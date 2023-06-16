@@ -3,9 +3,9 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.wechatSmsTemplate.WechatSmsTemplateDto;
+import com.java110.dto.wechat.WechatSmsTemplateDto;
 import com.java110.intf.store.IWechatSmsTemplateInnerServiceSMO;
-import com.java110.po.wechatSmsTemplate.WechatSmsTemplatePo;
+import com.java110.po.wechat.WechatSmsTemplatePo;
 import com.java110.store.dao.IWechatSmsTemplateServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

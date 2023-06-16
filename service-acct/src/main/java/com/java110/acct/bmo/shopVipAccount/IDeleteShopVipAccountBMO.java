@@ -1,5 +1,5 @@
 package com.java110.acct.bmo.shopVipAccount;
-import com.java110.po.shopVipAccount.ShopVipAccountPo;
+import com.java110.po.shop.ShopVipAccountPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteShopVipAccountBMO {

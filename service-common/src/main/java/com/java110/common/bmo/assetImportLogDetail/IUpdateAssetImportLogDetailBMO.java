@@ -1,5 +1,5 @@
 package com.java110.common.bmo.assetImportLogDetail;
-import com.java110.po.assetImportLogDetail.AssetImportLogDetailPo;
+import com.java110.po.log.AssetImportLogDetailPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateAssetImportLogDetailBMO {

@@ -15,7 +15,7 @@
  */
 package com.java110.api.smo.payment.adapt;
 
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;

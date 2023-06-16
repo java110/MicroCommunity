@@ -1,6 +1,6 @@
 package com.java110.user.bmo.userLogin;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.userLogin.UserLoginDto;
+import com.java110.dto.user.UserLoginDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetUserLoginBMO {
 

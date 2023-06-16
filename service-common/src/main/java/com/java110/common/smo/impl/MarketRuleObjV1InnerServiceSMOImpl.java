@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IMarketRuleObjV1ServiceDao;
 import com.java110.intf.common.IMarketRuleObjV1InnerServiceSMO;
 import com.java110.dto.market.MarketRuleObjDto;
-import com.java110.po.marketRuleObj.MarketRuleObjPo;
+import com.java110.po.market.MarketRuleObjPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

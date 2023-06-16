@@ -1,5 +1,5 @@
 package com.java110.report.bmo.reportInfoAnswerValue;
-import com.java110.po.reportInfoAnswerValue.ReportInfoAnswerValuePo;
+import com.java110.po.reportInfo.ReportInfoAnswerValuePo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateReportInfoAnswerValueBMO {

@@ -6,7 +6,7 @@ import com.java110.boot.smo.file.IAddFileSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
-import com.java110.entity.component.ComponentValidateResult;
+import com.java110.dto.system.ComponentValidateResult;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;

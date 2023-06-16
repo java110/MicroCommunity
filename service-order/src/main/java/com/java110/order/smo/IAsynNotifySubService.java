@@ -1,6 +1,6 @@
 package com.java110.order.smo;
 
-import com.java110.dto.businessTableHis.BusinessTableHisDto;
+import com.java110.dto.system.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.order.OrderItemDto;
 

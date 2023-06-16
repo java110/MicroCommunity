@@ -1,6 +1,6 @@
 package com.java110.common.bmo.machineTranslateError;
 
-import com.java110.po.machineTranslateError.MachineTranslateErrorPo;
+import com.java110.po.machine.MachineTranslateErrorPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteMachineTranslateErrorBMO {

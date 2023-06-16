@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeDiscount;
 
-import com.java110.po.feeDiscount.FeeDiscountPo;
+import com.java110.po.fee.FeeDiscountPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteFeeDiscountBMO {

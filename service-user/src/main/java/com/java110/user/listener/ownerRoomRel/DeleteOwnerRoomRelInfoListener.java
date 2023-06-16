@@ -4,8 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.po.owner.OwnerAppUserPo;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.user.dao.IOwnerRoomRelServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -58,7 +57,7 @@ public class DeleteOwnerRoomRelInfoListener extends AbstractOwnerRoomRelBusiness
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
@@ -94,7 +93,7 @@ public class DeleteOwnerRoomRelInfoListener extends AbstractOwnerRoomRelBusiness
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
 
@@ -124,7 +123,7 @@ public class DeleteOwnerRoomRelInfoListener extends AbstractOwnerRoomRelBusiness
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -159,7 +158,7 @@ public class DeleteOwnerRoomRelInfoListener extends AbstractOwnerRoomRelBusiness
      * @param business             总的数据节点
      * @param businessOwnerRoomRel 业主房屋节点
      */
-    private void doBusinessOwnerRoomRel(Business business, JSONObject businessOwnerRoomRel) {
+    private void doBusinessOwnerRoomRel(AppBusiness business, JSONObject businessOwnerRoomRel) {
 
         Assert.jsonObjectHaveKey(businessOwnerRoomRel, "relId", "businessOwnerRoomRel 节点下没有包含 relId 节点");
 

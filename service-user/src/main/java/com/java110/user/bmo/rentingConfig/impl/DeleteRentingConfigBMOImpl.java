@@ -3,7 +3,7 @@ package com.java110.user.bmo.rentingConfig.impl;
 import com.java110.core.annotation.Java110Transactional;
 
 import com.java110.intf.user.IRentingConfigInnerServiceSMO;
-import com.java110.po.rentingConfig.RentingConfigPo;
+import com.java110.po.renting.RentingConfigPo;
 import com.java110.user.bmo.rentingConfig.IDeleteRentingConfigBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

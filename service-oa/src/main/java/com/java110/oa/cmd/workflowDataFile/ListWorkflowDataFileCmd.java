@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.workflowDataFile.WorkflowDataFileDto;
+import com.java110.dto.oaWorkflow.WorkflowDataFileDto;
 import com.java110.intf.oa.IWorkflowDataFileV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;

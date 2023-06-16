@@ -1,7 +1,7 @@
 package com.java110.fee.listener.returnPayFee;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.fee.dao.IReturnPayFeeServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -62,7 +62,7 @@ public abstract class AbstractReturnPayFeeBusinessServiceDataFlowListener extend
      *
      * @param businessReturnPayFee 退费表信息
      */
-    protected void autoSaveDelBusinessReturnPayFee(Business business, JSONObject businessReturnPayFee) {
+    protected void autoSaveDelBusinessReturnPayFee(AppBusiness business, JSONObject businessReturnPayFee) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("returnFeeId", businessReturnPayFee.getString("returnFeeId"));

@@ -2,7 +2,7 @@ package com.java110.user.bmo.rentingPool.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
-import com.java110.po.rentingPool.RentingPoolPo;
+import com.java110.po.renting.RentingPoolPo;
 import com.java110.user.bmo.rentingPool.IUpdateRentingPoolBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

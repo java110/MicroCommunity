@@ -23,7 +23,7 @@ import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
 import com.java110.intf.community.ICommunityLocationAttrInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
-import com.java110.po.communityLocationAttr.CommunityLocationAttrPo;
+import com.java110.po.community.CommunityLocationAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

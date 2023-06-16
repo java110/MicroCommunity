@@ -6,7 +6,7 @@ import com.java110.intf.store.IComplaintInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.store.dao.IComplaintServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

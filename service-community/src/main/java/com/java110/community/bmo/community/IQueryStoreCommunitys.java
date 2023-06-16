@@ -14,7 +14,7 @@ package com.java110.community.bmo.community;/*
  * limitations under the License.
  */
 
-import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.community.CommunityMemberDto;
 import org.springframework.http.ResponseEntity;
 
 /**

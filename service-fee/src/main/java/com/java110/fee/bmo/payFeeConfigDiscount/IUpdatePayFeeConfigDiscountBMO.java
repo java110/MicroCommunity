@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.payFeeConfigDiscount;
 
-import com.java110.po.payFeeConfigDiscount.PayFeeConfigDiscountPo;
+import com.java110.po.payFee.PayFeeConfigDiscountPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdatePayFeeConfigDiscountBMO {

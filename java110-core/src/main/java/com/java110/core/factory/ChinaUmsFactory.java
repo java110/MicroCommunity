@@ -2,7 +2,7 @@ package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Synchronized;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.utils.cache.JWTCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;

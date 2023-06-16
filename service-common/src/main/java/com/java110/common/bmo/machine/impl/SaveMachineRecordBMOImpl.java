@@ -15,10 +15,9 @@
  */
 package com.java110.common.bmo.machine.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.machine.ISaveMachineRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
+import com.java110.dto.system.CustomBusinessDatabusDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineRecordDto;

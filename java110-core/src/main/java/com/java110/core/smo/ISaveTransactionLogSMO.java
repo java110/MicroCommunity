@@ -1,7 +1,7 @@
 package com.java110.core.smo;
 
-import com.java110.dto.assetImportLog.AssetImportLogDto;
-import com.java110.po.transactionLog.TransactionLogPo;
+import com.java110.dto.log.AssetImportLogDto;
+import com.java110.po.log.TransactionLogPo;
 
 /**
  * @ClassName ISaveTransactionLog

@@ -1,5 +1,5 @@
 package com.java110.user.bmo.rentingPoolFlow;
-import com.java110.dto.rentingPool.RentingPoolFlowDto;
+import com.java110.dto.renting.RentingPoolFlowDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetRentingPoolFlowBMO {
 

@@ -2,7 +2,7 @@ package com.java110.store.smo.impl;
 
 
 import com.java110.intf.store.IContractChangePlanRoomInnerServiceSMO;
-import com.java110.po.contractChangePlanRoom.ContractChangePlanRoomPo;
+import com.java110.po.contract.ContractChangePlanRoomPo;
 import com.java110.store.dao.IContractChangePlanRoomServiceDao;
 import com.java110.dto.contract.ContractChangePlanRoomDto;
 import com.java110.utils.util.BeanConvertUtil;

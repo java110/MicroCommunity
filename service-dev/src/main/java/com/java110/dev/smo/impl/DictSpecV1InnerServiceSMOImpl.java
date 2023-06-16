@@ -18,8 +18,8 @@ package com.java110.dev.smo.impl;
 
 import com.java110.dev.dao.IDictSpecV1ServiceDao;
 import com.java110.intf.dev.IDictSpecV1InnerServiceSMO;
-import com.java110.dto.Dict.DictSpecDto;
-import com.java110.po.dictSpec.DictSpecPo;
+import com.java110.dto.dict.DictSpecDto;
+import com.java110.po.dict.DictSpecPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

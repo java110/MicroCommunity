@@ -2,7 +2,7 @@ package com.java110.store.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
 import com.java110.utils.constant.ResponseConstant;

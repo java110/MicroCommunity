@@ -1,8 +1,7 @@
 package com.java110.utils.cache;
 
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.utils.util.SerializeUtil;
-import com.java110.utils.cache.Jedis;
 
 import java.util.List;
 

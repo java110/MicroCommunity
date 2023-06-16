@@ -1,8 +1,8 @@
 package com.java110.report.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.reportInfoAnswer.ReportInfoBackCityDto;
-import com.java110.po.reportInfoBackCity.ReportInfoBackCityPo;
+import com.java110.dto.reportInfo.ReportInfoBackCityDto;
+import com.java110.po.reportInfo.ReportInfoBackCityPo;
 import com.java110.report.bmo.reportInfoBackCity.IDeleteReportInfoBackCityBMO;
 import com.java110.report.bmo.reportInfoBackCity.IGetReportInfoBackCityBMO;
 import com.java110.report.bmo.reportInfoBackCity.ISaveReportInfoBackCityBMO;

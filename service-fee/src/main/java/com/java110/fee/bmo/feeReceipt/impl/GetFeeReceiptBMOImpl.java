@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeReceipt.impl;
 
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.fee.FeeReceiptDto;
 import com.java110.dto.fee.FeeReceiptDtoNew;

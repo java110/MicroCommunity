@@ -1,5 +1,5 @@
 package com.java110.user.bmo.userQuestionAnswerValue;
-import com.java110.dto.userQuestionAnswerValue.UserQuestionAnswerValueDto;
+import com.java110.dto.user.UserQuestionAnswerValueDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetUserQuestionAnswerValueBMO {
 

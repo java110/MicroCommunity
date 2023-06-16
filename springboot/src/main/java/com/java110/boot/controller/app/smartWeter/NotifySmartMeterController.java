@@ -2,7 +2,7 @@ package com.java110.boot.controller.app.smartWeter;
 
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.meterWater.NotifyMeterWaterOrderDto;
+import com.java110.dto.meter.NotifyMeterWaterOrderDto;
 import com.java110.intf.common.INotifySmartMeterV1InnerServiceSMO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -12,7 +12,7 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflow.OaWorkflowXmlDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.visit.VisitDto;
-import com.java110.dto.visitSetting.VisitSettingDto;
+import com.java110.dto.visit.VisitSettingDto;
 import com.java110.intf.common.*;
 import com.java110.intf.community.*;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;

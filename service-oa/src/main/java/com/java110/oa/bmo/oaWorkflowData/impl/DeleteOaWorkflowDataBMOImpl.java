@@ -3,7 +3,7 @@ package com.java110.oa.bmo.oaWorkflowData.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowData.IDeleteOaWorkflowDataBMO;
-import com.java110.po.oaWorkflowData.OaWorkflowDataPo;
+import com.java110.po.oaWorkflow.OaWorkflowDataPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeManualCollectionDetail;
 
-import com.java110.po.feeManualCollectionDetail.FeeManualCollectionDetailPo;
+import com.java110.po.fee.FeeManualCollectionDetailPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateFeeManualCollectionDetailBMO {

@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
-import com.java110.po.scheduleClasses.ScheduleClassesPo;
+import com.java110.po.classes.ScheduleClassesPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

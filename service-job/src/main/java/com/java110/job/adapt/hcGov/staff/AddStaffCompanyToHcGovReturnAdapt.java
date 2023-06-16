@@ -16,22 +16,19 @@
 package com.java110.job.adapt.hcGov.staff;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.RoomAttrDto;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
-import com.java110.intf.community.IRoomAttrInnerServiceSMO;
 import com.java110.intf.store.IStoreAttrInnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IUserAttrInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
-import com.java110.po.room.RoomAttrPo;
 import com.java110.po.store.StoreAttrPo;
-import com.java110.po.userAttr.UserAttrPo;
+import com.java110.po.user.UserAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractType;
 
-import com.java110.po.contractType.ContractTypePo;
+import com.java110.po.contract.ContractTypePo;
 import org.springframework.http.ResponseEntity;
 
 public interface ISaveContractTypeBMO {

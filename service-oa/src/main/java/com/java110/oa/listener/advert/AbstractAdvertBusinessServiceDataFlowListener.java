@@ -2,7 +2,7 @@ package com.java110.oa.listener.advert;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 
@@ -49,7 +49,7 @@ public abstract class AbstractAdvertBusinessServiceDataFlowListener extends Abst
      *
      * @param businessAdvert 广告信息信息
      */
-    protected void autoSaveDelBusinessAdvert(Business business, JSONObject businessAdvert) {
+    protected void autoSaveDelBusinessAdvert(AppBusiness business, JSONObject businessAdvert) {
 //自动插入DEL
 
     }

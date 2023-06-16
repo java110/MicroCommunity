@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.user.dao.IOwnerCarServiceDao;
 import org.slf4j.Logger;
@@ -60,7 +60,7 @@ public abstract class AbstractOwnerCarBusinessServiceDataFlowListener extends Ab
      *
      * @param businessOwnerCar 车辆管理信息
      */
-    protected void autoSaveDelBusinessOwnerCar(Business business, JSONObject businessOwnerCar) {
+    protected void autoSaveDelBusinessOwnerCar(AppBusiness business, JSONObject businessOwnerCar) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("memberId", businessOwnerCar.getString("memberId"));

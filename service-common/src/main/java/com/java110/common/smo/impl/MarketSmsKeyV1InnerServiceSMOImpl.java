@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IMarketSmsKeyV1ServiceDao;
 import com.java110.intf.common.IMarketSmsKeyV1InnerServiceSMO;
 import com.java110.dto.market.MarketSmsKeyDto;
-import com.java110.po.marketSmsKey.MarketSmsKeyPo;
+import com.java110.po.market.MarketSmsKeyPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

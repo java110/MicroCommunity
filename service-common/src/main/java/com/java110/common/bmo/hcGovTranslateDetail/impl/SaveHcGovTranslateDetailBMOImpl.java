@@ -4,7 +4,7 @@ import com.java110.common.bmo.hcGovTranslateDetail.ISaveHcGovTranslateDetailBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IHcGovTranslateDetailInnerServiceSMO;
-import com.java110.po.hcGovTranslateDetail.HcGovTranslateDetailPo;
+import com.java110.po.hcGovTranslate.HcGovTranslateDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

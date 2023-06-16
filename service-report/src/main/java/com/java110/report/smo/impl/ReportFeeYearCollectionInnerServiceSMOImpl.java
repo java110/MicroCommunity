@@ -3,11 +3,11 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.reportFeeYearCollection.ReportFeeYearCollectionDto;
-import com.java110.dto.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailDto;
+import com.java110.dto.reportFee.ReportFeeYearCollectionDto;
+import com.java110.dto.reportFee.ReportFeeYearCollectionDetailDto;
 import com.java110.intf.report.IReportFeeYearCollectionDetailInnerServiceSMO;
 import com.java110.intf.report.IReportFeeYearCollectionInnerServiceSMO;
-import com.java110.po.reportFeeYearCollection.ReportFeeYearCollectionPo;
+import com.java110.po.reportFee.ReportFeeYearCollectionPo;
 import com.java110.report.dao.IReportFeeYearCollectionServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

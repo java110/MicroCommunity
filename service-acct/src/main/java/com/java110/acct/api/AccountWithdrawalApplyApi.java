@@ -6,7 +6,7 @@ import com.java110.acct.bmo.accountWithdrawalApply.IGetAccountWithdrawalApplyBMO
 import com.java110.acct.bmo.accountWithdrawalApply.ISaveAccountWithdrawalApplyBMO;
 import com.java110.acct.bmo.accountWithdrawalApply.IUpdateAccountWithdrawalApplyBMO;
 import com.java110.dto.account.AccountWithdrawalApplyDto;
-import com.java110.po.accountWithdrawalApply.AccountWithdrawalApplyPo;
+import com.java110.po.account.AccountWithdrawalApplyPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

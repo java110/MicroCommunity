@@ -2,7 +2,7 @@ package com.java110.fee.listener.tempCarFeeConfigAttr;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.fee.dao.ITempCarFeeConfigAttrServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -54,7 +54,7 @@ public abstract class AbstractTempCarFeeConfigAttrBusinessServiceDataFlowListene
      *
      * @param businessTempCarFeeConfigAttr 临时车收费标准属性信息
      */
-    protected void autoSaveDelBusinessTempCarFeeConfigAttr(Business business, JSONObject businessTempCarFeeConfigAttr) {
+    protected void autoSaveDelBusinessTempCarFeeConfigAttr(AppBusiness business, JSONObject businessTempCarFeeConfigAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessTempCarFeeConfigAttr.getString("attrId"));

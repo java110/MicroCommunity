@@ -1,8 +1,7 @@
 package com.java110.acct.bmo.accountWithdrawalApply;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
-import com.java110.po.accountWithdrawalApply.AccountWithdrawalApplyPo;
+import com.java110.po.account.AccountWithdrawalApplyPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveAccountWithdrawalApplyBMO {
 

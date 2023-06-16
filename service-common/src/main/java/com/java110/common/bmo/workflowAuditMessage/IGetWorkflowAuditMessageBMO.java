@@ -1,5 +1,5 @@
 package com.java110.common.bmo.workflowAuditMessage;
-import com.java110.dto.workflowAuditMessage.WorkflowAuditMessageDto;
+import com.java110.dto.oaWorkflow.WorkflowAuditMessageDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetWorkflowAuditMessageBMO {
 

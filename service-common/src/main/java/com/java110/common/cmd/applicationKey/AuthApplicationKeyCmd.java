@@ -2,12 +2,11 @@ package com.java110.common.cmd.applicationKey;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.machine.ApplicationKeyDto;
 import com.java110.dto.machine.MachineDto;

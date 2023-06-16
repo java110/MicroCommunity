@@ -1,5 +1,5 @@
 package com.java110.store.bmo.storeAds;
-import com.java110.dto.storeAds.StoreAdsDto;
+import com.java110.dto.store.StoreAdsDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetStoreAdsBMO {
 

@@ -7,7 +7,7 @@ import com.java110.intf.store.ICbusinesstypeInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.businesstype.CbusinesstypeDto;
+import com.java110.dto.system.CbusinesstypeDto;
 import com.java110.store.dao.ICbusinesstypeServiceDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

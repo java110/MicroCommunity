@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.applyRoomDiscountType.impl;
 
-import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountTypeDto;
+import com.java110.dto.room.ApplyRoomDiscountTypeDto;
 import com.java110.fee.bmo.applyRoomDiscountType.IGetApplyRoomDiscountTypeBMO;
 import com.java110.intf.fee.IApplyRoomDiscountTypeInnerServiceSMO;
 import com.java110.vo.ResultVo;

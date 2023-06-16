@@ -1,7 +1,7 @@
 package com.java110.core.smo;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.integral.IntegralRuleConfigDto;
 import com.java110.dto.machine.CarInoutDetailDto;
@@ -11,7 +11,7 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.ReportCarDto;
 import com.java110.dto.report.ReportFeeDto;
 import com.java110.dto.report.ReportRoomDto;
-import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
+import com.java110.po.fee.FeeReceiptDetailPo;
 
 import java.util.Date;
 import java.util.List;

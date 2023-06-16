@@ -1,7 +1,7 @@
 package com.java110.fee.listener.config;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.fee.dao.IFeeConfigServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -64,7 +64,7 @@ public abstract class AbstractFeeConfigBusinessServiceDataFlowListener extends A
      *
      * @param businessFeeConfig 费用配置信息
      */
-    protected void autoSaveDelBusinessFeeConfig(Business business, JSONObject businessFeeConfig) {
+    protected void autoSaveDelBusinessFeeConfig(AppBusiness business, JSONObject businessFeeConfig) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("configId", businessFeeConfig.getString("configId"));

@@ -6,7 +6,7 @@ import com.java110.common.bmo.attrValue.IGetAttrValueBMO;
 import com.java110.common.bmo.attrValue.ISaveAttrValueBMO;
 import com.java110.common.bmo.attrValue.IUpdateAttrValueBMO;
 import com.java110.dto.attrSpec.AttrValueDto;
-import com.java110.po.attrValue.AttrValuePo;
+import com.java110.po.attrSpec.AttrValuePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

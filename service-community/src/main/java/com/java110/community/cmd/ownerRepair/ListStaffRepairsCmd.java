@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;

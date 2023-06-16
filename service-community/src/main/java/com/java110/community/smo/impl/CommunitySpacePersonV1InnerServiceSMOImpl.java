@@ -19,7 +19,7 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.ICommunitySpacePersonV1ServiceDao;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.dto.community.CommunitySpacePersonDto;
-import com.java110.po.communitySpacePerson.CommunitySpacePersonPo;
+import com.java110.po.communitySpace.CommunitySpacePersonPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -1,6 +1,6 @@
 package com.java110.common.bmo.transactionLog;
 
-import com.java110.dto.transactionLog.TransactionLogDto;
+import com.java110.dto.log.TransactionLogDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetTransactionLogBMO {

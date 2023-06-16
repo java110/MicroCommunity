@@ -26,7 +26,7 @@ import com.java110.doc.annotation.*;
 import com.java110.dto.supplier.SupplierDto;
 import com.java110.intf.acct.ISupplierCouponV1InnerServiceSMO;
 import com.java110.intf.scm.ISupplierV1InnerServiceSMO;
-import com.java110.po.supplierCoupon.SupplierCouponPo;
+import com.java110.po.supplier.SupplierCouponPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

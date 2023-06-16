@@ -11,7 +11,7 @@ import com.java110.dto.user.UserAttrDto;
 import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.user.UserPo;
-import com.java110.po.userAttr.UserAttrPo;
+import com.java110.po.user.UserAttrPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;

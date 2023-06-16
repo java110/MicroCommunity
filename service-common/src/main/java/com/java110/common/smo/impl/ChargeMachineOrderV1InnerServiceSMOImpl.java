@@ -18,8 +18,8 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IChargeMachineOrderV1ServiceDao;
 import com.java110.intf.common.IChargeMachineOrderV1InnerServiceSMO;
-import com.java110.dto.chargeMachine.ChargeMachineOrderDto;
-import com.java110.po.chargeMachineOrder.ChargeMachineOrderPo;
+import com.java110.dto.charge.ChargeMachineOrderDto;
+import com.java110.po.charge.ChargeMachineOrderPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

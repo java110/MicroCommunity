@@ -10,7 +10,7 @@ import com.java110.core.event.cmd.ServiceCmdEventPublishing;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.smo.ISaveTransactionLogSMO;
 import com.java110.core.trace.Java110TraceLog;
-import com.java110.entity.center.DataFlowLinksCost;
+import com.java110.dto.system.DataFlowLinksCost;
 import com.java110.service.smo.ICmdServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.KafkaConstant;

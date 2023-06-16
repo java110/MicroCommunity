@@ -1,7 +1,7 @@
 package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.idSeq.IdSeqDto;
+import com.java110.dto.system.IdSeqDto;
 import com.java110.intf.code.ICodeApi;
 import com.java110.intf.order.IIdSeqInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;

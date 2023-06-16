@@ -1,6 +1,6 @@
 package com.java110.vo.api;
 
-import com.java110.dto.RoomAttrDto;
+import com.java110.dto.room.RoomAttrDto;
 
 import java.io.Serializable;
 import java.util.List;

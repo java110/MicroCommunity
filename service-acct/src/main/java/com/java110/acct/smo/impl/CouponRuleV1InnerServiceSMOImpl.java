@@ -18,8 +18,8 @@ package com.java110.acct.smo.impl;
 
 import com.java110.acct.dao.ICouponRuleV1ServiceDao;
 import com.java110.intf.acct.ICouponRuleV1InnerServiceSMO;
-import com.java110.dto.couponPool.CouponRuleDto;
-import com.java110.po.couponRule.CouponRulePo;
+import com.java110.dto.coupon.CouponRuleDto;
+import com.java110.po.coupon.CouponRulePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

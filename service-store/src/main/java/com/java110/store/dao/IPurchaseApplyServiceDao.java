@@ -1,7 +1,7 @@
 package com.java110.store.dao;
 
 
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.utils.exception.DAOException;
 import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;

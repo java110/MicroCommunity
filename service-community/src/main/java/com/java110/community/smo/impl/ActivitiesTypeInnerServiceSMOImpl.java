@@ -6,7 +6,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.activities.ActivitiesTypeDto;
 import com.java110.intf.community.IActivitiesTypeInnerServiceSMO;
-import com.java110.po.activitiesType.ActivitiesTypePo;
+import com.java110.po.activities.ActivitiesTypePo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

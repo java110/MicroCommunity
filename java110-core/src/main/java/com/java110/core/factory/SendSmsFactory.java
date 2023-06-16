@@ -1,6 +1,6 @@
 package com.java110.core.factory;
 
-import com.java110.dto.smsConfig.SmsConfigDto;
+import com.java110.dto.sms.SmsConfigDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;

@@ -4,7 +4,7 @@ import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.ComputeDiscountDto;
 import com.java110.dto.fee.FeeDiscountDto;
-import com.java110.po.feeDiscount.FeeDiscountPo;
+import com.java110.po.fee.FeeDiscountPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IMarketGoodsItemV1ServiceDao;
 import com.java110.intf.common.IMarketGoodsItemV1InnerServiceSMO;
 import com.java110.dto.market.MarketGoodsItemDto;
-import com.java110.po.marketGoodsItem.MarketGoodsItemPo;
+import com.java110.po.market.MarketGoodsItemPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

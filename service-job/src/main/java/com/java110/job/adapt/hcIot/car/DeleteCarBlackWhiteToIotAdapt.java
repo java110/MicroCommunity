@@ -18,8 +18,7 @@ package com.java110.job.adapt.hcIot.car;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.machine.CarBlackWhiteDto;
-import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.common.ICarBlackWhiteInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
@@ -28,7 +27,6 @@ import com.java110.po.car.CarBlackWhitePo;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

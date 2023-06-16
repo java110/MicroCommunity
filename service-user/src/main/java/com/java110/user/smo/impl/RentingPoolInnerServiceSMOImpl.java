@@ -3,9 +3,9 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.rentingPool.RentingPoolDto;
+import com.java110.dto.renting.RentingPoolDto;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;
-import com.java110.po.rentingPool.RentingPoolPo;
+import com.java110.po.renting.RentingPoolPo;
 import com.java110.user.dao.IRentingPoolServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

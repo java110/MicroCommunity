@@ -8,7 +8,7 @@ import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.ISaveOaWorkflowFormBMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
-import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
+import com.java110.po.oaWorkflow.OaWorkflowFormPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PinYinUtil;

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dictDaoImpl">
-    <select id="queryDict" resultType="com.java110.dto.Dict.DictDto" parameterType="Map">
+    <select id="queryDict" resultType="com.java110.dto.dict.DictDto" parameterType="Map">
         SELECT t.name,t.description,t.status_cd statusCd FROM t_dict t  WHERE t.table_name=#{name} AND t.table_columns=#{type}
     </select>
 </mapper>

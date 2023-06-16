@@ -20,7 +20,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
-import com.java110.po.userAttr.UserAttrPo;
+import com.java110.po.user.UserAttrPo;
 import com.java110.user.dao.IUserAttrV1ServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

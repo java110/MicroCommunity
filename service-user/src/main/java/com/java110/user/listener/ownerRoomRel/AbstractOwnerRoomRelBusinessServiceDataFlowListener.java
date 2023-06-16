@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.user.dao.IOwnerRoomRelServiceDao;
 import org.slf4j.Logger;
@@ -56,7 +56,7 @@ public abstract class AbstractOwnerRoomRelBusinessServiceDataFlowListener extend
      *
      * @param businessOwnerRoomRel 业主房屋信息
      */
-    protected void autoSaveDelBusinessOwnerRoomRel(Business business, JSONObject businessOwnerRoomRel) {
+    protected void autoSaveDelBusinessOwnerRoomRel(AppBusiness business, JSONObject businessOwnerRoomRel) {
 //自动插入DEL
         Map<Object,Object> info = new HashMap<Object,Object>();
         info.put("relId", businessOwnerRoomRel.getString("relId"));

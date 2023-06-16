@@ -16,8 +16,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
-import com.java110.po.carInoutPayment.CarInoutPaymentPo;
+import com.java110.dto.payment.CarInoutPaymentDto;
+import com.java110.po.car.CarInoutPaymentPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

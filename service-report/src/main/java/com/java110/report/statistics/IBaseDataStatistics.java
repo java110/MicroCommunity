@@ -1,6 +1,6 @@
 package com.java110.report.statistics;
 
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;

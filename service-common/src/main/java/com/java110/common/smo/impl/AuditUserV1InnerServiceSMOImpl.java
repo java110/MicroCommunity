@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IAuditUserV1ServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.auditUser.AuditUserDto;
+import com.java110.dto.audit.AuditUserDto;
 import com.java110.intf.common.IAuditUserV1InnerServiceSMO;
 import com.java110.po.audit.AuditUserPo;
 import com.java110.utils.util.BeanConvertUtil;

@@ -2,14 +2,14 @@ package com.java110.common.bmo.attendanceClassesTask.impl;
 
 import com.java110.common.bmo.attendanceClassesTask.ISaveAttendanceClassesTaskBMO;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.dto.attendanceClasses.AttendanceClassesDto;
+import com.java110.dto.attendance.AttendanceClassesDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
-import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
-import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
+import com.java110.po.attendance.AttendanceClassesTaskPo;
+import com.java110.po.attendance.AttendanceClassesTaskDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

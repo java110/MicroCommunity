@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.entity.center.Business;
+import com.java110.dto.purchase.PurchaseApplyDto;
+import com.java110.dto.system.AppBusiness;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.store.dao.IPurchaseApplyServiceDao;
@@ -62,7 +62,7 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
@@ -97,7 +97,7 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
 
@@ -138,7 +138,7 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -173,7 +173,7 @@ public class DeletePurchaseApplyInfoListener extends AbstractPurchaseApplyBusine
      * @param business              总的数据节点
      * @param businessPurchaseApply 采购申请节点
      */
-    private void doBusinessPurchaseApply(Business business, JSONObject businessPurchaseApply) {
+    private void doBusinessPurchaseApply(AppBusiness business, JSONObject businessPurchaseApply) {
 
         Assert.jsonObjectHaveKey(businessPurchaseApply, "applyOrderId", "businessPurchaseApply 节点下没有包含 applyOrderId 节点");
 

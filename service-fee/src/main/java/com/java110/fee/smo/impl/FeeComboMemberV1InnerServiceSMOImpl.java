@@ -19,7 +19,7 @@ package com.java110.fee.smo.impl;
 import com.java110.fee.dao.IFeeComboMemberV1ServiceDao;
 import com.java110.intf.fee.IFeeComboMemberV1InnerServiceSMO;
 import com.java110.dto.fee.FeeComboMemberDto;
-import com.java110.po.feeComboMember.FeeComboMemberPo;
+import com.java110.po.fee.FeeComboMemberPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

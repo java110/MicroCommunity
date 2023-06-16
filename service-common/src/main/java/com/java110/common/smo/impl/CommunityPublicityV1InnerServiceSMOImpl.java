@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.ICommunityPublicityV1ServiceDao;
 import com.java110.intf.common.ICommunityPublicityV1InnerServiceSMO;
 import com.java110.dto.community.CommunityPublicityDto;
-import com.java110.po.communityPublicity.CommunityPublicityPo;
+import com.java110.po.community.CommunityPublicityPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -19,7 +19,7 @@ package com.java110.dev.smo.impl;
 import com.java110.dev.dao.ITaskAttrV1ServiceDao;
 import com.java110.intf.dev.ITaskAttrV1InnerServiceSMO;
 import com.java110.dto.task.TaskAttrDto;
-import com.java110.po.taskAttr.TaskAttrPo;
+import com.java110.po.task.TaskAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

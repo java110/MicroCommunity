@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.basePrivilege.HasPrivilegeDto;
+import com.java110.dto.privilege.HasPrivilegeDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;

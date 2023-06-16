@@ -1,8 +1,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.smsConfig.SmsConfigDto;
-import com.java110.po.smsConfig.SmsConfigPo;
+import com.java110.dto.sms.SmsConfigDto;
+import com.java110.po.sms.SmsConfigPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

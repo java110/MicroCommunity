@@ -2,14 +2,13 @@ package com.java110.order.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.idSeq.IdSeqDto;
+import com.java110.dto.system.IdSeqDto;
 import com.java110.intf.order.IIdSeqInnerServiceSMO;
 import com.java110.order.dao.ISnowflakeldWorker;
 import com.java110.service.init.ServiceInfoListener;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 

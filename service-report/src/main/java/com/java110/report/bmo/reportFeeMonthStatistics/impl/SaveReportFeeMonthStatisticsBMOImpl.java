@@ -3,7 +3,7 @@ package com.java110.report.bmo.reportFeeMonthStatistics.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
-import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
+import com.java110.po.reportFee.ReportFeeMonthStatisticsPo;
 import com.java110.report.bmo.reportFeeMonthStatistics.ISaveReportFeeMonthStatisticsBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

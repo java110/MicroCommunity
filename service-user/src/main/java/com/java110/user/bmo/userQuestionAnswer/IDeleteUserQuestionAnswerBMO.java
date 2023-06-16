@@ -1,5 +1,5 @@
 package com.java110.user.bmo.userQuestionAnswer;
-import com.java110.po.userQuestionAnswer.UserQuestionAnswerPo;
+import com.java110.po.user.UserQuestionAnswerPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteUserQuestionAnswerBMO {

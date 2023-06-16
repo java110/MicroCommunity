@@ -2,14 +2,12 @@ package com.java110.api.smo.meterWaterImport.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.component.BaseComponentSMO;
 import com.java110.core.context.IPageData;
-import com.java110.entity.assetImport.ImportFloor;
-import com.java110.entity.assetImport.ImportOwner;
-import com.java110.entity.component.ComponentValidateResult;
-import com.java110.entity.meterImport.ImportMeter;
+import com.java110.dto.importData.ImportFloor;
+import com.java110.dto.importData.ImportOwner;
+import com.java110.dto.system.ComponentValidateResult;
+import com.java110.dto.meter.ImportMeter;
 import com.java110.api.smo.meterWaterImport.IMeterWaterImportSMO;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.ImportExcelUtils;
 import com.java110.utils.util.StringUtil;

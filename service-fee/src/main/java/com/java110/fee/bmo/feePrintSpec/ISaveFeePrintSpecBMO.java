@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feePrintSpec;
 
-import com.java110.po.feePrintSpec.FeePrintSpecPo;
+import com.java110.po.fee.feePrintSpec.FeePrintSpecPo;
 import org.springframework.http.ResponseEntity;
 
 public interface ISaveFeePrintSpecBMO {

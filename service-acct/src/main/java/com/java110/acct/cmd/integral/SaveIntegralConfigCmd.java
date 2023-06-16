@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.acct.IIntegralConfigV1InnerServiceSMO;
-import com.java110.po.integralConfig.IntegralConfigPo;
+import com.java110.po.integral.IntegralConfigPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

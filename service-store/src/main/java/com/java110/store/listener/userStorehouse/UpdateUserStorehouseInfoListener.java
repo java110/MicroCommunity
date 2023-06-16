@@ -2,8 +2,7 @@ package com.java110.store.listener.userStorehouse;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.po.userStorehouse.UserStorehousePo;
-import com.java110.store.listener.userStorehouse.AbstractUserStorehouseBusinessServiceDataFlowListener;
+import com.java110.po.user.UserStorehousePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -11,7 +10,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IUserStorehouseServiceDao;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -57,7 +56,7 @@ public class UpdateUserStorehouseInfoListener extends AbstractUserStorehouseBusi
      * @param business 业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -92,7 +91,7 @@ public class UpdateUserStorehouseInfoListener extends AbstractUserStorehouseBusi
      * @param business 当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -121,7 +120,7 @@ public class UpdateUserStorehouseInfoListener extends AbstractUserStorehouseBusi
      * @param business 当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -157,7 +156,7 @@ public class UpdateUserStorehouseInfoListener extends AbstractUserStorehouseBusi
      * @param business 总的数据节点
      * @param businessUserStorehouse 个人物品节点
      */
-    private void doBusinessUserStorehouse(Business business,JSONObject businessUserStorehouse){
+    private void doBusinessUserStorehouse(AppBusiness business, JSONObject businessUserStorehouse){
 
         Assert.jsonObjectHaveKey(businessUserStorehouse,"usId","businessUserStorehouse 节点下没有包含 usId 节点");
 

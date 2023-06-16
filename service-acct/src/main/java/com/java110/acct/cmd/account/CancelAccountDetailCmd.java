@@ -9,7 +9,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.account.AccountDetailDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
-import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.po.account.AccountDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;

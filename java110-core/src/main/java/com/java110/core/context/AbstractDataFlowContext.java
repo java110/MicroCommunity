@@ -2,9 +2,9 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
-import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.entity.center.DataFlowLog;
+import com.java110.dto.system.AppBusiness;
+import com.java110.dto.system.DataFlowLinksCost;
+import com.java110.dto.system.DataFlowLog;
 import org.springframework.http.ResponseEntity;
 
 import java.util.*;
@@ -46,9 +46,9 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
 
     private String resData;
 
-    protected List<Business> businesses;
+    protected List<AppBusiness> businesses;
 
-    private Business currentBusiness;
+    private AppBusiness currentBusiness;
 
     private List<DataFlowLinksCost> linksCostDates = new ArrayList<DataFlowLinksCost>();
 
@@ -125,12 +125,12 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
     }
 
 
-    public List<Business> getBusinesses() {
+    public List<AppBusiness> getBusinesses() {
         return businesses;
     }
 
 
-    public void setBusinesses(List<Business> businesses) {
+    public void setBusinesses(List<AppBusiness> businesses) {
         this.businesses = businesses;
     }
 
@@ -242,11 +242,11 @@ public abstract class AbstractDataFlowContext extends AbstractTransactionLog imp
         return resBusiness;
     }
 
-    public Business getCurrentBusiness() {
+    public AppBusiness getCurrentBusiness() {
         return currentBusiness;
     }
 
-    public void setCurrentBusiness(Business currentBusiness) {
+    public void setCurrentBusiness(AppBusiness currentBusiness) {
         this.currentBusiness = currentBusiness;
     }
 

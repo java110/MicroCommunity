@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.equipmentAccount.EquipmentAccountDto;
+import com.java110.dto.machine.EquipmentAccountDto;
 import com.java110.dto.machine.MachineTypeDto;
 import com.java110.intf.common.IMachineTypeV1InnerServiceSMO;
 import com.java110.intf.common.IEquipmentAccountV1InnerServiceSMO;

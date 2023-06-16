@@ -14,7 +14,6 @@ package com.java110.community.bmo.initializeBuildingUnit;/*
  * limitations under the License.
  */
 
-import com.java110.dto.CommunityMemberDto;
 import org.springframework.http.ResponseEntity;
 
 /**

@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.acct.IIntegralRuleFeeV1InnerServiceSMO;
-import com.java110.po.integralRuleFee.IntegralRuleFeePo;
+import com.java110.po.integral.IntegralRuleFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

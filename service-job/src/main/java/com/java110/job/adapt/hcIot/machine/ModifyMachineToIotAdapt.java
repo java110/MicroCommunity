@@ -20,7 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.machine.MachineAttrDto;
 import com.java110.dto.machine.MachineDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.common.IMachineAttrInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.community.ICommunityLocationInnerServiceSMO;

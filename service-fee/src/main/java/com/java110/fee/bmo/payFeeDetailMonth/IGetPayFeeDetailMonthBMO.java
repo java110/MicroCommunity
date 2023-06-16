@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.payFeeDetailMonth;
-import com.java110.dto.payFeeDetailMonth.PayFeeDetailMonthDto;
+import com.java110.dto.payFee.PayFeeDetailMonthDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetPayFeeDetailMonthBMO {
 

@@ -26,7 +26,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.dev.ITaskAttrV1InnerServiceSMO;
 import com.java110.intf.dev.ITaskV1InnerServiceSMO;
 import com.java110.po.task.TaskPo;
-import com.java110.po.taskAttr.TaskAttrPo;
+import com.java110.po.task.TaskAttrPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

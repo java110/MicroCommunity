@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.maintainance.MaintainancePlanDto;
 import com.java110.intf.community.IMaintainancePlanStaffV1InnerServiceSMO;
 import com.java110.intf.community.IMaintainancePlanV1InnerServiceSMO;
-import com.java110.po.maintainancePlan.MaintainancePlanPo;
+import com.java110.po.maintainance.MaintainancePlanPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

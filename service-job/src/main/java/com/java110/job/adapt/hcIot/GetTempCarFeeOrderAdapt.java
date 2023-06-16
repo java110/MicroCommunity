@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.machine.CarInoutDto;
-import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
+import com.java110.dto.fee.TempCarPayOrderDto;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;

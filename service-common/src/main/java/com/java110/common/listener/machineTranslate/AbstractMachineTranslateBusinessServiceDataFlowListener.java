@@ -2,7 +2,7 @@ package com.java110.common.listener.machineTranslate;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.IMachineTranslateServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -58,7 +58,7 @@ public abstract class AbstractMachineTranslateBusinessServiceDataFlowListener ex
      *
      * @param businessMachineTranslate 设备同步信息
      */
-    protected void autoSaveDelBusinessMachineTranslate(Business business, JSONObject businessMachineTranslate) {
+    protected void autoSaveDelBusinessMachineTranslate(AppBusiness business, JSONObject businessMachineTranslate) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("machineTranslateId", businessMachineTranslate.getString("machineTranslateId"));

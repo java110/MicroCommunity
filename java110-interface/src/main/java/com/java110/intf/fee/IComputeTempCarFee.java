@@ -3,8 +3,8 @@ package com.java110.intf.fee;
 
 import com.java110.dto.fee.TempCarFeeResult;
 import com.java110.dto.machine.CarInoutDto;
-import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigAttrDto;
-import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
+import com.java110.dto.fee.TempCarFeeConfigAttrDto;
+import com.java110.dto.fee.TempCarFeeConfigDto;
 
 import java.util.List;
 

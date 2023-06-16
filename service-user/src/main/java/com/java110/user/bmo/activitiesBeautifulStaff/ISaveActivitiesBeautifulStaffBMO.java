@@ -1,6 +1,6 @@
 package com.java110.user.bmo.activitiesBeautifulStaff;
 
-import com.java110.po.activitiesBeautifulStaff.ActivitiesBeautifulStaffPo;
+import com.java110.po.activities.ActivitiesBeautifulStaffPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveActivitiesBeautifulStaffBMO {
 

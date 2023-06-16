@@ -9,7 +9,7 @@ import com.java110.dto.owner.OwnerSettledApplyDto;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledApplyV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerSettledSettingV1InnerServiceSMO;
-import com.java110.po.ownerSettledApply.OwnerSettledApplyPo;
+import com.java110.po.owner.OwnerSettledApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;

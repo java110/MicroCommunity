@@ -3,7 +3,7 @@ package com.java110.fee.bmo.feeFormula.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.fee.bmo.feeFormula.IUpdateFeeFormulaBMO;
 import com.java110.intf.fee.IFeeFormulaInnerServiceSMO;
-import com.java110.po.feeFormula.FeeFormulaPo;
+import com.java110.po.fee.FeeFormulaPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.java110.user.listener.orgCommunity;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.user.dao.IOrgCommunityServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -54,7 +54,7 @@ public abstract class AbstractOrgCommunityBusinessServiceDataFlowListener extend
      *
      * @param businessOrgCommunity 隶属小区信息
      */
-    protected void autoSaveDelBusinessOrgCommunity(Business business, JSONObject businessOrgCommunity) {
+    protected void autoSaveDelBusinessOrgCommunity(AppBusiness business, JSONObject businessOrgCommunity) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("orgCommunityId", businessOrgCommunity.getString("orgCommunityId"));

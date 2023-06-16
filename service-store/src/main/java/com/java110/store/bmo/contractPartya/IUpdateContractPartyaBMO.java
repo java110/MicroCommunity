@@ -1,5 +1,5 @@
 package com.java110.store.bmo.contractPartya;
-import com.java110.po.contractPartya.ContractPartyaPo;
+import com.java110.po.contract.ContractPartyaPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateContractPartyaBMO {

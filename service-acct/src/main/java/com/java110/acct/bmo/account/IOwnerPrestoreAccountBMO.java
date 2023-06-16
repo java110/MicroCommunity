@@ -1,6 +1,6 @@
 package com.java110.acct.bmo.account;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.po.account.AccountDetailPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IOwnerPrestoreAccountBMO {

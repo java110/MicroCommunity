@@ -3,7 +3,7 @@ package com.java110.oa.bmo.oaWorkflowForm.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowForm.IUpdateOaWorkflowFormBMO;
-import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
+import com.java110.po.oaWorkflow.OaWorkflowFormPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

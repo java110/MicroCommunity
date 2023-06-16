@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeCollectionOrder;
 
-import com.java110.po.feeCollectionOrder.FeeCollectionOrderPo;
+import com.java110.po.fee.FeeCollectionOrderPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteFeeCollectionOrderBMO {

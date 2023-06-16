@@ -16,8 +16,8 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.parkingCoupon.ParkingCouponCarDto;
-import com.java110.po.parkingCouponCar.ParkingCouponCarPo;
+import com.java110.dto.parking.ParkingCouponCarDto;
+import com.java110.po.parking.ParkingCouponCarPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,7 +1,7 @@
 package com.java110.report.bmo.reportOwnerPayFee.impl;
 
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.reportOwnerPayFee.ReportOwnerPayFeeDto;
+import com.java110.dto.reportFee.ReportOwnerPayFeeDto;
 import com.java110.intf.report.IReportOwnerPayFeeInnerServiceSMO;
 import com.java110.report.bmo.reportOwnerPayFee.IGetReportOwnerPayFeeBMO;
 import com.java110.utils.util.DateUtil;

@@ -1,15 +1,11 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.payFeeDetailMonth.PayFeeDetailMonthDto;
-import com.java110.dto.payFeeDetailMonth.PayFeeDetailRefreshFeeMonthDto;
-import com.java110.po.payFeeDetailMonth.PayFeeDetailMonthPo;
+import com.java110.dto.payFee.PayFeeDetailRefreshFeeMonthDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.List;
 
 /**
  * @ClassName IPayFeeDetailMonthInnerServiceSMO

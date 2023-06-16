@@ -18,8 +18,8 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IChargeMachineOrderCouponV1ServiceDao;
 import com.java110.intf.common.IChargeMachineOrderCouponV1InnerServiceSMO;
-import com.java110.dto.chargeMachine.ChargeMachineOrderCouponDto;
-import com.java110.po.chargeMachineOrderCoupon.ChargeMachineOrderCouponPo;
+import com.java110.dto.charge.ChargeMachineOrderCouponDto;
+import com.java110.po.charge.ChargeMachineOrderCouponPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

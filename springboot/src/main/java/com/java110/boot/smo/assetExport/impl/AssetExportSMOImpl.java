@@ -6,7 +6,7 @@ import com.java110.boot.smo.DefaultAbstractComponentSMO;
 import com.java110.boot.smo.assetExport.IAssetExportSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.log.LoggerFactory;
-import com.java110.entity.component.ComponentValidateResult;
+import com.java110.dto.system.ComponentValidateResult;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;

@@ -1,8 +1,8 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.userLogin.UserLoginDto;
-import com.java110.po.userLogin.UserLoginPo;
+import com.java110.dto.user.UserLoginDto;
+import com.java110.po.user.UserLoginPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

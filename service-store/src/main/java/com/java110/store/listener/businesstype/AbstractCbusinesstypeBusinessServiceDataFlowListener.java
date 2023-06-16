@@ -1,7 +1,7 @@
 package com.java110.store.listener.businesstype;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.ICbusinesstypeServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -51,7 +51,7 @@ public abstract class AbstractCbusinesstypeBusinessServiceDataFlowListener exten
      *
      * @param businessCbusinesstype cbusinesstype信息
      */
-    protected void autoSaveDelBusinessCbusinesstype(Business business, JSONObject businessCbusinesstype) {
+    protected void autoSaveDelBusinessCbusinesstype(AppBusiness business, JSONObject businessCbusinesstype) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("id", businessCbusinesstype.getString("id"));

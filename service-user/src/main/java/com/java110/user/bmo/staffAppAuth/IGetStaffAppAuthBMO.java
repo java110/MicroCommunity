@@ -1,6 +1,6 @@
 package com.java110.user.bmo.staffAppAuth;
 
-import com.java110.dto.staffAppAuth.StaffAppAuthDto;
+import com.java110.dto.user.StaffAppAuthDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetStaffAppAuthBMO {

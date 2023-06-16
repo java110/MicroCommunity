@@ -281,26 +281,26 @@
 
 
     <insert id="saveTaskRunLog"
-            parameterType="com.java110.entity.listener.FtpTaskLog">
+            parameterType="com.java110.dto.log.FtpTaskLog">
         insert into
         cep_ftp_tasklog(taskid,u_or_d,state,serverfilename,localfilename,filelength)
         values(#{taskid},#{uord},#{state},#{serverfilename},#{localfilename},#{filelength})
     </insert>
 
     <update id="updateTaskRunLog"
-            parameterType="com.java110.entity.listener.FtpTaskLog">
+            parameterType="com.java110.dto.log.FtpTaskLog">
         update cep_ftp_tasklog set update_date=now()
         <if test="state != null and state !=''">,state = #{state}</if>
         where logid=#{logid}
     </update>
     <insert id="saveTaskRunDetailLog"
-            parameterType="com.java110.entity.listener.FtpTaskLogDetail">
+            parameterType="com.java110.dto.log.FtpTaskLogDetail">
         insert into
         cep_ftp_tasklog_detail(logid,taskid,state,tnum,begin,end,data,havedown,remark,SERVERFILENAME,LOCALFILENAME)
         values(#{logid},#{taskid},#{state},#{tnum},#{begin},#{end},#{data},#{havedown},#{remark},#{serverfilename},#{localfilename})
     </insert>
     <update id="updateTaskRunDetailLog"
-            parameterType="com.java110.entity.listener.FtpTaskLogDetail">
+            parameterType="com.java110.dto.log.FtpTaskLogDetail">
         update cep_ftp_tasklog_detail set update_date=now()
         <if test="state != null and state !=''">,state = #{state}</if>
         <if test="data != null and data !=''">,data = #{data}</if>

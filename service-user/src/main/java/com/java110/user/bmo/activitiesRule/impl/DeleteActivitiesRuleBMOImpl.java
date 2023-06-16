@@ -2,7 +2,7 @@ package com.java110.user.bmo.activitiesRule.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.user.IActivitiesRuleInnerServiceSMO;
-import com.java110.po.activitiesRule.ActivitiesRulePo;
+import com.java110.po.activities.ActivitiesRulePo;
 import com.java110.user.bmo.activitiesRule.IDeleteActivitiesRuleBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

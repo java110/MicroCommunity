@@ -20,7 +20,7 @@ import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.user.UserPo;
-import com.java110.po.userAttr.UserAttrPo;
+import com.java110.po.user.UserAttrPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.UserLevelConstant;

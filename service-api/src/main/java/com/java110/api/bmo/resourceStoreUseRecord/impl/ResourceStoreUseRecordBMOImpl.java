@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.resourceStoreUseRecord.IResourceStoreUseRecordBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.store.IResourceStoreUseRecordInnerServiceSMO;
-import com.java110.po.resourceStoreUseRecord.ResourceStoreUseRecordPo;
+import com.java110.po.resource.ResourceStoreUseRecordPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,7 +8,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
-import com.java110.dto.smsConfig.SmsConfigDto;
+import com.java110.dto.sms.SmsConfigDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;

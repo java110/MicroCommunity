@@ -19,7 +19,7 @@ package com.java110.store.smo.impl;
 import com.java110.store.dao.IReserveCatalogV1ServiceDao;
 import com.java110.intf.store.IReserveCatalogV1InnerServiceSMO;
 import com.java110.dto.reserve.ReserveCatalogDto;
-import com.java110.po.reserveCatalog.ReserveCatalogPo;
+import com.java110.po.reserve.ReserveCatalogPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

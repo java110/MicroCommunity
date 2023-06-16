@@ -6,7 +6,7 @@ import com.java110.acct.bmo.accountBank.IGetAccountBankBMO;
 import com.java110.acct.bmo.accountBank.ISaveAccountBankBMO;
 import com.java110.acct.bmo.accountBank.IUpdateAccountBankBMO;
 import com.java110.dto.account.AccountBankDto;
-import com.java110.po.accountBank.AccountBankPo;
+import com.java110.po.account.AccountBankPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

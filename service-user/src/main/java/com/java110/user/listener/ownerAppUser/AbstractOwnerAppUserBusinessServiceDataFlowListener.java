@@ -1,7 +1,7 @@
 package com.java110.user.listener.ownerAppUser;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.user.dao.IOwnerAppUserServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -63,7 +63,7 @@ public abstract class AbstractOwnerAppUserBusinessServiceDataFlowListener extend
      *
      * @param businessOwnerAppUser 绑定业主信息
      */
-    protected void autoSaveDelBusinessOwnerAppUser(Business business, JSONObject businessOwnerAppUser) {
+    protected void autoSaveDelBusinessOwnerAppUser(AppBusiness business, JSONObject businessOwnerAppUser) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("appUserId", businessOwnerAppUser.getString("appUserId"));

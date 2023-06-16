@@ -1,9 +1,9 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.reportOweFee.ReportOweFeeDto;
-import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
-import com.java110.po.reportOweFee.ReportOweFeePo;
+import com.java110.dto.reportFee.ReportOweFeeDto;
+import com.java110.dto.reportFee.ReportOweFeeItemDto;
+import com.java110.po.reportFee.ReportOweFeePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

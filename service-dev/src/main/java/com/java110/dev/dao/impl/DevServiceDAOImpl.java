@@ -2,10 +2,10 @@ package com.java110.dev.dao.impl;
 
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.dev.dao.IDevServiceDAO;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.dto.businessDatabus.BusinessDatabusDto;
-import com.java110.dto.businessTableHis.BusinessTableHisDto;
-import com.java110.entity.mapping.Mapping;
+import com.java110.dto.privilege.BasePrivilegeDto;
+import com.java110.dto.system.BusinessDatabusDto;
+import com.java110.dto.system.BusinessTableHisDto;
+import com.java110.dto.mapping.Mapping;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;

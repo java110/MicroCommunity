@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
-import com.java110.po.reportCustomComponent.ReportCustomComponentPo;
+import com.java110.po.reportCustom.ReportCustomComponentPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.Base64Convert;

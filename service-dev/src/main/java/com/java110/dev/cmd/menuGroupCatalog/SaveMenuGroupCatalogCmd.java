@@ -25,7 +25,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.menu.MenuCatalogDto;
 import com.java110.intf.user.IMenuCatalogV1InnerServiceSMO;
 import com.java110.intf.user.IMenuGroupCatalogV1InnerServiceSMO;
-import com.java110.po.menuGroupCatalog.MenuGroupCatalogPo;
+import com.java110.po.menu.MenuGroupCatalogPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

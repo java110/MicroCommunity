@@ -1,6 +1,6 @@
 package com.java110.user.bmo.userLogin;
 import com.java110.dto.user.UserDto;
-import com.java110.po.userLogin.UserLoginPo;
+import com.java110.po.user.UserLoginPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteUserLoginBMO {

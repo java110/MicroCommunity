@@ -1,16 +1,12 @@
 package com.java110.job.export.adapt;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
-import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
+import com.java110.dto.attendance.AttendanceClassesTaskDetailDto;
+import com.java110.dto.attendance.AttendanceClassesTaskDto;
 import com.java110.dto.data.ExportDataDto;
-import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IReportAttendanceInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;

@@ -1,10 +1,9 @@
 package com.java110.dev.dao;
 
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.dto.businessDatabus.BusinessDatabusDto;
-import com.java110.dto.businessTableHis.BusinessTableHisDto;
-import com.java110.entity.mapping.Mapping;
-import com.java110.utils.exception.DAOException;
+import com.java110.dto.privilege.BasePrivilegeDto;
+import com.java110.dto.system.BusinessDatabusDto;
+import com.java110.dto.system.BusinessTableHisDto;
+import com.java110.dto.mapping.Mapping;
 
 import java.util.List;
 import java.util.Map;

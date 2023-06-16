@@ -2,8 +2,8 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.owner.OwnerCarDto;
-import com.java110.entity.assetImport.ImportCustomCreateFeeDto;
-import com.java110.entity.assetImport.ImportRoomFee;
+import com.java110.dto.importData.ImportCustomCreateFeeDto;
+import com.java110.dto.importData.ImportRoomFee;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

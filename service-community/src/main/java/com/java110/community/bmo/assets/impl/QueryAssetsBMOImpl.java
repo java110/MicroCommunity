@@ -2,7 +2,7 @@ package com.java110.community.bmo.assets.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.bmo.assets.IQueryAssetsBMO;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.common.IMachineInnerServiceSMO;

@@ -1,7 +1,7 @@
 package com.java110.user.listener.junkRequirement;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.user.dao.IJunkRequirementServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -58,7 +58,7 @@ public abstract class AbstractJunkRequirementBusinessServiceDataFlowListener ext
      *
      * @param businessJunkRequirement 旧货市场信息
      */
-    protected void autoSaveDelBusinessJunkRequirement(Business business, JSONObject businessJunkRequirement) {
+    protected void autoSaveDelBusinessJunkRequirement(AppBusiness business, JSONObject businessJunkRequirement) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("junkRequirementId", businessJunkRequirement.getString("junkRequirementId"));

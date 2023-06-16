@@ -7,7 +7,7 @@ import com.java110.core.context.Environment;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
-import com.java110.dto.businessTableHis.BusinessTableHisDto;
+import com.java110.dto.system.BusinessTableHisDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.order.OrderItemDto;
 import com.java110.order.dao.ICenterServiceDAO;

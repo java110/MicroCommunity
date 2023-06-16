@@ -4,7 +4,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.fee.bmo.feeDiscountRuleSpec.ISaveFeeDiscountRuleSpecBMO;
 import com.java110.intf.fee.IFeeDiscountRuleSpecInnerServiceSMO;
-import com.java110.po.feeDiscountRuleSpec.FeeDiscountRuleSpecPo;
+import com.java110.po.fee.FeeDiscountRuleSpecPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

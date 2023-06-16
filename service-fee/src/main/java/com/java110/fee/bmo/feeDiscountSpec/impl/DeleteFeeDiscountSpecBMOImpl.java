@@ -3,7 +3,7 @@ package com.java110.fee.bmo.feeDiscountSpec.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.fee.bmo.feeDiscountSpec.IDeleteFeeDiscountSpecBMO;
 import com.java110.intf.fee.IFeeDiscountSpecInnerServiceSMO;
-import com.java110.po.feeDiscountSpec.FeeDiscountSpecPo;
+import com.java110.po.fee.FeeDiscountSpecPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

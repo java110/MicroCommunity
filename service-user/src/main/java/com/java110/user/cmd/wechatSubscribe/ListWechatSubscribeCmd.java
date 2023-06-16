@@ -25,7 +25,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.wechatSubscribe.WechatSubscribeDto;
+import com.java110.dto.wechat.WechatSubscribeDto;
 import java.util.List;
 import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.java110.acct.bmo.accountBond;
 
-import com.java110.po.accountBond.AccountBondPo;
+import com.java110.po.account.AccountBondPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveAccountBondBMO {
 

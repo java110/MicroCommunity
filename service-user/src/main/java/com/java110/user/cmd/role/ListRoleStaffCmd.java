@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.privilegeUser.PrivilegeUserDto;
+import com.java110.dto.privilege.PrivilegeUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IPrivilegeUserV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;

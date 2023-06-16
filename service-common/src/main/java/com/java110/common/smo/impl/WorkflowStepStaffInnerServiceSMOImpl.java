@@ -3,7 +3,7 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IWorkflowStepStaffServiceDao;
 import com.java110.intf.common.IWorkflowStepStaffInnerServiceSMO;
-import com.java110.dto.workflow.WorkflowStepStaffDto;
+import com.java110.dto.oaWorkflow.WorkflowStepStaffDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;

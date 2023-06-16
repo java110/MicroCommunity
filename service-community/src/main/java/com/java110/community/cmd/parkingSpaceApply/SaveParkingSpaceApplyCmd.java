@@ -30,7 +30,7 @@ import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.user.IBuildingOwnerV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
-import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
+import com.java110.po.parking.ParkingSpaceApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

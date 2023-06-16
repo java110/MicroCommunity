@@ -1,6 +1,5 @@
 package com.java110.job.adapt.hcGov.asyn.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.reportData.ReportDataHeaderDto;
@@ -9,7 +8,7 @@ import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.asyn.BaseHcGovSendAsyn;
 import com.java110.po.hcGovTranslate.HcGovTranslatePo;
-import com.java110.po.hcGovTranslateDetail.HcGovTranslateDetailPo;
+import com.java110.po.hcGovTranslate.HcGovTranslateDetailPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.util.Assert;

@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.workflow.IWorkflowStepStaffBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.common.IWorkflowStepStaffInnerServiceSMO;
-import com.java110.po.workflow.WorkflowStepStaffPo;
+import com.java110.po.oaWorkflow.WorkflowStepStaffPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

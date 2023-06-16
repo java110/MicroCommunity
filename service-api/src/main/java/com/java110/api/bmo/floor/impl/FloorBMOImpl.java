@@ -6,7 +6,7 @@ import com.java110.api.bmo.floor.IFloorBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.dto.community.CommunityDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
-import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.community.CommunityMemberDto;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.po.floor.FloorPo;
 import com.java110.utils.constant.*;

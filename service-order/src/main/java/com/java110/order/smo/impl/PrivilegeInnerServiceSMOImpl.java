@@ -15,14 +15,11 @@
  */
 package com.java110.order.smo.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.order.dao.IPrivilegeDAO;
-import com.java110.utils.constant.ResponseConstant;
-import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

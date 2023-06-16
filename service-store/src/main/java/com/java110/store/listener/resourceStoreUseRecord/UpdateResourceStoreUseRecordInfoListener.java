@@ -2,7 +2,7 @@ package com.java110.store.listener.resourceStoreUseRecord;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.po.resourceStoreUseRecord.ResourceStoreUseRecordPo;
+import com.java110.po.resource.ResourceStoreUseRecordPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -10,7 +10,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IResourceStoreUseRecordServiceDao;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -57,7 +57,7 @@ public class UpdateResourceStoreUseRecordInfoListener extends AbstractResourceSt
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -93,7 +93,7 @@ public class UpdateResourceStoreUseRecordInfoListener extends AbstractResourceSt
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -123,7 +123,7 @@ public class UpdateResourceStoreUseRecordInfoListener extends AbstractResourceSt
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -159,7 +159,7 @@ public class UpdateResourceStoreUseRecordInfoListener extends AbstractResourceSt
      * @param business                       总的数据节点
      * @param businessResourceStoreUseRecord 物品使用记录节点
      */
-    private void doBusinessResourceStoreUseRecord(Business business, JSONObject businessResourceStoreUseRecord) {
+    private void doBusinessResourceStoreUseRecord(AppBusiness business, JSONObject businessResourceStoreUseRecord) {
 
         Assert.jsonObjectHaveKey(businessResourceStoreUseRecord, "rsurId", "businessResourceStoreUseRecord 节点下没有包含 rsurId 节点");
 

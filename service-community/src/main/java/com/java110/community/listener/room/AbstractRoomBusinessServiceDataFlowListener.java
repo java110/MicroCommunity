@@ -3,7 +3,7 @@ package com.java110.community.listener.room;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IRoomServiceDao;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -64,7 +64,7 @@ public abstract class AbstractRoomBusinessServiceDataFlowListener extends Abstra
      *
      * @param businessRoom 小区房屋信息
      */
-    protected Map<String, String> autoSaveDelBusinessRoom(Business business, JSONObject businessRoom) {
+    protected Map<String, String> autoSaveDelBusinessRoom(AppBusiness business, JSONObject businessRoom) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("roomId", businessRoom.getString("roomId"));

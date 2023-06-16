@@ -1,8 +1,8 @@
 package com.java110.intf.mall;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.shopCommunity.ShopCommunityDto;
-import com.java110.po.shopCommunity.ShopCommunityPo;
+import com.java110.dto.shop.ShopCommunityDto;
+import com.java110.po.shop.ShopCommunityPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

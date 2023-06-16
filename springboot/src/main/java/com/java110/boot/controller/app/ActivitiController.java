@@ -18,7 +18,7 @@ package com.java110.boot.controller.app;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.boot.smo.activiti.IModelSMO;
 import com.java110.dto.oaWorkflow.StencilsetJson;
-import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.dto.oaWorkflow.WorkflowModelDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

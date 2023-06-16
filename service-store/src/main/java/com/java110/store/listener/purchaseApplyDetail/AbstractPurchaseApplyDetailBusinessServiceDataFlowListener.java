@@ -1,7 +1,7 @@
 package com.java110.store.listener.purchaseApplyDetail;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IPurchaseApplyDetailServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -51,7 +51,7 @@ public abstract class AbstractPurchaseApplyDetailBusinessServiceDataFlowListener
      *
      * @param businessPurchaseApplyDetail 订单明细信息
      */
-    protected void autoSaveDelBusinessPurchaseApplyDetail(Business business, JSONObject businessPurchaseApplyDetail) {
+    protected void autoSaveDelBusinessPurchaseApplyDetail(AppBusiness business, JSONObject businessPurchaseApplyDetail) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("applyOrderId", businessPurchaseApplyDetail.getString("applyOrderId"));

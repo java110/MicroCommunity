@@ -6,7 +6,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeDiscountRuleSpecDto;
 import com.java110.fee.dao.IFeeDiscountRuleSpecServiceDao;
 import com.java110.intf.fee.IFeeDiscountRuleSpecInnerServiceSMO;
-import com.java110.po.feeDiscountRuleSpec.FeeDiscountRuleSpecPo;
+import com.java110.po.fee.FeeDiscountRuleSpecPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

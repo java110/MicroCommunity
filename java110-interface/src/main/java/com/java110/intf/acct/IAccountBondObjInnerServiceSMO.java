@@ -2,7 +2,7 @@ package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.account.AccountBondObjDto;
-import com.java110.po.accountBondObj.AccountBondObjPo;
+import com.java110.po.account.AccountBondObjPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

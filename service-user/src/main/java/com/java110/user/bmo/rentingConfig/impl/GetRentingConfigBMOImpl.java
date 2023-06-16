@@ -1,6 +1,6 @@
 package com.java110.user.bmo.rentingConfig.impl;
 
-import com.java110.dto.rentingPool.RentingConfigDto;
+import com.java110.dto.renting.RentingConfigDto;
 import com.java110.intf.user.IRentingConfigInnerServiceSMO;
 import com.java110.user.bmo.rentingConfig.IGetRentingConfigBMO;
 import com.java110.vo.ResultVo;

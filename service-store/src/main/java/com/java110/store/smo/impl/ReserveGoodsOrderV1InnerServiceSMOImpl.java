@@ -19,7 +19,7 @@ package com.java110.store.smo.impl;
 import com.java110.store.dao.IReserveGoodsOrderV1ServiceDao;
 import com.java110.intf.store.IReserveGoodsOrderV1InnerServiceSMO;
 import com.java110.dto.reserve.ReserveGoodsOrderDto;
-import com.java110.po.reserveGoodsOrder.ReserveGoodsOrderPo;
+import com.java110.po.reserve.ReserveGoodsOrderPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -1,7 +1,7 @@
 package com.java110.community.dao.impl;
 
 import com.java110.community.dao.IDictDao;
-import com.java110.dto.Dict.DictDto;
+import com.java110.dto.dict.DictDto;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

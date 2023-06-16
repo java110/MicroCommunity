@@ -1,5 +1,5 @@
 package com.java110.common.bmo.logSystemError;
-import com.java110.dto.logSystemError.LogSystemErrorDto;
+import com.java110.dto.log.LogSystemErrorDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetLogSystemErrorBMO {
 

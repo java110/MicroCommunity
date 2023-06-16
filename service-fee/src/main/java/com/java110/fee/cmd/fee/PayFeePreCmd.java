@@ -11,7 +11,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.couponPool.CouponUserDto;
+import com.java110.dto.coupon.CouponUserDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDetailDto;

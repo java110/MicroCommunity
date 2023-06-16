@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.community.IMaintainanceTaskDetailV1InnerServiceSMO;
-import com.java110.po.maintainanceTaskDetail.MaintainanceTaskDetailPo;
+import com.java110.po.maintainance.MaintainanceTaskDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -1,5 +1,5 @@
 package com.java110.acct.bmo.shopVipAccount;
-import com.java110.dto.shopVipAccount.ShopVipAccountDto;
+import com.java110.dto.shop.ShopVipAccountDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetShopVipAccountBMO {
 

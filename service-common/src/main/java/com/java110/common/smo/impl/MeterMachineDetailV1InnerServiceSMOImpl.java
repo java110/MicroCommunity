@@ -18,8 +18,8 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IMeterMachineDetailV1ServiceDao;
 import com.java110.intf.common.IMeterMachineDetailV1InnerServiceSMO;
-import com.java110.dto.meterMachine.MeterMachineDetailDto;
-import com.java110.po.meterMachineDetail.MeterMachineDetailPo;
+import com.java110.dto.meter.MeterMachineDetailDto;
+import com.java110.po.meter.MeterMachineDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

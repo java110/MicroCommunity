@@ -2,7 +2,7 @@ package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDetailDto;
-import com.java110.po.hcGovTranslateDetail.HcGovTranslateDetailPo;
+import com.java110.po.hcGovTranslate.HcGovTranslateDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

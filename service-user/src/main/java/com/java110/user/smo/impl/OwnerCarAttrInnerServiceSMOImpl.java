@@ -6,7 +6,7 @@ import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.owner.OwnerCarAttrDto;
 import com.java110.dto.user.UserDto;
-import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
+import com.java110.po.owner.OwnerCarAttrPo;
 import com.java110.user.dao.IOwnerCarAttrServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

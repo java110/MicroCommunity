@@ -1,9 +1,8 @@
 package com.java110.job.export.adapt;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
-import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
+import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IQueryPayFeeDetailInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.BeanConvertUtil;
@@ -16,7 +15,6 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 /**

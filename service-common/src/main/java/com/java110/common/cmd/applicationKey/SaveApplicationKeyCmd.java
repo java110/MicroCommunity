@@ -12,7 +12,7 @@ import com.java110.intf.common.IApplicationKeyV1InnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.po.applicationKey.ApplicationKeyPo;
+import com.java110.po.accessControl.ApplicationKeyPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;

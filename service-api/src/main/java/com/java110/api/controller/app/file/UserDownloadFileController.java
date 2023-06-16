@@ -2,7 +2,7 @@ package com.java110.api.controller.app.file;
 
 import com.java110.core.client.FileUploadTemplate;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.userDownloadFile.UserDownloadFileDto;
+import com.java110.dto.user.UserDownloadFileDto;
 import com.java110.intf.job.IUserDownloadFileV1InnerServiceSMO;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;

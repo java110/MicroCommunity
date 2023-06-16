@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.payFeeAudit;
-import com.java110.po.payFeeAudit.PayFeeAuditPo;
+import com.java110.po.payFee.PayFeeAuditPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeletePayFeeAuditBMO {

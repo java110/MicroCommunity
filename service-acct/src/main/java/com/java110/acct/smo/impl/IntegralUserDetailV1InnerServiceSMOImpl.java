@@ -19,7 +19,7 @@ package com.java110.acct.smo.impl;
 import com.java110.acct.dao.IIntegralUserDetailV1ServiceDao;
 import com.java110.intf.acct.IIntegralUserDetailV1InnerServiceSMO;
 import com.java110.dto.integral.IntegralUserDetailDto;
-import com.java110.po.integralUserDetail.IntegralUserDetailPo;
+import com.java110.po.integral.IntegralUserDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

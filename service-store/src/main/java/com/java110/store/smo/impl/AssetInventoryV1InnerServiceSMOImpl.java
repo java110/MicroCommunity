@@ -20,7 +20,7 @@ import com.java110.store.dao.IAssetInventoryDetailV1ServiceDao;
 import com.java110.store.dao.IAssetInventoryV1ServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.assetInventory.AssetInventoryDto;
+import com.java110.dto.purchase.AssetInventoryDto;
 import com.java110.intf.store.IAssetInventoryV1InnerServiceSMO;
 import com.java110.po.assetInventory.AssetInventoryPo;
 import com.java110.utils.util.BeanConvertUtil;

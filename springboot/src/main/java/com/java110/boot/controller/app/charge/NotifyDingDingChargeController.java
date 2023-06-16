@@ -3,7 +3,7 @@ package com.java110.boot.controller.app.charge;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.chargeMachine.NotifyChargeOrderDto;
+import com.java110.dto.charge.NotifyChargeOrderDto;
 import com.java110.intf.common.INotifyChargeV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.vo.ResultVo;

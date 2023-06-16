@@ -9,7 +9,7 @@ import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IStoreServiceDao;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -50,7 +50,7 @@ public class memberJoinedStoreListener extends AbstractStoreBusinessServiceDataF
      * @param business 当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
@@ -66,7 +66,7 @@ public class memberJoinedStoreListener extends AbstractStoreBusinessServiceDataF
      * @param business 当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -88,7 +88,7 @@ public class memberJoinedStoreListener extends AbstractStoreBusinessServiceDataF
      * @param business 当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -111,7 +111,7 @@ public class memberJoinedStoreListener extends AbstractStoreBusinessServiceDataF
      * @param business 总的数据节点
      * @param businessMemberStore 商户成员节点
      */
-    private void doBusinessMemberStore(Business business,JSONObject businessMemberStore){
+    private void doBusinessMemberStore(AppBusiness business, JSONObject businessMemberStore){
 
         Assert.jsonObjectHaveKey(businessMemberStore,"storeId","businessMemberStore 节点下没有包含 storeId 节点");
         Assert.jsonObjectHaveKey(businessMemberStore,"memberId","businessMemberStore 节点下没有包含 memberId 节点");

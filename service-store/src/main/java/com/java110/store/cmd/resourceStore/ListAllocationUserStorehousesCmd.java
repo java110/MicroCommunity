@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.PageDto;
-import com.java110.dto.allocationStorehouse.AllocationUserStorehouseDto;
+import com.java110.dto.purchase.AllocationUserStorehouseDto;
 import com.java110.intf.store.IAllocationUserStorehouseInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;

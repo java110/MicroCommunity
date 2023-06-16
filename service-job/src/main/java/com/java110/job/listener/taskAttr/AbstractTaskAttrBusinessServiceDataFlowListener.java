@@ -2,7 +2,7 @@ package com.java110.job.listener.taskAttr;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.job.dao.ITaskAttrServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -53,7 +53,7 @@ public abstract class AbstractTaskAttrBusinessServiceDataFlowListener extends Ab
      *
      * @param businessTaskAttr 定时任务属性信息
      */
-    protected void autoSaveDelBusinessTaskAttr(Business business, JSONObject businessTaskAttr) {
+    protected void autoSaveDelBusinessTaskAttr(AppBusiness business, JSONObject businessTaskAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessTaskAttr.getString("attrId"));

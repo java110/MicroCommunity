@@ -1,7 +1,7 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.store.dao.ISmallWeChatServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;

@@ -2,7 +2,7 @@ package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.contract.ContractPartyaDto;
-import com.java110.po.contractPartya.ContractPartyaPo;
+import com.java110.po.contract.ContractPartyaPo;
 import com.java110.store.bmo.contractPartya.IDeleteContractPartyaBMO;
 import com.java110.store.bmo.contractPartya.IGetContractPartyaBMO;
 import com.java110.store.bmo.contractPartya.ISaveContractPartyaBMO;

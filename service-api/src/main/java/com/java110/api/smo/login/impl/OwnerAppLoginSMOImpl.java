@@ -12,7 +12,7 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerCarOpenUserDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;

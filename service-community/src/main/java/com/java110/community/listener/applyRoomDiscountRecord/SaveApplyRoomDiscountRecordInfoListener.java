@@ -2,7 +2,7 @@ package com.java110.community.listener.applyRoomDiscountRecord;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.po.applyRoomDiscountRecord.ApplyRoomDiscountRecordPo;
+import com.java110.po.room.ApplyRoomDiscountRecordPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -10,7 +10,7 @@ import com.java110.community.dao.IApplyRoomDiscountRecordServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class SaveApplyRoomDiscountRecordInfoListener extends AbstractApplyRoomDi
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
@@ -82,7 +82,7 @@ public class SaveApplyRoomDiscountRecordInfoListener extends AbstractApplyRoomDi
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -127,7 +127,7 @@ public class SaveApplyRoomDiscountRecordInfoListener extends AbstractApplyRoomDi
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -151,7 +151,7 @@ public class SaveApplyRoomDiscountRecordInfoListener extends AbstractApplyRoomDi
      * @param business                        总的数据节点
      * @param businessApplyRoomDiscountRecord 验房记录节点
      */
-    private void doBusinessApplyRoomDiscountRecord(Business business, JSONObject businessApplyRoomDiscountRecord) {
+    private void doBusinessApplyRoomDiscountRecord(AppBusiness business, JSONObject businessApplyRoomDiscountRecord) {
 
         Assert.jsonObjectHaveKey(businessApplyRoomDiscountRecord, "ardrId", "businessApplyRoomDiscountRecord 节点下没有包含 ardrId 节点");
 

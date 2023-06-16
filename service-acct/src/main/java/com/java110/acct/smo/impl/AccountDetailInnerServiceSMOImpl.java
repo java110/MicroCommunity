@@ -7,7 +7,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.account.AccountDetailDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
-import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.po.account.AccountDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

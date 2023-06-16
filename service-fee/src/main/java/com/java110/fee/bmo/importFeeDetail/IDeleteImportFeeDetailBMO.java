@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.importFeeDetail;
-import com.java110.po.importFeeDetail.ImportFeeDetailPo;
+import com.java110.po.importFee.ImportFeeDetailPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteImportFeeDetailBMO {

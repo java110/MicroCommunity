@@ -1,7 +1,7 @@
 package com.java110.job.task.fee;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerCarDto;

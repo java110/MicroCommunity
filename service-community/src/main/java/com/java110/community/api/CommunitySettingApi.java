@@ -5,7 +5,7 @@ import com.java110.community.bmo.communitySetting.IGetCommunitySettingBMO;
 import com.java110.community.bmo.communitySetting.ISaveCommunitySettingBMO;
 import com.java110.community.bmo.communitySetting.IUpdateCommunitySettingBMO;
 import com.java110.dto.community.CommunitySettingDto;
-import com.java110.po.communitySetting.CommunitySettingPo;
+import com.java110.po.community.CommunitySettingPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.alibaba.fastjson.JSONObject;

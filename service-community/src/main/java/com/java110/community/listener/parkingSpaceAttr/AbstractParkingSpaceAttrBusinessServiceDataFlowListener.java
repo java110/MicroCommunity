@@ -3,7 +3,7 @@ package com.java110.community.listener.parkingSpaceAttr;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IParkingSpaceAttrServiceDao;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -54,7 +54,7 @@ public abstract class AbstractParkingSpaceAttrBusinessServiceDataFlowListener ex
      *
      * @param businessParkingSpaceAttr 车位属性信息
      */
-    protected void autoSaveDelBusinessParkingSpaceAttr(Business business, JSONObject businessParkingSpaceAttr) {
+    protected void autoSaveDelBusinessParkingSpaceAttr(AppBusiness business, JSONObject businessParkingSpaceAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessParkingSpaceAttr.getString("attrId"));

@@ -3,7 +3,7 @@ package com.java110.common.bmo.workflowAuditMessage.impl;
 import com.java110.common.bmo.workflowAuditMessage.IDeleteWorkflowAuditMessageBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.common.IWorkflowAuditMessageInnerServiceSMO;
-import com.java110.po.workflowAuditMessage.WorkflowAuditMessagePo;
+import com.java110.po.oaWorkflow.WorkflowAuditMessagePo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

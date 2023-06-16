@@ -1,7 +1,7 @@
 package com.java110.community.bmo.roomRenovationDetail.impl;
 
 import com.java110.community.bmo.roomRenovationDetail.IGetRoomRenovationDetailBMO;
-import com.java110.dto.roomRenovationDetail.RoomRenovationDetailDto;
+import com.java110.dto.room.RoomRenovationDetailDto;
 import com.java110.intf.community.IRoomRenovationDetailInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

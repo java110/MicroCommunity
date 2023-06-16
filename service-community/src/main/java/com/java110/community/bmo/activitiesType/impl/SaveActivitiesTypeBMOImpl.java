@@ -4,7 +4,7 @@ import com.java110.community.bmo.activitiesType.ISaveActivitiesTypeBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.IActivitiesTypeInnerServiceSMO;
-import com.java110.po.activitiesType.ActivitiesTypePo;
+import com.java110.po.activities.ActivitiesTypePo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

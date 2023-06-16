@@ -1,7 +1,6 @@
 package com.java110.community.bmo.room;
 
-import com.java110.dto.RoomDto;
-import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.room.RoomDto;
 
 import java.util.List;
 

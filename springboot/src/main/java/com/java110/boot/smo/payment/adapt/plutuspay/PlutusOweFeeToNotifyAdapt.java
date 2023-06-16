@@ -26,7 +26,7 @@ import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.BeanConvertUtil;

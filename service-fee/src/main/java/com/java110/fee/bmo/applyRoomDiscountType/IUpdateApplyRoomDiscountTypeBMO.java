@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.applyRoomDiscountType;
-import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;
+import com.java110.po.room.ApplyRoomDiscountTypePo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateApplyRoomDiscountTypeBMO {

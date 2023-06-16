@@ -18,19 +18,15 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.ICarInoutPaymentV1ServiceDao;
 import com.java110.intf.common.ICarInoutPaymentV1InnerServiceSMO;
-import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
-import com.java110.po.carInoutPayment.CarInoutPaymentPo;
+import com.java110.dto.payment.CarInoutPaymentDto;
+import com.java110.po.car.CarInoutPaymentPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

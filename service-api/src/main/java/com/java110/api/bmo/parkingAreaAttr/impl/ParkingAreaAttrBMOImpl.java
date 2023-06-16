@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.parkingAreaAttr.IParkingAreaAttrBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.community.IParkingAreaAttrInnerServiceSMO;
-import com.java110.po.parkingAreaAttr.ParkingAreaAttrPo;
+import com.java110.po.parking.ParkingAreaAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

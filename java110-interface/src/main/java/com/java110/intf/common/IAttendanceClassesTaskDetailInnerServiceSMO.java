@@ -1,8 +1,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
-import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
+import com.java110.dto.attendance.AttendanceClassesTaskDetailDto;
+import com.java110.po.attendance.AttendanceClassesTaskDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

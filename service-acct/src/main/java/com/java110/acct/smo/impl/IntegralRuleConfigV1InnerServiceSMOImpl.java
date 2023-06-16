@@ -19,7 +19,7 @@ package com.java110.acct.smo.impl;
 import com.java110.acct.dao.IIntegralRuleConfigV1ServiceDao;
 import com.java110.intf.acct.IIntegralRuleConfigV1InnerServiceSMO;
 import com.java110.dto.integral.IntegralRuleConfigDto;
-import com.java110.po.integralRuleConfig.IntegralRuleConfigPo;
+import com.java110.po.integral.IntegralRuleConfigPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

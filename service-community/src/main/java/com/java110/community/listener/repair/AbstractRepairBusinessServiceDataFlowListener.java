@@ -3,7 +3,7 @@ package com.java110.community.listener.repair;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IRepairServiceDao;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -64,7 +64,7 @@ public abstract class AbstractRepairBusinessServiceDataFlowListener extends Abst
      *
      * @param businessRepair 报修信息信息
      */
-    protected void autoSaveDelBusinessRepair(Business business, JSONObject businessRepair) {
+    protected void autoSaveDelBusinessRepair(AppBusiness business, JSONObject businessRepair) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("repairId", businessRepair.getString("repairId"));

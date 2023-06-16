@@ -2,6 +2,8 @@ package com.java110.order.smo.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.system.AppRoute;
+import com.java110.dto.system.AppService;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.order.smo.ICenterServiceSMO;
 import com.java110.utils.cache.AppRouteCache;
@@ -18,10 +20,8 @@ import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
 import com.java110.core.factory.DataTransactionFactory;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.AppRoute;
-import com.java110.entity.center.AppService;
-import com.java110.entity.center.Business;
-import com.java110.entity.center.DataFlowLinksCost;
+import com.java110.dto.system.AppBusiness;
+import com.java110.dto.system.DataFlowLinksCost;
 import com.java110.core.event.center.DataFlowEventPublishing;
 
 import com.java110.core.log.LogAgent;
@@ -456,7 +456,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
 
         //判断 AppId 是否有权限操作相应的服务
         if (dataFlow.getBusinesses() != null && dataFlow.getBusinesses().size() > 0) {
-            for (Business business : dataFlow.getBusinesses()) {
+            for (AppBusiness business : dataFlow.getBusinesses()) {
 
                 AppService appService = DataFlowFactory.getService(dataFlow, business.getServiceCode());
 
@@ -921,7 +921,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
             }
         }
 
-        Business business = dataFlow.getCurrentBusiness();
+        AppBusiness business = dataFlow.getCurrentBusiness();
         if(!ResponseConstant.RESULT_CODE_SUCCESS.equals(business.getCode())){
             //throw new BusinessStatusException(business.getCode(),"业务bId= "+business.getbId() + " 处理失败，需要作废订单");
             //作废订单和业务项 插入撤单记录 等待撤单
@@ -1011,9 +1011,9 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      */
     private void doSynchronousBusinesses(DataFlow dataFlow) throws BusinessException{
         Date startDate = DateUtil.getCurrentDate();
-        List<Business> synchronousBusinesses = DataFlowFactory.getSynchronousBusinesses(dataFlow);
+        List<AppBusiness> synchronousBusinesses = DataFlowFactory.getSynchronousBusinesses(dataFlow);
 
-        List<Business> deleteBusinesses = new ArrayList<Business>();
+        List<AppBusiness> deleteBusinesses = new ArrayList<AppBusiness>();
 
         if(synchronousBusinesses == null || synchronousBusinesses.size() == 0){
             return ;
@@ -1054,7 +1054,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * @param dataFlow
      * @param deleteBusinesses
      */
-    private void doDeleteOrderAndInstanceData(DataFlow dataFlow, List<Business> deleteBusinesses) {
+    private void doDeleteOrderAndInstanceData(DataFlow dataFlow, List<AppBusiness> deleteBusinesses) {
 
         if(deleteBusinesses == null || deleteBusinesses.size() == 0){
             return ;
@@ -1072,7 +1072,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * 完成订单状态
      * @param synchronousBusinesses
      */
-    private void doComplateOrderAndBusiness(DataFlow dataFlow,List<Business> synchronousBusinesses) {
+    private void doComplateOrderAndBusiness(DataFlow dataFlow,List<AppBusiness> synchronousBusinesses) {
 
         //Complete Order and business
         Map order = new HashMap();
@@ -1084,7 +1084,7 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
         Date businessStartDate;
         AppService service;
         JSONObject requestBusinessJson;
-        for(Business business : synchronousBusinesses){
+        for(AppBusiness business : synchronousBusinesses){
             businessStartDate = DateUtil.getCurrentDate();
             service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
             if(!CommonConstant.INSTANCE_Y.equals(service.getIsInstance())){
@@ -1106,11 +1106,11 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * @param dataFlow
      * @param synchronousBusinesses
      */
-    private void doBusinessTableDataInfoToInstanceTable(DataFlow dataFlow, List<Business> synchronousBusinesses,List<Business> deleteBusinesses) {
+    private void doBusinessTableDataInfoToInstanceTable(DataFlow dataFlow, List<AppBusiness> synchronousBusinesses, List<AppBusiness> deleteBusinesses) {
         Date businessStartDate;
         AppService service;
         JSONObject requestBusinessJson;
-        for(Business business : synchronousBusinesses){
+        for(AppBusiness business : synchronousBusinesses){
             businessStartDate = DateUtil.getCurrentDate();
             service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
             if(!CommonConstant.INSTANCE_Y.equals(service.getIsInstance())){
@@ -1147,11 +1147,11 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * @param dataFlow
      * @param deleteBusinesses
      */
-    private void doDeleteBusinessSystemInstanceData(DataFlow dataFlow, List<Business> deleteBusinesses) {
+    private void doDeleteBusinessSystemInstanceData(DataFlow dataFlow, List<AppBusiness> deleteBusinesses) {
         Date businessStartDate;
         AppService service;
         JSONObject requestBusinessJson;
-        for(Business business : deleteBusinesses){
+        for(AppBusiness business : deleteBusinesses){
             businessStartDate = DateUtil.getCurrentDate();
             service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
             requestBusinessJson = DataFlowFactory.getDeleteInstanceTableJson(dataFlow,business);
@@ -1216,11 +1216,11 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
      * @param synchronousBusinesses
      * @param responseBusinesses
      */
-    private void doSaveDataInfoToBusinessTable(DataFlow dataFlow, List<Business> synchronousBusinesses, JSONArray responseBusinesses) {
+    private void doSaveDataInfoToBusinessTable(DataFlow dataFlow, List<AppBusiness> synchronousBusinesses, JSONArray responseBusinesses) {
         Date businessStartDate;
         AppService service;
         JSONObject requestBusinessJson;
-        for(Business business : synchronousBusinesses) {
+        for(AppBusiness business : synchronousBusinesses) {
             businessStartDate = DateUtil.getCurrentDate();
 
             service = DataFlowFactory.getService(dataFlow,business.getServiceCode());
@@ -1253,14 +1253,14 @@ public class CenterServiceSMOImpl extends LoggerEngine implements ICenterService
     private void doAsynchronousBusinesses(DataFlow dataFlow) throws BusinessException{
         Date startDate = DateUtil.getCurrentDate();
         //6.3 处理异步，按消息队里处理
-        List<Business> asynchronousBusinesses = DataFlowFactory.getAsynchronousBusinesses(dataFlow);
+        List<AppBusiness> asynchronousBusinesses = DataFlowFactory.getAsynchronousBusinesses(dataFlow);
 
         if(asynchronousBusinesses == null || asynchronousBusinesses.size() == 0){
             return ;
         }
 
         try {
-            for (Business business : asynchronousBusinesses) {
+            for (AppBusiness business : asynchronousBusinesses) {
                 dataFlow.setCurrentBusiness(business);
                 KafkaFactory.sendKafkaMessage(DataFlowFactory.getService(dataFlow, business.getServiceCode()).getMessageQueueName(), "",
                         DataFlowFactory.getRequestBusinessJson(dataFlow,business).toJSONString());

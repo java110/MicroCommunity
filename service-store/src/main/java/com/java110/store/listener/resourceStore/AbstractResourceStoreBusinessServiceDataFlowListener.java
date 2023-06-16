@@ -1,7 +1,7 @@
 package com.java110.store.listener.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IResourceStoreServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -68,7 +68,7 @@ public abstract class AbstractResourceStoreBusinessServiceDataFlowListener exten
      *
      * @param businessResourceStore 资源信息
      */
-    protected void autoSaveDelBusinessResourceStore(Business business, JSONObject businessResourceStore) {
+    protected void autoSaveDelBusinessResourceStore(AppBusiness business, JSONObject businessResourceStore) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("resId", businessResourceStore.getString("resId"));

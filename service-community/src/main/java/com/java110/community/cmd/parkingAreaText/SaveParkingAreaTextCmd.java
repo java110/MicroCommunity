@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.parking.ParkingAreaTextDto;
 import com.java110.intf.community.IParkingAreaTextV1InnerServiceSMO;
-import com.java110.po.parkingAreaText.ParkingAreaTextPo;
+import com.java110.po.parking.ParkingAreaTextPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

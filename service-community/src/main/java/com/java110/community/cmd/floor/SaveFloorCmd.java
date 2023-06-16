@@ -8,7 +8,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
-import com.java110.dto.FloorDto;
+import com.java110.dto.floor.FloorDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IFloorV1InnerServiceSMO;
 import com.java110.po.floor.FloorPo;

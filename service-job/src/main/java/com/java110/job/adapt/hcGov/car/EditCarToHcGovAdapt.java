@@ -24,7 +24,7 @@ import com.java110.dto.owner.OwnerCarAttrDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.parking.ParkingAreaAttrDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;

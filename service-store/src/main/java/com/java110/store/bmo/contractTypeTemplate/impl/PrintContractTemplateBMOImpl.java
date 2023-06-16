@@ -4,7 +4,7 @@ import com.java110.dto.contract.ContractDto;
 import com.java110.dto.contract.ContractAttrDto;
 import com.java110.dto.contract.ContractTypeSpecDto;
 import com.java110.dto.contract.ContractTypeTemplateDto;
-import com.java110.entity.mapping.Mapping;
+import com.java110.dto.mapping.Mapping;
 import com.java110.intf.store.IContractAttrInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.store.IContractTypeSpecInnerServiceSMO;

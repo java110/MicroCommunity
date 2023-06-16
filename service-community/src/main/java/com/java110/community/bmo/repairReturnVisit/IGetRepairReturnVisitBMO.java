@@ -1,5 +1,5 @@
 package com.java110.community.bmo.repairReturnVisit;
-import com.java110.dto.repairReturnVisit.RepairReturnVisitDto;
+import com.java110.dto.repair.RepairReturnVisitDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetRepairReturnVisitBMO {
 

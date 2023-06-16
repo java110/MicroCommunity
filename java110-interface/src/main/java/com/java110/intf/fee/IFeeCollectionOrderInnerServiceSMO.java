@@ -2,7 +2,7 @@ package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.FeeCollectionOrderDto;
-import com.java110.po.feeCollectionOrder.FeeCollectionOrderPo;
+import com.java110.po.fee.FeeCollectionOrderPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

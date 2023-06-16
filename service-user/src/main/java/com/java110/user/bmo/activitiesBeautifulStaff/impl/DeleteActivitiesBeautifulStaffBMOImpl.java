@@ -2,7 +2,7 @@ package com.java110.user.bmo.activitiesBeautifulStaff.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.user.IActivitiesBeautifulStaffInnerServiceSMO;
-import com.java110.po.activitiesBeautifulStaff.ActivitiesBeautifulStaffPo;
+import com.java110.po.activities.ActivitiesBeautifulStaffPo;
 import com.java110.user.bmo.activitiesBeautifulStaff.IDeleteActivitiesBeautifulStaffBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

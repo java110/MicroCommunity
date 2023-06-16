@@ -1,8 +1,7 @@
 package com.java110.common.bmo.workflow;
 
-import com.java110.dto.user.StaffDto;
-import com.java110.dto.workflow.WorkflowDto;
-import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.dto.oaWorkflow.WorkflowDto;
+import com.java110.dto.oaWorkflow.WorkflowModelDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IQueryWorkFlowFirstStaffBMO {

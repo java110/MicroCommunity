@@ -4,7 +4,7 @@ import com.java110.community.bmo.communitySetting.IUpdateCommunitySettingBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
-import com.java110.po.communitySetting.CommunitySettingPo;
+import com.java110.po.community.CommunitySettingPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

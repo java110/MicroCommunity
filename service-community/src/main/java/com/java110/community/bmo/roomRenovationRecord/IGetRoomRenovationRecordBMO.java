@@ -1,6 +1,6 @@
 package com.java110.community.bmo.roomRenovationRecord;
 
-import com.java110.po.roomRenovationRecord.RoomRenovationRecordPo;
+import com.java110.po.room.RoomRenovationRecordPo;
 import org.springframework.http.ResponseEntity;
 
 /**

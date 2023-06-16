@@ -1,5 +1,5 @@
 package com.java110.report.bmo.reportFeeYearCollectionDetail;
-import com.java110.dto.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailDto;
+import com.java110.dto.reportFee.ReportFeeYearCollectionDetailDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetReportFeeYearCollectionDetailBMO {
 

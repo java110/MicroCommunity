@@ -1,6 +1,6 @@
 package com.java110.user.bmo.rentingPoolFlow.impl;
 
-import com.java110.dto.rentingPool.RentingPoolFlowDto;
+import com.java110.dto.renting.RentingPoolFlowDto;
 import com.java110.intf.user.IRentingPoolFlowInnerServiceSMO;
 import com.java110.user.bmo.rentingPoolFlow.IGetRentingPoolFlowBMO;
 import com.java110.vo.ResultVo;

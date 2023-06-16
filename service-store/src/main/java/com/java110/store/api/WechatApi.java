@@ -1,8 +1,8 @@
 package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.wechatSmsTemplate.WechatSmsTemplateDto;
-import com.java110.po.wechatSmsTemplate.WechatSmsTemplatePo;
+import com.java110.dto.wechat.WechatSmsTemplateDto;
+import com.java110.po.wechat.WechatSmsTemplatePo;
 import com.java110.store.bmo.wechatTemplate.IDeleteWechatTemplate;
 import com.java110.store.bmo.wechatTemplate.IGetWechatTemplate;
 import com.java110.store.bmo.wechatTemplate.ISaveWechatTemplate;

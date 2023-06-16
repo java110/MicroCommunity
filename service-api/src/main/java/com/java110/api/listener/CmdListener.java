@@ -7,7 +7,7 @@ import com.java110.core.context.DataFlowContext;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.order.OrderDto;
-import com.java110.entity.center.AppService;
+import com.java110.dto.system.AppService;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;

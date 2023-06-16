@@ -19,7 +19,7 @@ package com.java110.dev.smo.impl;
 import com.java110.dev.dao.IMappingDomainV1ServiceDao;
 import com.java110.intf.dev.IMappingDomainV1InnerServiceSMO;
 import com.java110.dto.mapping.MappingDomainDto;
-import com.java110.po.mappingDomain.MappingDomainPo;
+import com.java110.po.mapping.MappingDomainPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

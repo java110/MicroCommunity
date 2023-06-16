@@ -6,7 +6,7 @@ import com.java110.boot.smo.AppAbstractComponentSMO;
 import com.java110.boot.smo.payment.IGoodsToNotifySMO;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;

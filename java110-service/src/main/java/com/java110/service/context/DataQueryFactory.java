@@ -1,7 +1,7 @@
 package com.java110.service.context;
 
 import com.java110.utils.cache.ServiceSqlCache;
-import com.java110.entity.service.ServiceSql;
+import com.java110.dto.system.ServiceSql;
 
 /**
  * 数据查询工厂类

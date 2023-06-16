@@ -1,5 +1,5 @@
 package com.java110.user.bmo.rentingAppointment;
-import com.java110.dto.rentingAppointment.RentingAppointmentDto;
+import com.java110.dto.renting.RentingAppointmentDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetRentingAppointmentBMO {
 

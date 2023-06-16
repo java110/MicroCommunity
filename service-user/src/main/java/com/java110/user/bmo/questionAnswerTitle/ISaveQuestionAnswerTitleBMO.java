@@ -1,7 +1,7 @@
 package com.java110.user.bmo.questionAnswerTitle;
 
 import com.alibaba.fastjson.JSONArray;
-import com.java110.po.questionAnswerTitle.QuestionAnswerTitlePo;
+import com.java110.po.questionAnswer.QuestionAnswerTitlePo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveQuestionAnswerTitleBMO {
 

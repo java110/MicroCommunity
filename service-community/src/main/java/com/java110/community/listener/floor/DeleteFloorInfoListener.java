@@ -11,7 +11,7 @@ import com.java110.utils.util.Assert;
 import com.java110.community.dao.IFloorServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class DeleteFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
@@ -93,7 +93,7 @@ public class DeleteFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
 
@@ -123,7 +123,7 @@ public class DeleteFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -158,7 +158,7 @@ public class DeleteFloorInfoListener extends AbstractFloorBusinessServiceDataFlo
      * @param business      总的数据节点
      * @param businessFloor 小区楼节点
      */
-    private void doBusinessFloor(Business business, JSONObject businessFloor) {
+    private void doBusinessFloor(AppBusiness business, JSONObject businessFloor) {
 
         Assert.jsonObjectHaveKey(businessFloor, "floorId", "businessFloor 节点下没有包含 floorId 节点");
 

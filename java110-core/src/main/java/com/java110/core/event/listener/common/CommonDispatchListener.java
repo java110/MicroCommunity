@@ -6,7 +6,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.ProtocolUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.core.context.AppContext;
-import com.java110.entity.order.BusiOrder;
+import com.java110.dto.system.BusiOrder;
 import com.java110.core.event.app.AppListener;
 import com.java110.core.event.app.common.AppCommonEvent;
 import com.java110.core.event.method.CommonDispatchAfterMethod;

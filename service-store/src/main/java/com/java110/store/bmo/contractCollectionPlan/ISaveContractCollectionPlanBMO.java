@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractCollectionPlan;
 
-import com.java110.po.contractCollectionPlan.ContractCollectionPlanPo;
+import com.java110.po.contract.ContractCollectionPlanPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveContractCollectionPlanBMO {
 

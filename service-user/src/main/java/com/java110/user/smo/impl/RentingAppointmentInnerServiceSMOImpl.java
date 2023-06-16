@@ -3,9 +3,9 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.rentingAppointment.RentingAppointmentDto;
+import com.java110.dto.renting.RentingAppointmentDto;
 import com.java110.intf.user.IRentingAppointmentInnerServiceSMO;
-import com.java110.po.rentingAppointment.RentingAppointmentPo;
+import com.java110.po.renting.RentingAppointmentPo;
 import com.java110.user.dao.IRentingAppointmentServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

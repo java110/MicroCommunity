@@ -1,7 +1,7 @@
 package com.java110.service.smo.impl;
 
 import com.java110.intf.common.ILogSystemErrorInnerServiceSMO;
-import com.java110.po.logSystemError.LogSystemErrorPo;
+import com.java110.po.log.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;

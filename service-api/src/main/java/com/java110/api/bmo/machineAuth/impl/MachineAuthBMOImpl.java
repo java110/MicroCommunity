@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.machineAuth.IMachineAuthBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.common.IMachineAuthInnerServiceSMO;
-import com.java110.po.machineAuth.MachineAuthPo;
+import com.java110.po.machine.MachineAuthPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

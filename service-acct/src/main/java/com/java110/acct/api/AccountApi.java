@@ -14,7 +14,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.po.account.AccountDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;

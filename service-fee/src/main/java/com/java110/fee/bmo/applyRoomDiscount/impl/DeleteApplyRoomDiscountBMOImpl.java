@@ -5,7 +5,7 @@ import com.java110.dto.file.FileRelDto;
 import com.java110.fee.bmo.applyRoomDiscount.IDeleteApplyRoomDiscountBMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.fee.IApplyRoomDiscountInnerServiceSMO;
-import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
+import com.java110.po.room.ApplyRoomDiscountPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.staffAppAuth.StaffAppAuthDto;
-import com.java110.po.staffAppAuth.StaffAppAuthPo;
+import com.java110.dto.user.StaffAppAuthDto;
+import com.java110.po.user.StaffAppAuthPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IMachinePrinterV1ServiceDao;
 import com.java110.intf.common.IMachinePrinterV1InnerServiceSMO;
 import com.java110.dto.machine.MachinePrinterDto;
-import com.java110.po.machinePrinter.MachinePrinterPo;
+import com.java110.po.machine.MachinePrinterPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

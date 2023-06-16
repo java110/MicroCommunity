@@ -21,7 +21,7 @@ import com.java110.boot.smo.activiti.IModelSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.dto.app.AppDto;
-import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.dto.oaWorkflow.WorkflowModelDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

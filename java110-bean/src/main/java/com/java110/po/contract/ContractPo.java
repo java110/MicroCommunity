@@ -1,7 +1,5 @@
 package com.java110.po.contract;
 
-import com.java110.po.contractFile.ContractFilePo;
-
 import java.io.Serializable;
 import java.util.List;
 

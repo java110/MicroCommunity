@@ -14,8 +14,8 @@ package com.java110.fee.bmo.tempCarFee;/*
  * limitations under the License.
  */
 
-import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
-import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
+import com.java110.dto.fee.TempCarFeeRuleDto;
+import com.java110.dto.fee.TempCarPayOrderDto;
 import org.springframework.http.ResponseEntity;
 
 /**

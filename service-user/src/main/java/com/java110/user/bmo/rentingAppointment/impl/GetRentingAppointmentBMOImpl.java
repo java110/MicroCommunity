@@ -1,7 +1,7 @@
 package com.java110.user.bmo.rentingAppointment.impl;
 
-import com.java110.dto.RoomDto;
-import com.java110.dto.rentingAppointment.RentingAppointmentDto;
+import com.java110.dto.room.RoomDto;
+import com.java110.dto.renting.RentingAppointmentDto;
 import com.java110.intf.user.IRentingAppointmentInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.user.bmo.rentingAppointment.IGetRentingAppointmentBMO;

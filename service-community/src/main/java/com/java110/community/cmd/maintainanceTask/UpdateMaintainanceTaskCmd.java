@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.maintainance.MaintainanceTaskDto;
 import com.java110.intf.community.IMaintainanceTaskV1InnerServiceSMO;
-import com.java110.po.maintainanceTask.MaintainanceTaskPo;
+import com.java110.po.maintainance.MaintainanceTaskPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -1,8 +1,8 @@
 package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.userAddress.UserAddressDto;
-import com.java110.po.userAddress.UserAddressPo;
+import com.java110.dto.user.UserAddressDto;
+import com.java110.po.user.UserAddressPo;
 import com.java110.user.bmo.userAddress.IDeleteUserAddressBMO;
 import com.java110.user.bmo.userAddress.IGetUserAddressBMO;
 import com.java110.user.bmo.userAddress.ISaveUserAddressBMO;

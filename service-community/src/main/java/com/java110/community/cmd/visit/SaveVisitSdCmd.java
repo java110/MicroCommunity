@@ -1,7 +1,6 @@
 package com.java110.community.cmd.visit;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -23,7 +22,7 @@ import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.VisitPo;
-import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
+import com.java110.po.owner.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;

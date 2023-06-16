@@ -1,10 +1,10 @@
 package com.java110.report.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.reportFeeYearCollection.ReportFeeYearCollectionDto;
-import com.java110.dto.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailDto;
-import com.java110.po.reportFeeYearCollection.ReportFeeYearCollectionPo;
-import com.java110.po.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailPo;
+import com.java110.dto.reportFee.ReportFeeYearCollectionDto;
+import com.java110.dto.reportFee.ReportFeeYearCollectionDetailDto;
+import com.java110.po.reportFee.ReportFeeYearCollectionPo;
+import com.java110.po.reportFee.ReportFeeYearCollectionDetailPo;
 import com.java110.report.bmo.reportFeeYearCollection.IDeleteReportFeeYearCollectionBMO;
 import com.java110.report.bmo.reportFeeYearCollection.IGetReportFeeYearCollectionBMO;
 import com.java110.report.bmo.reportFeeYearCollection.ISaveReportFeeYearCollectionBMO;

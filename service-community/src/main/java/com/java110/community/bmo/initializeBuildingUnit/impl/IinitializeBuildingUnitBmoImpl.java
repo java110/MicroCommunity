@@ -17,7 +17,7 @@ package com.java110.community.bmo.initializeBuildingUnit.impl;
 
 import com.java110.community.bmo.initializeBuildingUnit.IinitializeBuildingUnitBmo;
 import com.java110.core.factory.AuthenticationFactory;
-import com.java110.dto.FloorDto;
+import com.java110.dto.floor.FloorDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.community.IinitializeBuildingUnitSMO;

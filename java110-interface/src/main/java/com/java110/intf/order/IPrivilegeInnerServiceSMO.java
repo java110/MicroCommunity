@@ -16,7 +16,7 @@
 package com.java110.intf.order;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName IPrivilegeInnerServiceSMO

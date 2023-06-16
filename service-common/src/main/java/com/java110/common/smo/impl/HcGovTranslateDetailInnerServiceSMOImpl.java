@@ -4,7 +4,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IHcGovTranslateDetailServiceDao;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDetailDto;
 import com.java110.intf.common.IHcGovTranslateDetailInnerServiceSMO;
-import com.java110.po.hcGovTranslateDetail.HcGovTranslateDetailPo;
+import com.java110.po.hcGovTranslate.HcGovTranslateDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

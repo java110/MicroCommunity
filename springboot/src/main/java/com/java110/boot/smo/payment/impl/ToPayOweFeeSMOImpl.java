@@ -15,7 +15,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;

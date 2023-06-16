@@ -1,12 +1,12 @@
 package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
+import com.java110.dto.payFee.PayFeeConfigDiscountDto;
 import com.java110.fee.bmo.payFeeConfigDiscount.IDeletePayFeeConfigDiscountBMO;
 import com.java110.fee.bmo.payFeeConfigDiscount.IGetPayFeeConfigDiscountBMO;
 import com.java110.fee.bmo.payFeeConfigDiscount.ISavePayFeeConfigDiscountBMO;
 import com.java110.fee.bmo.payFeeConfigDiscount.IUpdatePayFeeConfigDiscountBMO;
-import com.java110.po.payFeeConfigDiscount.PayFeeConfigDiscountPo;
+import com.java110.po.payFee.PayFeeConfigDiscountPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;

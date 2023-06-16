@@ -10,7 +10,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerCarOpenUserDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
-import com.java110.po.ownerCarOpenUser.OwnerCarOpenUserPo;
+import com.java110.po.owner.OwnerCarOpenUserPo;
 import com.java110.utils.util.Assert;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;

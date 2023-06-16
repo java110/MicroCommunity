@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.contract.ContractTypeTemplateDto;
 import com.java110.intf.store.IContractTypeTemplateInnerServiceSMO;
-import com.java110.po.contractTypeTemplate.ContractTypeTemplatePo;
+import com.java110.po.contract.ContractTypeTemplatePo;
 import com.java110.store.dao.IContractTypeTemplateServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

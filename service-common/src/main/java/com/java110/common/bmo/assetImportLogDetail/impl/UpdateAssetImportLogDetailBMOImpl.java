@@ -3,7 +3,7 @@ package com.java110.common.bmo.assetImportLogDetail.impl;
 import com.java110.common.bmo.assetImportLogDetail.IUpdateAssetImportLogDetailBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.common.IAssetImportLogDetailInnerServiceSMO;
-import com.java110.po.assetImportLogDetail.AssetImportLogDetailPo;
+import com.java110.po.log.AssetImportLogDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -2,7 +2,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.owner.OwnerCarAttrDto;
-import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
+import com.java110.po.owner.OwnerCarAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

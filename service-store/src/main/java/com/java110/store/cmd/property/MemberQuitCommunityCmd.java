@@ -35,7 +35,7 @@ import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.community.CommunityMemberPo;
-import com.java110.po.menuGroupCommunity.MenuGroupCommunityPo;
+import com.java110.po.menu.MenuGroupCommunityPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;

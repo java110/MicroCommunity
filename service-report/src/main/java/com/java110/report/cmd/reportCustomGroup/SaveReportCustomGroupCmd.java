@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.report.IReportCustomGroupV1InnerServiceSMO;
-import com.java110.po.reportCustomGroup.ReportCustomGroupPo;
+import com.java110.po.reportCustom.ReportCustomGroupPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

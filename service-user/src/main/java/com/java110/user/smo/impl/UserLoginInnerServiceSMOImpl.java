@@ -3,9 +3,9 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.userLogin.UserLoginDto;
+import com.java110.dto.user.UserLoginDto;
 import com.java110.intf.user.IUserLoginInnerServiceSMO;
-import com.java110.po.userLogin.UserLoginPo;
+import com.java110.po.user.UserLoginPo;
 import com.java110.user.dao.IUserLoginServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

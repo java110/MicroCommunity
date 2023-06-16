@@ -6,7 +6,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.community.IParkingSpaceAttrInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.parking.ParkingSpaceAttrDto;
-import com.java110.po.parkingSpaceAttr.ParkingSpaceAttrPo;
+import com.java110.po.parking.ParkingSpaceAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.reportInfoAnswer.ReportInfoAnswerDto;
+import com.java110.dto.reportInfo.ReportInfoAnswerDto;
 import com.java110.intf.report.IReportInfoAnswerInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;

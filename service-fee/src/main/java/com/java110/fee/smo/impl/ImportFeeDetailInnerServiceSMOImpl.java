@@ -3,10 +3,10 @@ package com.java110.fee.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.importFee.ImportFeeDetailDto;
+import com.java110.dto.importData.ImportFeeDetailDto;
 import com.java110.fee.dao.IImportFeeDetailServiceDao;
 import com.java110.intf.fee.IImportFeeDetailInnerServiceSMO;
-import com.java110.po.importFeeDetail.ImportFeeDetailPo;
+import com.java110.po.importFee.ImportFeeDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

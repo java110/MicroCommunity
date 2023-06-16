@@ -17,7 +17,7 @@ package com.java110.dev.smo.impl;
 
 
 import com.java110.dev.dao.IDictV1ServiceDao;
-import com.java110.dto.Dict.DictDto;
+import com.java110.dto.dict.DictDto;
 import com.java110.intf.dev.IDictV1InnerServiceSMO;
 import com.java110.po.dict.DictPo;
 import com.java110.utils.util.BeanConvertUtil;

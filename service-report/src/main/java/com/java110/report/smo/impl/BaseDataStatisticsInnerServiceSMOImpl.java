@@ -3,8 +3,7 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.RoomDto;
-import com.java110.dto.report.QueryStatisticsDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.intf.report.IBaseDataStatisticsInnerServiceSMO;
 import com.java110.report.dao.IBaseDataStatisticsServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

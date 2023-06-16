@@ -4,7 +4,7 @@ package com.java110.fee.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
+import com.java110.dto.payFee.PayFeeDetailDiscountDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.dao.IPayFeeDetailDiscountServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

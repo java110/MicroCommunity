@@ -3,7 +3,7 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.storehouse.StorehouseDto;
+import com.java110.dto.store.StorehouseDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IStorehouseInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;

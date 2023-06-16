@@ -18,17 +18,15 @@ package com.java110.store.smo.impl;
 
 import com.java110.store.dao.IScheduleClassesV1ServiceDao;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
-import com.java110.dto.scheduleClasses.ScheduleClassesDto;
-import com.java110.po.scheduleClasses.ScheduleClassesPo;
+import com.java110.dto.classes.ScheduleClassesDto;
+import com.java110.po.classes.ScheduleClassesPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

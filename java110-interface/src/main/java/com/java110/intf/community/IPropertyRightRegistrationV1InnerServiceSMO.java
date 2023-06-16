@@ -16,8 +16,8 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.propertyRightRegistration.PropertyRightRegistrationDto;
-import com.java110.po.propertyRightRegistration.PropertyRightRegistrationPo;
+import com.java110.dto.room.PropertyRightRegistrationDto;
+import com.java110.po.room.PropertyRightRegistrationPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

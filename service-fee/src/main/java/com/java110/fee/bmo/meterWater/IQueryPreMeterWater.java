@@ -1,7 +1,7 @@
 package com.java110.fee.bmo.meterWater;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.meterWater.MeterWaterDto;
+import com.java110.dto.meter.MeterWaterDto;
 import org.springframework.http.ResponseEntity;
 
 /**

@@ -1,11 +1,9 @@
 package com.java110.fee.bmo.applyRoomDiscount.impl;
 
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
 import com.java110.fee.bmo.applyRoomDiscount.ISaveApplyRoomDiscountBMO;
 import com.java110.intf.fee.IApplyRoomDiscountInnerServiceSMO;
-import com.java110.po.applyRoomDiscount.ApplyRoomDiscountPo;
+import com.java110.po.room.ApplyRoomDiscountPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ import com.java110.common.dao.IMachineAuthServiceDao;
 import com.java110.dto.machine.MachineAuthDto;
 import com.java110.intf.common.IMachineAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.po.machineAuth.MachineAuthPo;
+import com.java110.po.machine.MachineAuthPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;

@@ -18,8 +18,8 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IChargeMachinePortV1ServiceDao;
 import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
-import com.java110.dto.chargeMachine.ChargeMachinePortDto;
-import com.java110.po.chargeMachinePort.ChargeMachinePortPo;
+import com.java110.dto.charge.ChargeMachinePortDto;
+import com.java110.po.charge.ChargeMachinePortPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

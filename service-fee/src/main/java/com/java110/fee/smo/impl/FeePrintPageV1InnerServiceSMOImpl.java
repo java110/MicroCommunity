@@ -19,7 +19,7 @@ package com.java110.fee.smo.impl;
 import com.java110.fee.dao.IFeePrintPageV1ServiceDao;
 import com.java110.intf.fee.IFeePrintPageV1InnerServiceSMO;
 import com.java110.dto.fee.FeePrintPageDto;
-import com.java110.po.feePrintPage.FeePrintPagePo;
+import com.java110.po.fee.FeePrintPagePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

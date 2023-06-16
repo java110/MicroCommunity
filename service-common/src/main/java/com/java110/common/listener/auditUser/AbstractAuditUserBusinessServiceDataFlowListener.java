@@ -2,7 +2,7 @@ package com.java110.common.listener.auditUser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.IAuditUserServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -54,7 +54,7 @@ public abstract class AbstractAuditUserBusinessServiceDataFlowListener extends A
      *
      * @param businessAuditUser 审核人员信息
      */
-    protected void autoSaveDelBusinessAuditUser(Business business, JSONObject businessAuditUser) {
+    protected void autoSaveDelBusinessAuditUser(AppBusiness business, JSONObject businessAuditUser) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("auditUserId", businessAuditUser.getString("auditUserId"));

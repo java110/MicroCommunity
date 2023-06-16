@@ -3,7 +3,7 @@ package com.java110.community.bmo.repairReturnVisit.impl;
 import com.java110.community.bmo.repairReturnVisit.IDeleteRepairReturnVisitBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.community.IRepairReturnVisitInnerServiceSMO;
-import com.java110.po.repairReturnVisit.RepairReturnVisitPo;
+import com.java110.po.repair.RepairReturnVisitPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -6,7 +6,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.Assert;
 import com.java110.core.context.AppContext;
-import com.java110.entity.order.BusiOrder;
+import com.java110.dto.system.BusiOrder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;

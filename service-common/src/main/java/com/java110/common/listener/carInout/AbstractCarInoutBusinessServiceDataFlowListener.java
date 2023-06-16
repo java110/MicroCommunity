@@ -2,7 +2,7 @@ package com.java110.common.listener.carInout;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.ICarInoutServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -54,7 +54,7 @@ public abstract class AbstractCarInoutBusinessServiceDataFlowListener extends Ab
      *
      * @param businessCarInout 进出场信息
      */
-    protected void autoSaveDelBusinessCarInout(Business business, JSONObject businessCarInout) {
+    protected void autoSaveDelBusinessCarInout(AppBusiness business, JSONObject businessCarInout) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("inoutId", businessCarInout.getString("inoutId"));

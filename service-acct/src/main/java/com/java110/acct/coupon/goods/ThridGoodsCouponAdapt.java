@@ -2,8 +2,8 @@ package com.java110.acct.coupon.goods;
 
 import com.java110.acct.coupon.AbstractCouponAdapt;
 import com.java110.acct.coupon.ICouponAdapt;
-import com.java110.dto.couponPool.CouponPropertyUserDto;
-import com.java110.dto.couponPool.CouponQrCodeDto;
+import com.java110.dto.coupon.CouponPropertyUserDto;
+import com.java110.dto.coupon.CouponQrCodeDto;
 import com.java110.intf.scm.ISupplierV1InnerServiceSMO;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;

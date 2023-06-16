@@ -18,8 +18,8 @@ package com.java110.user.smo.impl;
 
 import com.java110.user.dao.IExamineStaffIntroductionV1ServiceDao;
 import com.java110.intf.user.IExamineStaffIntroductionV1InnerServiceSMO;
-import com.java110.dto.examineProject.ExamineStaffIntroductionDto;
-import com.java110.po.examineStaffIntroduction.ExamineStaffIntroductionPo;
+import com.java110.dto.examine.ExamineStaffIntroductionDto;
+import com.java110.po.examine.ExamineStaffIntroductionPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

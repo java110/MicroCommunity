@@ -20,7 +20,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.reportCustom.ReportCustomComponentDto;
 import com.java110.intf.report.IReportCustomComponentV1InnerServiceSMO;
-import com.java110.po.reportCustomComponent.ReportCustomComponentPo;
+import com.java110.po.reportCustom.ReportCustomComponentPo;
 import com.java110.report.dao.IReportCustomComponentV1ServiceDao;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;

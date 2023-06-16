@@ -1,5 +1,5 @@
 package com.java110.community.bmo.roomRenovation;
-import com.java110.dto.roomRenovation.RoomRenovationDto;
+import com.java110.dto.room.RoomRenovationDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 

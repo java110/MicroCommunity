@@ -1,5 +1,5 @@
 package com.java110.common.bmo.hcGovTranslateDetail;
-import com.java110.po.hcGovTranslateDetail.HcGovTranslateDetailPo;
+import com.java110.po.hcGovTranslate.HcGovTranslateDetailPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateHcGovTranslateDetailBMO {

@@ -3,7 +3,7 @@ package com.java110.store.smo.impl;
 
 import com.java110.store.dao.ISmallWechatAttrServiceDao;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
+import com.java110.dto.wechat.SmallWechatAttrDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;

@@ -1,12 +1,12 @@
 package com.java110.fee.bmo.payFeeAudit.impl;
 
 import com.java110.core.smo.IComputeFeeSMO;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.order.BusinessDto;
 import com.java110.dto.order.OrderDto;
 import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.payFeeAudit.PayFeeAuditDto;
+import com.java110.dto.payFee.PayFeeAuditDto;
 import com.java110.fee.bmo.payFeeAudit.IGetPayFeeAuditBMO;
 import com.java110.intf.fee.IPayFeeAuditInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;

@@ -17,14 +17,14 @@ package com.java110.job.adapt.hcGov.staff;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.community.CommunityMemberDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.org.OrgDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.store.StoreAttrDto;
 import com.java110.dto.store.StoreUserDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.store.IStoreAttrInnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;

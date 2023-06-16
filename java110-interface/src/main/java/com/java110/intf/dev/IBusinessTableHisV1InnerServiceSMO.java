@@ -16,8 +16,8 @@
 package com.java110.intf.dev;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.businessTableHis.BusinessTableHisDto;
-import com.java110.po.businessTableHis.BusinessTableHisPo;
+import com.java110.dto.system.BusinessTableHisDto;
+import com.java110.po.business.BusinessTableHisPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

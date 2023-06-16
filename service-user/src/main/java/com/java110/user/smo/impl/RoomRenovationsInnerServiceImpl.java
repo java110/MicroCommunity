@@ -2,7 +2,7 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.roomRenovation.RoomRenovationDto;
+import com.java110.dto.room.RoomRenovationDto;
 import com.java110.intf.user.IRoomRenovationsInnerServiceSMO;
 import com.java110.user.dao.IRoomRenovationsServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

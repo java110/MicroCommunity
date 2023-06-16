@@ -245,7 +245,7 @@
 
     </select>
 
-    <select id="getMappingInfoAll" resultType="com.java110.entity.mapping.Mapping">
+    <select id="getMappingInfoAll" resultType="com.java110.dto.mapping.Mapping">
         <![CDATA[
 
                      SELECT cm.domain,cm.name,cm.key,cm.value,cm.remark from c_mapping cm where cm.status_cd = '0'
@@ -253,13 +253,13 @@
         ]]>
     </select>
 
-    <select id="getPrivilegeAll" resultType="com.java110.dto.basePrivilege.BasePrivilegeDto">
+    <select id="getPrivilegeAll" resultType="com.java110.dto.privilege.BasePrivilegeDto">
         <![CDATA[
               select t.p_id pId,t.name,t.domain,t.resource,t.description,t.create_time createTime from p_privilege t where t.status_cd = '0'
         ]]>
     </select>
 
-    <select id="getDatabusAll" resultType="com.java110.dto.businessDatabus.BusinessDatabusDto">
+    <select id="getDatabusAll" resultType="com.java110.dto.system.BusinessDatabusDto">
         <![CDATA[
             SELECT
                 t.databus_id databusId,

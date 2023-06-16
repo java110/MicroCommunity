@@ -11,7 +11,7 @@ import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpaceV1InnerServiceSMO;
-import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.po.account.AccountDetailPo;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

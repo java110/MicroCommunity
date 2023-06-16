@@ -1,7 +1,7 @@
 package com.java110.core.event.service.api;
 
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.AppService;
+import com.java110.dto.system.AppService;
 
 import java.util.EventObject;
 

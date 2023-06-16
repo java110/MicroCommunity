@@ -18,8 +18,8 @@ package com.java110.acct.smo.impl;
 
 import com.java110.acct.dao.IParkingCouponShopV1ServiceDao;
 import com.java110.intf.acct.IParkingCouponShopV1InnerServiceSMO;
-import com.java110.dto.parkingCoupon.ParkingCouponShopDto;
-import com.java110.po.parkingCouponShop.ParkingCouponShopPo;
+import com.java110.dto.parking.ParkingCouponShopDto;
+import com.java110.po.parking.ParkingCouponShopPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

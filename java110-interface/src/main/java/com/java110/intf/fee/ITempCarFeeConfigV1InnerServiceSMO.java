@@ -16,8 +16,8 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
-import com.java110.po.tempCarFeeConfig.TempCarFeeConfigPo;
+import com.java110.dto.fee.TempCarFeeConfigDto;
+import com.java110.po.tempCarFee.TempCarFeeConfigPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

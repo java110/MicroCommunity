@@ -7,7 +7,7 @@ import com.java110.dto.contract.ContractChangePlanDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.po.contractChangePlan.ContractChangePlanPo;
+import com.java110.po.contract.ContractChangePlanPo;
 import com.java110.store.dao.IContractChangePlanServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

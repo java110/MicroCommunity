@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="userServiceDaoImpl">
 
-    <resultMap type="com.java110.entity.user.Cust" id="custMap">
+    <resultMap type="com.java110.dto.user.Cust" id="custMap">
         <id column="custId" jdbcType="VARCHAR" property="custId"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
@@ -18,7 +18,7 @@
         <result column="openId" jdbcType="VARCHAR" property="openId"/>
         <!-- 一对多关系 -->
         <!-- <collection property="stus" resultMap="Student.StudentResult"></collection>  -->
-        <collection property="custAttrs" javaType="com.java110.entity.user.CustAttr">
+        <collection property="custAttrs" javaType="com.java110.dto.user.CustAttr">
             <id property="custId" column="custId"/>
             <result property="attrCd" column="attrCd"/>
             <result property="value" column="value"/>
@@ -38,7 +38,7 @@
     </select>
 -->
     <!--保存数据至过程表 bo_cust 中 -->
-    <insert id="saveDataToBoCust" parameterType="com.java110.entity.user.BoCust">
+    <insert id="saveDataToBoCust" parameterType="com.java110.dto.user.BoCust">
         <![CDATA[
 
 
@@ -49,7 +49,7 @@
         ]]>
     </insert>
     <!-- 保存数据至过程表bo_cust_attr 中-->
-    <insert id="saveDataToBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr">
+    <insert id="saveDataToBoCustAttr" parameterType="com.java110.dto.user.BoCustAttr">
         <![CDATA[
 
 
@@ -60,7 +60,7 @@
         ]]>
     </insert>
     <!-- 保存 实例客户信息 cust -->
-    <insert id="saveDataToCust" parameterType="com.java110.entity.user.Cust">
+    <insert id="saveDataToCust" parameterType="com.java110.dto.user.Cust">
         <![CDATA[
 
 
@@ -71,7 +71,7 @@
         ]]>
     </insert>
     <!-- 删除实例客户信息 cust -->
-    <insert id="deleteDataToCust" parameterType="com.java110.entity.user.Cust">
+    <insert id="deleteDataToCust" parameterType="com.java110.dto.user.Cust">
         <![CDATA[
 
 
@@ -82,7 +82,7 @@
     </insert>
 
     <!-- 保存 实例客户属性信息 cust_attr -->
-    <insert id="saveDataToCustAttr" parameterType="com.java110.entity.user.CustAttr">
+    <insert id="saveDataToCustAttr" parameterType="com.java110.dto.user.CustAttr">
         <![CDATA[
 
 
@@ -93,7 +93,7 @@
         ]]>
     </insert>
     <!-- 删除实例客户信息 cust -->
-    <update id="deleteDataToCustAttr" parameterType="com.java110.entity.user.CustAttr">
+    <update id="deleteDataToCustAttr" parameterType="com.java110.dto.user.CustAttr">
         delete * from cust_attr ct where 1=1
         <if test="custId != null and custId != ''">
             and ct.custId = #{custId}
@@ -103,7 +103,7 @@
         </if>
     </update>
     <!--根据客户ID 查询客户信息，其中包括 cust 和custAttr 数据-->
-    <select id="queryDataToCust" parameterType="com.java110.entity.user.Cust" resultMap="custMap">
+    <select id="queryDataToCust" parameterType="com.java110.dto.user.Cust" resultMap="custMap">
 
         select c.custId,c.name,c.email,c.cellphone,c.realName,c.sex,c.password,c.lanId,c.custAdress,c.custType,c.openId,
         ca.custId,ca.attrCd,ca.value
@@ -119,7 +119,7 @@
     </select>
 
     <!-- 查询客户过程数据 -->
-    <select id="queryBoCust" parameterType="com.java110.entity.user.BoCust" resultType="com.java110.entity.user.BoCust">
+    <select id="queryBoCust" parameterType="com.java110.dto.user.BoCust" resultType="com.java110.dto.user.BoCust">
         select
         bc.boId,bc.custId,bc.name,bc.email,bc.cellphone,bc.realName,bc.sex,bc.password,bc.lanId,bc.custAdress,bc.custType,bc.openId,bc.create_dt
         from bo_cust bc where 1=1
@@ -138,8 +138,8 @@
         </if>
     </select>
     <!-- 查询客户属性过程表-->
-    <select id="queryBoCustAttr" parameterType="com.java110.entity.user.BoCustAttr"
-            resultType="com.java110.entity.user.BoCustAttr">
+    <select id="queryBoCustAttr" parameterType="com.java110.dto.user.BoCustAttr"
+            resultType="com.java110.dto.user.BoCustAttr">
         select bca.boId,bca.custId,bca.attrCd,bca.value,bca.state,bca.create_dt from bo_cust_attr bca where 1=1
         <if test="boId !=null and boId != ''">
             and bca.boId = #{boId}
@@ -156,8 +156,8 @@
     </select>
 
     <!-- 查询客户属性信息 -->
-    <select id="queryDataToCustAttr" parameterType="com.java110.entity.user.CustAttr"
-            resultType="com.java110.entity.user.CustAttr">
+    <select id="queryDataToCustAttr" parameterType="com.java110.dto.user.CustAttr"
+            resultType="com.java110.dto.user.CustAttr">
         select * from cust_attr ca where 1=1
         <if test="custId != null and custId != ''">
             and ca.custId = #{custId}

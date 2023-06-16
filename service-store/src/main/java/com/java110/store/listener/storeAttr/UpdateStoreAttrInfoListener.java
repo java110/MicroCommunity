@@ -11,7 +11,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class UpdateStoreAttrInfoListener extends AbstractStoreAttrBusinessServic
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -93,7 +93,7 @@ public class UpdateStoreAttrInfoListener extends AbstractStoreAttrBusinessServic
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -123,7 +123,7 @@ public class UpdateStoreAttrInfoListener extends AbstractStoreAttrBusinessServic
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -159,7 +159,7 @@ public class UpdateStoreAttrInfoListener extends AbstractStoreAttrBusinessServic
      * @param business          总的数据节点
      * @param businessStoreAttr 商户属性节点
      */
-    private void doBusinessStoreAttr(Business business, JSONObject businessStoreAttr) {
+    private void doBusinessStoreAttr(AppBusiness business, JSONObject businessStoreAttr) {
 
         Assert.jsonObjectHaveKey(businessStoreAttr, "attrId", "businessStoreAttr 节点下没有包含 attrId 节点");
 

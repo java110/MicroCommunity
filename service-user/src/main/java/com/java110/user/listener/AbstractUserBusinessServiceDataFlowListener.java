@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.user.dao.IUserServiceDao;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public abstract class AbstractUserBusinessServiceDataFlowListener extends Abstra
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param businessUser 商户信息
      */
-    protected void autoSaveDelBusinessUser(Business business, JSONObject businessUser){
+    protected void autoSaveDelBusinessUser(AppBusiness business, JSONObject businessUser){
         //自动插入DEL
         Map info = new HashMap();
         info.put("userId",businessUser.getString("userId"));
@@ -90,7 +90,7 @@ public abstract class AbstractUserBusinessServiceDataFlowListener extends Abstra
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param businessUser 商户信息
      */
-    protected void autoSaveAddBusinessUser(Business business, JSONObject businessUser){
+    protected void autoSaveAddBusinessUser(AppBusiness business, JSONObject businessUser){
         //自动插入DEL
         Map info = new HashMap();
         info.put("userId",businessUser.getString("userId"));

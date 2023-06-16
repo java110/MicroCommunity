@@ -19,7 +19,7 @@ package com.java110.user.smo.impl;
 import com.java110.user.dao.IOwnerCarOpenUserV1ServiceDao;
 import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
 import com.java110.dto.owner.OwnerCarOpenUserDto;
-import com.java110.po.ownerCarOpenUser.OwnerCarOpenUserPo;
+import com.java110.po.owner.OwnerCarOpenUserPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

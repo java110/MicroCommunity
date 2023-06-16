@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.activities.ActivitiesRuleDto;
 import com.java110.intf.user.IActivitiesRuleInnerServiceSMO;
-import com.java110.po.activitiesRule.ActivitiesRulePo;
+import com.java110.po.activities.ActivitiesRulePo;
 import com.java110.user.dao.IActivitiesRuleServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

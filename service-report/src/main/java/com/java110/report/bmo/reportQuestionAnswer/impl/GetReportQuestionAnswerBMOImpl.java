@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportQuestionAnswer.impl;
 
-import com.java110.dto.userQuestionAnswerValue.UserQuestionAnswerValueDto;
+import com.java110.dto.user.UserQuestionAnswerValueDto;
 import com.java110.intf.report.IReportUserQuestionAnswerValueInnerServiceSMO;
 import com.java110.report.bmo.reportQuestionAnswer.IGetReportQuestionAnswerBMO;
 import com.java110.utils.util.StringUtil;

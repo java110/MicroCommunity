@@ -22,7 +22,6 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
@@ -31,7 +30,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
+import com.java110.dto.accessControl.AccessControlWhiteDto;
 
 import java.util.List;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.junkRequirement.IJunkRequirementBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.user.IJunkRequirementInnerServiceSMO;
-import com.java110.dto.junkRequirement.JunkRequirementDto;
+import com.java110.dto.itemRelease.JunkRequirementDto;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.junkRequirement.JunkRequirementPo;
 import com.java110.utils.constant.BusinessTypeConstant;

@@ -1,21 +1,17 @@
 package com.java110.common.smartMeter.factory.zhongkong;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.smartMeter.ISmartMeterCoreRead;
 import com.java110.common.smartMeter.ISmartMeterFactoryAdapt;
-import com.java110.common.smartMeter.factory.tqdianbiao.TdDianBiaoUtil;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.meterMachine.MeterMachineDetailDto;
-import com.java110.dto.meterMachine.MeterMachineDto;
-import com.java110.dto.meterMachine.MeterMachineSpecDto;
+import com.java110.dto.meter.MeterMachineDetailDto;
+import com.java110.dto.meter.MeterMachineDto;
 import com.java110.intf.common.IMeterMachineDetailV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
-import com.java110.po.meterMachineDetail.MeterMachineDetailPo;
+import com.java110.po.meter.MeterMachineDetailPo;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;

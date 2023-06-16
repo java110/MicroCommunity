@@ -2,9 +2,9 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
-import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.entity.center.DataFlowLog;
+import com.java110.dto.system.AppBusiness;
+import com.java110.dto.system.DataFlowLinksCost;
+import com.java110.dto.system.DataFlowLog;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public interface DataFlowContext {
 
      List<DataFlowLinksCost> getLinksCostDates();
 
-     List<Business> getBusinesses();
+     List<AppBusiness> getBusinesses();
 
     /**
      * 源请求头信息
@@ -83,7 +83,7 @@ public interface DataFlowContext {
      * 获取当前Business
      * @return
      */
-    public Business getCurrentBusiness();
+    public AppBusiness getCurrentBusiness();
 
     public void setResJson(JSONObject resJson);
 

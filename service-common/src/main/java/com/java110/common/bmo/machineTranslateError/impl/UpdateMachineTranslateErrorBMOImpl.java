@@ -3,7 +3,7 @@ package com.java110.common.bmo.machineTranslateError.impl;
 import com.java110.common.bmo.machineTranslateError.IUpdateMachineTranslateErrorBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
-import com.java110.po.machineTranslateError.MachineTranslateErrorPo;
+import com.java110.po.machine.MachineTranslateErrorPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.importFee;
-import com.java110.dto.importFee.ImportFeeDto;
+import com.java110.dto.importData.ImportFeeDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetImportFeeBMO {
 

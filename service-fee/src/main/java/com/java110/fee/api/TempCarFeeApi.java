@@ -15,8 +15,8 @@
  */
 package com.java110.fee.api;
 
-import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
-import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
+import com.java110.dto.fee.TempCarFeeRuleDto;
+import com.java110.dto.fee.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

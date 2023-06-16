@@ -3,7 +3,7 @@ package com.java110.store.api;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;

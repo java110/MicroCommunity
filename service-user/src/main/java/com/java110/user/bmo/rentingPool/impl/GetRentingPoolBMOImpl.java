@@ -1,8 +1,8 @@
 package com.java110.user.bmo.rentingPool.impl;
 
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.rentingPool.RentingPoolDto;
+import com.java110.dto.renting.RentingPoolDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IRentingPoolInnerServiceSMO;

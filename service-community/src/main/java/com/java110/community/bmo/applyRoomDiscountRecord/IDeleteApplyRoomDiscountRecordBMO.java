@@ -1,6 +1,6 @@
 package com.java110.community.bmo.applyRoomDiscountRecord;
 
-import com.java110.po.applyRoomDiscountRecord.ApplyRoomDiscountRecordPo;
+import com.java110.po.room.ApplyRoomDiscountRecordPo;
 import org.springframework.http.ResponseEntity;
 
 /**

@@ -4,8 +4,8 @@ import com.java110.common.bmo.attendanceClassesTaskDetail.IUpdateAttendanceClass
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.common.IAttendanceClassesTaskDetailInnerServiceSMO;
 import com.java110.intf.common.IAttendanceClassesTaskInnerServiceSMO;
-import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
-import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
+import com.java110.po.attendance.AttendanceClassesTaskPo;
+import com.java110.po.attendance.AttendanceClassesTaskDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

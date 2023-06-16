@@ -1,7 +1,7 @@
 package com.java110.job.task.smartWeter;
 
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.meterMachine.MeterMachineDto;
+import com.java110.dto.meter.MeterMachineDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;

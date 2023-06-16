@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportOwnerPayFee;
 
-import com.java110.po.reportOwnerPayFee.ReportOwnerPayFeePo;
+import com.java110.po.reportFee.ReportOwnerPayFeePo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveReportOwnerPayFeeBMO {
 

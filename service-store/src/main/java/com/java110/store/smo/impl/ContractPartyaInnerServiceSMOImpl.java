@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.contract.ContractPartyaDto;
 import com.java110.intf.store.IContractPartyaInnerServiceSMO;
-import com.java110.po.contractPartya.ContractPartyaPo;
+import com.java110.po.contract.ContractPartyaPo;
 import com.java110.store.dao.IContractPartyaServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

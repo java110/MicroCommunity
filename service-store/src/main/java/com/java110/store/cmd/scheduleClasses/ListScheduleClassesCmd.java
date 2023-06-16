@@ -20,14 +20,14 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.scheduleClasses.ScheduleClassesStaffDto;
+import com.java110.dto.classes.ScheduleClassesStaffDto;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.scheduleClasses.ScheduleClassesDto;
+import com.java110.dto.classes.ScheduleClassesDto;
 
 import java.util.List;
 import java.util.ArrayList;

@@ -19,7 +19,7 @@ package com.java110.user.smo.impl;
 import com.java110.user.dao.IOwnerCommitteeContractV1ServiceDao;
 import com.java110.intf.user.IOwnerCommitteeContractV1InnerServiceSMO;
 import com.java110.dto.owner.OwnerCommitteeContractDto;
-import com.java110.po.ownerCommitteeContract.OwnerCommitteeContractPo;
+import com.java110.po.owner.OwnerCommitteeContractPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -1,7 +1,7 @@
 package com.java110.oa.bmo.oaWorkflow.impl;
 
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.entity.audit.AuditUser;
+import com.java110.dto.audit.AuditUser;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflow.IGetOaWorkflowBMO;

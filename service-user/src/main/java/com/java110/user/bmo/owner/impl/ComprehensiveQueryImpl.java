@@ -1,7 +1,7 @@
 package com.java110.user.bmo.owner.impl;
 
-import com.java110.dto.RoomDto;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
+import com.java110.dto.room.RoomDto;
+import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;

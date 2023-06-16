@@ -1,6 +1,6 @@
 package com.java110.oa.bmo.oaWorkflowForm;
 
-import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
+import com.java110.po.oaWorkflow.OaWorkflowFormPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveOaWorkflowFormBMO {
 

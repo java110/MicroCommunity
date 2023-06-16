@@ -17,11 +17,11 @@ package com.java110.job.adapt.hcGov.floor;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.UnitDto;
+import com.java110.dto.unit.UnitDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.floorAttr.FloorAttrDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.floor.FloorAttrDto;
+import com.java110.dto.system.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IFloorAttrInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;

@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.userStorehouse.IUserStorehouseBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
-import com.java110.po.userStorehouse.UserStorehousePo;
+import com.java110.po.user.UserStorehousePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

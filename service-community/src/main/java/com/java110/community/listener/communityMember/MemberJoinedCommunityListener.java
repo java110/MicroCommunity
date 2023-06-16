@@ -7,7 +7,7 @@ import com.java110.community.listener.community.AbstractCommunityBusinessService
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.community.CommunityMemberPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -57,7 +57,7 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
      * @param business        当前业务对象
      */
     @Override
-    public void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    public void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
@@ -90,7 +90,7 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -117,7 +117,7 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -147,7 +147,7 @@ public class MemberJoinedCommunityListener extends AbstractCommunityBusinessServ
      * @param business                总的数据节点
      * @param businessCommunityMember 小区成员节点
      */
-    private void doBusinessCommunityMember(Business business, JSONObject businessCommunityMember) {
+    private void doBusinessCommunityMember(AppBusiness business, JSONObject businessCommunityMember) {
 
         Assert.jsonObjectHaveKey(businessCommunityMember, "communityId", "businessCommunityMember 节点下没有包含 communityId 节点");
         Assert.jsonObjectHaveKey(businessCommunityMember, "memberId", "businessCommunityMember 节点下没有包含 memberId 节点");

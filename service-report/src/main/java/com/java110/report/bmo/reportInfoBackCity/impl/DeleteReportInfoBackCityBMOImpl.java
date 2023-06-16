@@ -2,7 +2,7 @@ package com.java110.report.bmo.reportInfoBackCity.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.report.IReportInfoBackCityInnerServiceSMO;
-import com.java110.po.reportInfoBackCity.ReportInfoBackCityPo;
+import com.java110.po.reportInfo.ReportInfoBackCityPo;
 import com.java110.report.bmo.reportInfoBackCity.IDeleteReportInfoBackCityBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

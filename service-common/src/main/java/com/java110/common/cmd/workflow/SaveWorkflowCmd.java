@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.intf.common.IWorkflowV1InnerServiceSMO;
-import com.java110.po.workflow.WorkflowPo;
+import com.java110.po.oaWorkflow.WorkflowPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -5,7 +5,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.community.dao.IRoomAttrServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -53,7 +53,7 @@ public abstract class AbstractRoomAttrBusinessServiceDataFlowListener extends Ab
      *
      * @param businessRoomAttr 小区房屋属性信息
      */
-    protected void autoSaveDelBusinessRoomAttr(Business business, JSONObject businessRoomAttr) {
+    protected void autoSaveDelBusinessRoomAttr(AppBusiness business, JSONObject businessRoomAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessRoomAttr.getString("attrId"));

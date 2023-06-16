@@ -7,7 +7,7 @@ import com.java110.boot.smo.api.IApiSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.store.StoreDto;
-import com.java110.entity.component.ComponentValidateResult;
+import com.java110.dto.system.ComponentValidateResult;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Map;
 
 @Service("apiSMOImpl")

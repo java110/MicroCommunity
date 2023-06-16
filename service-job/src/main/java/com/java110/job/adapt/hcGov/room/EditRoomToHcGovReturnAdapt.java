@@ -16,7 +16,7 @@
 package com.java110.job.adapt.hcGov.room;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.RoomAttrDto;
+import com.java110.dto.room.RoomAttrDto;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;

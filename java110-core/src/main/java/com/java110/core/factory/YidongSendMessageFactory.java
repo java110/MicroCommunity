@@ -1,21 +1,12 @@
 package com.java110.core.factory;
 
-import com.aliyuncs.CommonRequest;
-import com.aliyuncs.CommonResponse;
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.IAcsClient;
-import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
-import com.aliyuncs.http.MethodType;
-import com.aliyuncs.profile.DefaultProfile;
 import com.java110.core.client.OutRestTemplate;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.smsConfig.SmsConfigDto;
+import com.java110.dto.sms.SmsConfigDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;

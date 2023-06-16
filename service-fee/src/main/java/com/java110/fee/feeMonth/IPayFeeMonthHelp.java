@@ -1,13 +1,9 @@
 package com.java110.fee.feeMonth;
 
-import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.fee.MonthFeeDetailDto;
-import com.java110.dto.payFeeDetailMonth.PayFeeMonthOwnerDto;
+import com.java110.dto.payFee.PayFeeMonthOwnerDto;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 public interface IPayFeeMonthHelp {
 

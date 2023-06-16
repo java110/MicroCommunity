@@ -2,14 +2,13 @@ package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.userLogin.UserLoginDto;
-import com.java110.po.userLogin.UserLoginPo;
+import com.java110.dto.user.UserLoginDto;
+import com.java110.po.user.UserLoginPo;
 import com.java110.user.bmo.userLogin.IDeleteUserLoginBMO;
 import com.java110.user.bmo.userLogin.IGetUserLoginBMO;
 import com.java110.user.bmo.userLogin.ISaveUserLoginBMO;
 import com.java110.user.bmo.userLogin.IUpdateUserLoginBMO;
 import com.java110.utils.cache.CommonCache;
-import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;

@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractTypeSpec;
 
-import com.java110.po.contractTypeSpec.ContractTypeSpecPo;
+import com.java110.po.contract.ContractTypeSpecPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateContractTypeSpecBMO {

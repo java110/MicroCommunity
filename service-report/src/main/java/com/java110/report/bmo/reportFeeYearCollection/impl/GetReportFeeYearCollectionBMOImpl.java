@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportFeeYearCollection.impl;
 
-import com.java110.dto.reportFeeYearCollection.ReportFeeYearCollectionDto;
+import com.java110.dto.reportFee.ReportFeeYearCollectionDto;
 import com.java110.intf.report.IReportFeeYearCollectionInnerServiceSMO;
 import com.java110.report.bmo.reportFeeYearCollection.IGetReportFeeYearCollectionBMO;
 import com.java110.vo.ResultVo;

@@ -3,7 +3,7 @@ package com.java110.acct.bmo.shopVipAccountDetail.impl;
 import com.java110.acct.bmo.shopVipAccountDetail.IUpdateShopVipAccountDetailBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.acct.IShopVipAccountDetailInnerServiceSMO;
-import com.java110.po.shopVipAccountDetail.ShopVipAccountDetailPo;
+import com.java110.po.shop.ShopVipAccountDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

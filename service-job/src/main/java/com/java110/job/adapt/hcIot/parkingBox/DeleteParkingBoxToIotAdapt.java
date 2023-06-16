@@ -17,13 +17,13 @@ package com.java110.job.adapt.hcIot.parkingBox;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.parking.ParkingBoxDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.community.IParkingBoxAreaV1InnerServiceSMO;
 import com.java110.intf.community.IParkingBoxV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.parkingBox.ParkingBoxPo;
+import com.java110.po.parking.ParkingBoxPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

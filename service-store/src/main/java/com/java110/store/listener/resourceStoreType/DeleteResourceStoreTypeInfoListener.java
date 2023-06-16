@@ -2,7 +2,7 @@ package com.java110.store.listener.resourceStoreType;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.po.resourceStoreType.ResourceStoreTypePo;
+import com.java110.po.resource.ResourceStoreTypePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -10,7 +10,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IResourceStoreTypeServiceDao;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -56,7 +56,7 @@ public class DeleteResourceStoreTypeInfoListener extends AbstractResourceStoreTy
      * @param business 当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
@@ -91,7 +91,7 @@ public class DeleteResourceStoreTypeInfoListener extends AbstractResourceStoreTy
      * @param business 当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
 
@@ -120,7 +120,7 @@ public class DeleteResourceStoreTypeInfoListener extends AbstractResourceStoreTy
      * @param business 当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -155,7 +155,7 @@ public class DeleteResourceStoreTypeInfoListener extends AbstractResourceStoreTy
      * @param business 总的数据节点
      * @param businessResourceStoreType 物品类型节点
      */
-    private void doBusinessResourceStoreType(Business business,JSONObject businessResourceStoreType){
+    private void doBusinessResourceStoreType(AppBusiness business, JSONObject businessResourceStoreType){
 
         Assert.jsonObjectHaveKey(businessResourceStoreType,"rstId","businessResourceStoreType 节点下没有包含 rstId 节点");
 

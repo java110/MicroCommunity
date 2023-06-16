@@ -11,7 +11,7 @@ import com.java110.intf.common.IMarketBlacklistV1InnerServiceSMO;
 import com.java110.intf.common.IMarketLogV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
-import com.java110.po.marketLog.MarketLogPo;
+import com.java110.po.market.MarketLogPo;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;

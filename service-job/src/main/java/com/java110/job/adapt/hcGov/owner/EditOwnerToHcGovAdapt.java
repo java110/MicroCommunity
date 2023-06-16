@@ -17,13 +17,13 @@ package com.java110.job.adapt.hcGov.owner;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.RoomAttrDto;
+import com.java110.dto.room.RoomAttrDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;

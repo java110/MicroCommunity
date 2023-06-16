@@ -8,7 +8,6 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.workflowDataFile.WorkflowDataFileDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;

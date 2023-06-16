@@ -2,7 +2,7 @@ package com.java110.store.listener.userStorehouse;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IUserStorehouseServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -55,7 +55,7 @@ public abstract class AbstractUserStorehouseBusinessServiceDataFlowListener exte
      *
      * @param businessUserStorehouse 个人物品信息
      */
-    protected void autoSaveDelBusinessUserStorehouse(Business business, JSONObject businessUserStorehouse) {
+    protected void autoSaveDelBusinessUserStorehouse(AppBusiness business, JSONObject businessUserStorehouse) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("usId", businessUserStorehouse.getString("usId"));

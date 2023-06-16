@@ -2,7 +2,7 @@ package com.java110.core.factory;
 
 
 import com.java110.dto.machine.CarInoutDto;
-import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigAttrDto;
+import com.java110.dto.fee.TempCarFeeConfigAttrDto;
 import com.java110.utils.util.DateUtil;
 
 import java.text.ParseException;

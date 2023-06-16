@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.machineTranslate.IMachineTranslateBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.community.CommunityMemberDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.machine.ApplicationKeyDto;

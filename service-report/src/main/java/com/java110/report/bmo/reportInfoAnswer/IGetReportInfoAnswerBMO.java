@@ -1,5 +1,5 @@
 package com.java110.report.bmo.reportInfoAnswer;
-import com.java110.dto.reportInfoAnswer.ReportInfoAnswerDto;
+import com.java110.dto.reportInfo.ReportInfoAnswerDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetReportInfoAnswerBMO {
 

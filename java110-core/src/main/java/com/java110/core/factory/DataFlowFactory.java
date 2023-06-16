@@ -2,6 +2,7 @@ package com.java110.core.factory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.system.*;
 import com.java110.utils.cache.AppRouteCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
@@ -15,13 +16,7 @@ import com.java110.core.context.AbstractDataFlowContext;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
 import com.java110.core.context.OrderDataFlow;
-import com.java110.entity.center.AppRoute;
-import com.java110.entity.center.AppService;
-import com.java110.entity.center.Business;
-import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.entity.order.BusinessAttrs;
-import com.java110.entity.order.Orders;
-import com.java110.entity.order.OrdersAttrs;
+import com.java110.dto.system.AppBusiness;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
@@ -283,9 +278,9 @@ public class DataFlowFactory {
      */
     public static List<Map> getBusiness(DataFlow dataFlow){
         List<Map> businesss = new ArrayList<Map>();
-        List<Business> businesses= dataFlow.getBusinesses();
+        List<AppBusiness> businesses= dataFlow.getBusinesses();
         Map busiMap = null;
-        for(Business business : businesses) {
+        for(AppBusiness business : businesses) {
             if(business == null){
                 continue;
             }
@@ -310,8 +305,8 @@ public class DataFlowFactory {
     public static List<Map> getBusiness(OrderDataFlow dataFlow){
         List<Map> businesss = new ArrayList<Map>();
         Map busiMap = null;
-        List<com.java110.entity.order.Business> businessList = dataFlow.getBusinessList();
-        for(com.java110.entity.order.Business business : businessList) {
+        List<com.java110.dto.system.Business> businessList = dataFlow.getBusinessList();
+        for(com.java110.dto.system.Business business : businessList) {
             if(business == null){
                 continue;
             }
@@ -371,8 +366,8 @@ public class DataFlowFactory {
      */
     public static List<Map> getBusinessAttrs(DataFlow dataFlow){
         List<Map> businessAttrs = new ArrayList<Map>();
-        List<Business> businesses = dataFlow.getBusinesses();
-        for(Business business :businesses) {
+        List<AppBusiness> businesses = dataFlow.getBusinesses();
+        for(AppBusiness business :businesses) {
             if (business.getAttrs() == null || business.getAttrs().size() ==0) {
                 continue;
             }
@@ -398,8 +393,8 @@ public class DataFlowFactory {
      */
     public static List<Map> getBusinessAttrs(OrderDataFlow dataFlow){
         List<Map> businessAttrs = new ArrayList<Map>();
-        List<com.java110.entity.order.Business> businesses = dataFlow.getBusinessList();
-        for(com.java110.entity.order.Business business :businesses) {
+        List<com.java110.dto.system.Business> businesses = dataFlow.getBusinessList();
+        for(com.java110.dto.system.Business business :businesses) {
             if (business.getBusinessAttrs() == null || business.getBusinessAttrs().size() ==0) {
                 continue;
             }
@@ -460,7 +455,7 @@ public class DataFlowFactory {
     public static Map getNeedCompleteBusiness(DataFlow dataFlow){
         Map business = new HashMap();
         String bId = "";
-        for(Business busi:dataFlow.getBusinesses()){
+        for(AppBusiness busi:dataFlow.getBusinesses()){
             bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));
@@ -477,7 +472,7 @@ public class DataFlowFactory {
     public static Map getNeedBusinessComplete(DataFlow dataFlow){
         Map business = new HashMap();
         String bId = "";
-        for(Business busi:dataFlow.getBusinesses()){
+        for(AppBusiness busi:dataFlow.getBusinesses()){
             bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));
@@ -494,7 +489,7 @@ public class DataFlowFactory {
     public static Map getNeedDeleteBusiness(DataFlow dataFlow){
         Map business = new HashMap();
         String bId = "";
-        for(Business busi:dataFlow.getBusinesses()){
+        for(AppBusiness busi:dataFlow.getBusinesses()){
             bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));
@@ -511,7 +506,7 @@ public class DataFlowFactory {
     public static Map getNeedDeleteBusiness(OrderDataFlow dataFlow){
         Map business = new HashMap();
         String bId = "";
-        for(com.java110.entity.order.Business busi:dataFlow.getBusinessList()){
+        for(com.java110.dto.system.Business busi:dataFlow.getBusinessList()){
             bId += busi.getbId()+",";
         }
         business.put("bId",bId.substring(0,bId.length()-1));
@@ -536,7 +531,7 @@ public class DataFlowFactory {
      */
     public static String getMoreBId(DataFlow dataFlow){
         String bId = "";
-        for(Business busi:dataFlow.getBusinesses()){
+        for(AppBusiness busi:dataFlow.getBusinesses()){
             bId += busi.getbId()+",";
         }
         return bId;
@@ -567,7 +562,7 @@ public class DataFlowFactory {
 
         JSONObject busi = null;
         JSONObject response = null;
-        for(Business business :dataFlow.getBusinesses()){
+        for(AppBusiness business :dataFlow.getBusinesses()){
             busi = new JSONObject();
             busi.put("bId",business.getbId());
             busi.put("serviceCode",business.getServiceCode());
@@ -592,7 +587,7 @@ public class DataFlowFactory {
 
         JSONObject busi = null;
         JSONObject response = null;
-        for(Business business :dataFlow.getBusinesses()){
+        for(AppBusiness business :dataFlow.getBusinesses()){
             busi = new JSONObject();
             busi.put("bId",business.getbId());
             busi.put("serviceCode",business.getServiceCode());
@@ -631,7 +626,7 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(DataFlow dataFlow,Business business){
+    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(DataFlow dataFlow, AppBusiness business){
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE);
         JSONObject busi = null;
@@ -650,7 +645,7 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(OrderDataFlow dataFlow,com.java110.entity.order.Business business){
+    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(OrderDataFlow dataFlow, com.java110.dto.system.Business business){
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE);
         JSONObject busi = null;
@@ -666,7 +661,7 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getDeleteInstanceTableJson(DataFlow dataFlow,Business business){
+    public static JSONObject getDeleteInstanceTableJson(DataFlow dataFlow, AppBusiness business){
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
         JSONObject busi = null;
@@ -684,7 +679,7 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getDeleteInstanceTableJson(OrderDataFlow dataFlow,com.java110.entity.order.Business business){
+    public static JSONObject getDeleteInstanceTableJson(OrderDataFlow dataFlow, com.java110.dto.system.Business business){
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
         JSONObject busi = null;
@@ -713,7 +708,7 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getCompleteInstanceDataJson(DataFlow dataFlow,Business business){
+    public static JSONObject getCompleteInstanceDataJson(DataFlow dataFlow, AppBusiness business){
 
         JSONObject notifyMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE);
         //JSONObject businesses = notifyMessage.getJSONObject("business");
@@ -732,7 +727,7 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getRequestBusinessJson(DataFlow dataFlow,Business business){
+    public static JSONObject getRequestBusinessJson(DataFlow dataFlow, AppBusiness business){
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS);
         //JSONObject businesses = notifyMessage.getJSONObject("business");
@@ -753,7 +748,7 @@ public class DataFlowFactory {
      * @param business
      * @return
      */
-    public static JSONObject getRequestBusinessJson(OrderDataFlow dataFlow,com.java110.entity.order.Business business){
+    public static JSONObject getRequestBusinessJson(OrderDataFlow dataFlow, com.java110.dto.system.Business business){
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow,StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS);
         //JSONObject businesses = notifyMessage.getJSONObject("business");
@@ -802,11 +797,11 @@ public class DataFlowFactory {
      * @param dataFlow
      * @return
      */
-    public static List<Business> getSynchronousBusinesses(DataFlow dataFlow){
+    public static List<AppBusiness> getSynchronousBusinesses(DataFlow dataFlow){
         AppService service = null;
         AppRoute route = null;
-        List<Business> syschronousBusinesses = new ArrayList<Business>();
-        for(Business business :dataFlow.getBusinesses()){
+        List<AppBusiness> syschronousBusinesses = new ArrayList<AppBusiness>();
+        for(AppBusiness business :dataFlow.getBusinesses()){
             route = DataFlowFactory.getRoute(dataFlow,business.getServiceCode());
             service = route.getAppService();
             if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(route.getInvokeModel())){
@@ -827,11 +822,11 @@ public class DataFlowFactory {
      * @param dataFlow
      * @return
      */
-    public static List<com.java110.entity.order.Business> getSynchronousBusinesses(OrderDataFlow dataFlow){
+    public static List<com.java110.dto.system.Business> getSynchronousBusinesses(OrderDataFlow dataFlow){
         AppService service = null;
         AppRoute route = null;
-        List<com.java110.entity.order.Business> syschronousBusinesses = new ArrayList<com.java110.entity.order.Business>();
-        for(com.java110.entity.order.Business business :dataFlow.getBusinessList()){
+        List<com.java110.dto.system.Business> syschronousBusinesses = new ArrayList<com.java110.dto.system.Business>();
+        for(com.java110.dto.system.Business business :dataFlow.getBusinessList()){
 
             if(CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(business.getInvokeModel()) || StringUtil.isEmpty(business.getInvokeModel())){
                 business.setSeq(service.getSeq());
@@ -851,11 +846,11 @@ public class DataFlowFactory {
      * @param dataFlow
      * @return
      */
-    public static List<Business> getAsynchronousBusinesses(DataFlow dataFlow){
+    public static List<AppBusiness> getAsynchronousBusinesses(DataFlow dataFlow){
         AppService service = null;
         AppRoute route = null;
-        List<Business> syschronousBusinesses = new ArrayList<Business>();
-        for(Business business :dataFlow.getBusinesses()){
+        List<AppBusiness> syschronousBusinesses = new ArrayList<AppBusiness>();
+        for(AppBusiness business :dataFlow.getBusinesses()){
             route = DataFlowFactory.getRoute(dataFlow,business.getServiceCode());
             service = route.getAppService();
             if(CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(route.getInvokeModel())){
@@ -872,10 +867,10 @@ public class DataFlowFactory {
      * @param dataFlow
      * @return
      */
-    public static List<com.java110.entity.order.Business> getAsynchronousBusinesses(OrderDataFlow dataFlow){
+    public static List<com.java110.dto.system.Business> getAsynchronousBusinesses(OrderDataFlow dataFlow){
 
-        List<com.java110.entity.order.Business> asynchronousBusinesses = new ArrayList<com.java110.entity.order.Business>();
-        for(com.java110.entity.order.Business business :dataFlow.getBusinessList()){
+        List<com.java110.dto.system.Business> asynchronousBusinesses = new ArrayList<com.java110.dto.system.Business>();
+        for(com.java110.dto.system.Business business :dataFlow.getBusinessList()){
             if(CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(business.getInvokeModel())){
 
                 asynchronousBusinesses.add(business);

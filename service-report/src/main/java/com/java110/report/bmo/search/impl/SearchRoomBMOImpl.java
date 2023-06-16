@@ -1,6 +1,6 @@
 package com.java110.report.bmo.search.impl;
 
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.data.SearchDataDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;

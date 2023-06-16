@@ -1,6 +1,6 @@
 package com.java110.user.bmo.rentingPoolAttr;
 
-import com.java110.po.rentingPoolAttr.RentingPoolAttrPo;
+import com.java110.po.renting.RentingPoolAttrPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveRentingPoolAttrBMO {
 

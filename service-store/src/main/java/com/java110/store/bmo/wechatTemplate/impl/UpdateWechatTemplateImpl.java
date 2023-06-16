@@ -2,7 +2,7 @@ package com.java110.store.bmo.wechatTemplate.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.store.IWechatSmsTemplateInnerServiceSMO;
-import com.java110.po.wechatSmsTemplate.WechatSmsTemplatePo;
+import com.java110.po.wechat.WechatSmsTemplatePo;
 import com.java110.store.bmo.wechatTemplate.IUpdateWechatTemplate;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

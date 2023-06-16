@@ -16,8 +16,8 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.examineProject.ExamineStaffIntroductionDto;
-import com.java110.po.examineStaffIntroduction.ExamineStaffIntroductionPo;
+import com.java110.dto.examine.ExamineStaffIntroductionDto;
+import com.java110.po.examine.ExamineStaffIntroductionPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

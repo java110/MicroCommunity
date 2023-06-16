@@ -18,9 +18,9 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
+import com.java110.dto.purchase.AllocationStorehouseDto;
 import com.java110.intf.store.IAllocationStorehouseV1InnerServiceSMO;
-import com.java110.po.allocationStorehouse.AllocationStorehousePo;
+import com.java110.po.purchase.AllocationStorehousePo;
 import com.java110.store.dao.IAllocationStorehouseV1ServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.java110.report.bmo.reportOwnerPayFee.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.report.IReportOwnerPayFeeInnerServiceSMO;
-import com.java110.po.reportOwnerPayFee.ReportOwnerPayFeePo;
+import com.java110.po.reportFee.ReportOwnerPayFeePo;
 import com.java110.report.bmo.reportOwnerPayFee.IDeleteReportOwnerPayFeeBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

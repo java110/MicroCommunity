@@ -2,10 +2,10 @@ package com.java110.job.export.adapt;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
-import com.java110.dto.scheduleClasses.ScheduleClassesDto;
-import com.java110.dto.scheduleClasses.ScheduleClassesDayDto;
-import com.java110.dto.scheduleClasses.ScheduleClassesStaffDto;
-import com.java110.dto.scheduleClasses.ScheduleClassesTimeDto;
+import com.java110.dto.classes.ScheduleClassesDto;
+import com.java110.dto.classes.ScheduleClassesDayDto;
+import com.java110.dto.classes.ScheduleClassesStaffDto;
+import com.java110.dto.classes.ScheduleClassesTimeDto;
 import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;

@@ -1,15 +1,13 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.RoomDto;
-import com.java110.dto.report.QueryStatisticsDto;
+import com.java110.dto.room.RoomDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName IReportFeeStatisticsInnerServiceSMO

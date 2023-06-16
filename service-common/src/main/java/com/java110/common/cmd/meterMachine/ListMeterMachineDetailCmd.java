@@ -26,7 +26,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.meterMachine.MeterMachineDetailDto;
+import com.java110.dto.meter.MeterMachineDetailDto;
 
 import java.util.List;
 import java.util.ArrayList;

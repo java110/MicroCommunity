@@ -1,8 +1,8 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.storeAds.StoreAdsDto;
-import com.java110.po.storeAds.StoreAdsPo;
+import com.java110.dto.store.StoreAdsDto;
+import com.java110.po.store.StoreAdsPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

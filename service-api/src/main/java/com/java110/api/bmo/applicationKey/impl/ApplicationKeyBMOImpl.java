@@ -14,7 +14,7 @@ import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.ApplicationKeyDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
-import com.java110.po.applicationKey.ApplicationKeyPo;
+import com.java110.po.accessControl.ApplicationKeyPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.machine.MachineRecordPo;
 import com.java110.po.message.MsgPo;

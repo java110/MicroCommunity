@@ -16,8 +16,8 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.allocationStorehouse.AllocationUserStorehouseDto;
-import com.java110.po.allocationUserStorehouse.AllocationUserStorehousePo;
+import com.java110.dto.purchase.AllocationUserStorehouseDto;
+import com.java110.po.purchase.AllocationUserStorehousePo;
 import com.java110.store.dao.IAllocationUserStorehouseV1ServiceDao;
 import com.java110.intf.store.IAllocationUserStorehouseV1InnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;

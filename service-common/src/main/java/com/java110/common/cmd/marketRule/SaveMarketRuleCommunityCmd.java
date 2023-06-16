@@ -26,7 +26,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.market.MarketRuleCommunityDto;
 import com.java110.intf.common.IMarketRuleCommunityV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
-import com.java110.po.marketRuleCommunity.MarketRuleCommunityPo;
+import com.java110.po.market.MarketRuleCommunityPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

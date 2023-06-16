@@ -2,9 +2,9 @@ package com.java110.report.smo.impl;
 
 
 import com.java110.intf.report.IReportInfoSettingInnerServiceSMO;
-import com.java110.po.reportInfoSetting.ReportInfoSettingPo;
+import com.java110.po.reportInfo.ReportInfoSettingPo;
 import com.java110.report.dao.IReportInfoSettingServiceDao;
-import com.java110.dto.reportInfoSetting.ReportInfoSettingDto;
+import com.java110.dto.reportInfo.ReportInfoSettingDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

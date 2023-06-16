@@ -2,7 +2,7 @@ package com.java110.report.bmo.reportInfoSetting.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.report.IReportInfoSettingInnerServiceSMO;
-import com.java110.po.reportInfoSetting.ReportInfoSettingPo;
+import com.java110.po.reportInfo.ReportInfoSettingPo;
 import com.java110.report.bmo.reportInfoSetting.IUpdateReportInfoSettingBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

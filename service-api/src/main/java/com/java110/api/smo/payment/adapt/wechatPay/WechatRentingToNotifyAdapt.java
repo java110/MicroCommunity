@@ -17,13 +17,12 @@ package com.java110.api.smo.payment.adapt.wechatPay;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.dto.rentingPool.RentingPoolDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.renting.RentingPoolDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.payment.adapt.IPayNotifyAdapt;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
@@ -32,7 +31,6 @@ import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;

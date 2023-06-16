@@ -5,7 +5,7 @@ import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IResourceStoreUseRecordServiceDao;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -60,7 +60,7 @@ public abstract class AbstractResourceStoreUseRecordBusinessServiceDataFlowListe
      *
      * @param businessResourceStoreUseRecord 物品使用记录信息
      */
-    protected void autoSaveDelBusinessResourceStoreUseRecord(Business business, JSONObject businessResourceStoreUseRecord) {
+    protected void autoSaveDelBusinessResourceStoreUseRecord(AppBusiness business, JSONObject businessResourceStoreUseRecord) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("rsurId", businessResourceStoreUseRecord.getString("rsurId"));

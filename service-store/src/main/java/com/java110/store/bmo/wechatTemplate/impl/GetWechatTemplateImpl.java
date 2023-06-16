@@ -1,6 +1,6 @@
 package com.java110.store.bmo.wechatTemplate.impl;
 
-import com.java110.dto.wechatSmsTemplate.WechatSmsTemplateDto;
+import com.java110.dto.wechat.WechatSmsTemplateDto;
 import com.java110.intf.store.IWechatSmsTemplateInnerServiceSMO;
 import com.java110.store.bmo.wechatTemplate.IGetWechatTemplate;
 import com.java110.vo.ResultVo;

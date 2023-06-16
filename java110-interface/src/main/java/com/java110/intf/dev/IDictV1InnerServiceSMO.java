@@ -16,7 +16,7 @@
 package com.java110.intf.dev;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.Dict.DictDto;
+import com.java110.dto.dict.DictDto;
 import com.java110.po.dict.DictPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

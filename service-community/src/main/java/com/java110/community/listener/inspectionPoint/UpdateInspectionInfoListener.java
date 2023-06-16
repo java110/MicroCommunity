@@ -11,7 +11,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -94,7 +94,7 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -124,7 +124,7 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -160,7 +160,7 @@ public class UpdateInspectionInfoListener extends AbstractInspectionBusinessServ
      * @param business           总的数据节点
      * @param businessInspection 巡检点节点
      */
-    private void doBusinessInspection(Business business, JSONObject businessInspection) {
+    private void doBusinessInspection(AppBusiness business, JSONObject businessInspection) {
 
         Assert.jsonObjectHaveKey(businessInspection, "inspectionId", "businessInspection 节点下没有包含 inspectionId 节点");
 

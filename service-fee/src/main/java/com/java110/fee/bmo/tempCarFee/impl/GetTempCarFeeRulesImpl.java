@@ -15,8 +15,8 @@
  */
 package com.java110.fee.bmo.tempCarFee.impl;
 
-import com.java110.dto.tempCarFeeConfig.TempCarFeeRuleDto;
-import com.java110.dto.tempCarFeeConfig.TempCarPayOrderDto;
+import com.java110.dto.fee.TempCarFeeRuleDto;
+import com.java110.dto.fee.TempCarPayOrderDto;
 import com.java110.fee.bmo.tempCarFee.IGetTempCarFeeRules;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;

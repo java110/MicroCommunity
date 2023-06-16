@@ -1,11 +1,10 @@
 package com.java110.fee.bmo.applyRoomDiscount.impl;
 
-import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
+import com.java110.dto.room.ApplyRoomDiscountDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.fee.bmo.applyRoomDiscount.IGetApplyRoomDiscountBMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.fee.IApplyRoomDiscountInnerServiceSMO;
-import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

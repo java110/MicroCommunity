@@ -20,9 +20,9 @@ import com.java110.common.dao.IAccessControlWhiteV1ServiceDao;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
-import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
+import com.java110.dto.accessControl.AccessControlWhiteDto;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
-import com.java110.po.accessControlWhite.AccessControlWhitePo;
+import com.java110.po.accessControl.AccessControlWhitePo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
@@ -35,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

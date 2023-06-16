@@ -2,7 +2,7 @@ package com.java110.job.export.adapt;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
-import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
+import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;

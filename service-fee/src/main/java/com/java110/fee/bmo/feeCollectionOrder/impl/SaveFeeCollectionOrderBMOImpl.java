@@ -7,7 +7,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.feeCollectionOrder.ISaveFeeCollectionOrderBMO;
 import com.java110.intf.fee.IFeeCollectionOrderInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.po.feeCollectionOrder.FeeCollectionOrderPo;
+import com.java110.po.fee.FeeCollectionOrderPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;

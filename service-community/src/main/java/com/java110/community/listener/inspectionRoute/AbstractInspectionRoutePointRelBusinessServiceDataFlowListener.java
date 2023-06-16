@@ -2,7 +2,7 @@ package com.java110.community.listener.inspectionRoute;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IInspectionRoutePointRelServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -56,7 +56,7 @@ public abstract class AbstractInspectionRoutePointRelBusinessServiceDataFlowList
      *
      * @param businessInspectionRoutePointRel 巡检路线巡检点关系信息
      */
-    protected void autoSaveDelBusinessInspectionRoutePointRel(Business business, JSONObject businessInspectionRoutePointRel) {
+    protected void autoSaveDelBusinessInspectionRoutePointRel(AppBusiness business, JSONObject businessInspectionRoutePointRel) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("irpRelId", businessInspectionRoutePointRel.getString("irpRelId"));

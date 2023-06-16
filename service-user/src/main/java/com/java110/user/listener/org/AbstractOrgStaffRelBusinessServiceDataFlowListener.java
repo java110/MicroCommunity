@@ -1,7 +1,7 @@
 package com.java110.user.listener.org;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.user.dao.IOrgStaffRelServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -53,7 +53,7 @@ public abstract class AbstractOrgStaffRelBusinessServiceDataFlowListener extends
      *
      * @param businessOrgStaffRel 组织员工关系信息
      */
-    protected void autoSaveDelBusinessOrgStaffRel(Business business, JSONObject businessOrgStaffRel) {
+    protected void autoSaveDelBusinessOrgStaffRel(AppBusiness business, JSONObject businessOrgStaffRel) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("relId", businessOrgStaffRel.getString("relId"));
@@ -88,7 +88,7 @@ public abstract class AbstractOrgStaffRelBusinessServiceDataFlowListener extends
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param businessUser 商户信息
      */
-    protected void autoSaveAddBusinessOrgStaffRel(Business business, JSONObject businessOrgStaffRel) {
+    protected void autoSaveAddBusinessOrgStaffRel(AppBusiness business, JSONObject businessOrgStaffRel) {
         Map info = new HashMap();
         info.put("relId", businessOrgStaffRel.getString("relId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);

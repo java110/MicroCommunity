@@ -2,9 +2,9 @@ package com.java110.report.smo.impl;
 
 
 import com.java110.intf.report.IReportInfoAnswerInnerServiceSMO;
-import com.java110.po.reportInfoAnswer.ReportInfoAnswerPo;
+import com.java110.po.reportInfo.ReportInfoAnswerPo;
 import com.java110.report.dao.IReportInfoAnswerServiceDao;
-import com.java110.dto.reportInfoAnswer.ReportInfoAnswerDto;
+import com.java110.dto.reportInfo.ReportInfoAnswerDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -16,12 +16,7 @@
 package com.java110.common.dao;
 
 
-import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
 import com.java110.utils.exception.DAOException;
-import com.java110.entity.merchant.BoMerchant;
-import com.java110.entity.merchant.BoMerchantAttr;
-import com.java110.entity.merchant.Merchant;
-import com.java110.entity.merchant.MerchantAttr;
 
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.java110.store.bmo.purchase.impl;
 
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
+import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.intf.store.IPurchaseApplyDetailInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;

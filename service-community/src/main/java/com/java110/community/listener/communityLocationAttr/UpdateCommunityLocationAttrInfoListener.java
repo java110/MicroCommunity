@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.ICommunityLocationAttrServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.po.communityLocationAttr.CommunityLocationAttrPo;
+import com.java110.dto.system.AppBusiness;
+import com.java110.po.community.CommunityLocationAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -57,7 +57,7 @@ public class UpdateCommunityLocationAttrInfoListener extends AbstractCommunityLo
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -93,7 +93,7 @@ public class UpdateCommunityLocationAttrInfoListener extends AbstractCommunityLo
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -123,7 +123,7 @@ public class UpdateCommunityLocationAttrInfoListener extends AbstractCommunityLo
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -159,7 +159,7 @@ public class UpdateCommunityLocationAttrInfoListener extends AbstractCommunityLo
      * @param business                      总的数据节点
      * @param businessCommunityLocationAttr 位置属性节点
      */
-    private void doBusinessCommunityLocationAttr(Business business, JSONObject businessCommunityLocationAttr) {
+    private void doBusinessCommunityLocationAttr(AppBusiness business, JSONObject businessCommunityLocationAttr) {
 
         Assert.jsonObjectHaveKey(businessCommunityLocationAttr, "attrId", "businessCommunityLocationAttr 节点下没有包含 attrId 节点");
 

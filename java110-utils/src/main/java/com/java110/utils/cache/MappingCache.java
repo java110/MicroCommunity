@@ -1,12 +1,11 @@
 package com.java110.utils.cache;
 
-import com.java110.entity.mapping.Mapping;
+import com.java110.dto.mapping.Mapping;
 import com.java110.utils.constant.DomainContant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.SerializeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.java110.utils.cache.Jedis;
 
 import java.util.List;
 

@@ -16,8 +16,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.equipmentAccount.EquipmentAccountDto;
-import com.java110.po.equipmentAccount.EquipmentAccountPo;
+import com.java110.dto.machine.EquipmentAccountDto;
+import com.java110.po.machine.EquipmentAccountPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

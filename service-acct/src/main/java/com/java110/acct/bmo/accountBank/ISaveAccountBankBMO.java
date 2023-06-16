@@ -1,6 +1,6 @@
 package com.java110.acct.bmo.accountBank;
 
-import com.java110.po.accountBank.AccountBankPo;
+import com.java110.po.account.AccountBankPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveAccountBankBMO {
 

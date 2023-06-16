@@ -21,7 +21,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.machine.ApplicationKeyDto;
 import com.java110.intf.common.IApplicationKeyV1InnerServiceSMO;
-import com.java110.po.applicationKey.ApplicationKeyPo;
+import com.java110.po.accessControl.ApplicationKeyPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

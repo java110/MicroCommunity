@@ -1,7 +1,7 @@
 package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.meterWater.MeterWaterDto;
+import com.java110.dto.meter.MeterWaterDto;
 import com.java110.fee.bmo.meterWater.IQueryPreMeterWater;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.java110.order.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.trace.Java110TraceLog;
-import com.java110.entity.order.Orders;
+import com.java110.dto.system.Orders;
 import com.java110.order.smo.IOrderProcessServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.BusinessException;

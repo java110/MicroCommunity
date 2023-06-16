@@ -16,14 +16,14 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
+import com.java110.dto.resource.ResourceStoreTimesDto;
 import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.store.dao.IAssetInventoryDetailV1ServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.assetInventory.AssetInventoryDetailDto;
+import com.java110.dto.purchase.AssetInventoryDetailDto;
 import com.java110.intf.store.IAssetInventoryDetailV1InnerServiceSMO;
-import com.java110.po.assetInventoryDetail.AssetInventoryDetailPo;
+import com.java110.po.assetInventory.AssetInventoryDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

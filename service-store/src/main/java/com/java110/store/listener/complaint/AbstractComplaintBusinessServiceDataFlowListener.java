@@ -1,7 +1,7 @@
 package com.java110.store.listener.complaint;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IComplaintServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -58,7 +58,7 @@ public abstract class AbstractComplaintBusinessServiceDataFlowListener extends A
      *
      * @param businessComplaint 投诉建议信息
      */
-    protected void autoSaveDelBusinessComplaint(Business business, JSONObject businessComplaint) {
+    protected void autoSaveDelBusinessComplaint(AppBusiness business, JSONObject businessComplaint) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("complaintId", businessComplaint.getString("complaintId"));

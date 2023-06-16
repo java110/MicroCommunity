@@ -2,7 +2,7 @@ package com.java110.store.bmo.storeAds.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.store.IStoreAdsInnerServiceSMO;
-import com.java110.po.storeAds.StoreAdsPo;
+import com.java110.po.store.StoreAdsPo;
 import com.java110.store.bmo.storeAds.IDeleteStoreAdsBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

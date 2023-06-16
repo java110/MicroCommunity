@@ -6,7 +6,7 @@ import com.java110.api.bmo.tempCarFeeConfig.ITempCarFeeConfigBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
-import com.java110.po.tempCarFeeConfig.TempCarFeeConfigPo;
+import com.java110.po.tempCarFee.TempCarFeeConfigPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

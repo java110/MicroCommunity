@@ -16,7 +16,7 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.po.purchase.PurchaseApplyPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

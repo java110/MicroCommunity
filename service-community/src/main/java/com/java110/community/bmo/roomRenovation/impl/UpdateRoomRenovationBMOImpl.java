@@ -2,9 +2,9 @@ package com.java110.community.bmo.roomRenovation.impl;
 
 import com.java110.community.bmo.roomRenovation.IUpdateRoomRenovationBMO;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IRoomRenovationInnerServiceSMO;
-import com.java110.po.roomRenovation.RoomRenovationPo;
+import com.java110.po.room.RoomRenovationPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

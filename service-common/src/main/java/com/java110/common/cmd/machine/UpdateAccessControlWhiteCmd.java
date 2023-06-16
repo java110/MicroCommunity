@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.smo.IPhotoSMO;
 import com.java110.doc.annotation.*;
 import com.java110.intf.common.IAccessControlWhiteV1InnerServiceSMO;
-import com.java110.po.accessControlWhite.AccessControlWhitePo;
+import com.java110.po.accessControl.AccessControlWhitePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

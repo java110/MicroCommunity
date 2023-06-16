@@ -16,10 +16,10 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.UnitDto;
+import com.java110.dto.unit.UnitDto;
 import com.java110.dto.data.DataPrivilegeStaffDto;
 import com.java110.dto.data.DataPrivilegeUnitDto;
-import com.java110.po.dataPrivilegeUnit.DataPrivilegeUnitPo;
+import com.java110.po.privilege.DataPrivilegeUnitPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

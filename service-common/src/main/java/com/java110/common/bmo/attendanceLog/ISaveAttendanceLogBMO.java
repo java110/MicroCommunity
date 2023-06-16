@@ -1,6 +1,6 @@
 package com.java110.common.bmo.attendanceLog;
 
-import com.java110.po.attendanceLog.AttendanceLogPo;
+import com.java110.po.attendance.AttendanceLogPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveAttendanceLogBMO {
 

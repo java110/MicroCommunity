@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.ICarInoutDetailServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.car.CarInoutDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -57,7 +57,7 @@ public class DeleteCarInoutDetailInfoListener extends AbstractCarInoutDetailBusi
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
@@ -94,7 +94,7 @@ public class DeleteCarInoutDetailInfoListener extends AbstractCarInoutDetailBusi
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
 
@@ -124,7 +124,7 @@ public class DeleteCarInoutDetailInfoListener extends AbstractCarInoutDetailBusi
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -159,7 +159,7 @@ public class DeleteCarInoutDetailInfoListener extends AbstractCarInoutDetailBusi
      * @param business               总的数据节点
      * @param businessCarInoutDetail 进出场详情节点
      */
-    private void doBusinessCarInoutDetail(Business business, JSONObject businessCarInoutDetail) {
+    private void doBusinessCarInoutDetail(AppBusiness business, JSONObject businessCarInoutDetail) {
 
         Assert.jsonObjectHaveKey(businessCarInoutDetail, "detailId", "businessCarInoutDetail 节点下没有包含 detailId 节点");
 

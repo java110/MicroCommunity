@@ -19,7 +19,7 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.IMaintainanceItemV1ServiceDao;
 import com.java110.intf.community.IMaintainanceItemV1InnerServiceSMO;
 import com.java110.dto.maintainance.MaintainanceItemDto;
-import com.java110.po.maintainanceItem.MaintainanceItemPo;
+import com.java110.po.maintainance.MaintainanceItemPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

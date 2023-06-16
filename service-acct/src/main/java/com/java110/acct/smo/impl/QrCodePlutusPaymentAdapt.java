@@ -6,7 +6,7 @@ import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;

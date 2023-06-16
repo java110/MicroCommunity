@@ -1,6 +1,6 @@
 package com.java110.report.api;
 
-import com.java110.dto.userQuestionAnswerValue.UserQuestionAnswerValueDto;
+import com.java110.dto.user.UserQuestionAnswerValueDto;
 import com.java110.report.bmo.reportQuestionAnswer.IGetReportQuestionAnswerBMO;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;

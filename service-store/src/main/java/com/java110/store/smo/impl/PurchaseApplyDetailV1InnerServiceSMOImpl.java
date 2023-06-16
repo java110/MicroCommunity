@@ -18,7 +18,7 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
+import com.java110.dto.purchase.PurchaseApplyDetailDto;
 import com.java110.intf.store.IPurchaseApplyDetailV1InnerServiceSMO;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.store.dao.IPurchaseApplyDetailV1ServiceDao;

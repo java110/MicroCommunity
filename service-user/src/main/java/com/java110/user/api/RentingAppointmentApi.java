@@ -1,9 +1,9 @@
 package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.rentingAppointment.RentingAppointmentDto;
+import com.java110.dto.renting.RentingAppointmentDto;
 import com.java110.dto.store.StoreDto;
-import com.java110.po.rentingAppointment.RentingAppointmentPo;
+import com.java110.po.renting.RentingAppointmentPo;
 import com.java110.user.bmo.rentingAppointment.*;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

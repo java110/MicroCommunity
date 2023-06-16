@@ -2,7 +2,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.community.CommunityLocationAttrDto;
-import com.java110.po.communityLocationAttr.CommunityLocationAttrPo;
+import com.java110.po.community.CommunityLocationAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

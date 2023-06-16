@@ -4,7 +4,7 @@ package com.java110.store.smo.impl;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.store.dao.IResourceSupplierServiceDao;
 import com.java110.intf.store.IResourceSupplierInnerServiceSMO;
-import com.java110.dto.resourceSupplier.ResourceSupplierDto;
+import com.java110.dto.resource.ResourceSupplierDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;

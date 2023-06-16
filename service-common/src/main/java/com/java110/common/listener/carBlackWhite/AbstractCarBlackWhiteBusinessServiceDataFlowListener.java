@@ -2,7 +2,7 @@ package com.java110.common.listener.carBlackWhite;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.ICarBlackWhiteServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -55,7 +55,7 @@ public abstract class AbstractCarBlackWhiteBusinessServiceDataFlowListener exten
      *
      * @param businessCarBlackWhite 黑白名单信息
      */
-    protected void autoSaveDelBusinessCarBlackWhite(Business business, JSONObject businessCarBlackWhite) {
+    protected void autoSaveDelBusinessCarBlackWhite(AppBusiness business, JSONObject businessCarBlackWhite) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("bwId", businessCarBlackWhite.getString("bwId"));

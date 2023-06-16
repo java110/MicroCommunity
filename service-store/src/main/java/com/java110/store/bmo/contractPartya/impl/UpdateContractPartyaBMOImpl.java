@@ -2,7 +2,7 @@ package com.java110.store.bmo.contractPartya.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.store.IContractPartyaInnerServiceSMO;
-import com.java110.po.contractPartya.ContractPartyaPo;
+import com.java110.po.contract.ContractPartyaPo;
 import com.java110.store.bmo.contractPartya.IUpdateContractPartyaBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

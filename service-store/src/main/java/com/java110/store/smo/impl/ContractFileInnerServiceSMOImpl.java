@@ -2,7 +2,7 @@ package com.java110.store.smo.impl;
 
 
 import com.java110.intf.store.IContractFileInnerServiceSMO;
-import com.java110.po.contractFile.ContractFilePo;
+import com.java110.po.contract.ContractFilePo;
 import com.java110.store.dao.IContractFileServiceDao;
 import com.java110.dto.contract.ContractFileDto;
 import com.java110.utils.util.BeanConvertUtil;

@@ -1,7 +1,7 @@
 package com.java110.acct.bmo.systemGoldSetting.impl;
 
 import com.java110.acct.bmo.systemGoldSetting.IGetSystemGoldSettingBMO;
-import com.java110.dto.systemGoldSetting.SystemGoldSettingDto;
+import com.java110.dto.system.SystemGoldSettingDto;
 import com.java110.intf.acct.ISystemGoldSettingInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

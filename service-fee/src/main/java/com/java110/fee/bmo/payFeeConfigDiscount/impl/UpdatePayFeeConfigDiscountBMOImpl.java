@@ -3,7 +3,7 @@ package com.java110.fee.bmo.payFeeConfigDiscount.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.fee.bmo.payFeeConfigDiscount.IUpdatePayFeeConfigDiscountBMO;
 import com.java110.intf.fee.IPayFeeConfigDiscountInnerServiceSMO;
-import com.java110.po.payFeeConfigDiscount.PayFeeConfigDiscountPo;
+import com.java110.po.payFee.PayFeeConfigDiscountPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

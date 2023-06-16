@@ -1,5 +1,5 @@
 package com.java110.community.bmo.roomRenovationDetail;
-import com.java110.dto.roomRenovationDetail.RoomRenovationDetailDto;
+import com.java110.dto.room.RoomRenovationDetailDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetRoomRenovationDetailBMO {
 

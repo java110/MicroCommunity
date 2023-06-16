@@ -1,6 +1,6 @@
 package com.java110.store.bmo.contractAttr;
 
-import com.java110.po.contractAttr.ContractAttrPo;
+import com.java110.po.contract.ContractAttrPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteContractAttrBMO {

@@ -2,11 +2,8 @@ package com.java110.common.bmo.hcGovTranslate.impl;
 
 import com.java110.common.bmo.hcGovTranslate.IDeleteHcGovTranslateBMO;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
-import com.java110.intf.store.IWechatSmsTemplateInnerServiceSMO;
 import com.java110.po.hcGovTranslate.HcGovTranslatePo;
-import com.java110.po.wechatSmsTemplate.WechatSmsTemplatePo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

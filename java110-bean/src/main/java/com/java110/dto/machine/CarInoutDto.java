@@ -1,7 +1,6 @@
 package com.java110.dto.machine;
 
-import com.java110.dto.PageDto;
-import com.java110.dto.carInoutPayment.CarInoutPaymentDto;
+import com.java110.dto.payment.CarInoutPaymentDto;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -1,5 +1,5 @@
 package com.java110.common.bmo.attendanceClassesTaskDetail;
-import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
+import com.java110.po.attendance.AttendanceClassesTaskDetailPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteAttendanceClassesTaskDetailBMO {

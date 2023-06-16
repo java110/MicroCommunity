@@ -2,7 +2,7 @@ package com.java110.fee.listener.payFeeDetailDiscount;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.fee.dao.IPayFeeDetailDiscountServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -56,7 +56,7 @@ public abstract class AbstractPayFeeDetailDiscountBusinessServiceDataFlowListene
      *
      * @param businessPayFeeDetailDiscount 缴费优惠信息
      */
-    protected void autoSaveDelBusinessPayFeeDetailDiscount(Business business, JSONObject businessPayFeeDetailDiscount) {
+    protected void autoSaveDelBusinessPayFeeDetailDiscount(AppBusiness business, JSONObject businessPayFeeDetailDiscount) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("detailDiscountId", businessPayFeeDetailDiscount.getString("detailDiscountId"));

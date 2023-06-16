@@ -6,7 +6,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.FloorDto;
+import com.java110.dto.floor.FloorDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.community.IFloorV1InnerServiceSMO;
 import com.java110.report.statistics.IBaseDataStatistics;
@@ -18,12 +18,8 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 查询收费情况分析

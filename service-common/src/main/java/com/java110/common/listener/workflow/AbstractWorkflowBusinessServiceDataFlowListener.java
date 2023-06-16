@@ -3,7 +3,7 @@ package com.java110.common.listener.workflow;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.IWorkflowServiceDao;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -57,7 +57,7 @@ public abstract class AbstractWorkflowBusinessServiceDataFlowListener extends Ab
      *
      * @param businessWorkflow 工作流信息
      */
-    protected void autoSaveDelBusinessWorkflow(Business business, JSONObject businessWorkflow) {
+    protected void autoSaveDelBusinessWorkflow(AppBusiness business, JSONObject businessWorkflow) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("flowId", businessWorkflow.getString("flowId"));

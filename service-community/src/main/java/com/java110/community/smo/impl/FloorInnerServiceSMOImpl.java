@@ -1,15 +1,14 @@
 package com.java110.community.smo.impl;
 
 import com.java110.community.dao.IFloorAttrServiceDao;
-import com.java110.dto.UnitDto;
-import com.java110.dto.floorAttr.FloorAttrDto;
-import com.java110.intf.community.IFloorAttrInnerServiceSMO;
+import com.java110.dto.unit.UnitDto;
+import com.java110.dto.floor.FloorAttrDto;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.community.dao.IFloorServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.FloorDto;
+import com.java110.dto.floor.FloorDto;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;

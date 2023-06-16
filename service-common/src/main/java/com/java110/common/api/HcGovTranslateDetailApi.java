@@ -6,7 +6,7 @@ import com.java110.common.bmo.hcGovTranslateDetail.IGetHcGovTranslateDetailBMO;
 import com.java110.common.bmo.hcGovTranslateDetail.ISaveHcGovTranslateDetailBMO;
 import com.java110.common.bmo.hcGovTranslateDetail.IUpdateHcGovTranslateDetailBMO;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDetailDto;
-import com.java110.po.hcGovTranslateDetail.HcGovTranslateDetailPo;
+import com.java110.po.hcGovTranslate.HcGovTranslateDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

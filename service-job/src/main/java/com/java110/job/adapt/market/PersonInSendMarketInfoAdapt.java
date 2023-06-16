@@ -6,7 +6,7 @@ import com.java110.dto.market.MarketRuleCommunityDto;
 import com.java110.dto.market.MarketRuleObjDto;
 import com.java110.dto.market.MarketRuleWayDto;
 import com.java110.dto.market.MarketTextDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.common.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.machine.MachineRecordPo;

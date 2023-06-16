@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.applyRoomDiscount;
-import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountDto;
+import com.java110.dto.room.ApplyRoomDiscountDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetApplyRoomDiscountBMO {
 

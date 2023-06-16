@@ -2,7 +2,6 @@ package com.java110.store.smo.impl;
 
 
 import com.java110.dto.store.StoreAttrDto;
-import com.java110.po.contractAttr.ContractAttrPo;
 import com.java110.po.store.StoreAttrPo;
 import com.java110.store.dao.IStoreAttrServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

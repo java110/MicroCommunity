@@ -16,8 +16,8 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.attendanceClasses.AttendanceClassesStaffDto;
-import com.java110.po.attendanceClassesStaff.AttendanceClassesStaffPo;
+import com.java110.dto.attendance.AttendanceClassesStaffDto;
+import com.java110.po.attendance.AttendanceClassesStaffPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

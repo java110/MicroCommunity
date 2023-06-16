@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportOweFee;
 
-import com.java110.po.reportOweFee.ReportOweFeePo;
+import com.java110.po.reportFee.ReportOweFeePo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveReportOweFeeBMO {
 

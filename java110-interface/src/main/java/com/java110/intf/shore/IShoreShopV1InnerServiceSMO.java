@@ -16,8 +16,8 @@
 package com.java110.intf.shore;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.shoreShop.ShoreShopDto;
-import com.java110.po.shoreShop.ShoreShopPo;
+import com.java110.dto.shop.ShoreShopDto;
+import com.java110.po.shop.ShoreShopPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -7,7 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.resourceStore.ResourceStoreDto;
+import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;

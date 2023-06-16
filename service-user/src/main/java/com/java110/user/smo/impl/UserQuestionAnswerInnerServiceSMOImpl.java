@@ -3,9 +3,9 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.userQuestionAnswer.UserQuestionAnswerDto;
+import com.java110.dto.user.UserQuestionAnswerDto;
 import com.java110.intf.user.IUserQuestionAnswerInnerServiceSMO;
-import com.java110.po.userQuestionAnswer.UserQuestionAnswerPo;
+import com.java110.po.user.UserQuestionAnswerPo;
 import com.java110.user.dao.IUserQuestionAnswerServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

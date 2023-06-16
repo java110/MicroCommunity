@@ -3,8 +3,8 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.attendanceClasses.AttendanceClassesTaskDetailDto;
-import com.java110.dto.attendanceClasses.AttendanceClassesTaskDto;
+import com.java110.dto.attendance.AttendanceClassesTaskDetailDto;
+import com.java110.dto.attendance.AttendanceClassesTaskDto;
 import com.java110.intf.report.IReportAttendanceInnerServiceSMO;
 import com.java110.report.dao.IReportAttendanceServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

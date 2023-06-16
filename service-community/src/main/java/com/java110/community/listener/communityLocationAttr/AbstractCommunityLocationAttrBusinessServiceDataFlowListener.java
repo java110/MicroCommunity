@@ -3,7 +3,7 @@ package com.java110.community.listener.communityLocationAttr;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.ICommunityLocationAttrServiceDao;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -54,7 +54,7 @@ public abstract class AbstractCommunityLocationAttrBusinessServiceDataFlowListen
      *
      * @param businessCommunityLocationAttr 位置属性信息
      */
-    protected void autoSaveDelBusinessCommunityLocationAttr(Business business, JSONObject businessCommunityLocationAttr) {
+    protected void autoSaveDelBusinessCommunityLocationAttr(AppBusiness business, JSONObject businessCommunityLocationAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessCommunityLocationAttr.getString("attrId"));

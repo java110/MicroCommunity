@@ -6,7 +6,7 @@ import com.java110.fee.bmo.feeCollectionOrder.IDeleteFeeCollectionOrderBMO;
 import com.java110.fee.bmo.feeCollectionOrder.IGetFeeCollectionOrderBMO;
 import com.java110.fee.bmo.feeCollectionOrder.ISaveFeeCollectionOrderBMO;
 import com.java110.fee.bmo.feeCollectionOrder.IUpdateFeeCollectionOrderBMO;
-import com.java110.po.feeCollectionOrder.FeeCollectionOrderPo;
+import com.java110.po.fee.FeeCollectionOrderPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

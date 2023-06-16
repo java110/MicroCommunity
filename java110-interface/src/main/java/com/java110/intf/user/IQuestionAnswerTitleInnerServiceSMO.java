@@ -2,7 +2,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.questionAnswer.QuestionAnswerTitleDto;
-import com.java110.po.questionAnswerTitle.QuestionAnswerTitlePo;
+import com.java110.po.questionAnswer.QuestionAnswerTitlePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

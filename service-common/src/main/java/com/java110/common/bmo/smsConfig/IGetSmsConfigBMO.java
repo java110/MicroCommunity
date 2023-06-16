@@ -1,5 +1,5 @@
 package com.java110.common.bmo.smsConfig;
-import com.java110.dto.smsConfig.SmsConfigDto;
+import com.java110.dto.sms.SmsConfigDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetSmsConfigBMO {
 

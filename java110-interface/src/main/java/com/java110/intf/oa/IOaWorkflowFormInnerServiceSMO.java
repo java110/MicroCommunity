@@ -3,7 +3,7 @@ package com.java110.intf.oa;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.oaWorkflow.OaWorkflowFormDto;
-import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
+import com.java110.po.oaWorkflow.OaWorkflowFormPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -3,7 +3,7 @@ package com.java110.fee.bmo.feeCollectionOrder.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.fee.bmo.feeCollectionOrder.IDeleteFeeCollectionOrderBMO;
 import com.java110.intf.fee.IFeeCollectionOrderInnerServiceSMO;
-import com.java110.po.feeCollectionOrder.FeeCollectionOrderPo;
+import com.java110.po.fee.FeeCollectionOrderPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

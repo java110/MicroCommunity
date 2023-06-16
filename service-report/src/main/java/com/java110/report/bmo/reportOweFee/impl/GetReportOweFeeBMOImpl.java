@@ -1,8 +1,8 @@
 package com.java110.report.bmo.reportOweFee.impl;
 
 import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.reportOweFee.ReportOweFeeDto;
-import com.java110.dto.reportOweFee.ReportOweFeeItemDto;
+import com.java110.dto.reportFee.ReportOweFeeDto;
+import com.java110.dto.reportFee.ReportOweFeeItemDto;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.report.bmo.reportOweFee.IGetReportOweFeeBMO;

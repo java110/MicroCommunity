@@ -1,8 +1,8 @@
 package com.java110.intf.goods;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.groupBuy.GroupBuyProductDto;
-import com.java110.po.groupBuyProduct.GroupBuyProductPo;
+import com.java110.dto.shop.GroupBuyProductDto;
+import com.java110.po.shop.GroupBuyProductPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

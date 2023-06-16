@@ -29,7 +29,7 @@ import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.job.adapt.hcIot.GetToken;
 import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.machineTranslateError.MachineTranslateErrorPo;
+import com.java110.po.machine.MachineTranslateErrorPo;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;

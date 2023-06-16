@@ -3,9 +3,9 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.reportInfoAnswer.ReportInfoBackCityDto;
+import com.java110.dto.reportInfo.ReportInfoBackCityDto;
 import com.java110.intf.report.IReportInfoBackCityInnerServiceSMO;
-import com.java110.po.reportInfoBackCity.ReportInfoBackCityPo;
+import com.java110.po.reportInfo.ReportInfoBackCityPo;
 import com.java110.report.dao.IReportInfoBackCityServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

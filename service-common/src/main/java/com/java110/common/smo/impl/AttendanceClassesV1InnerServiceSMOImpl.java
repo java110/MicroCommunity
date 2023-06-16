@@ -18,17 +18,15 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IAttendanceClassesV1ServiceDao;
 import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
-import com.java110.dto.attendanceClasses.AttendanceClassesDto;
-import com.java110.po.attendanceClasses.AttendanceClassesPo;
+import com.java110.dto.attendance.AttendanceClassesDto;
+import com.java110.po.attendance.AttendanceClassesPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

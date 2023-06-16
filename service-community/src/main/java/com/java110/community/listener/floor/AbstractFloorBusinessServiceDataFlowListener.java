@@ -5,7 +5,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.community.dao.IFloorServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -55,7 +55,7 @@ public abstract class AbstractFloorBusinessServiceDataFlowListener extends Abstr
      *
      * @param businessFloor 小区楼信息
      */
-    protected void autoSaveDelBusinessFloor(Business business, JSONObject businessFloor) {
+    protected void autoSaveDelBusinessFloor(AppBusiness business, JSONObject businessFloor) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("floorId", businessFloor.getString("floorId"));

@@ -2,7 +2,7 @@ package com.java110.user.listener.ownerCarAttr;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
+import com.java110.po.owner.OwnerCarAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
@@ -10,7 +10,7 @@ import com.java110.user.dao.IOwnerCarAttrServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,7 @@ public class SaveOwnerCarAttrInfoListener extends AbstractOwnerCarAttrBusinessSe
      * @param business 当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
@@ -80,7 +80,7 @@ public class SaveOwnerCarAttrInfoListener extends AbstractOwnerCarAttrBusinessSe
      * @param business 当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -123,7 +123,7 @@ public class SaveOwnerCarAttrInfoListener extends AbstractOwnerCarAttrBusinessSe
      * @param business 当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -147,7 +147,7 @@ public class SaveOwnerCarAttrInfoListener extends AbstractOwnerCarAttrBusinessSe
      * @param business 总的数据节点
      * @param businessOwnerCarAttr 业主车辆属性节点
      */
-    private void doBusinessOwnerCarAttr(Business business,JSONObject businessOwnerCarAttr){
+    private void doBusinessOwnerCarAttr(AppBusiness business, JSONObject businessOwnerCarAttr){
 
         Assert.jsonObjectHaveKey(businessOwnerCarAttr,"attrId","businessOwnerCarAttr 节点下没有包含 attrId 节点");
 

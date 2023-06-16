@@ -6,7 +6,7 @@ import com.java110.dto.inspection.InspectionPlanDto;
 import com.java110.dto.inspection.InspectionPlanStaffDto;
 import com.java110.dto.inspection.InspectionRoutePointRelDto;
 import com.java110.dto.inspection.InspectionTaskDto;
-import com.java110.dto.scheduleClasses.ScheduleClassesStaffDto;
+import com.java110.dto.classes.ScheduleClassesStaffDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.*;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;

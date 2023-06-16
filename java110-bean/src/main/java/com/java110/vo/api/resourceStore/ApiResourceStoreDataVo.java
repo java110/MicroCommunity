@@ -1,7 +1,7 @@
 package com.java110.vo.api.resourceStore;
 
-import com.java110.dto.resourceStoreTimes.ResourceStoreTimesDto;
-import com.java110.dto.resourceSupplier.ResourceSupplierDto;
+import com.java110.dto.resource.ResourceStoreTimesDto;
+import com.java110.dto.resource.ResourceSupplierDto;
 
 import java.io.Serializable;
 import java.util.Date;

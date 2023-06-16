@@ -7,7 +7,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.oaWorkflow.OaWorkflowFormDto;
 import com.java110.intf.oa.IOaWorkflowFormInnerServiceSMO;
 import com.java110.oa.dao.IOaWorkflowFormServiceDao;
-import com.java110.po.oaWorkflowForm.OaWorkflowFormPo;
+import com.java110.po.oaWorkflow.OaWorkflowFormPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

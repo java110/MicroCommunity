@@ -1,5 +1,5 @@
 package com.java110.acct.bmo.shopVipAccountDetail;
-import com.java110.po.shopVipAccountDetail.ShopVipAccountDetailPo;
+import com.java110.po.shop.ShopVipAccountDetailPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateShopVipAccountDetailBMO {

@@ -16,7 +16,7 @@
 package com.java110.community.bmo.community.impl;
 
 import com.java110.community.bmo.community.IQueryStoreCommunitys;
-import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.community.CommunityMemberDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.vo.ResultVo;

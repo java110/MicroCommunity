@@ -26,7 +26,7 @@ import com.java110.dto.notepad.NotepadDetailDto;
 import com.java110.intf.user.INotepadDetailV1InnerServiceSMO;
 import com.java110.intf.user.INotepadV1InnerServiceSMO;
 import com.java110.po.notepad.NotepadPo;
-import com.java110.po.notepadDetail.NotepadDetailPo;
+import com.java110.po.notepad.NotepadDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -19,7 +19,7 @@ import com.java110.intf.user.IOwnerCarAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
-import com.java110.po.ownerCarAttr.OwnerCarAttrPo;
+import com.java110.po.owner.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;

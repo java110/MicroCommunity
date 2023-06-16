@@ -6,7 +6,7 @@ import com.java110.api.bmo.attendanceClasses.IAttendanceClassesBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
-import com.java110.po.attendanceClasses.AttendanceClassesPo;
+import com.java110.po.attendance.AttendanceClassesPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

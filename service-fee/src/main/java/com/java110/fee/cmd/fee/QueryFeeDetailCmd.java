@@ -7,7 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeAccountDetailDto;
-import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
+import com.java110.dto.payFee.PayFeeDetailDiscountDto;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;

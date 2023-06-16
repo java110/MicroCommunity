@@ -1,5 +1,5 @@
 package com.java110.report.bmo.reportFeeMonthStatistics;
-import com.java110.po.reportFeeMonthStatistics.ReportFeeMonthStatisticsPo;
+import com.java110.po.reportFee.ReportFeeMonthStatisticsPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteReportFeeMonthStatisticsBMO {

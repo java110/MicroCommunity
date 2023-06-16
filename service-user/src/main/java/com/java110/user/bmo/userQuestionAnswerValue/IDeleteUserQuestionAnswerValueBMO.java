@@ -1,5 +1,5 @@
 package com.java110.user.bmo.userQuestionAnswerValue;
-import com.java110.po.userQuestionAnswerValue.UserQuestionAnswerValuePo;
+import com.java110.po.user.UserQuestionAnswerValuePo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteUserQuestionAnswerValueBMO {

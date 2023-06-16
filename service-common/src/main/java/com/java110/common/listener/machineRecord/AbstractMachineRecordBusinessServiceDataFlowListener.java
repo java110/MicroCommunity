@@ -2,7 +2,7 @@ package com.java110.common.listener.machineRecord;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.IMachineRecordServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -59,7 +59,7 @@ public abstract class AbstractMachineRecordBusinessServiceDataFlowListener exten
      *
      * @param businessMachineRecord 设备上报信息
      */
-    protected void autoSaveDelBusinessMachineRecord(Business business, JSONObject businessMachineRecord) {
+    protected void autoSaveDelBusinessMachineRecord(AppBusiness business, JSONObject businessMachineRecord) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("machineRecordId", businessMachineRecord.getString("machineRecordId"));

@@ -1,5 +1,5 @@
 package com.java110.common.bmo.logSystemError;
-import com.java110.po.logSystemError.LogSystemErrorPo;
+import com.java110.po.log.LogSystemErrorPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteLogSystemErrorBMO {

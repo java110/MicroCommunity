@@ -16,7 +16,7 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.registerProtocol.RegisterProtocolDto;
+import com.java110.dto.system.RegisterProtocolDto;
 import com.java110.po.registerProtocol.RegisterProtocolPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -2,9 +2,9 @@ package com.java110.user.bmo.rentingAppointment.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.rentingAppointment.RentingAppointmentDto;
+import com.java110.dto.renting.RentingAppointmentDto;
 import com.java110.intf.user.IRentingAppointmentInnerServiceSMO;
-import com.java110.po.rentingAppointment.RentingAppointmentPo;
+import com.java110.po.renting.RentingAppointmentPo;
 import com.java110.user.bmo.rentingAppointment.ISaveRentingAppointmentBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

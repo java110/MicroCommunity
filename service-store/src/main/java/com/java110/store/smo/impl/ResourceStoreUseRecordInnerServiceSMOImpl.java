@@ -1,6 +1,6 @@
 package com.java110.store.smo.impl;
 
-import com.java110.dto.resourceStoreUseRecord.ResourceStoreUseRecordDto;
+import com.java110.dto.resource.ResourceStoreUseRecordDto;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.store.dao.IResourceStoreUseRecordServiceDao;
 import com.java110.intf.store.IResourceStoreUseRecordInnerServiceSMO;

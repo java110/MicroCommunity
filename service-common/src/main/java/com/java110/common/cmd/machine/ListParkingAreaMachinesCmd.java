@@ -22,7 +22,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.log.LoggerFactory;
 import com.java110.doc.annotation.*;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.machine.MachineDto;

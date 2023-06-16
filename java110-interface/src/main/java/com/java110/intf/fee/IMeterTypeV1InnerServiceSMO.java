@@ -16,8 +16,8 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.meterWater.MeterTypeDto;
-import com.java110.po.meterType.MeterTypePo;
+import com.java110.dto.meter.MeterTypeDto;
+import com.java110.po.meter.MeterTypePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -8,7 +8,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.UnitDto;
+import com.java110.dto.unit.UnitDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

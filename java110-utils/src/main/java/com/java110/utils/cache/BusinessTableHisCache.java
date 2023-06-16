@@ -1,8 +1,7 @@
 package com.java110.utils.cache;
 
-import com.java110.dto.businessTableHis.BusinessTableHisDto;
+import com.java110.dto.system.BusinessTableHisDto;
 import com.java110.utils.util.SerializeUtil;
-import com.java110.utils.cache.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;

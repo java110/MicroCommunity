@@ -19,7 +19,7 @@ package com.java110.store.smo.impl;
 import com.java110.store.dao.IClassesTimeV1ServiceDao;
 import com.java110.intf.store.IClassesTimeV1InnerServiceSMO;
 import com.java110.dto.classes.ClassesTimeDto;
-import com.java110.po.classesTime.ClassesTimePo;
+import com.java110.po.classes.ClassesTimePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -2,7 +2,7 @@ package com.java110.user.listener.ownerAttr;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.user.dao.IOwnerAttrServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -54,7 +54,7 @@ public abstract class AbstractOwnerAttrBusinessServiceDataFlowListener extends A
      *
      * @param businessOwnerAttr 业主属性信息
      */
-    protected void autoSaveDelBusinessOwnerAttr(Business business, JSONObject businessOwnerAttr) {
+    protected void autoSaveDelBusinessOwnerAttr(AppBusiness business, JSONObject businessOwnerAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessOwnerAttr.getString("attrId"));

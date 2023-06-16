@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.community.dao.ICommunityServiceDao;
 import org.slf4j.Logger;
@@ -105,7 +105,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
      *
      * @param businessCommunity 小区信息
      */
-    protected void autoSaveDelBusinessCommunity(Business business, JSONObject businessCommunity) {
+    protected void autoSaveDelBusinessCommunity(AppBusiness business, JSONObject businessCommunity) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("communityId", businessCommunity.getString("communityId"));
@@ -142,7 +142,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
      * @param business      当前业务
      * @param communityAttr 小区属性
      */
-    protected void autoSaveDelBusinessCommunityAttr(Business business, JSONObject communityAttr) {
+    protected void autoSaveDelBusinessCommunityAttr(AppBusiness business, JSONObject communityAttr) {
         Map info = new HashMap();
         info.put("attrId", communityAttr.getString("attrId"));
         info.put("communityId", communityAttr.getString("communityId"));
@@ -171,7 +171,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
      * @param business
      * @param businessCommunityPhoto 小区照片
      */
-    protected void autoSaveDelBusinessCommunityPhoto(Business business, JSONObject businessCommunityPhoto) {
+    protected void autoSaveDelBusinessCommunityPhoto(AppBusiness business, JSONObject businessCommunityPhoto) {
         Map info = new HashMap();
         info.put("communityPhotoId", businessCommunityPhoto.getString("communityPhotoId"));
         info.put("communityId", businessCommunityPhoto.getString("communityId"));
@@ -200,7 +200,7 @@ public abstract class AbstractCommunityBusinessServiceDataFlowListener extends A
      *
      * @param businessCommunityMember 小区信息
      */
-    protected void autoSaveDelBusinessCommunityMember(Business business, JSONObject businessCommunityMember) {
+    protected void autoSaveDelBusinessCommunityMember(AppBusiness business, JSONObject businessCommunityMember) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("communityMemberId", businessCommunityMember.getString("communityMemberId"));

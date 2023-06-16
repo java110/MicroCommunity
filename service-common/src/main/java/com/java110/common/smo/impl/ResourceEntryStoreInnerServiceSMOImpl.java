@@ -3,10 +3,10 @@ package com.java110.common.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.dto.resourceStore.ResourceOrderDto;
-import com.java110.dto.workflow.WorkflowDto;
-import com.java110.entity.audit.AuditUser;
+import com.java110.dto.purchase.PurchaseApplyDto;
+import com.java110.dto.resource.ResourceOrderDto;
+import com.java110.dto.oaWorkflow.WorkflowDto;
+import com.java110.dto.audit.AuditUser;
 import com.java110.intf.common.IResourceEntryStoreInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;

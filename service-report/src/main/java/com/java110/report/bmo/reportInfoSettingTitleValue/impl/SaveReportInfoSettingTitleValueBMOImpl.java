@@ -4,7 +4,7 @@ package com.java110.report.bmo.reportInfoSettingTitleValue.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.report.IReportInfoSettingTitleValueInnerServiceSMO;
-import com.java110.po.reportInfoSettingTitleValue.ReportInfoSettingTitleValuePo;
+import com.java110.po.reportInfo.ReportInfoSettingTitleValuePo;
 import com.java110.report.bmo.reportInfoSettingTitleValue.ISaveReportInfoSettingTitleValueBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

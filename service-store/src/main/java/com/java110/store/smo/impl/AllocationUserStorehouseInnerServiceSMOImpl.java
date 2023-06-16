@@ -1,7 +1,7 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.allocationStorehouse.AllocationUserStorehouseDto;
+import com.java110.dto.purchase.AllocationUserStorehouseDto;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.store.dao.IAllocationUserStorehouseServiceDao;
 import com.java110.intf.store.IAllocationUserStorehouseInnerServiceSMO;

@@ -2,7 +2,7 @@ package com.java110.community.bmo.applyRoomDiscountRecord.impl;
 
 import com.java110.community.bmo.applyRoomDiscountRecord.IDeleteApplyRoomDiscountRecordBMO;
 import com.java110.intf.community.IApplyRoomDiscountRecordInnerServiceSMO;
-import com.java110.po.applyRoomDiscountRecord.ApplyRoomDiscountRecordPo;
+import com.java110.po.room.ApplyRoomDiscountRecordPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

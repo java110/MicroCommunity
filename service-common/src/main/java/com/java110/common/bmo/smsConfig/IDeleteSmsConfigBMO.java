@@ -1,5 +1,5 @@
 package com.java110.common.bmo.smsConfig;
-import com.java110.po.smsConfig.SmsConfigPo;
+import com.java110.po.sms.SmsConfigPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteSmsConfigBMO {

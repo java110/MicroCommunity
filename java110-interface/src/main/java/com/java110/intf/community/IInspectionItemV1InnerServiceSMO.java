@@ -17,7 +17,7 @@ package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.inspection.InspectionItemDto;
-import com.java110.po.inspectionItem.InspectionItemPo;
+import com.java110.po.inspection.InspectionItemPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -2,7 +2,7 @@ package com.java110.job.task.ownerToMachine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.order.OrderDto;

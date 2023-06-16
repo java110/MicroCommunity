@@ -1,7 +1,7 @@
 package com.java110.db.dao;
 
-import com.java110.entity.order.ServiceBusiness;
-import com.java110.entity.service.ServiceSql;
+import com.java110.dto.system.ServiceBusiness;
+import com.java110.dto.system.ServiceSql;
 
 import java.util.List;
 import java.util.Map;

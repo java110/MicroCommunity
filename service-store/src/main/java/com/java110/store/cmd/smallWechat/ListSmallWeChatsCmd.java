@@ -29,7 +29,7 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.smallWeChat.ApiSmallWeChatDataVo;
 import com.java110.vo.api.smallWeChat.ApiSmallWeChatVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import java.util.List;
 import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;

@@ -19,7 +19,7 @@ package com.java110.scm.smo.impl;
 import com.java110.scm.dao.ISupplierKeyV1ServiceDao;
 import com.java110.intf.scm.ISupplierKeyV1InnerServiceSMO;
 import com.java110.dto.supplier.SupplierKeyDto;
-import com.java110.po.supplierKey.SupplierKeyPo;
+import com.java110.po.supplier.SupplierKeyPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IUnitServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.unit.UnitPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -57,7 +57,7 @@ public class UpdateUnitInfoListener extends AbstractUnitBusinessServiceDataFlowL
      * @param business
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -94,7 +94,7 @@ public class UpdateUnitInfoListener extends AbstractUnitBusinessServiceDataFlowL
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -124,7 +124,7 @@ public class UpdateUnitInfoListener extends AbstractUnitBusinessServiceDataFlowL
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -160,7 +160,7 @@ public class UpdateUnitInfoListener extends AbstractUnitBusinessServiceDataFlowL
      * @param business     总的数据节点
      * @param businessUnit 小区单元节点
      */
-    private void doBusinessUnit(Business business, JSONObject businessUnit) {
+    private void doBusinessUnit(AppBusiness business, JSONObject businessUnit) {
 
         Assert.jsonObjectHaveKey(businessUnit, "unitId", "businessUnit 节点下没有包含 unitId 节点");
 

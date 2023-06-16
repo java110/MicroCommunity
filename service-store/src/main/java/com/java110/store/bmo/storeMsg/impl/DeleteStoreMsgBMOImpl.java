@@ -2,7 +2,7 @@ package com.java110.store.bmo.storeMsg.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.store.IStoreMsgInnerServiceSMO;
-import com.java110.po.storeMsg.StoreMsgPo;
+import com.java110.po.store.StoreMsgPo;
 import com.java110.store.bmo.storeMsg.IDeleteStoreMsgBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

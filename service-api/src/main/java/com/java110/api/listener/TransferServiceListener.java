@@ -1,9 +1,9 @@
 package com.java110.api.listener;
 
+import com.java110.dto.system.AppService;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.AppService;
 import com.java110.core.event.service.api.ServiceDataFlowEvent;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;

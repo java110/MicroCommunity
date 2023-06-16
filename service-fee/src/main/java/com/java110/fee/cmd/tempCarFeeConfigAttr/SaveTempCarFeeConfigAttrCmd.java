@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.fee.ITempCarFeeConfigAttrV1InnerServiceSMO;
-import com.java110.po.tempCarFeeConfigAttr.TempCarFeeConfigAttrPo;
+import com.java110.po.tempCarFee.TempCarFeeConfigAttrPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

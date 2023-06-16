@@ -2,13 +2,13 @@ package com.java110.api.bmo.resourceStoreType.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.bmo.ApiBaseBMO;
-import com.java110.dto.resourceStoreType.ResourceStoreTypeDto;
+import com.java110.dto.resource.ResourceStoreTypeDto;
 import com.java110.intf.community.IResourceStoreServiceSMO;
 import com.java110.api.bmo.resourceStoreType.IResourceStoreTypeBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.store.IResourceStoreTypeInnerServiceSMO;
 import com.java110.po.purchase.ResourceStorePo;
-import com.java110.po.resourceStoreType.ResourceStoreTypePo;
+import com.java110.po.resource.ResourceStoreTypePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

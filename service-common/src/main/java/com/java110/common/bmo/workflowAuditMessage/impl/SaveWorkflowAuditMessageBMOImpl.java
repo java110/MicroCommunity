@@ -4,7 +4,7 @@ import com.java110.common.bmo.workflowAuditMessage.ISaveWorkflowAuditMessageBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IWorkflowAuditMessageInnerServiceSMO;
-import com.java110.po.workflowAuditMessage.WorkflowAuditMessagePo;
+import com.java110.po.oaWorkflow.WorkflowAuditMessagePo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

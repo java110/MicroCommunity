@@ -3,8 +3,8 @@ package com.java110.utils.util;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.log.LoggerEngine;
-import com.java110.entity.protocol.SvcCont;
-import  com.java110.entity.protocol.TcpCont;
+import com.java110.dto.system.SvcCont;
+import com.java110.dto.system.TcpCont;
 import org.springframework.util.StringUtils;
 
 import java.text.DateFormat;

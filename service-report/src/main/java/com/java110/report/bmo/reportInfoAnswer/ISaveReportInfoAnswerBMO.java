@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportInfoAnswer;
 
-import com.java110.po.reportInfoAnswer.ReportInfoAnswerPo;
+import com.java110.po.reportInfo.ReportInfoAnswerPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveReportInfoAnswerBMO {
 

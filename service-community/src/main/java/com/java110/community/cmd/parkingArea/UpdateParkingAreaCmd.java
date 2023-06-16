@@ -11,7 +11,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.community.IParkingAreaAttrV1InnerServiceSMO;
 import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.po.parking.ParkingAreaPo;
-import com.java110.po.parkingAreaAttr.ParkingAreaAttrPo;
+import com.java110.po.parking.ParkingAreaAttrPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -17,7 +17,7 @@ package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.market.MarketSmsKeyDto;
-import com.java110.po.marketSmsKey.MarketSmsKeyPo;
+import com.java110.po.market.MarketSmsKeyPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -4,18 +4,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.dto.order.BusinessDto;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.fee.dao.IFeeDetailServiceDao;
 import com.java110.fee.dao.IFeeServiceDao;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +62,7 @@ public class OnlyUpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlo
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -102,7 +98,7 @@ public class OnlyUpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
         Map info = new HashMap();
@@ -133,7 +129,7 @@ public class OnlyUpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -169,7 +165,7 @@ public class OnlyUpdateFeeInfoListener extends AbstractFeeBusinessServiceDataFlo
      * @param business    总的数据节点
      * @param businessFee 费用节点
      */
-    private void doBusinessFee(Business business, JSONObject businessFee) {
+    private void doBusinessFee(AppBusiness business, JSONObject businessFee) {
 
         Assert.jsonObjectHaveKey(businessFee, "feeId", "businessFee 节点下没有包含 feeId 节点");
 

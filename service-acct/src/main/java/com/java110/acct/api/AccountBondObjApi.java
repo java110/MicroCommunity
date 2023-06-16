@@ -6,7 +6,7 @@ import com.java110.acct.bmo.accountBondObj.IGetAccountBondObjBMO;
 import com.java110.acct.bmo.accountBondObj.ISaveAccountBondObjBMO;
 import com.java110.acct.bmo.accountBondObj.IUpdateAccountBondObjBMO;
 import com.java110.dto.account.AccountBondObjDto;
-import com.java110.po.accountBondObj.AccountBondObjPo;
+import com.java110.po.account.AccountBondObjPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

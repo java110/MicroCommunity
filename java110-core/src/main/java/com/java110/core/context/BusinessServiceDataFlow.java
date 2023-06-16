@@ -3,7 +3,7 @@ package com.java110.core.context;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.InitDataFlowContextException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 
@@ -36,7 +36,7 @@ public class BusinessServiceDataFlow extends AbstractDataFlowContext {
 
     public BusinessServiceDataFlow doBuilder(String reqInfo, Map<String, String> headerAll) throws InitDataFlowContextException {
         try{
-            Business business = null;
+            AppBusiness business = null;
             JSONObject reqInfoObj = JSONObject.parseObject(reqInfo);
             JSONObject orderObj = reqInfoObj.getJSONObject("orders");
             JSONObject businessObject = reqInfoObj.getJSONObject("business");
@@ -48,8 +48,8 @@ public class BusinessServiceDataFlow extends AbstractDataFlowContext {
             this.setBusinessType(orderObj.getString("businessType"));
             this.setbId(businessObject.getString("bId"));
             paramOut = new HashMap<String, Object>();
-            this.businesses = new ArrayList<Business>();
-            business = new Business().builder(businessObject);
+            this.businesses = new ArrayList<AppBusiness>();
+            business = new AppBusiness().builder(businessObject);
             businesses.add(business);
             this.setCurrentBusiness(business);
             if (headerAll != null){

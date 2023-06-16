@@ -2,7 +2,7 @@ package com.java110.intf.goods;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.product.ProductSpecValueDto;
-import com.java110.po.productSpecValue.ProductSpecValuePo;
+import com.java110.po.product.ProductSpecValuePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

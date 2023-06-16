@@ -1,7 +1,7 @@
 package com.java110.common.smartMeter;
 
-import com.java110.dto.meterMachine.MeterMachineDto;
-import com.java110.dto.meterMachine.MeterMachineDetailDto;
+import com.java110.dto.meter.MeterMachineDto;
+import com.java110.dto.meter.MeterMachineDetailDto;
 
 /**
  * 水电抄表逻辑

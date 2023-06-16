@@ -3,7 +3,7 @@ package com.java110.job.bmo.businessDatabus.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.job.IBusinessDatabusInnerServiceSMO;
 import com.java110.job.bmo.businessDatabus.IDeleteBusinessDatabusBMO;
-import com.java110.po.businessDatabus.BusinessDatabusPo;
+import com.java110.po.business.BusinessDatabusPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

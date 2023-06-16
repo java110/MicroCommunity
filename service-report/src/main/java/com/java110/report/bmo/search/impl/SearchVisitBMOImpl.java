@@ -1,15 +1,12 @@
 package com.java110.report.bmo.search.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.SearchDataDto;
 import com.java110.dto.visit.VisitDto;
-import com.java110.dto.visitSetting.VisitSettingDto;
+import com.java110.dto.visit.VisitSettingDto;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
 import com.java110.intf.community.IVisitV1InnerServiceSMO;
-import com.java110.report.bmo.search.ISearchStaffBMO;
 import com.java110.report.bmo.search.ISearchVisitBMO;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.api.visit.ApiVisitDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

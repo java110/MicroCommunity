@@ -1,7 +1,7 @@
 package com.java110.store.listener.storeAttr;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IStoreAttrServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -54,7 +54,7 @@ public abstract class AbstractStoreAttrBusinessServiceDataFlowListener extends A
      *
      * @param businessStoreAttr 商户属性信息
      */
-    protected void autoSaveDelBusinessStoreAttr(Business business, JSONObject businessStoreAttr) {
+    protected void autoSaveDelBusinessStoreAttr(AppBusiness business, JSONObject businessStoreAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessStoreAttr.getString("attrId"));

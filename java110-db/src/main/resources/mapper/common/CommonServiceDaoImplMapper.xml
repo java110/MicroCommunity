@@ -3,7 +3,7 @@
 <mapper namespace="commonServiceDaoImpl">
 
     <!--查询所有有效的映射数据-->
-    <select id="getCodeMappingAll" resultType="com.java110.entity.mapping.CodeMapping">
+    <select id="getCodeMappingAll" resultType="com.java110.dto.mapping.CodeMapping">
         <![CDATA[
             SELECT
               cm.id,
@@ -20,8 +20,8 @@
     </select>
 
     <!--根据域查询对应的映射关系-->
-    <select id="getCodeMappingByDomain" parameterType="com.java110.entity.mapping.CodeMapping"
-            resultType="com.java110.entity.mapping.CodeMapping"
+    <select id="getCodeMappingByDomain" parameterType="com.java110.dto.mapping.CodeMapping"
+            resultType="com.java110.dto.mapping.CodeMapping"
     >
         <![CDATA[
             SELECT
@@ -40,8 +40,8 @@
     </select>
 
     <!--根据HCode查询映射关系-->
-    <select id="getCodeMappingByHCode" parameterType="com.java110.entity.mapping.CodeMapping"
-            resultType="com.java110.entity.mapping.CodeMapping"
+    <select id="getCodeMappingByHCode" parameterType="com.java110.dto.mapping.CodeMapping"
+            resultType="com.java110.dto.mapping.CodeMapping"
     >
         <![CDATA[
             SELECT
@@ -61,8 +61,8 @@
     </select>
 
     <!--根据PCode查询映射关系-->
-    <select id="getCodeMappingByPCode" parameterType="com.java110.entity.mapping.CodeMapping"
-            resultType="com.java110.entity.mapping.CodeMapping"
+    <select id="getCodeMappingByPCode" parameterType="com.java110.dto.mapping.CodeMapping"
+            resultType="com.java110.dto.mapping.CodeMapping"
     >
         <![CDATA[
             SELECT
@@ -81,8 +81,8 @@
     </select>
 
     <!--根据PCode查询映射关系-->
-    <select id="getCodeMappingByDomainAndHCode" parameterType="com.java110.entity.mapping.CodeMapping"
-            resultType="com.java110.entity.mapping.CodeMapping"
+    <select id="getCodeMappingByDomainAndHCode" parameterType="com.java110.dto.mapping.CodeMapping"
+            resultType="com.java110.dto.mapping.CodeMapping"
     >
         <![CDATA[
             SELECT
@@ -102,8 +102,8 @@
     </select>
 
     <!--根据PCode查询映射关系-->
-    <select id="getCodeMappingByDomainAndPCode" parameterType="com.java110.entity.mapping.CodeMapping"
-            resultType="com.java110.entity.mapping.CodeMapping"
+    <select id="getCodeMappingByDomainAndPCode" parameterType="com.java110.dto.mapping.CodeMapping"
+            resultType="com.java110.dto.mapping.CodeMapping"
     >
         <![CDATA[
             SELECT

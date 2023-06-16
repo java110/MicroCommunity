@@ -3,7 +3,7 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.userQuestionAnswerValue.UserQuestionAnswerValueDto;
+import com.java110.dto.user.UserQuestionAnswerValueDto;
 import com.java110.intf.report.IReportUserQuestionAnswerValueInnerServiceSMO;
 import com.java110.report.dao.IReportUserQuestionAnswerValueServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

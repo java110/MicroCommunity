@@ -1,6 +1,6 @@
 package com.java110.store.bmo.storeMsg.impl;
 
-import com.java110.dto.storeMsg.StoreMsgDto;
+import com.java110.dto.store.StoreMsgDto;
 import com.java110.intf.store.IStoreMsgInnerServiceSMO;
 import com.java110.store.bmo.storeMsg.IGetStoreMsgBMO;
 import com.java110.vo.ResultVo;

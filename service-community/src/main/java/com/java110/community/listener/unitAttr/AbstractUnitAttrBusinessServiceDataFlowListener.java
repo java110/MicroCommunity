@@ -3,7 +3,7 @@ package com.java110.community.listener.unitAttr;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IUnitAttrServiceDao;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -52,7 +52,7 @@ public abstract class AbstractUnitAttrBusinessServiceDataFlowListener extends Ab
      *
      * @param businessUnitAttr 单元属性信息
      */
-    protected void autoSaveDelBusinessUnitAttr(Business business, JSONObject businessUnitAttr) {
+    protected void autoSaveDelBusinessUnitAttr(AppBusiness business, JSONObject businessUnitAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessUnitAttr.getString("attrId"));

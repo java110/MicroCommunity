@@ -14,7 +14,7 @@ package com.java110.boot.smo.activiti;/*
  * limitations under the License.
  */
 
-import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.dto.oaWorkflow.WorkflowModelDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IModelSMO {

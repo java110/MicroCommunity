@@ -1,6 +1,6 @@
 package com.java110.job.printer.manufactor;
 
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.util.StringUtil;

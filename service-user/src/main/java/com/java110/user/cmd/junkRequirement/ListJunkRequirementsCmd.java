@@ -32,7 +32,7 @@ import com.java110.vo.api.junkRequirement.ApiJunkRequirementDataVo;
 import com.java110.vo.api.junkRequirement.ApiJunkRequirementVo;
 import com.java110.vo.api.junkRequirement.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.junkRequirement.JunkRequirementDto;
+import com.java110.dto.itemRelease.JunkRequirementDto;
 import java.util.List;
 import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;

@@ -1,10 +1,10 @@
 package com.java110.user.dao;
 
 import com.java110.utils.exception.DAOException;
-import com.java110.entity.user.BoCust;
-import com.java110.entity.user.BoCustAttr;
-import com.java110.entity.user.Cust;
-import com.java110.entity.user.CustAttr;
+import com.java110.dto.user.BoCust;
+import com.java110.dto.user.BoCustAttr;
+import com.java110.dto.user.Cust;
+import com.java110.dto.user.CustAttr;
 
 import java.util.List;
 import java.util.Map;

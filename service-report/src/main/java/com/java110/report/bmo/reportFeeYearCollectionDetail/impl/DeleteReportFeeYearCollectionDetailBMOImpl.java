@@ -2,7 +2,7 @@ package com.java110.report.bmo.reportFeeYearCollectionDetail.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.report.IReportFeeYearCollectionDetailInnerServiceSMO;
-import com.java110.po.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailPo;
+import com.java110.po.reportFee.ReportFeeYearCollectionDetailPo;
 import com.java110.report.bmo.reportFeeYearCollectionDetail.IDeleteReportFeeYearCollectionDetailBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

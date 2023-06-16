@@ -1,9 +1,9 @@
 package com.java110.report.bmo.reportFeeMonthStatistics;
 
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.report.ReportDeposit;
-import com.java110.dto.reportFeeMonthStatistics.ReportFeeMonthStatisticsDto;
+import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;

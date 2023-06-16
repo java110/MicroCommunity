@@ -2,12 +2,12 @@ package com.java110.core.context;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.system.AppRoute;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.utils.util.StringUtil;
-import com.java110.entity.center.AppRoute;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 
 
 import java.util.*;
@@ -182,7 +182,7 @@ public class DataFlow extends AbstractDataFlowContext {
 
     public DataFlow builderByBusiness(String businessInfo) throws Exception{
         try{
-            Business business = null;
+            AppBusiness business = null;
             JSONObject reqInfoObj = JSONObject.parseObject(businessInfo);
             this.setReqJson(reqInfoObj);
             this.setReqData(businessInfo);
@@ -203,8 +203,8 @@ public class DataFlow extends AbstractDataFlowContext {
             this.setCode(response.getString("code"));
             this.setMessage(response.getString("message"));
             businessObj.put("response",response);
-            this.businesses = new ArrayList<Business>();
-            business = new Business().builder(businessObj);
+            this.businesses = new ArrayList<AppBusiness>();
+            business = new AppBusiness().builder(businessObj);
             businesses.add(business);
             this.setCurrentBusiness(business);
         }catch (Exception e){
@@ -217,7 +217,7 @@ public class DataFlow extends AbstractDataFlowContext {
     public DataFlow doBuilder(String reqInfo, Map<String,String> headerAll) throws Exception{
 
         try{
-            Business business = null;
+            AppBusiness business = null;
             JSONObject reqInfoObj = JSONObject.parseObject(reqInfo);
             JSONObject orderObj = refreshOrderObj(reqInfoObj,headerAll);
             Object businessObj = reqInfoObj.get("business");
@@ -243,10 +243,10 @@ public class DataFlow extends AbstractDataFlowContext {
             this.setRequestTime(orderObj.getString("requestTime"));
             this.setReqOrders(orderObj);
             this.setReqBusiness(businessArray);
-            this.businesses = new ArrayList<Business>();
+            this.businesses = new ArrayList<AppBusiness>();
             if(businessArray != null && businessArray.size() > 0){
                 for(int businessIndex = 0;businessIndex < businessArray.size();businessIndex++) {
-                    business = new Business().builder(businessArray.getJSONObject(businessIndex));
+                    business = new AppBusiness().builder(businessArray.getJSONObject(businessIndex));
                     businesses.add(business);
                 }
             }
@@ -276,7 +276,7 @@ public class DataFlow extends AbstractDataFlowContext {
     public DataFlow builderTransfer(String reqInfo, Map<String,String> headerAll) throws Exception{
 
         try{
-            Business business = null;
+            AppBusiness business = null;
             this.setReqData(reqInfo);
             this.setDataFlowId("-1");
             this.setAppId(headerAll.get("appId"));
@@ -287,12 +287,12 @@ public class DataFlow extends AbstractDataFlowContext {
             this.setReqSign(StringUtil.isNullOrNone(headerAll.get("sign"))? "":headerAll.get("sign"));
             this.setRequestTime(StringUtil.isNullOrNone(headerAll.get("requestTime"))? DateUtil.getyyyyMMddhhmmssDateString():headerAll.get("requestTime"));
             String serviceCode = headerAll.get("serviceCode");
-            this.businesses = new ArrayList<Business>();
+            this.businesses = new ArrayList<AppBusiness>();
             if(!StringUtil.isNullOrNone(serviceCode)){
                 JSONObject bInfo = new JSONObject();
                 bInfo.put("serviceCode",serviceCode);
                 bInfo.put("transferData",reqInfo);
-                    business = new Business().builder(bInfo);
+                    business = new AppBusiness().builder(bInfo);
                     businesses.add(business);
                 this.setCurrentBusiness(business);
             }

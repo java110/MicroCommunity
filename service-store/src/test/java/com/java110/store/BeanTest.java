@@ -1,6 +1,5 @@
 package com.java110.store;
 
-import com.java110.entity.product.Product;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

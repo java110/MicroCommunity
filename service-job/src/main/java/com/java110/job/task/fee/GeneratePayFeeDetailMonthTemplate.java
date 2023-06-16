@@ -1,37 +1,19 @@
 package com.java110.job.task.fee;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
-import com.java110.dto.logSystemError.LogSystemErrorDto;
-import com.java110.dto.payFeeDetailMonth.PayFeeDetailRefreshFeeMonthDto;
-import com.java110.dto.reportOweFee.ReportOweFeeDto;
+import com.java110.dto.log.LogSystemErrorDto;
+import com.java110.dto.payFee.PayFeeDetailRefreshFeeMonthDto;
 import com.java110.dto.task.TaskDto;
-import com.java110.intf.common.ILogSystemErrorInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeMonthInnerServiceSMO;
-import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.po.logSystemError.LogSystemErrorPo;
-import com.java110.po.reportOweFee.ReportOweFeePo;
+import com.java110.po.log.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
-import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ClassName GeneratePayFeeDetailMonthTemplate

@@ -5,12 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.DataFlow;
 import com.java110.core.context.IOrderDataFlowContext;
 import com.java110.core.context.IOrderNotifyDataFlowContext;
-import com.java110.entity.center.AppService;
-import com.java110.entity.center.Business;
-import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.entity.order.BusinessAttrs;
-import com.java110.entity.order.Orders;
-import com.java110.entity.order.OrdersAttrs;
+import com.java110.dto.system.*;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.MappingConstant;
@@ -150,8 +146,8 @@ public class OrderDataFlowContextFactory {
     public static List<Map> getBusiness(IOrderDataFlowContext dataFlow) {
         List<Map> businesss = new ArrayList<Map>();
         Map busiMap = null;
-        List<com.java110.entity.order.Business> businessList = dataFlow.getBusinessList();
-        for (com.java110.entity.order.Business business : businessList) {
+        List<com.java110.dto.system.Business> businessList = dataFlow.getBusinessList();
+        for (com.java110.dto.system.Business business : businessList) {
             if (business == null) {
                 continue;
             }
@@ -215,8 +211,8 @@ public class OrderDataFlowContextFactory {
      */
     public static List<Map> getBusinessAttrs(IOrderDataFlowContext dataFlow) {
         List<Map> businessAttrs = new ArrayList<Map>();
-        List<com.java110.entity.order.Business> businesses = dataFlow.getBusinessList();
-        for (com.java110.entity.order.Business business : businesses) {
+        List<com.java110.dto.system.Business> businesses = dataFlow.getBusinessList();
+        for (com.java110.dto.system.Business business : businesses) {
             if (business.getBusinessAttrs() == null || business.getBusinessAttrs().size() == 0) {
                 continue;
             }
@@ -270,10 +266,10 @@ public class OrderDataFlowContextFactory {
      * @param dataFlow
      * @return
      */
-    public static Map getNeedDeleteBusiness(IOrderDataFlowContext dataFlow, List<com.java110.entity.order.Business> deleteBusinesses) {
+    public static Map getNeedDeleteBusiness(IOrderDataFlowContext dataFlow, List<com.java110.dto.system.Business> deleteBusinesses) {
         Map business = new HashMap();
         String bId = "";
-        for (com.java110.entity.order.Business busi : deleteBusinesses) {
+        for (com.java110.dto.system.Business busi : deleteBusinesses) {
             bId += busi.getbId() + ",";
         }
         business.put("bId", bId.substring(0, bId.length() - 1));
@@ -323,7 +319,7 @@ public class OrderDataFlowContextFactory {
      */
     public static String getMoreBId(DataFlow dataFlow) {
         String bId = "";
-        for (Business busi : dataFlow.getBusinesses()) {
+        for (AppBusiness busi : dataFlow.getBusinesses()) {
             bId += busi.getbId() + ",";
         }
         return bId;
@@ -356,7 +352,7 @@ public class OrderDataFlowContextFactory {
 
         JSONObject busi = null;
         JSONObject response = null;
-        for (Business business : dataFlow.getBusinesses()) {
+        for (AppBusiness business : dataFlow.getBusinesses()) {
             busi = new JSONObject();
             busi.put("bId", business.getbId());
             busi.put("serviceCode", business.getServiceCode());
@@ -433,7 +429,7 @@ public class OrderDataFlowContextFactory {
 
         JSONObject busi = null;
         JSONObject response = null;
-        for (Business business : dataFlow.getBusinesses()) {
+        for (AppBusiness business : dataFlow.getBusinesses()) {
             busi = new JSONObject();
             busi.put("bId", business.getbId());
             busi.put("serviceCode", business.getServiceCode());
@@ -495,7 +491,7 @@ public class OrderDataFlowContextFactory {
      * @param business
      * @return
      */
-    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(DataFlow dataFlow, Business business) {
+    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(DataFlow dataFlow, AppBusiness business) {
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow, StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE);
         JSONObject busi = null;
@@ -515,7 +511,7 @@ public class OrderDataFlowContextFactory {
      * @param business
      * @return
      */
-    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(IOrderDataFlowContext dataFlow, com.java110.entity.order.Business business) {
+    public static JSONObject getBusinessTableDataInfoToInstanceTableJson(IOrderDataFlowContext dataFlow, com.java110.dto.system.Business business) {
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow, StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE);
         JSONObject busi = null;
@@ -550,7 +546,7 @@ public class OrderDataFlowContextFactory {
      * @param business
      * @return
      */
-    public static JSONObject getDeleteInstanceTableJson(DataFlow dataFlow, Business business) {
+    public static JSONObject getDeleteInstanceTableJson(DataFlow dataFlow, AppBusiness business) {
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow, StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
         JSONObject busi = null;
@@ -569,7 +565,7 @@ public class OrderDataFlowContextFactory {
      * @param business
      * @return
      */
-    public static JSONObject getDeleteInstanceTableJson(IOrderDataFlowContext dataFlow, com.java110.entity.order.Business business) {
+    public static JSONObject getDeleteInstanceTableJson(IOrderDataFlowContext dataFlow, com.java110.dto.system.Business business) {
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow, StatusConstant.REQUEST_BUSINESS_TYPE_DELETE);
         JSONObject busi = null;
@@ -611,7 +607,7 @@ public class OrderDataFlowContextFactory {
      * @param business
      * @return
      */
-    public static JSONObject getCompleteInstanceDataJson(DataFlow dataFlow, Business business) {
+    public static JSONObject getCompleteInstanceDataJson(DataFlow dataFlow, AppBusiness business) {
 
         JSONObject notifyMessage = getTransactionBusinessBaseJson(dataFlow, StatusConstant.REQUEST_BUSINESS_TYPE);
         //JSONObject businesses = notifyMessage.getJSONObject("business");
@@ -631,7 +627,7 @@ public class OrderDataFlowContextFactory {
      * @param business
      * @return
      */
-    public static JSONObject getRequestBusinessJson(DataFlow dataFlow, Business business) {
+    public static JSONObject getRequestBusinessJson(DataFlow dataFlow, AppBusiness business) {
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow, StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS);
         //JSONObject businesses = notifyMessage.getJSONObject("business");
@@ -653,7 +649,7 @@ public class OrderDataFlowContextFactory {
      * @param business
      * @return
      */
-    public static JSONObject getRequestBusinessJson(IOrderDataFlowContext dataFlow, com.java110.entity.order.Business business) {
+    public static JSONObject getRequestBusinessJson(IOrderDataFlowContext dataFlow, com.java110.dto.system.Business business) {
 
         JSONObject requestMessage = getTransactionBusinessBaseJson(dataFlow, StatusConstant.REQUEST_BUSINESS_TYPE_BUSINESS);
         //JSONObject businesses = notifyMessage.getJSONObject("business");
@@ -722,9 +718,9 @@ public class OrderDataFlowContextFactory {
      * @param dataFlow
      * @return
      */
-    public static List<com.java110.entity.order.Business> getSynchronousBusinesses(IOrderDataFlowContext dataFlow) {
-        List<com.java110.entity.order.Business> syschronousBusinesses = new ArrayList<com.java110.entity.order.Business>();
-        for (com.java110.entity.order.Business business : dataFlow.getBusinessList()) {
+    public static List<com.java110.dto.system.Business> getSynchronousBusinesses(IOrderDataFlowContext dataFlow) {
+        List<com.java110.dto.system.Business> syschronousBusinesses = new ArrayList<com.java110.dto.system.Business>();
+        for (com.java110.dto.system.Business business : dataFlow.getBusinessList()) {
 
             if (CommonConstant.ORDER_INVOKE_METHOD_SYNCHRONOUS.equals(business.getInvokeModel()) || StringUtil.isEmpty(business.getInvokeModel())) {
                 syschronousBusinesses.add(business);
@@ -744,10 +740,10 @@ public class OrderDataFlowContextFactory {
      * @param dataFlow
      * @return
      */
-    public static List<com.java110.entity.order.Business> getAsynchronousBusinesses(IOrderDataFlowContext dataFlow) {
+    public static List<com.java110.dto.system.Business> getAsynchronousBusinesses(IOrderDataFlowContext dataFlow) {
 
-        List<com.java110.entity.order.Business> asynchronousBusinesses = new ArrayList<com.java110.entity.order.Business>();
-        for (com.java110.entity.order.Business business : dataFlow.getBusinessList()) {
+        List<com.java110.dto.system.Business> asynchronousBusinesses = new ArrayList<com.java110.dto.system.Business>();
+        for (com.java110.dto.system.Business business : dataFlow.getBusinessList()) {
             if (CommonConstant.ORDER_INVOKE_METHOD_ASYNCHRONOUS.equals(business.getInvokeModel())) {
 
                 asynchronousBusinesses.add(business);

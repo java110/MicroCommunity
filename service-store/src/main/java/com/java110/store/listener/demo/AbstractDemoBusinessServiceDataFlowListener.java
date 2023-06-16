@@ -2,7 +2,7 @@ package com.java110.store.listener.demo;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IDemoServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -53,7 +53,7 @@ public abstract class AbstractDemoBusinessServiceDataFlowListener extends Abstra
      *
      * @param businessDemo demo信息
      */
-    protected void autoSaveDelBusinessDemo(Business business, JSONObject businessDemo) {
+    protected void autoSaveDelBusinessDemo(AppBusiness business, JSONObject businessDemo) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("demoId", businessDemo.getString("demoId"));

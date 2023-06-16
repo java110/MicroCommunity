@@ -16,9 +16,9 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.privilegeUser.PrivilegeUserDto;
+import com.java110.dto.privilege.PrivilegeUserDto;
 import com.java110.dto.user.UserDto;
-import com.java110.po.privilegeUser.PrivilegeUserPo;
+import com.java110.po.privilege.PrivilegeUserPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

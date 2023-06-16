@@ -4,7 +4,7 @@ package com.java110.acct.smo.impl;
 import com.java110.acct.dao.IAccountWithdrawalApplyServiceDao;
 import com.java110.dto.account.AccountWithdrawalApplyDto;
 import com.java110.intf.acct.IAccountWithdrawalApplyInnerServiceSMO;
-import com.java110.po.accountWithdrawalApply.AccountWithdrawalApplyPo;
+import com.java110.po.account.AccountWithdrawalApplyPo;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;

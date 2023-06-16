@@ -1,9 +1,9 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.shopVipAccount.ShopVipAccountDto;
-import com.java110.po.shopVipAccount.ShopVipAccountPo;
-import com.java110.po.shopVipAccountDetail.ShopVipAccountDetailPo;
+import com.java110.dto.shop.ShopVipAccountDto;
+import com.java110.po.shop.ShopVipAccountPo;
+import com.java110.po.shop.ShopVipAccountDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

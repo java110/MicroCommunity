@@ -1,8 +1,8 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.rentingPool.RentingConfigDto;
-import com.java110.po.rentingConfig.RentingConfigPo;
+import com.java110.dto.renting.RentingConfigDto;
+import com.java110.po.renting.RentingConfigPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

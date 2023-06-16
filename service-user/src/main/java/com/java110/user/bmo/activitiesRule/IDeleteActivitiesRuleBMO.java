@@ -1,5 +1,5 @@
 package com.java110.user.bmo.activitiesRule;
-import com.java110.po.activitiesRule.ActivitiesRulePo;
+import com.java110.po.activities.ActivitiesRulePo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteActivitiesRuleBMO {

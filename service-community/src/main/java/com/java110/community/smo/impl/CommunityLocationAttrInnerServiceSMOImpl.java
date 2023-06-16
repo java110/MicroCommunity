@@ -7,7 +7,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunityLocationAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.community.ICommunityLocationAttrInnerServiceSMO;
-import com.java110.po.communityLocationAttr.CommunityLocationAttrPo;
+import com.java110.po.community.CommunityLocationAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -3,7 +3,7 @@ package com.java110.user.bmo.staffAppAuth.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
-import com.java110.po.staffAppAuth.StaffAppAuthPo;
+import com.java110.po.user.StaffAppAuthPo;
 import com.java110.user.bmo.staffAppAuth.ISaveStaffAppAuthBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

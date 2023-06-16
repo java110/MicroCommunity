@@ -1,7 +1,6 @@
 package com.java110.store.bmo.collection;
 
-import com.java110.entity.audit.AuditUser;
-import com.java110.po.purchase.PurchaseApplyPo;
+import com.java110.dto.audit.AuditUser;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetCollectionAuditOrderBMO {

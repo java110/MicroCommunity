@@ -1,8 +1,8 @@
 package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.storeMsg.StoreMsgDto;
-import com.java110.po.storeMsg.StoreMsgPo;
+import com.java110.dto.store.StoreMsgDto;
+import com.java110.po.store.StoreMsgPo;
 import com.java110.store.bmo.storeMsg.IDeleteStoreMsgBMO;
 import com.java110.store.bmo.storeMsg.IGetStoreMsgBMO;
 import com.java110.store.bmo.storeMsg.ISaveStoreMsgBMO;

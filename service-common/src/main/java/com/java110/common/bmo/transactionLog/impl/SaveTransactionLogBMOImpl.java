@@ -3,7 +3,7 @@ package com.java110.common.bmo.transactionLog.impl;
 import com.java110.common.bmo.transactionLog.ISaveTransactionLogBMO;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.ITransactionLogInnerServiceSMO;
-import com.java110.po.transactionLog.TransactionLogPo;
+import com.java110.po.log.TransactionLogPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

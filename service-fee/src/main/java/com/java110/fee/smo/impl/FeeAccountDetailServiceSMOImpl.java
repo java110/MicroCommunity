@@ -5,7 +5,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeAccountDetailDto;
 import com.java110.fee.dao.IFeeAccountDetailServiceDao;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
-import com.java110.po.feeAccountDetail.FeeAccountDetailPo;
+import com.java110.po.fee.FeeAccountDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,5 +1,5 @@
 package com.java110.acct.bmo.accountBondObjDetail;
-import com.java110.po.accountBondObjDetail.AccountBondObjDetailPo;
+import com.java110.po.account.AccountBondObjDetailPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteAccountBondObjDetailBMO {

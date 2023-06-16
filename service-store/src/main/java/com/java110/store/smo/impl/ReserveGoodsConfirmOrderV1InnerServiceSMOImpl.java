@@ -19,7 +19,7 @@ package com.java110.store.smo.impl;
 import com.java110.store.dao.IReserveGoodsConfirmOrderV1ServiceDao;
 import com.java110.intf.store.IReserveGoodsConfirmOrderV1InnerServiceSMO;
 import com.java110.dto.reserve.ReserveGoodsConfirmOrderDto;
-import com.java110.po.reserveGoodsConfirmOrder.ReserveGoodsConfirmOrderPo;
+import com.java110.po.reserve.ReserveGoodsConfirmOrderPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

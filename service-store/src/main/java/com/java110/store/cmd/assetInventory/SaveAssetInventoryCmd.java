@@ -23,25 +23,20 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.allocationStorehouse.AllocationStorehouseDto;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.intf.store.IAssetInventoryDetailV1InnerServiceSMO;
 import com.java110.intf.store.IAssetInventoryV1InnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.po.assetInventory.AssetInventoryPo;
-import com.java110.po.assetInventoryDetail.AssetInventoryDetailPo;
+import com.java110.po.assetInventory.AssetInventoryDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * 类表述：保存

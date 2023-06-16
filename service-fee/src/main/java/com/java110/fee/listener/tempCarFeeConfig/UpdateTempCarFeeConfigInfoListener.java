@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.fee.dao.ITempCarFeeConfigServiceDao;
-import com.java110.po.tempCarFeeConfig.TempCarFeeConfigPo;
+import com.java110.po.tempCarFee.TempCarFeeConfigPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -57,7 +57,7 @@ public class UpdateTempCarFeeConfigInfoListener extends AbstractTempCarFeeConfig
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -93,7 +93,7 @@ public class UpdateTempCarFeeConfigInfoListener extends AbstractTempCarFeeConfig
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -123,7 +123,7 @@ public class UpdateTempCarFeeConfigInfoListener extends AbstractTempCarFeeConfig
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -159,7 +159,7 @@ public class UpdateTempCarFeeConfigInfoListener extends AbstractTempCarFeeConfig
      * @param business                 总的数据节点
      * @param businessTempCarFeeConfig 临时车收费标准节点
      */
-    private void doBusinessTempCarFeeConfig(Business business, JSONObject businessTempCarFeeConfig) {
+    private void doBusinessTempCarFeeConfig(AppBusiness business, JSONObject businessTempCarFeeConfig) {
 
         Assert.jsonObjectHaveKey(businessTempCarFeeConfig, "configId", "businessTempCarFeeConfig 节点下没有包含 configId 节点");
 

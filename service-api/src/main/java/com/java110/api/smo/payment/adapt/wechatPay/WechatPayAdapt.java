@@ -19,7 +19,7 @@ import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.PayUtil;

@@ -17,13 +17,13 @@ package com.java110.job.adapt.hcIot.tempCarFee;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.tempCarFeeConfig.TempCarFeeConfigDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.fee.TempCarFeeConfigDto;
+import com.java110.dto.system.Business;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.fee.ITempCarFeeConfigInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.tempCarFeeConfig.TempCarFeeConfigPo;
+import com.java110.po.tempCarFee.TempCarFeeConfigPo;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -3,7 +3,7 @@ package com.java110.fee.bmo.feeReceiptDetail.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.fee.bmo.feeReceiptDetail.IUpdateFeeReceiptDetailBMO;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
-import com.java110.po.feeReceiptDetail.FeeReceiptDetailPo;
+import com.java110.po.fee.FeeReceiptDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

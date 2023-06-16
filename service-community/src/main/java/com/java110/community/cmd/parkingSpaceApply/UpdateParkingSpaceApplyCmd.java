@@ -33,7 +33,7 @@ import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeePo;
-import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
+import com.java110.po.parking.ParkingSpaceApplyPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;

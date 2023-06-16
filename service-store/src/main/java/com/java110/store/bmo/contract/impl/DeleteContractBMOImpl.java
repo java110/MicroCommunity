@@ -1,7 +1,7 @@
 package com.java110.store.bmo.contract.impl;
 
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.contract.ContractRoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerRoomRelDto;

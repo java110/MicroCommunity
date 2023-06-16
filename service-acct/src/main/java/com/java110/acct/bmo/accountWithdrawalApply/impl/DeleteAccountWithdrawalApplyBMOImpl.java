@@ -4,7 +4,7 @@ import com.java110.acct.bmo.accountWithdrawalApply.IDeleteAccountWithdrawalApply
 import com.java110.core.annotation.Java110Transactional;
 
 import com.java110.intf.acct.IAccountWithdrawalApplyInnerServiceSMO;
-import com.java110.po.accountWithdrawalApply.AccountWithdrawalApplyPo;
+import com.java110.po.account.AccountWithdrawalApplyPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -6,7 +6,7 @@ import com.java110.acct.dao.IAccountServiceDao;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.account.AccountDetailDto;
 import com.java110.po.account.AccountPo;
-import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.po.account.AccountDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.lock.DistributedLock;
@@ -15,7 +15,7 @@ import com.java110.acct.dao.IAccountDetailServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.util.BeanConvertUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -59,7 +59,7 @@ public class SaveAccountDetailInfoListener extends AbstractAccountDetailBusiness
      * @param business 当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data,"没有datas 节点，或没有子节点需要处理");
 
@@ -90,7 +90,7 @@ public class SaveAccountDetailInfoListener extends AbstractAccountDetailBusiness
      * @param business 当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -169,7 +169,7 @@ public class SaveAccountDetailInfoListener extends AbstractAccountDetailBusiness
      * @param business 当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -193,7 +193,7 @@ public class SaveAccountDetailInfoListener extends AbstractAccountDetailBusiness
      * @param business 总的数据节点
      * @param businessAccountDetail 账户交易节点
      */
-    private void doBusinessAccountDetail(Business business,JSONObject businessAccountDetail){
+    private void doBusinessAccountDetail(AppBusiness business, JSONObject businessAccountDetail){
 
         Assert.jsonObjectHaveKey(businessAccountDetail,"detailId","businessAccountDetail 节点下没有包含 detailId 节点");
 

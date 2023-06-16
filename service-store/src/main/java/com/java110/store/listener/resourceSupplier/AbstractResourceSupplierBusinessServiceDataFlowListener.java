@@ -5,7 +5,7 @@ import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IResourceSupplierServiceDao;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -59,7 +59,7 @@ public abstract class AbstractResourceSupplierBusinessServiceDataFlowListener ex
      *
      * @param businessResourceSupplier 物品供应商信息
      */
-    protected void autoSaveDelBusinessResourceSupplier(Business business, JSONObject businessResourceSupplier) {
+    protected void autoSaveDelBusinessResourceSupplier(AppBusiness business, JSONObject businessResourceSupplier) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("rsId", businessResourceSupplier.getString("rsId"));

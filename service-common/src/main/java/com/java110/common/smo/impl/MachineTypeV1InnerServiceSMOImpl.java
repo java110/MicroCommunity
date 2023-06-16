@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IMachineTypeV1ServiceDao;
 import com.java110.intf.common.IMachineTypeV1InnerServiceSMO;
 import com.java110.dto.machine.MachineTypeDto;
-import com.java110.po.machineType.MachineTypePo;
+import com.java110.po.machine.MachineTypePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -2,7 +2,7 @@ package com.java110.store.bmo.contractChangePlan.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.store.IContractChangePlanInnerServiceSMO;
-import com.java110.po.contractChangePlan.ContractChangePlanPo;
+import com.java110.po.contract.ContractChangePlanPo;
 import com.java110.store.bmo.contractChangePlan.IUpdateContractChangePlanBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

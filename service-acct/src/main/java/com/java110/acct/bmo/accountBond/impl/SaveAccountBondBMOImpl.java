@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountBondDto;
 import com.java110.intf.acct.IAccountBondInnerServiceSMO;
-import com.java110.po.accountBond.AccountBondPo;
+import com.java110.po.account.AccountBondPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

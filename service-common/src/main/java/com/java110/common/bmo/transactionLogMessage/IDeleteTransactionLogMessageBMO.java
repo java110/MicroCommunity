@@ -1,6 +1,6 @@
 package com.java110.common.bmo.transactionLogMessage;
 
-import com.java110.po.transactionLog.TransactionLogMessagePo;
+import com.java110.po.log.TransactionLogMessagePo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteTransactionLogMessageBMO {

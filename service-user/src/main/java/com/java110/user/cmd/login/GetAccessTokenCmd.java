@@ -6,36 +6,25 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.userLogin.UserLoginDto;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserLoginInnerServiceSMO;
-import com.java110.po.userLogin.UserLoginPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Java110CmdDoc(title = "单点登录获取accessToken",

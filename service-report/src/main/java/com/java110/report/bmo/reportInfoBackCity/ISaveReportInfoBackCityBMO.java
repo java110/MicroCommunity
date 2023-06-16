@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportInfoBackCity;
 
-import com.java110.po.reportInfoBackCity.ReportInfoBackCityPo;
+import com.java110.po.reportInfo.ReportInfoBackCityPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveReportInfoBackCityBMO {
 

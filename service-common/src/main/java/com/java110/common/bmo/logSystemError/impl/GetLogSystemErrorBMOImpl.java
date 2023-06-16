@@ -1,7 +1,7 @@
 package com.java110.common.bmo.logSystemError.impl;
 
 import com.java110.common.bmo.logSystemError.IGetLogSystemErrorBMO;
-import com.java110.dto.logSystemError.LogSystemErrorDto;
+import com.java110.dto.log.LogSystemErrorDto;
 import com.java110.intf.common.ILogSystemErrorInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

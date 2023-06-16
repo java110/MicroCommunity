@@ -25,7 +25,7 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.po.parking.ParkingSpacePo;
-import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
+import com.java110.po.parking.ParkingSpaceApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

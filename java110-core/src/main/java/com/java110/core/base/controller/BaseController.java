@@ -1,24 +1,15 @@
 package com.java110.core.base.controller;
 
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.AppBase;
 import com.java110.core.context.BusinessServiceDataFlow;
-import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.DataFlowFactory;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.utils.cache.PrivilegeCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.NoAuthorityException;
 import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;

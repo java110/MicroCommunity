@@ -21,7 +21,7 @@ import com.java110.dto.market.MarketGoodsItemDto;
 import com.java110.intf.common.IMarketGoodsItemV1InnerServiceSMO;
 import com.java110.intf.common.IMarketGoodsV1InnerServiceSMO;
 import com.java110.dto.market.MarketGoodsDto;
-import com.java110.po.marketGoods.MarketGoodsPo;
+import com.java110.po.market.MarketGoodsPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

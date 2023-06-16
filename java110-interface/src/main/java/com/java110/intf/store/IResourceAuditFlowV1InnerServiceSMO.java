@@ -16,8 +16,8 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.resourceAuditFlow.ResourceAuditFlowDto;
-import com.java110.po.resourceAuditFlow.ResourceAuditFlowPo;
+import com.java110.dto.resource.ResourceAuditFlowDto;
+import com.java110.po.resource.ResourceAuditFlowPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

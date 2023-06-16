@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.charge.IChargeCore;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.chargeMachine.NotifyChargeOrderDto;
+import com.java110.dto.charge.NotifyChargeOrderDto;
 import com.java110.intf.common.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;

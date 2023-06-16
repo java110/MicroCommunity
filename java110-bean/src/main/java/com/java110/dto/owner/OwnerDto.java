@@ -1,7 +1,7 @@
 package com.java110.dto.owner;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.RoomDto;
+import com.java110.dto.room.RoomDto;
 
 import java.io.Serializable;
 import java.util.Date;

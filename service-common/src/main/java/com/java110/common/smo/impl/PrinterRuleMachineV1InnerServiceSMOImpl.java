@@ -19,7 +19,7 @@ package com.java110.common.smo.impl;
 import com.java110.common.dao.IPrinterRuleMachineV1ServiceDao;
 import com.java110.intf.common.IPrinterRuleMachineV1InnerServiceSMO;
 import com.java110.dto.printerRule.PrinterRuleMachineDto;
-import com.java110.po.printerRuleMachine.PrinterRuleMachinePo;
+import com.java110.po.printer.PrinterRuleMachinePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

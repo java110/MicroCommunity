@@ -16,17 +16,14 @@
 package com.java110.job.adapt.hcGov.owner;
 
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.RoomAttrDto;
 import com.java110.dto.hcGovTranslate.HcGovTranslateDto;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.intf.common.IHcGovTranslateInnerServiceSMO;
-import com.java110.intf.community.IRoomAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
 import com.java110.po.owner.OwnerAttrPo;
-import com.java110.po.room.RoomAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

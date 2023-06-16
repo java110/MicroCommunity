@@ -1,7 +1,7 @@
 package com.java110.store.bmo.contract;
 
 import com.java110.dto.contract.ContractDto;
-import com.java110.entity.audit.AuditUser;
+import com.java110.dto.audit.AuditUser;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetContractBMO {

@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.payFeeAudit;
 
-import com.java110.dto.payFeeAudit.PayFeeAuditDto;
+import com.java110.dto.payFee.PayFeeAuditDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetPayFeeAuditBMO {

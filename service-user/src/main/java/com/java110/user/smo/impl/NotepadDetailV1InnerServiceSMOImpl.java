@@ -19,7 +19,7 @@ package com.java110.user.smo.impl;
 import com.java110.user.dao.INotepadDetailV1ServiceDao;
 import com.java110.intf.user.INotepadDetailV1InnerServiceSMO;
 import com.java110.dto.notepad.NotepadDetailDto;
-import com.java110.po.notepadDetail.NotepadDetailPo;
+import com.java110.po.notepad.NotepadDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

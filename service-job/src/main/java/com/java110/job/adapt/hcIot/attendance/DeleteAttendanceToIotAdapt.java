@@ -17,13 +17,13 @@ package com.java110.job.adapt.hcIot.attendance;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.attendanceClasses.AttendanceClassesDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.attendance.AttendanceClassesDto;
+import com.java110.dto.system.Business;
 import com.java110.intf.common.IAttendanceClassesInnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.attendanceClasses.AttendanceClassesPo;
+import com.java110.po.attendance.AttendanceClassesPo;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

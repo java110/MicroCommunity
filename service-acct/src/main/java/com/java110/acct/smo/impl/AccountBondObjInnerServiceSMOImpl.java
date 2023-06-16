@@ -4,7 +4,7 @@ package com.java110.acct.smo.impl;
 import com.java110.acct.dao.IAccountBondObjServiceDao;
 import com.java110.dto.account.AccountBondObjDto;
 import com.java110.intf.acct.IAccountBondObjInnerServiceSMO;
-import com.java110.po.accountBondObj.AccountBondObjPo;
+import com.java110.po.account.AccountBondObjPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

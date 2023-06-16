@@ -18,7 +18,7 @@ package com.java110.api.smo.payment.adapt.chinaums;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.ChinaUmsFactory;
 import com.java110.core.factory.WechatFactory;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.payment.adapt.IPayAdapt;
 import com.java110.utils.cache.MappingCache;

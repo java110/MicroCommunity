@@ -4,7 +4,7 @@ import com.java110.acct.bmo.systemGoldSetting.ISaveSystemGoldSettingBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.acct.ISystemGoldSettingInnerServiceSMO;
-import com.java110.po.systemGoldSetting.SystemGoldSettingPo;
+import com.java110.po.system.SystemGoldSettingPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

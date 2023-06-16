@@ -35,7 +35,7 @@ import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleasePo;
-import com.java110.po.itemReleaseRes.ItemReleaseResPo;
+import com.java110.po.itemRelease.ItemReleaseResPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

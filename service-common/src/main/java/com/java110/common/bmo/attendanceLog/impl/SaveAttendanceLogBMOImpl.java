@@ -6,7 +6,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.intf.common.IAttendanceLogInnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
-import com.java110.po.attendanceLog.AttendanceLogPo;
+import com.java110.po.attendance.AttendanceLogPo;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

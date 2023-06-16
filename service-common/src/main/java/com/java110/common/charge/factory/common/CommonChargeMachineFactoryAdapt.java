@@ -3,10 +3,10 @@ package com.java110.common.charge.factory.common;
 
 import com.alibaba.fastjson.JSONArray;
 import com.java110.common.charge.IChargeFactoryAdapt;
-import com.java110.dto.chargeMachine.ChargeMachineDto;
-import com.java110.dto.chargeMachine.NotifyChargeOrderDto;
-import com.java110.dto.chargeMachine.NotifyChargePortDto;
-import com.java110.dto.chargeMachine.ChargeMachinePortDto;
+import com.java110.dto.charge.ChargeMachineDto;
+import com.java110.dto.charge.NotifyChargeOrderDto;
+import com.java110.dto.charge.NotifyChargePortDto;
+import com.java110.dto.charge.ChargeMachinePortDto;
 import com.java110.vo.ResultVo;
 import org.springframework.stereotype.Service;
 

@@ -6,7 +6,7 @@ import com.java110.fee.bmo.feePrintSpec.IDeleteFeePrintSpecBMO;
 import com.java110.fee.bmo.feePrintSpec.IGetFeePrintSpecBMO;
 import com.java110.fee.bmo.feePrintSpec.ISaveFeePrintSpecBMO;
 import com.java110.fee.bmo.feePrintSpec.IUpdateFeePrintSpecBMO;
-import com.java110.po.feePrintSpec.FeePrintSpecPo;
+import com.java110.po.fee.feePrintSpec.FeePrintSpecPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

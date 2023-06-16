@@ -21,7 +21,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.junkRequirement.JunkRequirementDto;
+import com.java110.dto.itemRelease.JunkRequirementDto;
 import com.java110.intf.user.IJunkRequirementInnerServiceSMO;
 import com.java110.intf.user.IJunkRequirementV1InnerServiceSMO;
 import com.java110.po.junkRequirement.JunkRequirementPo;

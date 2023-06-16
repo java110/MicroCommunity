@@ -1,8 +1,8 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountTypeDto;
-import com.java110.po.applyRoomDiscountType.ApplyRoomDiscountTypePo;
+import com.java110.dto.room.ApplyRoomDiscountTypeDto;
+import com.java110.po.room.ApplyRoomDiscountTypePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

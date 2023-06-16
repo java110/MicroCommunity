@@ -2,14 +2,13 @@ package com.java110.api.smo.payment.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.payment.IGoodsToNotifySMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
-import com.java110.utils.constant.ServiceConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.vo.ResultVo;

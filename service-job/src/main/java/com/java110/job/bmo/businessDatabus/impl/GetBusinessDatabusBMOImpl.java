@@ -1,6 +1,6 @@
 package com.java110.job.bmo.businessDatabus.impl;
 
-import com.java110.dto.businessDatabus.BusinessDatabusDto;
+import com.java110.dto.system.BusinessDatabusDto;
 import com.java110.intf.job.IBusinessDatabusInnerServiceSMO;
 import com.java110.job.bmo.businessDatabus.IGetBusinessDatabusBMO;
 import com.java110.vo.ResultVo;

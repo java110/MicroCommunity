@@ -1,12 +1,11 @@
 package com.java110.user;
 
-import com.java110.entity.user.BoCust;
+import com.java110.dto.user.BoCust;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

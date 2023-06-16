@@ -27,7 +27,7 @@ import com.java110.dto.classes.ClassesDto;
 import com.java110.intf.store.IClassesTimeV1InnerServiceSMO;
 import com.java110.intf.store.IClassesV1InnerServiceSMO;
 import com.java110.po.classes.ClassesPo;
-import com.java110.po.classesTime.ClassesTimePo;
+import com.java110.po.classes.ClassesTimePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

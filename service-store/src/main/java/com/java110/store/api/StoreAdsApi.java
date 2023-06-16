@@ -1,8 +1,8 @@
 package com.java110.store.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.storeAds.StoreAdsDto;
-import com.java110.po.storeAds.StoreAdsPo;
+import com.java110.dto.store.StoreAdsDto;
+import com.java110.po.store.StoreAdsPo;
 import com.java110.store.bmo.storeAds.IDeleteStoreAdsBMO;
 import com.java110.store.bmo.storeAds.IGetStoreAdsBMO;
 import com.java110.store.bmo.storeAds.ISaveStoreAdsBMO;

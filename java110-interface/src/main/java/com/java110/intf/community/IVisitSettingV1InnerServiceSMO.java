@@ -16,8 +16,8 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.visitSetting.VisitSettingDto;
-import com.java110.po.visitSetting.VisitSettingPo;
+import com.java110.dto.visit.VisitSettingDto;
+import com.java110.po.visit.VisitSettingPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

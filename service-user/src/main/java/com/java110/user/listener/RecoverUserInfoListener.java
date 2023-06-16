@@ -3,7 +3,7 @@ package com.java110.user.listener;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.user.UserPo;
 import com.java110.user.dao.IUserServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -55,7 +55,7 @@ public class RecoverUserInfoListener extends AbstractUserBusinessServiceDataFlow
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
@@ -81,7 +81,7 @@ public class RecoverUserInfoListener extends AbstractUserBusinessServiceDataFlow
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -104,7 +104,7 @@ public class RecoverUserInfoListener extends AbstractUserBusinessServiceDataFlow
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();

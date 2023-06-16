@@ -22,7 +22,7 @@ import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.payment.adapt.IOweFeeToNotifyAdapt;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.BeanConvertUtil;

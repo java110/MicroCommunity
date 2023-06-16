@@ -2,8 +2,8 @@ package com.java110.scm.supplier.defaultSupplier;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
-import com.java110.dto.couponPool.CouponPropertyUserDto;
-import com.java110.dto.couponPool.CouponQrCodeDto;
+import com.java110.dto.coupon.CouponPropertyUserDto;
+import com.java110.dto.coupon.CouponQrCodeDto;
 import com.java110.dto.supplier.SupplierDto;
 import com.java110.dto.supplier.SupplierConfigDto;
 import com.java110.dto.supplier.SupplierCouponDto;

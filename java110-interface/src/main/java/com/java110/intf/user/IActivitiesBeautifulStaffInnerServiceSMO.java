@@ -2,7 +2,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.activities.ActivitiesBeautifulStaffDto;
-import com.java110.po.activitiesBeautifulStaff.ActivitiesBeautifulStaffPo;
+import com.java110.po.activities.ActivitiesBeautifulStaffPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

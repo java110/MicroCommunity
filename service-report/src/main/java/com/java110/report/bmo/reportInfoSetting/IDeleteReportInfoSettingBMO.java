@@ -1,5 +1,5 @@
 package com.java110.report.bmo.reportInfoSetting;
-import com.java110.po.reportInfoSetting.ReportInfoSettingPo;
+import com.java110.po.reportInfo.ReportInfoSettingPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteReportInfoSettingBMO {

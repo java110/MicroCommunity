@@ -25,7 +25,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.repair.RepairSettingDto;
 import com.java110.intf.common.IPrinterRuleRepairV1InnerServiceSMO;
 import com.java110.intf.community.IRepairSettingV1InnerServiceSMO;
-import com.java110.po.printerRuleRepair.PrinterRuleRepairPo;
+import com.java110.po.printer.PrinterRuleRepairPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

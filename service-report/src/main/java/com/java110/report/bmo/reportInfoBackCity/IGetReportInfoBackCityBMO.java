@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportInfoBackCity;
 
-import com.java110.dto.reportInfoAnswer.ReportInfoBackCityDto;
+import com.java110.dto.reportInfo.ReportInfoBackCityDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetReportInfoBackCityBMO {

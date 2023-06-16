@@ -3,10 +3,10 @@ package com.java110.fee.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.payFeeConfigDiscount.PayFeeConfigDiscountDto;
+import com.java110.dto.payFee.PayFeeConfigDiscountDto;
 import com.java110.fee.dao.IPayFeeConfigDiscountServiceDao;
 import com.java110.intf.fee.IPayFeeConfigDiscountInnerServiceSMO;
-import com.java110.po.payFeeConfigDiscount.PayFeeConfigDiscountPo;
+import com.java110.po.payFee.PayFeeConfigDiscountPo;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

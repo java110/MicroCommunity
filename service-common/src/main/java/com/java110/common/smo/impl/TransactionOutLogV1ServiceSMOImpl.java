@@ -18,8 +18,8 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.ITransactionOutLogV1ServiceDao;
 import com.java110.intf.common.ITransactionOutLogV1ServiceSMO;
-import com.java110.dto.transactionLog.TransactionOutLogDto;
-import com.java110.po.transactionOutLog.TransactionOutLogPo;
+import com.java110.dto.log.TransactionOutLogDto;
+import com.java110.po.log.TransactionOutLogPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -12,7 +12,7 @@ import com.java110.dto.account.AccountDetailDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.po.account.AccountPo;
-import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.po.account.AccountDetailPo;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;

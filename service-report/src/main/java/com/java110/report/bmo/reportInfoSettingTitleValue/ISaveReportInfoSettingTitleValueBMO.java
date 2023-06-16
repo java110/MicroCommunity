@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportInfoSettingTitleValue;
 
-import com.java110.po.reportInfoSettingTitleValue.ReportInfoSettingTitleValuePo;
+import com.java110.po.reportInfo.ReportInfoSettingTitleValuePo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveReportInfoSettingTitleValueBMO {
 

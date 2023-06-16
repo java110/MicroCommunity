@@ -1,9 +1,9 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.workflow.WorkflowAuditInfoDto;
-import com.java110.dto.workflow.WorkflowDto;
-import com.java110.dto.workflow.WorkflowModelDto;
+import com.java110.dto.oaWorkflow.WorkflowAuditInfoDto;
+import com.java110.dto.oaWorkflow.WorkflowDto;
+import com.java110.dto.oaWorkflow.WorkflowModelDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

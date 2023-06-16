@@ -1,5 +1,5 @@
 package com.java110.oa.bmo.oaWorkflowXml;
-import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
+import com.java110.po.oaWorkflow.OaWorkflowXmlPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteOaWorkflowXmlBMO {

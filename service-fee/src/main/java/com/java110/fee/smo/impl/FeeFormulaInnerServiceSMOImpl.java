@@ -4,7 +4,7 @@ package com.java110.fee.smo.impl;
 import com.java110.fee.dao.IFeeFormulaServiceDao;
 import com.java110.intf.fee.IFeeFormulaInnerServiceSMO;
 import com.java110.dto.fee.FeeFormulaDto;
-import com.java110.po.feeFormula.FeeFormulaPo;
+import com.java110.po.fee.FeeFormulaPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -2,7 +2,7 @@ package com.java110.user.bmo.userAddress.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.user.IUserAddressInnerServiceSMO;
-import com.java110.po.userAddress.UserAddressPo;
+import com.java110.po.user.UserAddressPo;
 import com.java110.user.bmo.userAddress.IDeleteUserAddressBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,7 +6,7 @@ import com.java110.api.bmo.task.ITaskAttrBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.job.ITaskAttrInnerServiceSMO;
 import com.java110.dto.task.TaskAttrDto;
-import com.java110.po.taskAttr.TaskAttrPo;
+import com.java110.po.task.TaskAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

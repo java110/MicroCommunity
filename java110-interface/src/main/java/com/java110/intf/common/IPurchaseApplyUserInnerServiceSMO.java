@@ -1,10 +1,9 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.auditMessage.AuditMessageDto;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.entity.audit.AuditUser;
-import com.java110.po.contract.ContractPo;
+import com.java110.dto.audit.AuditMessageDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
+import com.java110.dto.audit.AuditUser;
 import com.java110.po.purchase.PurchaseApplyPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

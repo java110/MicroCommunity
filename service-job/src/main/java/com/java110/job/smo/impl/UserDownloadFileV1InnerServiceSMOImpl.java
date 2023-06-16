@@ -18,17 +18,15 @@ package com.java110.job.smo.impl;
 
 import com.java110.job.dao.IUserDownloadFileV1ServiceDao;
 import com.java110.intf.job.IUserDownloadFileV1InnerServiceSMO;
-import com.java110.dto.userDownloadFile.UserDownloadFileDto;
-import com.java110.po.userDownloadFile.UserDownloadFilePo;
+import com.java110.dto.user.UserDownloadFileDto;
+import com.java110.po.user.UserDownloadFilePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

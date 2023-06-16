@@ -21,7 +21,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.menu.MenuCatalogDto;
 import com.java110.dto.menu.MenuGroupDto;
 import com.java110.intf.user.IMenuCatalogV1InnerServiceSMO;
-import com.java110.po.menuCatalog.MenuCatalogPo;
+import com.java110.po.menu.MenuCatalogPo;
 import com.java110.user.dao.IMenuCatalogV1ServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

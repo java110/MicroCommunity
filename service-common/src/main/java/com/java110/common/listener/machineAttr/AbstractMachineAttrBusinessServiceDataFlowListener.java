@@ -2,7 +2,7 @@ package com.java110.common.listener.machineAttr;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.IMachineAttrServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -53,7 +53,7 @@ public abstract class AbstractMachineAttrBusinessServiceDataFlowListener extends
      *
      * @param businessMachineAttr 设备属性信息
      */
-    protected void autoSaveDelBusinessMachineAttr(Business business, JSONObject businessMachineAttr) {
+    protected void autoSaveDelBusinessMachineAttr(AppBusiness business, JSONObject businessMachineAttr) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("attrId", businessMachineAttr.getString("attrId"));

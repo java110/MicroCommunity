@@ -1,8 +1,8 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.payFeeAudit.PayFeeAuditDto;
-import com.java110.po.payFeeAudit.PayFeeAuditPo;
+import com.java110.dto.payFee.PayFeeAuditDto;
+import com.java110.po.payFee.PayFeeAuditPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,8 +1,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.transactionLog.TransactionLogMessageDto;
-import com.java110.po.transactionLog.TransactionLogMessagePo;
+import com.java110.dto.log.TransactionLogMessageDto;
+import com.java110.po.log.TransactionLogMessagePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

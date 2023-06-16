@@ -5,7 +5,7 @@ import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IUserAttrInnerServiceSMO;
 import com.java110.intf.user.IUserLoginInnerServiceSMO;
-import com.java110.po.userLogin.UserLoginPo;
+import com.java110.po.user.UserLoginPo;
 import com.java110.user.bmo.userLogin.IDeleteUserLoginBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.java110.common.bmo.workflowAuditMessage.impl;
 
 import com.java110.common.bmo.workflowAuditMessage.IGetWorkflowAuditMessageBMO;
-import com.java110.dto.workflowAuditMessage.WorkflowAuditMessageDto;
+import com.java110.dto.oaWorkflow.WorkflowAuditMessageDto;
 import com.java110.intf.common.IWorkflowAuditMessageInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.java110.store.listener.smallWeChat;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.ISmallWeChatServiceDao;
 import com.java110.utils.constant.ResponseConstant;
@@ -59,7 +59,7 @@ public abstract class AbstractSmallWeChatBusinessServiceDataFlowListener extends
      *
      * @param businessSmallWeChat 小程序管理信息
      */
-    protected void autoSaveDelBusinessSmallWeChat(Business business, JSONObject businessSmallWeChat) {
+    protected void autoSaveDelBusinessSmallWeChat(AppBusiness business, JSONObject businessSmallWeChat) {
         Map info = new HashMap();
         info.put("weChatId", businessSmallWeChat.getString("weChatId"));
         info.put("statusCd", StatusConstant.STATUS_CD_VALID);

@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyV1InnerServiceSMO;

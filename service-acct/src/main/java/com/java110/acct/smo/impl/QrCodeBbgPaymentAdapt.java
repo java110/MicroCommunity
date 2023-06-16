@@ -2,15 +2,10 @@ package com.java110.acct.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.adapt.bbgpay.EncryptDecryptFactory;
-import com.java110.acct.payment.adapt.bbgpay.lib.AesEncrypt;
-import com.java110.acct.payment.adapt.bbgpay.lib.CAUtil;
-import com.java110.acct.payment.adapt.bbgpay.lib.HttpRequestUtil;
-import com.java110.acct.payment.adapt.bbgpay.lib.JsonUtil;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -19,8 +14,6 @@ import com.java110.utils.util.PayUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

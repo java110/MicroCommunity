@@ -1,5 +1,5 @@
 package com.java110.user.bmo.userAddress;
-import com.java110.dto.userAddress.UserAddressDto;
+import com.java110.dto.user.UserAddressDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetUserAddressBMO {
 

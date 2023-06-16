@@ -19,7 +19,7 @@ package com.java110.report.smo.impl;
 import com.java110.report.dao.IReportCustomGroupV1ServiceDao;
 import com.java110.intf.report.IReportCustomGroupV1InnerServiceSMO;
 import com.java110.dto.reportCustom.ReportCustomGroupDto;
-import com.java110.po.reportCustomGroup.ReportCustomGroupPo;
+import com.java110.po.reportCustom.ReportCustomGroupPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

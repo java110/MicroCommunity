@@ -21,7 +21,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeAccountDetailDto;
-import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
+import com.java110.dto.payFee.PayFeeDetailDiscountDto;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
@@ -31,7 +31,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeDataVo;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.returnPayFee.ReturnPayFeeDto;
+import com.java110.dto.payFee.ReturnPayFeeDto;
 
 import java.util.List;
 import java.util.ArrayList;

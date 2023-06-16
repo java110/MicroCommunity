@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.importFee.impl;
 
-import com.java110.dto.importFee.ImportFeeDto;
+import com.java110.dto.importData.ImportFeeDto;
 import com.java110.fee.bmo.importFee.IGetImportFeeBMO;
 import com.java110.intf.fee.IImportFeeInnerServiceSMO;
 import com.java110.vo.ResultVo;

@@ -1,6 +1,6 @@
 package com.java110.job.bmo.businessDatabus;
 
-import com.java110.dto.businessDatabus.BusinessDatabusDto;
+import com.java110.dto.system.BusinessDatabusDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetBusinessDatabusBMO {

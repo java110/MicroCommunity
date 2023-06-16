@@ -11,7 +11,7 @@ import com.java110.community.dao.IParkingSpaceServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class SaveParkingSpaceInfoListener extends AbstractParkingSpaceBusinessSe
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
@@ -83,7 +83,7 @@ public class SaveParkingSpaceInfoListener extends AbstractParkingSpaceBusinessSe
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -128,7 +128,7 @@ public class SaveParkingSpaceInfoListener extends AbstractParkingSpaceBusinessSe
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -152,7 +152,7 @@ public class SaveParkingSpaceInfoListener extends AbstractParkingSpaceBusinessSe
      * @param business             总的数据节点
      * @param businessParkingSpace 停车位节点
      */
-    private void doBusinessParkingSpace(Business business, JSONObject businessParkingSpace) {
+    private void doBusinessParkingSpace(AppBusiness business, JSONObject businessParkingSpace) {
 
         Assert.jsonObjectHaveKey(businessParkingSpace, "psId", "businessParkingSpace 节点下没有包含 psId 节点");
 

@@ -5,7 +5,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.community.dao.IVisitServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -70,7 +70,7 @@ public abstract class AbstractVisitBusinessServiceDataFlowListener extends Abstr
      *
      * @param businessVisit 访客信息信息
      */
-    protected void autoSaveDelBusinessVisit(Business business, JSONObject businessVisit) {
+    protected void autoSaveDelBusinessVisit(AppBusiness business, JSONObject businessVisit) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("vId", businessVisit.getString("vId"));

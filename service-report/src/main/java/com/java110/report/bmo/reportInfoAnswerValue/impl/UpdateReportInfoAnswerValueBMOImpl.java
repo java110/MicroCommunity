@@ -2,7 +2,7 @@ package com.java110.report.bmo.reportInfoAnswerValue.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.report.IReportInfoAnswerValueInnerServiceSMO;
-import com.java110.po.reportInfoAnswerValue.ReportInfoAnswerValuePo;
+import com.java110.po.reportInfo.ReportInfoAnswerValuePo;
 import com.java110.report.bmo.reportInfoAnswerValue.IUpdateReportInfoAnswerValueBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

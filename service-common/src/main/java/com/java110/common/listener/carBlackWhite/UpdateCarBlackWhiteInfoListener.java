@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.ICarBlackWhiteServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.car.CarBlackWhitePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -57,7 +57,7 @@ public class UpdateCarBlackWhiteInfoListener extends AbstractCarBlackWhiteBusine
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -94,7 +94,7 @@ public class UpdateCarBlackWhiteInfoListener extends AbstractCarBlackWhiteBusine
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -124,7 +124,7 @@ public class UpdateCarBlackWhiteInfoListener extends AbstractCarBlackWhiteBusine
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -160,7 +160,7 @@ public class UpdateCarBlackWhiteInfoListener extends AbstractCarBlackWhiteBusine
      * @param business              总的数据节点
      * @param businessCarBlackWhite 黑白名单节点
      */
-    private void doBusinessCarBlackWhite(Business business, JSONObject businessCarBlackWhite) {
+    private void doBusinessCarBlackWhite(AppBusiness business, JSONObject businessCarBlackWhite) {
 
         Assert.jsonObjectHaveKey(businessCarBlackWhite, "bwId", "businessCarBlackWhite 节点下没有包含 bwId 节点");
 

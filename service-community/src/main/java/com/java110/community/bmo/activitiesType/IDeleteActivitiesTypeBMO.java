@@ -1,5 +1,5 @@
 package com.java110.community.bmo.activitiesType;
-import com.java110.po.activitiesType.ActivitiesTypePo;
+import com.java110.po.activities.ActivitiesTypePo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteActivitiesTypeBMO {

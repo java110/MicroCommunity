@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeReceipt;
 
-import com.java110.po.feeReceipt.FeeReceiptPo;
+import com.java110.po.fee.FeeReceiptPo;
 import org.springframework.http.ResponseEntity;
 
 public interface ISaveFeeReceiptBMO {

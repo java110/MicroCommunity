@@ -6,7 +6,7 @@ import com.java110.community.dao.ICommunityServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.community.CommunityAttrPo;
 import com.java110.po.community.CommunityPhotoPo;
 import com.java110.po.community.CommunityPo;
@@ -52,7 +52,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
@@ -83,7 +83,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -139,7 +139,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -177,7 +177,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
      * @param business                业务对象
      * @param businessCommunityPhotos 小区照片
      */
-    private void doBusinessCommunityPhoto(Business business, JSONArray businessCommunityPhotos) {
+    private void doBusinessCommunityPhoto(AppBusiness business, JSONArray businessCommunityPhotos) {
 
         for (int businessCommunityPhotoIndex = 0; businessCommunityPhotoIndex < businessCommunityPhotos.size(); businessCommunityPhotoIndex++) {
             JSONObject businessCommunityPhoto = businessCommunityPhotos.getJSONObject(businessCommunityPhotoIndex);
@@ -200,7 +200,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
      * @param business          总的数据节点
      * @param businessCommunity 小区节点
      */
-    private void doBusinessCommunity(Business business, JSONObject businessCommunity) {
+    private void doBusinessCommunity(AppBusiness business, JSONObject businessCommunity) {
 
         Assert.jsonObjectHaveKey(businessCommunity, "communityId", "businessCommunity 节点下没有包含 communityId 节点");
 
@@ -223,7 +223,7 @@ public class SaveCommunityInfoListener extends AbstractCommunityBusinessServiceD
      * @param business               当前业务
      * @param businessCommunityAttrs 小区属性
      */
-    private void doSaveBusinessCommunityAttrs(Business business, JSONArray businessCommunityAttrs) {
+    private void doSaveBusinessCommunityAttrs(AppBusiness business, JSONArray businessCommunityAttrs) {
         JSONObject data = business.getDatas();
         for (int communityAttrIndex = 0; communityAttrIndex < businessCommunityAttrs.size(); communityAttrIndex++) {
             JSONObject communityAttr = businessCommunityAttrs.getJSONObject(communityAttrIndex);

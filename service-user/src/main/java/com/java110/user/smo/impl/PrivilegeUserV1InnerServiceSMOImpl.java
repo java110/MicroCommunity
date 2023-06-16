@@ -18,8 +18,8 @@ package com.java110.user.smo.impl;
 
 import com.java110.user.dao.IPrivilegeUserV1ServiceDao;
 import com.java110.intf.user.IPrivilegeUserV1InnerServiceSMO;
-import com.java110.dto.privilegeUser.PrivilegeUserDto;
-import com.java110.po.privilegeUser.PrivilegeUserPo;
+import com.java110.dto.privilege.PrivilegeUserDto;
+import com.java110.po.privilege.PrivilegeUserPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
@@ -28,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

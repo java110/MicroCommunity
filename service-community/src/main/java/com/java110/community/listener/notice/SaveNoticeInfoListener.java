@@ -6,7 +6,7 @@ import com.java110.community.dao.INoticeServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.notice.NoticePo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -51,7 +51,7 @@ public class SaveNoticeInfoListener extends AbstractNoticeBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
@@ -83,7 +83,7 @@ public class SaveNoticeInfoListener extends AbstractNoticeBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -150,7 +150,7 @@ public class SaveNoticeInfoListener extends AbstractNoticeBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -174,7 +174,7 @@ public class SaveNoticeInfoListener extends AbstractNoticeBusinessServiceDataFlo
      * @param business       总的数据节点
      * @param businessNotice 通知节点
      */
-    private void doBusinessNotice(Business business, JSONObject businessNotice) {
+    private void doBusinessNotice(AppBusiness business, JSONObject businessNotice) {
 
         Assert.jsonObjectHaveKey(businessNotice, "noticeId", "businessNotice 节点下没有包含 noticeId 节点");
 

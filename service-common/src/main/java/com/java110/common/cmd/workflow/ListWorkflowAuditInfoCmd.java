@@ -6,7 +6,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.workflow.WorkflowAuditInfoDto;
+import com.java110.dto.oaWorkflow.WorkflowAuditInfoDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.exception.CmdException;

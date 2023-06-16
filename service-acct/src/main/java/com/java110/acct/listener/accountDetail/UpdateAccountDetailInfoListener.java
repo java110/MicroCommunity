@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.dao.IAccountDetailServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.po.accountDetail.AccountDetailPo;
+import com.java110.dto.system.AppBusiness;
+import com.java110.po.account.AccountDetailPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -57,7 +57,7 @@ public class UpdateAccountDetailInfoListener extends AbstractAccountDetailBusine
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -93,7 +93,7 @@ public class UpdateAccountDetailInfoListener extends AbstractAccountDetailBusine
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -123,7 +123,7 @@ public class UpdateAccountDetailInfoListener extends AbstractAccountDetailBusine
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -159,7 +159,7 @@ public class UpdateAccountDetailInfoListener extends AbstractAccountDetailBusine
      * @param business              总的数据节点
      * @param businessAccountDetail 账户交易节点
      */
-    private void doBusinessAccountDetail(Business business, JSONObject businessAccountDetail) {
+    private void doBusinessAccountDetail(AppBusiness business, JSONObject businessAccountDetail) {
 
         Assert.jsonObjectHaveKey(businessAccountDetail, "detailId", "businessAccountDetail 节点下没有包含 detailId 节点");
 

@@ -10,7 +10,7 @@ import com.java110.utils.util.Assert;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.user.dao.IOwnerServiceDao;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -52,7 +52,7 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
 
@@ -87,7 +87,7 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Map info = new HashMap();
@@ -111,7 +111,7 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -134,7 +134,7 @@ public class SaveOwnerInfoListener extends AbstractOwnerBusinessServiceDataFlowL
      * @param business      总的数据节点
      * @param businessOwner 业主节点
      */
-    private void doBusinessOwner(Business business, JSONObject businessOwner) {
+    private void doBusinessOwner(AppBusiness business, JSONObject businessOwner) {
 
         Assert.jsonObjectHaveKey(businessOwner, "memberId", "businessOwner 节点下没有包含 memberId 节点");
         Assert.jsonObjectHaveKey(businessOwner, "ownerId", "businessOwner 节点下没有包含 ownerId 节点");

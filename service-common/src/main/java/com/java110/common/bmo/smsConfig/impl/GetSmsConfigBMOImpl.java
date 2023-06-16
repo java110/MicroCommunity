@@ -1,7 +1,7 @@
 package com.java110.common.bmo.smsConfig.impl;
 
 import com.java110.common.bmo.smsConfig.IGetSmsConfigBMO;
-import com.java110.dto.smsConfig.SmsConfigDto;
+import com.java110.dto.sms.SmsConfigDto;
 import com.java110.intf.common.ISmsConfigInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

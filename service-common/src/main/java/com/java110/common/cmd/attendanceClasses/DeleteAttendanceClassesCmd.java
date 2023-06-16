@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
 import com.java110.intf.common.IAttendanceClassesV1InnerServiceSMO;
-import com.java110.po.attendanceClasses.AttendanceClassesPo;
+import com.java110.po.attendance.AttendanceClassesPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

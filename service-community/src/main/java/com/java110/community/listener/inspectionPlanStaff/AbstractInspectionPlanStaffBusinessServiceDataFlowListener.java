@@ -2,7 +2,7 @@ package com.java110.community.listener.inspectionPlanStaff;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IInspectionPlanStaffServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -56,7 +56,7 @@ public abstract class AbstractInspectionPlanStaffBusinessServiceDataFlowListener
      *
      * @param businessInspectionPlanStaff 执行计划人信息
      */
-    protected void autoSaveDelBusinessInspectionPlanStaff(Business business, JSONObject businessInspectionPlanStaff) {
+    protected void autoSaveDelBusinessInspectionPlanStaff(AppBusiness business, JSONObject businessInspectionPlanStaff) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("ipStaffId", businessInspectionPlanStaff.getString("ipStaffId"));

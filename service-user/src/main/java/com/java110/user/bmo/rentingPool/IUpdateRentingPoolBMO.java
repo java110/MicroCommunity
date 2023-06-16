@@ -1,6 +1,6 @@
 package com.java110.user.bmo.rentingPool;
 
-import com.java110.po.rentingPool.RentingPoolPo;
+import com.java110.po.renting.RentingPoolPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateRentingPoolBMO {

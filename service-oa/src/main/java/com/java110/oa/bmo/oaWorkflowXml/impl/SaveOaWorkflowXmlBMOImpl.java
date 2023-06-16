@@ -4,7 +4,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.oa.bmo.oaWorkflowXml.ISaveOaWorkflowXmlBMO;
-import com.java110.po.oaWorkflowXml.OaWorkflowXmlPo;
+import com.java110.po.oaWorkflow.OaWorkflowXmlPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

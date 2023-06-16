@@ -19,7 +19,7 @@ package com.java110.community.smo.impl;
 import com.java110.community.dao.IParkingSpaceApplyV1ServiceDao;
 import com.java110.intf.community.IParkingSpaceApplyV1InnerServiceSMO;
 import com.java110.dto.parking.ParkingSpaceApplyDto;
-import com.java110.po.parkingSpaceApply.ParkingSpaceApplyPo;
+import com.java110.po.parking.ParkingSpaceApplyPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

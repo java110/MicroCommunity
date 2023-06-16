@@ -1,10 +1,6 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.RoomDto;
-import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

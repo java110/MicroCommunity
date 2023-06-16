@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.payFeeDetailDiscount.IPayFeeDetailDiscountBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
-import com.java110.po.payFeeDetailDiscount.PayFeeDetailDiscountPo;
+import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.BeanConvertUtil;

@@ -4,7 +4,7 @@ import com.java110.community.dao.IVisitServiceDao;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.log.LoggerFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.BusinessTypeConstant;
 import org.slf4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,17 +21,17 @@ public class ExamineVisitInfoListener extends AbstractVisitBusinessServiceDataFl
     }
 
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
     }
 
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
     }
 
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
     }
 

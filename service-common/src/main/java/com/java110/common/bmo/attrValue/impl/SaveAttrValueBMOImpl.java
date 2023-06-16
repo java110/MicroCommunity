@@ -4,7 +4,7 @@ import com.java110.common.bmo.attrValue.ISaveAttrValueBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IAttrValueInnerServiceSMO;
-import com.java110.po.attrValue.AttrValuePo;
+import com.java110.po.attrSpec.AttrValuePo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -16,14 +16,9 @@
 package com.java110.intf.dev;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.Dict.DictDto;
-import com.java110.po.dict.DictPo;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用

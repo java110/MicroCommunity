@@ -5,12 +5,12 @@ import com.java110.community.bmo.applyRoomDiscountRecord.IDeleteApplyRoomDiscoun
 import com.java110.community.bmo.applyRoomDiscountRecord.IGetApplyRoomDiscountRecordBMO;
 import com.java110.community.bmo.applyRoomDiscountRecord.ISaveApplyRoomDiscountRecordBMO;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.applyRoomDiscount.ApplyRoomDiscountRecordDto;
+import com.java110.dto.room.ApplyRoomDiscountRecordDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.po.applyRoomDiscountRecord.ApplyRoomDiscountRecordPo;
+import com.java110.po.room.ApplyRoomDiscountRecordPo;
 import com.java110.po.file.FileRelPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

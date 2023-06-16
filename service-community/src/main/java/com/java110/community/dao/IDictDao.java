@@ -1,6 +1,6 @@
 package com.java110.community.dao;
 
-import com.java110.dto.Dict.DictDto;
+import com.java110.dto.dict.DictDto;
 
 import java.util.List;
 import java.util.Map;

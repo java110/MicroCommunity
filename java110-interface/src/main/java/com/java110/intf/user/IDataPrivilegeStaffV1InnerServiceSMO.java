@@ -18,7 +18,7 @@ package com.java110.intf.user;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.data.DataPrivilegeStaffDto;
 import com.java110.dto.user.UserDto;
-import com.java110.po.dataPrivilegeStaff.DataPrivilegeStaffPo;
+import com.java110.po.privilege.DataPrivilegeStaffPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

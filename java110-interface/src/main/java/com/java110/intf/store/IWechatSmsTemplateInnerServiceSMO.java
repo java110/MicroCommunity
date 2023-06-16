@@ -1,8 +1,8 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.wechatSmsTemplate.WechatSmsTemplateDto;
-import com.java110.po.wechatSmsTemplate.WechatSmsTemplatePo;
+import com.java110.dto.wechat.WechatSmsTemplateDto;
+import com.java110.po.wechat.WechatSmsTemplatePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

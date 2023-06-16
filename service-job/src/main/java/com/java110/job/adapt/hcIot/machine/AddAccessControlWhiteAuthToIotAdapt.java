@@ -16,16 +16,15 @@
 package com.java110.job.adapt.hcIot.machine;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.accessControlWhite.AccessControlWhiteAuthDto;
-import com.java110.dto.accessControlWhite.AccessControlWhiteDto;
+import com.java110.dto.accessControl.AccessControlWhiteAuthDto;
+import com.java110.dto.accessControl.AccessControlWhiteDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAttrDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.common.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
-import com.java110.po.accessControlWhite.AccessControlWhitePo;
-import com.java110.po.accessControlWhiteAuth.AccessControlWhiteAuthPo;
+import com.java110.po.accessControl.AccessControlWhiteAuthPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.*;

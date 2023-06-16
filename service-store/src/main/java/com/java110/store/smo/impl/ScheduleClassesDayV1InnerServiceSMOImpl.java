@@ -16,12 +16,12 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.scheduleClasses.ScheduleClassesTimeDto;
+import com.java110.dto.classes.ScheduleClassesTimeDto;
 import com.java110.intf.store.IScheduleClassesTimeV1InnerServiceSMO;
 import com.java110.store.dao.IScheduleClassesDayV1ServiceDao;
 import com.java110.intf.store.IScheduleClassesDayV1InnerServiceSMO;
-import com.java110.dto.scheduleClasses.ScheduleClassesDayDto;
-import com.java110.po.scheduleClassesDay.ScheduleClassesDayPo;
+import com.java110.dto.classes.ScheduleClassesDayDto;
+import com.java110.po.classes.ScheduleClassesDayPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

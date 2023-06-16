@@ -25,7 +25,7 @@ import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IUserAttrInnerServiceSMO;
 import com.java110.job.adapt.hcGov.HcGovConstant;
 import com.java110.job.adapt.hcGov.IReportReturnDataAdapt;
-import com.java110.po.userAttr.UserAttrPo;
+import com.java110.po.user.UserAttrPo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

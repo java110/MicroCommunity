@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.store.dao.IStoreServiceDao;
 import org.slf4j.Logger;
@@ -105,7 +105,7 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param businessStore 商户信息
      */
-    protected void autoSaveDelBusinessStore(Business business, JSONObject businessStore){
+    protected void autoSaveDelBusinessStore(AppBusiness business, JSONObject businessStore){
 //自动插入DEL
         Map info = new HashMap();
         info.put("storeId",businessStore.getString("storeId"));
@@ -136,7 +136,7 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
      * @param business 当前业务
      * @param storeAttr 商户属性
      */
-    protected void autoSaveDelBusinessStoreAttr(Business business, JSONObject storeAttr){
+    protected void autoSaveDelBusinessStoreAttr(AppBusiness business, JSONObject storeAttr){
         Map info = new HashMap();
         info.put("attrId",storeAttr.getString("attrId"));
         info.put("storeId",storeAttr.getString("storeId"));
@@ -164,7 +164,7 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
      * @param business
      * @param businessStorePhoto 商户照片
      */
-    protected void autoSaveDelBusinessStorePhoto(Business business,JSONObject businessStorePhoto){
+    protected void autoSaveDelBusinessStorePhoto(AppBusiness business, JSONObject businessStorePhoto){
        Map info = new HashMap();
         info.put("storePhotoId",businessStorePhoto.getString("storePhotoId"));
         info.put("storeId",businessStorePhoto.getString("storeId"));
@@ -192,7 +192,7 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
      * @param business
      * @param businessStoreCerdentials 商户证件
      */
-    protected void autoSaveDelBusinessStoreCerdentials(Business business,JSONObject businessStoreCerdentials){
+    protected void autoSaveDelBusinessStoreCerdentials(AppBusiness business, JSONObject businessStoreCerdentials){
         Map info = new HashMap();
         info.put("storeCerdentialsId",businessStoreCerdentials.getString("storeCerdentialsId"));
         info.put("storeId",businessStoreCerdentials.getString("storeId"));
@@ -219,7 +219,7 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param businessMemberStore 商户信息
      */
-    protected void autoSaveDelBusinessMemberStore(Business business, JSONObject businessMemberStore){
+    protected void autoSaveDelBusinessMemberStore(AppBusiness business, JSONObject businessMemberStore){
 //自动插入DEL
         Map info = new HashMap();
         info.put("memberStoreId",businessMemberStore.getString("memberStoreId"));
@@ -240,7 +240,7 @@ public abstract class AbstractStoreBusinessServiceDataFlowListener extends Abstr
      * 当修改数据时，查询instance表中的数据 自动保存删除数据到business中
      * @param businessStoreUser 商户信息
      */
-    protected void autoSaveDelBusinessStoreUser(Business business, JSONObject businessStoreUser){
+    protected void autoSaveDelBusinessStoreUser(AppBusiness business, JSONObject businessStoreUser){
         //自动插入DEL
         Map info = new HashMap();
         info.put("storeId",businessStoreUser.getString("storeId"));

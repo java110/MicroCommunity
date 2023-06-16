@@ -4,7 +4,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.factory.DataTransactionFactory;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 
 /**
  * BusinessServiceDataFlowListener 抽象类
@@ -26,7 +26,7 @@ public abstract class AbstractBusinessServiceDataFlowListener implements Busines
      */
     private void doSaveStoreInfo(DataFlowContext dataFlowContext){
         String businessType = dataFlowContext.getOrder().getBusinessType();
-        Business business = dataFlowContext.getCurrentBusiness();
+        AppBusiness business = dataFlowContext.getCurrentBusiness();
         // Instance 过程
         if(StatusConstant.REQUEST_BUSINESS_TYPE_INSTANCE.equals(businessType)){
             doBusinessToInstance(dataFlowContext,business);
@@ -46,19 +46,19 @@ public abstract class AbstractBusinessServiceDataFlowListener implements Busines
      * @param dataFlowContext 数据对象
      * @param business 当前业务对象
      */
-    protected abstract void doSaveBusiness(DataFlowContext dataFlowContext,Business business);
+    protected abstract void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business);
 
     /**
      * 将business 数据 同步到 business
      * @param dataFlowContext 数据对象
      * @param business 当前业务对象
      */
-    protected abstract void doBusinessToInstance(DataFlowContext dataFlowContext,Business business);
+    protected abstract void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business);
 
     /**
      * 撤单
      * @param dataFlowContext 数据对象
      * @param business 当前业务对象
      */
-    protected abstract void doRecover(DataFlowContext dataFlowContext,Business business);
+    protected abstract void doRecover(DataFlowContext dataFlowContext, AppBusiness business);
 }

@@ -1,8 +1,8 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.unitAttr.UnitAttrDto;
-import com.java110.po.unitAttr.UnitAttrPo;
+import com.java110.dto.unit.UnitAttrDto;
+import com.java110.po.unit.UnitAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

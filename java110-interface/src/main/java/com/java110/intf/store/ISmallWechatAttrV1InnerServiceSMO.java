@@ -16,8 +16,8 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.smallWechatAttr.SmallWechatAttrDto;
-import com.java110.po.smallWechatAttr.SmallWechatAttrPo;
+import com.java110.dto.wechat.SmallWechatAttrDto;
+import com.java110.po.wechat.SmallWechatAttrPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

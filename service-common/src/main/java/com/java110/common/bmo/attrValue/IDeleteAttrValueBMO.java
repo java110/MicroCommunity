@@ -1,6 +1,6 @@
 package com.java110.common.bmo.attrValue;
 
-import com.java110.po.attrValue.AttrValuePo;
+import com.java110.po.attrSpec.AttrValuePo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteAttrValueBMO {

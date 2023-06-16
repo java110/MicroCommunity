@@ -3,9 +3,9 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.reportOwnerPayFee.ReportOwnerPayFeeDto;
+import com.java110.dto.reportFee.ReportOwnerPayFeeDto;
 import com.java110.intf.report.IReportOwnerPayFeeInnerServiceSMO;
-import com.java110.po.reportOwnerPayFee.ReportOwnerPayFeePo;
+import com.java110.po.reportFee.ReportOwnerPayFeePo;
 import com.java110.report.dao.IReportOwnerPayFeeServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

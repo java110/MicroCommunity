@@ -2,7 +2,7 @@ package com.java110.community.bmo.roomRenovationRecord.impl;
 
 import com.java110.community.bmo.roomRenovationRecord.IGetRoomRenovationRecordBMO;
 import com.java110.intf.community.IRoomRenovationRecordInnerServiceSMO;
-import com.java110.po.roomRenovationRecord.RoomRenovationRecordPo;
+import com.java110.po.room.RoomRenovationRecordPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.StringUtil;

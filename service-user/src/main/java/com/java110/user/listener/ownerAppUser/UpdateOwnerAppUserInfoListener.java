@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.user.dao.IOwnerAppUserServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -57,7 +57,7 @@ public class UpdateOwnerAppUserInfoListener extends AbstractOwnerAppUserBusiness
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -94,7 +94,7 @@ public class UpdateOwnerAppUserInfoListener extends AbstractOwnerAppUserBusiness
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -124,7 +124,7 @@ public class UpdateOwnerAppUserInfoListener extends AbstractOwnerAppUserBusiness
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -160,7 +160,7 @@ public class UpdateOwnerAppUserInfoListener extends AbstractOwnerAppUserBusiness
      * @param business             总的数据节点
      * @param businessOwnerAppUser 绑定业主节点
      */
-    private void doBusinessOwnerAppUser(Business business, JSONObject businessOwnerAppUser) {
+    private void doBusinessOwnerAppUser(AppBusiness business, JSONObject businessOwnerAppUser) {
 
         Assert.jsonObjectHaveKey(businessOwnerAppUser, "appUserId", "businessOwnerAppUser 节点下没有包含 appUserId 节点");
 

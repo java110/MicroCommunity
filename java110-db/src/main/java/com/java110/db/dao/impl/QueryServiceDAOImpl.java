@@ -2,8 +2,8 @@ package com.java110.db.dao.impl;
 
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.db.dao.IQueryServiceDAO;
-import com.java110.entity.order.ServiceBusiness;
-import com.java110.entity.service.ServiceSql;
+import com.java110.dto.system.ServiceBusiness;
+import com.java110.dto.system.ServiceSql;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;

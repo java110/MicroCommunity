@@ -1,7 +1,7 @@
 package com.java110.community.bmo.repairReturnVisit.impl;
 
 import com.java110.community.bmo.repairReturnVisit.IGetRepairReturnVisitBMO;
-import com.java110.dto.repairReturnVisit.RepairReturnVisitDto;
+import com.java110.dto.repair.RepairReturnVisitDto;
 import com.java110.intf.community.IRepairReturnVisitInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

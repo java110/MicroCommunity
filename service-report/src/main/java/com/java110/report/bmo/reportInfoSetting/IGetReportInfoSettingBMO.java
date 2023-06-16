@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportInfoSetting;
 
-import com.java110.dto.reportInfoSetting.ReportInfoSettingDto;
+import com.java110.dto.reportInfo.ReportInfoSettingDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetReportInfoSettingBMO {

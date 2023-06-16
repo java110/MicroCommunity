@@ -2,8 +2,8 @@ package com.java110.job.export.adapt;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.Dict.DictDto;
-import com.java110.dto.RoomDto;
+import com.java110.dto.dict.DictDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.data.ExportDataDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.dev.IDictV1InnerServiceSMO;

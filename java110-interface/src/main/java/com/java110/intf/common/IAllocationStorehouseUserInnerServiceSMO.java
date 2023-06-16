@@ -1,8 +1,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.allocationStorehouse.AllocationStorehouseApplyDto;
-import com.java110.entity.audit.AuditUser;
+import com.java110.dto.purchase.AllocationStorehouseApplyDto;
+import com.java110.dto.audit.AuditUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

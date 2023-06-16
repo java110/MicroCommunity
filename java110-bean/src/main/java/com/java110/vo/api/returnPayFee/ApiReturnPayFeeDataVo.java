@@ -1,7 +1,7 @@
 package com.java110.vo.api.returnPayFee;
 
 import com.java110.dto.fee.FeeAccountDetailDto;
-import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
+import com.java110.dto.payFee.PayFeeDetailDiscountDto;
 
 import java.io.Serializable;
 import java.util.List;

@@ -16,8 +16,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.meterMachine.MeterMachineFactoryDto;
-import com.java110.po.meterMachineFactory.MeterMachineFactoryPo;
+import com.java110.dto.meter.MeterMachineFactoryDto;
+import com.java110.po.meter.MeterMachineFactoryPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

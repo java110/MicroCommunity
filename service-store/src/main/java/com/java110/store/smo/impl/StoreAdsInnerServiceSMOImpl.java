@@ -3,9 +3,9 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.storeAds.StoreAdsDto;
+import com.java110.dto.store.StoreAdsDto;
 import com.java110.intf.store.IStoreAdsInnerServiceSMO;
-import com.java110.po.storeAds.StoreAdsPo;
+import com.java110.po.store.StoreAdsPo;
 import com.java110.store.dao.IStoreAdsServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

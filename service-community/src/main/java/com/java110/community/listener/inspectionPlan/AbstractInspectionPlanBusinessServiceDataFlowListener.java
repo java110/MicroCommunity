@@ -5,7 +5,7 @@ import com.java110.community.dao.IInspectionPlanServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -61,7 +61,7 @@ public abstract class AbstractInspectionPlanBusinessServiceDataFlowListener exte
      *
      * @param businessInspectionPlan 巡检计划信息
      */
-    protected void autoSaveDelBusinessInspectionPlan(Business business, JSONObject businessInspectionPlan) {
+    protected void autoSaveDelBusinessInspectionPlan(AppBusiness business, JSONObject businessInspectionPlan) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("inspectionPlanId", businessInspectionPlan.getString("inspectionPlanId"));

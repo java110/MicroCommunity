@@ -3,7 +3,7 @@ package com.java110.common.bmo.logSystemError.impl;
 import com.java110.common.bmo.logSystemError.IDeleteLogSystemErrorBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.common.ILogSystemErrorInnerServiceSMO;
-import com.java110.po.logSystemError.LogSystemErrorPo;
+import com.java110.po.log.LogSystemErrorPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

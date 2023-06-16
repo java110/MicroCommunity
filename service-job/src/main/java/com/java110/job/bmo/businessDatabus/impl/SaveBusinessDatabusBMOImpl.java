@@ -4,7 +4,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.job.IBusinessDatabusInnerServiceSMO;
 import com.java110.job.bmo.businessDatabus.ISaveBusinessDatabusBMO;
-import com.java110.po.businessDatabus.BusinessDatabusPo;
+import com.java110.po.business.BusinessDatabusPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -23,7 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.common.IMeterMachineFactorySpecV1InnerServiceSMO;
-import com.java110.po.meterMachineFactorySpec.MeterMachineFactorySpecPo;
+import com.java110.po.meter.MeterMachineFactorySpecPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

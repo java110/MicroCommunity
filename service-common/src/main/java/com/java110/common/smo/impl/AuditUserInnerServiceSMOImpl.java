@@ -7,7 +7,7 @@ import com.java110.intf.common.IAuditUserInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.auditUser.AuditUserDto;
+import com.java110.dto.audit.AuditUserDto;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

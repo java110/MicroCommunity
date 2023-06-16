@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.feeDiscountSpec;
 
-import com.java110.po.feeDiscountSpec.FeeDiscountSpecPo;
+import com.java110.po.fee.FeeDiscountSpecPo;
 import org.springframework.http.ResponseEntity;
 
 public interface ISaveFeeDiscountSpecBMO {

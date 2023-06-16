@@ -1,5 +1,5 @@
 package com.java110.acct.bmo.systemGoldSetting;
-import com.java110.dto.systemGoldSetting.SystemGoldSettingDto;
+import com.java110.dto.system.SystemGoldSettingDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetSystemGoldSettingBMO {
 

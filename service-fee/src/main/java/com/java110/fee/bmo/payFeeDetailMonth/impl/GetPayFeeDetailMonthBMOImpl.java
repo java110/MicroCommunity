@@ -1,6 +1,6 @@
 package com.java110.fee.bmo.payFeeDetailMonth.impl;
 
-import com.java110.dto.payFeeDetailMonth.PayFeeDetailMonthDto;
+import com.java110.dto.payFee.PayFeeDetailMonthDto;
 import com.java110.fee.bmo.payFeeDetailMonth.IGetPayFeeDetailMonthBMO;
 import com.java110.intf.fee.IPayFeeDetailMonthInnerServiceSMO;
 import com.java110.vo.ResultVo;

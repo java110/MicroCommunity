@@ -3,7 +3,7 @@ package com.java110.acct.listener.account;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.dao.IAccountServiceDao;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -54,7 +54,7 @@ public abstract class AbstractAccountBusinessServiceDataFlowListener extends Abs
      *
      * @param businessAccount 账户信息
      */
-    protected void autoSaveDelBusinessAccount(Business business, JSONObject businessAccount) {
+    protected void autoSaveDelBusinessAccount(AppBusiness business, JSONObject businessAccount) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("acctId", businessAccount.getString("acctId"));

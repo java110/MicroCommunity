@@ -25,7 +25,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.common.IPrinterRuleFeeV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
-import com.java110.po.printerRuleFee.PrinterRuleFeePo;
+import com.java110.po.printer.PrinterRuleFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

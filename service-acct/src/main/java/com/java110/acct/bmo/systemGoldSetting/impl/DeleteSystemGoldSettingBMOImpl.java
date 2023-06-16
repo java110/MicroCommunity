@@ -3,7 +3,7 @@ package com.java110.acct.bmo.systemGoldSetting.impl;
 import com.java110.acct.bmo.systemGoldSetting.IDeleteSystemGoldSettingBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.acct.ISystemGoldSettingInnerServiceSMO;
-import com.java110.po.systemGoldSetting.SystemGoldSettingPo;
+import com.java110.po.system.SystemGoldSettingPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -2,12 +2,12 @@ package com.java110.common.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.allocationStorehouse.AllocationStorehouseApplyDto;
-import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.dto.storehouse.StorehouseDto;
-import com.java110.dto.workflow.WorkflowDto;
-import com.java110.entity.audit.AuditUser;
+import com.java110.dto.purchase.AllocationStorehouseApplyDto;
+import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
+import com.java110.dto.store.StorehouseDto;
+import com.java110.dto.oaWorkflow.WorkflowDto;
+import com.java110.dto.audit.AuditUser;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.java110.dto.storehouse.StorehouseDto.SH_TYPE_GROUP;
+import static com.java110.dto.store.StorehouseDto.SH_TYPE_GROUP;
 
 //@Service("resourceEntryStoreSMOImpl")
 @RestController

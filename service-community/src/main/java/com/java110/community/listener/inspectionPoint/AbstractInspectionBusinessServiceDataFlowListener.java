@@ -3,7 +3,7 @@ package com.java110.community.listener.inspectionPoint;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.dao.IInspectionServiceDao;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -57,7 +57,7 @@ public abstract class AbstractInspectionBusinessServiceDataFlowListener extends 
      *
      * @param businessInspection 巡检点信息
      */
-    protected void autoSaveDelBusinessInspection(Business business, JSONObject businessInspection) {
+    protected void autoSaveDelBusinessInspection(AppBusiness business, JSONObject businessInspection) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("inspectionId", businessInspection.getString("inspectionId"));

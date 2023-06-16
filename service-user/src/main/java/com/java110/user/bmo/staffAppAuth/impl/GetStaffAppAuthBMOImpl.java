@@ -1,6 +1,6 @@
 package com.java110.user.bmo.staffAppAuth.impl;
 
-import com.java110.dto.staffAppAuth.StaffAppAuthDto;
+import com.java110.dto.user.StaffAppAuthDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;

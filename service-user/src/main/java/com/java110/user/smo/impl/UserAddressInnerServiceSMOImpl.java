@@ -3,9 +3,9 @@ package com.java110.user.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.userAddress.UserAddressDto;
+import com.java110.dto.user.UserAddressDto;
 import com.java110.intf.user.IUserAddressInnerServiceSMO;
-import com.java110.po.userAddress.UserAddressPo;
+import com.java110.po.user.UserAddressPo;
 import com.java110.user.dao.IUserAddressServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

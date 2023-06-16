@@ -2,9 +2,9 @@ package com.java110.order.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.dto.businessDatabus.BusinessDatabusDto;
-import com.java110.entity.mapping.Mapping;
+import com.java110.dto.privilege.BasePrivilegeDto;
+import com.java110.dto.system.BusinessDatabusDto;
+import com.java110.dto.mapping.Mapping;
 import com.java110.order.dao.ICenterServiceDAO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;

@@ -16,8 +16,8 @@
 package com.java110.intf.scm;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.couponPool.CouponPropertyUserDto;
-import com.java110.dto.couponPool.CouponQrCodeDto;
+import com.java110.dto.coupon.CouponPropertyUserDto;
+import com.java110.dto.coupon.CouponQrCodeDto;
 import com.java110.dto.supplier.SupplierDto;
 import com.java110.po.supplier.SupplierPo;
 import org.springframework.cloud.openfeign.FeignClient;

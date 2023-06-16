@@ -25,7 +25,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.maintainance.MaintainanceStandardItemDto;
 import com.java110.intf.community.IMaintainanceStandardItemV1InnerServiceSMO;
-import com.java110.po.maintainanceStandardItem.MaintainanceStandardItemPo;
+import com.java110.po.maintainance.MaintainanceStandardItemPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

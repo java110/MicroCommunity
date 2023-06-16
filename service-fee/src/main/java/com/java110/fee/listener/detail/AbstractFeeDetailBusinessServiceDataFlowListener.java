@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.fee.dao.IFeeDetailServiceDao;
 import org.slf4j.Logger;
@@ -59,7 +59,7 @@ public abstract class AbstractFeeDetailBusinessServiceDataFlowListener extends A
      *
      * @param businessFeeDetail 费用明细信息
      */
-    protected void autoSaveDelBusinessFeeDetail(Business business, JSONObject businessFeeDetail) {
+    protected void autoSaveDelBusinessFeeDetail(AppBusiness business, JSONObject businessFeeDetail) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("detailId", businessFeeDetail.getString("detailId"));

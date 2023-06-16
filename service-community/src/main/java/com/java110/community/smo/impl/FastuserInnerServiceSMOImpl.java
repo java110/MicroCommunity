@@ -6,7 +6,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.community.IFastuserInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.fastuser.FastuserDto;
+import com.java110.dto.user.FastuserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

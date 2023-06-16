@@ -1,11 +1,10 @@
 package com.java110.store.bmo.storeAds.impl;
 
-import com.java110.dto.storeAds.StoreAdsDto;
+import com.java110.dto.store.StoreAdsDto;
 import com.java110.intf.store.IStoreAdsInnerServiceSMO;
 import com.java110.store.bmo.storeAds.IGetStoreAdsBMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

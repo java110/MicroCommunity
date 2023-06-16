@@ -1,6 +1,6 @@
 package com.java110.user.bmo.rentingConfig;
 
-import com.java110.po.rentingConfig.RentingConfigPo;
+import com.java110.po.renting.RentingConfigPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteRentingConfigBMO {

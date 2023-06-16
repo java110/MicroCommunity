@@ -19,17 +19,15 @@ package com.java110.store.smo.impl;
 import com.java110.dto.shop.ShopDto;
 import com.java110.store.dao.IStoreShopV1ServiceDao;
 import com.java110.intf.store.IStoreShopV1InnerServiceSMO;
-import com.java110.dto.storeShop.StoreShopDto;
-import com.java110.po.storeShop.StoreShopPo;
+import com.java110.dto.shop.StoreShopDto;
+import com.java110.po.shop.StoreShopPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

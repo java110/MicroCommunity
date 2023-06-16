@@ -3,7 +3,7 @@ package com.java110.store.bmo.contractFile.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.store.IContractFileInnerServiceSMO;
-import com.java110.po.contractFile.ContractFilePo;
+import com.java110.po.contract.ContractFilePo;
 import com.java110.store.bmo.contractFile.ISaveContractFileBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

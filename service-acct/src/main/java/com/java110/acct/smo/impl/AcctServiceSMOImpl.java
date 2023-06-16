@@ -7,8 +7,8 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.context.BusinessServiceDataFlow;
 import com.java110.core.event.service.BusinessServiceDataFlowEventPublishing;
 import com.java110.core.factory.DataFlowFactory;
-import com.java110.entity.center.DataFlowLinksCost;
-import com.java110.entity.center.DataFlowLog;
+import com.java110.dto.system.DataFlowLinksCost;
+import com.java110.dto.system.DataFlowLog;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.KafkaConstant;
 import com.java110.utils.constant.MappingConstant;
@@ -19,7 +19,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

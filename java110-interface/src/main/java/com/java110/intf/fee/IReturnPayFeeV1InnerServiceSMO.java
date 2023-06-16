@@ -16,8 +16,8 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.returnPayFee.ReturnPayFeeDto;
-import com.java110.po.returnPayFee.ReturnPayFeePo;
+import com.java110.dto.payFee.ReturnPayFeeDto;
+import com.java110.po.payFee.ReturnPayFeePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

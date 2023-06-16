@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.boot.smo.DefaultAbstractComponentSMO;
 import com.java110.boot.smo.org.IEditOrgSMO;
 import com.java110.core.context.IPageData;
-import com.java110.entity.component.ComponentValidateResult;
+import com.java110.dto.system.ComponentValidateResult;
 import com.java110.utils.constant.PrivilegeCodeConstant;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;

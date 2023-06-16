@@ -1,7 +1,7 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.purchaseApplyDetail.PurchaseApplyDetailDto;
+import com.java110.dto.purchase.PurchaseApplyDetailDto;
 import com.java110.po.purchase.PurchaseApplyDetailPo;
 import com.java110.store.dao.IPurchaseApplyDetailServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

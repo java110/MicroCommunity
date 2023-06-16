@@ -19,7 +19,7 @@ package com.java110.user.smo.impl;
 import com.java110.user.dao.IMenuUserV1ServiceDao;
 import com.java110.intf.user.IMenuUserV1InnerServiceSMO;
 import com.java110.dto.menu.MenuUserDto;
-import com.java110.po.menuUser.MenuUserPo;
+import com.java110.po.menu.MenuUserPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

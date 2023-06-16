@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.org.OrgPo;
 import com.java110.user.dao.IOrgServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -57,7 +57,7 @@ public class UpdateOrgInfoListener extends AbstractOrgBusinessServiceDataFlowLis
      * @param business        业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -94,7 +94,7 @@ public class UpdateOrgInfoListener extends AbstractOrgBusinessServiceDataFlowLis
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -124,7 +124,7 @@ public class UpdateOrgInfoListener extends AbstractOrgBusinessServiceDataFlowLis
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -160,7 +160,7 @@ public class UpdateOrgInfoListener extends AbstractOrgBusinessServiceDataFlowLis
      * @param business    总的数据节点
      * @param businessOrg 组织节点
      */
-    private void doBusinessOrg(Business business, JSONObject businessOrg) {
+    private void doBusinessOrg(AppBusiness business, JSONObject businessOrg) {
 
         Assert.jsonObjectHaveKey(businessOrg, "orgId", "businessOrg 节点下没有包含 orgId 节点");
 

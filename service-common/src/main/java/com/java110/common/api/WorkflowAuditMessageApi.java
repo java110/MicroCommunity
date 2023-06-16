@@ -5,8 +5,8 @@ import com.java110.common.bmo.workflowAuditMessage.IDeleteWorkflowAuditMessageBM
 import com.java110.common.bmo.workflowAuditMessage.IGetWorkflowAuditMessageBMO;
 import com.java110.common.bmo.workflowAuditMessage.ISaveWorkflowAuditMessageBMO;
 import com.java110.common.bmo.workflowAuditMessage.IUpdateWorkflowAuditMessageBMO;
-import com.java110.dto.workflowAuditMessage.WorkflowAuditMessageDto;
-import com.java110.po.workflowAuditMessage.WorkflowAuditMessagePo;
+import com.java110.dto.oaWorkflow.WorkflowAuditMessageDto;
+import com.java110.po.oaWorkflow.WorkflowAuditMessagePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

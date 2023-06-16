@@ -1,15 +1,10 @@
 package com.java110.user;
 
-import com.java110.entity.user.BoCust;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by wuxw on 2017/4/11.

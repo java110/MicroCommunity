@@ -19,7 +19,7 @@ package com.java110.store.smo.impl;
 import com.java110.store.dao.IReserveParamsOpenTimeV1ServiceDao;
 import com.java110.intf.store.IReserveParamsOpenTimeV1InnerServiceSMO;
 import com.java110.dto.reserve.ReserveParamsOpenTimeDto;
-import com.java110.po.reserveParamsOpenTime.ReserveParamsOpenTimePo;
+import com.java110.po.reserve.ReserveParamsOpenTimePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

@@ -2,7 +2,7 @@ package com.java110.common.listener.msg;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.dao.IMsgServiceDao;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -54,7 +54,7 @@ public abstract class AbstractMsgBusinessServiceDataFlowListener extends Abstrac
      *
      * @param businessMsg 消息信息
      */
-    protected void autoSaveDelBusinessMsg(Business business, JSONObject businessMsg) {
+    protected void autoSaveDelBusinessMsg(AppBusiness business, JSONObject businessMsg) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("msgId", businessMsg.getString("msgId"));

@@ -15,21 +15,18 @@
  */
 package com.java110.common.cmd.meterMachine;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.meterMachine.MeterMachineDto;
+import com.java110.dto.meter.MeterMachineDto;
 import com.java110.intf.common.IMeterMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
-import com.java110.po.meterMachine.MeterMachinePo;
-import com.java110.po.meterMachineSpec.MeterMachineSpecPo;
+import com.java110.po.meter.MeterMachinePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -9,7 +9,7 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.user.IOrgCommunityInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
-import com.java110.dto.CommunityMemberDto;
+import com.java110.dto.community.CommunityMemberDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.order.OrderDto;

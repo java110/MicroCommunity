@@ -1,8 +1,8 @@
 package com.java110.report.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.reportInfoSetting.ReportInfoSettingTitleValueDto;
-import com.java110.po.reportInfoSettingTitleValue.ReportInfoSettingTitleValuePo;
+import com.java110.dto.reportInfo.ReportInfoSettingTitleValueDto;
+import com.java110.po.reportInfo.ReportInfoSettingTitleValuePo;
 import com.java110.report.bmo.reportInfoSettingTitleValue.IDeleteReportInfoSettingTitleValueBMO;
 import com.java110.report.bmo.reportInfoSettingTitleValue.IGetReportInfoSettingTitleValueBMO;
 import com.java110.report.bmo.reportInfoSettingTitleValue.ISaveReportInfoSettingTitleValueBMO;

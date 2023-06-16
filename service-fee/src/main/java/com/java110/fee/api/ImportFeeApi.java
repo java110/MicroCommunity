@@ -1,15 +1,15 @@
 package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.importFee.ImportFeeDto;
-import com.java110.dto.importFee.ImportFeeDetailDto;
+import com.java110.dto.importData.ImportFeeDto;
+import com.java110.dto.importData.ImportFeeDetailDto;
 import com.java110.fee.bmo.importFee.IFeeSharingBMO;
 import com.java110.fee.bmo.importFee.IGetImportFeeBMO;
 import com.java110.fee.bmo.importFeeDetail.IDeleteImportFeeDetailBMO;
 import com.java110.fee.bmo.importFeeDetail.IGetImportFeeDetailBMO;
 import com.java110.fee.bmo.importFeeDetail.ISaveImportFeeDetailBMO;
 import com.java110.fee.bmo.importFeeDetail.IUpdateImportFeeDetailBMO;
-import com.java110.po.importFeeDetail.ImportFeeDetailPo;
+import com.java110.po.importFee.ImportFeeDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

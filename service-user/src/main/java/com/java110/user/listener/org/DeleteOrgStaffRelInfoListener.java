@@ -4,8 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
-import com.java110.po.org.OrgPo;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.org.OrgStaffRelPo;
 import com.java110.user.dao.IOrgStaffRelServiceDao;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -58,7 +57,7 @@ public class DeleteOrgStaffRelInfoListener extends AbstractOrgStaffRelBusinessSe
      * @param business        当前业务对象
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
         JSONObject data = business.getDatas();
 
         Assert.notEmpty(data, "没有datas 节点，或没有子节点需要处理");
@@ -95,7 +94,7 @@ public class DeleteOrgStaffRelInfoListener extends AbstractOrgStaffRelBusinessSe
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
 
@@ -125,7 +124,7 @@ public class DeleteOrgStaffRelInfoListener extends AbstractOrgStaffRelBusinessSe
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
         Map info = new HashMap();
@@ -160,7 +159,7 @@ public class DeleteOrgStaffRelInfoListener extends AbstractOrgStaffRelBusinessSe
      * @param business            总的数据节点
      * @param businessOrgStaffRel 组织员工关系节点
      */
-    private void doBusinessOrgStaffRel(Business business, JSONObject businessOrgStaffRel) {
+    private void doBusinessOrgStaffRel(AppBusiness business, JSONObject businessOrgStaffRel) {
 
         Assert.jsonObjectHaveKey(businessOrgStaffRel, "relId", "businessOrgStaffRel 节点下没有包含 relId 节点");
 

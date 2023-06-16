@@ -1,9 +1,9 @@
 package com.java110.common.activity.resourceEnter;
 
 import com.java110.intf.common.IAuditUserInnerServiceSMO;
-import com.java110.dto.auditUser.AuditUserDto;
-import com.java110.dto.resourceStore.ResourceOrderDto;
-import com.java110.entity.audit.AuditUser;
+import com.java110.dto.audit.AuditUserDto;
+import com.java110.dto.resource.ResourceOrderDto;
+import com.java110.dto.audit.AuditUser;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.BeanConvertUtil;
 import org.activiti.engine.delegate.DelegateTask;

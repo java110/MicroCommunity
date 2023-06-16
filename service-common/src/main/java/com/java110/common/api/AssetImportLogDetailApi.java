@@ -5,8 +5,8 @@ import com.java110.common.bmo.assetImportLogDetail.IDeleteAssetImportLogDetailBM
 import com.java110.common.bmo.assetImportLogDetail.IGetAssetImportLogDetailBMO;
 import com.java110.common.bmo.assetImportLogDetail.ISaveAssetImportLogDetailBMO;
 import com.java110.common.bmo.assetImportLogDetail.IUpdateAssetImportLogDetailBMO;
-import com.java110.dto.assetImportLog.AssetImportLogDetailDto;
-import com.java110.po.assetImportLogDetail.AssetImportLogDetailPo;
+import com.java110.dto.log.AssetImportLogDetailDto;
+import com.java110.po.log.AssetImportLogDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

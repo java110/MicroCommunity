@@ -30,7 +30,7 @@ import com.java110.dto.store.StoreDto;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.user.IMenuGroupCommunityV1InnerServiceSMO;
 import com.java110.intf.user.IMenuGroupV1InnerServiceSMO;
-import com.java110.po.menuGroupCommunity.MenuGroupCommunityPo;
+import com.java110.po.menu.MenuGroupCommunityPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;

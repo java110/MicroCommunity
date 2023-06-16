@@ -8,7 +8,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.area.AreaDto;
 import com.java110.dto.shop.ShopDto;
 import com.java110.dto.store.StoreDto;
-import com.java110.dto.storeShop.StoreShopDto;
+import com.java110.dto.shop.StoreShopDto;
 import com.java110.intf.acct.IAccountBondObjInnerServiceSMO;
 import com.java110.intf.common.IAreaInnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;

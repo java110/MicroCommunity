@@ -1,5 +1,5 @@
 package com.java110.report.bmo.reportOweFee;
-import com.java110.dto.reportOweFee.ReportOweFeeDto;
+import com.java110.dto.reportFee.ReportOweFeeDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetReportOweFeeBMO {
 

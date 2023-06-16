@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="purchaseApplyServiceDaoImpl">
-    <resultMap type="com.java110.dto.purchaseApply.PurchaseApplyDto" id="applyMap">
+    <resultMap type="com.java110.dto.purchase.PurchaseApplyDto" id="applyMap">
         <id column="applyOrderId" property="applyOrderId"/>
         <result column="description" property="description"/>
         <result column="resOrderType" property="resOrderType"/>

@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.intf.community.IParkingAreaInnerServiceSMO;
 import com.java110.intf.community.IVisitSettingV1InnerServiceSMO;
-import com.java110.po.visitSetting.VisitSettingPo;
+import com.java110.po.visit.VisitSettingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

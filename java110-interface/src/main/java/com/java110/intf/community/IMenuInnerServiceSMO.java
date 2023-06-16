@@ -1,8 +1,8 @@
 package com.java110.intf.community;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.basePrivilege.BasePrivilegeDto;
-import com.java110.dto.basePrivilege.HasPrivilegeDto;
+import com.java110.dto.privilege.BasePrivilegeDto;
+import com.java110.dto.privilege.HasPrivilegeDto;
 import com.java110.dto.menu.MenuDto;
 import com.java110.dto.menu.MenuGroupDto;
 import org.springframework.cloud.openfeign.FeignClient;

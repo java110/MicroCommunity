@@ -16,19 +16,15 @@
 package com.java110.user.smo.impl;
 
 
-import com.java110.po.fee.PayFeePo;
 import com.java110.user.dao.IWechatSubscribeV1ServiceDao;
 import com.java110.intf.user.IWechatSubscribeV1InnerServiceSMO;
-import com.java110.dto.wechatSubscribe.WechatSubscribeDto;
-import com.java110.po.wechatSubscribe.WechatSubscribePo;
+import com.java110.dto.wechat.WechatSubscribeDto;
+import com.java110.po.wechat.WechatSubscribePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;

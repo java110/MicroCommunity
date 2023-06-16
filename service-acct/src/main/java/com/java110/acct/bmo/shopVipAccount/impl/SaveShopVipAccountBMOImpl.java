@@ -4,7 +4,7 @@ import com.java110.acct.bmo.shopVipAccount.ISaveShopVipAccountBMO;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.acct.IShopVipAccountInnerServiceSMO;
-import com.java110.po.shopVipAccount.ShopVipAccountPo;
+import com.java110.po.shop.ShopVipAccountPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -22,7 +22,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.common.IMachinePrinterV1InnerServiceSMO;
-import com.java110.po.machinePrinter.MachinePrinterPo;
+import com.java110.po.machine.MachinePrinterPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

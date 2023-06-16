@@ -1,7 +1,7 @@
 package com.java110.acct.coupon;
 
-import com.java110.dto.couponPool.CouponPropertyUserDto;
-import com.java110.dto.couponPool.CouponQrCodeDto;
+import com.java110.dto.coupon.CouponPropertyUserDto;
+import com.java110.dto.coupon.CouponQrCodeDto;
 
 public abstract class AbstractCouponAdapt implements ICouponAdapt{
 

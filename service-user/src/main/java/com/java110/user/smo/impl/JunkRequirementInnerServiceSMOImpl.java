@@ -5,7 +5,7 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.intf.user.IJunkRequirementInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.junkRequirement.JunkRequirementDto;
+import com.java110.dto.itemRelease.JunkRequirementDto;
 import com.java110.user.dao.IJunkRequirementServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

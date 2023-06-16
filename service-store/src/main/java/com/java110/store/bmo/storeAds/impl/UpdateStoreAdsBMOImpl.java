@@ -5,7 +5,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.store.IStoreAdsInnerServiceSMO;
-import com.java110.po.storeAds.StoreAdsPo;
+import com.java110.po.store.StoreAdsPo;
 import com.java110.store.bmo.storeAds.IUpdateStoreAdsBMO;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;

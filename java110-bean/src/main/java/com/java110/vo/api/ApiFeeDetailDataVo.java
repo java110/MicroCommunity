@@ -1,7 +1,7 @@
 package com.java110.vo.api;
 
 import com.java110.dto.fee.FeeAccountDetailDto;
-import com.java110.dto.payFeeDetailDiscount.PayFeeDetailDiscountDto;
+import com.java110.dto.payFee.PayFeeDetailDiscountDto;
 import com.java110.vo.Vo;
 
 import java.util.Date;

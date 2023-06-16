@@ -1,7 +1,6 @@
 package com.java110.user.bmo.rentingPool;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.po.rentingPoolFlow.RentingPoolFlowPo;
+import com.java110.po.renting.RentingPoolFlowPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IAuditRentingBMO {

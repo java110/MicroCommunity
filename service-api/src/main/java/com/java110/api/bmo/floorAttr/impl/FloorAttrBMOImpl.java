@@ -5,7 +5,7 @@ import com.java110.api.bmo.ApiBaseBMO;
 import com.java110.api.bmo.floorAttr.IFloorAttrBMO;
 import com.java110.core.context.DataFlowContext;
 import com.java110.intf.community.IFloorAttrInnerServiceSMO;
-import com.java110.po.floorAttr.FloorAttrPo;
+import com.java110.po.floor.FloorAttrPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;

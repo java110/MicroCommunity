@@ -1,6 +1,6 @@
 package com.java110.store.bmo.wechatTemplate;
 
-import com.java110.po.wechatSmsTemplate.WechatSmsTemplatePo;
+import com.java110.po.wechat.WechatSmsTemplatePo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteWechatTemplate {

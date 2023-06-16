@@ -2,7 +2,7 @@ package com.java110.store.bmo.contractType.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.store.IContractTypeInnerServiceSMO;
-import com.java110.po.contractType.ContractTypePo;
+import com.java110.po.contract.ContractTypePo;
 import com.java110.store.bmo.contractType.IDeleteContractTypeBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

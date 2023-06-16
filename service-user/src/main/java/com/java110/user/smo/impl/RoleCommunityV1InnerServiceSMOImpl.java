@@ -18,17 +18,15 @@ package com.java110.user.smo.impl;
 
 import com.java110.user.dao.IRoleCommunityV1ServiceDao;
 import com.java110.intf.user.IRoleCommunityV1InnerServiceSMO;
-import com.java110.dto.roleCommunity.RoleCommunityDto;
-import com.java110.po.roleCommunity.RoleCommunityPo;
+import com.java110.dto.privilege.RoleCommunityDto;
+import com.java110.po.privilege.RoleCommunityPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

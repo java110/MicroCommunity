@@ -16,8 +16,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.chargeMachine.ChargeMachineDto;
-import com.java110.po.chargeMachine.ChargeMachinePo;
+import com.java110.dto.charge.ChargeMachineDto;
+import com.java110.po.charge.ChargeMachinePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

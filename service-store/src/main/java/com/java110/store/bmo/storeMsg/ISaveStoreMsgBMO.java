@@ -1,6 +1,6 @@
 package com.java110.store.bmo.storeMsg;
 
-import com.java110.po.storeMsg.StoreMsgPo;
+import com.java110.po.store.StoreMsgPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveStoreMsgBMO {
 

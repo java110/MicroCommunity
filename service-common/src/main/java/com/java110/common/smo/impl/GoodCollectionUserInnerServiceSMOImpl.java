@@ -2,12 +2,12 @@ package com.java110.common.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
-import com.java110.dto.auditMessage.AuditMessageDto;
-import com.java110.dto.businessDatabus.CustomBusinessDatabusDto;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
+import com.java110.dto.audit.AuditMessageDto;
+import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.workflow.WorkflowDto;
-import com.java110.entity.audit.AuditUser;
+import com.java110.dto.oaWorkflow.WorkflowDto;
+import com.java110.dto.audit.AuditUser;
 import com.java110.intf.common.IGoodCollectionUserInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;

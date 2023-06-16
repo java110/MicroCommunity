@@ -1,7 +1,7 @@
 package com.java110.store.smo.impl;
 
 
-import com.java110.dto.resourceStoreType.ResourceStoreTypeDto;
+import com.java110.dto.resource.ResourceStoreTypeDto;
 import com.java110.intf.store.IResourceStoreTypeInnerServiceSMO;
 import com.java110.store.dao.IResourceStoreTypeServiceDao;
 import com.java110.utils.util.BeanConvertUtil;

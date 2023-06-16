@@ -1,8 +1,8 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.systemGoldSetting.SystemGoldSettingDto;
-import com.java110.po.systemGoldSetting.SystemGoldSettingPo;
+import com.java110.dto.system.SystemGoldSettingDto;
+import com.java110.po.system.SystemGoldSettingPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

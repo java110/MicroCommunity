@@ -1,6 +1,6 @@
 package com.java110.user.bmo.rentingAppointment;
 
-import com.java110.po.rentingAppointment.RentingAppointmentPo;
+import com.java110.po.renting.RentingAppointmentPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteRentingAppointmentBMO {

@@ -24,7 +24,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.acct.ICouponRuleFeeV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.po.couponRuleFee.CouponRuleFeePo;
+import com.java110.po.coupon.CouponRuleFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

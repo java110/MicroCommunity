@@ -11,7 +11,7 @@ import com.java110.dto.user.UserAttrDto;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
 import com.java110.po.owner.OwnerAppUserPo;
-import com.java110.po.userAttr.UserAttrPo;
+import com.java110.po.user.UserAttrPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

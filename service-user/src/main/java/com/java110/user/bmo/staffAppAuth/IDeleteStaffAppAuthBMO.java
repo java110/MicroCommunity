@@ -1,5 +1,5 @@
 package com.java110.user.bmo.staffAppAuth;
-import com.java110.po.staffAppAuth.StaffAppAuthPo;
+import com.java110.po.user.StaffAppAuthPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteStaffAppAuthBMO {

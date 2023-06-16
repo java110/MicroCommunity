@@ -1,8 +1,8 @@
 package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.logSystemError.LogSystemErrorDto;
-import com.java110.po.logSystemError.LogSystemErrorPo;
+import com.java110.dto.log.LogSystemErrorDto;
+import com.java110.po.log.LogSystemErrorPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

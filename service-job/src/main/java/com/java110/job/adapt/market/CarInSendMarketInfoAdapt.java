@@ -8,7 +8,7 @@ import com.java110.dto.market.MarketRuleWayDto;
 import com.java110.dto.market.MarketTextDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.intf.common.IMarketRuleCommunityV1InnerServiceSMO;
 import com.java110.intf.common.IMarketRuleObjV1InnerServiceSMO;
 import com.java110.intf.common.IMarketRuleWayV1InnerServiceSMO;

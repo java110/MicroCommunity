@@ -6,7 +6,7 @@ import com.java110.core.annotation.Java110Listener;
 import com.java110.core.event.app.order.Ordered;
 import com.java110.core.event.center.event.InvokeBusinessBSuccessEvent;
 import com.java110.core.event.center.listener.DataFlowListener;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 import com.java110.po.store.StoreUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import org.slf4j.Logger;

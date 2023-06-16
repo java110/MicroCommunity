@@ -18,8 +18,8 @@ package com.java110.common.smo.impl;
 
 import com.java110.common.dao.IChargeRuleFeeV1ServiceDao;
 import com.java110.intf.common.IChargeRuleFeeV1InnerServiceSMO;
-import com.java110.dto.chargeMachine.ChargeRuleFeeDto;
-import com.java110.po.chargeRuleFee.ChargeRuleFeePo;
+import com.java110.dto.charge.ChargeRuleFeeDto;
+import com.java110.po.charge.ChargeRuleFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

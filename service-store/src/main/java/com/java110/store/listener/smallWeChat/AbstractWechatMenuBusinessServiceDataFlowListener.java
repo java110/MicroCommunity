@@ -2,7 +2,7 @@ package com.java110.store.listener.smallWeChat;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.store.dao.IWechatMenuServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
@@ -59,7 +59,7 @@ public abstract class AbstractWechatMenuBusinessServiceDataFlowListener extends 
      *
      * @param businessWechatMenu 公众号菜单信息
      */
-    protected void autoSaveDelBusinessWechatMenu(Business business, JSONObject businessWechatMenu) {
+    protected void autoSaveDelBusinessWechatMenu(AppBusiness business, JSONObject businessWechatMenu) {
 //自动插入DEL
         Map info = new HashMap();
         info.put("wechatMenuId", businessWechatMenu.getString("wechatMenuId"));

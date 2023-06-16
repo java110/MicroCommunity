@@ -17,8 +17,8 @@ package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.shop.ShopDto;
-import com.java110.dto.storeShop.StoreShopDto;
-import com.java110.po.storeShop.StoreShopPo;
+import com.java110.dto.shop.StoreShopDto;
+import com.java110.po.shop.StoreShopPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

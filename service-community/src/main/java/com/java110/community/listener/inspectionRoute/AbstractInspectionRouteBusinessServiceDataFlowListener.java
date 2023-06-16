@@ -5,7 +5,7 @@ import com.java110.community.dao.IInspectionRouteServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.core.event.service.AbstractBusinessServiceDataFlowListener;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -53,7 +53,7 @@ public abstract class AbstractInspectionRouteBusinessServiceDataFlowListener ext
      *
      * @param businessInspectionRoute 巡检路线信息
      */
-    protected void autoSaveDelBusinessInspectionRoute(Business business, JSONObject businessInspectionRoute) {
+    protected void autoSaveDelBusinessInspectionRoute(AppBusiness business, JSONObject businessInspectionRoute) {
         //自动插入DEL
         Map info = new HashMap();
         info.put("inspectionRouteId", businessInspectionRoute.getString("inspectionRouteId"));

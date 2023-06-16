@@ -1,7 +1,7 @@
 package com.java110.scm.supplier;
 
-import com.java110.dto.couponPool.CouponPropertyUserDto;
-import com.java110.dto.couponPool.CouponQrCodeDto;
+import com.java110.dto.coupon.CouponPropertyUserDto;
+import com.java110.dto.coupon.CouponQrCodeDto;
 import com.java110.dto.supplier.SupplierDto;
 import com.java110.dto.supplier.SupplierCouponDto;
 

@@ -1,7 +1,7 @@
 package com.java110.boot.smo.wechatGateway;
 
 import com.java110.core.context.IPageData;
-import com.java110.dto.smallWeChat.SmallWeChatDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.utils.exception.SMOException;
 import org.springframework.http.ResponseEntity;
 

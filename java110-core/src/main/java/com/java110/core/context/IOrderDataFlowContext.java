@@ -1,7 +1,7 @@
 package com.java110.core.context;
 
-import com.java110.entity.order.Business;
-import com.java110.entity.order.Orders;
+import com.java110.dto.system.Business;
+import com.java110.dto.system.Orders;
 
 import java.util.List;
 

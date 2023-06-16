@@ -1,5 +1,5 @@
 package com.java110.user.bmo.userAddress;
-import com.java110.po.userAddress.UserAddressPo;
+import com.java110.po.user.UserAddressPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeleteUserAddressBMO {

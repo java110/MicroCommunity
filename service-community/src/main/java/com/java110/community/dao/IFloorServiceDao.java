@@ -1,7 +1,6 @@
 package com.java110.community.dao;
 
 
-import com.java110.dto.UnitDto;
 import com.java110.utils.exception.DAOException;
 
 

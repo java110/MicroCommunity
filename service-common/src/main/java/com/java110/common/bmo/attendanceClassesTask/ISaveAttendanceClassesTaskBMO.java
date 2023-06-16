@@ -1,7 +1,7 @@
 package com.java110.common.bmo.attendanceClassesTask;
 
-import com.java110.po.attendanceClassesTask.AttendanceClassesTaskPo;
-import com.java110.po.attendanceClassesTaskDetail.AttendanceClassesTaskDetailPo;
+import com.java110.po.attendance.AttendanceClassesTaskPo;
+import com.java110.po.attendance.AttendanceClassesTaskDetailPo;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

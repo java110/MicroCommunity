@@ -19,7 +19,7 @@ package com.java110.user.smo.impl;
 import com.java110.user.dao.IOwnerSettledRoomsV1ServiceDao;
 import com.java110.intf.user.IOwnerSettledRoomsV1InnerServiceSMO;
 import com.java110.dto.owner.OwnerSettledRoomsDto;
-import com.java110.po.ownerSettledRooms.OwnerSettledRoomsPo;
+import com.java110.po.owner.OwnerSettledRoomsPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;

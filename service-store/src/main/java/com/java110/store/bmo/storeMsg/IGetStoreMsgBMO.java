@@ -1,5 +1,5 @@
 package com.java110.store.bmo.storeMsg;
-import com.java110.dto.storeMsg.StoreMsgDto;
+import com.java110.dto.store.StoreMsgDto;
 import org.springframework.http.ResponseEntity;
 public interface IGetStoreMsgBMO {
 

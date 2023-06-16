@@ -4,7 +4,7 @@ import com.java110.acct.bmo.accountBondObjDetail.IDeleteAccountBondObjDetailBMO;
 import com.java110.core.annotation.Java110Transactional;
 
 import com.java110.intf.acct.IAccountBondObjDetailInnerServiceSMO;
-import com.java110.po.accountBondObjDetail.AccountBondObjDetailPo;
+import com.java110.po.account.AccountBondObjDetailPo;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,6 @@
 package com.java110.common.bmo.assetImportLog;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.po.assetImportLog.AssetImportLogPo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveAssetImportLogBMO {
 

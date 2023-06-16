@@ -1,5 +1,5 @@
 package com.java110.store.bmo.storeAds;
-import com.java110.po.storeAds.StoreAdsPo;
+import com.java110.po.store.StoreAdsPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IUpdateStoreAdsBMO {

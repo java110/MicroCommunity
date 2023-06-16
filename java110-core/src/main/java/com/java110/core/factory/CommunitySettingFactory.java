@@ -2,7 +2,7 @@ package com.java110.core.factory;
 
 import com.java110.dto.community.CommunitySettingDto;
 import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
-import com.java110.po.communitySetting.CommunitySettingPo;
+import com.java110.po.community.CommunitySettingPo;
 import com.java110.utils.cache.BaseCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.SerializeUtil;

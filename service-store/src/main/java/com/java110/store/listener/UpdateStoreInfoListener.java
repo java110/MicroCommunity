@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Listener;
 import com.java110.core.context.DataFlowContext;
-import com.java110.entity.center.Business;
+import com.java110.dto.system.AppBusiness;
 import com.java110.po.store.StoreAttrPo;
 import com.java110.po.store.StoreCerdentialPo;
 import com.java110.po.store.StorePhotoPo;
@@ -60,7 +60,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
      * @param business
      */
     @Override
-    protected void doSaveBusiness(DataFlowContext dataFlowContext, Business business) {
+    protected void doSaveBusiness(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -97,7 +97,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doBusinessToInstance(DataFlowContext dataFlowContext, Business business) {
+    protected void doBusinessToInstance(DataFlowContext dataFlowContext, AppBusiness business) {
 
         JSONObject data = business.getDatas();
 
@@ -145,7 +145,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
      * @param business        当前业务对象
      */
     @Override
-    protected void doRecover(DataFlowContext dataFlowContext, Business business) {
+    protected void doRecover(DataFlowContext dataFlowContext, AppBusiness business) {
 
         String bId = business.getbId();
         //Assert.hasLength(bId,"请求报文中没有包含 bId");
@@ -221,7 +221,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
      * @param business            业务对象
      * @param businessStorePhotos 商户照片
      */
-    private void doBusinessStorePhoto(Business business, JSONArray businessStorePhotos) {
+    private void doBusinessStorePhoto(AppBusiness business, JSONArray businessStorePhotos) {
 
 
         for (int businessStorePhotoIndex = 0; businessStorePhotoIndex < businessStorePhotos.size(); businessStorePhotoIndex++) {
@@ -248,7 +248,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
      * @param business      总的数据节点
      * @param businessStore 商户节点
      */
-    private void doBusinessStore(Business business, JSONObject businessStore) {
+    private void doBusinessStore(AppBusiness business, JSONObject businessStore) {
 
         Assert.jsonObjectHaveKey(businessStore, "storeId", "businessStore 节点下没有包含 storeId 节点");
 
@@ -272,7 +272,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
      * @param business           当前业务
      * @param businessStoreAttrs 商户属性
      */
-    private void doSaveBusinessStoreAttrs(Business business, JSONArray businessStoreAttrs) {
+    private void doSaveBusinessStoreAttrs(AppBusiness business, JSONArray businessStoreAttrs) {
         JSONObject data = business.getDatas();
 
 
@@ -300,7 +300,7 @@ public class UpdateStoreInfoListener extends AbstractStoreBusinessServiceDataFlo
      * @param business                   当前业务
      * @param businessStoreCerdentialses 商户证件
      */
-    private void doBusinessStoreCerdentials(Business business, JSONArray businessStoreCerdentialses) {
+    private void doBusinessStoreCerdentials(AppBusiness business, JSONArray businessStoreCerdentialses) {
 
         for (int businessStoreCerdentialsIndex = 0; businessStoreCerdentialsIndex < businessStoreCerdentialses.size(); businessStoreCerdentialsIndex++) {
             JSONObject businessStoreCerdentials = businessStoreCerdentialses.getJSONObject(businessStoreCerdentialsIndex);

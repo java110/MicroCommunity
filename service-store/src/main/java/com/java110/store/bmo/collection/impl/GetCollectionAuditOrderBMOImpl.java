@@ -1,7 +1,7 @@
 package com.java110.store.bmo.collection.impl;
 
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
-import com.java110.entity.audit.AuditUser;
+import com.java110.dto.purchase.PurchaseApplyDto;
+import com.java110.dto.audit.AuditUser;
 import com.java110.intf.common.IGoodCollectionUserInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.store.bmo.collection.IGetCollectionAuditOrderBMO;

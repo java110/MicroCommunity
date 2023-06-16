@@ -1,5 +1,5 @@
 package com.java110.fee.bmo.payFeeDetailMonth;
-import com.java110.po.payFeeDetailMonth.PayFeeDetailMonthPo;
+import com.java110.po.payFee.PayFeeDetailMonthPo;
 import org.springframework.http.ResponseEntity;
 
 public interface IDeletePayFeeDetailMonthBMO {

@@ -2,7 +2,7 @@ package com.java110.core.event.center.event;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IOrderDataFlowContext;
-import com.java110.entity.order.Business;
+import com.java110.dto.system.Business;
 
 /**
  * 调用业务系统事件

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="queryServiceDAOImpl">
 
-    <resultMap type="com.java110.entity.service.ServiceSql" id="serviceSqlMap">
+    <resultMap type="com.java110.dto.system.ServiceSql" id="serviceSqlMap">
         <result column="service_code" jdbcType="VARCHAR" property="serviceCode"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="params" jdbcType="VARCHAR" property="params"/>
@@ -21,7 +21,7 @@
         <parameter property="resMsg" javaType="java.lang.String" jdbcType="CLOB" mode="OUT" />
     </parameterMap>
 
-    <resultMap type="com.java110.entity.order.ServiceBusiness" id="serviceBusinessMap">
+    <resultMap type="com.java110.dto.system.ServiceBusiness" id="serviceBusinessMap">
         <result column="service_business_id" jdbcType="INTEGER" property="serviceBusinessId"/>
         <result column="business_type_cd" jdbcType="VARCHAR" property="businessTypeCd"/>
         <result column="invoke_type" jdbcType="VARCHAR" property="invokeType"/>

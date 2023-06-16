@@ -1,7 +1,7 @@
 package com.java110.common.bmo.transactionLog.impl;
 
 import com.java110.common.bmo.transactionLog.IGetTransactionLogBMO;
-import com.java110.dto.transactionLog.TransactionLogDto;
+import com.java110.dto.log.TransactionLogDto;
 import com.java110.intf.common.ITransactionLogInnerServiceSMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

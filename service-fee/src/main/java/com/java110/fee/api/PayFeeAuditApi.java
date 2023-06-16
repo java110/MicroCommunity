@@ -1,14 +1,14 @@
 package com.java110.fee.api;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.payFeeAudit.PayFeeAuditDto;
+import com.java110.dto.payFee.PayFeeAuditDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.payFeeAudit.IDeletePayFeeAuditBMO;
 import com.java110.fee.bmo.payFeeAudit.IGetPayFeeAuditBMO;
 import com.java110.fee.bmo.payFeeAudit.ISavePayFeeAuditBMO;
 import com.java110.fee.bmo.payFeeAudit.IUpdatePayFeeAuditBMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
-import com.java110.po.payFeeAudit.PayFeeAuditPo;
+import com.java110.po.payFee.PayFeeAuditPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
