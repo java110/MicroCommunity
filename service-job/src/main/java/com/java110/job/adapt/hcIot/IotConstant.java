@@ -125,6 +125,13 @@ public class IotConstant {
 
     public static final String TEMP_CAR_AUTH = "/extApi/tempCarAuth/updateCarInoutTempAuths";
 
+    /**
+     * 查询临时车审核
+     */
+    public static final String GET_CAR_INOUT_TEMPAUTHS = "/extApi/tempCarAuth/getCarInoutTempAuths";
+
+
+
     //添加车辆
     public static final String ADD_TEAM_CAR_FEE_CONFIG = "/extApi/fee/addTempCarFee";
     //添加修改停车劵

@@ -89,4 +89,6 @@ public interface IDatabusAdapt {
     ResultVo getManualOpenDoorLogs(JSONObject reqJson);
 
     ResultVo tempCarAuth(JSONObject reqJson);
+
+    ResultVo getTempCarAuths(JSONObject reqJson);
 }

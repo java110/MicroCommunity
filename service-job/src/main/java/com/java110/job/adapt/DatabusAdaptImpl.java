@@ -173,6 +173,18 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
         return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
     }
 
+    /**
+     * 查询待审核车辆
+     *
+     * @param reqJson
+     * @return
+     */
+    @Override
+    public ResultVo getTempCarAuths(JSONObject reqJson) {
+        return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+    }
+
+
 
     /**
      * 查询 临时车待支付订单

@@ -77,16 +77,16 @@ public class NotifyTempCarFeeOrderAdapt extends DatabusAdaptImpl {
         postParameters.put("payCharge", tempCarPayOrderDto.getPayCharge());
         postParameters.put("payTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         postParameters.put("payType", tempCarPayOrderDto.getPayType());
-        postParameters.put("extPccIds",tempCarPayOrderDto.getPccIds());
-        if(!StringUtil.isEmpty(tempCarPayOrderDto.getMachineId())) {
+        postParameters.put("extPccIds", tempCarPayOrderDto.getPccIds());
+        if (!StringUtil.isEmpty(tempCarPayOrderDto.getMachineId())) {
             postParameters.put("extMachineId", tempCarPayOrderDto.getMachineId());
         }
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.NOTIFY_TEMP_CAR_FEE_ORDER), HttpMethod.POST, httpEntity, String.class);
-        System.out.println("缴费通知"+IotConstant.getUrl(IotConstant.NOTIFY_TEMP_CAR_FEE_ORDER));
-        System.out.println("请求报文"+postParameters.toJSONString());
-        System.out.println("返回报文"+responseEntity);
+        System.out.println("缴费通知" + IotConstant.getUrl(IotConstant.NOTIFY_TEMP_CAR_FEE_ORDER));
+        System.out.println("请求报文" + postParameters.toJSONString());
+        System.out.println("返回报文" + responseEntity);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
         }
@@ -107,20 +107,47 @@ public class NotifyTempCarFeeOrderAdapt extends DatabusAdaptImpl {
         JSONObject postParameters = new JSONObject();
         postParameters.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
         postParameters.put("authId", reqJson.getString("authId"));
-        postParameters.put("state",  reqJson.getString("state"));
-        postParameters.put("msg",  reqJson.getString("msg"));
+        postParameters.put("state", reqJson.getString("state"));
+        postParameters.put("msg", reqJson.getString("msg"));
 
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(postParameters.toJSONString(), getHeaders(outRestTemplate));
         ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.TEMP_CAR_AUTH), HttpMethod.POST, httpEntity, String.class);
-        System.out.println("缴费通知"+IotConstant.getUrl(IotConstant.TEMP_CAR_AUTH));
-        System.out.println("请求报文"+postParameters.toJSONString());
-        System.out.println("返回报文"+responseEntity);
+        System.out.println("缴费通知" + IotConstant.getUrl(IotConstant.TEMP_CAR_AUTH));
+        System.out.println("请求报文" + postParameters.toJSONString());
+        System.out.println("返回报文" + responseEntity);
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
         }
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
         return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
+
+    }
+
+    /**
+     * 查询临时车审核
+     *
+     * @param reqJson 业务信息
+     * @return
+     */
+    @Override
+    public ResultVo getTempCarAuths(JSONObject reqJson) {
+
+        reqJson.put("taskId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        reqJson.put("extCommunityId", reqJson.getString("communityId"));
+        reqJson.put("extPaId", reqJson.getString("paId"));
+        reqJson.put("communityId", "");
+        reqJson.put("paId", "");
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(reqJson.toJSONString(), getHeaders(outRestTemplate));
+        ResponseEntity<String> responseEntity = outRestTemplate.exchange(IotConstant.getUrl(IotConstant.GET_CAR_INOUT_TEMPAUTHS), HttpMethod.POST, httpEntity, String.class);
+        System.out.println("缴费通知" + IotConstant.getUrl(IotConstant.TEMP_CAR_AUTH));
+        System.out.println("请求报文" + reqJson.toJSONString());
+        System.out.println("返回报文" + responseEntity);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return new ResultVo(ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        return new ResultVo(paramOut.getIntValue("totalPage"),paramOut.getIntValue("total"),paramOut.getJSONArray("data"));
 
     }
 }

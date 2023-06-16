@@ -131,6 +131,12 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     }
 
     @Override
+    public ResultVo getTempCarAuths(@RequestBody JSONObject reqJson) {
+        IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_NOTIFY_TEMP_CAR_FEE_ORDER_PROTOCOL, IDatabusAdapt.class);
+        return databusAdaptImpl.getTempCarAuths(reqJson);
+    }
+
+    @Override
     public ResultVo notifyTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto) {
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_NOTIFY_TEMP_CAR_FEE_ORDER_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.notifyTempCarFeeOrder(tempCarPayOrderDto);
