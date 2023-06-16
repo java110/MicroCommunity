@@ -131,7 +131,10 @@ public class ExportDataExecutor implements Runnable {
      * 线程启动器
      */
     public static void startExportDataExecutor() {
+        log.debug("开始初始化导出队列");
         ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_EXPORT_POOL);
         executorService.execute(new ExportDataExecutor(true));
+        log.debug("初始化导出队列完成");
+
     }
 }
