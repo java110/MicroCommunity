@@ -79,16 +79,17 @@ public class ExportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
         row.setHeight((short) (200 * 15));
         row = sheet.createRow(1);
         row.createCell(0).setCellValue("车牌号");
-        row.createCell(1).setCellValue("房屋号");
-        row.createCell(2).setCellValue("车辆品牌");
-        row.createCell(3).setCellValue("车辆类型");
-        row.createCell(4).setCellValue("颜色");
-        row.createCell(5).setCellValue("停车场");
-        row.createCell(6).setCellValue("车位");
-        row.createCell(7).setCellValue("起租时间");
-        row.createCell(8).setCellValue("截止时间");
-        row.createCell(9).setCellValue("停车场类型");
-        row.createCell(10).setCellValue("车位状态");
+        row.createCell(1).setCellValue("业主名称");
+        row.createCell(2).setCellValue("手机号");
+        row.createCell(3).setCellValue("车辆品牌");
+        row.createCell(4).setCellValue("车辆类型");
+        row.createCell(5).setCellValue("颜色");
+        row.createCell(6).setCellValue("停车场");
+        row.createCell(7).setCellValue("车位");
+        row.createCell(8).setCellValue("起租时间");
+        row.createCell(9).setCellValue("截止时间");
+        row.createCell(10).setCellValue("停车场类型");
+        row.createCell(11).setCellValue("车位状态");
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, 8);
         sheet.addMergedRegion(region);
     }

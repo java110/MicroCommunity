@@ -43,8 +43,8 @@
         <if test="sendCount !=null and sendCount != ''">
             and t.send_count= #{sendCount}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="couponUserName !=null and couponUserName != ''">
+            and t.user_name= #{couponUserName}
         </if>
         <if test="value !=null and value != ''">
             and t.value= #{value}
@@ -123,8 +123,8 @@
         <if test="sendCount !=null and sendCount != ''">
             and t.send_count= #{sendCount}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="couponUserName !=null and couponUserName != ''">
+            and t.user_name= #{couponUserName}
         </if>
         <if test="value !=null and value != ''">
             and t.value= #{value}

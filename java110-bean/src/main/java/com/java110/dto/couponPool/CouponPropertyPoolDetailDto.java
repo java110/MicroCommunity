@@ -21,7 +21,7 @@ public class CouponPropertyPoolDetailDto extends PageDto implements Serializable
     private String tel;
     private String communityId;
     private String sendCount;
-    private String userName;
+    private String couponUserName;
     private String value;
     private String couponUserId;
 
@@ -79,13 +79,6 @@ public class CouponPropertyPoolDetailDto extends PageDto implements Serializable
         this.sendCount = sendCount;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 
     public String getValue() {
         return value;
@@ -118,5 +111,13 @@ public class CouponPropertyPoolDetailDto extends PageDto implements Serializable
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCouponUserName() {
+        return couponUserName;
+    }
+
+    public void setCouponUserName(String couponUserName) {
+        this.couponUserName = couponUserName;
     }
 }

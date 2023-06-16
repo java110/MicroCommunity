@@ -116,35 +116,37 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
                 continue;
             }
             Assert.hasValue(os[0], (osIndex + 1) + "车牌号不能为空");
-            Assert.hasValue(os[1], (osIndex + 1) + "房屋号不能为空");
-            Assert.hasValue(os[2], (osIndex + 1) + "车辆品牌不能为空");
-            Assert.hasValue(os[3], (osIndex + 1) + "车辆类型不能为空");
-            Assert.hasValue(os[4], (osIndex + 1) + "颜色不能为空");
-            Assert.hasValue(os[5], (osIndex + 1) + "停车场不能为空");
-            Assert.hasValue(os[6], (osIndex + 1) + "车位不能为空");
-            Assert.hasValue(os[7], (osIndex + 1) + "起租时间不能为空");
-            Assert.hasValue(os[8], (osIndex + 1) + "截止时间不能为空");
-            Assert.hasValue(os[9], (osIndex + 1) + "停车场类型不能为空");
-            Assert.hasValue(os[10], (osIndex + 1) + "车位类型不能为空");
-            String startTime = excelDoubleToDate(os[7].toString());
-            String endTime = excelDoubleToDate(os[8].toString());
+            Assert.hasValue(os[1], (osIndex + 1) + "业主不能为空");
+            Assert.hasValue(os[2], (osIndex + 1) + "手机号不能为空");
+            Assert.hasValue(os[3], (osIndex + 1) + "车辆品牌不能为空");
+            Assert.hasValue(os[4], (osIndex + 1) + "车辆类型不能为空");
+            Assert.hasValue(os[5], (osIndex + 1) + "颜色不能为空");
+            Assert.hasValue(os[6], (osIndex + 1) + "停车场不能为空");
+            Assert.hasValue(os[7], (osIndex + 1) + "车位不能为空");
+            Assert.hasValue(os[8], (osIndex + 1) + "起租时间不能为空");
+            Assert.hasValue(os[9], (osIndex + 1) + "截止时间不能为空");
+            Assert.hasValue(os[10], (osIndex + 1) + "停车场类型不能为空");
+            Assert.hasValue(os[11], (osIndex + 1) + "车位类型不能为空");
+            String startTime = excelDoubleToDate(os[8].toString());
+            String endTime = excelDoubleToDate(os[9].toString());
             Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD文本格式");
             Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD文本格式");
             importOwnerCar = new OwnerCarDto();
             importOwnerCar.setCarNum(os[0].toString());
-            importOwnerCar.setRoomName(os[1].toString());
-            importOwnerCar.setCarBrand(os[2].toString());
-            importOwnerCar.setCarType(os[3].toString());
-            importOwnerCar.setCarColor(os[4].toString());
-            importOwnerCar.setAreaNum(os[5].toString());
+            importOwnerCar.setOwnerName(os[1].toString());
+            importOwnerCar.setLink(os[2].toString());
+            importOwnerCar.setCarBrand(os[3].toString());
+            importOwnerCar.setCarType(os[4].toString());
+            importOwnerCar.setCarColor(os[5].toString());
+            importOwnerCar.setAreaNum(os[6].toString());
             //获取车位
-            String parkingLot = os[6].toString();
+            String parkingLot = os[7].toString();
             importOwnerCar.setNum(parkingLot);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             importOwnerCar.setStartTime(simpleDateFormat.parse(startTime));
             importOwnerCar.setEndTime(simpleDateFormat.parse(endTime));
-            importOwnerCar.setTypeCd(os[9].toString());
-            importOwnerCar.setSpaceSate(os[10].toString());
+            importOwnerCar.setTypeCd(os[10].toString());
+            importOwnerCar.setSpaceSate(os[11].toString());
             ownerCarDtos.add(importOwnerCar);
 
 
@@ -260,39 +262,14 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             if(split.length != 3){
                 throw new IllegalArgumentException(ownerCarDto.getCarNum()+"房屋号格式错误 格式应为：楼栋-单元-房屋，如果是商铺 楼栋-0-商铺编号");
             }
-            String floorNum = split[0];
-            String unitNum = split[1];
-            String roomNum = split[2];
-            FloorDto floorDto = new FloorDto();
-            floorDto.setCommunityId(reqJson.getString("communityId"));
-            floorDto.setFloorNum(floorNum);
-            //查询楼栋
-            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-            Assert.listOnlyOne(floorDtos, ownerCarDto.getCarNum() + "查询楼栋错误！");
-            UnitDto unitDto = new UnitDto();
-            unitDto.setUnitNum(unitNum);
-            unitDto.setFloorId(floorDtos.get(0).getFloorId());
-            //查询单元
-            List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-            Assert.listOnlyOne(unitDtos, ownerCarDto.getCarNum() + "查询单元错误！");
-            RoomDto roomDto = new RoomDto();
-            roomDto.setRoomNum(roomNum);
-            roomDto.setUnitId(unitDtos.get(0).getUnitId());
-            //查询房屋
-            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            Assert.listOnlyOne(roomDtos, ownerCarDto.getCarNum() + "查询房屋错误！");
-            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-            ownerRoomRelDto.setRoomId(roomDtos.get(0).getRoomId());
-            //查询业主房屋关系表
-            List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-            Assert.listOnlyOne(ownerRoomRelDtos, ownerCarDto.getCarNum() + "查询业主房屋信息错误！");
+
             OwnerDto ownerDto = new OwnerDto();
-            ownerDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
-            //ownerDto.setName(ownerCarDto.getOwnerName());
+            ownerDto.setName(ownerCarDto.getOwnerName());
+            ownerDto.setLink(ownerCarDto.getLink());
             //查询业主
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             Assert.listOnlyOne(ownerDtos, ownerCarDto.getCarNum() + "查询业主信息错误！");
-            ownerCarDto.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
+            ownerCarDto.setOwnerId(ownerDtos.get(0).getOwnerId());
         }
 
     }
