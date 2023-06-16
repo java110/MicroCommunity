@@ -273,8 +273,6 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
 
     }
 
-}
-
     //解析Excel日期格式
     public static String excelDoubleToDate(String strDate) {
         if (strDate.length() == 5) {
