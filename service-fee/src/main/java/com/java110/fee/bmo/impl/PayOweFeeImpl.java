@@ -9,7 +9,6 @@ import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.fee.bmo.IPayOweFee;
-import com.java110.fee.listener.fee.UpdateFeeInfoListener;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
@@ -46,7 +45,7 @@ import java.util.Map;
 @Service
 public class PayOweFeeImpl implements IPayOweFee {
 
-    private static Logger logger = LoggerFactory.getLogger(UpdateFeeInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(PayOweFeeImpl.class);
 
 
     @Autowired

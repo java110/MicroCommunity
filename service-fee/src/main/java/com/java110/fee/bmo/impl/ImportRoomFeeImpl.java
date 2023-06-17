@@ -11,7 +11,6 @@ import com.java110.dto.importData.ImportFeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.importData.ImportRoomFee;
 import com.java110.fee.bmo.IImportRoomFee;
-import com.java110.fee.listener.fee.UpdateFeeInfoListener;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -46,7 +45,7 @@ import java.util.List;
 @Service
 public class ImportRoomFeeImpl implements IImportRoomFee {
 
-    private static Logger logger = LoggerFactory.getLogger(UpdateFeeInfoListener.class);
+    private static Logger logger = LoggerFactory.getLogger(ImportRoomFeeImpl.class);
 
 
     private static final String IMPORT_FEE_NAME = "导入费用";
