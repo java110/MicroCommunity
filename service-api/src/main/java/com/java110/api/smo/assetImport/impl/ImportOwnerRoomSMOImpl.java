@@ -187,7 +187,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             }
 
             if (!hasOwnerType) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行一个房屋必须要有业主存在 才能 写家庭成员和房屋租客 和临时人员，并且业主要写在 其他之前");
+                throw new IllegalArgumentException((roomIndex + 1) + "行一个房屋必须要有业主存在 才能hasSpecialCharacters 写家庭成员和房屋租客 和临时人员，并且业主要写在 其他之前");
             }
         }
     }

@@ -33,6 +33,10 @@ public class AssetImportLogDto extends PageDto implements Serializable {
     public static final String LOG_TYPE_FEE_IMPORT = "5005";
     public static final String LOG_TYPE_AREA_PARKING_IMPORT = "6006";
 
+    public static final String STATE_WAIT_IMPORT = "W";//状态 W 待处理 D 处理中 C 处理完成
+    public static final String STATE_DOING_IMPORT = "D";//状态 W 待处理 D 处理中 C 处理完成
+    public static final String STATE_COMPLETE_IMPORT = "C";//状态 W 待处理 D 处理中 C 处理完成
+
     private String logType;
     private String logTypeName;
     private Long successCount;
@@ -40,6 +44,8 @@ public class AssetImportLogDto extends PageDto implements Serializable {
     private String remark;
     private String communityId;
     private Long errorCount;
+
+    private String state;
 
     List<AssetImportLogDetailDto> assetImportLogDetailDtos;
 
@@ -132,5 +138,13 @@ public class AssetImportLogDto extends PageDto implements Serializable {
 
     public void setLogTypeName(String logTypeName) {
         this.logTypeName = logTypeName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

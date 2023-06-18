@@ -68,6 +68,21 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         return successCount;
     }
 
+    @Override
+    public int saveOwnerRoom(@RequestBody ImportOwnerRoomDto importOwnerRoomDto) {
+
+
+        if (importOwnerRoomDto == null) {
+            return 0;
+        }
+
+        List<ImportOwnerRoomDto> importOwnerRoomDtosed = new ArrayList<>();
+        // 1.0 查看 楼栋是否存在
+        return doSaveOwnerRooms(importOwnerRoomDto, importOwnerRoomDtosed);
+
+
+    }
+
     /**
      * 导入数据
      *
@@ -398,7 +413,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         FloorPo floorPo = null;
         String floorId = "";
         int seq = 1;
-        if(StringUtil.isNumber(importOwnerRoomDto.getFloorNum())){
+        if (StringUtil.isNumber(importOwnerRoomDto.getFloorNum())) {
             seq = Integer.parseInt(importOwnerRoomDto.getFloorNum());
         }
 
@@ -410,7 +425,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             floorPo.setFloorArea("1");
             floorPo.setFloorId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_floorId));
             floorPo.setFloorNum(importOwnerRoomDto.getFloorNum());
-            floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");
+            floorPo.setName(importOwnerRoomDto.getFloorNum() + "栋");
             floorPo.setRemark("房产导入");
             floorPo.setUserId(importOwnerRoomDto.getUserId());
             floorPo.setSeq(seq);
@@ -430,7 +445,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
                 //floorPo.setFloorArea("1");
                 floorPo.setFloorId(floorId);
                 floorPo.setFloorNum(importOwnerRoomDto.getFloorNum());
-                floorPo.setName(importOwnerRoomDto.getFloorNum()+"栋");
+                floorPo.setName(importOwnerRoomDto.getFloorNum() + "栋");
                 floorPo.setRemark("房产导入");
                 floorPo.setUserId(importOwnerRoomDto.getUserId());
                 flag = floorV1InnerServiceSMOImpl.updateFloor(floorPo);

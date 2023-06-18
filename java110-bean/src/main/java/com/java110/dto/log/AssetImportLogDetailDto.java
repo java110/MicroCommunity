@@ -15,10 +15,14 @@ import java.util.Date;
  **/
 public class AssetImportLogDetailDto extends PageDto implements Serializable {
 
+    public static final String STATE_WAIT_IMPORT = "W"; //W 待导入 C 导入成功 F 导入失败
+    public static final String STATE_SUCCESS_IMPORT = "C"; //W 待导入 C 导入成功 F 导入失败
+    public static final String STATE_FAIL_IMPORT = "F"; //W 待导入 C 导入成功 F 导入失败
+
     private String detailId;
     private String logId;
     private String state;
-    private String objName;
+    private String content;
     private String communityId;
     private String message;
 
@@ -52,12 +56,13 @@ public class AssetImportLogDetailDto extends PageDto implements Serializable {
         this.state = state;
     }
 
-    public String getObjName() {
-        return objName;
+
+    public String getContent() {
+        return content;
     }
 
-    public void setObjName(String objName) {
-        this.objName = objName;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getCommunityId() {

@@ -20,5 +20,5 @@ public interface IAssetImportSMO {
      * @param uploadFile excel 文件
      * @return ResponseEntity
      */
-    public ResponseEntity<String> importExcelData(IPageData pd,  MultipartFile uploadFile) throws Exception;
+     ResponseEntity<String> importExcelData(IPageData pd,  MultipartFile uploadFile) throws Exception;
 }

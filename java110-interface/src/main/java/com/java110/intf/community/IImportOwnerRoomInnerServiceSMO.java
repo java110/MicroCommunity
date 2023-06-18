@@ -31,4 +31,13 @@ public interface IImportOwnerRoomInnerServiceSMO {
     int saveOwnerRooms(@RequestBody List<ImportOwnerRoomDto> importOwnerRoomDtos);
 
 
+    /**
+     * 导入房产信息(单条)
+     *
+     * @param importOwnerRoomDto 数据对象分享
+     * @return CommunityDto 对象数据
+     */
+    @RequestMapping(value = "/saveOwnerRoom", method = RequestMethod.POST)
+    int saveOwnerRoom(@RequestBody ImportOwnerRoomDto importOwnerRoomDto);
+
 }

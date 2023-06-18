@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 添加应用组件
+ * 物业系统数据导入
+ * 通用类方法
  */
 @Component("assetImport")
 public class AssetImportComponent {

@@ -250,7 +250,7 @@ public class ImportFeeDetailSMOImpl extends DefaultAbstractComponentSMO implemen
                 assetImportLogDetailDto.setState("F");
                 assetImportLogDetailDto.setMessage(responseEntity.getBody());
             }
-            assetImportLogDetailDto.setObjName("无");
+            assetImportLogDetailDto.setContent("无");
             assetImportLogDetailDtos.add(assetImportLogDetailDto);
         } else {
             successCount += importRoomFees.size();

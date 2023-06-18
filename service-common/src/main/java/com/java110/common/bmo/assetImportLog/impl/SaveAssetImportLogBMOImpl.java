@@ -62,7 +62,7 @@ public class SaveAssetImportLogBMOImpl implements ISaveAssetImportLogBMO {
             assetImportLogDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
             assetImportLogDetailPo.setLogId(assetImportLogPo.getLogId());
             assetImportLogDetailPo.setMessage(assetImportLogDetailDtos.getJSONObject(detailIndex).getString("message"));
-            assetImportLogDetailPo.setObjName(assetImportLogDetailDtos.getJSONObject(detailIndex).getString("objName"));
+            assetImportLogDetailPo.setContent(assetImportLogDetailDtos.getJSONObject(detailIndex).getString("objName"));
             assetImportLogDetailPo.setState(assetImportLogDetailDtos.getJSONObject(detailIndex).getString("state"));
             assetImportLogDetailPos.add(assetImportLogDetailPo);
         }
