@@ -58,6 +58,7 @@ public class ListNotepadCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区ID");
     }
 
     @Override

@@ -26,7 +26,7 @@
         from notepad t
         left join t_dict td on td.table_name = 'notepad' and td.table_columns = 'note_type' and td.status_cd = t.note_type
         <if test="communityId !=null and communityId != ''">
-             left join building_owner bo on t.obj_id = bo.owner_id and bo.status_cd = '0'
+             left join building_owner bo on t.obj_id = bo.member_id and bo.status_cd = '0'
         </if>
         where 1 =1
         <if test="communityId !=null and communityId != ''">
