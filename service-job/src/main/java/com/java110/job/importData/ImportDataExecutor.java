@@ -45,14 +45,14 @@ public class ImportDataExecutor implements Runnable {
     public void run() {
 
         while (isRun) {
-            log.debug("导出数据线程开始处理");
+            log.debug("导入数据线程开始处理");
             try {
                 doImportData();
             } catch (Throwable e) {
                 log.error("处理消息异常", e);
                 e.printStackTrace();
             }
-            log.debug("导出数据线程处理完成");
+            log.debug("导入数据线程处理完成");
 
         }
 
