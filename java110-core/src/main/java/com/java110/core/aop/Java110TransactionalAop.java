@@ -74,6 +74,7 @@ public class Java110TransactionalAop {
         // 接收到请求，记录请求内容
         String curOId = Java110TransactionalFactory.getOId();
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        // todo attributes 为空判断主要原因时 通过消息队列处理的数据是没有 attributes 对象的
         if (StringUtil.isEmpty(curOId) && attributes != null) {
             HttpServletRequest request = attributes.getRequest();
             Enumeration<String> headerNames = request.getHeaderNames();
