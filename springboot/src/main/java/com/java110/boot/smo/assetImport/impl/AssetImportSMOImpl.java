@@ -154,7 +154,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
         // todo 调用 导入队列开始导入
         flag = userImportDataV1InnerServiceSMOImpl.importExcelData(assetImportLogPo);
         if (flag > 0) {
-            return ResultVo.success();
+            return ResultVo.createResponseEntity(assetImportLogPo);
         }
         return ResultVo.error("导入失败");
     }
