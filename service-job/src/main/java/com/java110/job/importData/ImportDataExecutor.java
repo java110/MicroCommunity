@@ -122,6 +122,8 @@ public class ImportDataExecutor implements Runnable {
             return;
         }
 
+        count = (int) Math.ceil((double) total / (double) MAX_ROW);
+
         for (int page = 1; page <= count; page++) {
             assetImportLogDetailDto.setPage(page);
             assetImportLogDetailDto.setRow(MAX_ROW);
