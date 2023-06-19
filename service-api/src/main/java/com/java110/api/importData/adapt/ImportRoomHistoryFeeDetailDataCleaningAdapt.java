@@ -82,6 +82,8 @@ public class ImportRoomHistoryFeeDetailDataCleaningAdapt extends DefaultImportDa
             importRoomFee.setUserId(paramIn.getString("userId"));
             importRoomFee.setStoreId(paramIn.getString("storeId"));
             importRoomFee.setObjType(paramIn.getString("objType"));
+            importRoomFee.setCommunityId(paramIn.getString("communityId"));
+
         }
         return rooms;
     }

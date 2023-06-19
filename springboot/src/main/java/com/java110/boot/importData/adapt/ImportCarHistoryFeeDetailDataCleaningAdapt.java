@@ -85,6 +85,8 @@ public class ImportCarHistoryFeeDetailDataCleaningAdapt extends DefaultImportDat
             importRoomFee.setUserId(paramIn.getString("userId"));
             importRoomFee.setStoreId(paramIn.getString("storeId"));
             importRoomFee.setObjType(paramIn.getString("objType"));
+            importRoomFee.setCommunityId(paramIn.getString("communityId"));
+
         }
         return rooms;
     }
