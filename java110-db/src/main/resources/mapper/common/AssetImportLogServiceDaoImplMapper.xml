@@ -17,9 +17,9 @@
 
     <!-- 查询批量操作日志信息 add by wuxw 2018-07-03 -->
     <select id="getAssetImportLogInfo" parameterType="Map" resultType="Map">
-        select t.log_type,t.log_type logType,t.success_count,t.success_count successCount,t.log_id,t.log_id
+        select t.log_type,t.log_type logType,t.log_id,t.log_id
         logId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.error_count,t.error_count errorCount,t.create_time createTime,t.state,td.`name`
+        communityId,t.create_time createTime,t.state,td.`name`
         logTypeName,td1.name stateName,
         (select count(1) successCount from asset_import_log_detail a where a.log_id = t.log_id and a.status_cd = '0' and a.state = 'C') successCount,
         (select count(1) errorCount from asset_import_log_detail a where a.log_id = t.log_id and a.status_cd = '0' and a.state = 'F') errorCount,
