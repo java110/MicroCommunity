@@ -22,7 +22,8 @@
         communityId,t.error_count,t.error_count errorCount,t.create_time createTime,t.state,td.`name`
         logTypeName,td1.name stateName,
         (select count(1) successCount from asset_import_log_detail a where a.log_id = t.log_id and a.status_cd = '0' and a.state = 'C') successCount,
-        (select count(1) errorCount from asset_import_log_detail a where a.log_id = t.log_id and a.status_cd = '0' and a.state = 'F') errorCount
+        (select count(1) errorCount from asset_import_log_detail a where a.log_id = t.log_id and a.status_cd = '0' and a.state = 'F') errorCount,
+        (select count(1) waitCount from asset_import_log_detail a where a.log_id = t.log_id and a.status_cd = '0' and a.state = 'W') waitCount
         from asset_import_log t
         LEFT JOIN t_dict td on t.log_type = td.status_cd and td.table_name = 'asset_import_log' and td.table_columns =
         'log_type'

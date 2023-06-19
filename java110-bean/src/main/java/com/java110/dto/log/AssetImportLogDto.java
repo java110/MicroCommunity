@@ -44,6 +44,7 @@ public class AssetImportLogDto extends PageDto implements Serializable {
     private String remark;
     private String communityId;
     private Long errorCount;
+    private Long waitCount;
 
     private String state;
 
@@ -158,5 +159,13 @@ public class AssetImportLogDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public Long getWaitCount() {
+        return waitCount;
+    }
+
+    public void setWaitCount(Long waitCount) {
+        this.waitCount = waitCount;
     }
 }
