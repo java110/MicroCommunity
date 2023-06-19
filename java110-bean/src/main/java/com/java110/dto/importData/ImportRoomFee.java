@@ -40,6 +40,16 @@ public class ImportRoomFee {
 
     private String deductFrom;
 
+    private String userId;
+
+    private String storeId;
+
+    private String batchId;
+
+    private String objType;
+
+    private String detailId;
+
 
     public String getFloorNum() {
         return floorNum;
@@ -195,5 +205,45 @@ public class ImportRoomFee {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
+    }
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
+    }
+
+    public String getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(String detailId) {
+        this.detailId = detailId;
     }
 }

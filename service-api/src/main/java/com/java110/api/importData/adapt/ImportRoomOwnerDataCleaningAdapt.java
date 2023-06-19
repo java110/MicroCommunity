@@ -1,6 +1,5 @@
-package importData.adapt;
+package com.java110.api.importData.adapt;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.importData.ImportOwnerRoomDto;
 import com.java110.dto.owner.OwnerDto;
@@ -9,8 +8,8 @@ import com.java110.dto.system.ComponentValidateResult;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.ImportExcelUtils;
 import com.java110.utils.util.StringUtil;
-import importData.DefaultImportDataAdapt;
-import importData.IImportDataCleaningAdapt;
+import com.java110.api.importData.DefaultImportDataAdapt;
+import com.java110.api.importData.IImportDataCleaningAdapt;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
