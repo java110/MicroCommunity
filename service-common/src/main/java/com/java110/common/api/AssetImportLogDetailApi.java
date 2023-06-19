@@ -95,6 +95,7 @@ public class AssetImportLogDetailApi {
     @RequestMapping(value = "/queryAssetImportLogDetail", method = RequestMethod.GET)
     public ResponseEntity<String> queryAssetImportLogDetail(@RequestParam(value = "communityId") String communityId,
                                                             @RequestParam(value = "logId",required = false) String logId,
+                                                            @RequestParam(value = "state",required = false) String state,
                                                             @RequestParam(value = "page") int page,
                                                             @RequestParam(value = "row") int row) {
         AssetImportLogDetailDto assetImportLogDetailDto = new AssetImportLogDetailDto();
@@ -102,6 +103,7 @@ public class AssetImportLogDetailApi {
         assetImportLogDetailDto.setRow(row);
         assetImportLogDetailDto.setCommunityId(communityId);
         assetImportLogDetailDto.setLogId(logId);
+        assetImportLogDetailDto.setState(state);
         return getAssetImportLogDetailBMOImpl.get(assetImportLogDetailDto);
     }
 }

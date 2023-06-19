@@ -6,6 +6,7 @@ import com.java110.dto.log.AssetImportLogDetailDto;
 import com.java110.dto.log.AssetImportLogDto;
 import com.java110.intf.common.IAssetImportLogDetailInnerServiceSMO;
 import com.java110.intf.common.IAssetImportLogInnerServiceSMO;
+import com.java110.po.log.AssetImportLogPo;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -67,7 +68,7 @@ public class ImportDataExecutor implements Runnable {
 
         String businessAdapt = importDataDto.getBusinessAdapt();
 
-        IImportDataAdapt importDataAdaptImpl = ApplicationContextFactory.getBean(businessAdapt+"QueueData", IImportDataAdapt.class);
+        IImportDataAdapt importDataAdaptImpl = ApplicationContextFactory.getBean(businessAdapt + "QueueData", IImportDataAdapt.class);
 
         if (importDataAdaptImpl == null) {
             return;
@@ -76,11 +77,11 @@ public class ImportDataExecutor implements Runnable {
         try {
             assetImportLogInnerServiceSMOImpl
                     = ApplicationContextFactory.getBean(IAssetImportLogInnerServiceSMO.class.getName(), IAssetImportLogInnerServiceSMO.class);
-        }catch (Exception e){
+        } catch (Exception e) {
         }
-        if(assetImportLogInnerServiceSMOImpl == null){
+        if (assetImportLogInnerServiceSMOImpl == null) {
             assetImportLogInnerServiceSMOImpl
-                    = ApplicationContextFactory.getBean("assetImportLogInnerServiceSMOImpl",IAssetImportLogInnerServiceSMO.class);
+                    = ApplicationContextFactory.getBean("assetImportLogInnerServiceSMOImpl", IAssetImportLogInnerServiceSMO.class);
         }
         Assert.hasLength(importDataDto.getLogId(), "未包含导入数据");
         Assert.hasLength(importDataDto.getCommunityId(), "未包含小区信息");
@@ -94,15 +95,21 @@ public class ImportDataExecutor implements Runnable {
             throw new IllegalArgumentException("没有需要导入的房产数据" + importDataDto.getLogId());
         }
 
+        //todo 修改为 导入中
+        AssetImportLogPo assetImportLogPo = new AssetImportLogPo();
+        assetImportLogPo.setLogId(importDataDto.getLogId());
+        assetImportLogPo.setState(AssetImportLogDto.STATE_DOING_IMPORT);
+        assetImportLogInnerServiceSMOImpl.updateAssetImportLog(assetImportLogPo);
+
         // todo 查询detail数据
         try {
             assetImportLogDetailInnerServiceSMOImpl
                     = ApplicationContextFactory.getBean(IAssetImportLogDetailInnerServiceSMO.class.getName(), IAssetImportLogDetailInnerServiceSMO.class);
-        }catch (Exception e){
+        } catch (Exception e) {
         }
-        if(assetImportLogDetailInnerServiceSMOImpl == null){
+        if (assetImportLogDetailInnerServiceSMOImpl == null) {
             assetImportLogDetailInnerServiceSMOImpl
-                    = ApplicationContextFactory.getBean("assetImportLogDetailInnerServiceSMOImpl",IAssetImportLogDetailInnerServiceSMO.class);
+                    = ApplicationContextFactory.getBean("assetImportLogDetailInnerServiceSMOImpl", IAssetImportLogDetailInnerServiceSMO.class);
         }
 
         // todo 查询 房产 导入数据
@@ -130,6 +137,12 @@ public class ImportDataExecutor implements Runnable {
                 e.printStackTrace();
             }
         }
+
+        //todo 修改为 处理完成
+        assetImportLogPo = new AssetImportLogPo();
+        assetImportLogPo.setLogId(importDataDto.getLogId());
+        assetImportLogPo.setState(AssetImportLogDto.STATE_COMPLETE_IMPORT);
+        assetImportLogInnerServiceSMOImpl.updateAssetImportLog(assetImportLogPo);
     }
 
     /**

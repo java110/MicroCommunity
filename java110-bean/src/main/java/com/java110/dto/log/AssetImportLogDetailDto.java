@@ -29,7 +29,7 @@ public class AssetImportLogDetailDto extends PageDto implements Serializable {
     private String stateName;
 
 
-    private Date createTime;
+    private String createTime;
 
     private String statusCd = "0";
 
@@ -84,13 +84,7 @@ public class AssetImportLogDetailDto extends PageDto implements Serializable {
     }
 
 
-    public Date getCreateTime() {
-        return createTime;
-    }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
     public String getStatusCd() {
         return statusCd;
@@ -106,5 +100,13 @@ public class AssetImportLogDetailDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }
