@@ -26,6 +26,8 @@ public class AssetImportLogDetailDto extends PageDto implements Serializable {
     private String communityId;
     private String message;
 
+    private String stateName;
+
 
     private Date createTime;
 
@@ -96,5 +98,13 @@ public class AssetImportLogDetailDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

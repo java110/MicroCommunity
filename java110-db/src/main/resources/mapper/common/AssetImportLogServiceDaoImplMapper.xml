@@ -129,5 +129,6 @@
         from asset_import_log_type t
         where t.status_cd = '0'
         and t.log_type = #{logType}
+        order by CAST(t.type_id AS UNSIGNED)
     </select>
 </mapper>

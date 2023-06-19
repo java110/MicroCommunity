@@ -26,8 +26,11 @@
     <!-- 查询批量操作日志详情信息 add by wuxw 2018-07-03 -->
     <select id="getAssetImportLogDetailInfo" parameterType="Map" resultType="Map">
         select t.detail_id,t.detail_id detailId,t.log_id,t.log_id logId,t.status_cd,t.status_cd
-        statusCd,t.state,t.content,t.content,t.community_id,t.community_id communityId,t.message
+        statusCd,t.state,t.content,t.content,t.community_id,t.community_id communityId,t.message,
+        t.create_time createTime,td1.name stateName
         from asset_import_log_detail t
+        LEFT JOIN t_dict td1 on t.state = td1.status_cd and td1.table_name = 'asset_import_log' and td1.table_columns =
+        'state'
         where 1 =1
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
