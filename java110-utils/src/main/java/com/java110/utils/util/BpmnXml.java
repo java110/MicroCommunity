@@ -17,7 +17,7 @@ public class BpmnXml {
                 "      <bpmn2:outgoing>Flow_107cj2o</bpmn2:outgoing>\n" +
                 "    </bpmn2:userTask>\n" +
                 "    <bpmn2:sequenceFlow id=\"Flow_107cj2o\" sourceRef=\"Activity_1horz27\" targetRef=\"Activity_15b7rm5\"/>\n" +
-                "    <bpmn2:userTask id=\"Activity_15b7rm5\" name=\"审批人\" camunda:assignee=\"\">\n" +
+                "    <bpmn2:userTask id=\"Activity_15b7rm5\" name=\"审批人\" camunda:assignee=\"${nextUserId}\">\n" +
                 "      <bpmn2:incoming>Flow_107cj2o</bpmn2:incoming>\n" +
                 "      <bpmn2:outgoing>Flow_06hzw4i</bpmn2:outgoing>\n" +
                 "    </bpmn2:userTask>\n" +
@@ -70,7 +70,7 @@ public class BpmnXml {
                 "      <bpmn2:outgoing>Flow_107cj2o</bpmn2:outgoing>\n" +
                 "    </bpmn2:userTask>\n" +
                 "    <bpmn2:sequenceFlow id=\"Flow_107cj2o\" sourceRef=\"Activity_1horz27\" targetRef=\"Activity_15b7rm5\"/>\n" +
-                "    <bpmn2:userTask id=\"Activity_15b7rm5\" name=\"审批人\" camunda:assignee=\"\">\n" +
+                "    <bpmn2:userTask id=\"Activity_15b7rm5\" name=\"审批人\" camunda:assignee=\"${nextUserId}\">\n" +
                 "      <bpmn2:incoming>Flow_107cj2o</bpmn2:incoming>\n" +
                 "      <bpmn2:outgoing>Flow_06hzw4i</bpmn2:outgoing>\n" +
                 "    </bpmn2:userTask>\n" +
@@ -123,7 +123,7 @@ public class BpmnXml {
                 "      <bpmn2:outgoing>Flow_107cj2o</bpmn2:outgoing>\n" +
                 "    </bpmn2:userTask>\n" +
                 "    <bpmn2:sequenceFlow id=\"Flow_107cj2o\" sourceRef=\"Activity_1horz27\" targetRef=\"Activity_15b7rm5\"/>\n" +
-                "    <bpmn2:userTask id=\"Activity_15b7rm5\" name=\"审批人\" camunda:assignee=\"\">\n" +
+                "    <bpmn2:userTask id=\"Activity_15b7rm5\" name=\"审批人\" camunda:assignee=\"${nextUserId}\">\n" +
                 "      <bpmn2:incoming>Flow_107cj2o</bpmn2:incoming>\n" +
                 "      <bpmn2:outgoing>Flow_06hzw4i</bpmn2:outgoing>\n" +
                 "    </bpmn2:userTask>\n" +

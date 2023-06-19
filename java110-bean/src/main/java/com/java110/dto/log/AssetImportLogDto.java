@@ -26,7 +26,7 @@ public class AssetImportLogDto extends PageDto implements Serializable {
      * 5005	费用信息
      * 6006	车位车辆
      */
-    public static final String LOG_TYPE_FLOOR_UNIT_IMPORT = "1001";
+    public static final String LOG_TYPE_FLOOR_UNIT_IMPORT = "importRoomOwner";
     public static final String LOG_TYPE_HISTORY_FEE_IMPORT = "2002";
     public static final String LOG_TYPE_OWENR_IMPORT = "3003";
     public static final String LOG_TYPE_ROOM_IMPORT = "4004";
@@ -46,6 +46,10 @@ public class AssetImportLogDto extends PageDto implements Serializable {
     private Long errorCount;
 
     private String state;
+
+
+    private String stateName;
+
 
     List<AssetImportLogDetailDto> assetImportLogDetailDtos;
 
@@ -146,5 +150,13 @@ public class AssetImportLogDto extends PageDto implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

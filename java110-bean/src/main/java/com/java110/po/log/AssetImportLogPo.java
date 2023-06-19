@@ -12,6 +12,9 @@ public class AssetImportLogPo implements Serializable {
     private String communityId;
     private String errorCount;
 
+    private String state;
+
+
     public String getLogType() {
         return logType;
     }
@@ -68,5 +71,11 @@ public class AssetImportLogPo implements Serializable {
         this.errorCount = errorCount;
     }
 
+    public String getState() {
+        return state;
+    }
 
+    public void setState(String state) {
+        this.state = state;
+    }
 }
