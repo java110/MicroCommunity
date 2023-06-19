@@ -94,5 +94,14 @@ public class AssetImportLogServiceDaoImpl extends BaseServiceDao implements IAss
         return Integer.parseInt(businessAssetImportLogInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryAssetImportLogType(Map info) {
+        logger.debug("查询批量操作日志信息 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("assetImportLogServiceDaoImpl.queryAssetImportLogType",info);
+
+        return infos;
+    }
+
 
 }

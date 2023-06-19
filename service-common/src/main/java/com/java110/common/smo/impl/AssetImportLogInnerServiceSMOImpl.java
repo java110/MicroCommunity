@@ -5,6 +5,7 @@ import com.java110.common.dao.IAssetImportLogServiceDao;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.log.AssetImportLogDto;
+import com.java110.dto.log.AssetImportLogTypeDto;
 import com.java110.intf.common.IAssetImportLogInnerServiceSMO;
 import com.java110.po.log.AssetImportLogPo;
 import com.java110.utils.util.BeanConvertUtil;
@@ -71,6 +72,13 @@ public class AssetImportLogInnerServiceSMOImpl extends BaseServiceSMO implements
     @Override
     public int queryAssetImportLogsCount(@RequestBody AssetImportLogDto assetImportLogDto) {
         return assetImportLogServiceDaoImpl.queryAssetImportLogsCount(BeanConvertUtil.beanCovertMap(assetImportLogDto));
+    }
+
+    @Override
+    public List<AssetImportLogTypeDto> queryAssetImportLogType(@RequestBody AssetImportLogTypeDto assetImportLogTypeDto) {
+        List<AssetImportLogTypeDto> assetImportLogs = BeanConvertUtil.covertBeanList(assetImportLogServiceDaoImpl.queryAssetImportLogType(BeanConvertUtil.beanCovertMap(assetImportLogTypeDto)), AssetImportLogTypeDto.class);
+
+        return assetImportLogs;
     }
 
     public IAssetImportLogServiceDao getAssetImportLogServiceDaoImpl() {

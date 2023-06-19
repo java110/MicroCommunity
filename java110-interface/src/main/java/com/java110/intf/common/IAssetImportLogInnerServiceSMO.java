@@ -2,6 +2,7 @@ package com.java110.intf.common;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.log.AssetImportLogDto;
+import com.java110.dto.log.AssetImportLogTypeDto;
 import com.java110.po.log.AssetImportLogPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,4 +51,7 @@ public interface IAssetImportLogInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAssetImportLogsCount", method = RequestMethod.POST)
     int queryAssetImportLogsCount(@RequestBody AssetImportLogDto assetImportLogDto);
+
+    @RequestMapping(value = "/queryAssetImportLogType", method = RequestMethod.POST)
+    List<AssetImportLogTypeDto> queryAssetImportLogType(@RequestBody AssetImportLogTypeDto assetImportLogTypeDto);
 }

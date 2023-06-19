@@ -19,10 +19,13 @@
     <select id="getAssetImportLogInfo" parameterType="Map" resultType="Map">
         select t.log_type,t.log_type logType,t.success_count,t.success_count successCount,t.log_id,t.log_id
         logId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.error_count,t.error_count errorCount,t.create_time createTime,t.state,td.`name` logTypeName,td1.name stateName
+        communityId,t.error_count,t.error_count errorCount,t.create_time createTime,t.state,td.`name`
+        logTypeName,td1.name stateName
         from asset_import_log t
-        LEFT JOIN t_dict td on t.log_type = td.status_cd and td.table_name = 'asset_import_log' and td.table_columns = 'log_type'
-        LEFT JOIN t_dict td1 on t.state = td1.status_cd and td1.table_name = 'asset_import_log' and td1.table_columns = 'state'
+        LEFT JOIN t_dict td on t.log_type = td.status_cd and td.table_name = 'asset_import_log' and td.table_columns =
+        'log_type'
+        LEFT JOIN t_dict td1 on t.state = td1.status_cd and td1.table_name = 'asset_import_log' and td1.table_columns =
+        'state'
         where 1 =1
         <if test="logType !=null and logType != ''">
             and t.log_type= #{logType}
@@ -119,4 +122,12 @@
 
     </select>
 
+    <!-- 查询导入日志类型 -->
+    <select id="queryAssetImportLogType" parameterType="Map" resultType="Map">
+        select t.type_id typeId,t.log_type logType,t.log_column logColumn,
+        t.log_property logProperty,t.remark,t.create_time createTime
+        from asset_import_log_type t
+        where t.status_cd = '0'
+        and t.log_type = #{logType}
+    </select>
 </mapper>
