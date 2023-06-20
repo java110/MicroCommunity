@@ -82,6 +82,10 @@ public class ImportExcelUtils {
      */
     public static final List<Object[]> listFromSheet(Sheet sheet) {
 
+        if(sheet == null){
+            throw new IllegalArgumentException("excel sheet 未找到，请不要篡改excel模板");
+        }
+
         List<Object[]> list = new ArrayList<Object[]>();
         for (int r = sheet.getFirstRowNum(); r <= sheet.getLastRowNum(); r++) {
             Row row = sheet.getRow(r);

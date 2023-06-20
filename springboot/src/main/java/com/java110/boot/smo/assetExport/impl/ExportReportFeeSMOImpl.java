@@ -80,7 +80,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     public static final String RESOURCE_STAFF_FEE_MANAGE = "staffFeeManage";
     public static final String REPORT_PAY_FEE_DEPOSIT = "reportPayFeeDeposit";
     public static final String INSPECTION_TASK_DETAILS = "inspectionTaskDetails";
-    public static final String APPLY_PAY_FEE = "applyPayFee";
+    public static final String EXPORT_EXCEL = "exportExcel";
     @Autowired
     private RestTemplate restTemplate;
 
@@ -189,9 +189,6 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
                 break;
             case INSPECTION_TASK_DETAILS:
                 inspectionTaskDetails(pd, result, workbook);
-                break;
-            case APPLY_PAY_FEE:
-                applyPayFees(pd, result, workbook);
 
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -982,28 +979,6 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     }
 
 
-    private void applyPayFees(IPageData pd, ComponentValidateResult result, SXSSFWorkbook workbook) {
-
-        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-
-        Sheet sheet = workbook.createSheet(paramIn.getString("sheetName"));
-        Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue(paramIn.getString("title"));
-
-
-        JSONArray datas = paramIn.getJSONArray("datas");
-
-        JSONObject dataObj = null;
-        String[] keyColumns = null;
-        for (int roomIndex = 0; roomIndex < datas.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex + 1);
-            dataObj = datas.getJSONObject(roomIndex);
-            keyColumns = dataObj.keySet().toArray(new String[dataObj.keySet().size()]);
-            for (int keySetIndex = 0; keySetIndex < keyColumns.length; keySetIndex ++) {
-                row.createCell(keySetIndex).setCellValue(dataObj.getString(keyColumns[keySetIndex]));
-            }
-        }
-    }
 
     private void resourceStoreUseRecordManage(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("物品使用记录");
