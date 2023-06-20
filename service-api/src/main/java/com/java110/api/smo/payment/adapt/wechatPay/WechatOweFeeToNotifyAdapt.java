@@ -150,7 +150,8 @@ public class WechatOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
         paramIn.put("oId", orderId);
         freshFees(paramIn);
         String url = "fee.payOweFee";
-        responseEntity = this.callCenterService(getHeaders("-1"), paramIn.toJSONString(), url, HttpMethod.POST);
+        String userId = paramIn.getString("userId");
+        responseEntity = this.callCenterService(getHeaders(userId), paramIn.toJSONString(), url, HttpMethod.POST);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return 0;

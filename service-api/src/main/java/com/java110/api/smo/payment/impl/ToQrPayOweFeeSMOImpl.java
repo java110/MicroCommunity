@@ -113,6 +113,7 @@ public class ToQrPayOweFeeSMOImpl extends AppAbstractComponentSMO implements ITo
         saveFees.put("money", money);
         saveFees.put("roomId", paramIn.getString("roomId"));
         saveFees.put("communityId", paramIn.getString("communityId"));
+        saveFees.put("userId",pd.getUserId());
         saveFees.put("fees", fees);
         CommonCache.setValue(FeeDto.REDIS_PAY_OWE_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         return responseEntity;

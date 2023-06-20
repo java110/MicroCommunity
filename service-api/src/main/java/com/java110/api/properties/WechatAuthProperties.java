@@ -119,6 +119,7 @@ public class WechatAuthProperties {
     }
 
     public String getWxNotifyUrl() {
+
         String wxNotifyUrlCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "wxNotifyUrl");
         if (!StringUtil.isEmpty(wxNotifyUrlCache)) {
             return UrlCache.getOwnerUrl()+wxNotifyUrlCache;
