@@ -280,7 +280,13 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             payFeePo.setCommunityId(importRoomFee.getCommunityId());
             payFeePo.setConfigId(importRoomFee.getConfigId());
             payFeePo.setPayerObjId(importRoomFee.getPayObjId());
-            payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            if("3003".equals(importRoomFee.getObjType())) {
+                payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CONTRACT);
+            }else if("2002".equals(importRoomFee.getObjType())) {
+                payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CAR);
+            }else{
+                payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+            }
             payFeePo.setUserId(result.getUserId());
             payFeePo.setIncomeObjId(result.getStoreId());
             payFeePo.setFeeTypeCd(feeConfigDtos.get(0).getFeeTypeCd());
