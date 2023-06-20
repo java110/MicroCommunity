@@ -26,8 +26,10 @@ public class BeanInitCostTimeBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (Objects.nonNull(startTime.get(beanName))) {
-            System.out.println("beanName=" + beanName + ",costTime=" + (System.currentTimeMillis() - startTime.get(beanName)));
-            ;
+            long time = System.currentTimeMillis() - startTime.get(beanName);
+            if(time>1000) {
+                System.out.println("beanName=" + beanName + ",costTime=" + time);
+            }
         }
         return bean;
     }
