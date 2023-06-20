@@ -33,6 +33,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @ClassName AssetImportSmoImpl
@@ -79,7 +80,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     public static final String RESOURCE_STAFF_FEE_MANAGE = "staffFeeManage";
     public static final String REPORT_PAY_FEE_DEPOSIT = "reportPayFeeDeposit";
     public static final String INSPECTION_TASK_DETAILS = "inspectionTaskDetails";
-
+    public static final String APPLY_PAY_FEE = "applyPayFee";
     @Autowired
     private RestTemplate restTemplate;
 
@@ -97,7 +98,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             pdHeaders.remove("user_id");
             pdHeaders.put("user-id", result.getUserId());
             pdHeaders.put("user_id", result.getUserId());
-            pdHeaders.put("login-user-id",result.getLoginUserId());
+            pdHeaders.put("login-user-id", result.getLoginUserId());
         }
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "pagePath", "请求中未包含页面");
@@ -188,6 +189,10 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
                 break;
             case INSPECTION_TASK_DETAILS:
                 inspectionTaskDetails(pd, result, workbook);
+                break;
+            case APPLY_PAY_FEE:
+                applyPayFees(pd, result, workbook);
+
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultiValueMap headers = new HttpHeaders();
@@ -211,6 +216,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
     }
+
 
     private void reportListOweFee(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
@@ -975,6 +981,30 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         }
     }
 
+
+    private void applyPayFees(IPageData pd, ComponentValidateResult result, SXSSFWorkbook workbook) {
+
+        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+
+        Sheet sheet = workbook.createSheet(paramIn.getString("sheetName"));
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue(paramIn.getString("title"));
+
+
+        JSONArray datas = paramIn.getJSONArray("datas");
+
+        JSONObject dataObj = null;
+        String[] keyColumns = null;
+        for (int roomIndex = 0; roomIndex < datas.size(); roomIndex++) {
+            row = sheet.createRow(roomIndex + 1);
+            dataObj = datas.getJSONObject(roomIndex);
+            keyColumns = dataObj.keySet().toArray(new String[dataObj.keySet().size()]);
+            for (int keySetIndex = 0; keySetIndex < keyColumns.length; keySetIndex ++) {
+                row.createCell(keySetIndex).setCellValue(dataObj.getString(keyColumns[keySetIndex]));
+            }
+        }
+    }
+
     private void resourceStoreUseRecordManage(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("物品使用记录");
         Row row = sheet.createRow(0);
@@ -1134,7 +1164,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
         reqJson.put("page", 1);
         reqJson.put("row", 10000);
-        reqJson.put("hasOweFee","Y");
+        reqJson.put("hasOweFee", "Y");
         apiUrl = "/reportOweFee/queryReportAllOweFee" + mapToUrlParam(reqJson);
         responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
         if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
@@ -1710,7 +1740,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
                 String[] split = receivedAmount.split("-");
                 receivedAmount = split[1];
             }
-            if(!StringUtil.isEmpty(str) || !StringUtil.isEmpty(discount)) {
+            if (!StringUtil.isEmpty(str) || !StringUtil.isEmpty(discount)) {
                 row.createCell(7).setCellValue(receivedAmount + "(" + str + discount + ")");
             } else {
                 row.createCell(7).setCellValue(receivedAmount);
