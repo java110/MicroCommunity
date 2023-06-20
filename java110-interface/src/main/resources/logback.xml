@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
 
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml"/>-->
 
     <!-- 控制台输出 -->
     <appender name="STDOUT_FILE" class="ch.qos.logback.core.ConsoleAppender">
@@ -61,10 +61,10 @@
         </layout>
     </appender>
 
-    <logger name="org.springframework" level="DEBUG">
+    <logger name="org.springframework" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
-    <logger name="com.java110.order" level="DEBUG">
+    <logger name="com.java110.order" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
@@ -88,15 +88,15 @@
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
-    <logger name="io.shardingsphere" level="DEBUG">
+    <logger name="io.shardingsphere" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
-    <logger name="org.thymeleaf" level="DEBUG">
+    <logger name="org.thymeleaf" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 
-    <logger name="org.apache.kafka" level="DEBUG">
+    <logger name="org.apache.kafka" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
 

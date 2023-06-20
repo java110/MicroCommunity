@@ -155,10 +155,8 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
             headers.put(CommonConstant.HTTP_USER_ID, "-1");
         }
 
-        headers.put(CommonConstant.USER_ID, "-1");
-
-        if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
-            headers.put(CommonConstant.HTTP_USER_ID, "-1");
+        if (!headers.containsKey(CommonConstant.USER_ID)) {
+            headers.put(CommonConstant.USER_ID, "-1");
         }
         if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
             headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());

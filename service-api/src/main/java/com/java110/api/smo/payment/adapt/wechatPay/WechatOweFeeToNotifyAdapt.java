@@ -182,6 +182,7 @@ public class WechatOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
         Map<String, String> headers = new HashMap<>();
         headers.put(CommonConstant.HTTP_APP_ID.toLowerCase(), APP_ID);
         headers.put(CommonConstant.HTTP_USER_ID.toLowerCase(), userId);
+        headers.put(CommonConstant.USER_ID.toLowerCase(), userId);
         headers.put(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
         headers.put(CommonConstant.HTTP_REQ_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
         headers.put(CommonConstant.HTTP_SIGN.toLowerCase(), "");
