@@ -93,10 +93,8 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
             headers.put(CommonConstant.HTTP_USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
         }
 
-        headers.put(CommonConstant.USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
-
-        if (!headers.containsKey(CommonConstant.HTTP_USER_ID)) {
-            headers.put(CommonConstant.HTTP_USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
+        if (!headers.containsKey(CommonConstant.USER_ID)) {
+            headers.put(CommonConstant.USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
         }
         if (!headers.containsKey(CommonConstant.HTTP_APP_ID)) {
             headers.put(CommonConstant.HTTP_APP_ID, pd.getAppId());
