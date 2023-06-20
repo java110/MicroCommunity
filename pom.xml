@@ -53,7 +53,6 @@
         <logback.vaersion>1.2.9</logback.vaersion>
 
         <apache.common.lang3.version>3.4</apache.common.lang3.version>
-        <mybatis.version>3.5.6</mybatis.version>
         <log4j.version>2.17.1</log4j.version>
         <tomcat.servlet.version>6.0.37</tomcat.servlet.version>
         <druid.version>1.1.10</druid.version>

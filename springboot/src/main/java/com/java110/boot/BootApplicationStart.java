@@ -103,7 +103,9 @@ import java.util.concurrent.TimeUnit;
 },
         exclude = {LiquibaseAutoConfiguration.class,
                 org.activiti.spring.boot.SecurityAutoConfiguration.class,
-                org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class}
+                org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+                com.github.pagehelper.autoconfigure.MapperAutoConfiguration.class
+        }
 
 )
 @Java110CmdDiscovery(cmdPublishClass = ServiceCmdEventPublishing.class,
