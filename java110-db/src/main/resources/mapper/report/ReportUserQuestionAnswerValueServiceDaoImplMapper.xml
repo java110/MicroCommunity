@@ -60,10 +60,10 @@
         <if test="qaType !=null and qaType != ''">
             and qa.qa_type= #{qaType}
         </if>
-        <if test="startTime != null">
+        <if test="startTime != null and startTime != ''">
             and t.create_time &gt; #{startTime}
         </if>
-        <if test="endTime != null">
+        <if test="endTime != null and endTime != ''">
             and t.create_time &lt; #{endTime}
         </if>
         order by t.create_time desc
@@ -126,10 +126,10 @@
         <if test="qaType !=null and qaType != ''">
             and qa.qa_type= #{qaType}
         </if>
-        <if test="startTime != null">
+        <if test="startTime != null and startTime != ''">
             and t.create_time &gt; #{startTime}
         </if>
-        <if test="endTime != null">
+        <if test="endTime != null and endTime != ''">
             and t.create_time &lt; #{endTime}
         </if>
         <if test="qaId !=null and qaId != ''">
