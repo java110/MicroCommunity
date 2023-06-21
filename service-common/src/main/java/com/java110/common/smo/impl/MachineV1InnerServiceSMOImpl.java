@@ -78,6 +78,7 @@ public class MachineV1InnerServiceSMOImpl extends BaseServiceSMO implements IMac
 
         List<MachineDto> machines = BeanConvertUtil.covertBeanList(machineV1ServiceDaoImpl.getMachineInfo(BeanConvertUtil.beanCovertMap(machineDto)), MachineDto.class);
 
+
         return machines;
     }
 

@@ -76,8 +76,13 @@ public class MachineInnerServiceSMOImpl extends BaseServiceSMO implements IMachi
                 if (StringUtil.isEmpty(tMachineAttrDto.getValueName())) {
                     tMachineAttrDto.setValueName(tMachineAttrDto.getValue());
                 }
-                if (tMachineDto.getMachineId().equals(tMachineAttrDto.getMachineId())) {
-                    tMachineAttrDtos.add(tMachineAttrDto);
+                if (!tMachineDto.getMachineId().equals(tMachineAttrDto.getMachineId())) {
+                    continue;
+                }
+                tMachineAttrDtos.add(tMachineAttrDto);
+                //todo 刷入协议
+                if(MachineAttrDto.SPEC_HM.equals(tMachineAttrDto.getSpecCd())){
+                    tMachineDto.setHmId(tMachineAttrDto.getValue());
                 }
             }
             tMachineDto.setMachineAttrs(tMachineAttrDtos);

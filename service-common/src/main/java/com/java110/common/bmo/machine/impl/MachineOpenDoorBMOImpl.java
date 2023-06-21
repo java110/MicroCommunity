@@ -152,21 +152,7 @@ public class MachineOpenDoorBMOImpl implements IMachineOpenDoorBMO {
         return ResultVo.createResponseEntity(resultVo);
     }
 
-    @Override
-    public ResponseEntity<String> getQRcode(JSONObject reqJson) {
-        //如果是业主 限制开门次数
 
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setMemberId(reqJson.getString("userId"));
-        ownerDto.setCommunityId(reqJson.getString("communityId"));
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-        if (ownerDtos == null || ownerDtos.size() < 1) {
-            return ResultVo.error("没有权限开门");
-        }
-
-        ResultVo resultVo = dataBusInnerServiceSMOImpl.getQRcode(reqJson);
-        return ResultVo.createResponseEntity(resultVo.getCode(), resultVo.getMsg(), resultVo.getData());
-    }
 
     @Override
     public ResponseEntity<String> customCarInOut(JSONObject reqJson) {

@@ -6,19 +6,20 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
+import com.java110.dto.accessControl.AccessControlWhiteAuthDto;
 import com.java110.dto.community.CommunityLocationDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.common.IAccessControlWhiteAuthV1InnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
-import com.java110.intf.user.IOwnerV1InnerServiceSMO;
-import com.java110.intf.user.IUserV1InnerServiceSMO;
+import com.java110.intf.user.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
@@ -57,12 +58,13 @@ import java.util.List;
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
                 @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
                 @Java110ParamDoc(parentNodeName = "data", name = "userName", type = "String", remark = "用户名称"),
+                @Java110ParamDoc(parentNodeName = "data", name = "openDoor", type = "boolean", remark = "开门 true 开门 false 不开门"),
         }
 )
 
 @Java110ExampleDoc(
         reqBody = "{'qrCode':'wuxw','machineCode':'admin'}",
-        resBody = "{'code':0,'msg':'成功','data':{'userName':'123123'}}"
+        resBody = "{'code':0,'msg':'成功','data':{'userName':'123123','openDoor':true}}"
 )
 /**
  * 门禁二维码核验接口
@@ -86,6 +88,10 @@ public class AccessControlQrcodeVerificationCmd extends Cmd {
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IAccessControlWhiteAuthV1InnerServiceSMO accessControlWhiteAuthV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
@@ -95,7 +101,7 @@ public class AccessControlQrcodeVerificationCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-
+        JSONObject data = new JSONObject();
         //todo 查询设备信息
         MachineDto machineDto = new MachineDto();
         machineDto.setMachineCode(reqJson.getString("machineCode"));
@@ -114,11 +120,29 @@ public class AccessControlQrcodeVerificationCmd extends Cmd {
 
         Assert.listOnlyOne(userDtos, "用户不存在");
 
+        data.put("userName", userDtos.get(0).getName());
 
         boolean openDoor = false;
         //todo 判断是否为业主
         openDoor = hasOwnerRole(machineDtos.get(0), userDtos.get(0));
+        if (openDoor) {
+            data.put("openDoor", openDoor);
+            context.setResponseEntity(ResultVo.createResponseEntity(data));
+            return;
+        }
 
+
+        AccessControlWhiteAuthDto accessControlWhiteAuthDto = new AccessControlWhiteAuthDto();
+        accessControlWhiteAuthDto.setMachineId(machineDtos.get(0).getMachineId());
+        accessControlWhiteAuthDto.setPersonId(userDtos.get(0).getUserId());
+
+        int count = accessControlWhiteAuthV1InnerServiceSMOImpl.queryAccessControlWhiteAuthsCount(accessControlWhiteAuthDto);
+
+        if (count > 0) {
+            openDoor = true;
+        }
+        data.put("openDoor", openDoor);
+        context.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 
     /**

@@ -26,6 +26,8 @@ public class MachineDto extends PageDto implements Serializable {
     public static final String DIRECTION_IN = "3306"; //进场
     public static final String DIRECTION_OUT = "3307"; //出场
 
+    public static final String HM_HK = "16";// 海康平台
+
     private String machineMac;
     private String machineId;
     private String machineCode;
@@ -56,6 +58,8 @@ public class MachineDto extends PageDto implements Serializable {
     private String directionName;
     private String typeId;
     private String domain;
+
+    private String hmId;
 
     private List<MachineAttrDto> machineAttrs;
 
@@ -338,5 +342,13 @@ public class MachineDto extends PageDto implements Serializable {
 
     public void setMachineTypeCds(String[] machineTypeCds) {
         this.machineTypeCds = machineTypeCds;
+    }
+
+    public String getHmId() {
+        return hmId;
+    }
+
+    public void setHmId(String hmId) {
+        this.hmId = hmId;
     }
 }

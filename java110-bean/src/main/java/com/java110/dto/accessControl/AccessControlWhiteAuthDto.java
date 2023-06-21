@@ -19,6 +19,8 @@ public class AccessControlWhiteAuthDto extends MachineDto implements Serializabl
     private String acwaId;
     private String communityId;
 
+    private String personId;
+
 
 
 
@@ -64,5 +66,13 @@ public class AccessControlWhiteAuthDto extends MachineDto implements Serializabl
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 }
