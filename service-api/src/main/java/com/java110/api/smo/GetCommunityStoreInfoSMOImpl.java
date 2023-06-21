@@ -9,6 +9,7 @@ import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,16 @@ public class GetCommunityStoreInfoSMOImpl extends DefaultAbstractComponentSMO im
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException(responseEntity.getBody());
         }
+
+        if(!StringUtil.isJsonObject(responseEntity.getBody())){
+            return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, responseEntity.getBody());
+        }
+
+        JSONObject paramJson = JSONObject.parseObject(responseEntity.getBody());
+        if(paramJson.containsKey("code") && paramJson.getIntValue("code") != 0){
+            throw new IllegalArgumentException(paramJson.getString("msg"));
+        }
+
         return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, responseEntity.getBody());
     }
 

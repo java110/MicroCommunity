@@ -15,6 +15,17 @@ import java.util.Date;
  **/
 public class CommunityLocationDto extends PageDto implements Serializable {
 
+    public static final String LOCAL_TYPE_COMMUNITY = "1000";//小区
+    public static final String LOCAL_TYPE_UNIT = "2000";//小区
+
+//    1000	小区
+//2000	单元
+//3000	房屋
+//4000	岗亭
+//5000	部门
+//6000	楼栋
+//7000	停车场
+
     private String locationName;
 
     private String locationId;
