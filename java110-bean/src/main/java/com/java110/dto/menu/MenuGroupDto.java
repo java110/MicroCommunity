@@ -17,7 +17,7 @@ public class MenuGroupDto extends PageDto implements Serializable {
     private String label;
     private String seq;
     private String description;
-    private String statusCd;
+    private String statusCd = "0";
     private String groupType;
     private String storeType;
     private String userId;
