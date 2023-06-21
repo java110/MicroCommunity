@@ -381,7 +381,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
 
         ResultVo resultVo = getCommunityStoreInfoSMOImpl.getStoreInfo(pd, restTemplate, pd.getUserId());
-        logger.debug("ruleId getStoreInfo ：{}", resultVo.toString());
+        logger.debug("查询商户信息 getStoreInfo ：{}", resultVo.toString());
         return new ResponseEntity<String>(resultVo.getMsg(), resultVo.getCode() == ResultVo.CODE_OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
