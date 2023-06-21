@@ -25,7 +25,7 @@ import java.util.*;
    拓强智能电表 处理类 -- 5.1 单项单费率抄表
    http://doc-api.tqdianbiao.com/#/api2/6/2/1
  */
-@Service("tqDianBiaoFactoryAdaptImpl")
+@Service("tqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl")
 public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFactoryAdapt {
     private static final String READ_URL = "http://api2.tqdianbiao.com/Api_v2/ele_read";
 
