@@ -42,6 +42,7 @@ public class ReportFeeDto extends PageDto implements Serializable {
     private double feePrice;
     private String payerObjType;
     private String computingFormula;
+    private String computingFormulaText;
     private String isDefault;
     private double oweFee; // 欠费金额
     private String billType;
@@ -574,5 +575,13 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     public void setUnits(String units) {
         this.units = units;
+    }
+
+    public String getComputingFormulaText() {
+        return computingFormulaText;
+    }
+
+    public void setComputingFormulaText(String computingFormulaText) {
+        this.computingFormulaText = computingFormulaText;
     }
 }
