@@ -214,7 +214,7 @@ public class ListFeeCmd extends Cmd {
         String link = "";
         for (ApiFeeDataVo apiFeeDataVo : fees) {
             for (FeeDto feeDto : feeDtos) {
-                if (!StringUtil.isEmpty(feeDto.getPayerObjType()) && feeDto.getPayerObjType().equals("3333")) { //房屋
+                if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋
                     OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
                     ownerRoomRelDto.setRoomId(feeDto.getPayerObjId());
                     List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
@@ -227,9 +227,9 @@ public class ListFeeCmd extends Cmd {
                     } else {
                         continue;
                     }
-                } else if (!StringUtil.isEmpty(feeDto.getPayerObjType()) && feeDto.getPayerObjType().equals("6666")) {
+                } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
                     OwnerCarDto ownerCarDto = new OwnerCarDto();
-                    ownerCarDto.setCarId(feeDto.getPayerObjId());
+                    ownerCarDto.setMemberId(feeDto.getPayerObjId());
                     List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
                     Assert.listOnlyOne(ownerCarDtos, "查询业主车辆表错误！");
                     OwnerDto ownerDto = new OwnerDto();
