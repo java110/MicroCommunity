@@ -12,7 +12,6 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -67,28 +66,6 @@ public class NativeQrcodePaymentCmd extends Cmd {
 
 
         logger.debug(">>>>>>>>>>>>>>>>支付业务下单返回,{}", JSONObject.toJSONString(paymentOrderDto));
-
-        String env = MappingCache.getValue(MappingConstant.ENV_DOMAIN, "HC_ENV");
-
-        // 这里 演示环境不向微信下单
-//        if ("DEV".equals(env) || "TEST".equals(env)) {
-//            paymentBusiness.notifyPayment(paymentOrderDto, reqJson);
-//            JSONObject param = new JSONObject();
-//            param.put("code", "100");
-//            param.put("msg", "演示环境不触发支付");
-//            context.setResponseEntity(new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK));
-//            return;
-//        }
-//
-//        // 3.0 如果支付金额为0 直接调用 支付完通知接口
-//        if (paymentOrderDto.getMoney() <= 0) {
-//            paymentBusiness.notifyPayment(paymentOrderDto, reqJson);
-//            JSONObject param = new JSONObject();
-//            param.put("code", "100");
-//            param.put("msg", "扣费为0回调成功");
-//            context.setResponseEntity(new ResponseEntity(JSONObject.toJSONString(param), HttpStatus.OK));
-//            return;
-//        }
 
         // 3.0 寻找当前支付适配器
         String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.NATIVE_QRCODE_PAYMENT_ADAPT);
