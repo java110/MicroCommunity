@@ -82,7 +82,7 @@ public class QueryPropertyAssetsIndexCmd extends Cmd {
         int ownerCount = ownerV1InnerServiceSMOImpl.queryOwnersCount(ownerDto);
         paramOut.put("ownerCount", ownerCount);
 
-        // 查询车辆
+        // 查询车辆 (这里只查询 主车辆 副车辆)
         OwnerCarDto ownerCarDto  =  new OwnerCarDto();
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
         ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_PRIMARY,OwnerCarDto.CAR_TYPE_MEMBER});
