@@ -37,6 +37,7 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
 
     private String objName;
     private String objId;
+    private String[] objIds;
     private String ownerName;
     private String ownerId;
     private String link;
@@ -225,5 +226,13 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
 
     public void setConfigId(String configId) {
         this.configId = configId;
+    }
+
+    public String[] getObjIds() {
+        return objIds;
+    }
+
+    public void setObjIds(String[] objIds) {
+        this.objIds = objIds;
     }
 }
