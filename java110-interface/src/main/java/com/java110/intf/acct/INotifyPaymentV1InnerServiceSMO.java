@@ -44,5 +44,14 @@ public interface INotifyPaymentV1InnerServiceSMO {
      * @return 小区下的小区楼记录数
      */
     @RequestMapping(value = "/notifyPayment", method = RequestMethod.POST)
-    public ResponseEntity<String> notifyPayment(@RequestBody NotifyPaymentOrderDto notifyPaymentOrderDto);
+    ResponseEntity<String> notifyPayment(@RequestBody NotifyPaymentOrderDto notifyPaymentOrderDto);
+
+    /**
+     * native 支付回调
+     *
+     * @param notifyPaymentOrderDto 数据对象分享
+     * @return 小区下的小区楼记录数
+     */
+    @RequestMapping(value = "/nativeNotifyPayment", method = RequestMethod.POST)
+    ResponseEntity<String> nativeNotifyPayment(@RequestBody NotifyPaymentOrderDto notifyPaymentOrderDto);
 }

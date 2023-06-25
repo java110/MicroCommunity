@@ -17,7 +17,7 @@ public interface IPaymentFactoryAdapt {
 
     /**
      * 支付完成通知
-     * @param param
+     * @param notifyPaymentOrderDto
      * @return
      */
     PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto);

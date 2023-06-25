@@ -50,6 +50,8 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
 
     private static final String DEFAULT_PAYMENT_NOTIFY_ADAPT = "wechatPaymentFactory";// 默认微信通用支付
 
+    protected static final String DEFAULT_NATIVE_QRCODE_PAYMENT_ADAPT = "wechatNativeQrcodePaymentFactory";// 默认微信通用支付
+
     /**
      * 通知类
      *
@@ -89,8 +91,47 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
 
 
             return paymentOrderDto.getResponseEntity();
-        }catch (Exception e){
-            logger.error("通知是配置异常",e);
+        } catch (Exception e) {
+            logger.error("通知是配置异常", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> nativeNotifyPayment(@RequestBody NotifyPaymentOrderDto notifyPaymentOrderDto) {
+
+        try {
+            String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.NATIVE_QRCODE_PAYMENT_ADAPT);
+            payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_NATIVE_QRCODE_PAYMENT_ADAPT : payNotifyAdapt;
+            //支付适配器IPayNotifyAdapt
+            logger.debug("适配器：" + payNotifyAdapt);
+            IPaymentFactoryAdapt tPayNotifyAdapt = ApplicationContextFactory.getBean(payNotifyAdapt, IPaymentFactoryAdapt.class);
+            PaymentOrderDto paymentOrderDto = tPayNotifyAdapt.java110NotifyPayment(notifyPaymentOrderDto);
+            logger.info("【支付回调响应】 响应内容：\n" + paymentOrderDto.getResponseEntity());
+
+            if (StringUtil.isEmpty(paymentOrderDto.getOrderId())) {
+                return paymentOrderDto.getResponseEntity();
+            }
+
+            String paramIn = CommonCache.getAndRemoveValue("nativeQrcodePayment_" + paymentOrderDto.getOrderId());
+
+            JSONObject reqJson = JSONObject.parseObject(paramIn);
+
+            IPaymentBusiness paymentBusiness = ApplicationContextFactory.getBean(reqJson.getString("business"), IPaymentBusiness.class);
+
+            if (paymentBusiness == null) {
+                throw new CmdException("当前支付业务不支持");
+            }
+
+            paymentOrderDto.setAppId(notifyPaymentOrderDto.getAppId());
+
+            //2.0 相应业务 下单 返回 单号 ，金额，
+            paymentBusiness.notifyPayment(paymentOrderDto, reqJson);
+
+
+            return paymentOrderDto.getResponseEntity();
+        } catch (Exception e) {
+            logger.error("通知是配置异常", e);
             throw e;
         }
     }

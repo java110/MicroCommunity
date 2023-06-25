@@ -61,6 +61,11 @@ public class WechatConstant {
     //支付适配器
     public static final String PAY_ADAPT = "PAY_ADAPT";
     public static final String PAYMENT_ADAPT = "PAYMENT_ADAPT";
+
+    // native 支付
+    public static final String NATIVE_QRCODE_PAYMENT_ADAPT = "NATIVE_QRCODE_PAYMENT_ADAPT";
+
+
     public static final String PAY_QR_ADAPT = "PAY_QR_ADAPT";
     //支付通知适配器
     public static final String PAY_NOTIFY_ADAPT = "PAY_NOTIFY_ADAPT";
