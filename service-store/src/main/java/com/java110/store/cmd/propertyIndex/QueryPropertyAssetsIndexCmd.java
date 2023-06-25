@@ -85,6 +85,7 @@ public class QueryPropertyAssetsIndexCmd extends Cmd {
         // 查询车辆
         OwnerCarDto ownerCarDto  =  new OwnerCarDto();
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setCarTypeCds(new String[]{OwnerCarDto.CAR_TYPE_PRIMARY,OwnerCarDto.CAR_TYPE_MEMBER});
         int carCount = ownerCarV1InnerServiceSMOImpl.queryOwnerCarsCount(ownerCarDto);
         paramOut.put("carCount", carCount);
 
