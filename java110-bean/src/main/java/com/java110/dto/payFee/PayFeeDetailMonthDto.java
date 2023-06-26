@@ -55,7 +55,7 @@ public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
     private String feeName;
     private String configId;
 
-    private List<FeeAttrDto> feeAttrDtos;
+    private List<FeeAttrDto> feeAttrs;
 
     public String getDetailMonth() {
         return detailMonth;
@@ -250,11 +250,11 @@ public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
         this.objType = objType;
     }
 
-    public List<FeeAttrDto> getFeeAttrDtos() {
-        return feeAttrDtos;
+    public List<FeeAttrDto> getFeeAttrs() {
+        return feeAttrs;
     }
 
-    public void setFeeAttrDtos(List<FeeAttrDto> feeAttrDtos) {
-        this.feeAttrDtos = feeAttrDtos;
+    public void setFeeAttrs(List<FeeAttrDto> feeAttrs) {
+        this.feeAttrs = feeAttrs;
     }
 }
