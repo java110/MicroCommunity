@@ -1,9 +1,12 @@
 package com.java110.dto.payFee;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -13,7 +16,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class PayFeeDetailMonthDto extends PageDto implements Serializable {
+public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
 
     public static final String STATE_W = "W";//待缴费
     public static final String STATE_C = "C";//已缴费
@@ -37,6 +40,9 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
 
     private String objName;
     private String objId;
+
+    private String objType;
+
     private String[] objIds;
     private String ownerName;
     private String ownerId;
@@ -49,7 +55,7 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
     private String feeName;
     private String configId;
 
-
+    private List<FeeAttrDto> feeAttrDtos;
 
     public String getDetailMonth() {
         return detailMonth;
@@ -234,5 +240,21 @@ public class PayFeeDetailMonthDto extends PageDto implements Serializable {
 
     public void setObjIds(String[] objIds) {
         this.objIds = objIds;
+    }
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
+    }
+
+    public List<FeeAttrDto> getFeeAttrDtos() {
+        return feeAttrDtos;
+    }
+
+    public void setFeeAttrDtos(List<FeeAttrDto> feeAttrDtos) {
+        this.feeAttrDtos = feeAttrDtos;
     }
 }

@@ -51,6 +51,8 @@ public class FeeAttrDto extends PageDto implements Serializable {
     private String specCdName;
     private String communityId;
     private String feeId;
+
+    private String[] feeIds;
     private String value;
     private String state;
 
@@ -157,5 +159,13 @@ public class FeeAttrDto extends PageDto implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String[] getFeeIds() {
+        return feeIds;
+    }
+
+    public void setFeeIds(String[] feeIds) {
+        this.feeIds = feeIds;
     }
 }

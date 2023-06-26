@@ -125,5 +125,32 @@ public class PayFeeDetailMonthServiceDaoImpl extends BaseServiceDao implements I
         sqlSessionTemplate.update("payFeeDetailMonthServiceDaoImpl.deletePayFeeDetailMonthInfo", info);
     }
 
+    @Override
+    public List<Map> queryPagePayFeeDetailMonths(Map info) {
+        logger.debug("查询 queryPagePayFeeDetailMonths 信息 入参 info : {}", info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailMonthServiceDaoImpl.queryPagePayFeeDetailMonths", info);
+
+        return infos;
+    }
+
+    /**
+     * 查询月缴费表数量
+     *
+     * @param info 月缴费表信息
+     * @return 月缴费表数量
+     */
+    @Override
+    public int queryPagePayFeeDetailMonthsCount(Map info) {
+        logger.debug("查询月缴费表数据 入参 info : {}", info);
+
+        List<Map> businessPayFeeDetailMonthInfos = sqlSessionTemplate.selectList("payFeeDetailMonthServiceDaoImpl.queryPagePayFeeDetailMonthsCount", info);
+        if (businessPayFeeDetailMonthInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessPayFeeDetailMonthInfos.get(0).get("count").toString());
+    }
+
 
 }

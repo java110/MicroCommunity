@@ -116,11 +116,13 @@ public class ListMonthFeeCmd extends Cmd {
         // todo 处理 多个房屋
         morePayerObjIds(reqJson, payFeeDetailMonthDto);
 
-        int count = payFeeDetailMonthInnerServiceSMOImpl.queryPayFeeDetailMonthsCount(payFeeDetailMonthDto);
+        int count = payFeeDetailMonthInnerServiceSMOImpl.queryPagePayFeeDetailMonthsCount(payFeeDetailMonthDto);
+
         List<PayFeeDetailMonthDto> payFeeDetailMonthDtos = null;
         if (count > 0) {
-            payFeeDetailMonthDtos = payFeeDetailMonthInnerServiceSMOImpl.queryPayFeeDetailMonths(payFeeDetailMonthDto);//查询费用项目
-            //freshFeeAttrs(fees, feeDtos);
+            payFeeDetailMonthDtos = payFeeDetailMonthInnerServiceSMOImpl.queryPagePayFeeDetailMonths(payFeeDetailMonthDto);//查询费用项目
+            //todo 将 费用下的属性刷入进去，方便前段展示使用
+            freshFeeAttrs(payFeeDetailMonthDtos);
         } else {
             payFeeDetailMonthDtos = new ArrayList<>();
         }
@@ -188,61 +190,30 @@ public class ListMonthFeeCmd extends Cmd {
         }
     }
 
-    private void freshFeeAttrs(List<ApiFeeDataVo> fees, List<FeeDto> feeDtos) {
-        String link = "";
-        for (FeeDto feeDto : feeDtos) {
-            if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋
-                OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-                ownerRoomRelDto.setRoomId(feeDto.getPayerObjId());
-                List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-                if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
-                    continue;
-                }
-                OwnerDto ownerDto = new OwnerDto();
-                ownerDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
-                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-                Assert.listOnlyOne(ownerDtos, "查询业主错误！");
-                link = ownerDtos.get(0).getLink();
-            } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
-                OwnerCarDto ownerCarDto = new OwnerCarDto();
-                ownerCarDto.setMemberId(feeDto.getPayerObjId());
-                List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆表错误！");
-                OwnerDto ownerDto = new OwnerDto();
-                ownerDto.setMemberId(ownerCarDtos.get(0).getOwnerId());
-                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-                Assert.listOnlyOne(ownerDtos, "查询业主错误！");
-                link = ownerDtos.get(0).getLink();
-            }
-            FeeAttrDto feeAttrDto = new FeeAttrDto();
-            feeAttrDto.setFeeId(feeDto.getFeeId());
-            List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
-            if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
-                continue;
-            }
-            for (FeeAttrDto feeAttr : feeAttrDtos) {
-                if (!FeeAttrDto.SPEC_CD_OWNER_LINK.equals(feeAttr.getSpecCd())) { //联系方式
-                    continue;
-                }
-                if (feeAttr.getValue().equals(link)) {
-                    continue;
-                }
-                FeeAttrPo feeAttrPo = new FeeAttrPo();
-                feeAttrPo.setAttrId(feeAttr.getAttrId());
-                feeAttrPo.setValue(link);
-                int flag = feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
-                if (flag < 1) {
-                    throw new CmdException("更新业主联系方式失败");
-                }
-
-            }
+    private void freshFeeAttrs(List<PayFeeDetailMonthDto> payFeeDetailMonthDtos) {
+        List<String> feeIds = new ArrayList<>();
+        for (PayFeeDetailMonthDto feeDto : payFeeDetailMonthDtos) {
+            feeIds.add(feeDto.getFeeId());
         }
-        for (ApiFeeDataVo apiFeeDataVo : fees) {
-            for (FeeDto feeDto : feeDtos) {
-                if (apiFeeDataVo.getFeeId().equals(feeDto.getFeeId())) {
-                    apiFeeDataVo.setFeeAttrs(feeDto.getFeeAttrDtos());
+
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setFeeIds(feeIds.toArray(new String[feeIds.size()]));
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            return;
+        }
+
+        List<FeeAttrDto> tmpFeeAttrDtos = null;
+        for (PayFeeDetailMonthDto feeDto : payFeeDetailMonthDtos) {
+            tmpFeeAttrDtos = new ArrayList<>();
+            for (FeeAttrDto tmpFeeAttrDto : feeAttrDtos) {
+                if (!feeDto.getFeeId().equals(tmpFeeAttrDto.getFeeId())) {
+                    continue;
                 }
+                tmpFeeAttrDtos.add(tmpFeeAttrDto);
             }
+            feeDto.setFeeAttrDtos(tmpFeeAttrDtos);
         }
     }
 }
