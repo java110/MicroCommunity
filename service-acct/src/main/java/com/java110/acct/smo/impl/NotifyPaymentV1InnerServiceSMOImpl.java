@@ -76,6 +76,10 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
 
             String paramIn = CommonCache.getAndRemoveValue("unifiedPayment_" + paymentOrderDto.getOrderId());
 
+            if (StringUtil.isEmpty(paramIn)) {
+                throw new IllegalArgumentException("未找到业务数据");
+            }
+
             JSONObject reqJson = JSONObject.parseObject(paramIn);
 
             IPaymentBusiness paymentBusiness = ApplicationContextFactory.getBean(reqJson.getString("business"), IPaymentBusiness.class);
