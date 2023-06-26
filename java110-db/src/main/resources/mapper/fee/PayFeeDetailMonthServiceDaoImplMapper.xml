@@ -437,7 +437,7 @@
         <if test="payFeeTime !=null and payFeeTime != ''">
             and t.pay_fee_time= #{payFeeTime}
         </if>
-        order by t.detail_year desc,t.detail_month
+        order by t.detail_year,t.detail_month
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
