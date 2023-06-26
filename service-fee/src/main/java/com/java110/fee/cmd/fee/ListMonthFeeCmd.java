@@ -121,6 +121,8 @@ public class ListMonthFeeCmd extends Cmd {
         List<PayFeeDetailMonthDto> payFeeDetailMonthDtos = null;
         if (count > 0) {
             payFeeDetailMonthDtos = payFeeDetailMonthInnerServiceSMOImpl.queryPagePayFeeDetailMonths(payFeeDetailMonthDto);//查询费用项目
+            //todo 根据配置处理小数点
+            doScale(payFeeDetailMonthDtos);
             //todo 将 费用下的属性刷入进去，方便前段展示使用
             freshFeeAttrs(payFeeDetailMonthDtos);
         } else {
@@ -128,6 +130,24 @@ public class ListMonthFeeCmd extends Cmd {
         }
 
         context.setResponseEntity(ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, payFeeDetailMonthDtos));
+    }
+
+    /**
+     * 处理应收小数点
+     *
+     * @param payFeeDetailMonthDtos
+     */
+    private void doScale(List<PayFeeDetailMonthDto> payFeeDetailMonthDtos) {
+        if (payFeeDetailMonthDtos == null || payFeeDetailMonthDtos.size() < 1) {
+            return;
+        }
+        double amount = 0.0;
+        for (PayFeeDetailMonthDto payFeeDetailMonthDto : payFeeDetailMonthDtos) {
+            amount = MoneyUtil.computePriceScale(Double.parseDouble(payFeeDetailMonthDto.getReceivableAmount()),
+                    payFeeDetailMonthDto.getScale(),
+                    Integer.parseInt(payFeeDetailMonthDto.getDecimalPlace()));
+            payFeeDetailMonthDto.setReceivableAmount(amount + "");
+        }
     }
 
     /**
