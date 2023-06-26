@@ -128,6 +128,12 @@ public class PayFeeDetailMonthInnerServiceSMOImpl extends BaseServiceSMO impleme
 
     @Override
     public int queryPagePayFeeDetailMonthsCount(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto) {
+
+        int page = payFeeDetailMonthDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            payFeeDetailMonthDto.setPage((page - 1) * payFeeDetailMonthDto.getRow());
+        }
         return payFeeDetailMonthServiceDaoImpl.queryPagePayFeeDetailMonthsCount(BeanConvertUtil.beanCovertMap(payFeeDetailMonthDto));
     }
 
