@@ -213,7 +213,7 @@ public class ListMonthFeeCmd extends Cmd {
                 }
                 tmpFeeAttrDtos.add(tmpFeeAttrDto);
             }
-            feeDto.setFeeAttrDtos(tmpFeeAttrDtos);
+            feeDto.setFeeAttrs(tmpFeeAttrDtos);
         }
     }
 }
