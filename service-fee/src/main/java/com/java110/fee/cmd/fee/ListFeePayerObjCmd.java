@@ -156,6 +156,7 @@ public class ListFeePayerObjCmd extends Cmd {
         Assert.listOnlyOne(roomDtos, "房屋不存在");
 
         data.putAll(BeanConvertUtil.beanCovertJson(roomDtos.get(0)));
+        data.put("payerObjName", roomDtos.get(0).getFloorNum() + "-" + roomDtos.get(0).getUnitNum() + "-" + roomDtos.get(0).getRoomNum());
 
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setRoomId(roomDtos.get(0).getRoomId());
@@ -197,6 +198,8 @@ public class ListFeePayerObjCmd extends Cmd {
         Assert.listOnlyOne(ownerCarDtos, "车辆不存在");
 
         data.putAll(BeanConvertUtil.beanCovertJson(ownerCarDtos.get(0)));
+        data.put("payerObjName", ownerCarDtos.get(0).getCarNum());
+
 
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setMemberId(ownerCarDtos.get(0).getOwnerId());
@@ -227,6 +230,7 @@ public class ListFeePayerObjCmd extends Cmd {
         Assert.listOnlyOne(contractDtos, "合同不存在");
 
         data.putAll(BeanConvertUtil.beanCovertJson(contractDtos.get(0)));
+        data.put("payerObjName", contractDtos.get(0).getContractName());
 
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setLink(contractDtos.get(0).getbLink());
