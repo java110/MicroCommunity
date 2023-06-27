@@ -43,16 +43,20 @@ public class QueryStoreByUserCmd extends Cmd {
         dataQuery.setRequestParams(param);
         queryServiceSMOImpl.commonQueryService(dataQuery);
         ResponseEntity<String> responseEntity = dataQuery.getResponseEntity();
+        //todo 直接查询失败，所以直接返回异常
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             context.setResponseEntity(new ResponseEntity<>("初始化商户", HttpStatus.FORBIDDEN));
             return;
         }
 
+
+        //todo 说明是员工 返回查询信息
         String storeInfo = responseEntity.getBody();
         if (Assert.isJsonObject(storeInfo) && JSONObject.parseObject(storeInfo).containsKey("storeId")) {
             context.setResponseEntity(responseEntity);
             return;
         }
-        context.setResponseEntity(new ResponseEntity<>("初始化商户", HttpStatus.FORBIDDEN));
+        //todo 说明是业主 返回空即可
+        context.setResponseEntity(ResultVo.success());
     }
 }
