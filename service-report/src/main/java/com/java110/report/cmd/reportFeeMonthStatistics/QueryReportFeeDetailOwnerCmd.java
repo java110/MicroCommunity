@@ -105,10 +105,12 @@ public class QueryReportFeeDetailOwnerCmd extends Cmd {
             return datas;
         }
 
-        BigDecimal oweFee = new BigDecimal(0.00);
-        BigDecimal receivedFee = new BigDecimal(0.00);
+        BigDecimal oweFee = null;
+        BigDecimal receivedFee = null;
         for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
             data = datas.getJSONObject(dataIndex);
+            oweFee = new BigDecimal(0.00);
+            receivedFee = new BigDecimal(0.00);
             for (Map info : infos) {
                 if (!data.get("ownerId").toString().equals(info.get("ownerId"))) {
                     continue;
