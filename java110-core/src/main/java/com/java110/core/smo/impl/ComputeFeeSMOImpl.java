@@ -1415,7 +1415,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
-        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //合同相关
+        }
+        else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //合同相关
             String computingFormula = feeDto.getComputingFormula();
 
             //查询合同关联房屋
