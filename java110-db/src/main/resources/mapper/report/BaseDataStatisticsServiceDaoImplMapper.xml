@@ -58,10 +58,10 @@
         t.room_sub_type,t.room_rent,t.room_area,t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea,
         f.floor_num floorNum,bu.unit_num unitNum,bo.name ownerName,bo.owner_id ownerId,bo.link
         from building_room t
-        left join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
-        left join building_owner bo on borr.owner_id = bo.owner_id and bo.status_cd = '0'
+        inner join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
+        left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
         where 1=1
         <if test="floorId != null and floorId != ''">
             and f.floor_id = #{floorId}
