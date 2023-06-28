@@ -337,7 +337,7 @@
         and pf.payer_obj_type = '3333'
         and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{endDate}
-        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        and t.detail_id = '-1'
         group by a.room_id
         ) a
     </select>
