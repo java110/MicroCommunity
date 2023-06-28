@@ -241,7 +241,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
     }
 
     @Override
-    public int computeOweFee(FeeDto feeDto) {
+    public int computeOweFee(@RequestBody FeeDto feeDto) {
         //刷入欠费金额
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 

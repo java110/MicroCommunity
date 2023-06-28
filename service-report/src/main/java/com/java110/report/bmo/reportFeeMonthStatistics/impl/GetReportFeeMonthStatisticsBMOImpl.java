@@ -402,6 +402,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     /**
      * 前台查询分页查询
+     *
      * @param reportFeeMonthStatisticsDto
      * @return
      */
@@ -992,16 +993,16 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
     }
 
     private void freshReportOweDay(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
+
+        int day = 0;
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
             try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                int day = DateUtil.daysBetween(DateUtil.getDateFromString(format.format(new Date()), DateUtil.DATE_FORMATE_STRING_A), DateUtil.getDateFromString(reportFeeMonthStatisticsDto.getFeeCreateTime(),
-                        DateUtil.DATE_FORMATE_STRING_A));
+                day = DateUtil.daysBetween(DateUtil.getDateFromStringA(reportFeeMonthStatisticsDto.getDeadlineTime()),
+                        DateUtil.getDateFromStringA(reportFeeMonthStatisticsDto.getFeeCreateTime()));
                 reportFeeMonthStatisticsDto.setOweDay(day);
             } catch (Exception e) {
                 logger.error("计算欠费天数失败", e);
             }
-
         }
     }
 
