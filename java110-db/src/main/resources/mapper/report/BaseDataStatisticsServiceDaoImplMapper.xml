@@ -9,10 +9,10 @@
 
         select count(1) count
         from building_room t
-        left join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        left join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
-        left join building_owner bo on borr.owner_id = bo.owner_id and bo.status_cd = '0'
+        inner join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
+        left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
         where 1=1
         <if test="floorId != null and floorId != ''">
             and f.floor_id = #{floorId}
