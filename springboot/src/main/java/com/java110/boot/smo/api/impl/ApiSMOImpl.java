@@ -55,6 +55,7 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
         }
 
         JSONObject storeInfo = JSONObject.parseObject(responseEntity.getBody().toString());
+        //todo 说明是业主直接返回
         if (!storeInfo.containsKey("storeId")) {
             return new ComponentValidateResult("", "", "", pd.getUserId(), pd.getUserName());
         }
@@ -68,7 +69,7 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
         //开发者和运营不校验小区
-        if(StoreDto.STORE_TYPE_ADMIN.equals(storeTypeCd) || StoreDto.STORE_TYPE_DEV.equals(storeTypeCd)){
+        if (StoreDto.STORE_TYPE_ADMIN.equals(storeTypeCd) || StoreDto.STORE_TYPE_DEV.equals(storeTypeCd)) {
             return new ComponentValidateResult(storeId, storeTypeCd, "", pd.getUserId(), pd.getUserName());
         }
 
@@ -95,7 +96,7 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
             headers.remove("user_id");
             headers.put("user-id", result.getUserId());
             headers.put("user_id", result.getUserId());
-            headers.put("login-user-id",result.getLoginUserId());
+            headers.put("login-user-id", result.getLoginUserId());
         }
         // todo 如果 商户不为空则 商户ID写入只头信息中 这里的商户ID 可以是物业ID 或者商家ID
         if (!StringUtil.isEmpty(result.getStoreId())) {
