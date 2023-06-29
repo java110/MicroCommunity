@@ -56,6 +56,11 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
     @Override
     public void doGeneratorOrRefreshAllFeeMonth(String communityId) {
 
+        //todo 清理 pay_fee_detail_month
+        PayFeeDetailMonthPo payFeeDetailMonthPo = new PayFeeDetailMonthPo();
+        payFeeDetailMonthPo.setCommunityId(communityId);
+        payFeeDetailMonthInnerServiceSMOImpl.deletePayFeeDetailMonth(payFeeDetailMonthPo);
+
 
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(communityId);
