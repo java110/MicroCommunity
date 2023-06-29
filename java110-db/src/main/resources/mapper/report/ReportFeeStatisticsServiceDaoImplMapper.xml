@@ -403,7 +403,7 @@
         and pf.payer_obj_type = '3333'
         and t.community_id= a.community_id
         and t.cur_month_time &lt; #{endDate}
-        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        and detail_id = '-1'
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -558,7 +558,7 @@
         and pf.payer_obj_type = '3333'
         and t.community_id= a.community_id
         and t.cur_month_time &lt; #{endDate}
-        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        and t.detail_id = '-1'
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
