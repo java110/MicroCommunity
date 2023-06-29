@@ -638,9 +638,8 @@
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
-        and t.pay_fee_time &gt; #{startDate}
-        and t.pay_fee_time &lt; #{endDate}
-        and t.detail_id != '-1'
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
         <if test="configIds !=null ">
             and pf.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
