@@ -572,7 +572,7 @@
         select a.name,
         (
         select count(1) from (
-        select pf.fee_type_cd,a.room_id
+        select pf.fee_type_cd,t.obj_id
         from building_room a
         left join pay_fee_detail_month t on t.obj_id = a.room_id
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -599,7 +599,7 @@
         ) oweRoomCount,
         (
         select count(1) from (
-        select pf.fee_type_cd,a.room_id
+        select pf.fee_type_cd,t.obj_id
         from building_room a
         left join pay_fee_detail_month t on t.obj_id = a.room_id
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
