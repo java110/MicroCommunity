@@ -55,6 +55,7 @@ public class QueryReportConfigFeeSummaryCmd extends Cmd {
         BigDecimal feeRoomRate = null;
         BigDecimal hisOweFee = null;
         BigDecimal curReceivableFee = null;
+        BigDecimal hisReceivedFee = null;
         BigDecimal receivedFee = null;
         BigDecimal preReceivedFee = null;
         for (Map data : datas) {
@@ -71,7 +72,8 @@ public class QueryReportConfigFeeSummaryCmd extends Cmd {
             //todo 计算 收费率
             hisOweFee = new BigDecimal(Double.parseDouble(data.get("hisOweFee").toString()));
             curReceivableFee = new BigDecimal(Double.parseDouble(data.get("curReceivableFee").toString()));
-            hisOweFee = curReceivableFee.add(hisOweFee);
+            hisReceivedFee = new BigDecimal(Double.parseDouble(data.get("hisReceivedFee").toString()));
+            hisOweFee = curReceivableFee.add(hisOweFee).add(hisReceivedFee);
 
             if (hisOweFee.doubleValue() > 0) {
                 receivedFee = new BigDecimal(Double.parseDouble(data.get("receivedFee").toString()));
