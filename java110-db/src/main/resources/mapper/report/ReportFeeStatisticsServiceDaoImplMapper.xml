@@ -524,7 +524,7 @@
         and bu.floor_id = a.floor_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
-        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &gt;= #{startDate}
         and t.cur_month_time &lt; #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
@@ -689,7 +689,7 @@
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
-        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &gt;= #{startDate}
         and t.cur_month_time &lt; #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
