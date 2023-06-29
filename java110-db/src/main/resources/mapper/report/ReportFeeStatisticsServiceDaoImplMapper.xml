@@ -581,7 +581,7 @@
         1=1
         and a.status_cd = '0'
         and pf.payer_obj_type = '3333'
-        and t.community_id= a.community_id
+        and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id = '-1'
         <if test="configIds !=null ">
