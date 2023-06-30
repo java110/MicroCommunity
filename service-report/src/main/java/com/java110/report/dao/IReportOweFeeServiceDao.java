@@ -45,7 +45,7 @@ public interface IReportOweFeeServiceDao {
      */
     void updateReportOweFeeInfo(Map info) throws DAOException;
 
-    void deleteReportOweFeeInfo(Map info) throws DAOException;
+    int deleteReportOweFeeInfo(Map info) throws DAOException;
 
 
     /**
