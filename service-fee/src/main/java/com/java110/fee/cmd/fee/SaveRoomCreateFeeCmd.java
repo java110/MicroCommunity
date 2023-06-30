@@ -14,6 +14,7 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFee.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.fee.IFeeBMO;
+import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -68,6 +69,9 @@ public class SaveRoomCreateFeeCmd extends Cmd {
     @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeMonth payFeeMonthImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -104,11 +108,11 @@ public class SaveRoomCreateFeeCmd extends Cmd {
             }
         }
 
-        if (FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeConfigDtos.get(0).getComputingFormula())){
+        if (FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeConfigDtos.get(0).getComputingFormula())) {
             Assert.hasKeyAndValue(reqJson, "rateCycle", "未包含递增周期");
             Assert.hasKeyAndValue(reqJson, "rate", "未包含递增率");
             Assert.hasKeyAndValue(reqJson, "rateStartTime", "未包含递增开始时间");
-            reqJson.put("configComputingFormula",feeConfigDtos.get(0).getComputingFormula());
+            reqJson.put("configComputingFormula", feeConfigDtos.get(0).getComputingFormula());
         }
 
 
@@ -128,8 +132,7 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         /*if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
             roomDto.setState(RoomDto.STATE_SELL);
         }*/
-        if (reqJson.containsKey("roomState")
-                && (reqJson.getString("roomState").contains(",") || !StringUtil.isEmpty(reqJson.getString("roomState")))) {
+        if (reqJson.containsKey("roomState") && (reqJson.getString("roomState").contains(",") || !StringUtil.isEmpty(reqJson.getString("roomState")))) {
             String states = reqJson.getString("roomState");
             roomDto.setStates(states.split(","));
         }
@@ -227,27 +230,24 @@ public class SaveRoomCreateFeeCmd extends Cmd {
             feePos.add(BeanConvertUtil.covertBean(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context), PayFeePo.class));
             if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
                 if (!FeeDto.FEE_FLAG_CYCLE.equals(reqJson.getString("feeFlag"))) {
-                    feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
-                            reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
+                    feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
                 }
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
             }
 
-            //定制开发 加入
+            //todo 定制开发 加入
             //1、对合同约定的租金递增比例、递增年限各不相同的问题，支持按合同到期日期设租金递增比例。
             //2、能自动设置递增的租金实行自动计算当月的租金。
-            if(reqJson.containsKey("configComputingFormula")
-                    && FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(reqJson.getString("configComputingFormula"))){
+            if (reqJson.containsKey("configComputingFormula") && FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(reqJson.getString("configComputingFormula"))) {
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE_CYCLE, reqJson.getString("rateCycle")));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE, reqJson.getString("rate")));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE_START_TIME, reqJson.getString("rateStartTime")));
             }
 
             //付费对象名称
-            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME,
-                    roomDtos.get(roomIndex).getFloorNum() + "-" + roomDtos.get(roomIndex).getUnitNum() + "-" + roomDtos.get(roomIndex).getRoomNum()));
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME, roomDtos.get(roomIndex).getFloorNum() + "-" + roomDtos.get(roomIndex).getUnitNum() + "-" + roomDtos.get(roomIndex).getRoomNum()));
 
             if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
                 saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
@@ -275,12 +275,22 @@ public class SaveRoomCreateFeeCmd extends Cmd {
     }
 
     private int saveFeeAndAttrs(List<PayFeePo> feePos, List<FeeAttrPo> feeAttrsPos) {
+        if (feePos == null || feePos.size() < 1) {
+            return 1;
+        }
         int flag = feeInnerServiceSMOImpl.saveFee(feePos);
         if (flag < 1) {
             return flag;
         }
 
         flag = feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
+
+        // todo 这里异步的方式计算 月数据 和欠费数据
+        List<String> feeIds = new ArrayList<>();
+        for (PayFeePo feePo : feePos) {
+            feeIds.add(feePo.getFeeId());
+        }
+        payFeeMonthImpl.doGeneratorFeeMonths(feeIds, feePos.get(0).getCommunityId());
 
         return flag;
     }

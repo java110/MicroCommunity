@@ -148,7 +148,19 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
         doGeneratorOrRefreshFeeMonth(tmpFeeDtos.get(0), communityId);
     }
 
-
+    /**
+     * 生成多个费用 并 离散到月
+     *
+     * @param feeIds
+     * @param communityId
+     */
+    @Override
+    @Async
+    public void doGeneratorFeeMonths(List<String> feeIds, String communityId) {
+        for (String feeId : feeIds) {
+            doGeneratorOrRefreshFeeMonth(feeId, communityId);
+        }
+    }
 
 
     /**
@@ -197,7 +209,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
         //todo 处理 endTime 到 deadlineTime 的费用
         Date deadlineTime = computeFeeSMOImpl.getDeadlineTime(feeDto);
-        payFeeMonthHelp.waitDispersedOweFee(feeDto,payFeeMonthOwnerDto,feePrice,deadlineTime);
+        payFeeMonthHelp.waitDispersedOweFee(feeDto, payFeeMonthOwnerDto, feePrice, deadlineTime);
 
     }
 
