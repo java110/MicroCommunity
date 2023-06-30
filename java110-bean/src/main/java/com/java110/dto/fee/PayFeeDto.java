@@ -1,5 +1,7 @@
 package com.java110.dto.fee;
 
+import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 
 /**
@@ -10,7 +12,7 @@ import java.io.Serializable;
  * @Version 1.0
  * add by wuxw 2020/5/27
  **/
-public class PayFeeDto implements Serializable {
+public class PayFeeDto extends PageDto implements Serializable {
 
     private String feeId;
     private String feeTypeCd;

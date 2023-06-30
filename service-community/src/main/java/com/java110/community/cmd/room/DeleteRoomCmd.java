@@ -143,7 +143,7 @@ public class DeleteRoomCmd extends Cmd {
      * @param roomPo
      */
     private void unbindOwnerRoomRel(RoomPo roomPo) {
-        if (StringUtil.isJsonObject(roomPo.getRoomId())) {
+        if (StringUtil.isEmpty(roomPo.getRoomId())) {
             throw new CmdException("房屋ID不能为空");
         }
 
@@ -168,7 +168,7 @@ public class DeleteRoomCmd extends Cmd {
      * @param roomPo
      */
     private void deleteRoomFee(RoomPo roomPo) {
-        if (StringUtil.isJsonObject(roomPo.getRoomId())) {
+        if (StringUtil.isEmpty(roomPo.getRoomId())) {
             throw new CmdException("房屋ID不能为空");
         }
         PayFeeDto feeDto = new PayFeeDto();
