@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 此类主要用于调优，使用 打印bean的加载时间
  */
-@Component
+//@Component
 public class BeanInitCostTimeBeanPostProcessor implements BeanPostProcessor {
 
 
