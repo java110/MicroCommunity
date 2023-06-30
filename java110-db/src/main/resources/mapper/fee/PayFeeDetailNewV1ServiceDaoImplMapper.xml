@@ -116,12 +116,6 @@
         <if test="endTime !=null and endTime != ''">
             , t.end_time= #{endTime}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
-        <if test="feeId !=null and feeId != ''">
-            , t.fee_id= #{feeId}
-        </if>
         <if test="payOrderId !=null and payOrderId != ''">
             , t.pay_order_id= #{payOrderId}
         </if>

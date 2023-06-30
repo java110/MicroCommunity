@@ -3,6 +3,7 @@ package com.java110.user.cmd.owner;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -44,7 +45,7 @@ public class DeleteOwnerCarsCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
+        Environment.isDevEnv();
 
         Assert.hasKeyAndValue(reqJson, "carId", "carId不能为空");
         Assert.hasKeyAndValue(reqJson, "memberId", "memberId不能为空");
