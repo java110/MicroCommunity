@@ -32,8 +32,6 @@ public class PayFeeDto extends PageDto implements Serializable {
     private String createTime;
     private String batchId;
 
-    private int page;
-    private int row;
 
     public String getFeeId() {
         return feeId;
@@ -161,21 +159,5 @@ public class PayFeeDto extends PageDto implements Serializable {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
     }
 }
