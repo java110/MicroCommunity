@@ -166,7 +166,7 @@
     </update>
 
     <!-- 删除离散数据 -->
-    <update id="deletePayFeeDetailMonthInfo" parameterType="Map">
+    <delete id="deletePayFeeDetailMonthInfo" parameterType="Map">
         delete from pay_fee_detail_month
         where 1=1
         and community_id= #{communityId}
@@ -179,7 +179,7 @@
         <if test="detailId !=null and detailId != ''">
             and detail_id= #{detailId}
         </if>
-    </update>
+    </delete>
 
     <!-- 查询月缴费表数量 add by wuxw 2018-07-03 -->
     <select id="queryPayFeeDetailMonthsCount" parameterType="Map" resultType="Map">
