@@ -157,7 +157,7 @@
 
 
     <!-- 修改欠费统计信息 add by wuxw 2018-07-03 -->
-    <update id="deleteReportOweFeeInfo" parameterType="Map">
+    <delete id="deleteReportOweFeeInfo" parameterType="Map">
         delete from report_owe_fee
         where 1=1
         <if test="oweId !=null and oweId != ''">
@@ -169,7 +169,7 @@
         <if test="communityId !=null and communityId != ''">
             and community_id= #{communityId}
         </if>
-    </update>
+    </delete>
 
 
     <!-- 查询欠费统计数量 add by wuxw 2018-07-03 -->
