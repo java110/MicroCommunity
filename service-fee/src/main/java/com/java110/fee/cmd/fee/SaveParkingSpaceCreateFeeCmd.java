@@ -15,6 +15,7 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.payFee.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.fee.IFeeBMO;
+import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
@@ -61,6 +62,9 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeMonth payFeeMonthImpl;
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -110,9 +114,6 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
 
         if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
-//            ownerCarDto.setCommunityId(reqJson.getString("communityId"));
-//            ownerCarDto.setValid("1");
-//            ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
             reqJson.put("locationObjId", "");//刷成空
             ownerCarDtos = getOwnerCarByParkingArea(reqJson);
         } else if ("2000".equals(reqJson.getString("locationTypeCd"))) {//车辆
@@ -286,6 +287,13 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
         }
 
         flag = feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
+
+        // todo 这里异步的方式计算 月数据 和欠费数据
+        List<String> feeIds = new ArrayList<>();
+        for (PayFeePo feePo : feePos) {
+            feeIds.add(feePo.getFeeId());
+        }
+        payFeeMonthImpl.doGeneratorFeeMonths(feeIds, feePos.get(0).getCommunityId());
 
         return flag;
     }
