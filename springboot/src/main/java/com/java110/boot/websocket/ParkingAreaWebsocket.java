@@ -139,7 +139,10 @@ public class ParkingAreaWebsocket {
      * 实现服务器主动推送
      */
     public void sendMessage(String message) throws IOException {
-        this.session.getBasicRemote().sendText(message);
+        synchronized (this.session) {
+            this.session.getBasicRemote().sendText(message);
+        }
+        //this.session.getBasicRemote().sendText(message);
     }
 
 
@@ -149,9 +152,10 @@ public class ParkingAreaWebsocket {
     public static void sendInfo(String message, String paId) throws IOException {
         logger.info("发送消息到:" + paId + "，报文:" + message);
         for (ParkingAreaWebsocket server : webSocketMap.values()) {
-            if (paId.equals(server.paId)) {
-                webSocketMap.get(server.clientId).sendMessage(message);
+            if (!paId.equals(server.paId)) {
+                continue;
             }
+            webSocketMap.get(server.clientId).sendMessage(message);
         }
     }
 
