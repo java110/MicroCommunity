@@ -85,6 +85,8 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     private String primeRateName;
 
+    private String feeFlag;
+
     public String getPrimeRate() {
         return primeRate;
     }
@@ -395,5 +397,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setCashierName(String cashierName) {
         this.cashierName = cashierName;
+    }
+
+    public String getFeeFlag() {
+        return feeFlag;
+    }
+
+    public void setFeeFlag(String feeFlag) {
+        this.feeFlag = feeFlag;
     }
 }

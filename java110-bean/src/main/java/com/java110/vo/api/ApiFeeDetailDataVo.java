@@ -51,6 +51,9 @@ public class ApiFeeDetailDataVo extends Vo {
 
     private String payerObjName;
 
+    private String feeFlag;
+
+
 
     public String getPrimeRate() {
         return primeRate;
@@ -266,5 +269,13 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setCashierName(String cashierName) {
         this.cashierName = cashierName;
+    }
+
+    public String getFeeFlag() {
+        return feeFlag;
+    }
+
+    public void setFeeFlag(String feeFlag) {
+        this.feeFlag = feeFlag;
     }
 }
