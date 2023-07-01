@@ -6,125 +6,158 @@ import java.util.Date;
 public class ReportOweFeePo implements Serializable {
 
     private String configName;
-private String deadlineTime;
-private String ownerTel;
-private String updateTime;
-private String statusCd = "0";
-private String oweId;
-private String ownerId;
-private String feeId;
-private String amountOwed;
-private String payerObjName;
-private String ownerName;
-private String configId;
-private String feeName;
-private String endTime;
-private String communityId;
-private String payerObjType;
-private String payerObjId;
-public String getConfigName() {
+    private String deadlineTime;
+    private String ownerTel;
+    private String updateTime;
+    private String statusCd = "0";
+    private String oweId;
+    private String ownerId;
+    private String feeId;
+    private String amountOwed;
+    private String payerObjName;
+    private String ownerName;
+    private String configId;
+    private String feeName;
+    private String endTime;
+    private String communityId;
+    private String payerObjType;
+    private String payerObjId;
+
+    public String getConfigName() {
         return configName;
     }
-public void setConfigName(String configName) {
+
+    public void setConfigName(String configName) {
         this.configName = configName;
     }
-public String getDeadlineTime() {
+
+    public String getDeadlineTime() {
         return deadlineTime;
     }
-public void setDeadlineTime(String deadlineTime) {
+
+    public void setDeadlineTime(String deadlineTime) {
         this.deadlineTime = deadlineTime;
     }
-public String getOwnerTel() {
+
+    public String getOwnerTel() {
         return ownerTel;
     }
-public void setOwnerTel(String ownerTel) {
+
+    public void setOwnerTel(String ownerTel) {
         this.ownerTel = ownerTel;
     }
-public String getUpdateTime() {
+
+    public String getUpdateTime() {
         return updateTime;
     }
-public void setUpdateTime(String updateTime) {
+
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getOweId() {
+
+    public String getOweId() {
         return oweId;
     }
-public void setOweId(String oweId) {
+
+    public void setOweId(String oweId) {
         this.oweId = oweId;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-public String getAmountOwed() {
+
+    public String getAmountOwed() {
         return amountOwed;
     }
-public void setAmountOwed(String amountOwed) {
+
+    public void setAmountOwed(String amountOwed) {
         this.amountOwed = amountOwed;
     }
-public String getPayerObjName() {
+
+    public String getPayerObjName() {
         return payerObjName;
     }
-public void setPayerObjName(String payerObjName) {
+
+    public void setPayerObjName(String payerObjName) {
         this.payerObjName = payerObjName;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getFeeName() {
+
+    public String getFeeName() {
         return feeName;
     }
-public void setFeeName(String feeName) {
+
+    public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getPayerObjType() {
+
+    public String getPayerObjType() {
         return payerObjType;
     }
-public void setPayerObjType(String payerObjType) {
+
+    public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
     }
-public String getPayerObjId() {
+
+    public String getPayerObjId() {
         return payerObjId;
     }
-public void setPayerObjId(String payerObjId) {
+
+    public void setPayerObjId(String payerObjId) {
         this.payerObjId = payerObjId;
     }
-
 
 
 }

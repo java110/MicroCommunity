@@ -114,6 +114,29 @@ public class PayFeeDetailMonthInnerServiceSMOImpl extends BaseServiceSMO impleme
         return payFeeDetailMonths;
     }
 
+    /**
+     * 专门给页面使用 主要为了查询出费用相关的一些信息
+     * @param payFeeDetailMonthDto
+     * @return
+     */
+    @Override
+    public List<PayFeeDetailMonthDto> queryPagePayFeeDetailMonths(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto) {
+        List<PayFeeDetailMonthDto> payFeeDetailMonths = BeanConvertUtil.covertBeanList(payFeeDetailMonthServiceDaoImpl.queryPagePayFeeDetailMonths(BeanConvertUtil.beanCovertMap(payFeeDetailMonthDto)), PayFeeDetailMonthDto.class);
+
+        return payFeeDetailMonths;
+    }
+
+    @Override
+    public int queryPagePayFeeDetailMonthsCount(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto) {
+
+        int page = payFeeDetailMonthDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            payFeeDetailMonthDto.setPage((page - 1) * payFeeDetailMonthDto.getRow());
+        }
+        return payFeeDetailMonthServiceDaoImpl.queryPagePayFeeDetailMonthsCount(BeanConvertUtil.beanCovertMap(payFeeDetailMonthDto));
+    }
+
     public IPayFeeDetailMonthServiceDao getPayFeeDetailMonthServiceDaoImpl() {
         return payFeeDetailMonthServiceDaoImpl;
     }

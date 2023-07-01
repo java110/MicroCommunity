@@ -64,6 +64,9 @@
     <logger name="org.springframework" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>
+    <logger name="org.quartz" level="DEBUG">
+        <appender-ref ref="STDOUT_FILE"/>
+    </logger>
     <logger name="com.java110.order" level="ERROR">
         <appender-ref ref="STDOUT_FILE"/>
     </logger>

@@ -2,6 +2,7 @@ package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -13,8 +14,10 @@ import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.reportFee.ReportOweFeePo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -44,9 +47,13 @@ public class DeleteFeeCmd extends Cmd {
     @Autowired
     private IPayFeeMonth payFeeMonthImpl;
 
+    @Autowired
+    private IReportOweFeeInnerServiceSMO reportOweFeeInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        // super.validatePageInfo(pd);
+        Environment.isDevEnv();
+
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         Assert.hasKeyAndValue(reqJson, "feeId", "未包含feeId");
 
@@ -97,6 +104,12 @@ public class DeleteFeeCmd extends Cmd {
                 throw new IllegalArgumentException("删除失败");
             }
         }
+
+        // todo 删除欠费信息
+        ReportOweFeePo reportOweFeePo = new ReportOweFeePo();
+        reportOweFeePo.setFeeId(payFeePo.getFeeId());
+        reportOweFeePo.setCommunityId(payFeePo.getCommunityId());
+        reportOweFeeInnerServiceSMOImpl.deleteReportOweFee(reportOweFeePo);
 
         //todo 离散的月
         payFeeMonthImpl.deleteFeeMonth(payFeePo.getFeeId(),payFeePo.getCommunityId());

@@ -66,4 +66,15 @@ public interface IPayFeeDetailMonthInnerServiceSMO {
      */
     @RequestMapping(value = "/getWaitDispersedFeeDetail", method = RequestMethod.POST)
     List<FeeDetailDto> getWaitDispersedFeeDetail(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto);
+
+    /**
+     * 专门给页面展示使用
+     * @param payFeeDetailMonthDto
+     * @return
+     */
+    @RequestMapping(value = "/queryPagePayFeeDetailMonths", method = RequestMethod.POST)
+    List<PayFeeDetailMonthDto> queryPagePayFeeDetailMonths(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto);
+
+    @RequestMapping(value = "/queryPagePayFeeDetailMonthsCount", method = RequestMethod.POST)
+    int queryPagePayFeeDetailMonthsCount(@RequestBody PayFeeDetailMonthDto payFeeDetailMonthDto);
 }

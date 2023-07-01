@@ -1,5 +1,7 @@
 package com.java110.dto.fee;
 
+import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 
 /**
@@ -10,7 +12,7 @@ import java.io.Serializable;
  * @Version 1.0
  * add by wuxw 2020/5/27
  **/
-public class PayFeeDto implements Serializable {
+public class PayFeeDto extends PageDto implements Serializable {
 
     private String feeId;
     private String feeTypeCd;
@@ -30,8 +32,6 @@ public class PayFeeDto implements Serializable {
     private String createTime;
     private String batchId;
 
-    private int page;
-    private int row;
 
     public String getFeeId() {
         return feeId;
@@ -159,21 +159,5 @@ public class PayFeeDto implements Serializable {
 
     public void setBatchId(String batchId) {
         this.batchId = batchId;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
     }
 }

@@ -98,7 +98,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String feeTypeCd = reqJson.getString("feeTypeCd");//费用大类
         String storeId = reqJson.getString("storeId");
         String userId = reqJson.getString("userId");
-        String feeName = reqJson.getString("feeName").trim();
+        String feeName = reqJson.getString("feeName");
         String batchId = reqJson.getString("batchId");
 
 
@@ -116,6 +116,10 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
 
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
+        }
+
+        if(!StringUtil.isEmpty(feeName)){
+            feeName = feeName.trim();
         }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
@@ -327,7 +331,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         }
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setFeeName(feeName);
+        feeConfigDto.setFeeNameEq(feeName);
         feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
@@ -506,7 +510,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         }
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setFeeName(feeName);
+        feeConfigDto.setFeeNameEq(feeName);
         feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
@@ -670,7 +674,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         payFeeConfigPo.setFeeFlag("2006012");
         payFeeConfigPo.setIsDefault("F");
         payFeeConfigPo.setPaymentCd("2100");
-        payFeeConfigPo.setFeeName(feeConfigDto.getFeeName());
+        payFeeConfigPo.setFeeName(feeConfigDto.getFeeNameEq());
         payFeeConfigPo.setSquarePrice("0");
         payFeeConfigPo.setPaymentCycle("1");
         payFeeConfigPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));

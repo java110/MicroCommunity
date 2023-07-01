@@ -120,11 +120,11 @@ public class ReportFeeDetailOwnerAdapt implements IExportDataAdapt {
             row.createCell(3).setCellValue(dataObj.getString("receivedFee"));
 
             for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-                oweFee = dataObj.getString("oweFee" + dictDtos.get(0).getStatusCd());
+                oweFee = dataObj.getString("oweFee" + dictDtos.get(dictIndex).getStatusCd());
                 if (StringUtil.isEmpty(oweFee)) {
                     oweFee = "0";
                 }
-                receivedFee = dataObj.getString("receivedFee" + dictDtos.get(0).getStatusCd());
+                receivedFee = dataObj.getString("receivedFee" + dictDtos.get(dictIndex).getStatusCd());
                 if (StringUtil.isEmpty(receivedFee)) {
                     receivedFee = "0";
                 }
@@ -155,7 +155,6 @@ public class ReportFeeDetailOwnerAdapt implements IExportDataAdapt {
         ownerDto.setRow(queryStatisticsDto.getRow());
         return ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
     }
-
 
     /**
      * 计算业主欠费 实收费用
@@ -188,17 +187,19 @@ public class ReportFeeDetailOwnerAdapt implements IExportDataAdapt {
             return datas;
         }
 
-        BigDecimal oweFee = new BigDecimal(0.00);
-        BigDecimal receivedFee = new BigDecimal(0.00);
+        BigDecimal oweFee = null;
+        BigDecimal receivedFee = null;
         for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
             data = datas.getJSONObject(dataIndex);
+            oweFee = new BigDecimal(0.00);
+            receivedFee = new BigDecimal(0.00);
             for (Map info : infos) {
                 if (!data.get("ownerId").toString().equals(info.get("ownerId"))) {
                     continue;
                 }
 
                 oweFee = oweFee.add(new BigDecimal(info.get("oweFee").toString()));
-                receivedFee = oweFee.add(new BigDecimal(info.get("receivedFee").toString()));
+                receivedFee = receivedFee.add(new BigDecimal(info.get("receivedFee").toString()));
                 data.put("oweFee" + info.get("feeTypeCd").toString(), info.get("oweFee"));
                 data.put("receivedFee" + info.get("feeTypeCd").toString(), info.get("receivedFee"));
                 data.put("objName", info.get("objName"));

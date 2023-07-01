@@ -33,4 +33,19 @@ public class WechatNotifyPaymentController {
         return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId,postInfo,communityId));
 
     }
+
+    /**
+     * <p>支付回调Api</p>
+     *
+     * @param request
+     * @throws Exception
+     */
+    @RequestMapping(path = "/nativeWechat/{appId}/{communityId}", method = RequestMethod.POST)
+    public ResponseEntity<String> nativeNotify(@RequestBody String postInfo, @PathVariable String appId,@PathVariable String communityId, HttpServletRequest request) {
+
+        logger.debug("微信支付回调报文" + postInfo);
+
+        return notifyPaymentV1InnerServiceSMOImpl.nativeNotifyPayment(new NotifyPaymentOrderDto(appId,postInfo,communityId));
+
+    }
 }

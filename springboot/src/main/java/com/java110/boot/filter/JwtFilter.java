@@ -79,6 +79,7 @@ public class JwtFilter implements Filter {
 
         } catch (Exception e) {
             //response.sendRedirect("/flow/login");
+            logger.error("业务处理失败", e);
             noLogin(request,response);
         }
     }

@@ -14,6 +14,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,9 @@ public class QueryPrePaymentCmd extends Cmd {
      */
     private static void doObjNames(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
         for (ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            if(!StringUtil.isEmpty(tmpReportFeeMonthStatisticsDto.getObjName())){
+                continue;
+            }
             if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(tmpReportFeeMonthStatisticsDto.getPayerObjType())) {
                 tmpReportFeeMonthStatisticsDto.setObjName(tmpReportFeeMonthStatisticsDto.getFloorNum()
                         + "-" + tmpReportFeeMonthStatisticsDto.getUnitNum()

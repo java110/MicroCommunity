@@ -337,7 +337,7 @@
         and pf.payer_obj_type = '3333'
         and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{endDate}
-        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        and t.detail_id = '-1'
         group by a.room_id
         ) a
     </select>
@@ -403,7 +403,7 @@
         and pf.payer_obj_type = '3333'
         and t.community_id= a.community_id
         and t.cur_month_time &lt; #{endDate}
-        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        and detail_id = '-1'
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -524,7 +524,7 @@
         and bu.floor_id = a.floor_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
-        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &gt;= #{startDate}
         and t.cur_month_time &lt; #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
@@ -535,7 +535,32 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        ) curReceivableFee
+        ) curReceivableFee,
+        (
+        select ifnull(sum(t.received_amount),0.0) hisReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &lt; #{startDate}
+        and t.detail_id != '-1'
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        ) hisReceivedFee
         from f_floor a
         where 1=1
         and a.status_cd = '0'
@@ -547,7 +572,7 @@
         select a.name,
         (
         select count(1) from (
-        select pf.fee_type_cd,a.room_id
+        select pf.fee_type_cd,t.obj_id
         from building_room a
         left join pay_fee_detail_month t on t.obj_id = a.room_id
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -556,9 +581,9 @@
         1=1
         and a.status_cd = '0'
         and pf.payer_obj_type = '3333'
-        and t.community_id= a.community_id
+        and t.community_id= #{communityId}
         and t.cur_month_time &lt; #{endDate}
-        and (t.receivable_amount - t.received_amount - t.discount_amount) > 0
+        and t.detail_id = '-1'
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -574,7 +599,7 @@
         ) oweRoomCount,
         (
         select count(1) from (
-        select pf.fee_type_cd,a.room_id
+        select pf.fee_type_cd,t.obj_id
         from building_room a
         left join pay_fee_detail_month t on t.obj_id = a.room_id
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -609,7 +634,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = a.floor_id
+            and bu.floor_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -634,13 +659,14 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = a.floor_id
+            and bu.floor_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
         and t.cur_month_time &gt; #{endDate}
+        and t.detail_id != '-1'
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -660,7 +686,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = a.floor_id
+            and bu.floor_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -685,11 +711,11 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = a.floor_id
+            and bu.floor_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
-        and t.cur_month_time &gt; #{startDate}
+        and t.cur_month_time &gt;= #{startDate}
         and t.cur_month_time &lt; #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
@@ -698,7 +724,34 @@
             </foreach>
         </if>
         and pf.fee_type_cd = a.status_cd
-        ) curReceivableFee
+        ) curReceivableFee,
+        (
+        select ifnull(sum(t.received_amount),0.0) hisReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        <if test="floorId != null and floorId != ''">
+            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        </if>
+        where
+        1=1
+        <if test="floorId != null and floorId != ''">
+            and bu.floor_id = #{floorId}
+        </if>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &lt; #{startDate}
+        and t.detail_id != '-1'
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        and pf.fee_type_cd = a.status_cd
+        ) hisReceivedFee
         from t_dict a
         where 1=1
         and a.table_name = 'pay_fee_config'

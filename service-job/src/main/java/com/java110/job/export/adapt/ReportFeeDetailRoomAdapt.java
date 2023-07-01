@@ -118,11 +118,11 @@ public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
             row.createCell(3).setCellValue(dataObj.getString("receivedFee"));
 
             for(int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-                oweFee = dataObj.getString("oweFee"+dictDtos.get(0).getStatusCd());
+                oweFee = dataObj.getString("oweFee"+dictDtos.get(dictIndex).getStatusCd());
                 if(StringUtil.isEmpty(oweFee)){
                     oweFee = "0";
                 }
-                receivedFee = dataObj.getString("receivedFee"+dictDtos.get(0).getStatusCd());
+                receivedFee = dataObj.getString("receivedFee"+dictDtos.get(dictIndex).getStatusCd());
                 if(StringUtil.isEmpty(receivedFee)){
                     receivedFee = "0";
                 }
@@ -217,9 +217,11 @@ public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
             return datas;
         }
 
-        BigDecimal oweFee = new BigDecimal(0.00);
-        BigDecimal receivedFee = new BigDecimal(0.00);
+        BigDecimal oweFee = null;
+        BigDecimal receivedFee = null;
         for(int dataIndex = 0; dataIndex < datas.size();dataIndex ++){
+            oweFee = new BigDecimal(0.00);
+            receivedFee = new BigDecimal(0.00);
             data = datas.getJSONObject(dataIndex);
             for(Map info : infos){
                 if(!data.get("roomId").toString().equals(info.get("objId"))){
@@ -227,7 +229,7 @@ public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
                 }
 
                 oweFee = oweFee.add(new BigDecimal(info.get("oweFee").toString()));
-                receivedFee = oweFee.add(new BigDecimal(info.get("receivedFee").toString()));
+                receivedFee = receivedFee.add(new BigDecimal(info.get("receivedFee").toString()));
                 data.put("oweFee"+info.get("feeTypeCd").toString(),info.get("oweFee"));
                 data.put("receivedFee"+info.get("feeTypeCd").toString(),info.get("receivedFee"));
             }
@@ -237,4 +239,6 @@ public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
 
         return datas;
     }
+
+
 }

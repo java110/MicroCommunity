@@ -101,13 +101,15 @@
 
     </update>
 
-    <!-- 查询车辆支付数量 add by wuxw 2018-07-03 -->
+    <!-- 查询车辆支付数量 add by wuxw 2018-07-03 这两个注释 速度太慢
+            left join t_dict td on ci.state = td.status_cd and td.table_columns='state' and td.table_name = 'car_inout'
+        left join t_dict td1 on t.pay_type = td1.status_cd and td1.table_columns='pay_type' and td1.table_name = 'car_inout_payment'
+    -->
     <select id="queryCarInoutPaymentsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from car_inout_payment t
         left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id
-        left join t_dict td on ci.state = td.status_cd and td.table_columns='state' and td.table_name = 'car_inout'
-        left join t_dict td1 on t.pay_type = td1.status_cd and td1.table_columns='pay_type' and td1.table_name = 'car_inout_payment'
+
         where 1 =1
         <if test="realCharge !=null and realCharge != ''">
             and t.real_charge= #{realCharge}

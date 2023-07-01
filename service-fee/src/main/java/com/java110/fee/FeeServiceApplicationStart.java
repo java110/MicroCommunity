@@ -45,6 +45,7 @@ import java.nio.charset.Charset;
         "com.java110.intf.job",
         "com.java110.intf.acct",
         "com.java110.intf.common",
+        "com.java110.intf.report",
         "com.java110.intf.store"})
 public class FeeServiceApplicationStart {
 

@@ -212,50 +212,56 @@ public class ListFeeCmd extends Cmd {
 
     private void freshFeeAttrs(List<ApiFeeDataVo> fees, List<FeeDto> feeDtos) {
         String link = "";
+        //todo 影响查询性能 注释 by wuxw
+//        for (FeeDto feeDto : feeDtos) {
+//            if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋
+//                OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+//                ownerRoomRelDto.setRoomId(feeDto.getPayerObjId());
+//                List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+//                if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+//                    continue;
+//                }
+//                OwnerDto ownerDto = new OwnerDto();
+//                ownerDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
+//                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+//                Assert.listOnlyOne(ownerDtos, "查询业主错误！");
+//                link = ownerDtos.get(0).getLink();
+//            } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
+//                OwnerCarDto ownerCarDto = new OwnerCarDto();
+//                ownerCarDto.setMemberId(feeDto.getPayerObjId());
+//                List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+//                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆表错误！");
+//                OwnerDto ownerDto = new OwnerDto();
+//                ownerDto.setMemberId(ownerCarDtos.get(0).getOwnerId());
+//                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+//                Assert.listOnlyOne(ownerDtos, "查询业主错误！");
+//                link = ownerDtos.get(0).getLink();
+//            }
+//            FeeAttrDto feeAttrDto = new FeeAttrDto();
+//            feeAttrDto.setFeeId(feeDto.getFeeId());
+//            List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+//            if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+//                continue;
+//            }
+//            for (FeeAttrDto feeAttr : feeAttrDtos) {
+//                if (!FeeAttrDto.SPEC_CD_OWNER_LINK.equals(feeAttr.getSpecCd())) { //联系方式
+//                    continue;
+//                }
+//                if (feeAttr.getValue().equals(link)) {
+//                    continue;
+//                }
+//                FeeAttrPo feeAttrPo = new FeeAttrPo();
+//                feeAttrPo.setAttrId(feeAttr.getAttrId());
+//                feeAttrPo.setValue(link);
+//                int flag = feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
+//                if (flag < 1) {
+//                    throw new CmdException("更新业主联系方式失败");
+//                }
+//
+//            }
+//        }
         for (ApiFeeDataVo apiFeeDataVo : fees) {
             for (FeeDto feeDto : feeDtos) {
-                if (!StringUtil.isEmpty(feeDto.getPayerObjType()) && feeDto.getPayerObjType().equals("3333")) { //房屋
-                    OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-                    ownerRoomRelDto.setRoomId(feeDto.getPayerObjId());
-                    List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-                    if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() == 1) {
-                        OwnerDto ownerDto = new OwnerDto();
-                        ownerDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
-                        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-                        Assert.listOnlyOne(ownerDtos, "查询业主错误！");
-                        link = ownerDtos.get(0).getLink();
-                    } else {
-                        continue;
-                    }
-                } else if (!StringUtil.isEmpty(feeDto.getPayerObjType()) && feeDto.getPayerObjType().equals("6666")) {
-                    OwnerCarDto ownerCarDto = new OwnerCarDto();
-                    ownerCarDto.setCarId(feeDto.getPayerObjId());
-                    List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-                    Assert.listOnlyOne(ownerCarDtos, "查询业主车辆表错误！");
-                    OwnerDto ownerDto = new OwnerDto();
-                    ownerDto.setMemberId(ownerCarDtos.get(0).getOwnerId());
-                    List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-                    Assert.listOnlyOne(ownerDtos, "查询业主错误！");
-                    link = ownerDtos.get(0).getLink();
-                }
-                FeeAttrDto feeAttrDto = new FeeAttrDto();
-                feeAttrDto.setFeeId(feeDto.getFeeId());
-                List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
-                if (feeAttrDtos != null || feeAttrDtos.size() > 0) {
-                    for (FeeAttrDto feeAttr : feeAttrDtos) {
-                        if (!StringUtil.isEmpty(feeAttr.getSpecCd()) && feeAttr.getSpecCd().equals("390009")) { //联系方式
-                            if (!feeAttr.getValue().equals(link)) {
-                                FeeAttrPo feeAttrPo = new FeeAttrPo();
-                                feeAttrPo.setAttrId(feeAttr.getAttrId());
-                                feeAttrPo.setValue(link);
-                                int flag = feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
-                                if (flag < 1) {
-                                    throw new CmdException("更新业主联系方式失败");
-                                }
-                            }
-                        }
-                    }
-                }
                 if (apiFeeDataVo.getFeeId().equals(feeDto.getFeeId())) {
                     apiFeeDataVo.setFeeAttrs(feeDto.getFeeAttrDtos());
                 }
@@ -375,7 +381,6 @@ public class ListFeeCmd extends Cmd {
         computeFeeSMOImpl.dealRentRate(feeDto);
 
     }
-
 
 
     /**

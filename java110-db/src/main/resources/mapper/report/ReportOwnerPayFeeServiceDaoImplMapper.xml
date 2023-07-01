@@ -15,14 +15,15 @@
     </insert>
 
     <select id="queryReportOwnerMonthPayFees" parameterType="Map" resultType="Map">
-        select t.pf_year pfYear,t.pf_month pfMonth ,t.amount,t.fee_id feeId
-        from report_owner_pay_fee t
+        select t.detail_year pfYear,t.detail_month pfMonth,t.fee_id feeId,t.received_amount amount
+        from pay_fee_detail_month t
         where t.status_cd = '0'
+        and t.detail_id != '-1'
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
         </if>
         <if test="pfYear !=null and pfYear != ''">
-            and t.pf_year= #{pfYear}
+            and t.detail_year= #{pfYear}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -33,6 +34,7 @@
                 #{item}
             </foreach>
         </if>
+
     </select>
 
 

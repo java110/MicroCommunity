@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -79,6 +80,7 @@ public class DeleteOwnerCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        Environment.isDevEnv();
         Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
         if (!"1001".equals(reqJson.getString("ownerTypeCd"))) { //不是业主成员不管
