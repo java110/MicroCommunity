@@ -967,7 +967,7 @@
         ) roomCount,
         (
         select count(1) from (
-        select a.floor_id,br.room_id
+        select bu.floor_id,br.room_id
         from pay_fee_detail t
         INNER JOIN pay_fee pf1 on t.fee_id = pf1.fee_id and pf1.payer_obj_type='3333' and pf1.status_cd = '0'
         LEFT JOIN building_room br on pf1.payer_obj_id = br.room_id and br.status_cd = '0'
