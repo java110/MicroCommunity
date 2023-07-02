@@ -124,7 +124,7 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         // todo  nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
         infos = washInfos(infos);
 
-        BigDecimal receivedFee = new BigDecimal(0.00);
+        BigDecimal receivedFee = null;
         List<Map> itemFees = null;
         String feeTypeCd = "";
         data.put("receivedFee", "0");
@@ -132,6 +132,7 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         // todo 根据房屋ID 和payerObjId 比较 合并数据，讲费用大类 横向 放入 data中，
         // todo 并且计算每个 房屋 费用大类的欠费 和房屋的总欠费
         for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
+            receivedFee = new BigDecimal(0.00);
             data = datas.getJSONObject(dataIndex);
             //todo 这里循环费用大类
             for (Map info : infos) {
