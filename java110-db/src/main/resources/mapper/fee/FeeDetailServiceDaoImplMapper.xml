@@ -122,7 +122,7 @@
         importFeeName,pfc.fee_name feeName,t.payable_amount,t.payable_amount payableAmount,
         mw.cur_degrees curDegrees,mw.pre_degrees preDegrees, mw.pre_reading_time preReadingTime,mw.cur_reading_time
         curReadingTime,t.pay_order_id payOrderId,pfc.config_id configId,td.`name` primeRateName,pfao1.`value` payerObjName,
-        t.cashier_id cashierId,t.cashier_name cashierName
+        t.cashier_id cashierId,t.cashier_name cashierName,pfc.fee_flag feeFlag
         from pay_fee_detail t
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'

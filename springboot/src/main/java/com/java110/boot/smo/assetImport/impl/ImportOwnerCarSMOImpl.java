@@ -254,9 +254,13 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setName(ownerCarDto.getOwnerName());
             ownerDto.setLink(ownerCarDto.getLink());
+            ownerDto.setCommunityId(reqJson.getString("communityId"));
             //查询业主
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-            Assert.listOnlyOne(ownerDtos, ownerCarDto.getCarNum() + "查询业主信息错误！");
+            //Assert.listOnlyOne(ownerDtos, ownerCarDto.getCarNum() + "查询业主信息错误！");
+            if(ownerDtos == null || ownerDtos.size() < 1){
+                throw new IllegalArgumentException("业主不存在");
+            }
             ownerCarDto.setOwnerId(ownerDtos.get(0).getOwnerId());
         }
 

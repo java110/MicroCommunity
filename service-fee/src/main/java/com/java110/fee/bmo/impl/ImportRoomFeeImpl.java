@@ -207,6 +207,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
 
+            //todo 插入截止时间
             feeAttrPo = new FeeAttrPo();
             feeAttrPo.setCommunityId(communityId);
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
