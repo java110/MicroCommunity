@@ -978,7 +978,6 @@
         and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
-        and pf1.fee_type_cd = td.status_cd
         group by bu.floor_id,br.room_id
         ) b
         where b.floor_id = a.floor_id
