@@ -141,6 +141,9 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
                 if (!data.getString("roomId").equals(info.get("payerObjId"))) {
                     continue;
                 }
+                if(!info.containsKey("feeTypeCd")){
+                    continue;
+                }
                 feeTypeCd = info.get("feeTypeCd").toString();
                 oweFee = oweFee.add(new BigDecimal(info.get(feeTypeCd + "oweFee").toString()));
                 data.put("oweFee" + feeTypeCd, info.get(feeTypeCd));
