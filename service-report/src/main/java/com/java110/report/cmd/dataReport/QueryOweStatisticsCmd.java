@@ -79,17 +79,18 @@ public class QueryOweStatisticsCmd extends Cmd {
             return new ArrayList<>();
         }
 
-        BigDecimal receivedFee = new BigDecimal(0.00);
+        BigDecimal oweFee = null;
         for (Map tmpData : tmpDatas) {
+            oweFee = new BigDecimal(0.00);
             for (Map data : datas) {
                 if (!data.get("floorId").toString().equals(tmpData.get("floorId"))) {
                     continue;
                 }
 
-                receivedFee = receivedFee.add(new BigDecimal(data.get("oweFee").toString()));
+                oweFee = oweFee.add(new BigDecimal(data.get("oweFee").toString()));
                 tmpData.put("oweFee" + data.get("feeTypeCd").toString(), data.get("oweFee"));
             }
-            tmpData.put("oweFee", receivedFee.doubleValue());
+            tmpData.put("oweFee", oweFee.doubleValue());
         }
 
         return tmpDatas;
