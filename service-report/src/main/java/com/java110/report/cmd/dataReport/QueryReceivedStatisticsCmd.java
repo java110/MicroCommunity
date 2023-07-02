@@ -79,8 +79,9 @@ public class QueryReceivedStatisticsCmd extends Cmd {
             return new ArrayList<>();
         }
 
-        BigDecimal receivedFee = new BigDecimal(0.00);
+        BigDecimal receivedFee = null;
         for (Map tmpData : tmpDatas) {
+            receivedFee = new BigDecimal(0.00);
             for (Map data : datas) {
                 if (!data.get("floorId").toString().equals(tmpData.get("floorId"))) {
                     continue;
