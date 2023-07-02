@@ -249,7 +249,7 @@
         and t.community_id= #{communityId}
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
-        and t.cur_month_time &gt; #{endDate}
+        and t.cur_month_time &gt;= #{endDate}
     </select>
 
     <!-- 查询实收费用 -->
@@ -479,7 +479,7 @@
         and t.community_id= a.community_id
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
-        and t.cur_month_time &gt; #{endDate}
+        and t.cur_month_time &gt;= #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -665,7 +665,7 @@
         and t.community_id= #{communityId}
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt; #{endDate}
-        and t.cur_month_time &gt; #{endDate}
+        and t.cur_month_time &gt;= #{endDate}
         and t.detail_id != '-1'
         <if test="configIds !=null ">
             and t.config_id in
