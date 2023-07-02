@@ -127,13 +127,14 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
         // todo  nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
         infos = washInfos(infos);
 
-        BigDecimal oweFee = new BigDecimal(0.00);
+        BigDecimal oweFee = null;
         List<Map> itemFees = null;
         String feeTypeCd = "";
 
         // todo 根据房屋ID 和payerObjId 比较 合并数据，讲费用大类 横向 放入 data中，
         // todo 并且计算每个 房屋 费用大类的欠费 和房屋的总欠费
         for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
+            oweFee = new BigDecimal(0.00);
             data = datas.getJSONObject(dataIndex);
             //todo 这里循环费用大类
             for (Map info : infos) {
@@ -172,6 +173,9 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
                     continue;
                 }
                 tmpInfos = getTmpInfos(nInfo, info);
+                if (tmpInfos == null) {
+                    continue;
+                }
                 //todo 深拷贝
                 dInfo = new HashMap();
                 dInfo.putAll(info);
@@ -207,6 +211,9 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
     }
 
     private List<Map> getTmpInfos(Map nInfo, Map info) {
+        if (!info.containsKey("feeTypeCd")) {
+            return null;
+        }
         String feeTypeCd = info.get("feeTypeCd").toString();
         if (nInfo.containsKey(feeTypeCd)) {
             return (List<Map>) nInfo.get(feeTypeCd);
