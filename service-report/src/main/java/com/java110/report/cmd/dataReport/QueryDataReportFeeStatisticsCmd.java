@@ -103,8 +103,11 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
         data.put("freeCount", freeCount);
 
         // todo 查询 历史欠费
+        //这里设置查询月1日 不然历史和总欠费一样有点奇怪
+        queryStatisticsDto.setStartDate(DateUtil.getFormatTimeStringB(DateUtil.getFirstDate(reqJson.getString("startDate"))));
         double hisMonthOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
         data.put("hisMonthOweFee", hisMonthOweFee);
+        queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
 
         // todo 查询总欠费
         double oweFee = feeStatisticsImpl.getOweFee(queryStatisticsDto);
