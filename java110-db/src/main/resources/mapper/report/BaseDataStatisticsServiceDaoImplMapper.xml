@@ -114,10 +114,8 @@
         from building_room t
         inner join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        <if test="ownerId != null and ownerId != ''">
-            inner join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
-            left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
-        </if>
+        left join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
+        left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
         inner join pay_fee pf on t.room_id = pf.payer_obj_id and pf.payer_obj_type = '3333' and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
         where 1=1
@@ -236,10 +234,8 @@
         from building_room t
         inner join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
-        <if test="ownerId != null and ownerId != ''">
-            inner join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
-            left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
-        </if>
+        left join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
+        left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
         inner join report_owe_fee rof on t.room_id = rof.payer_obj_id and rof.payer_obj_type = '3333'
         where 1=1
         and rof.amount_owed > 0
