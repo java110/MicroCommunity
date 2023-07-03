@@ -67,10 +67,10 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         queryStatisticsDto.setLink(reqJson.getString("link"));
         queryStatisticsDto.setPage(reqJson.getInteger("page"));
         queryStatisticsDto.setRow(reqJson.getInteger("row"));
-        long count = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
+        long count = baseDataStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
         List<RoomDto> rooms = null;
         if (count > 0) {
-            rooms = baseDataStatisticsImpl.getRoomInfo(queryStatisticsDto);
+            rooms = baseDataStatisticsImpl.getReceivedRoomInfo(queryStatisticsDto);
         } else {
             rooms = new ArrayList<>();
         }

@@ -19,4 +19,20 @@ public interface IBaseDataStatisticsServiceDao {
      * @return
      */
     List<Map> getRoomInfo(Map info);
+
+    /**
+     * 查询实收房屋数
+     *
+     * @param info
+     * @return
+     */
+    int getReceivedRoomCount(Map info);
+
+    /**
+     * 查询实收房屋
+     *
+     * @param info
+     * @return
+     */
+    List<Map> getReceivedRoomInfo(Map info);
 }

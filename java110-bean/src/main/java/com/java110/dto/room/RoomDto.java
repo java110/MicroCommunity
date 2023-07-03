@@ -97,6 +97,10 @@ public class RoomDto extends PageDto implements Serializable {
 
     private String contractCount;
 
+    private String startDate;
+
+    private String endDate;
+
 
 
     public String getFeeCoefficient() {
@@ -521,5 +525,21 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setOwnerTel(String ownerTel) {
         this.ownerTel = ownerTel;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

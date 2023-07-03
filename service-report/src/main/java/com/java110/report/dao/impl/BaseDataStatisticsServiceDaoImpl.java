@@ -32,4 +32,30 @@ public class BaseDataStatisticsServiceDaoImpl extends BaseServiceDao implements 
         List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getRoomInfo", info);
         return infos;
     }
+
+    /**
+     * 查询实收房屋数
+     * @param info
+     * @return
+     */
+    @Override
+    public int getReceivedRoomCount(Map info) {
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getReceivedRoomCount", info);
+        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+    }
+
+    /**
+     * 查询实收房屋
+     * @param info
+     * @return
+     */
+    @Override
+    public List<Map> getReceivedRoomInfo(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getReceivedRoomInfo", info);
+        return infos;
+    }
 }

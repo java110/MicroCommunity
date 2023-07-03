@@ -59,4 +59,22 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
         List<Map> info = baseDataStatisticsServiceDaoImpl.getRoomInfo(BeanConvertUtil.beanCovertMap(roomDto));
         return BeanConvertUtil.covertBeanList(info, RoomDto.class);
     }
+
+    @Override
+    public long getReceivedRoomCount(@RequestBody RoomDto roomDto) {
+        int info = baseDataStatisticsServiceDaoImpl.getReceivedRoomCount(BeanConvertUtil.beanCovertMap(roomDto));
+        return info;
+    }
+
+    @Override
+    public List<RoomDto> getReceivedRoomInfo(@RequestBody RoomDto roomDto) {
+        int page = roomDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            roomDto.setPage((page - 1) * roomDto.getRow());
+        }
+
+        List<Map> info = baseDataStatisticsServiceDaoImpl.getReceivedRoomInfo(BeanConvertUtil.beanCovertMap(roomDto));
+        return BeanConvertUtil.covertBeanList(info, RoomDto.class);
+    }
 }

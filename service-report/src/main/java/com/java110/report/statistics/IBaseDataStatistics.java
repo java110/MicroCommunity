@@ -71,4 +71,18 @@ public interface IBaseDataStatistics {
      * @return
      */
     List<OwnerCarDto> getCar(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询实收房屋数
+     * @param queryStatisticsDto
+     * @return
+     */
+    long getReceivedRoomCount(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询实收房屋
+     * @param queryStatisticsDto
+     * @return
+     */
+    List<RoomDto> getReceivedRoomInfo(QueryStatisticsDto queryStatisticsDto);
 }
