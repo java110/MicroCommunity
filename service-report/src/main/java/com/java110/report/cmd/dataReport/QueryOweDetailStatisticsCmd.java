@@ -6,8 +6,10 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.dict.DictDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.report.QueryStatisticsDto;
+import com.java110.intf.dev.IDictV1InnerServiceSMO;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
@@ -36,6 +38,9 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
 
     @Autowired
     private IBaseDataStatistics baseDataStatisticsImpl;
+
+    @Autowired
+    private IDictV1InnerServiceSMO dictV1InnerServiceSMOImpl;
 
 
     @Override
@@ -131,6 +136,11 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
         List<Map> itemFees = null;
         String feeTypeCd = "";
 
+        DictDto dictDto = new DictDto();
+        dictDto.setTableName("pay_fee_config");
+        dictDto.setTableColumns("fee_type_cd_show");
+        List<DictDto> dictDtos = dictV1InnerServiceSMOImpl.queryDicts(dictDto);
+
         // todo 根据房屋ID 和payerObjId 比较 合并数据，讲费用大类 横向 放入 data中，
         // todo 并且计算每个 房屋 费用大类的欠费 和房屋的总欠费
         for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
@@ -141,12 +151,18 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
                 if (!data.getString("roomId").equals(info.get("payerObjId"))) {
                     continue;
                 }
-                if(!info.containsKey("feeTypeCd")){
-                    continue;
+//                if(!info.containsKey("feeTypeCd")){
+//                    continue;
+//                }
+                for (DictDto tDict : dictDtos) {
+                    //feeTypeCd = info.get("feeTypeCd").toString();
+                    feeTypeCd = tDict.getStatusCd();
+                    if (!info.containsKey(feeTypeCd)) {
+                        continue;
+                    }
+                    oweFee = oweFee.add(new BigDecimal(info.get(feeTypeCd + "oweFee").toString()));
+                    data.put("oweFee" + feeTypeCd, info.get(feeTypeCd));
                 }
-                feeTypeCd = info.get("feeTypeCd").toString();
-                oweFee = oweFee.add(new BigDecimal(info.get(feeTypeCd + "oweFee").toString()));
-                data.put("oweFee" + feeTypeCd, info.get(feeTypeCd));
             }
             data.put("oweFee", oweFee.doubleValue());
         }

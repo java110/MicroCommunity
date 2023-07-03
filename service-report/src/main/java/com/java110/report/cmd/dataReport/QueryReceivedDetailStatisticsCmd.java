@@ -6,8 +6,10 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.dict.DictDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.report.QueryStatisticsDto;
+import com.java110.intf.dev.IDictV1InnerServiceSMO;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
@@ -37,6 +39,8 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
     @Autowired
     private IBaseDataStatistics baseDataStatisticsImpl;
 
+    @Autowired
+    private IDictV1InnerServiceSMO dictV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -76,7 +80,7 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         }
 
         // todo 计算 房屋欠费实收数据
-        JSONArray datas = computeRoomOweReceivedFee(rooms,queryStatisticsDto);
+        JSONArray datas = computeRoomOweReceivedFee(rooms, queryStatisticsDto);
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) queryStatisticsDto.getRow()), count, datas);
 
@@ -90,7 +94,7 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
      * @param rooms
      * @return
      */
-    private JSONArray computeRoomOweReceivedFee(List<RoomDto> rooms,QueryStatisticsDto queryStatisticsDto) {
+    private JSONArray computeRoomOweReceivedFee(List<RoomDto> rooms, QueryStatisticsDto queryStatisticsDto) {
         if (rooms == null || rooms.size() < 1) {
             return new JSONArray();
         }
@@ -102,11 +106,11 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         for (RoomDto roomDto : rooms) {
             objIds.add(roomDto.getRoomId());
             data = new JSONObject();
-            data.put("roomId",roomDto.getRoomId());
-            data.put("roomName",roomDto.getFloorNum()+"-"+roomDto.getUnitNum()+"-"+roomDto.getRoomNum());
-            data.put("ownerName",roomDto.getOwnerName());
-            data.put("ownerId",roomDto.getOwnerId());
-            data.put("link",roomDto.getLink());
+            data.put("roomId", roomDto.getRoomId());
+            data.put("roomName", roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum());
+            data.put("ownerName", roomDto.getOwnerName());
+            data.put("ownerId", roomDto.getOwnerId());
+            data.put("link", roomDto.getLink());
             datas.add(data);
         }
 
@@ -124,12 +128,17 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         // todo  nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
         infos = washInfos(infos);
 
-        System.out.printf("infos = " + JSONObject.toJSONString(infos));
+        //System.out.printf("infos = " + JSONObject.toJSONString(infos));
 
         BigDecimal receivedFee = null;
         List<Map> itemFees = null;
         String feeTypeCd = "";
         data.put("receivedFee", "0");
+
+        DictDto dictDto = new DictDto();
+        dictDto.setTableName("pay_fee_config");
+        dictDto.setTableColumns("fee_type_cd_show");
+        List<DictDto> dictDtos = dictV1InnerServiceSMOImpl.queryDicts(dictDto);
 
         // todo 根据房屋ID 和payerObjId 比较 合并数据，讲费用大类 横向 放入 data中，
         // todo 并且计算每个 房屋 费用大类的欠费 和房屋的总欠费
@@ -141,9 +150,15 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
                 if (!data.getString("roomId").equals(info.get("payerObjId"))) {
                     continue;
                 }
-                feeTypeCd = info.get("feeTypeCd").toString();
-                receivedFee = receivedFee.add(new BigDecimal(info.get(feeTypeCd + "receivedFee").toString()));
-                data.put("receivedFee" + feeTypeCd, info.get(feeTypeCd));
+                for (DictDto tDict : dictDtos) {
+                    //feeTypeCd = info.get("feeTypeCd").toString();
+                    feeTypeCd = tDict.getStatusCd();
+                    if (!info.containsKey(feeTypeCd)) {
+                        continue;
+                    }
+                    receivedFee = receivedFee.add(new BigDecimal(info.get(feeTypeCd + "receivedFee").toString()));
+                    data.put("receivedFee" + feeTypeCd, info.get(feeTypeCd));
+                }
             }
             data.put("receivedFee", receivedFee.doubleValue());
         }
@@ -164,7 +179,6 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         for (Map info : infos) {
             generatorNewInfo(newInfos, info);
         }
-        System.out.printf("newInfos = " + JSONObject.toJSONString(newInfos));
 
 
         List<Map> tmpInfos = null;
