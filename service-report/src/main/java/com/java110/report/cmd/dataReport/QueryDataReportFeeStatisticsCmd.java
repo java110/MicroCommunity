@@ -107,9 +107,7 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
         long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
         data.put("roomCount", roomCount);
 
-        // todo 查询空置户数
-        long freeCount = baseDataStatisticsImpl.getFreeRoomCount(queryStatisticsDto);
-        data.put("freeCount", freeCount);
+
 
         // todo 查询 历史欠费
         //这里设置查询月1日 不然历史和总欠费一样有点奇怪
@@ -147,6 +145,10 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
         queryStatisticsDto.setEndDate(monthLastDate);
         double monthReceivedRoomCount = feeStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
         data.put("monthReceivedRoomCount", monthReceivedRoomCount);
+
+        // todo 查询收费户
+        long feeRoomCount = feeStatisticsImpl.getFeeRoomCount(queryStatisticsDto);
+        data.put("feeRoomCount", feeRoomCount);
 
         // todo 计算欠费户
         int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);

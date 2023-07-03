@@ -91,7 +91,7 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         //todo 房屋数
         long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
 
-        //todo 空闲房屋数
+        //todo 收费房屋数
         long feeRoomCount = feeStatisticsImpl.getFeeRoomCount(queryStatisticsDto);
 
         //todo 欠费户数
