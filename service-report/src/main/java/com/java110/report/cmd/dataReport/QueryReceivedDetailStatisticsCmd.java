@@ -124,6 +124,8 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         // todo  nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
         infos = washInfos(infos);
 
+        System.out.printf("infos = " + JSONObject.toJSONString(infos));
+
         BigDecimal receivedFee = null;
         List<Map> itemFees = null;
         String feeTypeCd = "";
@@ -162,6 +164,8 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         for (Map info : infos) {
             generatorNewInfo(newInfos, info);
         }
+        System.out.printf("newInfos = " + JSONObject.toJSONString(newInfos));
+
 
         List<Map> tmpInfos = null;
         Map dInfo = null;
@@ -170,6 +174,7 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
                 if (!nInfo.get("payerObjId").equals(info.get("payerObjId"))) {
                     continue;
                 }
+                //todo 根据feeTypeCd 去寻找
                 tmpInfos = getTmpInfos(nInfo, info);
                 //todo 深拷贝
                 dInfo = new HashMap();
