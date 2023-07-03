@@ -109,6 +109,8 @@
     <select id="getReceivedRoomCount" parameterType="Map" resultType="Map">
 
         select count(1) count
+        from
+        (select t.room_id
         from building_room t
         inner join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
@@ -157,10 +159,13 @@
         <if test="link != null and link != ''">
             and bo.link = #{link}
         </if>
+        group by t.room_id
+        ) a
     </select>
 
     <!-- 查询单月欠费 -->
     <select id="getReceivedRoomInfo" parameterType="Map" resultType="Map">
+        select a.* from (
         select t.fee_coefficient feeCoefficient,t.section,t.remark,t.user_id userId,
         t.room_id roomId,t.layer,t.built_up_area,t.built_up_area
         builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id
@@ -176,8 +181,8 @@
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
         where 1=1
         <if test="startDate != null and startDate != ''">
-        and pfd.create_time &gt;= #{startDate}
-        and pfd.create_time &lt;= #{endDate}
+            and pfd.create_time &gt;= #{startDate}
+            and pfd.create_time &lt;= #{endDate}
         </if>
         <if test="floorId != null and floorId != ''">
             and f.floor_id = #{floorId}
@@ -213,6 +218,11 @@
             and bo.link = #{link}
         </if>
         order by t.create_time desc
+        group by t.fee_coefficient ,t.section,t.remark,t.user_id ,
+        t.room_id ,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state,t.community_id,t.room_type,
+        t.room_sub_type,t.room_rent,t.room_area,t.room_rent,t.room_area,
+        f.floor_num ,bu.unit_num ,bo.name ,bo.owner_id ,bo.link
+        ) a
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
@@ -221,6 +231,8 @@
     <select id="getOweRoomCount" parameterType="Map" resultType="Map">
 
         select count(1) count
+        from
+        (select t.room_id
         from building_room t
         inner join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
@@ -265,10 +277,12 @@
         <if test="link != null and link != ''">
             and bo.link = #{link}
         </if>
+        ) a
     </select>
 
     <!-- 查询单月欠费 -->
     <select id="getOweRoomInfo" parameterType="Map" resultType="Map">
+        select a.* from (
         select t.fee_coefficient feeCoefficient,t.section,t.remark,t.user_id userId,
         t.room_id roomId,t.layer,t.built_up_area,t.built_up_area
         builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.b_id,t.b_id
@@ -317,6 +331,11 @@
             and bo.link = #{link}
         </if>
         order by t.create_time desc
+        group by t.fee_coefficient ,t.section,t.remark,t.user_id ,
+        t.room_id ,t.layer,t.built_up_area,t.room_num,t.unit_id,t.b_id,t.apartment,t.state,t.community_id,t.room_type,
+        t.room_sub_type,t.room_rent,t.room_area,t.room_rent,t.room_area,
+        f.floor_num ,bu.unit_num ,bo.name ,bo.owner_id ,bo.link
+        ) a
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>
