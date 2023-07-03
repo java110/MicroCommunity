@@ -277,6 +277,7 @@
         <if test="link != null and link != ''">
             and bo.link = #{link}
         </if>
+        group by t.room_id
         ) a
     </select>
 
