@@ -119,7 +119,7 @@
         inner join pay_fee pf on t.room_id = pf.payer_obj_id and pf.payer_obj_type = '3333' and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
         where 1=1
-        <if test="floorId != null and floorId != ''">
+        <if test="startDate != null and startDate != ''">
             and pfd.create_time &gt;= #{startDate}
             and pfd.create_time &lt;= #{endDate}
         </if>
@@ -175,7 +175,7 @@
         inner join pay_fee pf on t.room_id = pf.payer_obj_id and pf.payer_obj_type = '3333' and pf.status_cd = '0'
         inner join pay_fee_detail pfd on pf.fee_id = pfd.fee_id and pfd.status_cd = '0'
         where 1=1
-        <if test="floorId != null and floorId != ''">
+        <if test="startDate != null and startDate != ''">
         and pfd.create_time &gt;= #{startDate}
         and pfd.create_time &lt;= #{endDate}
         </if>
