@@ -85,4 +85,8 @@ public interface IBaseDataStatistics {
      * @return
      */
     List<RoomDto> getReceivedRoomInfo(QueryStatisticsDto queryStatisticsDto);
+
+    long getOweRoomCount(QueryStatisticsDto queryStatisticsDto);
+
+    List<RoomDto> getOweRoomInfo(QueryStatisticsDto queryStatisticsDto);
 }

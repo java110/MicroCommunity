@@ -69,10 +69,10 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
         queryStatisticsDto.setRow(reqJson.getInteger("row"));
 
         //todo 查询房屋信息
-        long count = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
+        long count = baseDataStatisticsImpl.getOweRoomCount(queryStatisticsDto);
         List<RoomDto> rooms = null;
         if (count > 0) {
-            rooms = baseDataStatisticsImpl.getRoomInfo(queryStatisticsDto);
+            rooms = baseDataStatisticsImpl.getOweRoomInfo(queryStatisticsDto);
         } else {
             rooms = new ArrayList<>();
         }

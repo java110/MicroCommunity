@@ -55,4 +55,10 @@ public interface IBaseDataStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/getReceivedRoomInfo", method = RequestMethod.POST)
     List<RoomDto> getReceivedRoomInfo(@RequestBody RoomDto roomDto);
+
+    @RequestMapping(value = "/getOweRoomCount", method = RequestMethod.POST)
+    long getOweRoomCount(@RequestBody RoomDto roomDto);
+
+    @RequestMapping(value = "/getOweRoomInfo", method = RequestMethod.POST)
+    List<RoomDto> getOweRoomInfo(@RequestBody RoomDto roomDto);
 }
