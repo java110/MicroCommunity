@@ -118,13 +118,17 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeName = IMPORT_FEE_NAME;
         }
 
-        if(!StringUtil.isEmpty(feeName)){
+        if (!StringUtil.isEmpty(feeName)) {
             feeName = feeName.trim();
         }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setFeeNameEq(feeName);
+        if (!StringUtil.isEmpty(tmpImportRoomFees.get(0).getConfigId())) {
+            feeConfigDto.setConfigId(tmpImportRoomFees.get(0).getConfigId());
+        } else {
+            feeConfigDto.setFeeNameEq(feeName);
+        }
         feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
@@ -326,13 +330,19 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String userId = reqJson.getString("userId");
         String feeName = reqJson.getString("feeName");
         String batchId = reqJson.getString("batchId");
+        JSONArray importCarFees = reqJson.getJSONArray("importCarFees");
 
+        List<ImportRoomFee> tmpImportCarFees = importCarFees.toJavaList(ImportRoomFee.class);
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
         }
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setFeeNameEq(feeName);
+        if (!StringUtil.isEmpty(tmpImportCarFees.get(0).getConfigId())) {
+            feeConfigDto.setConfigId(tmpImportCarFees.get(0).getConfigId());
+        } else {
+            feeConfigDto.setFeeNameEq(feeName);
+        }
         feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
@@ -346,9 +356,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         }
 
 
-        JSONArray importCarFees = reqJson.getJSONArray("importCarFees");
 
-        List<ImportRoomFee> tmpImportCarFees = importCarFees.toJavaList(ImportRoomFee.class);
 
         for (ImportRoomFee tmpImportCarFee : tmpImportCarFees) {
             tmpImportCarFee.setCommunityId(communityId);
@@ -506,12 +514,21 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         String feeName = reqJson.getString("feeName");
         String batchId = reqJson.getString("batchId");
 
+        JSONArray importCarFees = reqJson.getJSONArray("importRoomFees");
+
+        List<ImportRoomFee> tmpImportContractFees = importCarFees.toJavaList(ImportRoomFee.class);
+
         if (StringUtil.isEmpty(feeName)) {
             feeName = IMPORT_FEE_NAME;
         }
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setFeeTypeCd(feeTypeCd);
-        feeConfigDto.setFeeNameEq(feeName);
+        //feeConfigDto.setFeeNameEq(feeName);
+        if (!StringUtil.isEmpty(tmpImportContractFees.get(0).getConfigId())) {
+            feeConfigDto.setConfigId(tmpImportContractFees.get(0).getConfigId());
+        } else {
+            feeConfigDto.setFeeNameEq(feeName);
+        }
         feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
@@ -524,10 +541,6 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeConfigDto.setConfigId(feeConfigDtos.get(0).getConfigId());
         }
 
-
-        JSONArray importCarFees = reqJson.getJSONArray("importRoomFees");
-
-        List<ImportRoomFee> tmpImportContractFees = importCarFees.toJavaList(ImportRoomFee.class);
 
         for (ImportRoomFee tmpImportCarFee : tmpImportContractFees) {
             tmpImportCarFee.setCommunityId(communityId);
