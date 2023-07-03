@@ -148,12 +148,34 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
         double monthReceivedRoomCount = feeStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
         data.put("monthReceivedRoomCount", monthReceivedRoomCount);
 
+        // todo 计算欠费户
+        int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
+        data.put("monthReceivedRoomCount", oweRoomCount);
+
         // todo 已收金额
         double monthReceivedRoomAmount = feeStatisticsImpl.getReceivedRoomAmount(queryStatisticsDto);
         data.put("monthReceivedRoomAmount", monthReceivedRoomAmount);
         // todo 剩余未收
         double curMonthOweFee = feeStatisticsImpl.getCurMonthOweFee(queryStatisticsDto);
         data.put("curMonthOweFee", curMonthOweFee);
+
+        //todo 查询当月应收
+        queryStatisticsDto.setStartDate(monthFastDate);
+        queryStatisticsDto.setEndDate(monthLastDate);
+        double curReceivableFee = feeStatisticsImpl.getCurReceivableFee(queryStatisticsDto);
+        data.put("curReceivableFee", curReceivableFee);
+
+        //todo 查询 欠费追回
+        queryStatisticsDto.setStartDate(monthFastDate);
+        queryStatisticsDto.setEndDate(monthLastDate);
+        double hisReceivedFee = feeStatisticsImpl.getHisReceivedFee(queryStatisticsDto);
+        data.put("hisReceivedFee", hisReceivedFee);
+
+        //todo  查询 预交费用
+        queryStatisticsDto.setStartDate(monthFastDate);
+        queryStatisticsDto.setEndDate(monthLastDate);
+        double preReceivedFee = feeStatisticsImpl.getPreReceivedFee(queryStatisticsDto);
+        data.put("preReceivedFee", preReceivedFee);
 
         datas.add(data);
 
