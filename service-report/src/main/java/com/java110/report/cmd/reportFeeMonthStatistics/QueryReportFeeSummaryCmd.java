@@ -94,9 +94,8 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         //todo 空闲房屋数
         long feeRoomCount = feeStatisticsImpl.getFeeRoomCount(queryStatisticsDto);
 
-        //todo 已收费户数
-        double monthReceivedRoomCount = feeStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
-        //int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
+        //todo 欠费户数
+        int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
 
         JSONObject data = new JSONObject();
         data.put("hisOweFee", hisOweFee);
@@ -106,7 +105,7 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         data.put("receivedFee", receivedFee);
         data.put("roomCount", roomCount);
         data.put("feeRoomCount", feeRoomCount);
-        data.put("oweRoomCount", feeRoomCount-monthReceivedRoomCount);
+        data.put("oweRoomCount", oweRoomCount);
         data.put("curReceivableFee", curReceivableFee);
 
         JSONArray datas = new JSONArray();
