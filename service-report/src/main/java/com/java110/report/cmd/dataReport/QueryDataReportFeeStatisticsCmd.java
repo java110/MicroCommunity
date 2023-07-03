@@ -150,7 +150,7 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
 
         // todo 计算欠费户
         int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
-        data.put("monthReceivedRoomCount", oweRoomCount);
+        data.put("oweRoomCount", oweRoomCount);
 
         // todo 已收金额
         double monthReceivedRoomAmount = feeStatisticsImpl.getReceivedRoomAmount(queryStatisticsDto);
