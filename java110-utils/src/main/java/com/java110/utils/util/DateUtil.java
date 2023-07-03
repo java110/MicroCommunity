@@ -405,6 +405,19 @@ public class DateUtil {
         return calendar.getTime();
     }
 
+    public static Date getNextMonthFirstDate(String curDate) {
+        Date date = DateUtil.getDateFromStringB(curDate);
+        Calendar curDateCal = Calendar.getInstance();
+        curDateCal.setTime(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.add(Calendar.MONTH, 1);
+        return calendar.getTime();
+    }
+
     public static Date getFirstDate() {
         Calendar curDateCal = Calendar.getInstance();
         curDateCal.set(Calendar.DAY_OF_MONTH, 1);

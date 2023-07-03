@@ -19,6 +19,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -86,6 +87,14 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
 
+        String monthFastDate = DateUtil.getFormatTimeStringB(DateUtil.getFirstDate(reqJson.getString("startDate")));
+        String monthLastDate = DateUtil.getFormatTimeStringB(DateUtil.getNextMonthFirstDate(reqJson.getString("startDate")));
+        String startDate = reqJson.getString("startDate");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.getDateFromStringB(startDate));
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        String endDate = DateUtil.getFormatTimeStringB(calendar.getTime());
+
         // todo 查询楼栋
         FloorDto floorDto = new FloorDto();
         floorDto.setFloorId(floorId);
@@ -104,19 +113,18 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
 
         // todo 查询 历史欠费
         //这里设置查询月1日 不然历史和总欠费一样有点奇怪
-        queryStatisticsDto.setStartDate(DateUtil.getFormatTimeStringB(DateUtil.getFirstDate(reqJson.getString("startDate"))));
+        queryStatisticsDto.setStartDate(monthFastDate);
         double hisMonthOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
         data.put("hisMonthOweFee", hisMonthOweFee);
-        queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
 
         // todo 查询总欠费
+        queryStatisticsDto.setEndDate(monthLastDate);
         double oweFee = feeStatisticsImpl.getOweFee(queryStatisticsDto);
         data.put("oweFee", oweFee);
 
         // todo 本日已交户数
-        queryStatisticsDto.setStartDate(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate()) + " 00:00:00");
-        queryStatisticsDto.setEndDate(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate()) + " 23:59:59");
-        queryStatisticsDto.setHisDate(DateUtil.getFormatTimeStringB(DateUtil.getFirstDate()));
+        queryStatisticsDto.setStartDate(startDate);
+        queryStatisticsDto.setEndDate(endDate);
         double todayReceivedRoomCount = feeStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
         data.put("todayReceivedRoomCount", todayReceivedRoomCount);
 
@@ -125,16 +133,18 @@ public class QueryDataReportFeeStatisticsCmd extends Cmd {
         data.put("todayReceivedRoomAmount", todayReceivedRoomAmount);
 
         // todo 历史欠费清缴户
+        queryStatisticsDto.setStartDate(startDate);
+        queryStatisticsDto.setEndDate(endDate);
+        queryStatisticsDto.setHisDate(monthFastDate);
         double hisOweReceivedRoomCount = feeStatisticsImpl.getHisOweReceivedRoomCount(queryStatisticsDto);
         data.put("hisOweReceivedRoomCount", hisOweReceivedRoomCount);
         // todo 历史欠费清缴金额
         double hisOweReceivedRoomAmount = feeStatisticsImpl.getHisOweReceivedRoomAmount(queryStatisticsDto);
         data.put("hisOweReceivedRoomAmount", hisOweReceivedRoomAmount);
 
-        // todo 这里时间又改回来
-        queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
-        queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
         // todo 本月已收户
+        queryStatisticsDto.setStartDate(monthFastDate);
+        queryStatisticsDto.setEndDate(monthLastDate);
         double monthReceivedRoomCount = feeStatisticsImpl.getReceivedRoomCount(queryStatisticsDto);
         data.put("monthReceivedRoomCount", monthReceivedRoomCount);
 
