@@ -1219,9 +1219,9 @@
 
     <!-- 月实收 查询-->
     <select id="getMonthReceivedDetailInfo" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.owner_name ownerName,t.link,t.fee_name,pfd.start_time startTime,pfd.end_time endTime,
+        select t.obj_name objName,t.owner_name ownerName,t.link,t.fee_name feeName, pfd.start_time startTime,pfd.end_time endTime,
         pfd.pay_order_id payOrderId,pfd.cashier_name cashierName,
-        pfd.receivable_amount receivableAmount,pfd.received_amount receivedAmount,pfd.create_time createTime
+        t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfd.create_time createTime
         from pay_fee_detail_month t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
