@@ -42,7 +42,6 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
     private static final int MAX_ROW = 100;
 
 
-
     @Override
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) {
         JSONObject reqJson = exportDataDto.getReqJson();
@@ -96,8 +95,8 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
             queryStatisticsDto.setRow(MAX_ROW);
             List<RoomDto> rooms = getReceivedRoomInfo(queryStatisticsDto);
             // todo 计算 房屋欠费实收数据
-            JSONArray datas = computeRoomOweReceivedFee(rooms,queryStatisticsDto);
-            appendData(datas, sheet, dictDtos,(page - 1) * MAX_ROW);
+            JSONArray datas = computeRoomOweReceivedFee(rooms, queryStatisticsDto);
+            appendData(datas, sheet, dictDtos, (page - 1) * MAX_ROW);
         }
 
 
@@ -106,11 +105,12 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
 
     /**
      * 封装数据到Excel中
+     *
      * @param datas
      * @param sheet
      * @param dictDtos
      */
-    private void appendData(JSONArray datas, Sheet sheet, List<DictDto> dictDtos,int step) {
+    private void appendData(JSONArray datas, Sheet sheet, List<DictDto> dictDtos, int step) {
         Row row = null;
         JSONObject dataObj = null;
         String receivedFee = "";
@@ -119,28 +119,28 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
         String feeTypeCdValue = "";
         JSONObject feeTypeData = null;
         for (int roomIndex = 0; roomIndex < datas.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex + 1);
+            row = sheet.createRow(roomIndex + step + 1);
             dataObj = datas.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("roomName"));
-            row.createCell(1).setCellValue(dataObj.getString("ownerName")+"("+dataObj.getString("link")+")");
+            row.createCell(1).setCellValue(dataObj.getString("ownerName") + "(" + dataObj.getString("link") + ")");
             row.createCell(2).setCellValue(dataObj.getString("receivedFee"));
 
             for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-                feeTypeCd = "receivedFee"+dictDtos.get(dictIndex).getStatusCd();
-                if(!dataObj.containsKey(feeTypeCd)){
+                feeTypeCd = "receivedFee" + dictDtos.get(dictIndex).getStatusCd();
+                if (!dataObj.containsKey(feeTypeCd)) {
                     row.createCell(3 + dictIndex).setCellValue(0);
                     continue;
                 }
                 feeTypeCdData = dataObj.getJSONArray(feeTypeCd);
-                if(feeTypeCdData == null || feeTypeCdData.size() < 1){
+                if (feeTypeCdData == null || feeTypeCdData.size() < 1) {
                     row.createCell(3 + dictIndex).setCellValue(0);
                     continue;
                 }
                 feeTypeCdValue = "";
-                for(int feeTypeIndex = 0;feeTypeIndex < feeTypeCdData.size(); feeTypeIndex++) {
+                for (int feeTypeIndex = 0; feeTypeIndex < feeTypeCdData.size(); feeTypeIndex++) {
                     feeTypeData = feeTypeCdData.getJSONObject(feeTypeIndex);
-                    feeTypeCdValue += (feeTypeData.getString("feeName")+"("+feeTypeData.getString("startTime")+"~"+feeTypeData.getString("endTime"))+")="+feeTypeData.getString("receivedAmount");
-                    feeTypeCdValue +="\r\n";
+                    feeTypeCdValue += (feeTypeData.getString("feeName") + "(" + feeTypeData.getString("startTime") + "~" + feeTypeData.getString("endTime")) + ")=" + feeTypeData.getString("receivedAmount");
+                    feeTypeCdValue += "\r\n";
                 }
                 row.createCell(3 + dictIndex).setCellValue(feeTypeCdValue);
             }
@@ -292,6 +292,7 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
 
         return datas;
     }
+
     /**
      * //todo 清洗数据 将数据转变成 map roomId feeTypeCd->array
      * // todo 讲 payerObjId, feeTypeCd,feeName,endTime,deadlineTime,amountOwed 转换为 按payerObjId 纵向转换
