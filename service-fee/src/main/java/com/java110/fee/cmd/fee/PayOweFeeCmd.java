@@ -177,8 +177,10 @@ public class PayOweFeeCmd extends Cmd {
         }
         List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
+        JSONObject data = new JSONObject();
+        data.put("receipts",feeReceiptDetailDtos);
 
-        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDtos));
+        dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 
     private void getFeeReceiptDetailPo(ICmdDataFlowContext dataFlowContext, JSONObject paramObj,
