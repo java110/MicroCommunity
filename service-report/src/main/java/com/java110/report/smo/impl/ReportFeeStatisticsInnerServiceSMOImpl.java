@@ -190,6 +190,7 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
 
     /**
      * 临时车收入
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -201,6 +202,7 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
 
     /**
      * 查询退款押金
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -236,6 +238,7 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
 
     /**
      * 按收款方式统计收入
+     *
      * @param queryStatisticsDto
      * @return
      */
@@ -285,5 +288,23 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
     public List<Map> getObjReceivedFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
         List<Map> infos = reportFeeStatisticsServiceDaoImpl.getObjReceivedFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return infos;
+    }
+
+    @Override
+    public long getMonthReceivedDetailCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        long info = reportFeeStatisticsServiceDaoImpl.getMonthReceivedDetailCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public List<Map> getMonthReceivedDetailInfo(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        int page = queryStatisticsDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            queryStatisticsDto.setPage((page - 1) * queryStatisticsDto.getRow());
+        }
+
+        List<Map> info = reportFeeStatisticsServiceDaoImpl.getMonthReceivedDetailInfo(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
     }
 }

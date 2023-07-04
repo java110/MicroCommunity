@@ -236,4 +236,8 @@ public interface IFeeStatistics {
      * @return
      */
     List<Map> getObjReceivedFee(QueryStatisticsDto queryStatisticsDto);
+
+    long getMonthReceivedDetailCount(QueryStatisticsDto queryStatisticsDto);
+
+    List<Map> getMonthReceivedDetailInfo(QueryStatisticsDto queryStatisticsDto);
 }

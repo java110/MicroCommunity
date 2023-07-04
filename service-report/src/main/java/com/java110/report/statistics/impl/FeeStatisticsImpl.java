@@ -276,4 +276,14 @@ public class FeeStatisticsImpl implements IFeeStatistics {
         return reportFeeStatisticsInnerServiceSMOImpl.getObjReceivedFee(queryStatisticsDto);
     }
 
+    @Override
+    public long getMonthReceivedDetailCount(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailCount(queryStatisticsDto);
+    }
+
+    @Override
+    public List<Map> getMonthReceivedDetailInfo(QueryStatisticsDto queryStatisticsDto) {
+        return reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailInfo(queryStatisticsDto);
+    }
+
 }

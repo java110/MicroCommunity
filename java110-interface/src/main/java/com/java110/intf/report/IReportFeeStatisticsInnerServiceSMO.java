@@ -240,4 +240,8 @@ public interface IReportFeeStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getObjReceivedFee", method = RequestMethod.POST)
     List<Map> getObjReceivedFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    long getMonthReceivedDetailCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    List<Map> getMonthReceivedDetailInfo(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }

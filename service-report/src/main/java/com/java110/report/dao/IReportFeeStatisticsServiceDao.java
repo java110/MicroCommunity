@@ -236,4 +236,8 @@ public interface IReportFeeStatisticsServiceDao {
      * @return
      */
     List<Map> getObjReceivedFee(Map info);
+
+    long getMonthReceivedDetailCount(Map info);
+
+    List<Map> getMonthReceivedDetailInfo(Map info);
 }

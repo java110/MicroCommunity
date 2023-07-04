@@ -428,4 +428,21 @@ public class ReportFeeStatisticsServiceDaoImpl extends BaseServiceDao implements
 
     }
 
+    @Override
+    public long getMonthReceivedDetailCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getMonthReceivedDetailCount", info);
+
+        if (infos == null || infos.size() < 1) {
+            return 0;
+        }
+
+        return Long.parseLong(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> getMonthReceivedDetailInfo(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeStatisticsServiceDaoImpl.getMonthReceivedDetailInfo", info);
+        return infos;
+    }
+
 }
