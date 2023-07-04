@@ -240,4 +240,12 @@ public interface IFeeStatistics {
     long getMonthReceivedDetailCount(QueryStatisticsDto queryStatisticsDto);
 
     List<Map> getMonthReceivedDetailInfo(QueryStatisticsDto queryStatisticsDto);
+
+    long getMonthOweDetailCount(QueryStatisticsDto queryStatisticsDto);
+
+    List<Map> getMonthOweDetailInfo(QueryStatisticsDto queryStatisticsDto);
+
+    double getMonthOweDetailAmount(QueryStatisticsDto queryStatisticsDto);
+
+    double getMonthReceivedDetailAmount(QueryStatisticsDto queryStatisticsDto);
 }

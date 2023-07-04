@@ -30,8 +30,8 @@ import java.util.Map;
 /**
  * 查询月实收明细统计
  */
-@Java110Cmd(serviceCode = "dataReport.queryMonthReceivedDetail")
-public class QueryMonthReceivedDetailCmd extends Cmd {
+@Java110Cmd(serviceCode = "dataReport.queryMonthOweDetail")
+public class QueryMonthOweDetailCmd extends Cmd {
 
     @Autowired
     private IFeeStatistics feeStatisticsImpl;
@@ -73,19 +73,19 @@ public class QueryMonthReceivedDetailCmd extends Cmd {
         queryStatisticsDto.setLink(reqJson.getString("link"));
         queryStatisticsDto.setPage(reqJson.getInteger("page"));
         queryStatisticsDto.setRow(reqJson.getInteger("row"));
-        long count = feeStatisticsImpl.getMonthReceivedDetailCount(queryStatisticsDto);
+        long count = feeStatisticsImpl.getMonthOweDetailCount(queryStatisticsDto);
         List<Map> infos = null;
         if (count > 0) {
-            infos = feeStatisticsImpl.getMonthReceivedDetailInfo(queryStatisticsDto);
+            infos = feeStatisticsImpl.getMonthOweDetailInfo(queryStatisticsDto);
         } else {
             infos = new ArrayList<>();
         }
-
-        //todo 实收金额
-        double receivedAmount = feeStatisticsImpl.getMonthReceivedDetailAmount(queryStatisticsDto);
+        // todo 计算欠费金额
+        double oweAmount = feeStatisticsImpl.getMonthOweDetailAmount(queryStatisticsDto);
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) queryStatisticsDto.getRow()), count, infos);
-        resultVo.setSumTotal(receivedAmount);
+        resultVo.setSumTotal(oweAmount);
+
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
     }

@@ -307,4 +307,34 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
         List<Map> info = reportFeeStatisticsServiceDaoImpl.getMonthReceivedDetailInfo(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
         return info;
     }
+
+    @Override
+    public long getMonthOweDetailCount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        long info = reportFeeStatisticsServiceDaoImpl.getMonthOweDetailCount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public List<Map> getMonthOweDetailInfo(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        int page = queryStatisticsDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            queryStatisticsDto.setPage((page - 1) * queryStatisticsDto.getRow());
+        }
+
+        List<Map> info = reportFeeStatisticsServiceDaoImpl.getMonthOweDetailInfo(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getMonthOweDetailAmount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getMonthOweDetailAmount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
+
+    @Override
+    public double getMonthReceivedDetailAmount(@RequestBody QueryStatisticsDto queryStatisticsDto) {
+        double info = reportFeeStatisticsServiceDaoImpl.getMonthReceivedDetailAmount(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        return info;
+    }
 }

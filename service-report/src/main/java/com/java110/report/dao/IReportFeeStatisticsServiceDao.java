@@ -240,4 +240,12 @@ public interface IReportFeeStatisticsServiceDao {
     long getMonthReceivedDetailCount(Map info);
 
     List<Map> getMonthReceivedDetailInfo(Map info);
+
+    long getMonthOweDetailCount(Map info);
+
+    List<Map> getMonthOweDetailInfo(Map info);
+
+    double getMonthOweDetailAmount(Map info);
+
+    double getMonthReceivedDetailAmount(Map info);
 }

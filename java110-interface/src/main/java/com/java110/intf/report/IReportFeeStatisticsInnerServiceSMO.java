@@ -241,7 +241,21 @@ public interface IReportFeeStatisticsInnerServiceSMO {
     @RequestMapping(value = "/getObjReceivedFee", method = RequestMethod.POST)
     List<Map> getObjReceivedFee(@RequestBody QueryStatisticsDto queryStatisticsDto);
 
+    @RequestMapping(value = "/getMonthReceivedDetailCount", method = RequestMethod.POST)
     long getMonthReceivedDetailCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
 
+    @RequestMapping(value = "/getMonthReceivedDetailInfo", method = RequestMethod.POST)
     List<Map> getMonthReceivedDetailInfo(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getMonthOweDetailCount", method = RequestMethod.POST)
+    long getMonthOweDetailCount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getMonthOweDetailInfo", method = RequestMethod.POST)
+    List<Map> getMonthOweDetailInfo(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getMonthOweDetailAmount", method = RequestMethod.POST)
+    double getMonthOweDetailAmount(@RequestBody QueryStatisticsDto queryStatisticsDto);
+
+    @RequestMapping(value = "/getMonthReceivedDetailAmount", method = RequestMethod.POST)
+    double getMonthReceivedDetailAmount(@RequestBody QueryStatisticsDto queryStatisticsDto);
 }
