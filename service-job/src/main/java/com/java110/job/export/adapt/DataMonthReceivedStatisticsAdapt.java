@@ -73,9 +73,9 @@ public class DataMonthReceivedStatisticsAdapt implements IExportDataAdapt {
         queryStatisticsDto.setLink(reqJson.getString("link"));
         long count = reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailCount(queryStatisticsDto);
 
-        count = (int) Math.ceil((double) count / (double) MAX_ROW);
+        int maxPage = (int) Math.ceil((double) count / (double) MAX_ROW);
         List<Map> infos = null;
-        for (int page = 1; page <= count; page++) {
+        for (int page = 1; page <= maxPage; page++) {
             queryStatisticsDto.setPage(page);
             queryStatisticsDto.setRow(MAX_ROW);
             infos = reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailInfo(queryStatisticsDto);
