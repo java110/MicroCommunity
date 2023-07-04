@@ -86,8 +86,6 @@ public class DataReportEarnedDetailStatisticsAdapt implements IExportDataAdapt {
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
         queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
         queryStatisticsDto.setLink(reqJson.getString("link"));
-        queryStatisticsDto.setPage(reqJson.getInteger("page"));
-        queryStatisticsDto.setRow(reqJson.getInteger("row"));
 
         long roomCount = getReceivedRoomCount(queryStatisticsDto);
 

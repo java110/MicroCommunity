@@ -102,7 +102,7 @@ public class DataReportOweStatisticsAdapt implements IExportDataAdapt {
             row.createCell(1).setCellValue(dataObj.get("roomCount").toString());
             row.createCell(2).setCellValue(dataObj.get("feeRoomCount").toString());
             row.createCell(3).setCellValue(dataObj.get("oweRoomCount").toString());
-            row.createCell(4).setCellValue(dataObj.get("receivedFee").toString());
+            row.createCell(4).setCellValue(dataObj.get("oweFee").toString());
 
             for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
                 oweFee = dataObj.get("oweFee" + dictDtos.get(dictIndex).getStatusCd()).toString();
