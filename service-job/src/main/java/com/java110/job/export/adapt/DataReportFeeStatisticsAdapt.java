@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
+
 @Service("dataReportFeeStatistics")
 public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
 
@@ -120,23 +122,31 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         row.createCell(7).setCellValue(data.getString("hisOweReceivedRoomCount"));
         row.createCell(8).setCellValue(data.getString("hisOweReceivedRoomAmount"));
         row.createCell(9).setCellValue(data.getString("monthReceivedRoomCount"));
-        row.createCell(10).setCellValue(data.getIntValue("roomCount")-data.getIntValue("freeCount")-data.getIntValue("monthReceivedRoomCount"));
-        BigDecimal monthReceivedRoomCount = new BigDecimal(data.getIntValue("monthReceivedRoomCount"));
-        BigDecimal roomCount = new BigDecimal(data.getIntValue("roomCount")-data.getIntValue("freeCount"));
-        monthReceivedRoomCount = monthReceivedRoomCount.divide(roomCount,4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
-        row.createCell(11).setCellValue(monthReceivedRoomCount.doubleValue()+"%");
+        row.createCell(10).setCellValue(data.getIntValue("oweRoomCount"));
+        BigDecimal feeRoomCount = new BigDecimal(data.getIntValue("feeRoomCount"));
+        if (feeRoomCount.doubleValue() == 0) {
+            row.createCell(11).setCellValue("0%");
+        } else {
+            BigDecimal roomCount = new BigDecimal(data.getIntValue("feeRoomCount") - data.getIntValue("oweRoomCount"));
+            feeRoomCount = roomCount.divide(feeRoomCount, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+            row.createCell(11).setCellValue(feeRoomCount.doubleValue() + "%");
+        }
         row.createCell(12).setCellValue(data.getString("monthReceivedRoomAmount"));
         row.createCell(13).setCellValue(data.getString("curMonthOweFee"));
 
         BigDecimal monthReceivedRoomAmount = new BigDecimal(data.getIntValue("monthReceivedRoomAmount"));
-        BigDecimal curMonthOweFee = new BigDecimal(data.getIntValue("curMonthOweFee"));
+        BigDecimal hisMonthOweFee = new BigDecimal(data.getIntValue("hisMonthOweFee"));
+        BigDecimal hisReceivedFee = new BigDecimal(data.getIntValue("hisReceivedFee"));
+        BigDecimal curReceivableFee = new BigDecimal(data.getIntValue("curReceivableFee"));
 
-        curMonthOweFee = monthReceivedRoomAmount.add(curMonthOweFee);
-        curMonthOweFee = monthReceivedRoomAmount.divide(curMonthOweFee,4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
-
-        row.createCell(14).setCellValue(curMonthOweFee.doubleValue()+"%");
-
-
+       BigDecimal divideFee = hisMonthOweFee.add(hisReceivedFee).add(curReceivableFee);
+       if(divideFee.doubleValue() == 0){
+           row.createCell(14).setCellValue("0%");
+       }else{
+           BigDecimal preReceivedFee = new BigDecimal(data.getIntValue("preReceivedFee"));
+           monthReceivedRoomAmount = monthReceivedRoomAmount.subtract(preReceivedFee).divide(divideFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+           row.createCell(14).setCellValue(monthReceivedRoomAmount.doubleValue() + "%");
+       }
     }
 
     /**
@@ -154,6 +164,14 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
 
+        String monthFastDate = DateUtil.getFormatTimeStringB(DateUtil.getFirstDate(reqJson.getString("startDate")));
+        String monthLastDate = DateUtil.getFormatTimeStringB(DateUtil.getNextMonthFirstDate(reqJson.getString("startDate")));
+        String startDate = reqJson.getString("startDate");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DateUtil.getDateFromStringB(startDate));
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        String endDate = DateUtil.getFormatTimeStringB(calendar.getTime());
+
         // todo 查询楼栋
         FloorDto floorDto = new FloorDto();
         floorDto.setFloorId(floorId);
@@ -166,22 +184,21 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         long roomCount = getRoomCount(queryStatisticsDto);
         data.put("roomCount", roomCount);
 
-        // todo 查询空置户数
-        long freeCount = getFreeRoomCount(queryStatisticsDto);
-        data.put("freeCount", freeCount);
 
         // todo 查询 历史欠费
+        //这里设置查询月1日 不然历史和总欠费一样有点奇怪
+        queryStatisticsDto.setStartDate(monthFastDate);
         double hisMonthOweFee = reportFeeStatisticsInnerServiceSMOImpl.getHisMonthOweFee(queryStatisticsDto);
         data.put("hisMonthOweFee", hisMonthOweFee);
 
         // todo 查询总欠费
+        queryStatisticsDto.setEndDate(monthLastDate);
         double oweFee = reportFeeStatisticsInnerServiceSMOImpl.getOweFee(queryStatisticsDto);
         data.put("oweFee", oweFee);
 
         // todo 本日已交户数
-        queryStatisticsDto.setStartDate(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate()) + " 00:00:00");
-        queryStatisticsDto.setEndDate(DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate()) + " 23:59:59");
-        queryStatisticsDto.setHisDate(DateUtil.getFormatTimeStringB(DateUtil.getFirstDate()));
+        queryStatisticsDto.setStartDate(startDate);
+        queryStatisticsDto.setEndDate(endDate);
         double todayReceivedRoomCount = reportFeeStatisticsInnerServiceSMOImpl.getReceivedRoomCount(queryStatisticsDto);
         data.put("todayReceivedRoomCount", todayReceivedRoomCount);
 
@@ -190,18 +207,28 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         data.put("todayReceivedRoomAmount", todayReceivedRoomAmount);
 
         // todo 历史欠费清缴户
+        queryStatisticsDto.setStartDate(startDate);
+        queryStatisticsDto.setEndDate(endDate);
+        queryStatisticsDto.setHisDate(monthFastDate);
         double hisOweReceivedRoomCount = reportFeeStatisticsInnerServiceSMOImpl.getHisOweReceivedRoomCount(queryStatisticsDto);
         data.put("hisOweReceivedRoomCount", hisOweReceivedRoomCount);
         // todo 历史欠费清缴金额
         double hisOweReceivedRoomAmount = reportFeeStatisticsInnerServiceSMOImpl.getHisOweReceivedRoomAmount(queryStatisticsDto);
         data.put("hisOweReceivedRoomAmount", hisOweReceivedRoomAmount);
 
-        // todo 这里时间又改回来
-        queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
-        queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
         // todo 本月已收户
+        queryStatisticsDto.setStartDate(monthFastDate);
+        queryStatisticsDto.setEndDate(monthLastDate);
         double monthReceivedRoomCount = reportFeeStatisticsInnerServiceSMOImpl.getReceivedRoomCount(queryStatisticsDto);
         data.put("monthReceivedRoomCount", monthReceivedRoomCount);
+
+        // todo 查询收费户
+        long feeRoomCount = reportFeeStatisticsInnerServiceSMOImpl.getFeeRoomCount(queryStatisticsDto);
+        data.put("feeRoomCount", feeRoomCount);
+
+        // todo 计算欠费户
+        int oweRoomCount = reportFeeStatisticsInnerServiceSMOImpl.getOweRoomCount(queryStatisticsDto);
+        data.put("oweRoomCount", oweRoomCount);
 
         // todo 已收金额
         double monthReceivedRoomAmount = reportFeeStatisticsInnerServiceSMOImpl.getReceivedRoomAmount(queryStatisticsDto);
@@ -209,6 +236,24 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         // todo 剩余未收
         double curMonthOweFee = reportFeeStatisticsInnerServiceSMOImpl.getCurMonthOweFee(queryStatisticsDto);
         data.put("curMonthOweFee", curMonthOweFee);
+
+        //todo 查询当月应收
+        queryStatisticsDto.setStartDate(monthFastDate);
+        queryStatisticsDto.setEndDate(monthLastDate);
+        double curReceivableFee = reportFeeStatisticsInnerServiceSMOImpl.getCurReceivableFee(queryStatisticsDto);
+        data.put("curReceivableFee", curReceivableFee);
+
+        //todo 查询 欠费追回
+        queryStatisticsDto.setStartDate(monthFastDate);
+        queryStatisticsDto.setEndDate(monthLastDate);
+        double hisReceivedFee = reportFeeStatisticsInnerServiceSMOImpl.getHisReceivedFee(queryStatisticsDto);
+        data.put("hisReceivedFee", hisReceivedFee);
+
+        //todo  查询 预交费用
+        queryStatisticsDto.setStartDate(monthFastDate);
+        queryStatisticsDto.setEndDate(monthLastDate);
+        double preReceivedFee = reportFeeStatisticsInnerServiceSMOImpl.getPreReceivedFee(queryStatisticsDto);
+        data.put("preReceivedFee", preReceivedFee);
 
         datas.add(data);
 
