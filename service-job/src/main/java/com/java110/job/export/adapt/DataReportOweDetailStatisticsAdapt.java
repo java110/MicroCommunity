@@ -97,7 +97,7 @@ public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
             JSONArray datas = computeRoomOweReceivedFee(rooms,queryStatisticsDto);
             appendData(datas, sheet, dictDtos,(page - 1) * MAX_ROW);
         }
-        return null;
+        return workbook;
     }
 
     /**
