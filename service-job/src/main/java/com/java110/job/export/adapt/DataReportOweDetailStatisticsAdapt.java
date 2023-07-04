@@ -87,14 +87,14 @@ public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
         queryStatisticsDto.setPage(reqJson.getInteger("page"));
         queryStatisticsDto.setRow(reqJson.getInteger("row"));
 
-        long roomCount = getRoomCount(queryStatisticsDto);
+        long roomCount = getOweRoomCount(queryStatisticsDto);
 
         roomCount = (int) Math.ceil((double) roomCount / (double) MAX_ROW);
 
         for (int page = 1; page <= roomCount; page++) {
             queryStatisticsDto.setPage(page);
             queryStatisticsDto.setRow(MAX_ROW);
-            List<RoomDto> rooms = getRoomInfo(queryStatisticsDto);
+            List<RoomDto> rooms = getOweRoomInfo(queryStatisticsDto);
             // todo 计算 房屋欠费实收数据
             JSONArray datas = computeRoomOweReceivedFee(rooms,queryStatisticsDto);
             appendData(datas, sheet, dictDtos,(page - 1) * MAX_ROW);
@@ -146,19 +146,20 @@ public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
 
     }
 
-    public long getRoomCount(QueryStatisticsDto queryStatisticsDto) {
-
+    public long getOweRoomCount(QueryStatisticsDto queryStatisticsDto) {
         RoomDto roomDto = new RoomDto();
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
         roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
         roomDto.setOwnerName(queryStatisticsDto.getOwnerName());
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
         roomDto.setLink(queryStatisticsDto.getLink());
+        roomDto.setStartDate(queryStatisticsDto.getStartDate());
+        roomDto.setEndDate(queryStatisticsDto.getEndDate());
         addRoomNumCondition(queryStatisticsDto, roomDto);
-        return baseDataStatisticsInnerServiceSMOImpl.getRoomCount(roomDto);
+        return baseDataStatisticsInnerServiceSMOImpl.getOweRoomCount(roomDto);
     }
 
-    public List<RoomDto> getRoomInfo(QueryStatisticsDto queryStatisticsDto) {
+    public List<RoomDto> getOweRoomInfo(QueryStatisticsDto queryStatisticsDto) {
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
@@ -167,8 +168,10 @@ public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
         roomDto.setOwnerName(queryStatisticsDto.getOwnerName());
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
         roomDto.setLink(queryStatisticsDto.getLink());
+        roomDto.setStartDate(queryStatisticsDto.getStartDate());
+        roomDto.setEndDate(queryStatisticsDto.getEndDate());
         addRoomNumCondition(queryStatisticsDto, roomDto);
-        return baseDataStatisticsInnerServiceSMOImpl.getRoomInfo(roomDto);
+        return baseDataStatisticsInnerServiceSMOImpl.getOweRoomInfo(roomDto);
     }
 
     /**
@@ -241,22 +244,37 @@ public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
         // todo  nInfo.put(info.get("feeTypeCd").toString(), tmpInfos);
         infos = washInfos(infos);
 
-        BigDecimal oweFee = new BigDecimal(0.00);
+        BigDecimal oweFee = null;
         List<Map> itemFees = null;
         String feeTypeCd = "";
+
+        DictDto dictDto = new DictDto();
+        dictDto.setTableName("pay_fee_config");
+        dictDto.setTableColumns("fee_type_cd_show");
+        List<DictDto> dictDtos = dictV1InnerServiceSMOImpl.queryDicts(dictDto);
 
         // todo 根据房屋ID 和payerObjId 比较 合并数据，讲费用大类 横向 放入 data中，
         // todo 并且计算每个 房屋 费用大类的欠费 和房屋的总欠费
         for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
+            oweFee = new BigDecimal(0.00);
             data = datas.getJSONObject(dataIndex);
             //todo 这里循环费用大类
             for (Map info : infos) {
                 if (!data.getString("roomId").equals(info.get("payerObjId"))) {
                     continue;
                 }
-                feeTypeCd = info.get("feeTypeCd").toString();
-                oweFee = oweFee.add(new BigDecimal(info.get(feeTypeCd + "oweFee").toString()));
-                data.put("oweFee" + feeTypeCd, info.get(feeTypeCd));
+//                if(!info.containsKey("feeTypeCd")){
+//                    continue;
+//                }
+                for (DictDto tDict : dictDtos) {
+                    //feeTypeCd = info.get("feeTypeCd").toString();
+                    feeTypeCd = tDict.getStatusCd();
+                    if (!info.containsKey(feeTypeCd)) {
+                        continue;
+                    }
+                    oweFee = oweFee.add(new BigDecimal(info.get(feeTypeCd + "oweFee").toString()));
+                    data.put("oweFee" + feeTypeCd, info.get(feeTypeCd));
+                }
             }
             data.put("oweFee", oweFee.doubleValue());
         }
@@ -286,6 +304,9 @@ public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
                     continue;
                 }
                 tmpInfos = getTmpInfos(nInfo, info);
+                if (tmpInfos == null) {
+                    continue;
+                }
                 //todo 深拷贝
                 dInfo = new HashMap();
                 dInfo.putAll(info);
@@ -321,6 +342,9 @@ public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
     }
 
     private List<Map> getTmpInfos(Map nInfo, Map info) {
+        if (!info.containsKey("feeTypeCd")) {
+            return null;
+        }
         String feeTypeCd = info.get("feeTypeCd").toString();
         if (nInfo.containsKey(feeTypeCd)) {
             return (List<Map>) nInfo.get(feeTypeCd);

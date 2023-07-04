@@ -60,7 +60,7 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("楼栋");
         row.createCell(1).setCellValue("户数");
-        row.createCell(2).setCellValue("空置户数");
+        row.createCell(2).setCellValue("收费户");
         row.createCell(3).setCellValue("历史欠费");
         row.createCell(4).setCellValue("总欠费");
         row.createCell(5).setCellValue("本日已交户数");
@@ -112,7 +112,7 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
 
         row.createCell(0).setCellValue(data.getString("floorNum"));
         row.createCell(1).setCellValue(data.getString("roomCount"));
-        row.createCell(2).setCellValue(data.getString("freeCount"));
+        row.createCell(2).setCellValue(data.getString("feeCount"));
         row.createCell(3).setCellValue(data.getString("hisMonthOweFee"));
         row.createCell(4).setCellValue(data.getString("oweFee"));
         row.createCell(5).setCellValue(data.getString("todayReceivedRoomCount"));

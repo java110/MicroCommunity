@@ -42,7 +42,7 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
         row.createCell(3).setCellValue("历史欠费+当期欠费=欠费");
         row.createCell(6).setCellValue("欠费追回+当期实收+预交=实收");
         row.createCell(10).setCellValue("已交户/收费户=户收费率");
-        row.createCell(11).setCellValue("(实收-预交)/(历史欠费+当期应收)=收费率");
+        row.createCell(11).setCellValue("(实收-预交)/(历史欠费+欠费追回+当期应收)=收费率");
 
         JSONObject reqJson = exportDataDto.getReqJson();
 
@@ -103,7 +103,7 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
         row.createCell(10).setCellValue(roomFeeRate.doubleValue() + "%");
         //((fee.receivedFee-fee.preReceivedFee)/(fee.hisOweFee+fee.curReceivableFee)*100).toFixed(2)
         BigDecimal curReceivableFee = new BigDecimal(dataObj.getDouble("curReceivableFee"));
-        curReceivableFee = hisOweFee.add(curReceivableFee);
+        curReceivableFee = hisOweFee.add(curReceivableFee).add(hisReceivedFee);
         roomFeeRate = new BigDecimal(0);
         if(curReceivableFee.doubleValue()> 0) {
             roomFeeRate = receivedFee.subtract(preReceivedFee).divide(curReceivableFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
