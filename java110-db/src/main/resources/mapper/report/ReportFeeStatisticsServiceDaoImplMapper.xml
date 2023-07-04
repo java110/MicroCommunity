@@ -1297,6 +1297,7 @@
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id = '-1'
         and t.community_id = #{communityId}
+        and t.receivable_amount &gt; 0
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
@@ -1327,6 +1328,7 @@
         and t.cur_month_time &gt;= #{startDate}
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id = '-1'
+        and t.receivable_amount &gt; 0
         and t.community_id = #{communityId}
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
@@ -1361,6 +1363,7 @@
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id = '-1'
         and t.community_id = #{communityId}
+        and t.receivable_amount &gt; 0
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
