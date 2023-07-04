@@ -1124,7 +1124,8 @@
         LEFT JOIN building_room br on pf.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         where
-        bu.floor_id = #{floorId}
+        1=1
+        and bu.floor_id = #{floorId}
         and t.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}

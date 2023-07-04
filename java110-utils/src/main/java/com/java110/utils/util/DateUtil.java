@@ -36,7 +36,6 @@ public class DateUtil {
     public static final String DATE_FORMATE_STRING_Q = "yyyy-MM";
 
 
-
     static {
         formats.put("yyyyMMddHHmmss", new SimpleDateFormat("yyyyMMddHHmmss"));
         formats.put("yyyy-MM-dd HH:mm:ss", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
@@ -406,6 +405,19 @@ public class DateUtil {
         return calendar.getTime();
     }
 
+    public static Date getNextMonthFirstDate(String curDate) {
+        Date date = DateUtil.getDateFromStringB(curDate);
+        Calendar curDateCal = Calendar.getInstance();
+        curDateCal.setTime(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.add(Calendar.MONTH, 1);
+        return calendar.getTime();
+    }
+
     public static Date getFirstDate() {
         Calendar curDateCal = Calendar.getInstance();
         curDateCal.set(Calendar.DAY_OF_MONTH, 1);
@@ -414,6 +426,27 @@ public class DateUtil {
         curDateCal.set(Calendar.SECOND, 0);
         Date curDate = curDateCal.getTime();
         return curDate;
+    }
+
+    public static Date getFirstDate(Date curDate) {
+        Calendar curDateCal = Calendar.getInstance();
+        curDateCal.setTime(curDate);
+        curDateCal.set(Calendar.DAY_OF_MONTH, 1);
+        curDateCal.set(Calendar.HOUR_OF_DAY, 0);
+        curDateCal.set(Calendar.MINUTE, 0);
+        curDateCal.set(Calendar.SECOND, 0);
+        return curDateCal.getTime();
+    }
+
+    public static Date getFirstDate(String curDate) {
+        Date date = DateUtil.getDateFromStringB(curDate);
+        Calendar curDateCal = Calendar.getInstance();
+        curDateCal.setTime(date);
+        curDateCal.set(Calendar.DAY_OF_MONTH, 1);
+        curDateCal.set(Calendar.HOUR_OF_DAY, 0);
+        curDateCal.set(Calendar.MINUTE, 0);
+        curDateCal.set(Calendar.SECOND, 0);
+        return curDateCal.getTime();
     }
 
 
@@ -758,11 +791,12 @@ public class DateUtil {
 
     /**
      * 除去 小时 分 秒
+     *
      * @param time
      * @return
      */
-    public static Date timeToDate(Date time){
-        Calendar calendar =Calendar.getInstance();
+    public static Date timeToDate(Date time) {
+        Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
         setTimeToMidnight(calendar);
         return calendar.getTime();
