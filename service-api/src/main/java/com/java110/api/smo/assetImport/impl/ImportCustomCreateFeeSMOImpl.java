@@ -268,7 +268,7 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             }
             successCount++;
             payFeePo = new PayFeePo();
-            payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+            payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId,true));
             payFeePo.setEndTime(importRoomFee.getStartTime());
             payFeePo.setState(FeeDto.STATE_DOING);
             payFeePo.setCommunityId(importRoomFee.getCommunityId());
@@ -294,9 +294,17 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
 
             FeeAttrPo feeAttrPo = new FeeAttrPo();
             feeAttrPo.setCommunityId(importRoomFee.getCommunityId());
-            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_IMPORT_FEE_NAME);
             feeAttrPo.setValue(feeConfigDtos.get(0).getFeeName());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPos.add(feeAttrPo);
+
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(importRoomFee.getCommunityId());
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME);
+            feeAttrPo.setValue(importRoomFee.getObjName());
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
 
@@ -304,7 +312,7 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             if (!StringUtil.isEmpty(importRoomFee.getOwnerId())) {
                 feeAttrPo = new FeeAttrPo();
                 feeAttrPo.setCommunityId(importRoomFee.getCommunityId());
-                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
                 feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
                 feeAttrPo.setValue(importRoomFee.getOwnerId());
                 feeAttrPo.setFeeId(payFeePo.getFeeId());
@@ -312,7 +320,7 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
 
                 feeAttrPo = new FeeAttrPo();
                 feeAttrPo.setCommunityId(importRoomFee.getCommunityId());
-                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
                 feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_NAME);
                 feeAttrPo.setValue(importRoomFee.getOwnerName());
                 feeAttrPo.setFeeId(payFeePo.getFeeId());
@@ -320,7 +328,7 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
 
                 feeAttrPo = new FeeAttrPo();
                 feeAttrPo.setCommunityId(importRoomFee.getCommunityId());
-                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+                feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
                 feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_LINK);
                 feeAttrPo.setValue(importRoomFee.getOwnerLink());
                 feeAttrPo.setFeeId(payFeePo.getFeeId());

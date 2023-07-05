@@ -1190,10 +1190,11 @@
     <select id="getMonthReceivedDetailCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee_detail_month t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
         left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where 1=1
         and t.status_cd = '0'
         and t.cur_month_time &gt;= #{startDate}
@@ -1219,14 +1220,15 @@
 
     <!-- 月实收 查询-->
     <select id="getMonthReceivedDetailInfo" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.owner_name ownerName,t.link,t.fee_name feeName, pfd.start_time startTime,pfd.end_time endTime,
+        select concat(f.floor_num,'-',bu.unit_num,'-',br.room_num) objName,t.owner_name ownerName,t.link,t.fee_name feeName, pfd.start_time startTime,pfd.end_time endTime,
         pfd.pay_order_id payOrderId,pfd.cashier_name cashierName,
         t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfd.create_time createTime
         from pay_fee_detail_month t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
         left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where 1=1
         and t.status_cd = '0'
         and t.cur_month_time &gt;= #{startDate}
@@ -1257,10 +1259,11 @@
     <select id="getMonthReceivedDetailAmount" parameterType="Map" resultType="Map">
         select ifnull(sum(t.received_amount),0.0) amount
         from pay_fee_detail_month t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
         left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where 1=1
         and t.status_cd = '0'
         and t.cur_month_time &gt;= #{startDate}
@@ -1288,9 +1291,11 @@
     <select id="getMonthOweDetailCount" parameterType="Map" resultType="Map">
         select count(1) count
         from pay_fee_detail_month t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
+        left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where 1=1
         and t.status_cd = '0'
         and t.cur_month_time &gt;= #{startDate}
@@ -1317,12 +1322,14 @@
 
     <!-- 月实收 查询-->
     <select id="getMonthOweDetailInfo" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.owner_name ownerName,t.link,t.fee_name feeName, pf.end_time startTime,t.deadline_time endTime,
+        select concat(f.floor_num,'-',bu.unit_num,'-',br.room_num) objName,t.owner_name ownerName,t.link,t.fee_name feeName, pf.end_time startTime,t.deadline_time endTime,
         t.receivable_amount receivableAmount,t.received_amount receivedAmount
         from pay_fee_detail_month t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
+        left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where 1=1
         and t.status_cd = '0'
         and t.cur_month_time &gt;= #{startDate}
@@ -1354,9 +1361,11 @@
     <select id="getMonthOweDetailAmount" parameterType="Map" resultType="Map">
         select ifnull(sum(t.receivable_amount),0.0) amount
         from pay_fee_detail_month t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
+        left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
         where 1=1
         and t.status_cd = '0'
         and t.cur_month_time &gt;= #{startDate}
