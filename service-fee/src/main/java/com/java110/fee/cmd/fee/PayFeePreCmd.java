@@ -32,6 +32,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -280,8 +281,44 @@ public class PayFeePreCmd extends Cmd {
             reqJson.put("deductionAmount", 0.0);
             return 0.0;
         }
-
         BigDecimal money = new BigDecimal(0);
+        BigDecimal totalAccountAmount = new BigDecimal(0);
+        for (AccountDto tmpAccountDto : accountDtos) {
+             if (AccountDto.ACCT_TYPE_CASH.equals(tmpAccountDto.getAcctType())) { //现金账户
+                //账户金额
+                BigDecimal amount = new BigDecimal(tmpAccountDto.getAmount());
+                //获取应收金额
+                BigDecimal dedAmount = new BigDecimal("0.00");
+                if (reqJson.containsKey("receivedMoney") && !StringUtil.isEmpty(reqJson.getString("receivedMoney"))) {
+                    dedAmount = new BigDecimal(reqJson.getString("receivedMoney"));
+                } else {
+                    dedAmount = new BigDecimal(reqJson.getString("deductionAmount"));
+                }
+                int flag = amount.compareTo(dedAmount);
+                BigDecimal redepositAmount = new BigDecimal("0.00");
+                BigDecimal integralAmount = new BigDecimal("0.00");
+                if (flag == 1) { //现金账户大于应收金额，就用应收金额抵扣
+                    redepositAmount = dedAmount;
+                    integralAmount = amount.subtract(dedAmount);
+                }
+                if (flag > -1) { //现金账户大于等于应收金额，就用应收金额抵扣
+                    redepositAmount = dedAmount;
+                    integralAmount = amount.subtract(dedAmount);
+                }
+                if (flag == -1) { //现金账户小于实收金额，就用现金账户抵扣
+                    redepositAmount = amount;
+                }
+                if (flag < 1) { //现金账户小于等于应收金额，就用现金账户抵扣
+                    redepositAmount = amount;
+                }
+                if (flag == 0) { //现金账户等于应收金额
+                    redepositAmount = amount;
+                }
+                money = money.add(redepositAmount);
+            }
+//            totalAccountAmount = totalAccountAmount.add(new BigDecimal(tmpAccountDto.getAmount()));
+        }
+
 
         reqJson.put("deductionAmount", money.doubleValue());
         reqJson.put("selectUserAccount", BeanConvertUtil.beanCovertJSONArray(accountDtos));
