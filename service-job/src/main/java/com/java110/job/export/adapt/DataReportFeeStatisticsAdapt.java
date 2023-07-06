@@ -219,7 +219,7 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         // todo 本月已收户
         queryStatisticsDto.setStartDate(monthFastDate);
         queryStatisticsDto.setEndDate(monthLastDate);
-        double monthReceivedRoomCount = reportFeeStatisticsInnerServiceSMOImpl.getReceivedRoomCount(queryStatisticsDto);
+        double monthReceivedRoomCount = reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailCount(queryStatisticsDto);
         data.put("monthReceivedRoomCount", monthReceivedRoomCount);
 
         // todo 查询收费户
@@ -230,8 +230,8 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         int oweRoomCount = reportFeeStatisticsInnerServiceSMOImpl.getOweRoomCount(queryStatisticsDto);
         data.put("oweRoomCount", oweRoomCount);
 
-        // todo 已收金额
-        double monthReceivedRoomAmount = reportFeeStatisticsInnerServiceSMOImpl.getReceivedRoomAmount(queryStatisticsDto);
+        // todo 当月已收金额
+        double monthReceivedRoomAmount = reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailAmount(queryStatisticsDto);
         data.put("monthReceivedRoomAmount", monthReceivedRoomAmount);
         // todo 剩余未收
         double curMonthOweFee = reportFeeStatisticsInnerServiceSMOImpl.getCurMonthOweFee(queryStatisticsDto);
@@ -243,17 +243,17 @@ public class DataReportFeeStatisticsAdapt implements IExportDataAdapt {
         double curReceivableFee = reportFeeStatisticsInnerServiceSMOImpl.getCurReceivableFee(queryStatisticsDto);
         data.put("curReceivableFee", curReceivableFee);
 
-        //todo 查询 欠费追回
-        queryStatisticsDto.setStartDate(monthFastDate);
-        queryStatisticsDto.setEndDate(monthLastDate);
-        double hisReceivedFee = reportFeeStatisticsInnerServiceSMOImpl.getHisReceivedFee(queryStatisticsDto);
-        data.put("hisReceivedFee", hisReceivedFee);
-
-        //todo  查询 预交费用
-        queryStatisticsDto.setStartDate(monthFastDate);
-        queryStatisticsDto.setEndDate(monthLastDate);
-        double preReceivedFee = reportFeeStatisticsInnerServiceSMOImpl.getPreReceivedFee(queryStatisticsDto);
-        data.put("preReceivedFee", preReceivedFee);
+//        //todo 查询 欠费追回
+//        queryStatisticsDto.setStartDate(monthFastDate);
+//        queryStatisticsDto.setEndDate(monthLastDate);
+//        double hisReceivedFee = reportFeeStatisticsInnerServiceSMOImpl.getHisReceivedFee(queryStatisticsDto);
+//        data.put("hisReceivedFee", hisReceivedFee);
+//
+//        //todo  查询 预交费用
+//        queryStatisticsDto.setStartDate(monthFastDate);
+//        queryStatisticsDto.setEndDate(monthLastDate);
+//        double preReceivedFee = reportFeeStatisticsInnerServiceSMOImpl.getPreReceivedFee(queryStatisticsDto);
+//        data.put("preReceivedFee", preReceivedFee);
 
         datas.add(data);
 
