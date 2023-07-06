@@ -12,6 +12,7 @@ import com.java110.dto.meter.MeterWaterDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.fee.bmo.meterWater.IQueryPreMeterWater;
+import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
@@ -65,6 +66,8 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeMonth payFeeMonthImpl;
 
     @Override
     public ResponseEntity<String> query(MeterWaterDto meterWaterDto, String roomNum) {
@@ -155,7 +158,15 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrPos);
         }
 
+
         meterWaterInnerServiceSMOImpl.saveMeterWaters(meterWaterPos);
+
+        // todo 这里异步的方式计算 月数据 和欠费数据
+        List<String> feeIds = new ArrayList<>();
+        for (PayFeePo feePo : fees) {
+            feeIds.add(feePo.getFeeId());
+        }
+        payFeeMonthImpl.doGeneratorFeeMonths(feeIds, fees.get(0).getCommunityId());
         return ResultVo.success();
     }
 
@@ -173,6 +184,8 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
 
         Assert.listOnlyOne(roomDtos, "房屋未找到或找到多条" + importExportMeterWaterDto.getFloorNum() + "-" + importExportMeterWaterDto.getUnitNum() + "-" + importExportMeterWaterDto.getRoomNum());
+
+        String roomName = importExportMeterWaterDto.getFloorNum() + "-" + importExportMeterWaterDto.getUnitNum() + "-" + importExportMeterWaterDto.getRoomNum();
 
         importExportMeterWaterDto.setMeterType(meterType);
         //查询房屋是否有合同
@@ -202,8 +215,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             feeAttrPo.setCommunityId(communityId);
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_IMPORT_FEE_NAME);
-            String feeName = importExportMeterWaterDto.getFloorNum() + "栋" + importExportMeterWaterDto.getUnitNum() + "单元" + importExportMeterWaterDto.getRoomNum() + "室";
-
+            String feeName = roomName;
             if ("1010".equals(importExportMeterWaterDto.getMeterType())) {
                 feeName += "水费";
             } else if ("2020".equals(importExportMeterWaterDto.getMeterType())) {
@@ -216,13 +228,23 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             feeAttrPos.add(feeAttrPo);
         }
 
+
+        //todo 保存房屋名称
+        FeeAttrPo feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(communityId);
+        feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME);
+        feeAttrPo.setValue(roomName);
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        feeAttrPos.add(feeAttrPo);
+
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setCommunityId(communityId);
         ownerDto.setRoomId(roomDtos.get(0).getRoomId());
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
 
         if (ownerDtos != null && ownerDtos.size() > 0) {
-            FeeAttrPo feeAttrPo = new FeeAttrPo();
+            feeAttrPo = new FeeAttrPo();
             feeAttrPo.setCommunityId(communityId);
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
             feeAttrPo.setValue(ownerDtos.get(0).getOwnerId());
@@ -250,7 +272,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
         payFeePo.setState(FeeDto.STATE_DOING);
         // 如果 当前读数小于等于上期读数
-        if(Double.parseDouble(importExportMeterWaterDto.getCurDegrees()) <= Double.parseDouble(importExportMeterWaterDto.getPreDegrees())){
+        if (Double.parseDouble(importExportMeterWaterDto.getCurDegrees()) <= Double.parseDouble(importExportMeterWaterDto.getPreDegrees())) {
             payFeePo.setState(FeeDto.STATE_FINISH);
         }
 
@@ -288,7 +310,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             return false;
         }
         if (MeterWaterDto.METER_TYPE_ROOM.equals(meterWaterDto.getObjType())) {
-            String[] nums = roomNum.split("-",3);
+            String[] nums = roomNum.split("-", 3);
             if (nums.length != 3) {
                 return false;
             }
@@ -305,7 +327,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
             meterWaterDto.setObjId(roomDtos.get(0).getRoomId());
 
         } else {
-            String[] nums = roomNum.split("-",2);
+            String[] nums = roomNum.split("-", 2);
             if (nums.length != 2) {
                 return false;
             }

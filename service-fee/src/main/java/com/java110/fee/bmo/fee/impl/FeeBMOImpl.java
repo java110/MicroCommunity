@@ -717,7 +717,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeAttrPo.setSpecCd(specCd);
         feeAttrPo.setValue(value);
         feeAttrPo.setFeeId(paramInJson.getString("feeId"));
-        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
         return feeAttrPo;
 
     }
