@@ -39,6 +39,9 @@ public class QueryReportConfigFeeSummaryCmd extends Cmd {
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
         queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
+        if(reqJson.containsKey("endDate") && !reqJson.getString("endDate").contains(":")) {
+            queryStatisticsDto.setEndDate(reqJson.getString("endDate") + " 23:59:59");
+        }
         queryStatisticsDto.setFloorId(reqJson.getString("floorId"));
         if (reqJson.containsKey("configIds")) {
             queryStatisticsDto.setConfigIds(reqJson.getString("configIds").split(","));
@@ -53,11 +56,8 @@ public class QueryReportConfigFeeSummaryCmd extends Cmd {
         BigDecimal feeRoomCountDec = null;
         BigDecimal oweRoomCountDec = null;
         BigDecimal feeRoomRate = null;
-        BigDecimal hisOweFee = null;
+        BigDecimal curReceivedFee = null;
         BigDecimal curReceivableFee = null;
-        BigDecimal hisReceivedFee = null;
-        BigDecimal receivedFee = null;
-        BigDecimal preReceivedFee = null;
         for (Map data : datas) {
             //todo 计算 户收费率
             if (Double.parseDouble(data.get("feeRoomCount").toString()) > 0) {
@@ -70,15 +70,12 @@ public class QueryReportConfigFeeSummaryCmd extends Cmd {
             }
 
             //todo 计算 收费率
-            hisOweFee = new BigDecimal(Double.parseDouble(data.get("hisOweFee").toString()));
+            curReceivedFee = new BigDecimal(Double.parseDouble(data.get("curReceivedFee").toString()));
             curReceivableFee = new BigDecimal(Double.parseDouble(data.get("curReceivableFee").toString()));
-            hisReceivedFee = new BigDecimal(Double.parseDouble(data.get("hisReceivedFee").toString()));
-            hisOweFee = curReceivableFee.add(hisOweFee).add(hisReceivedFee);
 
-            if (hisOweFee.doubleValue() > 0) {
-                receivedFee = new BigDecimal(Double.parseDouble(data.get("receivedFee").toString()));
-                preReceivedFee = new BigDecimal(Double.parseDouble(data.get("preReceivedFee").toString()));
-                feeRoomRate = receivedFee.subtract(preReceivedFee).divide(hisOweFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+
+            if (curReceivableFee.doubleValue() > 0) {
+                feeRoomRate = curReceivedFee.divide(curReceivableFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
                 data.put("feeRate", feeRoomRate.doubleValue());
             } else {
                 data.put("feeRate", 0.0);

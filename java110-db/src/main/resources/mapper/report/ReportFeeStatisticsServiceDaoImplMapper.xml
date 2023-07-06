@@ -537,6 +537,30 @@
         </if>
         ) curReceivableFee,
         (
+        select ifnull(sum(t.receivable_amount),0.0) curReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = a.floor_id
+        and t.status_cd = '0'
+        and t.community_id= a.community_id
+        and t.cur_month_time &gt;= #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        and t.detail_id != '-1'
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        ) curReceivedFee,
+        (
         select ifnull(sum(t.received_amount),0.0) hisReceivedFee
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -725,6 +749,32 @@
         </if>
         and pf.fee_type_cd = a.status_cd
         ) curReceivableFee,
+        (
+        select ifnull(sum(t.receivable_amount),0.0) curReceivedFee
+        from pay_fee_detail_month t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        <if test="floorId != null and floorId != ''">
+            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        </if>
+        where
+        1=1
+        <if test="floorId != null and floorId != ''">
+            and bu.floor_id = #{floorId}
+        </if>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.cur_month_time &gt;= #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        and t.detail_id != '-1'
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        and pf.fee_type_cd = a.status_cd
+        ) curReceivedFee,
         (
         select ifnull(sum(t.received_amount),0.0) hisReceivedFee
         from pay_fee_detail_month t

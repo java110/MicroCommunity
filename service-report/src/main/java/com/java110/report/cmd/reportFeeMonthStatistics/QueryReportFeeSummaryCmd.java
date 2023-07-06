@@ -59,6 +59,9 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
         queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
+        if(reqJson.containsKey("endDate") && !reqJson.getString("endDate").contains(":")) {
+            queryStatisticsDto.setEndDate(reqJson.getString("endDate") + " 23:59:59");
+        }
         queryStatisticsDto.setConfigId(reqJson.getString("configId"));
         queryStatisticsDto.setFloorId(reqJson.getString("floorId"));
         queryStatisticsDto.setObjName(reqJson.getString("objName"));

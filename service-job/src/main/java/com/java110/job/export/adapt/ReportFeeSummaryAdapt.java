@@ -40,9 +40,12 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
         row.createCell(1).setCellValue("收费户");
         row.createCell(2).setCellValue("欠费户");
         row.createCell(3).setCellValue("历史欠费+当期欠费=欠费");
-        row.createCell(6).setCellValue("欠费追回+当期实收+预交=实收");
-        row.createCell(10).setCellValue("已交户/收费户=户收费率");
-        row.createCell(11).setCellValue("(实收-预交)/(历史欠费+欠费追回+当期应收)=收费率");
+        row.createCell(6).setCellValue("欠费追回+当期部分+预交=实缴");
+        row.createCell(10).setCellValue("当期应收");
+        row.createCell(11).setCellValue("当期实收");
+        row.createCell(12).setCellValue("已交户/收费户=户收费率");
+        row.createCell(13).setCellValue("当期实收/当期应收=收费率");
+        row.createCell(14).setCellValue("欠费追回/(欠费追回+历史欠费)=清缴率");
 
         JSONObject reqJson = exportDataDto.getReqJson();
 
@@ -93,23 +96,33 @@ public class ReportFeeSummaryAdapt implements IExportDataAdapt {
         row.createCell(8).setCellValue(dataObj.getDouble("preReceivedFee"));
         row.createCell(9).setCellValue(dataObj.getDouble("receivedFee"));
         //((fee.feeRoomCount-fee.oweRoomCount)/fee.feeRoomCount*100).toFixed(2)
+        row.createCell(10).setCellValue(dataObj.getDouble("curReceivableFee"));
+        BigDecimal curReceivableFee = new BigDecimal(dataObj.getDouble("curReceivableFee"));
+        BigDecimal curReceivedFee = curReceivableFee.subtract(curOweFee);
+        row.createCell(11).setCellValue(curReceivedFee.doubleValue());
 
+        //todo 计算户收费率
         BigDecimal feeRoomCount = new BigDecimal(dataObj.getDouble("feeRoomCount"));
         BigDecimal oweRoomCount = new BigDecimal(dataObj.getDouble("oweRoomCount"));
         BigDecimal roomFeeRate = new BigDecimal(0);
-        if(feeRoomCount.doubleValue()>0){
-            feeRoomCount.subtract(oweRoomCount).divide(feeRoomCount, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        if (feeRoomCount.doubleValue() > 0) {
+            roomFeeRate = feeRoomCount.subtract(oweRoomCount).divide(feeRoomCount, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
         }
-        row.createCell(10).setCellValue(roomFeeRate.doubleValue() + "%");
-        //((fee.receivedFee-fee.preReceivedFee)/(fee.hisOweFee+fee.curReceivableFee)*100).toFixed(2)
-        BigDecimal curReceivableFee = new BigDecimal(dataObj.getDouble("curReceivableFee"));
-        curReceivableFee = hisOweFee.add(curReceivableFee).add(hisReceivedFee);
-        roomFeeRate = new BigDecimal(0);
-        if(curReceivableFee.doubleValue()> 0) {
-            roomFeeRate = receivedFee.subtract(preReceivedFee).divide(curReceivableFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
-        }
-        row.createCell(11).setCellValue(roomFeeRate.doubleValue() + "%");
+        row.createCell(12).setCellValue(roomFeeRate.doubleValue() + "%");
 
+        //todo 计算收费率 当期实收/当期应收=收费率
+        roomFeeRate = new BigDecimal(0);
+        if (curReceivableFee.doubleValue() > 0) {
+            roomFeeRate = curReceivedFee.divide(curReceivableFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
+        //todo 计算清缴率 欠费追回/(欠费追回+历史欠费)=清缴率
+        row.createCell(13).setCellValue(roomFeeRate.doubleValue() + "%");
+        hisReceivedFee = hisReceivedFee.add(hisOweFee);
+        roomFeeRate = new BigDecimal(0);
+        if (hisReceivedFee.doubleValue() > 0) {
+            roomFeeRate = hisReceivedFee.divide(hisReceivedFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
+        row.createCell(14).setCellValue(roomFeeRate.doubleValue() + "%");
     }
 
     /**
