@@ -159,11 +159,27 @@ public class PayMonthFeeCmd extends Cmd {
 
         List<PayFeeDetailMonthDto> payFeeDetailMonthDtos = (List<PayFeeDetailMonthDto>) reqJson.get("payFeeDetailMonthDtos");
 
+        Calendar createTimeCal = Calendar.getInstance();
+
+        Map<String, FeeDto> feeDtoMap = new HashMap<>();
 
         JSONArray details = new JSONArray();
         for (PayFeeDetailMonthDto payFeeDetailMonthDto : payFeeDetailMonthDtos) {
+            // todo 费用只查一次提高 效率
+            if (!feeDtoMap.containsKey(payFeeDetailMonthDto.getFeeId())) {
+                //todo 查询费用是否存在
+                FeeDto feeDto = new FeeDto();
+                feeDto.setFeeId(payFeeDetailMonthDto.getFeeId());
+                feeDto.setCommunityId(payFeeDetailMonthDto.getCommunityId());
+                List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+                if (feeDtos == null || feeDtos.size() != 1) {
+                    throw new CmdException("费用不存在");
+                }
+                feeDtoMap.put(payFeeDetailMonthDto.getFeeId(), feeDtos.get(0));
+            }
+            createTimeCal.add(Calendar.SECOND, 1);
             try {
-                doMonthFee(payFeeDetailMonthDto, context, userDtos.get(0), reqJson);
+                doMonthFee(payFeeDetailMonthDto, context, userDtos.get(0), reqJson, createTimeCal.getTime(), feeDtoMap);
             } catch (Exception e) {
                 logger.error("处理异常", e);
                 throw new CmdException(e.getMessage());
@@ -185,7 +201,7 @@ public class PayMonthFeeCmd extends Cmd {
      * @param userDto
      * @param reqJson
      */
-    private void doMonthFee(PayFeeDetailMonthDto payFeeDetailMonthDto, ICmdDataFlowContext context, UserDto userDto, JSONObject reqJson) {
+    private void doMonthFee(PayFeeDetailMonthDto payFeeDetailMonthDto, ICmdDataFlowContext context, UserDto userDto, JSONObject reqJson, Date createTime, Map<String, FeeDto> feeDtoMap) {
         //todo 计算结束时间
         Date startTime = DateUtil.getDateFromStringB(payFeeDetailMonthDto.getCurMonthTime());
         Calendar calendar = Calendar.getInstance();
@@ -193,14 +209,6 @@ public class PayMonthFeeCmd extends Cmd {
         calendar.add(Calendar.MONTH, 1);
         String endTime = DateUtil.getFormatTimeStringB(calendar.getTime());
 
-        //todo 查询费用是否存在
-        FeeDto feeDto = new FeeDto();
-        feeDto.setFeeId(payFeeDetailMonthDto.getFeeId());
-        feeDto.setCommunityId(payFeeDetailMonthDto.getCommunityId());
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (feeDtos == null || feeDtos.size() != 1) {
-            throw new CmdException("费用不存在");
-        }
 
         //获取订单ID
         String oId = Java110TransactionalFactory.getOId();
@@ -218,12 +226,14 @@ public class PayMonthFeeCmd extends Cmd {
             }
             payFeeDetailPo.setPayOrderId(oId);
             payFeeDetailPo.setEndTime(endTime);
+            // todo 按月交费时 主要按时间顺序排序时 能够整齐
+            payFeeDetailPo.setCreateTime(DateUtil.getFormatTimeStringA(createTime));
 
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
             }
-            payFeePo = modifyFee(payFeeDetailMonthDto, reqJson, feeDtos.get(0), endTime);
+            payFeePo = modifyFee(payFeeDetailMonthDto, reqJson, feeDtoMap.get(payFeeDetailMonthDto.getFeeId()), endTime);
 
             flag = payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
             if (flag < 1) {
@@ -238,10 +248,10 @@ public class PayMonthFeeCmd extends Cmd {
             DistributedLock.releaseDistributedLock(key, requestId);
         }
         //车辆延期
-        updateOwnerCarEndTime(payFeePo, reqJson, feeDtos.get(0));
+        updateOwnerCarEndTime(payFeePo, reqJson, feeDtoMap.get(payFeeDetailMonthDto.getFeeId()));
 
         //处理报修单
-        doDealRepairOrder(payFeeDetailMonthDto, feeDtos.get(0));
+        doDealRepairOrder(payFeeDetailMonthDto, feeDtoMap.get(payFeeDetailMonthDto.getFeeId()));
 
 
     }
