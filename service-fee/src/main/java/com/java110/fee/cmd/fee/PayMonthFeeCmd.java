@@ -3,6 +3,7 @@ package com.java110.fee.cmd.fee;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -148,6 +149,7 @@ public class PayMonthFeeCmd extends Cmd {
 
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = context.getReqHeaders().get("user-id");
         UserDto userDto = new UserDto();
@@ -233,7 +235,7 @@ public class PayMonthFeeCmd extends Cmd {
             payFeeDetailMonthDto.setDetailId(payFeeDetailPo.getDetailId());
 
         } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
+            DistributedLock.releaseDistributedLock(key, requestId);
         }
         //车辆延期
         updateOwnerCarEndTime(payFeePo, reqJson, feeDtos.get(0));
@@ -363,7 +365,8 @@ public class PayMonthFeeCmd extends Cmd {
         for (PayFeeDetailMonthDto tmpFeeDetailMonthDto : feeDetailMonthDtos) {
             if (Integer.parseInt(tmpFeeDetailMonthDto.getDetailYear()) <= Integer.parseInt(tmpPayFeeDetailMonthDto.getDetailYear())
                     && Integer.parseInt(tmpFeeDetailMonthDto.getDetailMonth()) < Integer.parseInt(tmpPayFeeDetailMonthDto.getDetailMonth())) {
-                throw new CmdException("未连续缴费，请选择" + tmpFeeDetailMonthDto.getDetailYear() + "-" + tmpFeeDetailMonthDto.getDetailMonth() + " ," + tmpFeeDetailMonthDto.getFeeName());
+                throw new CmdException("未连续缴费，请选择" + tmpFeeDetailMonthDto.getDetailYear() + "-" + tmpFeeDetailMonthDto.getDetailMonth()
+                        + " ," + tmpPayFeeDetailMonthDto.getFeeName());
             }
             if (Integer.parseInt(tmpFeeDetailMonthDto.getDetailYear()) == Integer.parseInt(tmpPayFeeDetailMonthDto.getDetailYear())
                     && Integer.parseInt(tmpFeeDetailMonthDto.getDetailMonth()) == Integer.parseInt(tmpPayFeeDetailMonthDto.getDetailMonth())) {

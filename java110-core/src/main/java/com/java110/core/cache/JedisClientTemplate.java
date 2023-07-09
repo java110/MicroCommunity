@@ -40,7 +40,7 @@ public class JedisClientTemplate implements Jedis {
     public String set(String key, String value, String nxxx, String expx, int time) {
 //        redisTemplate.opsForValue().set(key, value,nxxx,expx,time);
 //        return "";
-        return redisTemplate.execute(new RedisCallback() {
+        Object ext = redisTemplate.execute(new RedisCallback() {
             public String doInRedis(RedisConnection connection) {
                 //redis.clients.jedis.Jedis jedis = (redis.clients.jedis.Jedis) connection.getNativeConnection();
                 Object nativeConnection = connection.getNativeConnection();
@@ -55,7 +55,11 @@ public class JedisClientTemplate implements Jedis {
                 }
                 return "";
             }
-        }, true).toString();
+        }, true);
+        if (ext == null) {
+            return "";
+        }
+        return ext.toString();
     }
 
 
