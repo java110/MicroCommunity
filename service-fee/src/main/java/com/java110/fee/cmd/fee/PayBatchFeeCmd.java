@@ -215,7 +215,7 @@ public class PayBatchFeeCmd extends Cmd {
                 throw new CmdException("缴费失败");
             }
         } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
+            DistributedLock.releaseDistributedLock(key,requestId);
         }
         //车辆延期
         updateOwnerCarEndTime(payFeePo, paramObj);

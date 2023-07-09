@@ -247,7 +247,7 @@ public class PayFeeCmd extends Cmd {
         } catch (ParseException e) {
             e.printStackTrace();
         } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
+            DistributedLock.releaseDistributedLock(key,requestId);
         }
         //账户处理
         dealAccount(paramObj);
