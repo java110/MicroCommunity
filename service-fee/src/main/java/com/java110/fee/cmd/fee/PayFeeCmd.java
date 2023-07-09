@@ -693,7 +693,7 @@ public class PayFeeCmd extends Cmd {
         BigDecimal cycles = null;
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
-        if ("-101".equals(paramInJson.getString("cycles"))) {
+        if ("-101".equals(paramInJson.getString("cycles"))) { // 自定义金额交费
             Date endTime = feeDto.getEndTime();
             Calendar endCalender = Calendar.getInstance();
             endCalender.setTime(endTime);
@@ -707,6 +707,10 @@ public class PayFeeCmd extends Cmd {
             if (paramInJson.containsKey("receivableAmount") && !StringUtil.isEmpty(paramInJson.getString("receivableAmount"))) {
                 businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
             } else {
+                businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
+            }
+            //todo 如果应收小于实收，将应收刷为 实收
+            if(businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()){
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
         } else if ("-103".equals(paramInJson.getString("cycles"))) { //这里按缴费结束时间缴费
@@ -728,7 +732,11 @@ public class PayFeeCmd extends Cmd {
             } else {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
-        } else {
+            //todo 如果应收小于实收，将应收刷为 实收
+            if(businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()){
+                businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
+            }
+        } else { //自定义周期
             targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));//根据缴费周期计算 结束时间
             cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
             double tmpReceivableAmount = cycles.multiply(feePrice).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
@@ -741,6 +749,7 @@ public class PayFeeCmd extends Cmd {
                 }
             }
         }
+
         businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
         paramInJson.put("feeInfo", feeDto);
 
