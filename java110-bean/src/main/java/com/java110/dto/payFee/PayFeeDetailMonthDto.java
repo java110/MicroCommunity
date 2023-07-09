@@ -32,6 +32,7 @@ public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
     private String communityId;
     private String feeId;
     private String monthId;
+    private String[] monthIds;
 
 
     private Date createTime;
@@ -256,5 +257,13 @@ public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
 
     public void setFeeAttrs(List<FeeAttrDto> feeAttrs) {
         this.feeAttrs = feeAttrs;
+    }
+
+    public String[] getMonthIds() {
+        return monthIds;
+    }
+
+    public void setMonthIds(String[] monthIds) {
+        this.monthIds = monthIds;
     }
 }

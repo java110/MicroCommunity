@@ -42,8 +42,9 @@
         receivedAmount,t.community_id,t.community_id communityId,t.fee_id,t.fee_id feeId,t.month_id,t.month_id monthId,
         t.obj_name objName,t.obj_id objId,t.owner_name ownerName,t.owner_id ownerId,t.link,t.state,t.pay_fee_time
         payFeeTime,
-        t.cur_month_time curMonthTime,t.deadline_time deadlineTime
+        t.cur_month_time curMonthTime,t.deadline_time deadlineTime,pf.fee_flag feeFlag,pf.end_time endTime
         from pay_fee_detail_month t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1 =1
         <if test="detailMonth !=null and detailMonth != ''">
             and t.detail_month= #{detailMonth}
@@ -77,6 +78,12 @@
         </if>
         <if test="monthId !=null and monthId != ''">
             and t.month_id= #{monthId}
+        </if>
+        <if test="monthIds !=null ">
+            and t.month_id in
+            <foreach collection="monthIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
@@ -218,6 +225,12 @@
         </if>
         <if test="monthId !=null and monthId != ''">
             and t.month_id= #{monthId}
+        </if>
+        <if test="monthIds !=null ">
+            and t.month_id in
+            <foreach collection="monthIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
@@ -418,6 +431,12 @@
         </if>
         <if test="monthId !=null and monthId != ''">
             and t.month_id= #{monthId}
+        </if>
+        <if test="monthIds !=null ">
+            and t.month_id in
+            <foreach collection="monthIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
