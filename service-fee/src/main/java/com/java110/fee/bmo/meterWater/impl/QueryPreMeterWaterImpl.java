@@ -271,10 +271,11 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         }
         payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
         payFeePo.setState(FeeDto.STATE_DOING);
-        // 如果 当前读数小于等于上期读数
-        if (Double.parseDouble(importExportMeterWaterDto.getCurDegrees()) <= Double.parseDouble(importExportMeterWaterDto.getPreDegrees())) {
-            payFeePo.setState(FeeDto.STATE_FINISH);
-        }
+        //todo 如果 当前读数小于等于上期读数
+        //todo 这里注释，本来想着 方便物业再不用去缴费 读数为0 的，结果物业还习惯不了 总以为读数为0 的没有抄表成功，不会去结束费用中查看
+//        if (Double.parseDouble(importExportMeterWaterDto.getCurDegrees()) <= Double.parseDouble(importExportMeterWaterDto.getPreDegrees())) {
+//            payFeePo.setState(FeeDto.STATE_FINISH);
+//        }
 
         payFeePo.setUserId(userId);
         payFeePo.setFeeTypeCd(feeTypeCd);
