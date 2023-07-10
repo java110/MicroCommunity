@@ -1671,6 +1671,7 @@
         left join t_dict d3 on t.state = d3.status_cd and d3.table_name = "pay_fee_detail" and d3.table_columns =
         "state"
         where t.status_cd = '0' and pf.status_cd = '0'
+        and t.state != '1500'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -1779,6 +1780,7 @@
         fad.status_cd = '0' and fad.state = '1002'
         where t.status_cd = '0'
         and pf.status_cd = '0'
+        and t.state != '1500'
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>

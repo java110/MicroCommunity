@@ -13,10 +13,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.account.AccountDetailDto;
-import com.java110.dto.fee.FeeAttrDto;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.dto.fee.FeeDto;
-import com.java110.dto.fee.FeeReceiptDetailDto;
+import com.java110.dto.fee.*;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
@@ -1073,6 +1070,7 @@ public class PayFeeCmd extends Cmd {
         tmpPayFeeDetailPo.setPayableAmount("0");
         tmpPayFeeDetailPo.setStartTime(DateUtil.getFormatTimeStringB(endTime));
         tmpPayFeeDetailPo.setEndTime(reqJson.getString("customStartTime"));
+        tmpPayFeeDetailPo.setState(FeeDetailDto.STATE_OWE);
         tmpPayFeeDetailPo.setRemark("按缴费时间段缴费,这部分费用按欠费的方式重新生成，请在" + payObjNameRemark + "上查看");
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(tmpPayFeeDetailPo);
 
@@ -1107,14 +1105,26 @@ public class PayFeeCmd extends Cmd {
 
         List<FeeAttrPo> tmpFeeAttrPos = new ArrayList<>();
         FeeAttrPo tmpFeeAttrPo = null;
+        boolean hasDeadLineTime = false;
         for (FeeAttrDto tmpFeeAttrDto : feeAttrDtos) {
             tmpFeeAttrDto.setFeeId(tmpPayFeePo.getFeeId());
             tmpFeeAttrDto.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
 
             if (FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME.equals(tmpFeeAttrDto.getSpecCd())) {
                 tmpFeeAttrDto.setValue(reqJson.getString("customStartTime"));
+                hasDeadLineTime = true;
             }
             tmpFeeAttrPo = BeanConvertUtil.covertBean(tmpFeeAttrDto, FeeAttrPo.class);
+            tmpFeeAttrPos.add(tmpFeeAttrPo);
+        }
+        //todo 没有结束时间时
+        if(!hasDeadLineTime){
+            tmpFeeAttrPo = new FeeAttrPo();
+            tmpFeeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
+            tmpFeeAttrPo.setFeeId(tmpPayFeePo.getFeeId());
+            tmpFeeAttrPo.setCommunityId(tmpFeeAttrPo.getCommunityId());
+            tmpFeeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
+            tmpFeeAttrPo.setValue(reqJson.getString("customStartTime"));
             tmpFeeAttrPos.add(tmpFeeAttrPo);
         }
 

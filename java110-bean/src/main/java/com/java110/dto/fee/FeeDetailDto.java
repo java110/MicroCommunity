@@ -28,7 +28,7 @@ public class FeeDetailDto extends PageDto implements Serializable {
     public static final String STATE_RETURN_ERROR = "1200";
     public static final String STATE_RETURN_ORDER = "1300";
     public static final String STATE_NORMAL = "1400";
-
+    public static final String STATE_OWE = "1500"; // 欠费
     /**
      * 1000	退费中
      * 1100	已退费
