@@ -18,7 +18,7 @@
     <!-- 查询问卷题目信息 add by wuxw 2018-07-03 -->
     <select id="getQuestionTitleInfo" parameterType="Map" resultType="Map">
         select t.title_type,t.title_type titleType,t.title_id,t.title_id titleId,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.qa_title,t.qa_title qaTitle
+        statusCd,t.community_id,t.community_id communityId,t.qa_title,t.qa_title qaTitle,t.create_time createTime
         from question_title t
         where 1 =1
         <if test="titleType !=null and titleType != ''">
