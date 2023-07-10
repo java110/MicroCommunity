@@ -17,6 +17,10 @@ import java.util.List;
  **/
 public class QuestionTitleDto extends PageDto implements Serializable {
 
+    public static final String TITLE_TYPE_SINGLE = "1001"; // 单选题
+    public static final String TITLE_TYPE_MULTIPLE = "2002"; // 多选题
+    public static final String TITLE_TYPE_QUESTIONS = "3003"; // 简答题
+
     private String titleType;
     private String titleId;
     private String communityId;

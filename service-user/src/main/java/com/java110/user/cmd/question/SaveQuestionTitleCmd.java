@@ -15,6 +15,7 @@
  */
 package com.java110.user.cmd.question;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,13 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.maintainance.MaintainanceItemDto;
+import com.java110.dto.questionTitle.QuestionTitleDto;
 import com.java110.intf.user.IQuestionTitleV1InnerServiceSMO;
+import com.java110.intf.user.IQuestionTitleValueV1InnerServiceSMO;
+import com.java110.po.maintainance.MaintainanceItemValuePo;
 import com.java110.po.questionTitle.QuestionTitlePo;
+import com.java110.po.questionTitleValue.QuestionTitleValuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,11 +58,23 @@ public class SaveQuestionTitleCmd extends Cmd {
     @Autowired
     private IQuestionTitleV1InnerServiceSMO questionTitleV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IQuestionTitleValueV1InnerServiceSMO questionTitleValueV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "qaTitle", "请求报文中未包含qaTitle");
         Assert.hasKeyAndValue(reqJson, "titleType", "请求报文中未包含titleType");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+
+        //todo 如果不是简答题 需要 包含选项
+        JSONArray titleValues = null;
+        if (!QuestionTitleDto.TITLE_TYPE_QUESTIONS.equals(reqJson.getString("titleType"))) {
+            titleValues = reqJson.getJSONArray("titleValues");
+            if (titleValues.size() < 1) {
+                throw new IllegalArgumentException("未包含选项");
+            }
+        }
 
     }
 
@@ -70,6 +88,23 @@ public class SaveQuestionTitleCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+        //todo 简答题不用 写入，直接返回
+        if (QuestionTitleDto.TITLE_TYPE_QUESTIONS.equals(questionTitlePo.getTitleType())) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return;
+        }
+        JSONArray titleValues = reqJson.getJSONArray("titleValues");
+        QuestionTitleValuePo questionTitleValuePo = null;
+        for (int titleValueIndex = 0; titleValueIndex < titleValues.size(); titleValueIndex++) {
+            questionTitleValuePo = new QuestionTitleValuePo();
+            questionTitleValuePo.setQaValue(titleValues.getJSONObject(titleValueIndex).getString("itemValue"));
+            questionTitleValuePo.setSeq(titleValues.getJSONObject(titleValueIndex).getString("seq"));
+            questionTitleValuePo.setTitleId(questionTitlePo.getTitleId());
+            questionTitleValuePo.setValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_valueId));
+            questionTitleValuePo.setCommunityId(questionTitlePo.getCommunityId());
+            questionTitleValueV1InnerServiceSMOImpl.saveQuestionTitleValue(questionTitleValuePo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

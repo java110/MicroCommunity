@@ -17,6 +17,7 @@ package com.java110.po.questionTitleValue;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-07-10 15:24:35 mail: 928255095@qq.com
@@ -28,55 +29,68 @@ import java.util.Date;
 public class QuestionTitleValuePo implements Serializable {
 
     private String score;
-private String valueId;
-private String titleId;
-private String statusCd = "0";
-private String communityId;
-private String qaValue;
-private String seq;
-public String getScore() {
+    private String valueId;
+    private String titleId;
+    private String statusCd = "0";
+    private String communityId;
+    private String qaValue;
+    private String seq;
+
+    public String getScore() {
         return score;
     }
-public void setScore(String score) {
+
+    public void setScore(String score) {
         this.score = score;
     }
-public String getValueId() {
+
+    public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getTitleId() {
+
+    public String getTitleId() {
         return titleId;
     }
-public void setTitleId(String titleId) {
+
+    public void setTitleId(String titleId) {
         this.titleId = titleId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getQaValue() {
+
+    public String getQaValue() {
         return qaValue;
     }
-public void setQaValue(String qaValue) {
+
+    public void setQaValue(String qaValue) {
         this.qaValue = qaValue;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
-
 
 
 }
