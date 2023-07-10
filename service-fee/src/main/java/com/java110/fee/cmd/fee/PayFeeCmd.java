@@ -818,10 +818,10 @@ public class PayFeeCmd extends Cmd {
         } else if ("-105".equals(paramInJson.getString("cycles"))) {
             String customEndTime = paramInJson.getString("customEndTime");
             Date endDates = DateUtil.getDateFromStringB(customEndTime);
-            Calendar c = Calendar.getInstance();
-            c.setTime(endDates);
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            endDates = c.getTime();//这是明天
+//            Calendar c = Calendar.getInstance();
+//            c.setTime(endDates);
+//            c.add(Calendar.DAY_OF_MONTH, 1);
+//            endDates = c.getTime();//这是明天
             endCalender.setTime(endDates);
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
@@ -1034,19 +1034,19 @@ public class PayFeeCmd extends Cmd {
         }
 
         FeeConfigDto tmpFeeConfigDto = new FeeConfigDto();
-        tmpFeeConfigDto.setFeeNameEq(feeConfigDto.getFeeNameEq() + "欠费");
+        tmpFeeConfigDto.setFeeNameEq(feeConfigDto.getFeeName() + "欠费");
         tmpFeeConfigDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE_ONCE);
         tmpFeeConfigDto.setComputingFormula(feeConfigDto.getComputingFormula());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(tmpFeeConfigDto);
 
-        Assert.listOnlyOne(feeConfigDtos, "按缴费时间段缴费时，费用必须为间接性费用，或者存在名称为=" + feeConfigDto.getFeeName() + "欠费 的间接性费用，它的公式计算必须要和" + feeConfigDto.getFeeName() + "一致");
+        Assert.listOnlyOne(feeConfigDtos, "按自定义时间段缴费时，费用必须为间接性费用，或者存在名称为 " + feeConfigDto.getFeeName() + "欠费 的间接性费用，它的公式计算必须要和" + feeConfigDto.getFeeName() + "一致");
     }
 
 
     /**
      * 自定义时间段 缴费
      *
-     * @param cycle
+     * @param cycles
      * @param endTime
      * @param payFeeDetailPo
      * @param payFeePo
@@ -1140,7 +1140,7 @@ public class PayFeeCmd extends Cmd {
 
 
         FeeConfigDto tmpFeeConfigDto = new FeeConfigDto();
-        tmpFeeConfigDto.setFeeNameEq(feeConfigDtos.get(0).getFeeNameEq() + "欠费");
+        tmpFeeConfigDto.setFeeNameEq(feeConfigDtos.get(0).getFeeName() + "欠费");
         tmpFeeConfigDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE_ONCE);
         tmpFeeConfigDto.setComputingFormula(feeConfigDto.getComputingFormula());
         //todo 校验的时候校验过了 所以这里不可能为空
