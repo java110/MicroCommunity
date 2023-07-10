@@ -97,10 +97,17 @@ public class SaveQuestionTitleCmd extends Cmd {
         }
         JSONArray titleValues = reqJson.getJSONArray("titleValues");
         QuestionTitleValuePo questionTitleValuePo = null;
+        JSONObject valueObj = null;
         for (int titleValueIndex = 0; titleValueIndex < titleValues.size(); titleValueIndex++) {
+            valueObj = titleValues.getJSONObject(titleValueIndex);
             questionTitleValuePo = new QuestionTitleValuePo();
-            questionTitleValuePo.setQaValue(titleValues.getJSONObject(titleValueIndex).getString("itemValue"));
-            questionTitleValuePo.setSeq(titleValues.getJSONObject(titleValueIndex).getString("seq"));
+            questionTitleValuePo.setQaValue(valueObj.getString("itemValue"));
+            questionTitleValuePo.setSeq((titleValueIndex+1)+"");
+            if(valueObj.containsKey("score")) {
+                questionTitleValuePo.setScore(valueObj.getString("score"));
+            }else{
+                questionTitleValuePo.setScore("0");
+            }
             questionTitleValuePo.setTitleId(questionTitlePo.getTitleId());
             questionTitleValuePo.setValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_valueId));
             questionTitleValuePo.setCommunityId(questionTitlePo.getCommunityId());
