@@ -156,6 +156,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String feeFlag;
 
+    private String preOweAmount;
+
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -803,5 +805,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setFeeFlag(String feeFlag) {
         this.feeFlag = feeFlag;
+    }
+
+    public String getPreOweAmount() {
+        return preOweAmount;
+    }
+
+    public void setPreOweAmount(String preOweAmount) {
+        this.preOweAmount = preOweAmount;
     }
 }

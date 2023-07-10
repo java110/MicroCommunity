@@ -832,18 +832,11 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Override
     public ResponseEntity<String> queryHuaningOweFee(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
-        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFeeCount(reportFeeMonthStatisticsDto);
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
-        if (count > 0) {
-            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFee(reportFeeMonthStatisticsDto);
-        } else {
-            reportFeeMonthStatisticsDtos = new ArrayList<>();
-        }
+        reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFee(reportFeeMonthStatisticsDto);
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(reportFeeMonthStatisticsDtos);
 
         return responseEntity;
     }

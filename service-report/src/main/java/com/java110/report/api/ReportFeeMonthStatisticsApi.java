@@ -565,7 +565,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setFloorNum(floorNum);
         reportFeeMonthStatisticsDto.setPage(page);
         reportFeeMonthStatisticsDto.setRow(row);
-        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
+        reportFeeMonthStatisticsDto.setStartTime(DateUtil.getYear()+"-01-01");
+        reportFeeMonthStatisticsDto.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningOweFee(reportFeeMonthStatisticsDto);
     }
 

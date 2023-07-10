@@ -2761,117 +2761,70 @@
 
     <select id="queryHuaningOweFeeCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from (
-        select a.floorNum,a.oweAmount,b.curOweAmount
-        from
-        (select t.floor_num floorNum,SUM(rfms.owe_amount) oweAmount
-        from f_floor t
-        left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and
-        rfms.status_cd = '0'
-        where t.status_cd = '0'
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
-        </if>
-        <if test="roomNum !=null and roomNum != ''">
-            and br.room_num= #{roomNum}
-        </if>
-        <if test="objName !=null and objName != ''">
-            and rfms.obj_name= #{objName}
-        </if>
-        <if test="feeYear !=null and feeYear != ''">
-            and rfms.fee_year= #{feeYear}
-        </if>
-        <if test="feeMonth !=null and feeMonth != ''">
-            and rfms.fee_month= #{feeMonth}
-        </if>
-        GROUP BY t.floor_num
-        ) a,
-        (select t.floor_num floorNum,SUM(curT.owe_amount) curOweAmount
-        from f_floor t
-        left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.obj_type = '3333' and
-        curT.status_cd = '0' and curT.community_id = t.community_id
-        where t.status_cd = '0'
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
-        </if>
-        <if test="roomNum !=null and roomNum != ''">
-            and br.room_num= #{roomNum}
-        </if>
-        <if test="feeYear !=null and feeYear != ''">
-            and curT.fee_year= #{feeYear}
-        </if>
-        <if test="feeMonth !=null and feeMonth != ''">
-            and curT.fee_month= #{feeMonth}
-        </if>
-        GROUP BY t.floor_num
-        ) b
-        where a.floorNum = b.floorNum
-        <if test="floorId !=null and floorId != ''">
-            and a.floor_id = #{floorId}
-        </if>
-        ) t
+        from f_floor f
+        where 1=1
+        and f.community_id = #{communityId}
+        and f.status_cd = '0'
+
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryHuaningOweFee" parameterType="Map" resultType="Map">
-        select a.floorNum,a.oweAmount,b.curOweAmount
-        from
-        (select t.floor_num floorNum,SUM(rfms.owe_amount) oweAmount
-        from f_floor t
-        left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        LEFT JOIN report_fee_month_statistics rfms on rfms.obj_id = br.room_id and rfms.obj_type = '3333' and
-        rfms.status_cd = '0'
-        where t.status_cd = '0'
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+        select
+        f.floor_num floorNum,
+        (
+        select ifnull(SUM(t.receivable_amount),0)
+        from pay_fee_detail_month t
+        inner join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = f.floor_id
+        and t.community_id = f.community_id
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        <if test="roomNum !=null and roomNum != ''">
-            and br.room_num= #{roomNum}
+        and t.detail_id = '-1'
+        and t.cur_month_time &lt;= #{endTime}
+        ) oweAmount,
+        (
+        select ifnull(SUM(t.receivable_amount),0)
+        from pay_fee_detail_month t
+        inner join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = f.floor_id
+        and t.community_id = f.community_id
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        <if test="objName !=null and objName != ''">
-            and rfms.obj_name= #{objName}
+        and t.detail_id = '-1'
+        and t.cur_month_time &lt;= #{endTime}
+        and t.cur_month_time &gt;= #{startTime}
+        ) curOweAmount,
+        (
+        select ifnull(SUM(t.receivable_amount),0)
+        from pay_fee_detail_month t
+        inner join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
+        inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where
+        1=1
+        and bu.floor_id = f.floor_id
+        and t.community_id = f.community_id
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        <if test="feeYear !=null and feeYear != ''">
-            and rfms.fee_year= #{feeYear}
-        </if>
-        <if test="feeMonth !=null and feeMonth != ''">
-            and rfms.fee_month= #{feeMonth}
-        </if>
-        GROUP BY t.floor_num
-        ) a,
-        (select t.floor_num floorNum,SUM(curT.owe_amount) curOweAmount
-        from f_floor t
-        left join building_unit bu on t.floor_id = bu.floor_id and bu.status_cd = '0'
-        left join building_room br on br.unit_id = bu.unit_id and br.status_cd = '0'
-        inner join report_fee_month_statistics curT on curT.obj_id = br.room_id and curT.obj_type = '3333' and
-        curT.status_cd = '0' and curT.community_id = t.community_id
-        where t.status_cd = '0'
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
-        </if>
-        <if test="roomNum !=null and roomNum != ''">
-            and br.room_num= #{roomNum}
-        </if>
-        <if test="feeYear !=null and feeYear != ''">
-            and curT.fee_year= #{feeYear}
-        </if>
-        <if test="feeMonth !=null and feeMonth != ''">
-            and curT.fee_month= #{feeMonth}
-        </if>
-        GROUP BY t.floor_num
-        ) b
-        where a.floorNum = b.floorNum
-        <if test="floorId !=null and floorId != ''">
-            and a.floor_id = #{floorId}
-        </if>
-        <if test="page != -1 and page != null ">
-            limit #{page}, #{row}
-        </if>
+        and t.detail_id = '-1'
+        and t.cur_month_time &lt; #{startTime}
+        ) preOweAmount
+        from f_floor f
+        where 1=1
+        and f.community_id = #{communityId}
+        and f.status_cd = '0'
     </select>
 
 
