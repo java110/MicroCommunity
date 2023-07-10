@@ -140,12 +140,16 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
         String cycel = null;
         String custEndTime = null;
+        String customStartTime = "";
+        String customEndTime = "";
         if (!StringUtil.isEmpty(feeDto.getCycle())) {
             cycel = feeDto.getCycle();
         }
         if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
             custEndTime = feeDto.getCustEndTime();
         }
+        customStartTime = feeDto.getCustomStartTime();
+        customEndTime = feeDto.getCustomEndTime();
         feeDto = feeDtos.get(0);
         if (!StringUtil.isEmpty(cycel)) {
             feeDto.setCycle(cycel);
@@ -153,6 +157,9 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         if (!StringUtil.isEmpty(custEndTime)) {
             feeDto.setCustEndTime(custEndTime);
         }
+
+        feeDto.setCustomStartTime(customStartTime);
+        feeDto.setCustomEndTime(customEndTime);
 
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
             RoomDto roomDto = new RoomDto();
