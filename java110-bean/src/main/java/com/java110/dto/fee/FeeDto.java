@@ -154,6 +154,9 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String userName;
 
+    private String customStartTime;
+    private String customEndTime;
+
     public String getAmount() {
         return amount;
     }
@@ -749,5 +752,19 @@ public class FeeDto extends PageDto implements Serializable {
         this.userName = userName;
     }
 
+    public String getCustomStartTime() {
+        return customStartTime;
+    }
 
+    public void setCustomStartTime(String customStartTime) {
+        this.customStartTime = customStartTime;
+    }
+
+    public String getCustomEndTime() {
+        return customEndTime;
+    }
+
+    public void setCustomEndTime(String customEndTime) {
+        this.customEndTime = customEndTime;
+    }
 }

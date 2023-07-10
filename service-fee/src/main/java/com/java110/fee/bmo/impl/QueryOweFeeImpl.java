@@ -185,6 +185,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             feeDto.setPayerObjName(ownerCarDto.getCarNum() + "(" + parkingSpaceDto.getAreaNum() + "停车场" + parkingSpaceDto.getNum() + "车位)");
             feeDto.setBuiltUpArea(parkingSpaceDto.getArea());
         }
+
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
 
@@ -518,7 +519,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         //动态费用
         if ("4004".equals(computingFormula)
                 && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
-                ) {
+        ) {
             feeDto.setAmountOwed(feeDto.getFeePrice() + "");
             feeDto.setDeadlineTime(DateUtil.getCurrentDate());
         }

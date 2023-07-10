@@ -36,6 +36,12 @@ public class ListFeeObjCmd extends Cmd {
         if (reqJson.containsKey("custEndTime") && !StringUtil.isEmpty(reqJson.getString("custEndTime"))) {
             feeDto.setCustEndTime(reqJson.getString("custEndTime"));
         }
+
+        if("105".equals(reqJson.getString("cycle"))){
+            feeDto.setCustomStartTime(reqJson.getString("customStartTime"));
+            feeDto.setCustomEndTime(reqJson.getString("customEndTime"));
+        }
+
         ResponseEntity<String> result = queryOweFeeImpl.listFeeObj(feeDto);
         context.setResponseEntity(result);
     }

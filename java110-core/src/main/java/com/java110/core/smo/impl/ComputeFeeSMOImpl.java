@@ -1002,6 +1002,18 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         if (Environment.isOwnerPhone(java110Properties)) {
             return getOwnerPhoneFee(feeAmount);
         }
+
+        //todo 如果 cycle 为105 则 根据缴费时间段 改写下
+        if ("105".equals(feeDto.getCycle())) {
+            double cycle = dayCompare(DateUtil.getDateFromStringB(feeDto.getCustomStartTime()), DateUtil.getDateFromStringB(feeDto.getCustomEndTime()));
+            feeDto.setCycle(cycle + "");
+        }
+        // todo 按结束时间缴费
+        if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
+            double cycle = dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime()));
+            feeDto.setCycle(cycle + "");
+        }
+
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
             String computingFormula = feeDto.getComputingFormula();
             if (roomDto == null) {
@@ -1024,9 +1036,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1039,9 +1048,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1057,9 +1063,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1071,9 +1074,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1087,9 +1087,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1100,9 +1097,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1126,9 +1120,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
                         cycle = new BigDecimal(feeDto.getCycle());
                     }
-                    if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                        cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                    }
                     if (cycle == null) {
                         feeTotalPrice = new BigDecimal(0);
                     } else {
@@ -1141,9 +1132,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1166,9 +1154,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1179,9 +1164,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1203,9 +1185,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     BigDecimal cycle = null;
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
                         cycle = new BigDecimal(feeDto.getCycle());
-                    }
-                    if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                        cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                     }
                     if (cycle == null) {
                         feeTotalPrice = new BigDecimal(0);
@@ -1241,9 +1220,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1257,9 +1233,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1276,9 +1249,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1291,9 +1261,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1308,9 +1275,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1321,9 +1285,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1347,9 +1308,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
                         cycle = new BigDecimal(feeDto.getCycle());
                     }
-                    if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                        cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                    }
                     if (cycle == null) {
                         feeTotalPrice = new BigDecimal(0);
                     } else {
@@ -1363,9 +1321,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1377,9 +1332,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1403,9 +1355,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
                         cycle = new BigDecimal(feeDto.getCycle());
                     }
-                    if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                        cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                    }
                     if (cycle == null) {
                         feeTotalPrice = new BigDecimal(0);
                     } else {
@@ -1415,8 +1364,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             } else {
                 throw new IllegalArgumentException("暂不支持该类公式");
             }
-        }
-        else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //合同相关
+        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //合同相关
             String computingFormula = feeDto.getComputingFormula();
 
             //查询合同关联房屋
@@ -1439,9 +1387,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1458,9 +1403,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1476,9 +1418,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1491,9 +1430,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1508,9 +1444,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1522,9 +1455,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1549,9 +1479,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
                         cycle = new BigDecimal(feeDto.getCycle());
                     }
-                    if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                        cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                    }
                     if (cycle == null) {
                         feeTotalPrice = new BigDecimal(0);
                     } else {
@@ -1565,9 +1492,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1580,9 +1504,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
-                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1594,9 +1515,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1619,9 +1537,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                     BigDecimal cycle = null;
                     if (!StringUtil.isEmpty(feeDto.getCycle())) {
                         cycle = new BigDecimal(feeDto.getCycle());
-                    }
-                    if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                        cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                     }
                     if (cycle == null) {
                         feeTotalPrice = new BigDecimal(0);
@@ -1776,13 +1691,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         ScriptEngineManager manager = new ScriptEngineManager();
         ScriptEngine engine = manager.getEngineByName("JavaScript");
         BigDecimal valueObj = null;
-        logger.debug("计算公式为：{}",value);
+        logger.debug("计算公式为：{}", value);
         try {
             value = engine.eval(value).toString();
             valueObj = new BigDecimal(Double.parseDouble(value));
         } catch (Exception e) {
             //throw new IllegalArgumentException("公式计算异常，公式为【" + feeDto.getComputingFormulaText() + "】,计算 【" + value + "】异常");
-            logger.error("公式计算异常，公式为【" + feeDto.getComputingFormulaText() + "】,计算 【" + value + "】异常",e);
+            logger.error("公式计算异常，公式为【" + feeDto.getComputingFormulaText() + "】,计算 【" + value + "】异常", e);
             valueObj = new BigDecimal(0);
         }
 
@@ -1795,9 +1710,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
     @Override
-    public Date getDeadlineTime(FeeDto feeDto){
+    public Date getDeadlineTime(FeeDto feeDto) {
         Map info = getTargetEndDateAndOweMonth(feeDto);
-        return (Date)info.get("targetEndDate");
+        return (Date) info.get("targetEndDate");
     }
 
     /**
@@ -2304,7 +2219,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
             // todo 递增
             curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
-        }else{
+        } else {
             // todo 递增
             curOweMonth = dayCompare(feeDto.getEndTime(), feeDto.getDeadlineTime());
         }
