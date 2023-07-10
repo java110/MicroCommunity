@@ -215,7 +215,7 @@ public class PayFeeCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
 
-        String cycle = paramObj.getString("cycle");
+        String cycles = paramObj.getString("cycles");
         Date endTime = null;
 
         PayFeePo payFeePo = null;
@@ -257,7 +257,7 @@ public class PayFeeCmd extends Cmd {
                 throw new CmdException("缴费失败");
             }
             // todo 如果是按 自定义时间段缴费，这里补一条缴费记录 和 欠费费用
-            ifCustomStartEndTimePayFee(cycle, endTime, payFeeDetailPo, payFeePo, paramObj);
+            ifCustomStartEndTimePayFee(cycles, endTime, payFeeDetailPo, payFeePo, paramObj);
         } catch (ParseException e) {
             e.printStackTrace();
         } finally {
@@ -1025,7 +1025,7 @@ public class PayFeeCmd extends Cmd {
      * @param feeConfigDto
      */
     private void validateIfPayFeeStartEndDate(JSONObject reqJson, FeeConfigDto feeConfigDto) {
-        if (!"-105".equals(reqJson.getString("cycle"))) {
+        if (!"-105".equals(reqJson.getString("cycles"))) {
             return;
         }
         // todo 自己是间接性费用
@@ -1051,8 +1051,8 @@ public class PayFeeCmd extends Cmd {
      * @param payFeeDetailPo
      * @param payFeePo
      */
-    private void ifCustomStartEndTimePayFee(String cycle, Date endTime, PayFeeDetailPo payFeeDetailPo, PayFeePo payFeePo, JSONObject reqJson) {
-        if (!"-105".equals(cycle)) {
+    private void ifCustomStartEndTimePayFee(String cycles, Date endTime, PayFeeDetailPo payFeeDetailPo, PayFeePo payFeePo, JSONObject reqJson) {
+        if (!"-105".equals(cycles)) {
             return;
         }
 
