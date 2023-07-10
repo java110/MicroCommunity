@@ -32,6 +32,7 @@ import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.account.AccountDetailPo;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.room.ApplyRoomDiscountPo;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.po.fee.PayFeeDetailPo;
@@ -41,6 +42,7 @@ import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.utils.cache.CommonCache;
+import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.FeeFlagTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
@@ -210,13 +212,20 @@ public class PayFeeCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
 
+        String cycle = paramObj.getString("cycle");
+        Date endTime = null;
+
         PayFeePo payFeePo = null;
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + paramObj.get("feeId");
         try {
             DistributedLock.waitGetDistributedLock(key, requestId);
+            //todo 封装 缴费记录报文
             JSONObject feeDetail = addFeeDetail(paramObj);
+            FeeDto feeInfo = (FeeDto) paramObj.get("feeInfo");
+            endTime = feeInfo.getEndTime();
             feeDetail.put("payableAmount", feeDetail.getString("receivableAmount"));
+            //todo 封装 修改费用时间报文
             JSONObject fee = modifyFee(paramObj);
             payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
@@ -244,10 +253,12 @@ public class PayFeeCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("缴费失败");
             }
+            // todo 如果是按 自定义时间段缴费，这里补一条缴费记录 和 欠费费用
+            ifCustomStartEndTimePayFee(cycle, endTime, payFeeDetailPo, payFeePo, paramObj);
         } catch (ParseException e) {
             e.printStackTrace();
         } finally {
-            DistributedLock.releaseDistributedLock(key,requestId);
+            DistributedLock.releaseDistributedLock(key, requestId);
         }
         //账户处理
         dealAccount(paramObj);
@@ -288,6 +299,7 @@ public class PayFeeCmd extends Cmd {
 
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(feeReceiptDetailDto));
     }
+
 
     private void dealUserAccount(JSONObject paramObj, PayFeeDetailPo payFeeDetailPo) {
         //判断选择的账号
@@ -710,7 +722,7 @@ public class PayFeeCmd extends Cmd {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
             //todo 如果应收小于实收，将应收刷为 实收
-            if(businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()){
+            if (businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()) {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
         } else if ("-103".equals(paramInJson.getString("cycles"))) { //这里按缴费结束时间缴费
@@ -733,9 +745,34 @@ public class PayFeeCmd extends Cmd {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
             //todo 如果应收小于实收，将应收刷为 实收
-            if(businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()){
+            if (businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()) {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
+        } else if ("-105".equals(paramInJson.getString("cycles"))) { //这里按缴费结束时间缴费
+            String customEndTime = paramInJson.getString("customEndTime");
+            Date endDates = DateUtil.getDateFromStringB(customEndTime);
+            Calendar c = Calendar.getInstance();
+            c.setTime(endDates);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            endDates = c.getTime();//这是明天
+            targetEndTime = endDates;
+            BigDecimal receivedAmount1 = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+            cycles = receivedAmount1.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
+            paramInJson.put("tmpCycles", cycles.doubleValue());
+            businessFeeDetail.put("cycles", cycles.doubleValue());
+            BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
+            //处理 可能还存在 实收手工减免的情况
+            if (paramInJson.containsKey("receivableAmount") && !StringUtil.isEmpty(paramInJson.getString("receivableAmount"))) {
+                businessFeeDetail.put("receivableAmount", paramInJson.getString("receivableAmount"));
+            } else {
+                businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
+            }
+            //todo 如果应收小于实收，将应收刷为 实收
+            if (businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()) {
+                businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
+            }
+            //todo 改写开始时间
+            businessFeeDetail.put("startTime", paramInJson.getString("customStartTime"));
         } else { //自定义周期
             targetEndTime = computeFeeSMOImpl.getFeeEndTimeByCycles(feeDto, paramInJson.getString("cycles"));//根据缴费周期计算 结束时间
             cycles = new BigDecimal(Double.parseDouble(paramInJson.getString("cycles")));
@@ -770,6 +807,14 @@ public class PayFeeCmd extends Cmd {
         } else if ("-103".equals(paramInJson.getString("cycles"))) {
             String custEndTime = paramInJson.getString("custEndTime");
             Date endDates = DateUtil.getDateFromStringB(custEndTime);
+            Calendar c = Calendar.getInstance();
+            c.setTime(endDates);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            endDates = c.getTime();//这是明天
+            endCalender.setTime(endDates);
+        } else if ("-105".equals(paramInJson.getString("cycles"))) {
+            String customEndTime = paramInJson.getString("customEndTime");
+            Date endDates = DateUtil.getDateFromStringB(customEndTime);
             Calendar c = Calendar.getInstance();
             c.setTime(endDates);
             c.add(Calendar.DAY_OF_MONTH, 1);
@@ -967,6 +1012,81 @@ public class PayFeeCmd extends Cmd {
                 throw new CmdException("扣款失败");
             }
         }
+    }
+
+    /**
+     * 自定义时间段 缴费
+     *
+     * @param cycle
+     * @param endTime
+     * @param payFeeDetailPo
+     * @param payFeePo
+     */
+    private void ifCustomStartEndTimePayFee(String cycle, Date endTime, PayFeeDetailPo payFeeDetailPo, PayFeePo payFeePo, JSONObject reqJson) {
+        if (!"-105".equals(cycle)) {
+            return;
+        }
+
+        FeeDto feeInfo = (FeeDto) reqJson.get("feeInfo");
+        String payObjNameRemark = "房屋";
+        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeInfo.getPayerObjType())) {
+            payObjNameRemark = "车辆";
+        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeInfo.getPayerObjType())) {
+            payObjNameRemark = "合同";
+        }
+
+        //todo 补充一条 缴费记录数据
+        PayFeeDetailPo tmpPayFeeDetailPo = BeanConvertUtil.covertBean(payFeeDetailPo, PayFeeDetailPo.class);
+        tmpPayFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        tmpPayFeeDetailPo.setCycles("0");
+        tmpPayFeeDetailPo.setReceivableAmount("0");
+        tmpPayFeeDetailPo.setReceivedAmount("0");
+        tmpPayFeeDetailPo.setPayableAmount("0");
+        tmpPayFeeDetailPo.setStartTime(DateUtil.getFormatTimeStringB(endTime));
+        tmpPayFeeDetailPo.setEndTime(reqJson.getString("customStartTime"));
+        tmpPayFeeDetailPo.setRemark("按缴费时间段缴费,这部分费用按欠费的方式重新生成，请在" + payObjNameRemark + "上查看");
+        int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(tmpPayFeeDetailPo);
+
+        if (flag < 1) {
+            throw new CmdException("生成欠费失败");
+        }
+
+        //todo 生成费用
+        PayFeePo tmpPayFeePo = BeanConvertUtil.covertBean(feeInfo, PayFeePo.class);;
+        tmpPayFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+        tmpPayFeePo.setEndTime(DateUtil.getFormatTimeStringB(endTime));
+        tmpPayFeePo.setState(FeeDto.STATE_DOING);
+
+        flag = payFeeV1InnerServiceSMOImpl.savePayFee(tmpPayFeePo);
+        if (flag < 1) {
+            throw new CmdException("生成欠费失败");
+        }
+
+        //todo 补充 费用属性
+        FeeAttrDto feeAttrDto = new FeeAttrDto();
+        feeAttrDto.setFeeId(payFeePo.getFeeId());
+        feeAttrDto.setCommunityId(payFeePo.getCommunityId());
+        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
+
+        if(feeAttrDtos == null || feeAttrDtos.size() < 1){
+            return;
+        }
+
+        List<FeeAttrPo> tmpFeeAttrPos = new ArrayList<>();
+        FeeAttrPo tmpFeeAttrPo = null;
+        for(FeeAttrDto tmpFeeAttrDto: feeAttrDtos){
+            tmpFeeAttrDto.setFeeId(tmpPayFeePo.getFeeId());
+            tmpFeeAttrDto.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
+
+            if(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME.equals(tmpFeeAttrDto.getSpecCd())){
+                tmpFeeAttrDto.setValue(reqJson.getString("customStartTime"));
+            }
+            tmpFeeAttrPo = BeanConvertUtil.covertBean(tmpFeeAttrDto,FeeAttrPo.class);
+            tmpFeeAttrPos.add(tmpFeeAttrPo);
+        }
+
+        feeAttrInnerServiceSMOImpl.saveFeeAttrs(tmpFeeAttrPos);
+
     }
 
     private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
