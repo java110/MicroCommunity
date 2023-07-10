@@ -198,6 +198,9 @@ public class PayFeeCmd extends Cmd {
             JSONObject param = params.getJSONObject(paramIndex);
             String maximumNumber = param.getString("maximumNumber");
         }
+
+        //todo 是否按缴费时间段缴费
+        validateIfPayFeeStartEndDate(reqJson, feeConfigDtos.get(0));
     }
 
 
@@ -1014,6 +1017,32 @@ public class PayFeeCmd extends Cmd {
         }
     }
 
+
+    /**
+     * 校验是否按缴费时间段缴费
+     *
+     * @param reqJson
+     * @param feeConfigDto
+     */
+    private void validateIfPayFeeStartEndDate(JSONObject reqJson, FeeConfigDto feeConfigDto) {
+        if (!"-105".equals(reqJson.getString("cycle"))) {
+            return;
+        }
+        // todo 自己是间接性费用
+        if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeConfigDto.getFeeFlag())) {
+            return;
+        }
+
+        FeeConfigDto tmpFeeConfigDto = new FeeConfigDto();
+        tmpFeeConfigDto.setFeeNameEq(feeConfigDto.getFeeNameEq() + "欠费");
+        tmpFeeConfigDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE_ONCE);
+        tmpFeeConfigDto.setComputingFormula(feeConfigDto.getComputingFormula());
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(tmpFeeConfigDto);
+
+        Assert.listOnlyOne(feeConfigDtos, "按缴费时间段缴费时，费用必须为间接性费用，或者存在名称为=" + feeConfigDto.getFeeName() + "欠费 的间接性费用，它的公式计算必须要和" + feeConfigDto.getFeeName() + "一致");
+    }
+
+
     /**
      * 自定义时间段 缴费
      *
@@ -1052,10 +1081,14 @@ public class PayFeeCmd extends Cmd {
         }
 
         //todo 生成费用
-        PayFeePo tmpPayFeePo = BeanConvertUtil.covertBean(feeInfo, PayFeePo.class);;
+        PayFeePo tmpPayFeePo = BeanConvertUtil.covertBean(feeInfo, PayFeePo.class);
         tmpPayFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         tmpPayFeePo.setEndTime(DateUtil.getFormatTimeStringB(endTime));
         tmpPayFeePo.setState(FeeDto.STATE_DOING);
+
+        // todo 处理configId
+        doChangeConfigId(tmpPayFeePo, feeInfo);
+
 
         flag = payFeeV1InnerServiceSMOImpl.savePayFee(tmpPayFeePo);
         if (flag < 1) {
@@ -1068,25 +1101,52 @@ public class PayFeeCmd extends Cmd {
         feeAttrDto.setCommunityId(payFeePo.getCommunityId());
         List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
 
-        if(feeAttrDtos == null || feeAttrDtos.size() < 1){
+        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
             return;
         }
 
         List<FeeAttrPo> tmpFeeAttrPos = new ArrayList<>();
         FeeAttrPo tmpFeeAttrPo = null;
-        for(FeeAttrDto tmpFeeAttrDto: feeAttrDtos){
+        for (FeeAttrDto tmpFeeAttrDto : feeAttrDtos) {
             tmpFeeAttrDto.setFeeId(tmpPayFeePo.getFeeId());
-            tmpFeeAttrDto.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
+            tmpFeeAttrDto.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
 
-            if(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME.equals(tmpFeeAttrDto.getSpecCd())){
+            if (FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME.equals(tmpFeeAttrDto.getSpecCd())) {
                 tmpFeeAttrDto.setValue(reqJson.getString("customStartTime"));
             }
-            tmpFeeAttrPo = BeanConvertUtil.covertBean(tmpFeeAttrDto,FeeAttrPo.class);
+            tmpFeeAttrPo = BeanConvertUtil.covertBean(tmpFeeAttrDto, FeeAttrPo.class);
             tmpFeeAttrPos.add(tmpFeeAttrPo);
         }
 
         feeAttrInnerServiceSMOImpl.saveFeeAttrs(tmpFeeAttrPos);
 
+    }
+
+    /**
+     * 处理费用项ID
+     *
+     * @param tmpPayFeePo
+     * @param feeInfo
+     */
+    private void doChangeConfigId(PayFeePo tmpPayFeePo, FeeDto feeInfo) {
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(feeInfo.getConfigId());
+        feeConfigDto.setCommunityId(feeInfo.getCommunityId());
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        Assert.listOnlyOne(feeConfigDtos, "费用项不存在");
+        if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            return;
+        }
+
+
+        FeeConfigDto tmpFeeConfigDto = new FeeConfigDto();
+        tmpFeeConfigDto.setFeeNameEq(feeConfigDtos.get(0).getFeeNameEq() + "欠费");
+        tmpFeeConfigDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE_ONCE);
+        tmpFeeConfigDto.setComputingFormula(feeConfigDto.getComputingFormula());
+        //todo 校验的时候校验过了 所以这里不可能为空
+        feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(tmpFeeConfigDto);
+
+        tmpPayFeePo.setConfigId(feeConfigDtos.get(0).getConfigId());
     }
 
     private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
