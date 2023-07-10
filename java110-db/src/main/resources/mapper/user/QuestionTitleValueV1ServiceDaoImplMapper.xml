@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="questionTitleValueV1ServiceDaoImpl">
+
+
+    <!-- 保存问卷题目选项信息 add by wuxw 2018-07-03 -->
+    <insert id="saveQuestionTitleValueInfo" parameterType="Map">
+        insert into question_title_value(
+        score,value_id,title_id,community_id,qa_value,seq
+        ) values (
+        #{score},#{valueId},#{titleId},#{communityId},#{qaValue},#{seq}
+        )
+    </insert>
+
+
+    <!-- 查询问卷题目选项信息 add by wuxw 2018-07-03 -->
+    <select id="getQuestionTitleValueInfo" parameterType="Map" resultType="Map">
+        select t.score,t.value_id,t.value_id valueId,t.title_id,t.title_id titleId,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.qa_value,t.qa_value qaValue,t.seq
+        from question_title_value t
+        where 1 =1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="titleIds !=null">
+            and t.title_id in
+            <foreach collection="titleIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="qaValue !=null and qaValue != ''">
+            and t.qa_value= #{qaValue}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改问卷题目选项信息 add by wuxw 2018-07-03 -->
+    <update id="updateQuestionTitleValueInfo" parameterType="Map">
+        update question_title_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="score !=null and score != ''">
+            , t.score= #{score}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            , t.title_id= #{titleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="qaValue !=null and qaValue != ''">
+            , t.qa_value= #{qaValue}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+
+    </update>
+
+    <!-- 查询问卷题目选项数量 add by wuxw 2018-07-03 -->
+    <select id="queryQuestionTitleValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from question_title_value t
+        where 1 =1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="qaValue !=null and qaValue != ''">
+            and t.qa_value= #{qaValue}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+
+
+    </select>
+
+</mapper>
