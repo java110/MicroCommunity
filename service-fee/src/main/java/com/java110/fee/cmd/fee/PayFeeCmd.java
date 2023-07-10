@@ -815,10 +815,10 @@ public class PayFeeCmd extends Cmd {
         } else if ("-105".equals(paramInJson.getString("cycles"))) {
             String customEndTime = paramInJson.getString("customEndTime");
             Date endDates = DateUtil.getDateFromStringB(customEndTime);
-//            Calendar c = Calendar.getInstance();
-//            c.setTime(endDates);
-//            c.add(Calendar.DAY_OF_MONTH, 1);
-//            endDates = c.getTime();//这是明天
+            Calendar c = Calendar.getInstance();
+            c.setTime(endDates);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            endDates = c.getTime();//这是明天
             endCalender.setTime(endDates);
         } else {
             endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
