@@ -3054,32 +3054,79 @@
         </if>
     </select>
     <select id="queryHuaningOweFeeDetailCount" parameterType="Map" resultType="Map">
-        select count(1) count
-        from (
-        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id
-        feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
-        from report_owe_fee t
-        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
-        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
-        where t.amount_owed > 0
-        and pfc.fee_type_cd = '888800010001'
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+        select
+        count(1) count
+        from building_room br
+        inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join report_owe_fee rof on br.room_id = rof.payer_obj_id
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where 1=1
+        and br.community_id = #{communityId}
+        and br.status_cd = '0'
+        and rof.amount_owed > 0
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        ) tt
+        <if test="floorId != null and floorId != ''">
+            and f.floor_id = #{floorId}
+        </if>
+
     </select>
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryHuaningOweFeeDetail" parameterType="Map" resultType="Map">
-        select t.payer_obj_name payerObjName,br.built_up_area builtUpArea,pfc.square_price squarePrice, t.fee_id
-        feeId,t.end_time startTime,t.deadline_time endTime,t.amount_owed oweAmount
-        from report_owe_fee t
-        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
-        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
-        where t.amount_owed > 0
-        and pfc.fee_type_cd = '888800010001'
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+        select
+        concat(f.floor_num,'-',bu.unit_num,'-',br.room_num) roomName,
+        br.built_up_area builtUpArea,
+        rof.fee_name feeName,
+        rof.end_time endTime,
+        rof.deadline_time deadlineTime,
+        (
+        select ifnull(SUM(t.receivable_amount),0)
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.fee_id = rof.fee_id
+        and t.community_id = f.community_id
+        and t.detail_id = '-1'
+        and t.cur_month_time &lt;= #{startTime}
+        ) oweAmount,
+        (
+        select ifnull(SUM(t.receivable_amount),0)
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.fee_id = rof.fee_id
+        and t.community_id = f.community_id
+        and t.detail_id = '-1'
+        and t.cur_month_time &lt;= #{startTime}
+        and t.cur_month_time &gt;= #{endTime}
+        ) curOweAmount,
+        (
+        select ifnull(SUM(t.receivable_amount),0)
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.fee_id = rof.fee_id
+        and t.community_id = f.community_id
+        and t.detail_id = '-1'
+        and t.cur_month_time &lt;= #{startTime}
+        ) preOweAmount
+        from building_room br
+        inner join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        inner join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        inner join report_owe_fee rof on br.room_id = rof.payer_obj_id
+        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        where 1=1
+        and br.community_id = #{communityId}
+        and br.status_cd = '0'
+        and rof.amount_owed > 0
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        <if test="floorId != null and floorId != ''">
+            and f.floor_id = #{floorId}
         </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

@@ -893,12 +893,12 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Override
     public ResponseEntity<String> queryHuaningOweFeeDetail(Map paramInfo) {
-        Calendar calendar = Calendar.getInstance();
+        //Calendar calendar = Calendar.getInstance();
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFeeDetailCount(paramInfo);
         List<Map> reportFeeMonthStatisticsDtos = null;
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFeeDetail(paramInfo);
-            refreshOweFee(reportFeeMonthStatisticsDtos, paramInfo);
+           // refreshOweFee(reportFeeMonthStatisticsDtos, paramInfo);
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }
