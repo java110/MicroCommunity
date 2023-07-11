@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 
-@Service("feeManualCollection")
-public class FeeManualCollectionAdapt implements IExportDataAdapt {
+@Service("dataFeeManualCollection")
+public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
