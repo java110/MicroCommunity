@@ -28,6 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * 催缴单 导出处理类
+ */
 @Service("dataFeeManualCollection")
 public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
 
