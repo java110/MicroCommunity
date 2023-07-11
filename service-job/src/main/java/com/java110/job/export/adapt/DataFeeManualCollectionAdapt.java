@@ -261,13 +261,11 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             JSONObject feeObj = BeanConvertUtil.beanCovertJson(fees.get(feeIndex));
             row = sheet.createRow(line + feeIndex + 3);
-            startTime = feeObj.getString("endTime").length() > 10 ? feeObj.getString("endTime").substring(0, 10) : feeObj.getString("endTime");
-            endTime = feeObj.getString("deadlineTime").length() > 10 ? feeObj.getString("deadlineTime").substring(0, 10) : feeObj.getString("deadlineTime");
-            //如果费用是周期性费用 则 结束时间减一天
-
+            startTime = DateUtil.getFormatTimeStringB(feeObj.getDate("endTime"));
+            endTime = DateUtil.getFormatTimeStringB(feeObj.getDate("deadlineTime"));
+            //todo 如果费用是周期性费用 则 结束时间减一天
             if (feeObj.containsKey("feeFlag") && (FeeDto.FEE_FLAG_CYCLE.equals(feeObj.getString("feeFlag")) || FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeObj.getString("feeFlag")))) {
-                endTime = DateUtil.getFormatTimeString(DateUtil.stepDay(DateUtil.getDateFromStringB(endTime), -1),
-                        DateUtil.DATE_FORMATE_STRING_B);
+                endTime = DateUtil.getFormatTimeStringB(DateUtil.stepDay(DateUtil.getDateFromStringB(endTime), -1));
             }
 
             squarePrice = feeObj.getString("squarePrice");
