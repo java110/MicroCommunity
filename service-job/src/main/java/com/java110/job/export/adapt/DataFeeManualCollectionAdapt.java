@@ -94,6 +94,10 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
                 getTmpRoomDtos(roomDto1);
             }
             for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
+                //todo 有可能房屋下没有欠费
+                if (roomDtos.get(roomIndex).getFees() == null) {
+                    continue;
+                }
                 Map<String, Object> info = generatorRoomOweFee(sheet, workbook, roomDtos.get(roomIndex), line, totalPageHeight, patriarch, feePrintSpecDto);
                 line = Integer.parseInt(info.get("line").toString()) + 1;
                 totalPageHeight = Double.parseDouble(info.get("totalPageHeight").toString());
