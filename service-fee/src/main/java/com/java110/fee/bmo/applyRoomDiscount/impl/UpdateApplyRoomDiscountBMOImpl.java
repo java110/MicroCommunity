@@ -31,39 +31,40 @@ public class UpdateApplyRoomDiscountBMOImpl implements IUpdateApplyRoomDiscountB
      */
     @Java110Transactional
     public ResponseEntity<String> update(ApplyRoomDiscountPo applyRoomDiscountPo) {
-
+        List<String> photos = applyRoomDiscountPo.getPhotos();
+        applyRoomDiscountPo.setPhotos(null);
         int flag = applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
 
-        if (flag > 0) {
-            //获取图片集合
-            List<String> photos = applyRoomDiscountPo.getPhotos();
-            if (photos != null && photos.size() > 0) {
-                FileRelDto fileRelDto = new FileRelDto();
-                fileRelDto.setObjId(applyRoomDiscountPo.getArdId());
-                List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-                if (fileRelDtos != null && fileRelDtos.size() > 0) {
-                    FileRelPo fileRelPo = new FileRelPo();
-                    fileRelPo.setObjId(applyRoomDiscountPo.getArdId());
-                    fileRelInnerServiceSMOImpl.deleteFileRel(fileRelPo);
-                }
-                FileRelPo fileRel = new FileRelPo();
-                fileRel.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-                fileRel.setObjId(applyRoomDiscountPo.getArdId());
-                //table表示表存储 ftp表示ftp文件存储
-                fileRel.setSaveWay("ftp");
-                fileRel.setCreateTime(new Date());
-                //19000表示装修图片
-                fileRel.setRelTypeCd("19000");
-                for (String photo : photos) {
-                    fileRel.setFileRealName(photo);
-                    fileRel.setFileSaveName(photo);
-                    fileRelInnerServiceSMOImpl.saveFileRel(fileRel);
-                }
-            }
-            return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
+        if (flag < 1) {
+            return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
+        //获取图片集合
+        if (photos != null && photos.size() > 0) {
+            FileRelDto fileRelDto = new FileRelDto();
+            fileRelDto.setObjId(applyRoomDiscountPo.getArdId());
+            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+            if (fileRelDtos != null && fileRelDtos.size() > 0) {
+                FileRelPo fileRelPo = new FileRelPo();
+                fileRelPo.setObjId(applyRoomDiscountPo.getArdId());
+                fileRelInnerServiceSMOImpl.deleteFileRel(fileRelPo);
+            }
+            FileRelPo fileRel = new FileRelPo();
+            fileRel.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+            fileRel.setObjId(applyRoomDiscountPo.getArdId());
+            //table表示表存储 ftp表示ftp文件存储
+            fileRel.setSaveWay("ftp");
+            fileRel.setCreateTime(new Date());
+            //19000表示装修图片
+            fileRel.setRelTypeCd("19000");
+            for (String photo : photos) {
+                fileRel.setFileRealName(photo);
+                fileRel.setFileSaveName(photo);
+                fileRelInnerServiceSMOImpl.saveFileRel(fileRel);
+            }
+        }
+        return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
 
-        return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
+
     }
 
 }

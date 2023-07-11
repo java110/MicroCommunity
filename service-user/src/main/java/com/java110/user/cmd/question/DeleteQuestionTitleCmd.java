@@ -21,8 +21,12 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.questionTitle.QuestionTitleDto;
+import com.java110.dto.questionTitleValue.QuestionTitleValueDto;
 import com.java110.intf.user.IQuestionTitleV1InnerServiceSMO;
+import com.java110.intf.user.IQuestionTitleValueV1InnerServiceSMO;
 import com.java110.po.questionTitle.QuestionTitlePo;
+import com.java110.po.questionTitleValue.QuestionTitleValuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -30,6 +34,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -48,6 +54,9 @@ public class DeleteQuestionTitleCmd extends Cmd {
     @Autowired
     private IQuestionTitleV1InnerServiceSMO questionTitleV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IQuestionTitleValueV1InnerServiceSMO questionTitleValueV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "titleId", "titleId不能为空");
@@ -64,6 +73,22 @@ public class DeleteQuestionTitleCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("删除数据失败");
+        }
+
+        if (QuestionTitleDto.TITLE_TYPE_QUESTIONS.equals(questionTitlePo.getTitleType())) {
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return;
+        }
+        QuestionTitleValueDto questionTitleValueDto = new QuestionTitleValueDto();
+        questionTitleValueDto.setTitleId(reqJson.getString("titleId"));
+        List<QuestionTitleValueDto> questionTitleValues = questionTitleValueV1InnerServiceSMOImpl.queryQuestionTitleValues(questionTitleValueDto);
+        if (questionTitleValues != null && questionTitleValues.size() > 0) {
+            QuestionTitleValuePo deleteQuestionTitleValuePo = new QuestionTitleValuePo();
+            deleteQuestionTitleValuePo.setTitleId(questionTitlePo.getTitleId());
+            flag = questionTitleValueV1InnerServiceSMOImpl.deleteQuestionTitleValue(deleteQuestionTitleValuePo);
+            if (flag < 1) {
+                throw new CmdException("更新数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

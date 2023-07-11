@@ -48,7 +48,7 @@
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
-        order by t.create_time desc
+        order by t.seq
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -65,12 +65,6 @@
         <if test="score !=null and score != ''">
             , t.score= #{score}
         </if>
-        <if test="titleId !=null and titleId != ''">
-            , t.title_id= #{titleId}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
         <if test="qaValue !=null and qaValue != ''">
             , t.qa_value= #{qaValue}
         </if>
@@ -80,6 +74,12 @@
         where 1=1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

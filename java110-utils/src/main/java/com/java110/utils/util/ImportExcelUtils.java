@@ -128,8 +128,7 @@ public class ImportExcelUtils {
                         result = df.format(((HSSFCell) cell).getNumericCellValue());
                         break;
                     case HSSFCell.CELL_TYPE_FORMULA:
-                        result = ((HSSFCell) cell).getNumericCellValue();
-                        break;
+                        throw new IllegalArgumentException("请不要公式计算，程序没法计算Excel的公式");
                     case HSSFCell.CELL_TYPE_BOOLEAN:
                         result = ((HSSFCell) cell).getBooleanCellValue();
                         break;
@@ -157,8 +156,8 @@ public class ImportExcelUtils {
                         result = df.format(((XSSFCell) cell).getNumericCellValue());
                         break;
                     case XSSFCell.CELL_TYPE_FORMULA:
-                        result = ((XSSFCell) cell).getNumericCellValue();
-                        break;
+                        //result = ((XSSFCell) cell).getNumericCellValue();
+                        throw new IllegalArgumentException("请不要公式计算，程序没法计算Excel的公式");
                     case XSSFCell.CELL_TYPE_BOOLEAN:
                         result = ((XSSFCell) cell).getBooleanCellValue();
                         break;
