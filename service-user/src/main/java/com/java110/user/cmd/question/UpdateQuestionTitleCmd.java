@@ -112,6 +112,11 @@ public class UpdateQuestionTitleCmd extends Cmd {
             questionTitleValuePo = new QuestionTitleValuePo();
             questionTitleValuePo.setQaValue(titleValues.getJSONObject(titleValueIndex).getString("qaValue"));
             questionTitleValuePo.setSeq(titleValues.getJSONObject(titleValueIndex).getString("seq"));
+            if(titleValues.getJSONObject(titleValueIndex).containsKey("score")) {
+                questionTitleValuePo.setScore(titleValues.getJSONObject(titleValueIndex).getString("score"));
+            }else{
+                questionTitleValuePo.setScore("0");
+            }
             questionTitleValuePo.setTitleId(questionTitlePo.getTitleId());
             questionTitleValuePo.setValueId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_valueId));
             questionTitleValuePo.setCommunityId(questionTitlePo.getCommunityId());
