@@ -832,43 +832,23 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Override
     public ResponseEntity<String> queryHuaningOweFee(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
-        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFeeCount(reportFeeMonthStatisticsDto);
 
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
-        if (count > 0) {
-            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFee(reportFeeMonthStatisticsDto);
-        } else {
-            reportFeeMonthStatisticsDtos = new ArrayList<>();
-        }
+        reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFee(reportFeeMonthStatisticsDto);
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(reportFeeMonthStatisticsDtos);
 
         return responseEntity;
     }
 
     @Override
     public ResponseEntity<String> queryHuaningPayFee(Map paramInfo) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, (int) paramInfo.get("year"));
-        calendar.set(Calendar.MONTH, (int) paramInfo.get("month") - 1);
-        paramInfo.put("yearMonth", DateUtil.getFormatTimeString(calendar.getTime(), "YYYY-MM"));
-        calendar.add(Calendar.MONTH, 1);
-        paramInfo.put("nextYear", calendar.get(Calendar.YEAR));
-        paramInfo.put("nextMonth", calendar.get(Calendar.MONTH) + 1);
-        int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningPayFeeCount(paramInfo);
 
         List<Map> reportFeeMonthStatisticsDtos = null;
-        if (count > 0) {
-            reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningPayFee(paramInfo);
-        } else {
-            reportFeeMonthStatisticsDtos = new ArrayList<>();
-        }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (int) paramInfo.get("row")), count, reportFeeMonthStatisticsDtos);
+        reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningPayFee(paramInfo);
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(reportFeeMonthStatisticsDtos);
 
         return responseEntity;
     }
@@ -900,12 +880,12 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
 
     @Override
     public ResponseEntity<String> queryHuaningOweFeeDetail(Map paramInfo) {
-        Calendar calendar = Calendar.getInstance();
+        //Calendar calendar = Calendar.getInstance();
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFeeDetailCount(paramInfo);
         List<Map> reportFeeMonthStatisticsDtos = null;
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryHuaningOweFeeDetail(paramInfo);
-            refreshOweFee(reportFeeMonthStatisticsDtos, paramInfo);
+            // refreshOweFee(reportFeeMonthStatisticsDtos, paramInfo);
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
         }

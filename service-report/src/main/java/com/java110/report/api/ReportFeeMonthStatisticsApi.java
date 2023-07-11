@@ -114,7 +114,6 @@ public class ReportFeeMonthStatisticsApi {
     }
 
 
-
     /**
      * 查询费用汇总表
      *
@@ -324,8 +323,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setFeeStartTime(feeStartTime);
         reportFeeMonthStatisticsDto.setFeeEndTime(feeEndTime);
         reportFeeMonthStatisticsDto.setObjId(objId);
-        if(!StringUtil.isEmpty(roomName)){
-            String[] roomNameArray = roomName.split("-",3);
+        if (!StringUtil.isEmpty(roomName)) {
+            String[] roomNameArray = roomName.split("-", 3);
             reportFeeMonthStatisticsDto.setFloorNum(roomNameArray[0]);
             reportFeeMonthStatisticsDto.setUnitNum(roomNameArray[1]);
             reportFeeMonthStatisticsDto.setRoomNum(roomNameArray[2]);
@@ -565,7 +564,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setFloorNum(floorNum);
         reportFeeMonthStatisticsDto.setPage(page);
         reportFeeMonthStatisticsDto.setRow(row);
-        reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
+        reportFeeMonthStatisticsDto.setStartTime(DateUtil.getYear() + "-01-01");
+        reportFeeMonthStatisticsDto.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningOweFee(reportFeeMonthStatisticsDto);
     }
 
@@ -597,6 +597,9 @@ public class ReportFeeMonthStatisticsApi {
         paramInfo.put("month", month);
         paramInfo.put("page", page);
         paramInfo.put("row", row);
+        paramInfo.put("startTime", DateUtil.getYear() + "-01-01");
+        paramInfo.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_Q)+"-01");
+        paramInfo.put("nextMonthTime",DateUtil.getFormatTimeStringB(DateUtil.getNextMonthFirstDate()));
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningPayFee(paramInfo);
     }
 
@@ -639,6 +642,7 @@ public class ReportFeeMonthStatisticsApi {
     public ResponseEntity<String> queryHuaningOweFeeDetail(@RequestParam(value = "communityId") String communityId,
                                                            @RequestParam(value = "year") int year,
                                                            @RequestParam(value = "month") int month,
+                                                           @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
                                                            @RequestParam(value = "page") int page,
                                                            @RequestParam(value = "row") int row) {
         Map paramInfo = new HashMap();
@@ -647,6 +651,9 @@ public class ReportFeeMonthStatisticsApi {
         paramInfo.put("month", month);
         paramInfo.put("page", page);
         paramInfo.put("row", row);
+        paramInfo.put("feeTypeCd", feeTypeCd);
+        paramInfo.put("startTime", DateUtil.getYear() + "-01-01");
+        paramInfo.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningOweFeeDetail(paramInfo);
     }
 
