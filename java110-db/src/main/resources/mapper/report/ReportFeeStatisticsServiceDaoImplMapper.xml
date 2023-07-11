@@ -1245,7 +1245,9 @@
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join pay_fee_detail_month pfdm on t.fee_id = pfdm.fee_id and t.detail_year = pfdm.detail_year and t.detail_month = pfdm.detail_month and pfdm.detail_id = '-1'
         where 1=1
+        and pfdm.month_id is null
         and t.status_cd = '0'
         and t.cur_month_time &gt;= #{startDate}
         and t.cur_month_time &lt; #{endDate}
@@ -1279,7 +1281,9 @@
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join pay_fee_detail_month pfdm on t.fee_id = pfdm.fee_id and t.detail_year = pfdm.detail_year and t.detail_month = pfdm.detail_month and pfdm.detail_id = '-1'
         where 1=1
+        and pfdm.month_id is null
         and t.status_cd = '0'
         and t.cur_month_time &gt;= #{startDate}
         and t.cur_month_time &lt; #{endDate}
