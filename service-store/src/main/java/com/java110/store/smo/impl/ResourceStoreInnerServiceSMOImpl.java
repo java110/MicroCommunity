@@ -138,7 +138,7 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
             resourceStorePo.setStatusCd("0");
             return resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance(BeanConvertUtil.beanCovertMap(resourceStorePo));
         } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
+            DistributedLock.releaseDistributedLock(key, requestId);
         }
     }
 
