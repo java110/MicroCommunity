@@ -106,6 +106,7 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
         accountDto.setObjId(accountPo.getObjId());
         accountDto.setPartId(accountPo.getPartId());
         accountDto.setLink(accountPo.getLink());
+        accountDto.setAcctType(accountPo.getAcctType());
         int flag = accountServiceDaoImpl.queryAccountsCount(BeanConvertUtil.beanCovertMap(accountDto));
         if (flag > 0) {
             return flag;
