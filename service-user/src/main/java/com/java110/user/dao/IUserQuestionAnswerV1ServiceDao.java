@@ -24,50 +24,51 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2023-07-13 00:07:03 mail: 928255095@qq.com
+ * add by 吴学文 at 2023-07-13 00:38:00 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-public interface IQuestionAnswerTitleRelV1ServiceDao {
+public interface IUserQuestionAnswerV1ServiceDao {
 
 
     /**
-     * 保存 问卷题目信息
+     * 保存 用户问卷信息
      * @param info
      * @throws DAOException DAO异常
      */
-    int saveQuestionAnswerTitleRelInfo(Map info) throws DAOException;
+    int saveUserQuestionAnswerInfo(Map info) throws DAOException;
 
 
 
 
     /**
-     * 查询问卷题目信息（instance过程）
-     * 根据bId 查询问卷题目信息
+     * 查询用户问卷信息（instance过程）
+     * 根据bId 查询用户问卷信息
      * @param info bId 信息
-     * @return 问卷题目信息
+     * @return 用户问卷信息
      * @throws DAOException DAO异常
      */
-    List<Map> getQuestionAnswerTitleRelInfo(Map info) throws DAOException;
+    List<Map> getUserQuestionAnswerInfo(Map info) throws DAOException;
 
 
 
     /**
-     * 修改问卷题目信息
+     * 修改用户问卷信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    int updateQuestionAnswerTitleRelInfo(Map info) throws DAOException;
+    int updateUserQuestionAnswerInfo(Map info) throws DAOException;
 
 
     /**
-     * 查询问卷题目总数
+     * 查询用户问卷总数
      *
-     * @param info 问卷题目信息
-     * @return 问卷题目数量
+     * @param info 用户问卷信息
+     * @return 用户问卷数量
      */
-    int queryQuestionAnswerTitleRelsCount(Map info);
+    int queryUserQuestionAnswersCount(Map info);
 
+    int saveUserQuestionAnswers(Map info);
 }

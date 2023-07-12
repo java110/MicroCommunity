@@ -47,6 +47,12 @@
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
+        <if test="roomIds != null">
+            and t.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -117,6 +123,12 @@
         </if>
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
+        </if>
+        <if test="roomIds != null">
+            and t.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
     </select>
 

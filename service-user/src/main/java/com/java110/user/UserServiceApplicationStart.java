@@ -22,6 +22,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import javax.annotation.Resource;
 import java.nio.charset.Charset;
@@ -47,7 +48,7 @@ import java.nio.charset.Charset;
         basePackages = {"com.java110.user.cmd"})
 @EnableFeignClients(basePackages = {"com.java110.intf.community","com.java110.intf.common","com.java110.intf.store","com.java110.intf.oa",
         "com.java110.intf.fee","com.java110.intf.order","com.java110.intf.mall","com.java110.intf.report","com.java110.intf.acct"})
-
+@EnableAsync
 // 文档
 @Java110CmdDocDiscovery(basePackages = {"com.java110.user.cmd"},cmdDocClass = ApiDocCmdPublishing.class)
 public class UserServiceApplicationStart {

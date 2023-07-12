@@ -8,7 +8,7 @@
 
 
 
-    <!-- 保存问卷题目关系信息 add by wuxw 2018-07-03 -->
+    <!-- 保存问卷题目信息 add by wuxw 2018-07-03 -->
     <insert id="saveQuestionAnswerTitleRelInfo" parameterType="Map">
         insert into question_answer_title_rel(
 score,title_id,qatr_id,community_id,seq,qa_id
@@ -19,7 +19,7 @@ score,title_id,qatr_id,community_id,seq,qa_id
 
 
 
-    <!-- 查询问卷题目关系信息 add by wuxw 2018-07-03 -->
+    <!-- 查询问卷题目信息 add by wuxw 2018-07-03 -->
     <select id="getQuestionAnswerTitleRelInfo" parameterType="Map" resultType="Map">
         select  t.score,t.title_id,t.title_id titleId,t.qatr_id,t.qatr_id qatrId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.seq,t.qa_id,t.qa_id qaId 
 from question_answer_title_rel t 
@@ -55,7 +55,7 @@ order by t.create_time desc
 
 
 
-    <!-- 修改问卷题目关系信息 add by wuxw 2018-07-03 -->
+    <!-- 修改问卷题目信息 add by wuxw 2018-07-03 -->
     <update id="updateQuestionAnswerTitleRelInfo" parameterType="Map">
         update  question_answer_title_rel t set t.status_cd = #{statusCd}
 <if test="newBId != null and newBId != ''">
@@ -82,7 +82,7 @@ and t.qatr_id= #{qatrId}
 
     </update>
 
-    <!-- 查询问卷题目关系数量 add by wuxw 2018-07-03 -->
+    <!-- 查询问卷题目数量 add by wuxw 2018-07-03 -->
      <select id="queryQuestionAnswerTitleRelsCount" parameterType="Map" resultType="Map">
         select  count(1) count 
 from question_answer_title_rel t 

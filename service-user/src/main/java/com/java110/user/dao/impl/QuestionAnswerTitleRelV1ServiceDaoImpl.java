@@ -31,7 +31,7 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2023-07-07 16:27:01 mail: 928255095@qq.com
+ * add by 吴学文 at 2023-07-13 00:07:03 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -47,7 +47,7 @@ public class QuestionAnswerTitleRelV1ServiceDaoImpl extends BaseServiceDao imple
 
 
     /**
-     * 保存问卷题目关系信息 到 instance
+     * 保存问卷题目信息 到 instance
      * @param info   bId 信息
      * @throws DAOException DAO异常
      */
@@ -62,7 +62,7 @@ public class QuestionAnswerTitleRelV1ServiceDaoImpl extends BaseServiceDao imple
 
 
     /**
-     * 查询问卷题目关系信息（instance）
+     * 查询问卷题目信息（instance）
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
@@ -78,7 +78,7 @@ public class QuestionAnswerTitleRelV1ServiceDaoImpl extends BaseServiceDao imple
 
 
     /**
-     * 修改问卷题目关系信息
+     * 修改问卷题目信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
@@ -92,9 +92,9 @@ public class QuestionAnswerTitleRelV1ServiceDaoImpl extends BaseServiceDao imple
     }
 
      /**
-     * 查询问卷题目关系数量
-     * @param info 问卷题目关系信息
-     * @return 问卷题目关系数量
+     * 查询问卷题目数量
+     * @param info 问卷题目信息
+     * @return 问卷题目数量
      */
     @Override
     public int queryQuestionAnswerTitleRelsCount(Map info) {

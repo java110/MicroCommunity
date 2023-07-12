@@ -16,8 +16,8 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.questionAnswerTitleRel.QuestionAnswerTitleRelDto;
-import com.java110.po.questionAnswerTitleRel.QuestionAnswerTitleRelPo;
+import com.java110.dto.questionAnswer.QuestionAnswerDto;
+import com.java110.po.questionAnswer.QuestionAnswerPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,42 +27,42 @@ import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2023-07-13 00:07:03 mail: 928255095@qq.com
+ * add by 吴学文 at 2023-07-13 00:03:56 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @FeignClient(name = "user-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/questionAnswerTitleRelV1Api")
-public interface IQuestionAnswerTitleRelV1InnerServiceSMO {
+@RequestMapping("/questionAnswerV1Api")
+public interface IQuestionAnswerV1InnerServiceSMO {
 
 
-    @RequestMapping(value = "/saveQuestionAnswerTitleRel", method = RequestMethod.POST)
-    public int saveQuestionAnswerTitleRel(@RequestBody  QuestionAnswerTitleRelPo questionAnswerTitleRelPo);
+    @RequestMapping(value = "/saveQuestionAnswer", method = RequestMethod.POST)
+    public int saveQuestionAnswer(@RequestBody  QuestionAnswerPo questionAnswerPo);
 
-    @RequestMapping(value = "/updateQuestionAnswerTitleRel", method = RequestMethod.POST)
-    public int updateQuestionAnswerTitleRel(@RequestBody  QuestionAnswerTitleRelPo questionAnswerTitleRelPo);
+    @RequestMapping(value = "/updateQuestionAnswer", method = RequestMethod.POST)
+    public int updateQuestionAnswer(@RequestBody  QuestionAnswerPo questionAnswerPo);
 
-    @RequestMapping(value = "/deleteQuestionAnswerTitleRel", method = RequestMethod.POST)
-    public int deleteQuestionAnswerTitleRel(@RequestBody  QuestionAnswerTitleRelPo questionAnswerTitleRelPo);
+    @RequestMapping(value = "/deleteQuestionAnswer", method = RequestMethod.POST)
+    public int deleteQuestionAnswer(@RequestBody  QuestionAnswerPo questionAnswerPo);
 
     /**
      * <p>查询小区楼信息</p>
      *
      *
-     * @param questionAnswerTitleRelDto 数据对象分享
-     * @return QuestionAnswerTitleRelDto 对象数据
+     * @param questionAnswerDto 数据对象分享
+     * @return QuestionAnswerDto 对象数据
      */
-    @RequestMapping(value = "/queryQuestionAnswerTitleRels", method = RequestMethod.POST)
-    List<QuestionAnswerTitleRelDto> queryQuestionAnswerTitleRels(@RequestBody QuestionAnswerTitleRelDto questionAnswerTitleRelDto);
+    @RequestMapping(value = "/queryQuestionAnswers", method = RequestMethod.POST)
+    List<QuestionAnswerDto> queryQuestionAnswers(@RequestBody QuestionAnswerDto questionAnswerDto);
 
     /**
      * 查询<p>小区楼</p>总记录数
      *
-     * @param questionAnswerTitleRelDto 数据对象分享
+     * @param questionAnswerDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
-    @RequestMapping(value = "/queryQuestionAnswerTitleRelsCount", method = RequestMethod.POST)
-    int queryQuestionAnswerTitleRelsCount(@RequestBody QuestionAnswerTitleRelDto questionAnswerTitleRelDto);
+    @RequestMapping(value = "/queryQuestionAnswersCount", method = RequestMethod.POST)
+    int queryQuestionAnswersCount(@RequestBody QuestionAnswerDto questionAnswerDto);
 }

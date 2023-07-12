@@ -89,9 +89,6 @@ public class QuestionAnswerApi {
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
 
-        if (QuestionAnswerDto.QA_TYPE_STORE.equals(reqJson.getString("objType"))) {
-            reqJson.put("objId", storeId);
-        }
         Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
 
         QuestionAnswerPo questionAnswerPo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerPo.class);
@@ -156,16 +153,9 @@ public class QuestionAnswerApi {
         QuestionAnswerDto questionAnswerDto = new QuestionAnswerDto();
         questionAnswerDto.setPage(page);
         questionAnswerDto.setRow(row);
-        questionAnswerDto.setUserId(userId);
         questionAnswerDto.setQaType(qaType);
         questionAnswerDto.setQaName(qaName);
         questionAnswerDto.setQaId(qaId);
-        if (!StringUtil.isEmpty(objType)) {
-            questionAnswerDto.setObjType(objType);
-            questionAnswerDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
-        } else {
-            questionAnswerDto.setObjIds(new String[]{storeId, communityId});
-        }
         return getQuestionAnswerBMOImpl.get(questionAnswerDto);
     }
 
@@ -276,7 +266,7 @@ public class QuestionAnswerApi {
         //questionAnswerTitleDto.setUserId(userId);
         if (!StringUtil.isEmpty(objType)) {
             questionAnswerTitleDto.setObjType(objType);
-            questionAnswerTitleDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
+            questionAnswerTitleDto.setObjId(communityId);
         } else {
             questionAnswerTitleDto.setObjIds(new String[]{storeId, communityId});
         }
@@ -356,7 +346,7 @@ public class QuestionAnswerApi {
         questionAnswerTitleValueDto.setPage(page);
         questionAnswerTitleValueDto.setRow(row);
         questionAnswerTitleValueDto.setObjType(objType);
-        questionAnswerTitleValueDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
+        questionAnswerTitleValueDto.setObjId(communityId);
         return getQuestionAnswerTitleValueBMOImpl.get(questionAnswerTitleValueDto);
     }
 
@@ -381,7 +371,7 @@ public class QuestionAnswerApi {
         questionAnswerTitleValueDto.setRow(row);
         questionAnswerTitleValueDto.setObjType(objType);
         questionAnswerTitleValueDto.setTitleId(titleId);
-        questionAnswerTitleValueDto.setObjId(QuestionAnswerDto.QA_TYPE_COMMUNITY.equals(objType) ? communityId : storeId);
+        questionAnswerTitleValueDto.setObjId(communityId);
         return getQuestionAnswerTitleValueBMOImpl.queryQuestionAnswerTitleValueResult(questionAnswerTitleValueDto);
     }
 }

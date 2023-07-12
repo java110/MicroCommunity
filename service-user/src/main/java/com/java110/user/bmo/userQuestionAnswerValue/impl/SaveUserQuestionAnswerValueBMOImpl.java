@@ -44,8 +44,6 @@ public class SaveUserQuestionAnswerValueBMOImpl implements ISaveUserQuestionAnsw
     public ResponseEntity<String> save(UserQuestionAnswerValuePo userQuestionAnswerValuePo, JSONArray questionAnswerTitles) {
 
         QuestionAnswerDto questionAnswerDto = new QuestionAnswerDto();
-        questionAnswerDto.setObjId(userQuestionAnswerValuePo.getObjId());
-        questionAnswerDto.setObjType(userQuestionAnswerValuePo.getObjType());
         questionAnswerDto.setQaId(userQuestionAnswerValuePo.getQaId());
         List<QuestionAnswerDto> questionAnswerDtos = questionAnswerInnerServiceSMOImpl.queryQuestionAnswers(questionAnswerDto);
         Assert.listOnlyOne(questionAnswerDtos, "问卷不存在");
@@ -94,11 +92,6 @@ public class SaveUserQuestionAnswerValueBMOImpl implements ISaveUserQuestionAnsw
             userQuestionAnswerInnerServiceSMOImpl.updateUserQuestionAnswer(userQuestionAnswerPo);
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
         }
-
-        userQuestionAnswerPo.setEvaluationScore("0");
-        userQuestionAnswerPo.setObjId(userQuestionAnswerValuePo.getObjId());
-        userQuestionAnswerPo.setObjType(userQuestionAnswerValuePo.getObjType());
-        userQuestionAnswerPo.setPersonId(userQuestionAnswerValuePo.getPersonId());
         userQuestionAnswerPo.setQaId(userQuestionAnswerValuePo.getQaId());
         userQuestionAnswerPo.setScore("0");
 

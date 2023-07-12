@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userQuestionAnswerV1ServiceDaoImpl">
+
+
+    <!-- 保存用户问卷信息 add by wuxw 2018-07-03 -->
+    <insert id="saveUserQuestionAnswerInfo" parameterType="Map">
+        insert into user_question_answer(
+        score,owner_name,link,user_qa_id,state,owner_id,community_id,room_id,room_name,qa_id
+        ) values (
+        #{score},#{ownerName},#{link},#{userQaId},#{state},#{ownerId},#{communityId},#{roomId},#{roomName},#{qaId}
+        )
+    </insert>
+    <insert id="saveUserQuestionAnswers" parameterType="Map">
+        insert into user_question_answer(
+        score,owner_name,link,user_qa_id,state,owner_id,community_id,room_id,room_name,qa_id
+        ) values
+        <foreach collection="userQuestionAnswerPos" item="item" index="index" separator=",">
+            (
+            #{item.score},#{item.ownerName},#{item.link},#{item.userQaId},#{item.state},#{item.ownerId},#{item.communityId},#{item.roomId},#{item.roomName},#{item.qaId}
+            )
+        </foreach>
+
+    </insert>
+
+
+
+
+    <!-- 查询用户问卷信息 add by wuxw 2018-07-03 -->
+    <select id="getUserQuestionAnswerInfo" parameterType="Map" resultType="Map">
+        select t.score,t.owner_name,t.owner_name ownerName,t.link,t.user_qa_id,t.user_qa_id
+        userQaId,t.status_cd,t.status_cd statusCd,t.state,t.owner_id,t.owner_id ownerId,t.community_id,t.community_id
+        communityId,t.room_id,t.room_id roomId,t.room_name,t.room_name roomName,t.qa_id,t.qa_id qaId
+        from user_question_answer t
+        where 1 =1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改用户问卷信息 add by wuxw 2018-07-03 -->
+    <update id="updateUserQuestionAnswerInfo" parameterType="Map">
+        update user_question_answer t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="score !=null and score != ''">
+            , t.score= #{score}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="link !=null and link != ''">
+            , t.link= #{link}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            , t.qa_id= #{qaId}
+        </if>
+        where 1=1
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+
+    </update>
+
+    <!-- 查询用户问卷数量 add by wuxw 2018-07-03 -->
+    <select id="queryUserQuestionAnswersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from user_question_answer t
+        where 1 =1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="link !=null and link != ''">
+            and t.link= #{link}
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+
+
+    </select>
+
+</mapper>

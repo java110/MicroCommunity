@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * @ClassName FloorDto
- * @Description 问卷题目关系数据层封装
+ * @Description 问卷题目数据层封装
  * @Author wuxw
  * @Date 2019/4/24 8:52
  * @Version 1.0

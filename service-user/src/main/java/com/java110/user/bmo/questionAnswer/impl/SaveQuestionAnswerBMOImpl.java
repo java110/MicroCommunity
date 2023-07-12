@@ -35,24 +35,7 @@ public class SaveQuestionAnswerBMOImpl implements ISaveQuestionAnswerBMO {
         questionAnswerPo.setQaId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_qaId));
         int flag = questionAnswerInnerServiceSMOImpl.saveQuestionAnswer(questionAnswerPo);
         if (flag > 0) {
-            //图片
-            List<String> photos = questionAnswerPo.getPhotos();
-            FileRelPo fileRelPo = new FileRelPo();
-            fileRelPo.setFileRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
-            fileRelPo.setObjId(questionAnswerPo.getQaId());
-            //table表示表存储 ftp表示ftp文件存储
-            fileRelPo.setSaveWay("ftp");
-            fileRelPo.setCreateTime(new Date());
-            //图片上传
-            if (photos != null && photos.size() > 0) {
-                //28000表示问卷图片
-                fileRelPo.setRelTypeCd("28000");
-                for (String photo : photos) {
-                    fileRelPo.setFileRealName(photo);
-                    fileRelPo.setFileSaveName(photo);
-                    fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
-                }
-            }
+
             return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
         }
         return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");

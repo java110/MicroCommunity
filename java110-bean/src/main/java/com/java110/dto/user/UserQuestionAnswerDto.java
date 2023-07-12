@@ -1,13 +1,12 @@
 package com.java110.dto.user;
 
 import com.java110.dto.PageDto;
-
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @ClassName FloorDto
- * @Description 答卷数据层封装
+ * @Description 用户问卷数据层封装
  * @Author wuxw
  * @Date 2019/4/24 8:52
  * @Version 1.0
@@ -15,21 +14,19 @@ import java.util.Date;
  **/
 public class UserQuestionAnswerDto extends PageDto implements Serializable {
 
+    public static final String STATE_WAIT = "1201";//1201 待处理 1202 完成
+    public static final String STATE_FINISH = "1202";//1201 待处理 1202 完成
     private String score;
-    private String evaluationScore;
-    private String objId;
-    private String userQaId;
-    private String personId;
-    private String personName;
-    private String state;
-    private String objType;
-    private String qaId;
-    private String qaType;
-    private String[] qaTypes;
-    private String startTime;
-    private String qaName;
-    private String endTime;
-    private String qaTypeName;
+private String ownerName;
+private String link;
+private String userQaId;
+private String state;
+private String ownerId;
+private String communityId;
+private String roomId;
+private String roomName;
+private String qaId;
+
 
     private Date createTime;
 
@@ -39,64 +36,61 @@ public class UserQuestionAnswerDto extends PageDto implements Serializable {
     public String getScore() {
         return score;
     }
-
-    public void setScore(String score) {
+public void setScore(String score) {
         this.score = score;
     }
-
-    public String getEvaluationScore() {
-        return evaluationScore;
+public String getOwnerName() {
+        return ownerName;
     }
-
-    public void setEvaluationScore(String evaluationScore) {
-        this.evaluationScore = evaluationScore;
+public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
-
-    public String getObjId() {
-        return objId;
+public String getLink() {
+        return link;
     }
-
-    public void setObjId(String objId) {
-        this.objId = objId;
+public void setLink(String link) {
+        this.link = link;
     }
-
-    public String getUserQaId() {
+public String getUserQaId() {
         return userQaId;
     }
-
-    public void setUserQaId(String userQaId) {
+public void setUserQaId(String userQaId) {
         this.userQaId = userQaId;
     }
-
-    public String getPersonId() {
-        return personId;
-    }
-
-    public void setPersonId(String personId) {
-        this.personId = personId;
-    }
-
-    public String getState() {
+public String getState() {
         return state;
     }
-
-    public void setState(String state) {
+public void setState(String state) {
         this.state = state;
     }
-
-    public String getObjType() {
-        return objType;
+public String getOwnerId() {
+        return ownerId;
     }
-
-    public void setObjType(String objType) {
-        this.objType = objType;
+public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
-
-    public String getQaId() {
+public String getCommunityId() {
+        return communityId;
+    }
+public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+public String getRoomId() {
+        return roomId;
+    }
+public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+public String getRoomName() {
+        return roomName;
+    }
+public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+public String getQaId() {
         return qaId;
     }
-
-    public void setQaId(String qaId) {
+public void setQaId(String qaId) {
         this.qaId = qaId;
     }
 
@@ -115,61 +109,5 @@ public class UserQuestionAnswerDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
-    }
-
-    public String getQaType() {
-        return qaType;
-    }
-
-    public void setQaType(String qaType) {
-        this.qaType = qaType;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getQaName() {
-        return qaName;
-    }
-
-    public void setQaName(String qaName) {
-        this.qaName = qaName;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public String getQaTypeName() {
-        return qaTypeName;
-    }
-
-    public void setQaTypeName(String qaTypeName) {
-        this.qaTypeName = qaTypeName;
-    }
-
-    public String[] getQaTypes() {
-        return qaTypes;
-    }
-
-    public void setQaTypes(String[] qaTypes) {
-        this.qaTypes = qaTypes;
-    }
-
-    public String getPersonName() {
-        return personName;
-    }
-
-    public void setPersonName(String personName) {
-        this.personName = personName;
     }
 }

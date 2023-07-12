@@ -123,15 +123,10 @@ public class UserQuestionAnswerApi {
         userQuestionAnswerDto.setRow(row);
         userQuestionAnswerDto.setState(state);
         if ("owner".equals(roleCd)) {
-            userQuestionAnswerDto.setObjType(QuestionAnswerDto.QA_TYPE_COMMUNITY);
-            userQuestionAnswerDto.setObjId(communityId);
-            userQuestionAnswerDto.setPersonId(userId);
-            userQuestionAnswerDto.setQaTypes(new String[]{"1001", "3003"});
+            userQuestionAnswerDto.setCommunityId(communityId);
+
         } else {
-            userQuestionAnswerDto.setObjType(QuestionAnswerDto.QA_TYPE_STORE);
-            userQuestionAnswerDto.setObjId(storeId);
-            userQuestionAnswerDto.setPersonId(userId);
-            userQuestionAnswerDto.setQaTypes(new String[]{"2002", "4004"});
+
         }
         return getUserQuestionAnswerBMOImpl.get(userQuestionAnswerDto);
     }

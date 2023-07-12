@@ -75,11 +75,11 @@ public class ActivitiesRuleApi {
         String activitiesObj = reqJson.getString("activitiesObj");
         ActivitiesRulePo activitiesRulePo = BeanConvertUtil.covertBean(reqJson, ActivitiesRulePo.class);
         if ("4444".equals(activitiesObj)) {
-            activitiesRulePo.setObjType(QuestionAnswerDto.QA_TYPE_STORE);
+            activitiesRulePo.setObjType(ActivitiesRuleDto.QA_TYPE_STORE);
             activitiesRulePo.setObjId(storeId);
         } else {
             Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
-            activitiesRulePo.setObjType(QuestionAnswerDto.QA_TYPE_COMMUNITY);
+            activitiesRulePo.setObjType(ActivitiesRuleDto.QA_TYPE_COMMUNITY);
             activitiesRulePo.setObjId(reqJson.getString("communityId"));
         }
         return saveActivitiesRuleBMOImpl.save(activitiesRulePo);

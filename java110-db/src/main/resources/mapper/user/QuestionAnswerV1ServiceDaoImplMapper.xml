@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="questionAnswerV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存问卷投票信息 add by wuxw 2018-07-03 -->
+    <insert id="saveQuestionAnswerInfo" parameterType="Map">
+        insert into question_answer(
+qa_name,qa_type,start_time,remark,end_time,community_id,content,qa_id
+) values (
+#{qaName},#{qaType},#{startTime},#{remark},#{endTime},#{communityId},#{content},#{qaId}
+)
+    </insert>
+
+
+
+    <!-- 查询问卷投票信息 add by wuxw 2018-07-03 -->
+    <select id="getQuestionAnswerInfo" parameterType="Map" resultType="Map">
+        select  t.qa_name,t.qa_name qaName,t.qa_type,t.qa_type qaType,t.start_time,t.start_time startTime,t.remark,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.content,t.qa_id,t.qa_id qaId 
+from question_answer t 
+where 1 =1 
+<if test="qaName !=null and qaName != ''">
+   and t.qa_name= #{qaName}
+</if> 
+<if test="qaType !=null and qaType != ''">
+   and t.qa_type= #{qaType}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="content !=null and content != ''">
+   and t.content= #{content}
+</if> 
+<if test="qaId !=null and qaId != ''">
+   and t.qa_id= #{qaId}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改问卷投票信息 add by wuxw 2018-07-03 -->
+    <update id="updateQuestionAnswerInfo" parameterType="Map">
+        update  question_answer t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="qaName !=null and qaName != ''">
+, t.qa_name= #{qaName}
+</if> 
+<if test="qaType !=null and qaType != ''">
+, t.qa_type= #{qaType}
+</if> 
+<if test="startTime !=null and startTime != ''">
+, t.start_time= #{startTime}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="endTime !=null and endTime != ''">
+, t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="content !=null and content != ''">
+, t.content= #{content}
+</if> 
+ where 1=1 <if test="qaId !=null and qaId != ''">
+and t.qa_id= #{qaId}
+</if> 
+
+    </update>
+
+    <!-- 查询问卷投票数量 add by wuxw 2018-07-03 -->
+     <select id="queryQuestionAnswersCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from question_answer t 
+where 1 =1 
+<if test="qaName !=null and qaName != ''">
+   and t.qa_name= #{qaName}
+</if> 
+<if test="qaType !=null and qaType != ''">
+   and t.qa_type= #{qaType}
+</if> 
+<if test="startTime !=null and startTime != ''">
+   and t.start_time= #{startTime}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="endTime !=null and endTime != ''">
+   and t.end_time= #{endTime}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="content !=null and content != ''">
+   and t.content= #{content}
+</if> 
+<if test="qaId !=null and qaId != ''">
+   and t.qa_id= #{qaId}
+</if> 
+
+
+     </select>
+
+</mapper>

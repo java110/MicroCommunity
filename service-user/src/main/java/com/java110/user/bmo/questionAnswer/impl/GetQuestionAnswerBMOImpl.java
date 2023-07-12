@@ -43,7 +43,6 @@ public class GetQuestionAnswerBMOImpl implements IGetQuestionAnswerBMO {
                         fileUrls.add(fileRel.getFileRealName());
                     }
                 }
-                questionAnswer.setFileUrls(fileUrls);
                 questionAnswerDtos.add(questionAnswer);
             }
         } else {

@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class ActivitiesRuleDto extends PageDto implements Serializable {
 
+    public static final String QA_TYPE_COMMUNITY = "3306";//小区
+    public static final String QA_TYPE_STORE = "3307";//商户ID
     private String ruleType;
     private String objId;
     private String[] objIds;
