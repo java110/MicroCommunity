@@ -3,6 +3,7 @@ package com.java110.user.cmd.question;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -72,6 +73,7 @@ public class UpdateOwnerVoteCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         QuestionAnswerTitleRelDto questionAnswerTitleRelDto = new QuestionAnswerTitleRelDto();
@@ -103,7 +105,7 @@ public class UpdateOwnerVoteCmd extends Cmd {
         for (int titleValueIndex = 0; titleValueIndex < titleValues.size(); titleValueIndex++) {
             valueObj = titleValues.getJSONObject(titleValueIndex);
             questionTitleValuePo = new QuestionTitleValuePo();
-            questionTitleValuePo.setQaValue(valueObj.getString("itemValue"));
+            questionTitleValuePo.setQaValue(valueObj.getString("qaValue"));
             questionTitleValuePo.setSeq((titleValueIndex + 1) + "");
             if (valueObj.containsKey("score")) {
                 questionTitleValuePo.setScore(valueObj.getString("score"));
