@@ -106,12 +106,13 @@
         <if test="roomName !=null and roomName != ''">
             , t.room_name= #{roomName}
         </if>
-        <if test="qaId !=null and qaId != ''">
-            , t.qa_id= #{qaId}
-        </if>
+
         where 1=1
         <if test="userQaId !=null and userQaId != ''">
             and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
         </if>
 
     </update>

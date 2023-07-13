@@ -98,6 +98,7 @@ public class ListOwnerVoteCmd extends Cmd {
                     continue;
                 }
                 values.add(tmpQuestionTitleValueDto);
+                tmpQuestionAnswerDto.setTitleType(tmpQuestionTitleValueDto.getTitleType());
             }
             tmpQuestionAnswerDto.setTitleValues(values);
         }

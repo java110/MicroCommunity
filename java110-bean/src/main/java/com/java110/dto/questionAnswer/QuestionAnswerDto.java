@@ -28,6 +28,7 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     private String content;
     private String qaId;
 
+    private String titleType;
 
     private Date createTime;
 
@@ -142,5 +143,13 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setVotedCount(long votedCount) {
         this.votedCount = votedCount;
+    }
+
+    public String getTitleType() {
+        return titleType;
+    }
+
+    public void setTitleType(String titleType) {
+        this.titleType = titleType;
     }
 }
