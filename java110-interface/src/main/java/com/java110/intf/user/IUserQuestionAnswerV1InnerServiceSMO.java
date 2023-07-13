@@ -41,7 +41,7 @@ public interface IUserQuestionAnswerV1InnerServiceSMO {
     @RequestMapping(value = "/saveUserQuestionAnswer", method = RequestMethod.POST)
     public int saveUserQuestionAnswer(@RequestBody  UserQuestionAnswerPo userQuestionAnswerPo);
 
-    @RequestMapping(value = "/saveUserQuestionAnswer", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveUserQuestionAnswers", method = RequestMethod.POST)
     int saveUserQuestionAnswers(@RequestBody List<UserQuestionAnswerPo> userQuestionAnswerPos);
     @RequestMapping(value = "/updateUserQuestionAnswer", method = RequestMethod.POST)
     public int updateUserQuestionAnswer(@RequestBody  UserQuestionAnswerPo userQuestionAnswerPo);
