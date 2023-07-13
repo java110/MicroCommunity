@@ -70,4 +70,5 @@ public interface IQuestionTitleValueV1ServiceDao {
      */
     int queryQuestionTitleValuesCount(Map info);
 
+    List<Map> queryQuestionOwnerTitleValues(Map info);
 }

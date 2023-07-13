@@ -1,9 +1,11 @@
 package com.java110.dto.questionAnswer;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.questionTitleValue.QuestionTitleValueDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -31,6 +33,11 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private long voteCount; // 总投票人数
+
+    private long votedCount; // 已投票人数
+
+    private List<QuestionTitleValueDto> titleValues;
 
     public String getQaName() {
         return qaName;
@@ -111,5 +118,29 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<QuestionTitleValueDto> getTitleValues() {
+        return titleValues;
+    }
+
+    public void setTitleValues(List<QuestionTitleValueDto> titleValues) {
+        this.titleValues = titleValues;
+    }
+
+    public long getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(long voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public long getVotedCount() {
+        return votedCount;
+    }
+
+    public void setVotedCount(long votedCount) {
+        this.votedCount = votedCount;
     }
 }

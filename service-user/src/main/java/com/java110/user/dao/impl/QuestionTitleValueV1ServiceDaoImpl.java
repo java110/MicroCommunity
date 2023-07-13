@@ -108,5 +108,14 @@ public class QuestionTitleValueV1ServiceDaoImpl extends BaseServiceDao implement
         return Integer.parseInt(businessQuestionTitleValueInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryQuestionOwnerTitleValues(Map info) {
+        logger.debug("查询 queryQuestionOwnerTitleValues 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("questionTitleValueV1ServiceDaoImpl.queryQuestionOwnerTitleValues",info);
+
+        return infos;
+    }
+
 
 }
