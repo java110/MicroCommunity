@@ -17,6 +17,7 @@ package com.java110.po.questionAnswer;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-07-13 00:03:56 mail: 928255095@qq.com
@@ -28,69 +29,94 @@ import java.util.Date;
 public class QuestionAnswerPo implements Serializable {
 
     private String qaName;
-private String qaType;
-private String startTime;
-private String remark;
-private String statusCd = "0";
-private String endTime;
-private String communityId;
-private String content;
-private String qaId;
-public String getQaName() {
+    private String qaType;
+    private String startTime;
+    private String remark;
+    private String statusCd = "0";
+    private String endTime;
+    private String communityId;
+    private String content;
+    private String qaId;
+
+    private String state;
+
+    public String getQaName() {
         return qaName;
     }
-public void setQaName(String qaName) {
+
+    public void setQaName(String qaName) {
         this.qaName = qaName;
     }
-public String getQaType() {
+
+    public String getQaType() {
         return qaType;
     }
-public void setQaType(String qaType) {
+
+    public void setQaType(String qaType) {
         this.qaType = qaType;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getContent() {
+
+    public String getContent() {
         return content;
     }
-public void setContent(String content) {
+
+    public void setContent(String content) {
         this.content = content;
     }
-public String getQaId() {
+
+    public String getQaId() {
         return qaId;
     }
-public void setQaId(String qaId) {
+
+    public void setQaId(String qaId) {
         this.qaId = qaId;
     }
 
+    public String getState() {
+        return state;
+    }
 
-
+    public void setState(String state) {
+        this.state = state;
+    }
 }

@@ -115,6 +115,7 @@ public class SaveOwnerVoteCmd extends Cmd {
         questionAnswerPo.setQaName(reqJson.getString("qaName"));
         questionAnswerPo.setCommunityId(reqJson.getString("communityId"));
         questionAnswerPo.setQaType(QuestionAnswerDto.QA_TYPE_VOTE);
+        questionAnswerPo.setState(QuestionAnswerDto.STATE_WAIT);
         questionAnswerV1InnerServiceSMOImpl.saveQuestionAnswer(questionAnswerPo);
 
         QuestionAnswerTitleRelPo questionAnswerTitleRelPo = new QuestionAnswerTitleRelPo();

@@ -18,6 +18,8 @@ import java.util.List;
 public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public static final String QA_TYPE_VOTE = "3003";// 业主投票
+    public static final String STATE_WAIT = "W"; // 待发布
+    public static final String STATE_COMPLETE = "C"; //发布完成
 
     private String qaName;
     private String qaType;
@@ -39,6 +41,8 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     private long votedCount; // 已投票人数
 
     private List<QuestionTitleValueDto> titleValues;
+
+    private String state;
 
     public String getQaName() {
         return qaName;
@@ -151,5 +155,13 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setTitleType(String titleType) {
         this.titleType = titleType;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
