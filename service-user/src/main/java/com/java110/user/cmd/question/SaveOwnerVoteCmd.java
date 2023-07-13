@@ -124,6 +124,6 @@ public class SaveOwnerVoteCmd extends Cmd {
         questionAnswerTitleRelPo.setQatrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         questionAnswerTitleRelV1InnerServiceSMOImpl.saveQuestionAnswerTitleRel(questionAnswerTitleRelPo);
 
-        questionAnswerBMOImpl.saveUserQuestionAnswer(questionAnswerPo,reqJson.getString("roomIds"));
+        questionAnswerBMOImpl.saveUserQuestionAnswer(questionAnswerPo,reqJson.getJSONArray("roomIds"));
     }
 }

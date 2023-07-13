@@ -1,5 +1,6 @@
 package com.java110.user.bmo.question.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.room.RoomDto;
@@ -33,17 +34,16 @@ public class QuestionAnswerBMOImpl implements IQuestionAnswerBMO {
 
     @Async
     @Override
-    public void saveUserQuestionAnswer(QuestionAnswerPo questionAnswerPo, String roomId) {
+    public void saveUserQuestionAnswer(QuestionAnswerPo questionAnswerPo, JSONArray roomIds) {
 
-        String[] roomIds = roomId.split(",");
-        if (roomIds == null || roomIds.length < 1) {
+        if (roomIds == null || roomIds.size() < 1) {
             return;
         }
 
         List<String> roomIdStrs = new ArrayList<>();
 
-        for (int roomIndex = 0; roomIndex < roomIds.length; roomIndex++) {
-            roomIdStrs.add(roomIds[roomIndex]);
+        for (int roomIndex = 0; roomIndex < roomIds.size(); roomIndex++) {
+            roomIdStrs.add(roomIds.getString(roomIndex));
             if (roomIdStrs.size() == MAX_LENGTH) {
                 doData(roomIdStrs, questionAnswerPo);
                 roomIdStrs = new ArrayList<>();
