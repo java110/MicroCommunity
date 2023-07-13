@@ -24,6 +24,7 @@ public class QuestionTitleValueDto extends PageDto implements Serializable {
 
     private String communityId;
     private String qaValue;
+    private String titleType;
     private String seq;
 
 
@@ -135,5 +136,11 @@ public class QuestionTitleValueDto extends PageDto implements Serializable {
         this.qaIds = qaIds;
     }
 
+    public String getTitleType() {
+        return titleType;
+    }
 
+    public void setTitleType(String titleType) {
+        this.titleType = titleType;
+    }
 }
