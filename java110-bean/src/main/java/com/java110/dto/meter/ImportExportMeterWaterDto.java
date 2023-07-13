@@ -28,6 +28,14 @@ public class ImportExportMeterWaterDto extends PageDto implements Serializable {
     private String roomNum;
     private double price;
 
+    private String storeId;
+
+    private String configId;
+
+    private String userId;
+    private String feeTypeCd;
+    private String batchId;
+
 
     public String getRemark() {
         return remark;
@@ -123,5 +131,45 @@ public class ImportExportMeterWaterDto extends PageDto implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
     }
 }

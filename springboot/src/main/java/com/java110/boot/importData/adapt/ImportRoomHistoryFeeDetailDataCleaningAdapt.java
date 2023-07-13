@@ -147,31 +147,5 @@ public class ImportRoomHistoryFeeDetailDataCleaningAdapt extends DefaultImportDa
         }
     }
 
-    /**
-     * 生成批次号
-     *
-     * @param reqJson
-     */
-    private void generatorBatch(JSONObject reqJson) {
-        PayFeeBatchPo payFeeBatchPo = new PayFeeBatchPo();
-        payFeeBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId("12"));
-        payFeeBatchPo.setCommunityId(reqJson.getString("communityId"));
-        payFeeBatchPo.setCreateUserId(reqJson.getString("userId"));
-        UserDto userDto = new UserDto();
-        userDto.setUserId(reqJson.getString("userId"));
-        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
-
-        Assert.listOnlyOne(userDtos, "用户不存在");
-        payFeeBatchPo.setCreateUserName(userDtos.get(0).getUserName());
-        payFeeBatchPo.setState(PayFeeBatchDto.STATE_NORMAL);
-        payFeeBatchPo.setMsg("正常");
-        int flag = payFeeBatchV1InnerServiceSMOImpl.savePayFeeBatch(payFeeBatchPo);
-
-        if (flag < 1) {
-            throw new IllegalArgumentException("生成批次失败");
-        }
-
-        reqJson.put("batchId", payFeeBatchPo.getBatchId());
-    }
 
 }
