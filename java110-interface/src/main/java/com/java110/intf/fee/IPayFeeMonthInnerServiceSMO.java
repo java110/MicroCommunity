@@ -29,6 +29,9 @@ public interface IPayFeeMonthInnerServiceSMO {
     int payFeeDetailRefreshFeeMonth(@RequestBody PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto);
 
 
+    @RequestMapping(value = "/doGeneratorOrRefreshFeeMonth", method = RequestMethod.POST)
+    int doGeneratorOrRefreshFeeMonth(@RequestBody PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto);
+
     @RequestMapping(value = "/doGeneratorOrRefreshAllFeeMonth", method = RequestMethod.POST)
     int doGeneratorOrRefreshAllFeeMonth(@RequestBody PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto);
 

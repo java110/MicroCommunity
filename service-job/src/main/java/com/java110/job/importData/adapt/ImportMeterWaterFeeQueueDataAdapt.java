@@ -10,12 +10,11 @@ import com.java110.dto.log.AssetImportLogDetailDto;
 import com.java110.dto.meter.ImportExportMeterWaterDto;
 import com.java110.dto.meter.MeterWaterDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.payFee.PayFeeDetailRefreshFeeMonthDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IMeterWaterInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.job.importData.DefaultImportData;
@@ -55,6 +54,9 @@ public class ImportMeterWaterFeeQueueDataAdapt extends DefaultImportData impleme
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeMonthInnerServiceSMO payFeeMonthInnerServiceSMOImpl;
 
     //    @Autowired
 //    private IPayFeeMonth payFeeMonthImpl;
@@ -118,13 +120,11 @@ public class ImportMeterWaterFeeQueueDataAdapt extends DefaultImportData impleme
         meterWaterInnerServiceSMOImpl.saveMeterWaters(meterWaterPos);
 
         // todo 这里异步的方式计算 月数据 和欠费数据
-        List<String> feeIds = new ArrayList<>();
-        for (PayFeePo feePo : fees) {
-            feeIds.add(feePo.getFeeId());
-        }
-        //   payFeeMonthImpl.doGeneratorFeeMonths(feeIds, fees.get(0).getCommunityId());
 
-
+        PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto = new PayFeeDetailRefreshFeeMonthDto();
+        payFeeDetailRefreshFeeMonthDto.setCommunityId(communityId);
+        payFeeDetailRefreshFeeMonthDto.setFeeId(fees.get(0).getFeeId());
+        payFeeMonthInnerServiceSMOImpl.doGeneratorOrRefreshFeeMonth(payFeeDetailRefreshFeeMonthDto);
     }
 
     private void dealImportExportMeterWater(ImportExportMeterWaterDto importExportMeterWaterDto, String communityId,
