@@ -60,8 +60,8 @@
         <if test="roomArea !=null and roomArea != ''">
             and t.room_area= #{roomArea}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
@@ -93,9 +93,7 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
-        </if>
+
         <if test="apartment !=null and apartment != ''">
             and t.apartment= #{apartment}
         </if>

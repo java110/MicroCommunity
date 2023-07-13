@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -23,12 +24,19 @@ public class QuestionTitleValueDto extends PageDto implements Serializable {
 
     private String communityId;
     private String qaValue;
+    private String titleType;
     private String seq;
 
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String qaId;
+    private String[] qaIds;
+
+    private int personCount;
+
 
 
     public String getScore() {
@@ -102,5 +110,37 @@ public class QuestionTitleValueDto extends PageDto implements Serializable {
 
     public void setTitleIds(String[] titleIds) {
         this.titleIds = titleIds;
+    }
+
+    public String getQaId() {
+        return qaId;
+    }
+
+    public void setQaId(String qaId) {
+        this.qaId = qaId;
+    }
+
+    public int getPersonCount() {
+        return personCount;
+    }
+
+    public void setPersonCount(int personCount) {
+        this.personCount = personCount;
+    }
+
+    public String[] getQaIds() {
+        return qaIds;
+    }
+
+    public void setQaIds(String[] qaIds) {
+        this.qaIds = qaIds;
+    }
+
+    public String getTitleType() {
+        return titleType;
+    }
+
+    public void setTitleType(String titleType) {
+        this.titleType = titleType;
     }
 }

@@ -86,4 +86,11 @@ public class QuestionTitleValueV1InnerServiceSMOImpl extends BaseServiceSMO impl
     public int queryQuestionTitleValuesCount(@RequestBody QuestionTitleValueDto questionTitleValueDto) {
         return questionTitleValueV1ServiceDaoImpl.queryQuestionTitleValuesCount(BeanConvertUtil.beanCovertMap(questionTitleValueDto));    }
 
+    @Override
+    public List<QuestionTitleValueDto> queryQuestionOwnerTitleValues(@RequestBody QuestionTitleValueDto questionTitleValueDto) {
+        List<QuestionTitleValueDto> questionTitleValues = BeanConvertUtil.covertBeanList(questionTitleValueV1ServiceDaoImpl.queryQuestionOwnerTitleValues(BeanConvertUtil.beanCovertMap(questionTitleValueDto)), QuestionTitleValueDto.class);
+
+        return questionTitleValues;
+    }
+
 }

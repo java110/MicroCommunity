@@ -65,4 +65,7 @@ public interface IQuestionTitleValueV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryQuestionTitleValuesCount", method = RequestMethod.POST)
     int queryQuestionTitleValuesCount(@RequestBody QuestionTitleValueDto questionTitleValueDto);
+
+    @RequestMapping(value = "/queryQuestionOwnerTitleValues", method = RequestMethod.POST)
+    List<QuestionTitleValueDto> queryQuestionOwnerTitleValues(@RequestBody QuestionTitleValueDto questionTitleValueDto);
 }

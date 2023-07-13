@@ -1,9 +1,11 @@
 package com.java110.dto.questionAnswer;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.questionTitleValue.QuestionTitleValueDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -16,6 +18,8 @@ import java.util.Date;
 public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public static final String QA_TYPE_VOTE = "3003";// 业主投票
+    public static final String STATE_WAIT = "W"; // 待发布
+    public static final String STATE_COMPLETE = "C"; //发布完成
 
     private String qaName;
     private String qaType;
@@ -26,11 +30,19 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     private String content;
     private String qaId;
 
+    private String titleType;
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private long voteCount; // 总投票人数
+
+    private long votedCount; // 已投票人数
+
+    private List<QuestionTitleValueDto> titleValues;
+
+    private String state;
 
     public String getQaName() {
         return qaName;
@@ -111,5 +123,45 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<QuestionTitleValueDto> getTitleValues() {
+        return titleValues;
+    }
+
+    public void setTitleValues(List<QuestionTitleValueDto> titleValues) {
+        this.titleValues = titleValues;
+    }
+
+    public long getVoteCount() {
+        return voteCount;
+    }
+
+    public void setVoteCount(long voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public long getVotedCount() {
+        return votedCount;
+    }
+
+    public void setVotedCount(long votedCount) {
+        this.votedCount = votedCount;
+    }
+
+    public String getTitleType() {
+        return titleType;
+    }
+
+    public void setTitleType(String titleType) {
+        this.titleType = titleType;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
