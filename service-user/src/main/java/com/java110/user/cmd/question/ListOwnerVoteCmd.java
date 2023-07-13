@@ -47,7 +47,7 @@ public class ListOwnerVoteCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         QuestionAnswerDto questionAnswerDto = BeanConvertUtil.covertBean(reqJson, QuestionAnswerDto.class);
-
+        questionAnswerDto.setQaType(QuestionAnswerDto.QA_TYPE_VOTE);
         int count = questionAnswerV1InnerServiceSMOImpl.queryQuestionAnswersCount(questionAnswerDto);
 
         List<QuestionAnswerDto> questionAnswerDtos = null;
