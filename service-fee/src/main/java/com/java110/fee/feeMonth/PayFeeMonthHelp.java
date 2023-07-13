@@ -228,8 +228,8 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         BigDecimal receivableAmount = new BigDecimal(Double.parseDouble(feeDetailDto.getReceivableAmount()));
         BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(feeDetailDto.getReceivedAmount()));
 
-        BigDecimal dayReceivableAmount = receivableAmount.divide(new BigDecimal(day), 4, BigDecimal.ROUND_HALF_UP);// 日 应收
-        BigDecimal dayReceivedAmount = receivedAmount.divide(new BigDecimal(day), 4, BigDecimal.ROUND_HALF_UP);// 日 实收
+        BigDecimal dayReceivableAmount = receivableAmount.divide(new BigDecimal(day), 8, BigDecimal.ROUND_HALF_UP);// 日 应收
+        BigDecimal dayReceivedAmount = receivedAmount.divide(new BigDecimal(day), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
 
         // todo 寻找第一个自然月 一日
         Calendar firstMonthDayCal = Calendar.getInstance();
