@@ -40,12 +40,12 @@ public class ReportQuestionAnswerApi {
         UserQuestionAnswerValueDto userQuestionAnswerValueDto = new UserQuestionAnswerValueDto();
         userQuestionAnswerValueDto.setPage(page);
         userQuestionAnswerValueDto.setRow(row);
-        userQuestionAnswerValueDto.setObjIds(new String[]{storeId, communityId});
-        userQuestionAnswerValueDto.setQaType(qaType);
-        userQuestionAnswerValueDto.setStartTime(startTime);
-        if(!StringUtil.isEmpty(endTime)){
-            userQuestionAnswerValueDto.setEndTime(endTime+" 23:59:59");
-        }
+        userQuestionAnswerValueDto.setCommunityId(communityId);
+//        userQuestionAnswerValueDto.setQaType(qaType);
+//        userQuestionAnswerValueDto.setStartTime(startTime);
+//        if(!StringUtil.isEmpty(endTime)){
+//            userQuestionAnswerValueDto.setEndTime(endTime+" 23:59:59");
+//        }
         userQuestionAnswerValueDto.setTitleId(titleId);
         return getReportQuestionAnswerBMOImpl.get(userQuestionAnswerValueDto);
     }

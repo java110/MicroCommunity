@@ -52,8 +52,8 @@ public class GetReportQuestionAnswerBMOImpl implements IGetReportQuestionAnswerB
         }
 
         for (UserQuestionAnswerValueDto userQuestionAnswerValueDto : userQuestionAnswerValueDtos) {
-            if (StringUtil.isEmpty(userQuestionAnswerValueDto.getQaValue())) {
-                userQuestionAnswerValueDto.setQaValue(userQuestionAnswerValueDto.getValueContent());
+            if (StringUtil.isEmpty(userQuestionAnswerValueDto.getValueContent())) {
+                userQuestionAnswerValueDto.setValueContent(userQuestionAnswerValueDto.getValueContent());
             }
         }
     }

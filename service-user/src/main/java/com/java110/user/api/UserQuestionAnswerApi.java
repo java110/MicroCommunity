@@ -2,7 +2,6 @@ package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.dto.user.UserQuestionAnswerDto;
 import com.java110.dto.user.UserQuestionAnswerValueDto;
 import com.java110.po.user.UserQuestionAnswerPo;
@@ -227,7 +226,7 @@ public class UserQuestionAnswerApi {
         UserQuestionAnswerValueDto userQuestionAnswerValueDto = new UserQuestionAnswerValueDto();
         userQuestionAnswerValueDto.setPage(page);
         userQuestionAnswerValueDto.setRow(row);
-        userQuestionAnswerValueDto.setObjId(communityId);
+        userQuestionAnswerValueDto.setCommunityId(communityId);
         return getUserQuestionAnswerValueBMOImpl.get(userQuestionAnswerValueDto);
     }
 }

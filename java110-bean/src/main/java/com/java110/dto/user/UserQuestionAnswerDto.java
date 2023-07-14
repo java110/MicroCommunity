@@ -1,8 +1,10 @@
 package com.java110.dto.user;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -17,80 +19,101 @@ public class UserQuestionAnswerDto extends PageDto implements Serializable {
     public static final String STATE_WAIT = "1201";//1201 待处理 1202 完成
     public static final String STATE_FINISH = "1202";//1201 待处理 1202 完成
     private String score;
-private String ownerName;
-private String link;
-private String userQaId;
-private String state;
-private String ownerId;
-private String communityId;
-private String roomId;
-private String roomName;
-private String qaId;
+    private String ownerName;
+    private String link;
+    private String userQaId;
+    private String state;
+    private String ownerId;
+    private String communityId;
+    private String roomId;
+    private String roomName;
+    private String qaId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
 
+    private List<UserQuestionAnswerValueDto> values;
+
 
     public String getScore() {
         return score;
     }
-public void setScore(String score) {
+
+    public void setScore(String score) {
         this.score = score;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getLink() {
+
+    public String getLink() {
         return link;
     }
-public void setLink(String link) {
+
+    public void setLink(String link) {
         this.link = link;
     }
-public String getUserQaId() {
+
+    public String getUserQaId() {
         return userQaId;
     }
-public void setUserQaId(String userQaId) {
+
+    public void setUserQaId(String userQaId) {
         this.userQaId = userQaId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getRoomId() {
+
+    public String getRoomId() {
         return roomId;
     }
-public void setRoomId(String roomId) {
+
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
-public String getRoomName() {
+
+    public String getRoomName() {
         return roomName;
     }
-public void setRoomName(String roomName) {
+
+    public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
-public String getQaId() {
+
+    public String getQaId() {
         return qaId;
     }
-public void setQaId(String qaId) {
+
+    public void setQaId(String qaId) {
         this.qaId = qaId;
     }
 
@@ -109,5 +132,13 @@ public void setQaId(String qaId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<UserQuestionAnswerValueDto> getValues() {
+        return values;
+    }
+
+    public void setValues(List<UserQuestionAnswerValueDto> values) {
+        this.values = values;
     }
 }
