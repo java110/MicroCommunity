@@ -61,7 +61,7 @@ public class ListUserQuestionAnswerCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        super.validatePageInfo(reqJson);
+        
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "qaId", "未包含小区信息");
     }

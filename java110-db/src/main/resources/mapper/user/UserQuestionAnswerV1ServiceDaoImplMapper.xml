@@ -68,7 +68,7 @@
         <if test="qaId !=null and qaId != ''">
             and t.qa_id= #{qaId}
         </if>
-        order by t.create_time desc
+        order by t.room_name
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
