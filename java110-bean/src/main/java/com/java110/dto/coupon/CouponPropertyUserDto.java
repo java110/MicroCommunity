@@ -30,7 +30,7 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
     private String toTypeName;
     private String validityDay;
     private String couponId;
-    private String userName;
+    private String couponUserName;
     private String couponUserId;
     private String cppId;
     private String tel;
@@ -82,14 +82,6 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
 
     public void setCouponId(String couponId) {
         this.couponId = couponId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
 
@@ -204,5 +196,13 @@ public class CouponPropertyUserDto extends PageDto implements Serializable {
 
     public void setIsStart(String isStart) {
         this.isStart = isStart;
+    }
+
+    public String getCouponUserName() {
+        return couponUserName;
+    }
+
+    public void setCouponUserName(String couponUserName) {
+        this.couponUserName = couponUserName;
     }
 }
