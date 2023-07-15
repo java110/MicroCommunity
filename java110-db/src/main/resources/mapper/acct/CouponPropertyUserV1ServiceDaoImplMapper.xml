@@ -39,7 +39,7 @@
         <if test="couponId !=null and couponId != ''">
             and t.coupon_id= #{couponId}
         </if>
-        <if test="userName !=null and userName != ''">
+        <if test="couponUserName !=null and couponUserName != ''">
             and t.user_name= #{userName}
         </if>
         <if test="couponUserId !=null and couponUserId != ''">
@@ -147,7 +147,7 @@
         <if test="couponId !=null and couponId != ''">
             and t.coupon_id= #{couponId}
         </if>
-        <if test="userName !=null and userName != ''">
+        <if test="couponUserName !=null and couponUserName != ''">
             and t.user_name= #{userName}
         </if>
         <if test="couponUserId !=null and couponUserId != ''">
