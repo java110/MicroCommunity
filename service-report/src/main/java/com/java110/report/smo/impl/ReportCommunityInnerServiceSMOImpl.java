@@ -3,6 +3,7 @@ package com.java110.report.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAttrDto;
@@ -141,21 +142,21 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
     }
 
     @Override
-    public int queryHisFeeConfigCount(@RequestBody FeeDto feeDto) {
+    public int queryHisFeeConfigCount(@RequestBody FeeConfigDto feeDto) {
         return reportCommunityServiceDaoImpl.queryHisFeeConfigCount(BeanConvertUtil.beanCovertMap(feeDto));
     }
 
     @Override
-    public List<FeeDto> queryHisFeeConfigs(@RequestBody FeeDto feeDto) {
+    public List<FeeConfigDto> queryHisFeeConfigs(@RequestBody FeeConfigDto feeDto) {
         int page = feeDto.getPage();
 
         if (page != PageDto.DEFAULT_PAGE) {
             feeDto.setPage((page - 1) * feeDto.getRow());
         }
 
-        List<FeeDto> feeDtos = BeanConvertUtil.covertBeanList(
+        List<FeeConfigDto> feeDtos = BeanConvertUtil.covertBeanList(
                 reportCommunityServiceDaoImpl.queryHisFeeConfigs(BeanConvertUtil.beanCovertMap(feeDto)),
-                FeeDto.class);
+                FeeConfigDto.class);
 
         return feeDtos;
     }

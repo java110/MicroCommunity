@@ -1,6 +1,7 @@
 package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -85,7 +86,7 @@ public interface IReportCommunityInnerServiceSMO {
      * @return
      */
     @RequestMapping(value = "/queryHisFeeConfigCount", method = RequestMethod.POST)
-    int queryHisFeeConfigCount(@RequestBody FeeDto feeDto);
+    int queryHisFeeConfigCount(@RequestBody FeeConfigDto feeDto);
 
     /**
      * 查询费用项
@@ -93,5 +94,5 @@ public interface IReportCommunityInnerServiceSMO {
      * @return
      */
     @RequestMapping(value = "/queryHisFeeConfigs", method = RequestMethod.POST)
-    List<FeeDto> queryHisFeeConfigs(@RequestBody FeeDto feeDto);
+    List<FeeConfigDto> queryHisFeeConfigs(@RequestBody FeeConfigDto feeDto);
 }

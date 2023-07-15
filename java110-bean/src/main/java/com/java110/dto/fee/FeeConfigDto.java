@@ -86,6 +86,11 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String decimalPlace;
     private String units;
 
+    private String bId;
+    private String operate;
+
+    private String userName;
+
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -335,5 +340,29 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setUnits(String units) {
         this.units = units;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
+    }
+
+    public String getOperate() {
+        return operate;
+    }
+
+    public void setOperate(String operate) {
+        this.operate = operate;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

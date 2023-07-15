@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -39,18 +40,18 @@ public class QueryHisFeeConfigCmd extends Cmd{
 
 
         int row = reqJson.getInteger("row");
-        FeeDto feeDto = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
+        FeeConfigDto feeDto = BeanConvertUtil.covertBean(reqJson, FeeConfigDto.class);
 
         int total = reportCommunityInnerServiceSMOImpl.queryHisFeeConfigCount(feeDto);
 //        int count = 0;
-        List<FeeDto> feeDtos = null;
+        List<FeeConfigDto> feeConfigDtos = null;
         if (total > 0) {
-            feeDtos = reportCommunityInnerServiceSMOImpl.queryHisFeeConfigs(feeDto);
+            feeConfigDtos = reportCommunityInnerServiceSMOImpl.queryHisFeeConfigs(feeDto);
         } else {
-            feeDtos = new ArrayList<>();
+            feeConfigDtos = new ArrayList<>();
         }
 
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, feeDtos);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, feeConfigDtos);
         context.setResponseEntity(responseEntity);
     }
 }
