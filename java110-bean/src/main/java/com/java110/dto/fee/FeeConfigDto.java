@@ -91,6 +91,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private String userName;
 
+    private String payerObjType;
+
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -364,5 +366,13 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPayerObjType() {
+        return payerObjType;
+    }
+
+    public void setPayerObjType(String payerObjType) {
+        this.payerObjType = payerObjType;
     }
 }
