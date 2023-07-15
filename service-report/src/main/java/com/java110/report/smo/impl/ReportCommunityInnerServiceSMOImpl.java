@@ -140,6 +140,26 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
         return feeDtos;
     }
 
+    @Override
+    public int queryHisFeeConfigCount(@RequestBody FeeDto feeDto) {
+        return reportCommunityServiceDaoImpl.queryHisFeeConfigCount(BeanConvertUtil.beanCovertMap(feeDto));
+    }
+
+    @Override
+    public List<FeeDto> queryHisFeeConfigs(@RequestBody FeeDto feeDto) {
+        int page = feeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDto.setPage((page - 1) * feeDto.getRow());
+        }
+
+        List<FeeDto> feeDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.queryHisFeeConfigs(BeanConvertUtil.beanCovertMap(feeDto)),
+                FeeDto.class);
+
+        return feeDtos;
+    }
+
     /**
      * 获取批量userId
      *

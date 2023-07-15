@@ -78,4 +78,20 @@ public interface IReportCommunityInnerServiceSMO {
 
     @RequestMapping(value = "/queryHisFees", method = RequestMethod.POST)
     List<FeeDto> queryHisFees(@RequestBody FeeDto feeDto);
+
+    /**
+     * 查询费用项数量
+     * @param feeDto
+     * @return
+     */
+    @RequestMapping(value = "/queryHisFeeConfigCount", method = RequestMethod.POST)
+    int queryHisFeeConfigCount(@RequestBody FeeDto feeDto);
+
+    /**
+     * 查询费用项
+     * @param feeDto
+     * @return
+     */
+    @RequestMapping(value = "/queryHisFeeConfigs", method = RequestMethod.POST)
+    List<FeeDto> queryHisFeeConfigs(@RequestBody FeeDto feeDto);
 }

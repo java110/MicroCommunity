@@ -331,4 +331,37 @@
         </if>
     </select>
 
+    <select id="queryHisFeeConfigCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from business_pay_fee_config t
+        left join c_business cb on t.b_id = cb.b_id
+        left join c_orders co on cb.o_id = co.o_id
+        left join u_user uu on co.user_id = uu.user_id
+        where 1=1
+        and t.config_id = #{configId}
+        and t.community_id = #{communityId}
+    </select>
+
+    <select id="queryHisFeeConfigs" parameterType="Map" resultType="Map">
+        select t.operate,t.fee_type_cd feeTypeCd,t.computing_formula
+        computingFormula,t.additional_amount additionalAmount,t.bill_type
+        billType,t.computing_formula_text computingFormulaText,t.square_price squarePrice,t.payment_cd paymentCd,t.is_default
+        isDefault,t.config_id configId,t.fee_flag feeFlag,t.fee_name
+        feeName,t.payment_cycle paymentCycle,t.start_time startTime,t.end_time
+        endTime,t.community_id communityId,t.deduct_from deductFrom,
+        t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units,t.b_id bId,
+        uu.`name` userName
+        from business_pay_fee_config t
+        left join c_business cb on t.b_id = cb.b_id
+        left join c_orders co on cb.o_id = co.o_id
+        left join u_user uu on co.user_id = uu.user_id
+        where 1=1
+        and t.config_id = #{configId}
+        and t.community_id = #{communityId}
+        order by t.create_time desc,t.operate
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
 </mapper>

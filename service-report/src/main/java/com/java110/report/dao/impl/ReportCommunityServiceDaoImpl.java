@@ -190,4 +190,25 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
 
         return businessOwnerCarInfos;
     }
+
+    @Override
+    public int queryHisFeeConfigCount(Map info) {
+        logger.debug("查询 queryHisFeeConfigCount 入参 info : {}", info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.queryHisFeeConfigCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryHisFeeConfigs(Map info) {
+        logger.debug("查询 queryHisFees 入参 info : {}", info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.queryHisFeeConfigs", info);
+
+        return infos;
+    }
 }
