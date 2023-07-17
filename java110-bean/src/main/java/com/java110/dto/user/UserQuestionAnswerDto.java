@@ -34,6 +34,8 @@ public class UserQuestionAnswerDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String qaType;
+
     private List<UserQuestionAnswerValueDto> values;
 
 
@@ -140,5 +142,13 @@ public class UserQuestionAnswerDto extends PageDto implements Serializable {
 
     public void setValues(List<UserQuestionAnswerValueDto> values) {
         this.values = values;
+    }
+
+    public String getQaType() {
+        return qaType;
+    }
+
+    public void setQaType(String qaType) {
+        this.qaType = qaType;
     }
 }

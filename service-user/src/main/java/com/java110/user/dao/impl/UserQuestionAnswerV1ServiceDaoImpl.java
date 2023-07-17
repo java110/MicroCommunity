@@ -116,5 +116,14 @@ public class UserQuestionAnswerV1ServiceDaoImpl extends BaseServiceDao implement
         return saveFlag;
     }
 
+    @Override
+    public List<Map> queryOwnerQuestionAnswers(Map info) {
+        logger.debug("查询 queryOwnerQuestionAnswers 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("userQuestionAnswerV1ServiceDaoImpl.queryOwnerQuestionAnswers",info);
+
+        return infos;
+    }
+
 
 }

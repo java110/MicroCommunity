@@ -16,6 +16,7 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.user.dao.IUserQuestionAnswerV1ServiceDao;
 import com.java110.intf.user.IUserQuestionAnswerV1InnerServiceSMO;
 import com.java110.dto.user.UserQuestionAnswerDto;
@@ -47,7 +48,7 @@ public class UserQuestionAnswerV1InnerServiceSMOImpl extends BaseServiceSMO impl
 
 
     @Override
-    public int saveUserQuestionAnswer(@RequestBody  UserQuestionAnswerPo userQuestionAnswerPo) {
+    public int saveUserQuestionAnswer(@RequestBody UserQuestionAnswerPo userQuestionAnswerPo) {
         int saveFlag = userQuestionAnswerV1ServiceDaoImpl.saveUserQuestionAnswerInfo(BeanConvertUtil.beanCovertMap(userQuestionAnswerPo));
         return saveFlag;
     }
@@ -55,27 +56,27 @@ public class UserQuestionAnswerV1InnerServiceSMOImpl extends BaseServiceSMO impl
     @Override
     public int saveUserQuestionAnswers(@RequestBody List<UserQuestionAnswerPo> userQuestionAnswerPos) {
         Map info = new HashMap();
-        info.put("userQuestionAnswerPos",userQuestionAnswerPos);
+        info.put("userQuestionAnswerPos", userQuestionAnswerPos);
         int saveFlag = userQuestionAnswerV1ServiceDaoImpl.saveUserQuestionAnswers(info);
         return saveFlag;
     }
 
 
     @Override
-    public int updateUserQuestionAnswer(@RequestBody  UserQuestionAnswerPo userQuestionAnswerPo) {
+    public int updateUserQuestionAnswer(@RequestBody UserQuestionAnswerPo userQuestionAnswerPo) {
         int saveFlag = userQuestionAnswerV1ServiceDaoImpl.updateUserQuestionAnswerInfo(BeanConvertUtil.beanCovertMap(userQuestionAnswerPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteUserQuestionAnswer(@RequestBody  UserQuestionAnswerPo userQuestionAnswerPo) {
-       userQuestionAnswerPo.setStatusCd("1");
-       int saveFlag = userQuestionAnswerV1ServiceDaoImpl.updateUserQuestionAnswerInfo(BeanConvertUtil.beanCovertMap(userQuestionAnswerPo));
-       return saveFlag;
+    @Override
+    public int deleteUserQuestionAnswer(@RequestBody UserQuestionAnswerPo userQuestionAnswerPo) {
+        userQuestionAnswerPo.setStatusCd("1");
+        int saveFlag = userQuestionAnswerV1ServiceDaoImpl.updateUserQuestionAnswerInfo(BeanConvertUtil.beanCovertMap(userQuestionAnswerPo));
+        return saveFlag;
     }
 
     @Override
-    public List<UserQuestionAnswerDto> queryUserQuestionAnswers(@RequestBody  UserQuestionAnswerDto userQuestionAnswerDto) {
+    public List<UserQuestionAnswerDto> queryUserQuestionAnswers(@RequestBody UserQuestionAnswerDto userQuestionAnswerDto) {
 
         //校验是否传了 分页信息
 
@@ -93,6 +94,15 @@ public class UserQuestionAnswerV1InnerServiceSMOImpl extends BaseServiceSMO impl
 
     @Override
     public int queryUserQuestionAnswersCount(@RequestBody UserQuestionAnswerDto userQuestionAnswerDto) {
-        return userQuestionAnswerV1ServiceDaoImpl.queryUserQuestionAnswersCount(BeanConvertUtil.beanCovertMap(userQuestionAnswerDto));    }
+        return userQuestionAnswerV1ServiceDaoImpl.queryUserQuestionAnswersCount(BeanConvertUtil.beanCovertMap(userQuestionAnswerDto));
+    }
+
+    @Override
+    public List<QuestionAnswerDto> queryOwnerQuestionAnswers(@RequestBody UserQuestionAnswerDto userQuestionAnswerDto) {
+        List<QuestionAnswerDto> questionAnswerDtos = BeanConvertUtil.covertBeanList(
+                userQuestionAnswerV1ServiceDaoImpl.queryOwnerQuestionAnswers(BeanConvertUtil.beanCovertMap(userQuestionAnswerDto)),
+                QuestionAnswerDto.class);
+        return questionAnswerDtos;
+    }
 
 }

@@ -16,6 +16,7 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.dto.user.UserQuestionAnswerDto;
 import com.java110.po.user.UserQuestionAnswerPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -69,4 +70,11 @@ public interface IUserQuestionAnswerV1InnerServiceSMO {
     int queryUserQuestionAnswersCount(@RequestBody UserQuestionAnswerDto userQuestionAnswerDto);
 
 
+    /**
+     * 查询业主需要投票
+     * @param userQuestionAnswerDto
+     * @return
+     */
+    @RequestMapping(value = "/queryOwnerQuestionAnswers", method = RequestMethod.POST)
+    List<QuestionAnswerDto> queryOwnerQuestionAnswers(@RequestBody UserQuestionAnswerDto userQuestionAnswerDto);
 }
