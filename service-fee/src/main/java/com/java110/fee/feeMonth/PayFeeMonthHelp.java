@@ -141,7 +141,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
             if (day < 1) {
                 day = 1;
             }
-            dayReceivableAmount = receivableAmount.divide(new BigDecimal(day), 4, BigDecimal.ROUND_HALF_UP);// 日 应收
+            dayReceivableAmount = receivableAmount.divide(new BigDecimal(day), 8, BigDecimal.ROUND_HALF_UP);// 日 应收
         }
 
         // todo 寻找第一个自然月 一日
@@ -165,16 +165,16 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
             curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
             // todo 如果不是整月，则转换为按天计算
-            if (curDay != curMonthMaxDay) {
+//            if (curDay != curMonthMaxDay) {
                 //todo 周期性费用 日应收重新算
                 if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-                    dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 4, BigDecimal.ROUND_HALF_UP);// 日 实收
+                    dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
                 }
                 // todo 计算 应收
                 curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
-            } else { // todo 如果是整月 那就按月计算，以免 转换成天再 乘以天数后的误差
-                curMonthReceivableAmount = receivableAmount;
-            }
+//            } else { // todo 如果是整月 那就按月计算，以免 转换成天再 乘以天数后的误差
+//                curMonthReceivableAmount = receivableAmount;
+//            }
             // todo 保存数据到pay_fee_detail_month
             toSavePayFeeDetailMonth(curMonthReceivableAmount.doubleValue(), 0, null, feeDto, payFeeMonthOwnerDto, payFeeDetailMonthPos, startMonthDayTime, deadlineTime);
 
