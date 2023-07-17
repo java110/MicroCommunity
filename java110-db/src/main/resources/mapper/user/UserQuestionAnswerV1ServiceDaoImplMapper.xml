@@ -155,8 +155,6 @@
         <if test="qaId !=null and qaId != ''">
             and t.qa_id= #{qaId}
         </if>
-
-
     </select>
     <select id="queryOwnerQuestionAnswers" parameterType="Map" resultType="Map">
         select qa.qa_name qaName,qa.qa_type qaType,qa.start_time startTime,qa.end_time endTime,qa.remark,
@@ -169,6 +167,7 @@
             and t.community_id = #{communityId}
             and t.link = #{link}
             and qa.qa_type = #{qaType}
+            and qa.state = 'C'
             and qa.start_time &lt; NOW()
             and qa.end_time &gt; NOW()
     </select>
