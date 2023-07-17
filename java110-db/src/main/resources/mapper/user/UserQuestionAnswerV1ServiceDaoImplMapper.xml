@@ -169,8 +169,8 @@
             and t.community_id = #{communityId}
             and t.link = #{link}
             and qa.qa_type = #{qaType}
-            and qa.start_time &gt; NOW()
-            and qa.end_time &lt; NOW()
+            and qa.start_time &lt; NOW()
+            and qa.end_time &gt; NOW()
     </select>
 
 </mapper>
