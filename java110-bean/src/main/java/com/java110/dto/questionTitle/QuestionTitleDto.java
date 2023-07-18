@@ -32,6 +32,8 @@ public class QuestionTitleDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String qaId;
+
 
     public String getTitleType() {
         return titleType;
@@ -88,5 +90,13 @@ public class QuestionTitleDto extends PageDto implements Serializable {
 
     public void setTitleValues(List<QuestionTitleValueDto> titleValues) {
         this.titleValues = titleValues;
+    }
+
+    public String getQaId() {
+        return qaId;
+    }
+
+    public void setQaId(String qaId) {
+        this.qaId = qaId;
     }
 }
