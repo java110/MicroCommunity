@@ -40,6 +40,12 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     private long votedCount; // 已投票人数
 
+    private String ownerName;
+
+    private String link;
+
+    private String roomName;
+
     private List<QuestionTitleValueDto> titleValues;
 
     private String state;
@@ -163,5 +169,29 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }
