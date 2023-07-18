@@ -70,4 +70,10 @@ public interface IUserQuestionAnswerValueV1ServiceDao {
      */
     int queryUserQuestionAnswerValuesCount(Map info);
 
+    /**
+     * 批量保存
+     * @param infos
+     * @return
+     */
+    int saveUserQuestionAnswerValues(Map infos);
 }

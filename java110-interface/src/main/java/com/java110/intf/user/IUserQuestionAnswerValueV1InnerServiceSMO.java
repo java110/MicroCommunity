@@ -17,7 +17,7 @@ package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.user.UserQuestionAnswerValueDto;
-import com.java110.po.userQuestionAnswerValue.UserQuestionAnswerValuePo;
+import com.java110.po.user.UserQuestionAnswerValuePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +40,9 @@ public interface IUserQuestionAnswerValueV1InnerServiceSMO {
 
     @RequestMapping(value = "/saveUserQuestionAnswerValue", method = RequestMethod.POST)
     public int saveUserQuestionAnswerValue(@RequestBody  UserQuestionAnswerValuePo userQuestionAnswerValuePo);
+
+    @RequestMapping(value = "/saveUserQuestionAnswerValues", method = RequestMethod.POST)
+    int saveUserQuestionAnswerValues(@RequestBody  List<UserQuestionAnswerValuePo> tmpUserUserQuestionAnswerValues);
 
     @RequestMapping(value = "/updateUserQuestionAnswerValue", method = RequestMethod.POST)
     public int updateUserQuestionAnswerValue(@RequestBody  UserQuestionAnswerValuePo userQuestionAnswerValuePo);
@@ -65,4 +68,6 @@ public interface IUserQuestionAnswerValueV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryUserQuestionAnswerValuesCount", method = RequestMethod.POST)
     int queryUserQuestionAnswerValuesCount(@RequestBody UserQuestionAnswerValueDto userQuestionAnswerValueDto);
+
+
 }

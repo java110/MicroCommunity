@@ -50,6 +50,8 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     private String state;
 
+    private String userQaId;
+
     public String getQaName() {
         return qaName;
     }
@@ -193,5 +195,13 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getUserQaId() {
+        return userQaId;
+    }
+
+    public void setUserQaId(String userQaId) {
+        this.userQaId = userQaId;
     }
 }

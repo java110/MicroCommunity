@@ -108,5 +108,13 @@ public class UserQuestionAnswerValueV1ServiceDaoImpl extends BaseServiceDao impl
         return Integer.parseInt(businessUserQuestionAnswerValueInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public int saveUserQuestionAnswerValues(Map infos) {
+
+        int saveFlag = sqlSessionTemplate.insert("userQuestionAnswerValueV1ServiceDaoImpl.saveUserQuestionAnswerValues",infos);
+
+        return saveFlag;
+    }
+
 
 }
