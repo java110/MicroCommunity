@@ -55,7 +55,7 @@ public class UserQuestionAnswerValueV1InnerServiceSMOImpl extends BaseServiceSMO
     @Override
     public int saveUserQuestionAnswerValues(@RequestBody List<UserQuestionAnswerValuePo> userUserQuestionAnswerValues) {
         Map infos = new HashMap();
-        infos.put("datas",userUserQuestionAnswerValues);
+        infos.put("userUserQuestionAnswerValues",userUserQuestionAnswerValues);
         int saveFlag = userQuestionAnswerValueV1ServiceDaoImpl.saveUserQuestionAnswerValues(infos);
         return saveFlag;
     }

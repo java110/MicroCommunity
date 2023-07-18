@@ -18,8 +18,8 @@
         insert into user_question_answer_value(
         value_id,title_id,user_qa_id,value_content,community_id,user_title_id,qa_id
         ) values
-        <foreach collection="datas" item="item" separator=",">
-        #{item.valueId},#{item.titleId},#{item.userQaId},#{item.valueContent},#{item.communityId},#{item.userTitleId},#{item.qaId}
+        <foreach collection="userUserQuestionAnswerValues" item="item" separator=",">
+        (#{item.valueId},#{item.titleId},#{item.userQaId},#{item.valueContent},#{item.communityId},#{item.userTitleId},#{item.qaId})
         </foreach>
     </insert>
 
