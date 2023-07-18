@@ -82,7 +82,7 @@ public class LoginServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         if(!StringUtil.isEmpty(storeInfo)){
             CommonCache.removeValue("getStoreInfo" + Java110RedisConfig.GET_STORE_INFO_EXPIRE_TIME_KEY + "::" + userInfo.getString("userId"));
             JSONObject storeObj = JSONObject.parseObject(storeInfo);
-            storeId = storeObj.getJSONObject("msg").getString("storeId");
+            storeId = storeObj.getString("storeId");
             CommonCache.removeValue("getStoreEnterCommunitys" + Java110RedisConfig.GET_STORE_ENTER_COMMUNITYS_EXPIRE_TIME_KEY + "::" + storeId);
         }
         //员工权限
