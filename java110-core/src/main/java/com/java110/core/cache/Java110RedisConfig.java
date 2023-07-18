@@ -1,5 +1,10 @@
 package com.java110.core.cache;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +18,10 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.util.StringUtils;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
@@ -60,7 +68,7 @@ public class Java110RedisConfig extends CachingConfigurerSupport {
     }
 
 
-//    @Bean(name = "jedisCluster")
+    //    @Bean(name = "jedisCluster")
 //    @Autowired
     public JedisCluster jedisCluster(@Qualifier("jedis.pool.config") JedisPoolConfig config,
                                      @Value("${jedis.pool.host}") String host,
@@ -111,14 +119,20 @@ public class Java110RedisConfig extends CachingConfigurerSupport {
         return cm;
     }
 
+    /**
+     * @return
+     * @Cacheable和通过RedisTemplate之间去相互获取数据
+     * @Cacheable注解存储redis缓存数据和通过RedisTemplate去获取存储的数据，由于@Cacheable默认的序列化编码存储到数据为byte类型，而RedisTemplate的默认编码为JdkSerializationRedisSerializer，所以要通过设置同一个序列化方式去解决问题； 通过继承CachingConfigurerSupport并且开启@EnableCaching去设置cache的配置通过RedisCacheConfiguration.defaultCacheConfig()去设置序列化的方式RedisTemplate<String, Object>设置RedisTemplate的序列化方式
+     * 设置序列化方式Jackson2JsonRedisSerializer
+     */
     @Bean
     public RedisCacheConfiguration redisCacheConfiguration() {
 
         RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
-
-        configuration = configuration.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())).entryTtl(Duration.ofSeconds(30));
-
+        configuration = configuration.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new JdkSerializationRedisSerializer())).entryTtl(Duration.ofSeconds(30));
         return configuration;
+
+
     }
 
 
