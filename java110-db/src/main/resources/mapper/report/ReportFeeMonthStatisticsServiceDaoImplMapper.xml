@@ -1931,6 +1931,7 @@
         left join t_dict d on t.prime_rate = d.status_cd and d.table_name="pay_fee_detail" and
         d.table_columns="prime_rate"
         where t.status_cd = '0'
+        and pfdd.discount_price> 0
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>

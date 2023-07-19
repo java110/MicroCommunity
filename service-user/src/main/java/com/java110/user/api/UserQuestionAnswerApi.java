@@ -167,7 +167,6 @@ public class UserQuestionAnswerApi {
 
         UserQuestionAnswerValuePo userQuestionAnswerValuePo = BeanConvertUtil.covertBean(reqJson, UserQuestionAnswerValuePo.class);
 
-        userQuestionAnswerValuePo.setPersonId(userId);
 
 
         return saveUserQuestionAnswerValueBMOImpl.save(userQuestionAnswerValuePo, questionAnswerTitles);

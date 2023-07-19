@@ -16,6 +16,7 @@
 package com.java110.user.dao;
 
 
+import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.utils.exception.DAOException;
 
 
@@ -71,4 +72,6 @@ public interface IUserQuestionAnswerV1ServiceDao {
     int queryUserQuestionAnswersCount(Map info);
 
     int saveUserQuestionAnswers(Map info);
+
+    List<Map> queryOwnerQuestionAnswers(Map info);
 }

@@ -2,6 +2,7 @@ package com.java110.fee.cmd.feeConfig;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -42,6 +43,7 @@ public class UpdateFeeConfigCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));

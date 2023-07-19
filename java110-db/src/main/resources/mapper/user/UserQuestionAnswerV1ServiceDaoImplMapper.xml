@@ -155,8 +155,22 @@
         <if test="qaId !=null and qaId != ''">
             and t.qa_id= #{qaId}
         </if>
-
-
+    </select>
+    <select id="queryOwnerQuestionAnswers" parameterType="Map" resultType="Map">
+        select qa.qa_name qaName,qa.qa_type qaType,qa.start_time startTime,qa.end_time endTime,qa.remark,
+        qa.community_id communityId,qa.qa_id qaId,td.`name` qaTypeName,qa.content,
+        t.owner_name ownerName,t.link,t.room_name roomName,t.user_qa_id userQaId
+        from user_question_answer t
+        left join question_answer qa on t.qa_id = qa.qa_id and qa.status_cd = '0'
+        LEFT JOIN t_dict td on td.status_cd = qa.qa_type and td.table_name = 'question_answer' and td.table_columns = 'qa_type'
+        where 1=1
+            and t.status_cd = '0'
+            and t.community_id = #{communityId}
+            and t.link = #{link}
+            and qa.qa_type = #{qaType}
+            and qa.state = 'C'
+            and qa.start_time &lt; NOW()
+            and qa.end_time &gt; NOW()
     </select>
 
 </mapper>

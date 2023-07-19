@@ -32,7 +32,7 @@ public class JedisClientTemplate implements Jedis {
 
     @Override
     public String set(byte[] key, byte[] value) {
-        redisTemplate.opsForValue().set(key, value);
+        redisTemplate.opsForValue().set(new String(key), value);
         return "";
     }
 
@@ -75,7 +75,7 @@ public class JedisClientTemplate implements Jedis {
 
     @Override
     public byte[] get(byte[] key) {
-        Object value = redisTemplate.opsForValue().get(key);
+        Object value = redisTemplate.opsForValue().get(new String(key));
         if (value == null) {
             return null;
         }
@@ -133,7 +133,7 @@ public class JedisClientTemplate implements Jedis {
 
     @Override
     public Long del(byte[] key) {
-        redisTemplate.delete(key);
+        redisTemplate.delete(new String(key));
         return 1L;
     }
 

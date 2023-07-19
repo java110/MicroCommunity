@@ -60,12 +60,7 @@ public class SaveUserQuestionAnswerValueBMOImpl implements ISaveUserQuestionAnsw
         for (int questionAnswerTitleIndex = 0; questionAnswerTitleIndex < questionAnswerTitles.size(); questionAnswerTitleIndex++) {
             titleObj = questionAnswerTitles.getJSONObject(questionAnswerTitleIndex);
             tmpUserUserQuestionAnswerValue = new UserQuestionAnswerValuePo();
-            tmpUserUserQuestionAnswerValue.setAnswerType(userQuestionAnswerValuePo.getAnswerType());
-            tmpUserUserQuestionAnswerValue.setObjId(userQuestionAnswerValuePo.getObjId());
-            tmpUserUserQuestionAnswerValue.setObjType(userQuestionAnswerValuePo.getObjType());
-            tmpUserUserQuestionAnswerValue.setPersonId(userQuestionAnswerValuePo.getPersonId());
             tmpUserUserQuestionAnswerValue.setQaId(userQuestionAnswerValuePo.getQaId());
-            tmpUserUserQuestionAnswerValue.setScore("0");
             tmpUserUserQuestionAnswerValue.setTitleId(titleObj.getString("titleId"));
             tmpUserUserQuestionAnswerValue.setUserQaId(userQuestionAnswerPo.getUserQaId());
             tmpUserUserQuestionAnswerValue.setUserTitleId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_userTitleId));
@@ -85,7 +80,7 @@ public class SaveUserQuestionAnswerValueBMOImpl implements ISaveUserQuestionAnsw
         }
 
         //如果是领导 评价 直接返回
-        String answerType = userQuestionAnswerValuePo.getAnswerType();
+        String answerType = "";
 
         if("2003".equals(answerType)){
             userQuestionAnswerPo.setState("1202");

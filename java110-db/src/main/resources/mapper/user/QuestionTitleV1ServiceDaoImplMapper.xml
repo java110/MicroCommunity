@@ -20,7 +20,13 @@
         select t.title_type,t.title_type titleType,t.title_id,t.title_id titleId,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.qa_title,t.qa_title qaTitle,t.create_time createTime
         from question_title t
+        <if test="qaId !=null and qaId != ''">
+             left join question_answer_title_rel qatr on t.title_id = qatr.title_id and qatr.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="qaId !=null and qaId != ''">
+             and qatr.qa_id = #{qaId}
+        </if>
         <if test="titleType !=null and titleType != ''">
             and t.title_type= #{titleType}
         </if>
@@ -70,7 +76,13 @@
     <select id="queryQuestionTitlesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from question_title t
+        <if test="qaId !=null and qaId != ''">
+            left join question_answer_title_rel qatr on t.title_id = qatr.title_id and qatr.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="qaId !=null and qaId != ''">
+            and qatr.qa_id = #{qaId}
+        </if>
         <if test="titleType !=null and titleType != ''">
             and t.title_type= #{titleType}
         </if>

@@ -5,120 +5,126 @@
 <mapper namespace="userQuestionAnswerValueV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存问卷答案信息 add by wuxw 2018-07-03 -->
     <insert id="saveUserQuestionAnswerValueInfo" parameterType="Map">
         insert into user_question_answer_value(
-value_id,title_id,user_qa_id,value_content,community_id,user_title_id,qa_id
-) values (
-#{valueId},#{titleId},#{userQaId},#{valueContent},#{communityId},#{userTitleId},#{qaId}
-)
+        value_id,title_id,user_qa_id,value_content,community_id,user_title_id,qa_id
+        ) values (
+        #{valueId},#{titleId},#{userQaId},#{valueContent},#{communityId},#{userTitleId},#{qaId}
+        )
     </insert>
 
-
+    <insert id="saveUserQuestionAnswerValues" parameterType="Map">
+        insert into user_question_answer_value(
+        value_id,title_id,user_qa_id,value_content,community_id,user_title_id,qa_id
+        ) values
+        <foreach collection="userUserQuestionAnswerValues" item="item" separator=",">
+        (#{item.valueId},#{item.titleId},#{item.userQaId},#{item.valueContent},#{item.communityId},#{item.userTitleId},#{item.qaId})
+        </foreach>
+    </insert>
 
     <!-- 查询问卷答案信息 add by wuxw 2018-07-03 -->
     <select id="getUserQuestionAnswerValueInfo" parameterType="Map" resultType="Map">
-        select  t.value_id,t.value_id valueId,t.title_id,t.title_id titleId,t.user_qa_id,t.user_qa_id userQaId,t.value_content,t.value_content valueContent,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.user_title_id,t.user_title_id userTitleId,t.qa_id,t.qa_id qaId 
-from user_question_answer_value t 
-where 1 =1 
-<if test="valueId !=null and valueId != ''">
-   and t.value_id= #{valueId}
-</if> 
-<if test="titleId !=null and titleId != ''">
-   and t.title_id= #{titleId}
-</if> 
-<if test="userQaId !=null and userQaId != ''">
-   and t.user_qa_id= #{userQaId}
-</if> 
-<if test="valueContent !=null and valueContent != ''">
-   and t.value_content= #{valueContent}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="userTitleId !=null and userTitleId != ''">
-   and t.user_title_id= #{userTitleId}
-</if> 
-<if test="qaId !=null and qaId != ''">
-   and t.qa_id= #{qaId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.value_id,t.value_id valueId,t.title_id,t.title_id titleId,t.user_qa_id,t.user_qa_id
+        userQaId,t.value_content,t.value_content valueContent,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.user_title_id,t.user_title_id userTitleId,t.qa_id,t.qa_id
+        qaId
+        from user_question_answer_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and t.value_content= #{valueContent}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="userTitleId !=null and userTitleId != ''">
+            and t.user_title_id= #{userTitleId}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改问卷答案信息 add by wuxw 2018-07-03 -->
     <update id="updateUserQuestionAnswerValueInfo" parameterType="Map">
-        update  user_question_answer_value t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="valueId !=null and valueId != ''">
-, t.value_id= #{valueId}
-</if> 
-<if test="titleId !=null and titleId != ''">
-, t.title_id= #{titleId}
-</if> 
-<if test="userQaId !=null and userQaId != ''">
-, t.user_qa_id= #{userQaId}
-</if> 
-<if test="valueContent !=null and valueContent != ''">
-, t.value_content= #{valueContent}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="qaId !=null and qaId != ''">
-, t.qa_id= #{qaId}
-</if> 
- where 1=1 <if test="userTitleId !=null and userTitleId != ''">
-and t.user_title_id= #{userTitleId}
-</if> 
+        update user_question_answer_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="valueId !=null and valueId != ''">
+            , t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            , t.title_id= #{titleId}
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            , t.user_qa_id= #{userQaId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            , t.value_content= #{valueContent}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            , t.qa_id= #{qaId}
+        </if>
+        where 1=1
+        <if test="userTitleId !=null and userTitleId != ''">
+            and t.user_title_id= #{userTitleId}
+        </if>
 
     </update>
 
     <!-- 查询问卷答案数量 add by wuxw 2018-07-03 -->
-     <select id="queryUserQuestionAnswerValuesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from user_question_answer_value t 
-where 1 =1 
-<if test="valueId !=null and valueId != ''">
-   and t.value_id= #{valueId}
-</if> 
-<if test="titleId !=null and titleId != ''">
-   and t.title_id= #{titleId}
-</if> 
-<if test="userQaId !=null and userQaId != ''">
-   and t.user_qa_id= #{userQaId}
-</if> 
-<if test="valueContent !=null and valueContent != ''">
-   and t.value_content= #{valueContent}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="userTitleId !=null and userTitleId != ''">
-   and t.user_title_id= #{userTitleId}
-</if> 
-<if test="qaId !=null and qaId != ''">
-   and t.qa_id= #{qaId}
-</if> 
+    <select id="queryUserQuestionAnswerValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from user_question_answer_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="userQaId !=null and userQaId != ''">
+            and t.user_qa_id= #{userQaId}
+        </if>
+        <if test="valueContent !=null and valueContent != ''">
+            and t.value_content= #{valueContent}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="userTitleId !=null and userTitleId != ''">
+            and t.user_title_id= #{userTitleId}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

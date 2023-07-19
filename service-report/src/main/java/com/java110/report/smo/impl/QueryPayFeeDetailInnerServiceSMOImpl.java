@@ -65,10 +65,6 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
         ReportFeeMonthStatisticsTotalDto reportFeeMonthStatisticsTotalDto = new ReportFeeMonthStatisticsTotalDto();
         List<ReportFeeMonthStatisticsDto> reportList = new ArrayList<>();
-        //查询该小区下的费用项目
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(reportFeeMonthStatisticsDto.getCommunityId());
-        List<FeeConfigDto> feeConfigDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         //应收总金额(大计)
         Double allReceivableAmount = 0.0;
         //实收金额(大计)
@@ -154,12 +150,6 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
             Double totalLateFee = 0.0;
             List<String> ownerIds = new ArrayList<>();
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
-//                FeeDetailDto feeDetailDto = new FeeDetailDto();
-//                feeDetailDto.setDetailId(reportFeeMonthStatistics.getDetailId());
-//                List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
-//                Assert.listOnlyOne(feeDetailDtos, "查询费用明细表错误");
-//                reportFeeMonthStatistics.setReceivableAmount(feeDetailDtos.get(0).getReceivableAmount());
-//                reportFeeMonthStatistics.setPayableAmount(feeDetailDtos.get(0).getPayableAmount());
                 //应收金额
                 Double receivableAmount = Double.valueOf(reportFeeMonthStatistics.getReceivableAmount());
                 //实收金额
@@ -251,8 +241,6 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getImportFeeName())) {
                     reportFeeMonthStatistics.setFeeName(reportFeeMonthStatistics.getImportFeeName());
                 }
-                //费用项目
-                reportFeeMonthStatistics.setFeeConfigDtos(feeConfigDtos);
                 if (!StringUtil.isEmpty(reportFeeMonthStatistics.getRepairId())) {
                     RepairDto repairDto = new RepairDto();
                     repairDto.setRepairId(reportFeeMonthStatistics.getRepairId());
