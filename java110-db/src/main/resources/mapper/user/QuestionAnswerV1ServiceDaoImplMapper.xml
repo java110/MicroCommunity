@@ -19,10 +19,9 @@
     <select id="getQuestionAnswerInfo" parameterType="Map" resultType="Map">
         select t.qa_name,t.qa_name qaName,t.qa_type,t.qa_type qaType,t.start_time,t.start_time
         startTime,t.remark,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.content,t.qa_id,t.qa_id qaId,t.create_time createTime,t.state,count(uqa1.user_qa_id) voteCount,count(uqa2.user_qa_id) votedCount
+        communityId,t.content,t.qa_id,t.qa_id qaId,t.create_time createTime,t.state,count(uqa1.user_qa_id) voteCount
         from question_answer t
         left join user_question_answer uqa1 on t.qa_id = uqa1.qa_id and uqa1.status_cd = '0'
-        left join user_question_answer uqa2 on t.qa_id = uqa2.qa_id and uqa2.status_cd = '0' and uqa2.state = '1202'
         where 1 =1
         <if test="qaName !=null and qaName != ''">
             and t.qa_name= #{qaName}
