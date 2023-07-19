@@ -108,5 +108,11 @@ public class QuestionAnswerV1ServiceDaoImpl extends BaseServiceDao implements IQ
         return Integer.parseInt(businessQuestionAnswerInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryVotedCountAndScore(Map info) {
+        List<Map> businessQuestionAnswerInfos = sqlSessionTemplate.selectList("questionAnswerV1ServiceDaoImpl.queryVotedCountAndScore",info);
+
+        return businessQuestionAnswerInfos;    }
+
 
 }

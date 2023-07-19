@@ -23,6 +23,8 @@ public class UserQuestionAnswerValueDto extends PageDto implements Serializable 
     private String userTitleId;
     private String qaId;
 
+    private String qaValue;
+
 
     private Date createTime;
 
@@ -100,5 +102,13 @@ public class UserQuestionAnswerValueDto extends PageDto implements Serializable 
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getQaValue() {
+        return qaValue;
+    }
+
+    public void setQaValue(String qaValue) {
+        this.qaValue = qaValue;
     }
 }

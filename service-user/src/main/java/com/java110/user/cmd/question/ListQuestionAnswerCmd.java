@@ -20,15 +20,20 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.questionTitleValue.QuestionTitleValueDto;
 import com.java110.intf.user.IQuestionAnswerV1InnerServiceSMO;
+import com.java110.intf.user.IQuestionTitleV1InnerServiceSMO;
+import com.java110.intf.user.IQuestionTitleValueV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.questionAnswer.QuestionAnswerDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,9 +53,16 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "question.listQuestionAnswer")
 public class ListQuestionAnswerCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListQuestionAnswerCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListQuestionAnswerCmd.class);
     @Autowired
     private IQuestionAnswerV1InnerServiceSMO questionAnswerV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IQuestionTitleV1InnerServiceSMO questionTitleV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IQuestionTitleValueV1InnerServiceSMO questionTitleValueV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -61,22 +73,61 @@ public class ListQuestionAnswerCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           QuestionAnswerDto questionAnswerDto = BeanConvertUtil.covertBean(reqJson, QuestionAnswerDto.class);
+        QuestionAnswerDto questionAnswerDto = BeanConvertUtil.covertBean(reqJson, QuestionAnswerDto.class);
 
-           int count = questionAnswerV1InnerServiceSMOImpl.queryQuestionAnswersCount(questionAnswerDto);
+        int count = questionAnswerV1InnerServiceSMOImpl.queryQuestionAnswersCount(questionAnswerDto);
 
-           List<QuestionAnswerDto> questionAnswerDtos = null;
+        List<QuestionAnswerDto> questionAnswerDtos = null;
 
-           if (count > 0) {
-               questionAnswerDtos = questionAnswerV1InnerServiceSMOImpl.queryQuestionAnswers(questionAnswerDto);
-           } else {
-               questionAnswerDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            questionAnswerDtos = questionAnswerV1InnerServiceSMOImpl.queryQuestionAnswers(questionAnswerDto);
+        } else {
+            questionAnswerDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, questionAnswerDtos);
+        //todo 查询已投票数据和 得分
+        computeVotedCountAndScore(questionAnswerDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, questionAnswerDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
+
+    /**
+     * 计算 投票和得分
+     *
+     * @param questionAnswerDtos
+     */
+    private void computeVotedCountAndScore(List<QuestionAnswerDto> questionAnswerDtos) {
+
+        if (questionAnswerDtos == null || questionAnswerDtos.size() < 1) {
+            return;
+        }
+        List<String> qaIds = new ArrayList<>();
+        for (QuestionAnswerDto questionAnswerDto : questionAnswerDtos) {
+            qaIds.add(questionAnswerDto.getQaId());
+        }
+
+        // todo 查询投票人数和得分
+        List<QuestionAnswerDto> votedQAs = questionAnswerV1InnerServiceSMOImpl.queryVotedCountAndScore(qaIds.toArray(new String[qaIds.size()]));
+
+        if (votedQAs == null || votedQAs.size() < 1) {
+            return;
+        }
+        for(QuestionAnswerDto questionAnswerDto:questionAnswerDtos){
+            for(QuestionAnswerDto votedQa : votedQAs){
+                if(!questionAnswerDto.getQaId().equals(votedQa.getQaId())){
+                    continue;
+                }
+
+                questionAnswerDto.setVotedCount(votedQa.getVotedCount());
+                questionAnswerDto.setScore(votedQa.getScore());
+            }
+        }
+    }
+
+
 }

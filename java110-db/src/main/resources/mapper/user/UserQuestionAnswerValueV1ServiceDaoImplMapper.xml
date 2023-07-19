@@ -28,8 +28,9 @@
         select t.value_id,t.value_id valueId,t.title_id,t.title_id titleId,t.user_qa_id,t.user_qa_id
         userQaId,t.value_content,t.value_content valueContent,t.status_cd,t.status_cd
         statusCd,t.community_id,t.community_id communityId,t.user_title_id,t.user_title_id userTitleId,t.qa_id,t.qa_id
-        qaId
+        qaId,qtv.qa_value qaValue
         from user_question_answer_value t
+        left join question_title_value qtv on t.value_id = qtv.value_id and qtv.status_cd = '0'
         where 1 =1
         <if test="valueId !=null and valueId != ''">
             and t.value_id= #{valueId}

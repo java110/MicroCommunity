@@ -15,6 +15,7 @@
  */
 package com.java110.user.cmd.question;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -22,8 +23,12 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.questionAnswer.QuestionAnswerDto;
+import com.java110.intf.user.IQuestionAnswerTitleRelV1InnerServiceSMO;
 import com.java110.intf.user.IQuestionAnswerV1InnerServiceSMO;
 import com.java110.po.questionAnswer.QuestionAnswerPo;
+import com.java110.po.questionAnswerTitleRel.QuestionAnswerTitleRelPo;
+import com.java110.user.bmo.question.IQuestionAnswerBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,13 +57,26 @@ public class SaveQuestionAnswerCmd extends Cmd {
     @Autowired
     private IQuestionAnswerV1InnerServiceSMO questionAnswerV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IQuestionAnswerTitleRelV1InnerServiceSMO questionAnswerTitleRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IQuestionAnswerBMO questionAnswerBMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "qaType", "请求报文中未包含qaType");
-Assert.hasKeyAndValue(reqJson, "qaName", "请求报文中未包含qaName");
-Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
-Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "qaName", "请求报文中未包含投票名称");
+        Assert.hasKey(reqJson, "roomIds", "请求报文中未包含投票房屋");
+        Assert.hasKeyAndValue(reqJson, "startTime", "未包含开始时间");
+        Assert.hasKeyAndValue(reqJson, "endTime", "未包含结束时间");
+        Assert.hasKeyAndValue(reqJson, "content", "未包含说明");
+        Assert.hasKey(reqJson, "questionTitles", "请求报文中未包含题目");
+
+        JSONArray questionTitles = reqJson.getJSONArray("questionTitles");
+        if (questionTitles == null || questionTitles.size() < 1) {
+            throw new IllegalArgumentException("未包含题目");
+        }
 
     }
 
@@ -66,13 +84,39 @@ Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含community
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       QuestionAnswerPo questionAnswerPo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerPo.class);
+        //todo 写入投票信息
+        QuestionAnswerPo questionAnswerPo = new QuestionAnswerPo();
+        questionAnswerPo.setContent(reqJson.getString("content"));
+        questionAnswerPo.setEndTime(reqJson.getString("endTime"));
+        questionAnswerPo.setStartTime(reqJson.getString("startTime"));
         questionAnswerPo.setQaId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        questionAnswerPo.setQaName(reqJson.getString("qaName"));
+        questionAnswerPo.setCommunityId(reqJson.getString("communityId"));
+        questionAnswerPo.setQaType(QuestionAnswerDto.QA_TYPE_QUESTION);
+        questionAnswerPo.setState(QuestionAnswerDto.STATE_WAIT);
         int flag = questionAnswerV1InnerServiceSMOImpl.saveQuestionAnswer(questionAnswerPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+        JSONArray questionTitles = reqJson.getJSONArray("questionTitles");
+        JSONObject title = null;
+        for (int titleIndex = 0; titleIndex < questionTitles.size(); titleIndex++) {
+            title= questionTitles.getJSONObject(titleIndex);
+            QuestionAnswerTitleRelPo questionAnswerTitleRelPo = new QuestionAnswerTitleRelPo();
+            questionAnswerTitleRelPo.setCommunityId(reqJson.getString("communityId"));
+            questionAnswerTitleRelPo.setTitleId(title.getString("titleId"));
+            questionAnswerTitleRelPo.setSeq((titleIndex + 1) + "");
+            questionAnswerTitleRelPo.setScore("0");
+            if(title.containsKey("score")){
+                questionAnswerTitleRelPo.setScore(title.getString("score"));
+            }
+            questionAnswerTitleRelPo.setQaId(questionAnswerPo.getQaId());
+            questionAnswerTitleRelPo.setQatrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            questionAnswerTitleRelV1InnerServiceSMOImpl.saveQuestionAnswerTitleRel(questionAnswerTitleRelPo);
+        }
+
+        questionAnswerBMOImpl.saveUserQuestionAnswer(questionAnswerPo, reqJson.getJSONArray("roomIds"));
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

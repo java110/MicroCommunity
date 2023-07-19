@@ -1,6 +1,7 @@
 package com.java110.dto.questionAnswer;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.questionTitle.QuestionTitleDto;
 import com.java110.dto.questionTitleValue.QuestionTitleValueDto;
 
 import java.io.Serializable;
@@ -18,6 +19,8 @@ import java.util.List;
 public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public static final String QA_TYPE_VOTE = "3003";// 业主投票
+    public static final String QA_TYPE_QUESTION = "1001";// 业主问卷
+
     public static final String STATE_WAIT = "W"; // 待发布
     public static final String STATE_COMPLETE = "C"; //发布完成
 
@@ -40,6 +43,8 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     private long votedCount; // 已投票人数
 
+    private long score;
+
     private String ownerName;
 
     private String link;
@@ -47,6 +52,8 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     private String roomName;
 
     private List<QuestionTitleValueDto> titleValues;
+
+    private List<QuestionTitleDto> titles;
 
     private String state;
 
@@ -203,5 +210,21 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setUserQaId(String userQaId) {
         this.userQaId = userQaId;
+    }
+
+    public List<QuestionTitleDto> getTitles() {
+        return titles;
+    }
+
+    public void setTitles(List<QuestionTitleDto> titles) {
+        this.titles = titles;
+    }
+
+    public long getScore() {
+        return score;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
     }
 }

@@ -49,6 +49,7 @@ public class QueryOwnerQuestionAnswerCmd extends Cmd {
         userQuestionAnswerDto.setLink(userDtos.get(0).getTel());
         userQuestionAnswerDto.setCommunityId(reqJson.getString("communityId"));
         userQuestionAnswerDto.setQaType(reqJson.getString("qaType"));
+        userQuestionAnswerDto.setState(reqJson.getString("state"));
         List<QuestionAnswerDto> questionAnswerDtos = userQuestionAnswerV1InnerServiceSMOImpl.queryOwnerQuestionAnswers(userQuestionAnswerDto);
         context.setResponseEntity(ResultVo.createResponseEntity(questionAnswerDtos));
     }

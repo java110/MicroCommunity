@@ -65,4 +65,7 @@ public interface IQuestionAnswerV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryQuestionAnswersCount", method = RequestMethod.POST)
     int queryQuestionAnswersCount(@RequestBody QuestionAnswerDto questionAnswerDto);
+
+    @RequestMapping(value = "/queryVotedCountAndScore", method = RequestMethod.POST)
+    List<QuestionAnswerDto> queryVotedCountAndScore(@RequestBody String[] toArray);
 }
