@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reportFeeYearCollectionServiceDaoImpl">
 
     <!-- 保存费用年收费信息 add by wuxw 2018-07-03 -->
     <insert id="saveReportFeeYearCollectionInfo" parameterType="Map">
-        insert into report_fee_year_collection(
-        owner_link,obj_name,owner_id,fee_id,built_up_area,owner_name,config_id,obj_id,fee_name,community_id,collection_id,obj_type
-        ) values (
-        #{ownerLink},#{objName},#{ownerId},#{feeId},#{builtUpArea},#{ownerName},#{configId},#{objId},#{feeName},#{communityId},#{collectionId},#{objType}
-        )
+        insert into report_fee_year_collection(owner_link, obj_name, owner_id, fee_id, built_up_area, owner_name,
+                                               config_id, obj_id, fee_name, community_id, collection_id, obj_type)
+        values (#{ownerLink}, #{objName}, #{ownerId}, #{feeId}, #{builtUpArea}, #{ownerName}, #{configId}, #{objId},
+                #{feeName}, #{communityId}, #{collectionId}, #{objType})
     </insert>
 
     <select id="getReportFeeYearCollectionInfos" parameterType="Map" resultType="Map">
@@ -18,13 +16,17 @@
         objName,t.owner_id,t.owner_id ownerId,t.fee_id,t.fee_id feeId,t.built_up_area,t.built_up_area
         builtUpArea,t.owner_name,t.owner_name ownerName,t.config_id,t.config_id configId,t.obj_id,t.obj_id
         objId,t.fee_name,t.fee_name feeName,t.community_id,t.community_id communityId,t.collection_id,t.collection_id
-        collectionId,t.obj_type,t.obj_type objType,rd.collection_year collectionYear,rd.receivable_amount receivableAmount,
-        rd.relation_year relationYear,rd.received_amount receivedAmount,pfc.fee_type_cd feeTypeCd,td.name feeTypeCdName
+        collectionId,t.obj_type,t.obj_type objType,rd.collection_year collectionYear,rd.receivable_amount
+        receivableAmount,
+        rd.relation_year relationYear,rd.received_amount receivedAmount,pfc.fee_type_cd feeTypeCd,td.name feeTypeCdName,
+        t.collection_id,t.collection_id collectionId
         from report_fee_year_collection t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        left join report_fee_year_collection_detail rd on t.collection_id = rd.collection_id and rd.status_cd = '0' and rd.community_id = t.community_id
+        left join report_fee_year_collection_detail rd on t.collection_id = rd.collection_id and rd.status_cd = '0' and
+        rd.community_id = t.community_id
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
-        left join t_dict td on td.status_cd = pfc.fee_type_cd and td.table_name = 'pay_fee_config' and td.table_columns = 'fee_type_cd'
+        left join t_dict td on td.status_cd = pfc.fee_type_cd and td.table_name = 'pay_fee_config' and td.table_columns
+        = 'fee_type_cd'
         where 1 = 1 and rd.receivable_amount >= 0 and rd.received_amount >= 0
         <if test="ownerLink !=null and ownerLink != ''">
             and t.owner_link= #{ownerLink}
@@ -77,12 +79,15 @@
         objName,t.owner_id,t.owner_id ownerId,t.fee_id,t.fee_id feeId,t.built_up_area,t.built_up_area
         builtUpArea,t.owner_name,t.owner_name ownerName,t.config_id,t.config_id configId,t.obj_id,t.obj_id
         objId,t.fee_name,t.fee_name feeName,t.community_id,t.community_id communityId,t.collection_id,t.collection_id
-        collectionId,t.obj_type,t.obj_type objType,pfc.fee_type_cd feeTypeCd,td.name feeTypeCdName,t.create_time
+        collectionId,t.obj_type,t.obj_type objType,pfc.fee_type_cd feeTypeCd,td.name feeTypeCdName,t.create_time,
+        t.collection_id,t.collection_id collectionId
         from report_fee_year_collection t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
-        left join t_dict td on td.status_cd = pfc.fee_type_cd and td.table_name = 'pay_fee_config' and td.table_columns = 'fee_type_cd'
-        left join report_fee_year_collection_detail rd on t.collection_id = rd.collection_id and rd.status_cd = '0' and rd.community_id = t.community_id
+        left join t_dict td on td.status_cd = pfc.fee_type_cd and td.table_name = 'pay_fee_config' and td.table_columns
+        = 'fee_type_cd'
+        left join report_fee_year_collection_detail rd on t.collection_id = rd.collection_id and rd.status_cd = '0' and
+        rd.community_id = t.community_id
         where 1 = 1 and rd.receivable_amount >= 0 and rd.received_amount >= 0
         <if test="ownerLink !=null and ownerLink != ''">
             and t.owner_link= #{ownerLink}
@@ -174,7 +179,6 @@
         <if test="collectionId !=null and collectionId != ''">
             and t.collection_id= #{collectionId}
         </if>
-
     </update>
 
     <update id="deleteReportFeeYearCollectionInfo" parameterType="Map">
@@ -189,7 +193,6 @@
         <if test="collectionId !=null and collectionId != ''">
             and t.collection_id= #{collectionId}
         </if>
-
     </update>
 
     <!-- 查询费用年收费数量 add by wuxw 2018-07-03 -->
@@ -197,7 +200,8 @@
         select count(DISTINCT t.collection_id) count
         from report_fee_year_collection t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        left join report_fee_year_collection_detail rd on t.collection_id = rd.collection_id and rd.status_cd = '0' and rd.community_id = t.community_id
+        left join report_fee_year_collection_detail rd on t.collection_id = rd.collection_id and rd.status_cd = '0' and
+        rd.community_id = t.community_id
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where 1 = 1 and rd.receivable_amount >= 0 and rd.received_amount >= 0
         <if test="ownerLink !=null and ownerLink != ''">
@@ -240,5 +244,4 @@
             and t.obj_type= #{objType}
         </if>
     </select>
-
 </mapper>

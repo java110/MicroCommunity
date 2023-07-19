@@ -167,7 +167,7 @@ public class SaveOwnerRepairCmd extends Cmd {
         feeDto.setState(FeeDto.STATE_DOING);
         //查询报修业主处理中的报修费
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        //取出开关映射的值(维修师傅未处理最大单数)
+        //取出开关映射的值(报修业主未处理费用条数)
         String repairFeeNumber = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN, REPAIR_FEE_NUMBER);
         if (feeDtos != null && StringUtil.isInteger(repairFeeNumber) && feeDtos.size() >= Integer.parseInt(repairFeeNumber)) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "该房屋存在" + Integer.parseInt(repairFeeNumber) + "条未处理的费用，请缴费后再进行报修！");
