@@ -18,6 +18,8 @@ import java.util.List;
 public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public static final String QA_TYPE_VOTE = "3003";// 业主投票
+    public static final String QA_TYPE_QUESTION = "1001";// 业主问卷
+
     public static final String STATE_WAIT = "W"; // 待发布
     public static final String STATE_COMPLETE = "C"; //发布完成
 
