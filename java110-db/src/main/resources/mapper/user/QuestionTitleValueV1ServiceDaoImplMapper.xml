@@ -115,13 +115,14 @@
     </select>
 
     <select id="queryQuestionOwnerTitleValues" parameterType="Map" resultType="Map">
-        select qt.title_type titleType,qa.qa_id qaId,t.qa_value qaValue,t.seq,count(uqav.user_qa_id) personCount
+        select qt.qa_title qaTitle,qt.title_id titleId, qt.title_type titleType,qa.qa_id qaId,t.qa_value qaValue,t.seq,count(uqav.user_qa_id) personCount
         from question_title_value t
         inner join question_title qt on t.title_id = qt.title_id and qt.status_cd = '0'
         inner join question_answer_title_rel qatr on t.title_id = qatr.title_id and qatr.status_cd = '0'
         inner join question_answer qa on qatr.qa_id = qa.qa_id and qa.status_cd = '0'
         left join user_question_answer_value uqav on qa.qa_id = uqav.qa_id and t.value_id = uqav.value_id and t.title_id = uqav.title_id and uqav.status_cd = '0'
         where 1=1
+
         and t.community_id = #{communityId}
         <if test="titleId !=null and titleId != ''">
             and t.title_id= #{titleId}
@@ -135,7 +136,7 @@
                 #{item}
             </foreach>
         </if>
-        group by qt.title_type,qa.qa_id,t.qa_value,t.seq
+        group by qt.qa_title,qt.title_id , qt.title_type,qa.qa_id,t.qa_value,t.seq
         order by t.seq
 
 

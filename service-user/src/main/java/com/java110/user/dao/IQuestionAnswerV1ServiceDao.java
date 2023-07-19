@@ -70,4 +70,5 @@ public interface IQuestionAnswerV1ServiceDao {
      */
     int queryQuestionAnswersCount(Map info);
 
+    List<Map> queryVotedCountAndScore(Map info);
 }

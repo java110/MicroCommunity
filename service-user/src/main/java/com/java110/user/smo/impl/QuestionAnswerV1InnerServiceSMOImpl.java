@@ -29,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -85,5 +87,14 @@ public class QuestionAnswerV1InnerServiceSMOImpl extends BaseServiceSMO implemen
     @Override
     public int queryQuestionAnswersCount(@RequestBody QuestionAnswerDto questionAnswerDto) {
         return questionAnswerV1ServiceDaoImpl.queryQuestionAnswersCount(BeanConvertUtil.beanCovertMap(questionAnswerDto));    }
+
+    @Override
+    public List<QuestionAnswerDto> queryVotedCountAndScore(String[] qaIds) {
+        Map infos = new HashMap();
+        infos.put("qaIds",qaIds);
+        List<QuestionAnswerDto> questionAnswers = BeanConvertUtil.covertBeanList(questionAnswerV1ServiceDaoImpl.queryVotedCountAndScore(infos), QuestionAnswerDto.class);
+
+        return questionAnswers;
+    }
 
 }

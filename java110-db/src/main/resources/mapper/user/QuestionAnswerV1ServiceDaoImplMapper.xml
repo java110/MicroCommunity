@@ -138,4 +138,16 @@
 
     </select>
 
+
+    <select id="queryVotedCountAndScore" parameterType="Map" resultType="Map">
+        select qa_id qaId, count(1) votedCount,SUM(t.score) score
+        from user_question_answer t
+        where
+        t.state = '1202'
+        and t.qa_id in
+        <foreach collection="qaIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        GROUP BY qa_id
+    </select>
 </mapper>
