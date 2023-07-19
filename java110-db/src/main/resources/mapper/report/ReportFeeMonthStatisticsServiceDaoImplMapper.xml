@@ -1864,6 +1864,7 @@
         left join owner_car oc on pf.payer_obj_id = oc.car_id and oc.status_cd = '0' and oc.car_type_cd='1001'
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         where t.status_cd = '0'
+        and t.state in ('1400','1000','1200')
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
