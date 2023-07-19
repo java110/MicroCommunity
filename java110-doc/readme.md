@@ -1,5 +1,11 @@
 ## java110 api 文档使用说明
 
+### 文档查看地址
+
+http://ip:port/doc-ui.html
+
+比如:hc的文档 http://127.0.0.1:8008/doc-ui.html
+
 ### @Java110ApiDoc 的使用
 
 样例
