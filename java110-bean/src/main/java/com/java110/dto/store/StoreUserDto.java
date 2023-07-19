@@ -13,6 +13,8 @@ import java.util.Date;
  */
 public class StoreUserDto extends PageDto implements Serializable {
 
+    public static final String REL_CD_MANAGER = "600311000001";
+
     //商户id
     private String storeId;
 
