@@ -22,18 +22,16 @@ import java.util.List;
  **/
 @Component
 public class GenerateFeeMonthStatisticsTemplate extends TaskSystemQuartz {
+
     private static final Logger logger = LoggerFactory.getLogger(GenerateFeeMonthStatisticsTemplate.class);
 
     @Autowired
     private IGeneratorFeeMonthStatisticsInnerServiceSMO generatorFeeMonthStatisticsInnerServiceSMOImpl;
 
-
     @Override
     protected void process(TaskDto taskDto) throws Exception {
-
         // 获取小区
         List<CommunityDto> communityDtos = getAllCommunity();
-
         for (CommunityDto communityDto : communityDtos) {
             try {
                 GenerateFeeMonthStatistic(taskDto, communityDto);
@@ -41,7 +39,6 @@ public class GenerateFeeMonthStatisticsTemplate extends TaskSystemQuartz {
                 logger.error("生成月报表 失败", e);
             }
         }
-
     }
 
     private void GenerateFeeMonthStatistic(TaskDto taskDto, CommunityDto communityDto) {
@@ -49,6 +46,4 @@ public class GenerateFeeMonthStatisticsTemplate extends TaskSystemQuartz {
         reportFeeMonthStatisticsPo.setCommunityId(communityDto.getCommunityId());
         generatorFeeMonthStatisticsInnerServiceSMOImpl.generatorData(reportFeeMonthStatisticsPo);
     }
-
-
 }

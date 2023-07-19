@@ -17,6 +17,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.StatusConstant;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -91,7 +92,13 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
 
         for (RoomDto room : rooms) {
             try {
+                OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+                ownerRoomRelDto.setRoomId(room.getRoomId());
+                List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+                Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
                 room.setApartmentName(MappingCache.getValue(room.getApartment().substring(0, 2).toString()) + MappingCache.getValue(room.getApartment().substring(2, 5).toString()));
+                room.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
+                room.setOwnerName(ownerRoomRelDtos.get(0).getOwnerName());
             } catch (Exception e) {
                 logger.error("设置房屋户型失败", e);
             }
@@ -278,11 +285,13 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             return new ArrayList<>();
         }
 
+        RoomDto tmpRoomDto = new RoomDto();
         List<String> roomIds = new ArrayList<>();
         for (OwnerRoomRelDto tmpOwnerRoomRelDto : ownerRoomRelDtos) {
             roomIds.add(tmpOwnerRoomRelDto.getRoomId());
+            tmpRoomDto.setOwnerId(tmpOwnerRoomRelDto.getOwnerId());
+            tmpRoomDto.setOwnerName(tmpOwnerRoomRelDto.getOwnerName());
         }
-        RoomDto tmpRoomDto = new RoomDto();
         tmpRoomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
         tmpRoomDto.setRoomNum(roomDto.getRoomNum());
         tmpRoomDto.setCommunityId(roomDto.getCommunityId());
@@ -316,7 +325,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             importRoomFee.setFloorNum(infos.get(0).get("floorNum").toString());
             importRoomFee.setUnitNum(infos.get(0).get("unitNum").toString());
             importRoomFee.setRoomNum(infos.get(0).get("roomNum").toString());
-            importRoomFee.setRoomName(importRoomFee.getFloorNum()+"-"+importRoomFee.getUnitNum()+"-"+importRoomFee.getRoomNum());
+            importRoomFee.setRoomName(importRoomFee.getFloorNum() + "-" + importRoomFee.getUnitNum() + "-" + importRoomFee.getRoomNum());
 
         }
         return importRoomFees;

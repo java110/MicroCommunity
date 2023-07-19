@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="unitServiceDaoImpl">
 
     <!-- 保存小区单元信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessUnitInfo" parameterType="Map">
-        insert into business_building_unit(
-        floor_id,operate,layer_count,unit_id,unit_num,lift,remark,b_id,user_id,unit_area
-        ) values (
-        #{floorId},#{operate},#{layerCount},#{unitId},#{unitNum},#{lift},#{remark},#{bId},#{userId},#{unitArea}
-        )
+        insert into business_building_unit(floor_id, operate, layer_count, unit_id, unit_num, lift, remark, b_id,
+                                           user_id, unit_area)
+        values (#{floorId}, #{operate}, #{layerCount}, #{unitId}, #{unitNum}, #{lift}, #{remark}, #{bId}, #{userId},
+                #{unitArea})
     </insert>
-
 
     <!-- 查询小区单元信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessUnitInfo" parameterType="Map" resultType="Map">
@@ -49,9 +46,7 @@
             and t.user_id= #{userId}
         </if>
         order by unitNum asc
-
     </select>
-
 
     <!-- 保存小区单元信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveUnitInfoInstance" parameterType="Map">
@@ -85,9 +80,7 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-
     </insert>
-
 
     <!-- 查询小区单元信息 add by wuxw 2018-07-03 -->
     <select id="getUnitInfo" parameterType="Map" resultType="Map">
@@ -134,12 +127,10 @@
             and t.user_id= #{userId}
         </if>
         order by ff.seq,ff.floor_num,t.unit_num asc
-       <!-- <if test="page != -1 and page != null ">
-            limit #{page}, #{row}
-        </if>limit 10;-->
-
+        <!-- <if test="page != -1 and page != null ">
+             limit #{page}, #{row}
+         </if>limit 10;-->
     </select>
-
 
     <!-- 修改小区单元信息 add by wuxw 2018-07-03 -->
     <update id="updateUnitInfoInstance" parameterType="Map">
@@ -175,7 +166,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询小区单元数量 add by wuxw 2018-07-03 -->
@@ -210,8 +200,6 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
-
-
     </select>
 
     <select id="queryUnitsByCommunityId" parameterType="Map" resultType="Map">
@@ -258,19 +246,19 @@
 
     <select id="getFloorAndUnitInfo" parameterType="Map" resultType="Map">
         SELECT
-          bu.`unit_id` unitId,
-          bu.`unit_num` unitNum,
-          f.`floor_id` floorId,
-          f.`floor_num` floorNum
+        bu.`unit_id` unitId,
+        bu.`unit_num` unitNum,
+        f.`floor_id` floorId,
+        f.`floor_num` floorNum
         FROM
-          f_floor f,
-          building_unit bu
+        f_floor f,
+        building_unit bu
         WHERE f.`floor_id` = bu.`floor_id`
-          AND f.`status_cd` = '0'
-          AND bu.`status_cd` = '0'
-          <if test="floorId != null and floorId !=''">
-              and bu.floor_id = #{floorId}
-          </if>
+        AND f.`status_cd` = '0'
+        AND bu.`status_cd` = '0'
+        <if test="floorId != null and floorId !=''">
+            and bu.floor_id = #{floorId}
+        </if>
         <if test="floorNum != null and floorNum !=''">
             and f.floor_num = #{floorNum}
         </if>
@@ -286,7 +274,5 @@
         <if test="unitNum != null and unitNum !=''">
             and bu.unit_num = #{unitNum}
         </if>
-
     </select>
-
 </mapper>

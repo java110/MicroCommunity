@@ -39,7 +39,6 @@ public class ListPurchaseApplyDetailsCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         PurchaseApplyDetailDto purchaseApplyDetailDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDetailDto.class);
-
         //是否具有查看所有出入库明细的权限
         String userId = reqJson.getString("userId");
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
@@ -47,31 +46,23 @@ public class ListPurchaseApplyDetailsCmd extends Cmd {
         basePrivilegeDto.setUserId(userId);
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         purchaseApplyDetailDto.setUserId("");//申请人
-        if (privileges.size()!=0) {
+        if (privileges.size() != 0) {
             purchaseApplyDetailDto.setUserId("");//创建人
-        }else{
+        } else {
             purchaseApplyDetailDto.setCreateUserId(userId);//创建人
         }
-
-
         int count = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetailsCount(purchaseApplyDetailDto);
-
         List<ApiPurchaseApplyDetailDataVo> purchaseApplyDetails = null;
-
         if (count > 0) {
             purchaseApplyDetails = BeanConvertUtil.covertBeanList(purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetails(purchaseApplyDetailDto), ApiPurchaseApplyDetailDataVo.class);
         } else {
             purchaseApplyDetails = new ArrayList<>();
         }
-
         ApiPurchaseApplyDetailVo apiPurchaseApplyDetailVo = new ApiPurchaseApplyDetailVo();
-
         apiPurchaseApplyDetailVo.setTotal(count);
         apiPurchaseApplyDetailVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiPurchaseApplyDetailVo.setPurchaseApplyDetails(purchaseApplyDetails);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiPurchaseApplyDetailVo), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
     }
 }

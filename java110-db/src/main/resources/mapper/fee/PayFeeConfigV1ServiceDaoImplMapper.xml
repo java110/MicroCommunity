@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="payFeeConfigV1ServiceDaoImpl">
+
     <!-- 保存收费项目信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeConfigInfo" parameterType="Map">
-        insert into pay_fee_config(
-        fee_type_cd,computing_formula,additional_amount,bill_type,computing_formula_text,square_price,
-        payment_cd,is_default,config_id,fee_flag,fee_name,payment_cycle,start_time,end_time,community_id,deduct_from,
-        pay_online,scale,decimal_place,units
-        ) values (
-        #{feeTypeCd},#{computingFormula},#{additionalAmount},#{billType},#{computingFormulaText},#{squarePrice},
-        #{paymentCd},#{isDefault},#{configId},#{feeFlag},#{feeName},#{paymentCycle},#{startTime},#{endTime},#{communityId},#{deductFrom},
-        #{payOnline},#{scale},#{decimalPlace},#{units}
-        )
+        insert into pay_fee_config(fee_type_cd, computing_formula, additional_amount, bill_type, computing_formula_text,
+                                   square_price, payment_cd, is_default, config_id, fee_flag, fee_name, payment_cycle,
+                                   start_time, end_time, community_id, deduct_from, pay_online, scale, decimal_place,
+                                   units, prepayment_period)
+        values (#{feeTypeCd}, #{computingFormula}, #{additionalAmount}, #{billType}, #{computingFormulaText},
+                #{squarePrice}, #{paymentCd}, #{isDefault}, #{configId}, #{feeFlag}, #{feeName}, #{paymentCycle},
+                #{startTime}, #{endTime}, #{communityId}, #{deductFrom}, #{payOnline}, #{scale}, #{decimalPlace},
+                #{units}, #{prepaymentPeriod})
     </insert>
-
 
     <!-- 查询收费项目信息 add by wuxw 2018-07-03 -->
     <select id="getPayFeeConfigInfo" parameterType="Map" resultType="Map">
@@ -26,7 +24,8 @@
         isDefault,t.config_id,t.config_id configId,t.fee_flag,t.fee_flag feeFlag,t.fee_name,t.fee_name
         feeName,t.payment_cycle,t.payment_cycle paymentCycle,t.start_time,t.start_time startTime,t.end_time,t.end_time
         endTime,t.community_id,t.community_id communityId,t.deduct_from,t.deduct_from deductFrom,
-        t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units
+        t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units,t.prepayment_period,t.prepayment_period
+        prepaymentPeriod
         from pay_fee_config t
         where 1 =1
         <if test="feeTypeCd !=null and feeTypeCd != ''">
@@ -87,13 +86,14 @@
         <if test="deductFrom !=null and deductFrom != ''">
             and t.deduct_from = #{deductFrom}
         </if>
+        <if test="prepaymentPeriod !=null and prepaymentPeriod != ''">
+            and t.prepayment_period = #{prepaymentPeriod}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改收费项目信息 add by wuxw 2018-07-03 -->
     <update id="updatePayFeeConfigInfo" parameterType="Map">
@@ -158,11 +158,11 @@
         <if test="units !=null and units != ''">
             , t.units= #{units}
         </if>
+        , t.prepayment_period = #{prepaymentPeriod}
         where 1=1
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
-
     </update>
 
     <!-- 查询收费项目数量 add by wuxw 2018-07-03 -->
@@ -228,7 +228,9 @@
         <if test="deductFrom !=null and deductFrom != ''">
             and t.deduct_from = #{deductFrom}
         </if>
-
+        <if test="prepaymentPeriod !=null and prepaymentPeriod != ''">
+            and t.prepayment_period = #{prepaymentPeriod}
+        </if>
     </select>
 
     <!-- 查询收费项目数量 add by wuxw 2018-07-03 -->

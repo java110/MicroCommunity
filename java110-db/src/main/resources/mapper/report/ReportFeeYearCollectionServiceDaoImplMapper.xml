@@ -126,7 +126,6 @@
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and pfc.fee_type_cd= #{feeTypeCd}
         </if>
-        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

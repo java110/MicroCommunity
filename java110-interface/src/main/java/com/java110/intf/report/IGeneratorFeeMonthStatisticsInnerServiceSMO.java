@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/generatorFeeMonthStatisticsApi")
 public interface IGeneratorFeeMonthStatisticsInnerServiceSMO {
 
-
-
     @RequestMapping(value = "/generatorData", method = RequestMethod.POST)
     public int generatorData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
 

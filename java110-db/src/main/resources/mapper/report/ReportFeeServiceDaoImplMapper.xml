@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reportFeeServiceDaoImpl">
 
     <!-- 查询实收金额 -->
     <select id="getFeeReceivedAmount" parameterType="com.java110.dto.report.ReportFeeDetailDto" resultType="Map">
-
         select SUM(t.received_amount) receivedAmount
         from pay_fee_detail t
         <if test="configId != null and configId != ''">
@@ -49,8 +47,7 @@
     </select>
 
     <!-- 查询 费用 -->
-    <select id="getFees" parameterType="Map"
-            resultType="Map">
+    <select id="getFees" parameterType="Map" resultType="Map">
         select pfc.fee_name feeName,pfc.start_time configStartTime,pfc.end_time configEndTime,pfc.config_id
         configId,pfc.fee_type_cd feeTypeCd,
         pfc.additional_amount additionalAmount,pfc.bill_type billType,pfc.computing_formula
@@ -64,8 +61,9 @@
         storeTypeCd,
         t.community_id communityId,pfa.value importFeeName,ifd.end_time importFeeEndTime,mw.cur_degrees
         curDegrees,mw.pre_degrees preDegrees,
-        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,mw.price mwPrice,
-        pfa2.`value` ownerTel,   pfa3.`value` ownerName,br.room_area roomArea,
+        mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,mw.price
+        mwPrice,
+        pfa2.`value` ownerTel, pfa3.`value` ownerName,br.room_area roomArea,
         pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,br.room_rent roomRent
         from pay_fee t
         INNER JOIN pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -183,6 +181,4 @@
             limit #{page}, #{row}
         </if>
     </select>
-
-
 </mapper>

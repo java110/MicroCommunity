@@ -62,7 +62,6 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     private String ownerTel;
 
-
     private Date createTime;
 
     /**
@@ -77,7 +76,6 @@ public class ReportFeeDto extends PageDto implements Serializable {
     private Date deadlineTime;
 
     private Date importFeeEndTime;
-
 
     private String curDegrees;
     private String preDegrees;
@@ -102,8 +100,8 @@ public class ReportFeeDto extends PageDto implements Serializable {
     private String decimalPlace;
     private String units;
 
-
-
+    private Date newStartTime;
+    private Date newEndTime;
 
     public String getAmount() {
         return amount;
@@ -583,5 +581,20 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     public void setComputingFormulaText(String computingFormulaText) {
         this.computingFormulaText = computingFormulaText;
+    }
+    public Date getNewStartTime() {
+        return newStartTime;
+    }
+
+    public void setNewStartTime(Date newStartTime) {
+        this.newStartTime = newStartTime;
+    }
+
+    public Date getNewEndTime() {
+        return newEndTime;
+    }
+
+    public void setNewEndTime(Date newEndTime) {
+        this.newEndTime = newEndTime;
     }
 }

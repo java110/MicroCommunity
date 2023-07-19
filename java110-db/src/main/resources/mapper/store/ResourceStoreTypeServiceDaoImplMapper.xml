@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="resourceResourceStoreTypeTypeServiceDaoImpl">
 
     <!-- 保存物品类型信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessResourceStoreTypeInfo" parameterType="Map">
-        insert into business_resource_store_type(
-        rst_id,name,description,b_id,store_id,create_time,operate,parent_id
-        ) values (
-         #{rstId},#{name},#{description},#{bId},#{storeId},#{createTime},#{operate},#{parentId}
-        )
+        insert into business_resource_store_type(rst_id, name, description, b_id, store_id, create_time, operate,
+                                                 parent_id)
+        values (#{rstId}, #{name}, #{description}, #{bId}, #{storeId}, #{createTime}, #{operate}, #{parentId})
     </insert>
 
     <!-- 查询物品类型信息（Business） add by wuxw 2018-07-03 -->
@@ -70,8 +67,7 @@
     <select id="getResourceStoreTypeInfo" parameterType="Map" resultType="Map">
         select t.rst_id,t.rst_id rstId,t.name,t.description,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id
         bId,t.store_id,t.store_id storeId,t.create_time,t.create_time createTime,t.parent_id,t.parent_id parentId,
-        t.name
-        from resource_store_type t
+        t.name from resource_store_type t
         where 1 =1
         <if test="rstId !=null and rstId != ''">
             and t.rst_id= #{rstId}

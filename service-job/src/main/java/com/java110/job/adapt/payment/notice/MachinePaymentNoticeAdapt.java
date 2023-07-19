@@ -519,7 +519,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             templateMessage.setData(data);
             //获取业主公众号地址
             String wechatUrl = UrlCache.getOwnerUrl();
-            if (wechatUrl.contains("?")) {
+            if (!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")) {
                 wechatUrl += ("&wAppId=" + smallWeChatDtos.get(0).getAppId());
             } else {
                 wechatUrl += ("?wAppId=" + smallWeChatDtos.get(0).getAppId());

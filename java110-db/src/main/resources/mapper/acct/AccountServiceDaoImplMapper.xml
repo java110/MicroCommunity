@@ -1,31 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="accountServiceDaoImpl">
 
     <!-- 保存账户信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAccountInfo" parameterType="Map">
-        insert into business_account(
-        amount,operate,acct_type,obj_id,acct_id,acct_name,b_id,obj_type,part_id,link
-        ) values (
-        #{amount},#{operate},#{acctType},#{objId},#{acctId},#{acctName},#{bId},#{objType},#{partId},#{link}
-        )
+        insert into business_account(amount, operate, acct_type, obj_id, acct_id, acct_name, b_id, obj_type, part_id,
+                                     link)
+        values (#{amount}, #{operate}, #{acctType}, #{objId}, #{acctId}, #{acctName}, #{bId}, #{objType}, #{partId},
+                #{link})
     </insert>
 
     <insert id="saveAccount" parameterType="Map">
-        insert into account(
-        amount,acct_type,obj_id,acct_id,acct_name,b_id,obj_type,part_id,link
-        ) values (
-        #{amount},#{acctType},#{objId},#{acctId},#{acctName},'-1',#{objType},#{partId},#{link}
-        )
+        insert into account(amount, acct_type, obj_id, acct_id, acct_name, b_id, obj_type, part_id, link)
+        values (#{amount}, #{acctType}, #{objId}, #{acctId}, #{acctName}, '-1', #{objType}, #{partId}, #{link})
     </insert>
-
 
     <!-- 查询账户信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAccountInfo" parameterType="Map" resultType="Map">
         select t.amount,t.operate,t.acct_type,t.acct_type acctType,t.obj_id,t.obj_id objId,t.acct_id,t.acct_id
-        acctId,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType,t.part_id,t.part_id partId,t.link
+        acctId,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type objType,t.part_id,t.part_id
+        partId,t.link
         from business_account t
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -58,9 +53,7 @@
         <if test="link !=null and link != ''">
             and t.link= #{link}
         </if>
-
     </select>
-
 
     <!-- 保存账户信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAccountInfoInstance" parameterType="Map">
@@ -91,9 +84,7 @@
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
         </if>
-
     </insert>
-
 
     <!-- 查询账户信息 add by wuxw 2018-07-03 -->
     <select id="getAccountInfo" parameterType="Map" resultType="Map">
@@ -135,7 +126,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="acctName !=null and acctName != ''">
-            and t.acct_name= #{acctName}
+            and t.acct_name like '%${acctName}%'
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -153,9 +144,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改账户信息 add by wuxw 2018-07-03 -->
     <update id="updateAccountInfoInstance" parameterType="Map">
@@ -191,7 +180,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询账户数量 add by wuxw 2018-07-03 -->
@@ -224,7 +212,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="acctName !=null and acctName != ''">
-            and t.acct_name= #{acctName}
+            and t.acct_name like '%${acctName}%'
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -239,7 +227,6 @@
             and t.link= #{link}
         </if>
     </select>
-
 
     <!-- 修改账户信息 add by wuxw 2018-07-03 -->
     <update id="updateAccount" parameterType="Map">
@@ -263,11 +250,10 @@
             and t.acct_id= #{acctId}
         </if>
         <if test="objId !=null and objId != ''">
-           and t.obj_id = #{objId}
+            and t.obj_id = #{objId}
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
         </if>
     </update>
-
 </mapper>

@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="storeShopCommunityV1ServiceDaoImpl">
 
-
     <!-- 保存小区店铺信息 add by wuxw 2018-07-03 -->
     <insert id="saveStoreShopCommunityInfo" parameterType="Map">
-        insert into s_shop_community(
-        address,city_code,code_name,community_name,start_time,shop_id,end_time,state,community_id,message,sc_id
-        ) values (
-        #{address},#{cityCode},#{codeName},#{communityName},#{startTime},#{shopId},#{endTime},#{state},#{communityId},#{message},#{scId}
-        )
+        insert into s_shop_community(address, city_code, code_name, community_name, start_time, shop_id, end_time,
+                                     state, community_id, message, sc_id)
+        values (#{address}, #{cityCode}, #{codeName}, #{communityName}, #{startTime}, #{shopId}, #{endTime}, #{state},
+                #{communityId}, #{message}, #{scId})
     </insert>
-
 
     <!-- 查询小区店铺信息 add by wuxw 2018-07-03 -->
     <select id="getStoreShopCommunityInfo" parameterType="Map" resultType="Map">
@@ -43,6 +39,12 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
+        <if test="shopName !=null and shopName != ''">
+            and s.shop_name like '%${shopName}%'
+        </if>
+        <if test="returnLink !=null and returnLink != ''">
+            and s.return_link= #{returnLink}
+        </if>
         <if test="shopId !=null and shopId != ''">
             and t.shop_id= #{shopId}
         </if>
@@ -65,9 +67,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改小区店铺信息 add by wuxw 2018-07-03 -->
     <update id="updateStoreShopCommunityInfo" parameterType="Map">
@@ -109,13 +109,13 @@
         <if test="scId !=null and scId != ''">
             and t.sc_id= #{scId}
         </if>
-
     </update>
 
     <!-- 查询小区店铺数量 add by wuxw 2018-07-03 -->
     <select id="queryStoreShopCommunitysCount" parameterType="Map" resultType="Map">
         select count(1) count
         from s_shop_community t
+        left join s_shop s on t.shop_id = s.shop_id and s.status_cd = '0'
         where 1 =1
         <if test="address !=null and address != ''">
             and t.address= #{address}
@@ -138,6 +138,12 @@
         <if test="shopId !=null and shopId != ''">
             and t.shop_id= #{shopId}
         </if>
+        <if test="shopName !=null and shopName != ''">
+            and s.shop_name like '%${shopName}%'
+        </if>
+        <if test="returnLink !=null and returnLink != ''">
+            and s.return_link= #{returnLink}
+        </if>
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
@@ -153,8 +159,5 @@
         <if test="scId !=null and scId != ''">
             and t.sc_id= #{scId}
         </if>
-
-
     </select>
-
 </mapper>

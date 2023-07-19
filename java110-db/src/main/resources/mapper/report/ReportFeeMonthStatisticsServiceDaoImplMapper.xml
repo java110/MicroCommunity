@@ -1371,7 +1371,7 @@
         hisOweReceivedAmount,SUM(t.pre_received_amount) preReceivedAmount,
         sum(t.his_owe_amount+t.cur_receivable_amount) receivableAmount,
         sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,
-        t.obj_type objType,t.obj_name_num objNameNum
+        t.obj_type objType
         from report_fee_month_statistics t
         inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.obj_id = br.room_id and t.obj_type = '3333' and br.status_cd = '0'
@@ -1380,7 +1380,6 @@
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.community_id = t.community_id and pf.status_cd = '0'
         left join pay_fee_attrs pfa on pf.fee_id = pfa.fee_id and pfa.spec_cd = '390008' and pfa.status_cd ='0'
         where t.status_cd = '0'
-
         <if test="roomNum !=null and roomNum != ''">
             and br.room_num= #{roomNum}
         </if>
@@ -1392,9 +1391,6 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
-        </if>
-        <if test="objNameNum != null and objNameNum != ''">
-            and t.obj_name_num= #{objNameNum}
         </if>
         <if test="feeYear !=null and feeYear != ''">
             and t.fee_year= #{feeYear}
@@ -2331,9 +2327,9 @@
     </select>
 
     <select id="getRepairWithOutPage" parameterType="Map" resultType="Map">
-        select r.staff_id staffId,r.staff_name staffName,r.state, t.name stateName,u.score, count(*) amount from
+        select r.staff_id staffId,u.name staffName,r.state,u.score, count(*) amount from
         r_repair_user r
-        left join t_dict t on t.table_name="r_repair_user" and t.table_columns="state" and t.status_cd=r.state
+        left join t_dict td on td.table_name="r_repair_user" and td.table_columns="state" and td.status_cd=r.state
         left join u_user u on u.user_id = r.staff_id and u.status_cd = '0'
         where r.state != '10005' and r.status_cd = '0'
         <if test="ruId != null and ruId != ''">
@@ -2385,11 +2381,10 @@
             and r.create_time = #{createTime}
         </if>
         group by r.staff_id,r.state
-        order by r.create_time desc
     </select>
 
     <select id="queryRepairForStaff" parameterType="Map" resultType="Map">
-        SELECT r.staff_id staffId,r.staff_name staffName,r.state FROM r_repair_user r
+        SELECT r.staff_id staffId,u.name staffName FROM r_repair_user r
         inner join u_user u on u.user_id = r.staff_id and u.status_cd = '0'
         WHERE r.state!='10005' AND r.state!='10009' AND r.state!='11000' AND
         r.state!='12000' AND r.state != '10007' AND r.status_cd = '0' AND
@@ -2401,68 +2396,86 @@
             and r.staff_id = #{staffId}
         </if>
         group by r.staff_id
-        order by r.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
     </select>
 
     <select id="getReceivableInformation" parameterType="Map" resultType="Map">
-        select a.receivableAmount,a.receivedAmount, IF(a.receivableAmount &lt;
-        a.oweReceivedAmount,'0',a.receivableAmount-a.oweReceivedAmount) oweAmount
+        select a.receivableAmount,
+               a.receivedAmount,
+               IF(a.receivableAmount &lt;
+                  a.oweReceivedAmount, '0', a.receivableAmount - a.oweReceivedAmount) oweAmount
         from (
-        select sum(t.his_owe_amount+t.cur_receivable_amount)
-        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,
-        sum(t.cur_received_amount+t.his_owe_received_amount) oweReceivedAmount
-        from report_fee_month_statistics t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        where 1=1
-        and t.fee_year= #{feeYear}
-        and t.fee_month= #{feeMonth}
-        and t.community_id = #{communityId}
-        ) a
+                 select sum(t.his_owe_amount + t.cur_receivable_amount)
+                                                                                                       receivableAmount,
+                        sum(t.cur_received_amount + t.his_owe_received_amount + t.pre_received_amount) receivedAmount,
+                        sum(t.cur_received_amount + t.his_owe_received_amount)                         oweReceivedAmount
+                 from report_fee_month_statistics t
+                          inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+                 where 1 = 1
+                   and t.fee_year = #{feeYear}
+                   and t.fee_month = #{feeMonth}
+                   and t.community_id = #{communityId}
+             ) a
     </select>
 
     <select id="getFloorReceivableInformation" parameterType="Map" resultType="Map">
-        select a.floorNum,a.`name`,a.receivableAmount,a.receivedAmount, IF(a.receivableAmount &lt;
-        a.oweReceivedAmount,'0',a.receivableAmount-a.oweReceivedAmount) oweAmount
+        select a.floorNum,
+               a.`name`,
+               a.receivableAmount,
+               a.receivedAmount,
+               IF(a.receivableAmount &lt;
+                  a.oweReceivedAmount, '0', a.receivableAmount - a.oweReceivedAmount) oweAmount
         from (
-        select f.floor_num floorNum,f.`name`,sum(t.his_owe_amount+t.cur_receivable_amount)
-        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,
-        sum(t.cur_received_amount+t.his_owe_received_amount) oweReceivedAmount
-        from report_fee_month_statistics t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join building_room br on br.room_id = t.obj_id and t.obj_type = '3333' and br.community_id =
-        t.community_id and br.status_cd = '0'
-        inner join building_unit bu on bu.unit_id = br.unit_id and bu.status_cd = '0'
-        inner join f_floor f on f.floor_id = bu.floor_id and f.status_cd = '0'
-        where 1=1
-        and t.fee_year= #{feeYear}
-        and t.fee_month= #{feeMonth}
-        and t.community_id = #{communityId}
-        group by f.floor_num ,f.`name`
-        ) a
+                 select f.floor_num                                                                    floorNum,
+                        f.`name`,
+                        sum(t.his_owe_amount + t.cur_receivable_amount)
+                                                                                                       receivableAmount,
+                        sum(t.cur_received_amount + t.his_owe_received_amount + t.pre_received_amount) receivedAmount,
+                        sum(t.cur_received_amount + t.his_owe_received_amount)                         oweReceivedAmount
+                 from report_fee_month_statistics t
+                          inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+                          inner join building_room br
+                                     on br.room_id = t.obj_id and t.obj_type = '3333' and br.community_id =
+                                                                                          t.community_id and
+                                        br.status_cd = '0'
+                          inner join building_unit bu on bu.unit_id = br.unit_id and bu.status_cd = '0'
+                          inner join f_floor f on f.floor_id = bu.floor_id and f.status_cd = '0'
+                 where 1 = 1
+                   and t.fee_year = #{feeYear}
+                   and t.fee_month = #{feeMonth}
+                   and t.community_id = #{communityId}
+                 group by f.floor_num, f.`name`
+             ) a
     </select>
 
     <select id="getFeeConfigReceivableInformation" parameterType="Map" resultType="Map">
-        select a.feeName,a.receivableAmount,a.receivedAmount, IF(a.receivableAmount &lt;
-        a.oweReceivedAmount,'0',a.receivableAmount-a.oweReceivedAmount) oweAmount
+        select a.feeName,
+               a.receivableAmount,
+               a.receivedAmount,
+               IF(a.receivableAmount &lt;
+                  a.oweReceivedAmount, '0', a.receivableAmount - a.oweReceivedAmount) oweAmount
         from (
-        select t.fee_name feeName,sum(t.his_owe_amount+t.cur_receivable_amount)
-        receivableAmount,sum(t.cur_received_amount+t.his_owe_received_amount+t.pre_received_amount) receivedAmount,
-        sum(t.cur_received_amount+t.his_owe_received_amount) oweReceivedAmount
-        from report_fee_month_statistics t
-        inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        left join building_room br on br.room_id = t.obj_id and t.obj_type = '3333' and br.community_id =
-        t.community_id and br.status_cd = '0'
-        left join building_unit bu on bu.unit_id = br.unit_id and bu.status_cd = '0'
-        left join f_floor f on f.floor_id = bu.floor_id and f.status_cd = '0'
-        where 1=1
-        and t.fee_year= #{feeYear}
-        and t.fee_month= #{feeMonth}
-        and t.community_id = #{communityId}
-        group by t.fee_name
-        ) a
+                 select t.fee_name                                                                     feeName,
+                        sum(t.his_owe_amount + t.cur_receivable_amount)
+                                                                                                       receivableAmount,
+                        sum(t.cur_received_amount + t.his_owe_received_amount + t.pre_received_amount) receivedAmount,
+                        sum(t.cur_received_amount + t.his_owe_received_amount)                         oweReceivedAmount
+                 from report_fee_month_statistics t
+                          inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+                          left join building_room br
+                                    on br.room_id = t.obj_id and t.obj_type = '3333' and br.community_id =
+                                                                                         t.community_id and
+                                       br.status_cd = '0'
+                          left join building_unit bu on bu.unit_id = br.unit_id and bu.status_cd = '0'
+                          left join f_floor f on f.floor_id = bu.floor_id and f.status_cd = '0'
+                 where 1 = 1
+                   and t.fee_year = #{feeYear}
+                   and t.fee_month = #{feeMonth}
+                   and t.community_id = #{communityId}
+                 group by t.fee_name
+             ) a
     </select>
 
 

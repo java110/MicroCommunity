@@ -321,7 +321,7 @@
             and rs.is_fixed= #{isFixed}
         </if>
         <if test="state !=null and state != ''">
-            and rs.state= #{state}
+            and t.state= #{state}
         </if>
         <if test="parentRstId !=null and parentRstId != ''">
             and rs.parent_rst_id= #{parentRstId}

@@ -310,12 +310,20 @@ public class ApplyRoomDiscountApi {
                     }
                 }
                 DecimalFormat df = new DecimalFormat("0.00");
-                reqJson.put("cashBackAmount", df.format(cashBackAmount));
+                if (StringUtil.isEmpty(reqJson.getString("refundAmount"))) {
+                    reqJson.put("cashBackAmount", df.format(cashBackAmount));
+                } else {
+                    reqJson.put("cashBackAmount", reqJson.getString("refundAmount"));
+                }
                 //处理账户返现
                 JSONArray businesses = new JSONArray();
                 updateAccountBMOImpl.cashBackAccount(reqJson, dataFlowContext, businesses);
                 reqJson.put("inUse", 1);
-                reqJson.put("returnAmount", df.format(cashBackAmount));
+                if (StringUtil.isEmpty(reqJson.getString("refundAmount"))) {
+                    reqJson.put("returnAmount", df.format(cashBackAmount));
+                } else {
+                    reqJson.put("returnAmount", reqJson.getString("refundAmount"));
+                }
             }
         } else {
             reqJson.put("inUse", 0);

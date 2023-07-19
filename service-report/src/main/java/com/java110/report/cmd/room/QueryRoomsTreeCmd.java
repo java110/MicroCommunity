@@ -20,9 +20,9 @@ import java.util.List;
 
 @Java110Cmd(serviceCode = "room.queryRoomsTree")
 public class QueryRoomsTreeCmd extends Cmd {
+
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -30,7 +30,6 @@ public class QueryRoomsTreeCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "unitId", "请求中未包含单元信息");
         Assert.jsonObjectHaveKey(reqJson, "page", "请求报文中未包含page节点");
         Assert.jsonObjectHaveKey(reqJson, "row", "请求报文中未包含row节点");
-
         Assert.isInteger(reqJson.getString("page"), "page不是数字");
         Assert.isInteger(reqJson.getString("row"), "row不是数字");
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
@@ -56,6 +55,4 @@ public class QueryRoomsTreeCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiRoomVo), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
-
-
 }

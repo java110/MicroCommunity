@@ -68,7 +68,7 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\n" +
+        reqBody = "{\n" +
                 "\t\"name\": \"王王\",\n" +
                 "\t\"age\": \"\",\n" +
                 "\t\"link\": \"18909718888\",\n" +
@@ -81,7 +81,7 @@ import java.util.List;
                 "\t\"idCard\": \"\",\n" +
                 "\t\"communityId\": \"2022121921870161\"\n" +
                 "}",
-        resBody="{\"code\":0,\"msg\":\"成功\"}"
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 @Java110Cmd(serviceCode = "owner.editOwner")
 public class EditOwnerCmd extends Cmd {
@@ -291,7 +291,7 @@ public class EditOwnerCmd extends Cmd {
     public void editOwnerPhoto(JSONObject paramInJson) {
 
         String _photo = paramInJson.getString("ownerPhoto");
-        if(_photo.length()> 512){
+        if (_photo.length() > 512) {
             FileDto fileDto = new FileDto();
             fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
             fileDto.setFileName(fileDto.getFileId());

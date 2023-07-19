@@ -14,7 +14,7 @@ public class UrlCache {
      */
     public static String getOwnerUrl(){
 
-        return MappingCache.getValue(MappingConstant.URL_DOMAIN,"OWNER_WECHAT_URL");
+        return MappingCache.getValue(MappingConstant.DOMAIN_COMMON,"OWNER_WECHAT_URL");
 
     }
     /**

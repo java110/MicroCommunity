@@ -251,8 +251,12 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         reportOweFeePo.setCommunityId(feeDto.getCommunityId());
         reportOweFeePo.setConfigId(feeDto.getConfigId());
         reportOweFeePo.setConfigName(feeDto.getFeeName());
-        reportOweFeePo.setDeadlineTime(DateUtil.getFormatTimeString(feeDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
-        reportOweFeePo.setEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        if (feeDto.getDeadlineTime() != null) {
+            reportOweFeePo.setDeadlineTime(DateUtil.getFormatTimeString(feeDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
+        }
+        if (feeDto.getEndTime() != null) {
+            reportOweFeePo.setEndTime(DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        }
         reportOweFeePo.setFeeId(feeDto.getFeeId());
         reportOweFeePo.setFeeName(feeDto.getFeeName());
         reportOweFeePo.setOwnerId(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_ID));

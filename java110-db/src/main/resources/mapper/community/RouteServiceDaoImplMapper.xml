@@ -93,6 +93,7 @@
         <if test="appName != null and appName != ''">
             and a.name = #{appName}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

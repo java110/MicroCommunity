@@ -71,7 +71,6 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private String valid;
 
-
     private Date createTime;
 
     private String statusCd = "0";
@@ -93,6 +92,7 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private String payerObjType;
 
+    private String prepaymentPeriod;
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -374,5 +374,12 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
+    }
+    public String getPrepaymentPeriod() {
+        return prepaymentPeriod;
+    }
+
+    public void setPrepaymentPeriod(String prepaymentPeriod) {
+        this.prepaymentPeriod = prepaymentPeriod;
     }
 }
