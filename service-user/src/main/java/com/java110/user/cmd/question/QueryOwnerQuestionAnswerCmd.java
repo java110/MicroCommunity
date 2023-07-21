@@ -33,7 +33,7 @@ public class QueryOwnerQuestionAnswerCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
-        Assert.hasKeyAndValue(reqJson, "qaType", "未包含qaType");
+        //Assert.hasKeyAndValue(reqJson, "qaType", "未包含qaType");
         String userId = context.getReqHeaders().get("user-id");
         Assert.hasLength(userId, "用户未登录");
     }
