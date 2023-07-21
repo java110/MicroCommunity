@@ -18,8 +18,9 @@
     <!-- 查询问卷题目选项信息 add by wuxw 2018-07-03 -->
     <select id="getQuestionTitleValueInfo" parameterType="Map" resultType="Map">
         select t.score,t.value_id,t.value_id valueId,t.title_id,t.title_id titleId,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.qa_value,t.qa_value qaValue,t.seq
+        statusCd,t.community_id,t.community_id communityId,t.qa_value,t.qa_value qaValue,t.seq,count(uqav.user_qa_id) personCount
         from question_title_value t
+        left join user_question_answer_value uqav on  t.value_id = uqav.value_id and t.title_id = uqav.title_id and uqav.status_cd = '0'
         where 1 =1
         <if test="score !=null and score != ''">
             and t.score= #{score}
@@ -48,6 +49,7 @@
         <if test="seq !=null and seq != ''">
             and t.seq= #{seq}
         </if>
+        group by t.score,t.value_id,t.title_id,t.status_cd,t.community_id,t.qa_value,t.seq
         order by t.seq
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
