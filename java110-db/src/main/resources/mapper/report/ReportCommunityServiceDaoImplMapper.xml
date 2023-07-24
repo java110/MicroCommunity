@@ -341,7 +341,9 @@
             inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '1' and pfc.b_id = t.b_id
         </if>
         where 1=1
-        and t.config_id = #{configId}
+        <if test="configId != null and configId != ''">
+            and t.config_id = #{configId}
+        </if>
         and t.community_id = #{communityId}
     </select>
 
@@ -371,7 +373,9 @@
             inner join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '1' and pfc.b_id = t.b_id
         </if>
         where 1=1
+        <if test="configId != null and configId != ''">
         and t.config_id = #{configId}
+        </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
         <if test="page != -1 and page != null ">
