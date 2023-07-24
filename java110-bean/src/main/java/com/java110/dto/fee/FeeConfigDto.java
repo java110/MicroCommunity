@@ -93,6 +93,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private String payerObjType;
 
+    private String deleteFlag;
+
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -374,5 +376,13 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
+    }
+
+    public String getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(String deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 }
