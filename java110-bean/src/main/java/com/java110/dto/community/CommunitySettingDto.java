@@ -17,6 +17,12 @@ public class CommunitySettingDto extends PageDto implements Serializable {
 
     public static final String SETTING_TYPE_FEE = "2002";
 
+    /**
+     * 收据编号
+     */
+    public static final String SETTING_KEY_RECEIPT_CODE = "RECEIPT_CODE";
+
+
     private String csId;
     private String settingValue;
     private String remark;

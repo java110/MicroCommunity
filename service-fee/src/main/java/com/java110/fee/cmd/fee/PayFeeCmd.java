@@ -19,6 +19,7 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.user.UserDto;
+import com.java110.fee.smo.impl.FeeReceiptInnerServiceSMOImpl;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
@@ -138,6 +139,9 @@ public class PayFeeCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private FeeReceiptInnerServiceSMOImpl feeReceiptInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -215,6 +219,9 @@ public class PayFeeCmd extends Cmd {
         String cycles = paramObj.getString("cycles");
         Date endTime = null;
 
+        //todo 生成收据编号
+        String receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(paramObj.getString("communityId"));
+
         PayFeePo payFeePo = null;
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + paramObj.get("feeId");
@@ -230,6 +237,7 @@ public class PayFeeCmd extends Cmd {
             payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
             payFeeDetailPo.setReceivableAmount(feeDetail.getString("totalFeePrice"));
+            payFeeDetailPo.setReceiptCode(receiptCode);
             //判断是否有赠送规则
             hasDiscount(paramObj, payFeePo, payFeeDetailPo);
 
@@ -292,6 +300,7 @@ public class PayFeeCmd extends Cmd {
                 applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
             }
         }
+
 
         //根据明细ID 查询收据信息
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();

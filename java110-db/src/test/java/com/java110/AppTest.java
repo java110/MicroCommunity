@@ -22,7 +22,7 @@ public class AppTest
     @Test
     public void parseInteger(){
         String communityId = "702019051443120001";
-
-        System.out.println(Long.parseLong(communityId));
+        String str = String.format("%0"+24+"d", 991);
+        System.out.println(str);
     }
 }

@@ -48,6 +48,8 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     private String feeId;
 
+    private String receiptCode;
+
     public String getAmount() {
         return amount;
     }
@@ -238,5 +240,13 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     public void setFeeId(String feeId) {
         this.feeId = feeId;
+    }
+
+    public String getReceiptCode() {
+        return receiptCode;
+    }
+
+    public void setReceiptCode(String receiptCode) {
+        this.receiptCode = receiptCode;
     }
 }

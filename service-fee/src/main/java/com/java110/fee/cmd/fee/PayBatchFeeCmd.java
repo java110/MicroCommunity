@@ -103,6 +103,9 @@ public class PayBatchFeeCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -164,13 +167,17 @@ public class PayBatchFeeCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
 
+        //todo 生成收据编号
+        String receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(reqJson.getString("communityId"));
+
+
         JSONArray fees = reqJson.getJSONArray("fees");
         JSONObject paramInObj = null;
         JSONArray details = new JSONArray();
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             try {
                 paramInObj = fees.getJSONObject(feeIndex);
-                doDeal(paramInObj, reqJson.getString("communityId"), cmdDataFlowContext, userDtos.get(0));
+                doDeal(paramInObj, reqJson.getString("communityId"),receiptCode, cmdDataFlowContext, userDtos.get(0));
             } catch (Exception e) {
                 logger.error("处理异常", e);
                 throw new CmdException(e.getMessage());
@@ -184,7 +191,7 @@ public class PayBatchFeeCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 
-    private void doDeal(JSONObject paramObj, String communityId, ICmdDataFlowContext cmdDataFlowContext, UserDto userDto) throws Exception {
+    private void doDeal(JSONObject paramObj, String communityId,String receiptCode, ICmdDataFlowContext cmdDataFlowContext, UserDto userDto) throws Exception {
         paramObj.put("communityId", communityId);
         //获取订单ID
         String oId = Java110TransactionalFactory.getOId();
@@ -203,6 +210,7 @@ public class PayBatchFeeCmd extends Cmd {
             payFeeDetailPo.setPayOrderId(oId);
             payFeeDetailPo.setCashierId(userDto.getUserId());
             payFeeDetailPo.setCashierName(userDto.getName());
+            payFeeDetailPo.setReceiptCode(receiptCode);
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");

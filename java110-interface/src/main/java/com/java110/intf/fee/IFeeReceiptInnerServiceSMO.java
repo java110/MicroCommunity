@@ -63,4 +63,14 @@ public interface IFeeReceiptInnerServiceSMO {
      */
     @RequestMapping(value = "/queryFeeReceiptsCount", method = RequestMethod.POST)
     int queryFeeReceiptsCount(@RequestBody FeeReceiptDto feeReceiptDto);
+
+
+    /**
+     * 生成收据编号
+     *
+     * @param communityId 小区ID
+     * @return 收据编号
+     */
+    @RequestMapping(value = "/generatorReceiptCode", method = RequestMethod.POST)
+    String generatorReceiptCode(@RequestBody String communityId);
 }
