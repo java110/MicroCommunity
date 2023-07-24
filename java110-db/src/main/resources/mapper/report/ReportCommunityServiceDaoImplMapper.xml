@@ -344,6 +344,9 @@
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
         </if>
+        <if test="deleteFlag != null and deleteFlag != ''">
+            and t.operate = 'DEL'
+        </if>
         and t.community_id = #{communityId}
     </select>
 
@@ -375,6 +378,9 @@
         where 1=1
         <if test="configId != null and configId != ''">
         and t.config_id = #{configId}
+        </if>
+        <if test="deleteFlag != null and deleteFlag != ''">
+            and t.operate = 'DEL'
         </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
