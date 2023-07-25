@@ -121,6 +121,24 @@ public class PayOweFeeCmd extends Cmd {
             Assert.hasKeyAndValue(feeObject, "startTime", "未包含开始时间");
             Assert.hasKeyAndValue(feeObject, "endTime", "未包含结束时间");
             Assert.hasKeyAndValue(feeObject, "receivedAmount", "未包含实收金额");
+
+            //计算 应收金额
+            FeeDto feeDto = new FeeDto();
+            feeDto.setFeeId(feeObject.getString("feeId"));
+            feeDto.setCommunityId(feeObject.getString("communityId"));
+            Date pageEndTime = null;
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+            if (feeDtos == null || feeDtos.size() != 1) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
+            }
+            feeDto = feeDtos.get(0);
+
+            pageEndTime = DateUtil.getDateFromStringB(feeObject.getString("endTime"));
+            if (pageEndTime.getTime() <= feeDto.getEndTime().getTime()) {
+                throw new IllegalArgumentException("可能存在重复缴费，请刷新页面重新缴费");
+            }
+
+            feeObject.put("feeDto", feeDto);
         }
     }
 
@@ -340,18 +358,11 @@ public class PayOweFeeCmd extends Cmd {
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
-        //计算 应收金额
-        FeeDto feeDto = new FeeDto();
-        feeDto.setFeeId(paramInJson.getString("feeId"));
-        feeDto.setCommunityId(paramInJson.getString("communityId"));
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (feeDtos == null || feeDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
-        }
+        FeeDto feeDto = (FeeDto) paramInJson.get("feeDto");
         if (!businessFeeDetail.containsKey("state") || StringUtil.isEmpty(businessFeeDetail.getString("state"))) {
             businessFeeDetail.put("state", "1400");
         }
-        feeDto = feeDtos.get(0);
+
         businessFeeDetail.put("startTime", paramInJson.getString("startTime"));
         BigDecimal cycles = null;
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
@@ -387,7 +398,7 @@ public class PayOweFeeCmd extends Cmd {
         payFeeDetailPo.setCashierId(userDto.getUserId());
         payFeeDetailPo.setCashierName(userDto.getName());
         //todo 缓存收据编号
-        CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
+        CommonCache.setValue(payFeeDetailPo.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
         int flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
 
         if (flag < 1) {
