@@ -1748,7 +1748,7 @@
         pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time endTime,t.create_time createTime,
         t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfa.`value`
         importFeeName,t.prime_rate,d.name primeRate,fdr.discount_small_type discountSmallType,fdr.rule_name
-        ruleName,pfdd.discount_price discountPrice,co.contract_code contractCode,pfo.`value` ownerName,cb.o_id oId,
+        ruleName,pfdd.discount_price discountPrice,co.contract_code contractCode,pfo.`value` ownerName,t.pay_order_id oId,
         d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,t.state,d3.name stateName,t.fee_id feeId,pft.`value` repairId,
         t.detail_id,t.detail_id detailId,pf.payer_obj_id,pfb.value ownerId,concat(pa.num,'停车场',ps.num,'车位') psName,
         fad.amount withholdAmount,t.cashier_id cashierId,t.cashier_name cashierName,t.payable_amount payableAmount,pfc.fee_flag feeFlag
@@ -1775,7 +1775,6 @@
         left join t_dict d3 on t.state = d3.status_cd and d3.table_name = "pay_fee_detail" and d3.table_columns =
         "state"
         LEFT JOIN contract co on pf.payer_obj_id = co.contract_id and co.status_cd = '0' and pf.payer_obj_type='7777'
-        LEFT JOIN c_business cb on t.b_id = cb.b_id
         left join fee_account_detail fad on t.detail_id = fad.detail_id and t.community_id = fad.community_id and
         fad.status_cd = '0' and fad.state = '1002'
         where t.status_cd = '0'
