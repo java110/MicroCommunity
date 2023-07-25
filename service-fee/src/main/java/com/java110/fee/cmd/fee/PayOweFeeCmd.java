@@ -35,6 +35,7 @@ import com.java110.po.fee.FeeReceiptPo;
 import com.java110.po.fee.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -385,8 +386,8 @@ public class PayOweFeeCmd extends Cmd {
         }
         payFeeDetailPo.setCashierId(userDto.getUserId());
         payFeeDetailPo.setCashierName(userDto.getName());
-        payFeeDetailPo.setReceiptCode(receiptCode);
-
+        //todo 缓存收据编号
+        CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
         int flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
 
         if (flag < 1) {

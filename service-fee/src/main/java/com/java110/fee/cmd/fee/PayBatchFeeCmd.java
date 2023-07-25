@@ -29,6 +29,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.FeeFlagTypeConstant;
 import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -210,7 +211,8 @@ public class PayBatchFeeCmd extends Cmd {
             payFeeDetailPo.setPayOrderId(oId);
             payFeeDetailPo.setCashierId(userDto.getUserId());
             payFeeDetailPo.setCashierName(userDto.getName());
-            payFeeDetailPo.setReceiptCode(receiptCode);
+            //todo 缓存收据编号
+            CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
