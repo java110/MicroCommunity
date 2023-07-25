@@ -103,7 +103,6 @@ public class UpdateFeeOwnerInfoImpl implements IUpdateFeeOwnerInfo {
     private void doDealFeeDto(FeeDto tmpFeeDto, OwnerDto ownerDto) {
 
         //判断是否存在 业主名称
-
         FeeAttrDto ownerNameAttr = getOwnerFeeAttr(tmpFeeDto, FeeAttrDto.SPEC_CD_OWNER_NAME);
         FeeAttrPo tmpFeeAttrPo = new FeeAttrPo();
         if (ownerNameAttr == null) {
@@ -132,6 +131,22 @@ public class UpdateFeeOwnerInfoImpl implements IUpdateFeeOwnerInfo {
         } else {
             tmpFeeAttrPo.setAttrId(ownerNameAttr.getAttrId());
             tmpFeeAttrPo.setValue(ownerDto.getLink());
+            feeAttrInnerServiceSMOImpl.updateFeeAttr(tmpFeeAttrPo);
+        }
+
+        // todo 是否存在 业主ID
+        ownerNameAttr = getOwnerFeeAttr(tmpFeeDto, FeeAttrDto.SPEC_CD_OWNER_ID);
+        tmpFeeAttrPo = new FeeAttrPo();
+        if (ownerNameAttr == null) {
+            tmpFeeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            tmpFeeAttrPo.setCommunityId(ownerDto.getCommunityId());
+            tmpFeeAttrPo.setFeeId(tmpFeeDto.getFeeId());
+            tmpFeeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
+            tmpFeeAttrPo.setValue(ownerDto.getOwnerId());
+            feeAttrInnerServiceSMOImpl.saveFeeAttr(tmpFeeAttrPo);
+        } else {
+            tmpFeeAttrPo.setAttrId(ownerNameAttr.getAttrId());
+            tmpFeeAttrPo.setValue(ownerDto.getOwnerId());
             feeAttrInnerServiceSMOImpl.updateFeeAttr(tmpFeeAttrPo);
         }
 

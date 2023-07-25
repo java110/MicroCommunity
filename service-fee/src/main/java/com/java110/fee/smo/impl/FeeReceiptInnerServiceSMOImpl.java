@@ -2,6 +2,7 @@ package com.java110.fee.smo.impl;
 
 
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunitySettingDto;
 import com.java110.dto.fee.FeeReceiptDto;
@@ -144,14 +145,14 @@ public class FeeReceiptInnerServiceSMOImpl extends BaseServiceSMO implements IFe
                 communitySettingDtos = communitySettingInnerServiceSMOImpl.queryCommunitySettings(communitySettingDto);
             }
 
-            preReceiptCode = communitySettingDtos.get(0).getSettingValue();
+            preReceiptCode = communitySettingDtos.get(0).getSettingValue().trim();
             if (!StringUtil.isNumber(preReceiptCode)) {
                 return startCode + preReceiptCode;
             }
 
-            if(preReceiptCode.length() > 24){
+            if (preReceiptCode.length() > 24) {
                 receiptCode = String.format("%024d", (Long.parseLong(preReceiptCode) + 1));
-            }else{
+            } else {
                 receiptCode = String.format("%0" + preReceiptCode.length() + "d", (Long.parseLong(preReceiptCode) + 1));
             }
 
@@ -168,6 +169,15 @@ public class FeeReceiptInnerServiceSMOImpl extends BaseServiceSMO implements IFe
     }
 
     private void saveReceiptCode(String communityId) {
+        CommunitySettingPo communitySettingPo = new CommunitySettingPo();
+        communitySettingPo.setCommunityId(communityId);
+        communitySettingPo.setCsId(GenerateCodeFactory.getGeneratorId("10"));
+        communitySettingPo.setSettingType(CommunitySettingDto.SETTING_TYPE_FEE);
+        communitySettingPo.setSettingKey(CommunitySettingDto.SETTING_KEY_RECEIPT_CODE);
+        communitySettingPo.setSettingValue("001");
+        communitySettingPo.setSettingName("收据开始编号");
+        communitySettingPo.setRemark("系统自动生成");
+        communitySettingInnerServiceSMOImpl.saveCommunitySetting(communitySettingPo);
     }
 
     public IFeeReceiptServiceDao getFeeReceiptServiceDaoImpl() {

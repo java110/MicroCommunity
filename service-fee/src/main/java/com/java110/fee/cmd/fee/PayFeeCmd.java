@@ -237,8 +237,10 @@ public class PayFeeCmd extends Cmd {
             payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
             payFeeDetailPo.setReceivableAmount(feeDetail.getString("totalFeePrice"));
-            payFeeDetailPo.setReceiptCode(receiptCode);
-            //判断是否有赠送规则
+            //todo 缓存收据编号
+            CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
+
+            //todo 判断是否有赠送规则
             hasDiscount(paramObj, payFeePo, payFeeDetailPo);
 
             // todo 处理用户账户

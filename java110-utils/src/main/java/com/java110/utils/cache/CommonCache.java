@@ -15,8 +15,13 @@ public class CommonCache extends BaseCache {
     public final static int defaultExpireTime = 5 * 60;
     public final static int RESEND_DEFAULT_EXPIRETIME = 1 * 60;
 
+    public final static int DEFAULT_EXPIRETIME_TWO_MIN = 1 * 60;
+
+
     //支付默认回话
     public final static int PAY_DEFAULT_EXPIRE_TIME = 2 * 60 * 60;
+
+    public static final String RECEIPT_CODE = "_RECEIPT_CODE";// 收据编号
 
 
 

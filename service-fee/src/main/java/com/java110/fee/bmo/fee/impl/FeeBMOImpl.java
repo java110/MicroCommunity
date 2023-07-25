@@ -27,6 +27,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.fee.FeeReceiptPo;
 import com.java110.po.fee.FeeReceiptDetailPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -426,7 +427,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             payFeeDetail.setPayableAmount("0.0");
         }
         payFeeDetail.setPayOrderId(paramInJson.getString("oId"));
-        payFeeDetail.setReceiptCode(receiptCode);
+        //todo 缓存收据编号
+        CommonCache.setValue(payFeeDetail.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
         // todo 刷入收银人员信息
         freshCashierInfo(payFeeDetail, paramInJson);
 

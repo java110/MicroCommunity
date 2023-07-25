@@ -37,7 +37,6 @@ public class PayFeeDetailPo implements Serializable {
     private String cashierId;
     private String cashierName;
 
-    private String receiptCode;
 
 
     public String getDetailId() {
@@ -184,11 +183,4 @@ public class PayFeeDetailPo implements Serializable {
         this.cashierName = cashierName;
     }
 
-    public String getReceiptCode() {
-        return receiptCode;
-    }
-
-    public void setReceiptCode(String receiptCode) {
-        this.receiptCode = receiptCode;
-    }
 }

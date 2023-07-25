@@ -29,6 +29,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.FeeFlagTypeConstant;
 import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -142,15 +143,15 @@ public class PayBatchFeeCmd extends Cmd {
                 throw new IllegalArgumentException("费用项不存在");
             }
             Date maxEndTime = feeDtos.get(0).getDeadlineTime();
-            if (!FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
-                try {
-                    maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-                } catch (ParseException e) {
-                    logger.error("比较费用日期失败", e);
-                }
-                Date newDate = DateUtil.stepMonth(endTime, paramInObj.getInteger("cycles") - 1);
+            //周期性费用
+            if (maxEndTime == null || FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+                maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
+            }
+
+            if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+                Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
                 if (newDate.getTime() > maxEndTime.getTime()) {
-                    throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+                    throw new IllegalArgumentException("缴费周期超过 缴费结束时间,请用按结束时间方式缴费");
                 }
             }
 
@@ -210,7 +211,8 @@ public class PayBatchFeeCmd extends Cmd {
             payFeeDetailPo.setPayOrderId(oId);
             payFeeDetailPo.setCashierId(userDto.getUserId());
             payFeeDetailPo.setCashierName(userDto.getName());
-            payFeeDetailPo.setReceiptCode(receiptCode);
+            //todo 缓存收据编号
+            CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
