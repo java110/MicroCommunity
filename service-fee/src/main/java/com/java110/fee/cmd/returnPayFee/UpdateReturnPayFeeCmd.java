@@ -440,6 +440,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         businessReturnPayFee.putAll(BeanConvertUtil.beanCovertMap(feeDetailDtos.get(0)));
         businessReturnPayFee.putAll(paramInJson);
         PayFeeDetailPo returnPayFeePo = BeanConvertUtil.covertBean(businessReturnPayFee, PayFeeDetailPo.class);
+        returnPayFeePo.setPrimeRate(feeDetailDtos.get(0).getPrimeRate());
         int flag = payFeeDetailV1InnerServiceSMOImpl.updatePayFeeDetailNew(returnPayFeePo);
         if (flag < 1) {
             throw new CmdException("更新数据失败");
