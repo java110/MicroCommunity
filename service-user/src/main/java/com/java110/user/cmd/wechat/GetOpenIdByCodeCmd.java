@@ -5,16 +5,25 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.user.UserAttrDto;
+import com.java110.dto.wechat.SmallWeChatDto;
+import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
+import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
+import com.java110.po.user.UserAttrPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * 根据小程序code 获取openId
@@ -26,6 +35,12 @@ public class GetOpenIdByCodeCmd extends Cmd {
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserAttrV1InnerServiceSMO userAttrV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "code", "未包含code");
@@ -35,8 +50,24 @@ public class GetOpenIdByCodeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-        if("MALL".equals(reqJson.getString("appId"))){
-            MappingCache.getValue()
+        String userId = context.getReqHeaders().get("user-id");
+
+        String appId = "";
+        String appSecret = "";
+        if ("MALL".equals(reqJson.getString("appId"))) {
+            appId = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "appId");
+            appSecret = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "appSecret");
+        } else {
+            SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setAppId(reqJson.getString("appId"));
+            List<SmallWeChatDto> smallWeChatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto);
+
+            if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
+                throw new IllegalArgumentException("未配置小程序信息");
+            }
+
+            appId = smallWeChatDtos.get(0).getAppId();
+            appSecret = smallWeChatDtos.get(0).getAppSecret();
         }
 
 
@@ -45,12 +76,10 @@ public class GetOpenIdByCodeCmd extends Cmd {
         String urlString = "https://api.weixin.qq.com/sns/jscode2session?appid={appId}&secret={secret}&js_code={code}&grant_type={grantType}";
         String response = outRestTemplate.getForObject(
                 urlString, String.class,
-                smallWeChatDto.getAppId(),
-                smallWeChatDto.getAppSecret(),
+                appId,
+                appSecret,
                 code,
-                wechatAuthProperties.getGrantType());
-
-        logger.debug("wechatAuthProperties:" + JSONObject.toJSONString(wechatAuthProperties));
+                "authorization_code");
 
         logger.debug("微信返回报文：" + response);
 
@@ -62,7 +91,25 @@ public class GetOpenIdByCodeCmd extends Cmd {
         }
 
         String openId = responseObj.getString("openid");
-        String sessionKey = responseObj.getString("session_key");
+
+        UserAttrDto userAttrDto = new UserAttrDto();
+        userAttrDto.setUserId(userId);
+        userAttrDto.setSpecCd(UserAttrDto.SPEC_MALL_OPEN_ID);
+        List<UserAttrDto> userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
+        if(userAttrDtos == null || userAttrDtos.size() < 1){
+            UserAttrPo userAttrPo = new UserAttrPo();
+            userAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+            userAttrPo.setUserId(userId);
+            userAttrPo.setSpecCd(UserAttrDto.SPEC_MALL_OPEN_ID);
+            userAttrPo.setValue(openId);
+            userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
+        }else {
+            UserAttrPo userAttrPo = new UserAttrPo();
+            userAttrPo.setAttrId(userAttrDtos.get(0).getAttrId());
+            userAttrPo.setValue(openId);
+            userAttrV1InnerServiceSMOImpl.updateUserAttr(userAttrPo);
+        }
+        context.setResponseEntity(ResultVo.createResponseEntity(openId));
 
     }
 }
