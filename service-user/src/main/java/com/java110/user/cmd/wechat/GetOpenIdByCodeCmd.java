@@ -55,8 +55,8 @@ public class GetOpenIdByCodeCmd extends Cmd {
         String appId = "";
         String appSecret = "";
         if ("MALL".equals(reqJson.getString("appId"))) {
-            appId = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "appId");
-            appSecret = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "appSecret");
+            appId = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "wechatAppId");
+            appSecret = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "wechatAppSecret");
         } else {
             SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
             smallWeChatDto.setAppId(reqJson.getString("appId"));
