@@ -113,6 +113,11 @@ public class SaveReturnPayFeeCmd extends Cmd {
 
         Assert.listOnlyOne(feeDtos, "不存在该费用");
 
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setDetailId(reqJson.getString("detailId"));
+        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+        Assert.listOnlyOne(feeDetailDtos, "未找到需要修改的活动 或多条数据");
+
         reqJson.put("configId", feeDtos.get(0).getConfigId());
         reqJson.put("feeTypeCd", feeDtos.get(0).getFeeTypeCd());
 
@@ -122,7 +127,9 @@ public class SaveReturnPayFeeCmd extends Cmd {
         returnPayFeePo.setCycles((reqJson.getDouble("cycles") * -1) + "");
         returnPayFeePo.setReceivableAmount((reqJson.getDouble("receivableAmount") * -1) + "");
         returnPayFeePo.setReceivedAmount((reqJson.getDouble("receivedAmount") * -1) + "");
-        returnPayFeePo.setPrimeRate("7"); //退费默认方式为转账
+        //todo 这里不知道为啥写死为 转账，物业交费是现金 退费为转账时 物业误解，所以暂时屏蔽,如果退款也需要 支付方式 建议退款页面补充
+        //returnPayFeePo.setPrimeRate("7"); //退费默认方式为转账
+        returnPayFeePo.setPrimeRate(feeDetailDtos.get(0).getPrimeRate());
         returnPayFeePo.setApplyPersonId(userId);
         returnPayFeePo.setApplyPersonName(userDtos.get(0).getName());
         int flag = returnPayFeeV1InnerServiceSMOImpl.saveReturnPayFee(returnPayFeePo);
@@ -132,10 +139,7 @@ public class SaveReturnPayFeeCmd extends Cmd {
         }
         reqJson.put("state", "1000");
 
-        FeeDetailDto feeDetailDto = new FeeDetailDto();
-        feeDetailDto.setDetailId(reqJson.getString("detailId"));
-        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
-        Assert.listOnlyOne(feeDetailDtos, "未找到需要修改的活动 或多条数据");
+
 
         JSONObject businessReturnPayFee = new JSONObject();
         businessReturnPayFee.putAll(BeanConvertUtil.beanCovertMap(feeDetailDtos.get(0)));

@@ -157,6 +157,8 @@ public class FeeDto extends PageDto implements Serializable {
     private String customStartTime;
     private String customEndTime;
 
+    private String deleteFlag;
+
     public String getAmount() {
         return amount;
     }
@@ -766,5 +768,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setCustomEndTime(String customEndTime) {
         this.customEndTime = customEndTime;
+    }
+
+    public String getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(String deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 }
