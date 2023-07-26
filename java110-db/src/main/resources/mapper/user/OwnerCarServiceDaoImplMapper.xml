@@ -146,7 +146,7 @@
         left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns = 'lease_type'
         <if test="carTypeCd != '1003'">
-        left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd = '1002'
+        left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd = '1002' and moc.status_cd = '0'
         </if>
         where 1=1
         <if test="statusCd !=null and statusCd != ''">
