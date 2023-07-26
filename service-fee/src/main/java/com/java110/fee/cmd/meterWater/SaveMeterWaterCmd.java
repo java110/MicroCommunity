@@ -99,8 +99,6 @@ public class SaveMeterWaterCmd extends Cmd {
     @Autowired
     private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
 
-    @Autowired
-    private IPayFeeMonth payFeeMonthImpl;
 
     @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
@@ -232,7 +230,7 @@ public class SaveMeterWaterCmd extends Cmd {
             }
             reqJson.put("feeId", payFeePo.getFeeId());
 
-            payFeeMonthImpl.doGeneratorOrRefreshFeeMonth(payFeePo.getFeeId(), reqJson.getString("communityId"));
+
             addMeterWater(reqJson);
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
