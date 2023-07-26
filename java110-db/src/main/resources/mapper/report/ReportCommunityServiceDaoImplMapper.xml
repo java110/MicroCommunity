@@ -326,7 +326,7 @@
         t.amount,
         uu.`name` userName
         from business_pay_fee t
-        left join  pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join  pay_fee_config pfc on t.config_id = pfc.config_id
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
         left join u_user uu on co.user_id = uu.user_id
