@@ -951,7 +951,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         return getFeePrice(feeDto, null);
     }
 
-     /*
+    /*
      *
      * @param feeDto
      * @param roomDto
@@ -1701,7 +1701,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         //todo 考虑费用项 费用提前生成
         Calendar preEndTimeCal = Calendar.getInstance();
         preEndTimeCal.setTime(feeDto.getEndTime());
-        if(StringUtil.isNumber(feeDto.getPrepaymentPeriod())) {
+        if (StringUtil.isNumber(feeDto.getPrepaymentPeriod())) {
             preEndTimeCal.add(Calendar.DAY_OF_MONTH, Integer.parseInt(feeDto.getPrepaymentPeriod()) * -1);
         }
         Date preEndTime = preEndTimeCal.getTime();
@@ -1745,12 +1745,21 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             }
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
             targetEndDate = getTargetEndTime(round * paymentCycle, startDate);//目标结束时间
-            //费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
+
+            //todo 如果 到了 预付期 产生下个周期的费用
+            if (DateUtil.getFormatTimeStringB(targetEndDate).equals(DateUtil.getFormatTimeStringB(endDate))
+                    && DateUtil.getCurrentDate().getTime() > preEndTime.getTime()
+            ) {
+                targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate);//目标结束时间
+            }
+
+
+            //todo 费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
             if (maxEndTime.getTime() < targetEndDate.getTime()) {
                 targetEndDate = maxEndTime;
             }
             //说明欠费
-            if (preEndTime.getTime() < targetEndDate.getTime()) {
+            if (endDate.getTime() < targetEndDate.getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
                 oweMonth = dayCompare(endDate, targetEndDate);
             }
@@ -1780,12 +1789,20 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             }
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
             targetEndDate = getTargetEndTime(round * paymentCycle, endDate);//目标结束时间
+
+            //todo 如果 到了 预付期 产生下个周期的费用
+            if (DateUtil.getFormatTimeStringB(targetEndDate).equals(DateUtil.getFormatTimeStringB(endDate))
+                    && DateUtil.getCurrentDate().getTime() > preEndTime.getTime()
+            ) {
+                targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate);//目标结束时间
+            }
+
             //费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
             if (maxEndTime.getTime() < targetEndDate.getTime()) {
                 targetEndDate = maxEndTime;
             }
             //说明欠费
-            if (preEndTime.getTime() < targetEndDate.getTime()) {
+            if (endDate.getTime() < targetEndDate.getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
                 oweMonth = dayCompare(endDate, targetEndDate);
             }
