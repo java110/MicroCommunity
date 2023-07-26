@@ -175,6 +175,11 @@ public class SaveMeterWaterCmd extends Cmd {
             payFeePo.setState(FeeDto.STATE_DOING);
             payFeePo.setBatchId(reqJson.getString("batchId"));
             payFeePo.setUserId("-1");
+
+            //todo 先写 不然 写月离散表 查询费用时 查不到
+            reqJson.put("feeId", payFeePo.getFeeId());
+            addMeterWater(reqJson);
+
             int flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
@@ -228,10 +233,7 @@ public class SaveMeterWaterCmd extends Cmd {
                     throw new CmdException("保存数据失败");
                 }
             }
-            reqJson.put("feeId", payFeePo.getFeeId());
 
-
-            addMeterWater(reqJson);
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

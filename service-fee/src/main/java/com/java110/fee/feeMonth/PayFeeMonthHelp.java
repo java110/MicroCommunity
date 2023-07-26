@@ -114,10 +114,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
      */
     @Override
     public void waitDispersedOweFee(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date deadlineTime) {
-        // todo 费用已经结束
-        if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            return;
-        }
+
 
         // todo 清理 detailId 为-1 的数据
         PayFeeDetailMonthPo payFeeDetailMonthPo = new PayFeeDetailMonthPo();
@@ -125,6 +122,11 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         payFeeDetailMonthPo.setFeeId(feeDto.getFeeId());
         payFeeDetailMonthPo.setDetailId("-1");
         payFeeDetailMonthInnerServiceSMOImpl.deletePayFeeDetailMonth(payFeeDetailMonthPo);
+
+        // todo 费用已经结束
+        if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            return;
+        }
 
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
         // todo 处理 开始时间和结束时间
