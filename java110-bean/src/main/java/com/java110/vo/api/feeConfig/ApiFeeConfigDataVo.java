@@ -33,7 +33,7 @@ public class ApiFeeConfigDataVo implements Serializable {
     private String scale;
     private String decimalPlace;
     private String units;
-
+    private String prepaymentPeriod;
 
     public String getConfigId() {
         return configId;
@@ -90,7 +90,6 @@ public class ApiFeeConfigDataVo implements Serializable {
     public void setComputingFormula(String computingFormula) {
         this.computingFormula = computingFormula;
     }
-
 
     public String getFeeTypeCdName() {
         return feeTypeCdName;
@@ -156,10 +155,13 @@ public class ApiFeeConfigDataVo implements Serializable {
         this.computingFormulaText = computingFormulaText;
     }
 
-    public String getDeductFrom() { return deductFrom; }
+    public String getDeductFrom() {
+        return deductFrom;
+    }
 
-    public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
-
+    public void setDeductFrom(String deductFrom) {
+        this.deductFrom = deductFrom;
+    }
 
     public String getComputingFormulaName() {
         return computingFormulaName;
@@ -201,7 +203,6 @@ public class ApiFeeConfigDataVo implements Serializable {
         this.units = units;
     }
 
-
     public String getSquarePrice() {
         return squarePrice;
     }
@@ -216,5 +217,13 @@ public class ApiFeeConfigDataVo implements Serializable {
 
     public void setAdditionalAmount(String additionalAmount) {
         this.additionalAmount = additionalAmount;
+    }
+
+    public String getPrepaymentPeriod() {
+        return prepaymentPeriod;
+    }
+
+    public void setPrepaymentPeriod(String prepaymentPeriod) {
+        this.prepaymentPeriod = prepaymentPeriod;
     }
 }

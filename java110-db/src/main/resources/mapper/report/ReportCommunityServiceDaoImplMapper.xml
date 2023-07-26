@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reportCommunityServiceDaoImpl">
 
@@ -23,7 +22,8 @@
         select t.apartment,t.built_up_area builtUpArea,t.community_id communityId,t.create_time createTime,
         t.fee_coefficient feeCoefficient,t.layer,t.room_id roomId,t.room_num roomNum,t.section,
         t.state,bu.unit_id unitId,bu.unit_num unitNum,ff.floor_id floorId,ff.floor_num floorNum,
-        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.`name` ownerName,bo.owner_id ownerId,t.room_type roomType,
+        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.`name` ownerName,bo.owner_id
+        ownerId,t.room_type roomType,
         t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea
         from building_room t
         INNER JOIN building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
@@ -43,50 +43,89 @@
     </select>
 
     <select id="queryRoomStructures" parameterType="Map" resultType="Map">
-        select t.apartment,t.built_up_area builtUpArea,t.community_id communityId,t.create_time createTime,
-        t.fee_coefficient feeCoefficient,t.layer,t.room_id roomId,t.room_num roomNum,t.section,
-        t.state,bu.unit_id unitId,bu.unit_num unitNum,ff.floor_id floorId,ff.floor_num floorNum,
-        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.`name` ownerName,bo.owner_id ownerId,t.room_type roomType,
-        t.room_sub_type roomSubType,t.room_rent roomRent,t.room_area roomArea,td.name stateName,
-        (
-        select if (SUM(rof.amount_owed)!='',SUM(rof.amount_owed),0) from report_owe_fee rof where rof.payer_obj_id = t.room_id and rof.payer_obj_type = '3333'
-        ) oweAmount
+        select t.apartment,
+               t.built_up_area   builtUpArea,
+               t.community_id    communityId,
+               t.create_time     createTime,
+               t.fee_coefficient feeCoefficient,
+               t.layer,
+               t.room_id         roomId,
+               t.room_num        roomNum,
+               t.section,
+               t.state,
+               bu.unit_id        unitId,
+               bu.unit_num       unitNum,
+               ff.floor_id       floorId,
+               ff.floor_num      floorNum,
+               bo.age,
+               bo.id_card        idCard,
+               bo.link,
+               bo.member_id      memberId,
+               bo.`name`,
+               bo.`name`         ownerName,
+               bo.owner_id       ownerId,
+               t.room_type       roomType,
+               t.room_sub_type   roomSubType,
+               t.room_rent       roomRent,
+               t.room_area       roomArea,
+               td.name           stateName,
+               (
+                   select if(SUM(rof.amount_owed)!='', SUM(rof.amount_owed), 0)
+                   from report_owe_fee rof
+                   where rof.payer_obj_id = t.room_id
+                     and rof.payer_obj_type = '3333'
+               )                 oweAmount
         from building_room t
-        INNER JOIN building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
-        inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
-        LEFT JOIN building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
-        left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
-        left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
+                 INNER JOIN building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
+                 inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
+                 LEFT JOIN building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
+                 left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
+                 left join t_dict td
+                           on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
         where t.status_cd = '0'
-        and t.community_id = #{communityId}
-        and bu.unit_id = #{unitId}
-        order by CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED) asc
+          and t.community_id = #{communityId}
+          and bu.unit_id = #{unitId}
+        order by CONVERT(t.layer, SIGNED), CONVERT(t.room_num, SIGNED) asc
     </select>
 
     <select id="queryCarStructures" parameterType="Map" resultType="Map">
-        select pa.num areaNum,ps.num,t.car_num carNum,br.room_id roomId,br.room_num roomNum,br.section,
-        br.state,bu.unit_id unitId,bu.unit_num unitNum,ff.floor_id floorId,ff.floor_num floorNum,
-        bo.age,bo.id_card idCard,bo.link,bo.member_id memberId,bo.`name`,bo.`name` ownerName,bo.owner_id ownerId,
-        (
-        select if (SUM(rof.amount_owed)!='',SUM(rof.amount_owed),0) from report_owe_fee rof where rof.payer_obj_id = t.car_id and rof.payer_obj_type = '6666'
-        ) oweAmount
+        select pa.num       areaNum,
+               ps.num,
+               t.car_num    carNum,
+               br.room_id   roomId,
+               br.room_num  roomNum,
+               br.section,
+               br.state,
+               bu.unit_id   unitId,
+               bu.unit_num  unitNum,
+               ff.floor_id  floorId,
+               ff.floor_num floorNum,
+               bo.age,
+               bo.id_card   idCard,
+               bo.link,
+               bo.member_id memberId,
+               bo.`name`,
+               bo.`name`    ownerName,
+               bo.owner_id  ownerId,
+               (
+                   select if(SUM(rof.amount_owed)!='', SUM(rof.amount_owed), 0)
+                   from report_owe_fee rof
+                   where rof.payer_obj_id = t.car_id
+                     and rof.payer_obj_type = '6666'
+               )            oweAmount
         from owner_car t
-        INNER join building_owner bo on t.owner_id = bo.member_id and bo.status_cd = '0'
-        INNER JOIN building_owner_room_rel borr on bo.owner_id = borr.owner_id and borr.status_cd = '0'
-        INNER join building_room br on borr.room_id = br.room_id and br.status_cd = '0'
-        INNER JOIN building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
-        LEFT JOIN parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
-        LEFT JOIN parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
+                 INNER join building_owner bo on t.owner_id = bo.member_id and bo.status_cd = '0'
+                 INNER JOIN building_owner_room_rel borr on bo.owner_id = borr.owner_id and borr.status_cd = '0'
+                 INNER join building_room br on borr.room_id = br.room_id and br.status_cd = '0'
+                 INNER JOIN building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+                 inner join f_floor ff on bu.floor_id = ff.floor_id and ff.status_cd = '0'
+                 LEFT JOIN parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
+                 LEFT JOIN parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         where t.status_cd = '0'
-        and t.community_id = #{communityId}
-        and bu.unit_id = #{unitId}
+          and t.community_id = #{communityId}
+          and bu.unit_id = #{unitId}
         order by t.car_num
     </select>
-
-
-
-
 
     <!-- 查询房屋个数 add by wuxw 2018-07-03 -->
     <select id="getCarCount" parameterType="com.java110.dto.report.ReportCarDto" resultType="Map">
@@ -106,7 +145,6 @@
             and t.community_id= #{communityId}
         </if>
     </select>
-
 
     <!-- 查询 房屋 楼栋 单元 业主 -->
     <select id="getCarParkingSpace" parameterType="com.java110.dto.report.ReportCarDto"
@@ -188,34 +226,33 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
 
     <!-- 查询无效费用 add by wuxw 2018-07-03 -->
     <select id="queryInvalidFeeMonthStatistics" parameterType="Map" resultType="Map">
-        select t.fee_id feeId from pay_fee t
-        inner join pay_fee_config pfc on t.config_id = pfc.config_id
-        inner join report_fee_year_collection rfyc on t.fee_id = rfyc.fee_id and rfyc.status_cd = '0'
+        select t.fee_id feeId
+        from pay_fee t
+                 inner join pay_fee_config pfc on t.config_id = pfc.config_id
+                 inner join report_fee_year_collection rfyc on t.fee_id = rfyc.fee_id and rfyc.status_cd = '0'
         where (t.status_cd = '1' or pfc.status_cd = '1')
-        and t.community_id= #{communityId}
+          and t.community_id = #{communityId}
     </select>
 
     <!--清理报表 无效数据-->
     <update id="deleteInvalidFee" parameterType="Map">
-        delete from report_fee_year_collection where fee_id  in
+        delete from report_fee_year_collection where fee_id in
         <foreach collection="feeIds" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
         and community_id = #{communityId}
     </update>
 
-
-
     <!-- 查询无效费用 add by wuxw 2018-07-03 -->
     <select id="queryRoomsTree" parameterType="Map" resultType="Map">
         SELECT t.room_id,t.room_id roomId,t.layer,t.room_num,
         t.room_num roomNum,t.unit_id,u.`unit_num` unitNum,
-        u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum,t.`community_id` communityId,bo.owner_id ownerId ,bo.`name` ownerName ,bo.link link
+        u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum,t.`community_id` communityId,bo.owner_id ownerId
+        ,bo.`name` ownerName ,bo.link link
         FROM building_room t
         inner join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
         inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` =

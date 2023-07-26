@@ -21,9 +21,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
-import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
-import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -38,7 +36,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 @Java110CmdDoc(title = "查询放行物品类型",
         description = "查询放行物品类型，供物业端使用",
@@ -80,10 +77,9 @@ import org.slf4j.LoggerFactory;
 public class ListItemReleaseTypeCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListItemReleaseTypeCmd.class);
+
     @Autowired
     private IItemReleaseTypeV1InnerServiceSMO itemReleaseTypeV1InnerServiceSMOImpl;
-
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {

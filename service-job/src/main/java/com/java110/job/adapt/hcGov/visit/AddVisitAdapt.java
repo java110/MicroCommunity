@@ -120,7 +120,7 @@ public class AddVisitAdapt extends DatabusAdaptImpl {
         for (int bVisitIndex = 0; bVisitIndex < businessVisits.size(); bVisitIndex++) {
             JSONObject businessVisit = businessVisits.getJSONObject(bVisitIndex);
             if (businessVisit.containsKey("carNum") && !StringUtil.isEmpty(businessVisit.getString("carNum"))) { //有车辆
-                publishMsg(business, businessVisit); //访客登记给有预约车审核权限的员工推送消息
+//                publishMsg(business, businessVisit); //访客登记给有预约车审核权限的员工推送消息
             }
         }
     }
@@ -222,7 +222,7 @@ public class AddVisitAdapt extends DatabusAdaptImpl {
                 }
             }
         } else if (!StringUtil.isEmpty(visitDtos.get(0).getCarState()) && (visitDtos.get(0).getCarState().equals("1") || visitDtos.get(0).getCarState().equals("2"))) { //车辆不需要审核，此时给业主发信息
-            sendMessage(visitDtos); //给业主推送消息
+//            sendMessage(visitDtos); //给业主推送消息
         }
     }
 

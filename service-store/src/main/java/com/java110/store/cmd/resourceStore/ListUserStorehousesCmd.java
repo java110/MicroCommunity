@@ -6,10 +6,15 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.privilege.BasePrivilegeDto;
+import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.dto.user.UserStorehouseDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
+import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.store.IUserStorehouseInnerServiceSMO;
+import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -31,6 +36,12 @@ public class ListUserStorehousesCmd extends Cmd {
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
+    @Autowired
+    private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
@@ -41,7 +52,16 @@ public class ListUserStorehousesCmd extends Cmd {
         UserStorehouseDto userStorehouseDto = BeanConvertUtil.covertBean(reqJson, UserStorehouseDto.class);
         //获取用户id
         String userId = reqJson.getString("userId");
-        if(StringUtil.isEmpty(userId)){
+        if (!StringUtil.isEmpty(reqJson.getString("sign")) && reqJson.getString("sign").equals("1")) {
+            RepairUserDto repairUserDto = new RepairUserDto();
+            repairUserDto.setRepairId(reqJson.getString("repairId"));
+            repairUserDto.setState(RepairUserDto.STATE_DOING); //处理中
+            List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
+            if (repairUserDtos != null && repairUserDtos.size() == 1) {
+                userId = repairUserDtos.get(0).getStaffId();
+            }
+        }
+        if (StringUtil.isEmpty(userId)) {
             userId = context.getReqHeaders().get("user-id");
         }
         List<Map> privileges = null;
@@ -51,13 +71,31 @@ public class ListUserStorehousesCmd extends Cmd {
         basePrivilegeDto.setUserId(userId);
         privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         if (privileges != null && privileges.size() > 0) {
-            userStorehouseDto.setUserId(reqJson.getString("searchUserId"));
-            userStorehouseDto.setUserName(reqJson.getString("searchUserName"));
+            if (!StringUtil.isEmpty(reqJson.getString("sign")) && reqJson.getString("sign").equals("1")) {
+                UserDto userDto = new UserDto();
+                userDto.setUserId(userId);
+                List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+                Assert.listOnlyOne(users, "查询用户信息错误！");
+                userStorehouseDto.setUserId(userId);
+                userStorehouseDto.setUserName(users.get(0).getName());
+            } else {
+                userStorehouseDto.setUserId(reqJson.getString("searchUserId"));
+                userStorehouseDto.setUserName(reqJson.getString("searchUserName"));
+            }
         }
         //转增只查询自己的物品
         if (!StringUtil.isEmpty(reqJson.getString("giveType")) && "1".equals(reqJson.getString("giveType"))) {
-            userStorehouseDto.setUserId(reqJson.getString("userId"));
-            userStorehouseDto.setUserName(reqJson.getString("searchUserName"));
+            if (!StringUtil.isEmpty(reqJson.getString("sign")) && reqJson.getString("sign").equals("1")) {
+                UserDto userDto = new UserDto();
+                userDto.setUserId(userId);
+                List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+                Assert.listOnlyOne(users, "查询用户信息错误！");
+                userStorehouseDto.setUserId(userId);
+                userStorehouseDto.setUserName(users.get(0).getName());
+            } else {
+                userStorehouseDto.setUserId(reqJson.getString("userId"));
+                userStorehouseDto.setUserName(reqJson.getString("searchUserName"));
+            }
         }
         userStorehouseDto.setLagerStockZero("1");
 

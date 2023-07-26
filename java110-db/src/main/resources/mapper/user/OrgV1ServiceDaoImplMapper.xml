@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="orgV1ServiceDaoImpl">
 
-
     <!-- 保存组织信息 add by wuxw 2018-07-03 -->
     <insert id="saveOrgInfo" parameterType="Map">
-        insert into u_org(
-belong_community_id,org_name,parent_org_id,allow_operation,description,org_level,store_id,org_id
-) values (
-#{belongCommunityId},#{orgName},#{parentOrgId},#{allowOperation},#{description},#{orgLevel},#{storeId},#{orgId}
-)
+        insert into u_org(belong_community_id, org_name, parent_org_id, allow_operation, description, org_level,
+                          store_id, org_id)
+        values (#{belongCommunityId}, #{orgName}, #{parentOrgId}, #{allowOperation}, #{description}, #{orgLevel},
+                #{storeId}, #{orgId})
     </insert>
-
 
     <!-- 查询组织信息 add by wuxw 2018-07-03 -->
     <select id="getOrgInfo" parameterType="Map" resultType="Map">
@@ -60,9 +56,7 @@ belong_community_id,org_name,parent_org_id,allow_operation,description,org_level
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改组织信息 add by wuxw 2018-07-03 -->
     <update id="updateOrgInfo" parameterType="Map">
@@ -82,9 +76,7 @@ belong_community_id,org_name,parent_org_id,allow_operation,description,org_level
         <if test="allowOperation !=null and allowOperation != ''">
             , t.allow_operation= #{allowOperation}
         </if>
-        <if test="description !=null and description != ''">
-            , t.description= #{description}
-        </if>
+        , t.description= #{description}
         <if test="orgLevel !=null and orgLevel != ''">
             , t.org_level= #{orgLevel}
         </if>
@@ -95,7 +87,6 @@ belong_community_id,org_name,parent_org_id,allow_operation,description,org_level
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}
         </if>
-
     </update>
 
     <!-- 查询组织数量 add by wuxw 2018-07-03 -->
@@ -130,8 +121,5 @@ belong_community_id,org_name,parent_org_id,allow_operation,description,org_level
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}
         </if>
-
-
     </select>
-
 </mapper>

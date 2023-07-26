@@ -25,7 +25,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Java110CmdDoc(title = "查询周围店铺",
         description = "根据小区ID查询周围店铺，设计此接口主要 用于停车卷 商家购买 停车卷时 查询小区周边 商铺，比如 饭店等",
         httpMethod = "get",
@@ -68,12 +67,10 @@ public class ListCommunityStoreShopCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
-
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-
         StoreShopCommunityDto storeShopCommunityDto = BeanConvertUtil.covertBean(reqJson, StoreShopCommunityDto.class);
         List<ShopCommunityDto> storeShopCommunityDtos = null;
         int count = 0;
@@ -92,17 +89,10 @@ public class ListCommunityStoreShopCmd extends Cmd {
                 storeShopCommunityDtos = new ArrayList<>();
             }
         }
-
-
         freshParkingCoupon(storeShopCommunityDtos);
-
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, storeShopCommunityDtos);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
-
     }
 
     private void freshParkingCoupon(List<ShopCommunityDto> storeShopCommunityDtos) {
@@ -112,27 +102,21 @@ public class ListCommunityStoreShopCmd extends Cmd {
         if (storeShopCommunityDtos == null || storeShopCommunityDtos.size() < 1) {
             return;
         }
-
         if (storeShopCommunityDtos.size() > 20) {
             return;
         }
-
         List<String> shopIds = new ArrayList<>();
-
         for (ShopCommunityDto shopCommunityDto : storeShopCommunityDtos) {
             shopIds.add(shopCommunityDto.getShopId());
         }
-
         ParkingCouponShopDto parkingCouponShopDto = new ParkingCouponShopDto();
         parkingCouponShopDto.setShopIds(shopIds.toArray(new String[shopIds.size()]));
         List<ParkingCouponShopDto> parkingCouponShopDtos = parkingCouponShopV1InnerServiceSMOImpl.queryParkingCouponShopStatistics(parkingCouponShopDto);
-
         for (ShopCommunityDto shopCommunityDto : storeShopCommunityDtos) {
             for (ParkingCouponShopDto parkingCouponShopDto1 : parkingCouponShopDtos) {
                 if (!parkingCouponShopDto1.getShopId().equals(shopCommunityDto.getShopId())) {
                     continue;
                 }
-
                 shopCommunityDto.setParkingCouponCount(parkingCouponShopDto1.getQuantity());
             }
         }

@@ -31,21 +31,16 @@ public class ListFeeConfigsCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
-
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         FeeConfigDto feeConfigDto = BeanConvertUtil.covertBean(reqJson, FeeConfigDto.class);
-
-        if ("0".equals(reqJson.getString("isFlag"))) {
+        if (!StringUtil.isEmpty(reqJson.getString("isFlag")) && reqJson.getString("isFlag").equals("0")) {
             feeConfigDto.setPage(PageDto.DEFAULT_PAGE);
         }
-
         int count = feeConfigInnerServiceSMOImpl.queryFeeConfigsCount(feeConfigDto);
-
         List<ApiFeeConfigDataVo> feeConfigs = null;
-
         if (count > 0) {
             feeConfigs = BeanConvertUtil.covertBeanList(feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto), ApiFeeConfigDataVo.class);
             //处理 小数点后无效的0
@@ -53,7 +48,6 @@ public class ListFeeConfigsCmd extends Cmd {
                 if (!StringUtil.isEmpty(feeConfig.getAdditionalAmount())) {
                     feeConfig.setAdditionalAmount(Double.parseDouble(feeConfig.getAdditionalAmount()) + "");
                 }
-
                 if (!StringUtil.isEmpty(feeConfig.getSquarePrice())) {
                     feeConfig.setSquarePrice(Double.parseDouble(feeConfig.getSquarePrice()) + "");
                 }
@@ -61,15 +55,11 @@ public class ListFeeConfigsCmd extends Cmd {
         } else {
             feeConfigs = new ArrayList<>();
         }
-
         ApiFeeConfigVo apiFeeConfigVo = new ApiFeeConfigVo();
-
         apiFeeConfigVo.setTotal(count);
         apiFeeConfigVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiFeeConfigVo.setFeeConfigs(feeConfigs);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeConfigVo), HttpStatus.OK);
-
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

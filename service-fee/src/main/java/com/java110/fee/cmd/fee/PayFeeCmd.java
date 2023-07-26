@@ -179,11 +179,17 @@ public class PayFeeCmd extends Cmd {
         if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
             throw new IllegalArgumentException("费用项不存在");
         }
-        //一次性费用 和间接性费用
+        /*//一次性费用 和间接性费用
         Date maxEndTime = feeDtos.get(0).getDeadlineTime();
         //周期性费用
         if (maxEndTime == null || FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
+        }*/
+        Date maxEndTime = null;
+        if (!StringUtil.isEmpty(feeDto.getFeeFlag()) && feeDto.getFeeFlag().equals(FeeDto.FEE_FLAG_CYCLE)) { //周期性费用
+            maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
+        } else { //一次性费用 和间接性费用
+            maxEndTime = feeDtos.get(0).getDeadlineTime();
         }
 
         if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {

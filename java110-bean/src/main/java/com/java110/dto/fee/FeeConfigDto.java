@@ -71,7 +71,6 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private String valid;
 
-
     private Date createTime;
 
     private String statusCd = "0";
@@ -93,7 +92,11 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     private String payerObjType;
 
+
     private String deleteFlag;
+
+
+    private String prepaymentPeriod;
 
 
     public String getFeeTypeCd() {
@@ -378,11 +381,20 @@ public class FeeConfigDto extends PageDto implements Serializable {
         this.payerObjType = payerObjType;
     }
 
+
     public String getDeleteFlag() {
         return deleteFlag;
     }
 
     public void setDeleteFlag(String deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+    public String getPrepaymentPeriod() {
+        return prepaymentPeriod;
+    }
+
+    public void setPrepaymentPeriod(String prepaymentPeriod) {
+        this.prepaymentPeriod = prepaymentPeriod;
+
     }
 }

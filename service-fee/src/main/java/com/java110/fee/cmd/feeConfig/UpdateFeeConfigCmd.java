@@ -29,7 +29,6 @@ public class UpdateFeeConfigCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         Assert.hasKeyAndValue(reqJson, "configId", "费用项ID不能为空");
         Assert.hasKeyAndValue(reqJson, "feeTypeCd", "必填，请选择费用类型");
         Assert.hasKeyAndValue(reqJson, "feeName", "必填，请填写收费项目");
@@ -41,9 +40,6 @@ public class UpdateFeeConfigCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "additionalAmount", "必填，请填写附加费用");
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         Assert.hasKeyAndValue(reqJson, "billType", "必填，请填写出账类型");
-
-
-
     }
 
     @Override
@@ -58,13 +54,10 @@ public class UpdateFeeConfigCmd extends Cmd {
         businessFeeConfig.putAll(reqJson);
         businessFeeConfig.put("isDefault", feeConfigDtos.get(0).getIsDefault());
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
-
         int flag = payFeeConfigV1InnerServiceSMOImpl.updatePayFeeConfig(payFeeConfigPo);
-
         if (flag < 1) {
             throw new CmdException("修改费用项失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

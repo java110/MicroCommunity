@@ -10,6 +10,10 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.parking.ParkingSpaceDto;
+import com.java110.dto.privilege.BasePrivilegeDto;
+import com.java110.dto.user.StaffAppAuthDto;
+import com.java110.dto.user.UserDto;
+import com.java110.dto.visit.VisitSettingDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.dto.wechat.SmallWechatAttrDto;
 import com.java110.dto.visit.VisitDto;
@@ -18,13 +22,17 @@ import com.java110.dto.wechat.Content;
 import com.java110.dto.wechat.Data;
 import com.java110.dto.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.community.*;
+import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.owner.VisitPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +43,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 /**
- * 访客登记审核适配器
+ * 访客推送消息适配器
  *
  * @author fqz
  * @date 2022-04-12
@@ -70,6 +78,18 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMO;
 
+    @Autowired
+    private IPrivilegeInnerServiceSMO privilegeInnerServiceSMO;
+
+    @Autowired
+    private IStaffAppAuthInnerServiceSMO staffAppAuthInnerServiceSMO;
+
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IVisitSettingV1InnerServiceSMO visitSettingV1InnerServiceSMOImpl;
+
     private static Logger logger = LoggerFactory.getLogger(ExamineVisitAdapt.class);
 
     //模板信息推送地址
@@ -100,12 +120,117 @@ public class ExamineVisitAdapt extends DatabusAdaptImpl {
         for (int bVisitIndex = 0; bVisitIndex < businessVisits.size(); bVisitIndex++) {
             JSONObject businessVisit = businessVisits.getJSONObject(bVisitIndex);
             if (!StringUtil.isEmpty(businessVisit.getString("carNum"))) {
-                if (!StringUtil.isEmpty(businessVisit.getString("state")) && businessVisit.getString("state").equals("1")) { //访客记录为审核通过状态
+                //查询访客配置信息
+                VisitSettingDto visitSettingDto = new VisitSettingDto();
+                visitSettingDto.setCommunityId(businessVisit.getString("communityId"));
+                List<VisitSettingDto> visitSettingDtos = visitSettingV1InnerServiceSMOImpl.queryVisitSettings(visitSettingDto);
+                if (visitSettingDtos == null || visitSettingDtos.size() != 1 || StringUtil.isEmpty(visitSettingDtos.get(0).getCarNumWay())
+                        || !visitSettingDtos.get(0).getCarNumWay().equals("Y")) { //访客配置信息不存在，或者访客配置信息里面的车辆不同步，就不推送信息
+                    return;
+                }
+                if (!StringUtil.isEmpty(visitSettingDtos.get(0).getAuditWay()) && visitSettingDtos.get(0).getAuditWay().equals("N")) { //物业审核 Y 是 N 否
                     if (!StringUtil.isEmpty(businessVisit.getString("carState")) &&
-                            (businessVisit.getString("carState").equals("1") || businessVisit.getString("carState").equals("2"))) { //车辆必须为审核通过或审核拒绝状态
-                        sendMessage(business, businessVisit); //给业主推送消息
+                            (businessVisit.getString("carState").equals("0") || businessVisit.getString("carState").equals("3"))) { //不需要流程人审核，车辆状态为待审核或审核中状态时，给员工推送消息
+                        publishMsg(business, businessVisit); //给有预约车审核权限的员工推送消息
+                    }
+                } else { //需要流程人审核
+                    if (!StringUtil.isEmpty(businessVisit.getString("state")) && businessVisit.getString("state").equals("1")) { //访客记录为审核通过状态
+                        if (!StringUtil.isEmpty(businessVisit.getString("carState")) &&
+                                (businessVisit.getString("carState").equals("0") || businessVisit.getString("carState").equals("3"))) { //访客记录通过，车辆状态为待审核或审核中状态时，给员工推送消息
+                            publishMsg(business, businessVisit); //给有预约车审核权限的员工推送消息
+                        }
                     }
                 }
+                if (!StringUtil.isEmpty(businessVisit.getString("carState")) &&
+                        (businessVisit.getString("carState").equals("1") || businessVisit.getString("carState").equals("2"))) { //车辆必须为审核通过或审核拒绝状态
+                    sendMessage(business, businessVisit); //给业主推送消息
+                }
+            }
+        }
+    }
+
+    /**
+     * 给有审核权限的员工推送消息
+     *
+     * @param business
+     * @param businessVisit
+     */
+    private void publishMsg(Business business, JSONObject businessVisit) {
+        VisitDto visitDto = new VisitDto();
+        visitDto.setvId(businessVisit.getString("vId"));
+        //查询访客信息
+        List<VisitDto> visitDtos = visitInnerServiceSMOImpl.queryVisits(visitDto);
+        if (visitDtos == null || visitDtos.size() != 1) {
+            return;
+        }
+        VisitPo visitPo = BeanConvertUtil.covertBean(businessVisit, VisitPo.class);
+        //查询小区信息
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(visitPo.getCommunityId());
+        List<CommunityDto> communityDtos = communityInnerServiceSMO.queryCommunitys(communityDto);
+        Assert.listOnlyOne(communityDtos, "查询小区错误！");
+        //查询公众号配置
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setWeChatType("1100");
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(visitPo.getCommunityId());
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
+            logger.info("未配置微信公众号信息,定时任务执行结束");
+            return;
+        }
+        SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
+        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
+        smallWechatAttrDto.setCommunityId(visitPo.getCommunityId());
+        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
+        smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_PROCESS_TEMPLATE);
+        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
+        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
+            logger.info("未配置微信公众号消息模板");
+            return;
+        }
+        String templateId = smallWechatAttrDtos.get(0).getValue();
+        String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
+        if (StringUtil.isEmpty(accessToken)) {
+            logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
+            return;
+        }
+        // 根据特定权限查询 有该权限的 员工(预约车审核权限)
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/reviewVisitJurisdiction");
+        List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
+        String url = sendMsgUrl + accessToken;
+        //查询业主信息
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setOwnerId(visitPo.getOwnerId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        Assert.listOnlyOne(ownerDtos, "查询业主信息错误！");
+        for (UserDto userDto : userDtos) {
+            //根据 userId 查询到openId
+            StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
+            staffAppAuthDto.setStaffId(userDto.getUserId());
+            staffAppAuthDto.setAppType("WECHAT");
+            List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
+            if (staffAppAuthDtos != null && staffAppAuthDtos.size() > 0) {
+                String openId = staffAppAuthDtos.get(0).getOpenId();
+                Data data = new Data();
+                PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+                templateMessage.setTemplate_id(templateId);
+                templateMessage.setTouser(openId);
+                data.setFirst(new Content("访客预约车辆，登记信息如下："));
+                data.setKeyword1(new Content(visitPo.getvId()));
+                data.setKeyword2(new Content("访客预约车辆-审核"));
+                data.setKeyword3(new Content(ownerDtos.get(0).getName()));
+                data.setKeyword4(new Content(ownerDtos.get(0).getName() + "提交的访客预约车辆-" + visitPo.getCarNum() + "，需要进行车辆审核。"));
+                data.setKeyword5(new Content("待审核"));
+                data.setRemark(new Content("请及时处理！"));
+                templateMessage.setData(data);
+                //获取员工公众号地址
+                String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
+                templateMessage.setUrl(wechatUrl);
+                logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+                ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+                logger.info("微信模板返回内容:{}", responseEntity);
             }
         }
     }

@@ -1036,6 +1036,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
                 }
+                /*if (!StringUtil.isEmpty(feeDto.getPaymentCycle())) {
+                    cycle = new BigDecimal(feeDto.getPaymentCycle());
+                }*/
+                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
+                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
+                }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
                 } else {
@@ -1797,7 +1803,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
             double mulMonth = 0.0;
-            mulMonth = dayCompare(startDate, billEndTime);
+            mulMonth = dayCompare(endDate, billEndTime);
 
             // 月份/ 周期 = 轮数（向上取整）
             double round = 0.0;
@@ -1807,7 +1813,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 round = Math.floor(mulMonth / paymentCycle);
             }
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-            targetEndDate = getTargetEndTime(round * paymentCycle, startDate);//目标结束时间
+            targetEndDate = getTargetEndTime(round * paymentCycle, endDate);//目标结束时间
             //费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
             if (maxEndTime.getTime() < targetEndDate.getTime()) {
                 targetEndDate = maxEndTime;

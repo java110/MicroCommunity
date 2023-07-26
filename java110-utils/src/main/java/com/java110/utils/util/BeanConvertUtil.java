@@ -69,6 +69,10 @@ public final class BeanConvertUtil {
      */
     public static <T1, T2> T2 covertBean(T1 orgBean, T2 dstBean) {
 
+        if(orgBean == null){
+            return dstBean;
+        }
+
         try {
             //BeanUtils.copyProperties(dstBean, orgBean);
             if (orgBean instanceof Map) {

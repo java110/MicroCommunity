@@ -3,6 +3,7 @@ package com.java110.job.adapt.payment.receipt;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.fee.FeeDetailDto;
@@ -73,6 +74,8 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
 
+    //键(退费收据开关)
+    public static final String REFUND_RECEIPT_SWITCH = "REFUND_RECEIPT_SWITCH";
 
     @Autowired
     private IPrinterRuleFeeV1InnerServiceSMO printerRuleFeeV1InnerServiceSMOImpl;
@@ -146,8 +149,10 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeDto = feeDtos.get(0);
             //查询业主信息
             OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
+            //获取小区配置里退费收据开关(open开;off关)
+            String refundReceiptSwitch = CommunitySettingFactory.getValue(payFeeDetailPo.getCommunityId(), REFUND_RECEIPT_SWITCH);
             // if received amount lt zero
-            if (businessPayFeeDetail.containsKey("receivedAmount")
+            if (!StringUtil.isEmpty(refundReceiptSwitch) && refundReceiptSwitch.equals("off") && businessPayFeeDetail.containsKey("receivedAmount")
                     && businessPayFeeDetail.getDoubleValue("receivedAmount") < 0) {
                 return;
             }
