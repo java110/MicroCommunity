@@ -29,6 +29,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFee.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;
+import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterV1InnerServiceSMO;
@@ -99,6 +100,9 @@ public class SaveMeterWaterCmd extends Cmd {
     private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
 
     @Autowired
+    private IPayFeeMonth payFeeMonthImpl;
+
+    @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Override
@@ -114,7 +118,7 @@ public class SaveMeterWaterCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "meterType", "请求报文中未包含抄表类型");
 
-        if(reqJson.getDoubleValue("curDegrees") < reqJson.getDoubleValue("preDegrees")){
+        if (reqJson.getDoubleValue("curDegrees") < reqJson.getDoubleValue("preDegrees")) {
             throw new CmdException("当前读数小于上期读数");
         }
     }
@@ -227,6 +231,8 @@ public class SaveMeterWaterCmd extends Cmd {
                 }
             }
             reqJson.put("feeId", payFeePo.getFeeId());
+
+            payFeeMonthImpl.doGeneratorOrRefreshFeeMonth(payFeePo.getFeeId(), reqJson.getString("communityId"));
             addMeterWater(reqJson);
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
