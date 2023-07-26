@@ -64,7 +64,7 @@
         mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,mw.price
         mwPrice,
         pfa2.`value` ownerTel, pfa3.`value` ownerName,br.room_area roomArea,
-        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,br.room_rent roomRent
+        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,br.room_rent roomRent,pfc.prepayment_period prepaymentPeriod
         from pay_fee t
         INNER JOIN pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
