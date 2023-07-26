@@ -139,7 +139,7 @@
         mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,pfa1.`value` maxEndTime,mw.price
         mwPrice,
         pfa2.`value` ownerName,t.batch_id,t.batch_id batchId,
-        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units
+        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,pfc.prepayment_period prepaymentPeriod
         from pay_fee t
         INNER join pay_fee_config pfc on t.config_id = pfc.config_id and
         pfc.status_cd = '0'

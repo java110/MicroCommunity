@@ -951,44 +951,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         return getFeePrice(feeDto, null);
     }
 
-    /**
-     * //计算周期
-     * //                    Map<String, Object> cycleResults = dateDiff(feeDto.getEndTime(), feeDto.getCustEndTime());
-     * //                    //月份大于0
-     * //                    Integer months = Integer.valueOf(cycleResults.get("months").toString());
-     * //                    Integer days = Integer.valueOf(cycleResults.get("days").toString());
-     * //                    Integer startMonthDays = Integer.valueOf(cycleResults.get("startMonthDays").toString());
-     * //                    Integer endMonthDays = Integer.valueOf(cycleResults.get("endMonthDays").toString());
-     * //                    String isOneMonth = cycleResults.get("isOneMonth").toString();
-     * //                    //整数月
-     * //                    if (months > 0 && days == 0) {
-     * //                        BigDecimal cycle = new BigDecimal(months);
-     * //                        feeTotalPrice = (squarePrice.multiply(builtUpArea).add(additionalAmount)).multiply(cycle).setScale(3, BigDecimal.ROUND_HALF_UP);
-     * //                    }
-     * //                    //几个月几天   （单价*面积+附加费）*月份+((单价*面积+附加费)/总天数)*实际天数
-     * //                    if (months > 0 && days > 0) {
-     * //                        BigDecimal cycle = new BigDecimal(months);
-     * //                        BigDecimal endMonthDayss = new BigDecimal(endMonthDays);
-     * //                        BigDecimal dayss = new BigDecimal(days);
-     * //                        BigDecimal monthPrice = squarePrice.multiply(builtUpArea).add(additionalAmount);
-     * //                        feeTotalPrice = (monthPrice).multiply(cycle).add(monthPrice.divide(endMonthDayss).multiply(dayss)).setScale(3, BigDecimal.ROUND_HALF_UP);
-     * //                    }
-     * //                    //跨月份 不足一月  ((单价*面积+附加费)/开始月份总天数)*实际天数+((单价*面积+附加费)/结束月份总天数)*实际天数
-     * //                    if (months == 0 && days > 0 && "true".equals(isOneMonth)) {
-     * //                        BigDecimal startEndOfMonth = new BigDecimal(cycleResults.get("startEndOfMonth").toString());
-     * //                        BigDecimal endBeginningOfMonth = new BigDecimal(cycleResults.get("endBeginningOfMonth").toString());
-     * //                        BigDecimal endMonthDayss = new BigDecimal(endMonthDays);
-     * //                        BigDecimal startMonthDayss = new BigDecimal(startMonthDays);
-     * //                        BigDecimal monthPrice = squarePrice.multiply(builtUpArea).add(additionalAmount);
-     * //                        feeTotalPrice = monthPrice.divide(startMonthDayss, 4, BigDecimal.ROUND_HALF_UP).multiply(startEndOfMonth).add(monthPrice.divide(endMonthDayss, 4, BigDecimal.ROUND_HALF_UP).multiply(endBeginningOfMonth)).setScale(3, BigDecimal.ROUND_HALF_UP);
-     * //                    }
-     * //                    //不跨月份 不足一月  (单价*面积+附加费/开始月份总天数)*实际天数
-     * //                    if (months == 0 && days > 0 && "false".equals(isOneMonth)) {
-     * //                        BigDecimal cycle = new BigDecimal(days);
-     * //                        BigDecimal startMonthDayss = new BigDecimal(startMonthDays);
-     * //                        BigDecimal monthPrice = squarePrice.multiply(builtUpArea).add(additionalAmount);
-     * //                        feeTotalPrice = monthPrice.divide(startMonthDayss, 4, BigDecimal.ROUND_HALF_UP).multiply(cycle).setScale(3, BigDecimal.ROUND_HALF_UP);
-     * //                    }
+     /*
      *
      * @param feeDto
      * @param roomDto
@@ -1035,12 +998,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 BigDecimal cycle = null;
                 if (!StringUtil.isEmpty(feeDto.getCycle())) {
                     cycle = new BigDecimal(feeDto.getCycle());
-                }
-                /*if (!StringUtil.isEmpty(feeDto.getPaymentCycle())) {
-                    cycle = new BigDecimal(feeDto.getPaymentCycle());
-                }*/
-                if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-                    cycle = new BigDecimal(dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime())));
                 }
                 if (cycle == null) {
                     feeTotalPrice = new BigDecimal(0);
@@ -1733,14 +1690,23 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         double oweMonth = 0.0;
 
         Map<String, Object> targetEndDateAndOweMonth = new HashMap<>();
-        //判断当前费用是否已结束
+        //todo 判断当前费用是否已结束
         if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
             targetEndDate = feeDto.getEndTime();
             targetEndDateAndOweMonth.put("oweMonth", oweMonth);
             targetEndDateAndOweMonth.put("targetEndDate", targetEndDate);
             return targetEndDateAndOweMonth;
         }
-        //当前费用为一次性费用
+
+        //todo 考虑费用项 费用提前生成
+        Calendar preEndTimeCal = Calendar.getInstance();
+        preEndTimeCal.setTime(feeDto.getEndTime());
+        if(StringUtil.isNumber(feeDto.getPrepaymentPeriod())) {
+            preEndTimeCal.add(Calendar.DAY_OF_MONTH, Integer.parseInt(feeDto.getPrepaymentPeriod()) * -1);
+        }
+        Date preEndTime = preEndTimeCal.getTime();
+
+        //todo 当前费用为一次性费用
         Date maxEndTime = feeDto.getConfigEndTime();
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
             //先取 deadlineTime
@@ -1784,7 +1750,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 targetEndDate = maxEndTime;
             }
             //说明欠费
-            if (endDate.getTime() < targetEndDate.getTime()) {
+            if (preEndTime.getTime() < targetEndDate.getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
                 oweMonth = dayCompare(endDate, targetEndDate);
             }
@@ -1819,7 +1785,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 targetEndDate = maxEndTime;
             }
             //说明欠费
-            if (endDate.getTime() < targetEndDate.getTime()) {
+            if (preEndTime.getTime() < targetEndDate.getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
                 oweMonth = dayCompare(endDate, targetEndDate);
             }

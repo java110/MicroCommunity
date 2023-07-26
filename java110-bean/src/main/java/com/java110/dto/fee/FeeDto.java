@@ -159,6 +159,7 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String deleteFlag;
 
+    private String prepaymentPeriod;
     public String getAmount() {
         return amount;
     }
@@ -776,5 +777,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setDeleteFlag(String deleteFlag) {
         this.deleteFlag = deleteFlag;
+    }
+
+    public String getPrepaymentPeriod() {
+        return prepaymentPeriod;
+    }
+
+    public void setPrepaymentPeriod(String prepaymentPeriod) {
+        this.prepaymentPeriod = prepaymentPeriod;
     }
 }
