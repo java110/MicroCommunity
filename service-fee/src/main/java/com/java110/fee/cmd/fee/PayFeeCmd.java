@@ -244,7 +244,7 @@ public class PayFeeCmd extends Cmd {
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
             payFeeDetailPo.setReceivableAmount(feeDetail.getString("totalFeePrice"));
             //todo 缓存收据编号
-            CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
+            CommonCache.setValue(payFeeDetailPo.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
 
             //todo 判断是否有赠送规则
             hasDiscount(paramObj, payFeePo, payFeeDetailPo);
@@ -1070,6 +1070,11 @@ public class PayFeeCmd extends Cmd {
             return;
         }
 
+        //todo 如果是同一天不创建
+        if (DateUtil.getFormatTimeStringB(endTime).equals(reqJson.getString("customStartTime"))) {
+            return;
+        }
+
         FeeDto feeInfo = (FeeDto) reqJson.get("feeInfo");
         String payObjNameRemark = "房屋";
         if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeInfo.getPayerObjType())) {
@@ -1135,7 +1140,7 @@ public class PayFeeCmd extends Cmd {
             tmpFeeAttrPos.add(tmpFeeAttrPo);
         }
         //todo 没有结束时间时
-        if(!hasDeadLineTime){
+        if (!hasDeadLineTime) {
             tmpFeeAttrPo = new FeeAttrPo();
             tmpFeeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
             tmpFeeAttrPo.setFeeId(tmpPayFeePo.getFeeId());
