@@ -351,6 +351,9 @@ public class AppController extends BaseController {
             if ("userId".equals(key)) {
                 headers.put("user_id", claims.get(key));
             }
+            if("userName".equals(key)){
+                headers.put("userName", "-");
+            }
             headers.put(key, claims.get(key));
         }
     }
