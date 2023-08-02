@@ -163,7 +163,7 @@ public class RepairDispatchCmd extends Cmd {
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(reqJson.getString("repairId"));
         repairUserDto.setCommunityId(reqJson.getString("communityId"));
-        repairUserDto.setState(RepairUserDto.STATE_DOING);
+        //repairUserDto.setState(RepairUserDto.STATE_DOING);
         repairUserDto.setStaffId(reqJson.getString("userId"));
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
         if (repairUserDtos != null && repairUserDtos.size() != 1) {
