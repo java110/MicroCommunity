@@ -31,7 +31,7 @@
         rstName,
         rs.is_fixed,rs.is_fixed isFixed,td2.name isFixedName
         from resource_store_times t
-        inner join resource_store rs on t.res_code = rs.res_code and rs.status_cd = '0'
+        inner join resource_store rs on t.res_code = rs.res_code and rs.status_cd = '0' and t.sh_id = rs.sh_id
         left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_type rst1 on rs.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
         left join resource_store_specification rss on rs.rss_id = rss.rss_id and rss.status_cd = '0'
