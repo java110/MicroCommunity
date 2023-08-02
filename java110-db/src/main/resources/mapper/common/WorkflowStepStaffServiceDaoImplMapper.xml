@@ -81,8 +81,10 @@
     <select id="getWorkflowStepStaffInfo" parameterType="Map" resultType="Map">
         select t.wss_id,t.wss_id wssId,t.step_id,t.step_id stepId,t.staff_name,t.staff_name
         staffName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.community_id,t.community_id
-        communityId,t.staff_id,t.staff_id staffId,t.staff_role,t.staff_role staffRole,t.flow_type,t.flow_type flowType
+        communityId,t.staff_id,t.staff_id staffId,t.staff_role,t.staff_role staffRole,t.flow_type,t.flow_type flowType,w.process_definition_key processDefinitionKey
         from workflow_step_staff t
+        left JOIN workflow_step ws on t.step_id = ws.step_id and ws.status_cd = '0'
+        left join workflow w on ws.flow_id = w.flow_id and w.status_cd = '0'
         where 1 =1
         <if test="wssId !=null and wssId != ''">
             and t.wss_id= #{wssId}

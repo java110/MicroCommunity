@@ -60,6 +60,10 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     //调拨源仓库
     private String shId;
 
+    private String storeManager;
+
+    private String processDefinitionKey;
+
     public String getApplyId() {
         return applyId;
     }
@@ -282,5 +286,21 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
 
     public void setNextUserId(String nextUserId) {
         this.nextUserId = nextUserId;
+    }
+
+    public String getStoreManager() {
+        return storeManager;
+    }
+
+    public void setStoreManager(String storeManager) {
+        this.storeManager = storeManager;
+    }
+
+    public String getProcessDefinitionKey() {
+        return processDefinitionKey;
+    }
+
+    public void setProcessDefinitionKey(String processDefinitionKey) {
+        this.processDefinitionKey = processDefinitionKey;
     }
 }
