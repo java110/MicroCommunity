@@ -172,26 +172,11 @@ public class RepairDispatchCmd extends Cmd {
             context.setResponseEntity(responseEntity);
             return;
         }
-//        String ruId = repairUserDtos.get(0).getRuId();
-//        RepairUserPo repairUserPo = new RepairUserPo();
-//        repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
-//        repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-//        repairUserPo.setState(RepairUserDto.STATE_BACK);
-//        repairUserPo.setContext(reqJson.getString("context"));
-//        repairUserInnerServiceSMOImpl.updateRepairUser(repairUserPo);
-        //处理人信息
-//        repairUserPo = new RepairUserPo();
-//        repairUserPo.setRuId("-1");
-//        repairUserPo.setState(RepairUserDto.STATE_DOING);
-//        repairUserPo.setRepairId(reqJson.getString("repairId"));
-//        repairUserPo.setStaffId(reqJson.getString("staffId"));
-//        repairUserPo.setStaffName(reqJson.getString("staffName"));
         RepairUserDto repair = new RepairUserDto();
         repair.setRepairId(reqJson.getString("repairId"));
         repair.setStaffId(reqJson.getString("staffId"));
         repair.setCommunityId(reqJson.getString("communityId"));
-//        repair.setRuId(repairUserDtos.get(0).getPreRuId());
-        repair.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE, RepairUserDto.STATE_STOP});
+        repair.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE, RepairUserDto.STATE_STOP,RepairUserDto.STATE_EVALUATE});
         List<RepairUserDto> repairUsers = repairUserInnerServiceSMOImpl.queryRepairUsers(repair);
         if (repairUsers == null || repairUsers.size() < 1) { //指派的不能退单
             if (RepairDto.REPAIR_WAY_GRABBING.equals(repairDtos.get(0).getRepairWay())
