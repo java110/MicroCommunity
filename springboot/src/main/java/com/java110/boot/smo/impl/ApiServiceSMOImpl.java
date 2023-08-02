@@ -557,6 +557,10 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         HttpHeaders header = new HttpHeaders();
         //todo 对头信息重新包装
         for (String key : dataFlow.getRequestCurrentHeaders().keySet()) {
+            if("userName".equals(key) || "user-name".equals(key)){
+                header.add(key, "-");
+                continue;
+            }
             header.add(key, reqHeader.get(key));
         }
         //todo 用户信息再次包装
