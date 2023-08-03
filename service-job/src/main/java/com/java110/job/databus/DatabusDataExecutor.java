@@ -78,7 +78,7 @@ public class DatabusDataExecutor implements Runnable {
         try {
             futureTask.get(DEFAULT_TIMEOUT_TIME, TimeUnit.MILLISECONDS);
         } catch (InterruptedException | ExecutionException |
-                 TimeoutException e) {//e.printStackTrace();
+                 TimeoutException e) {
             futureTask.cancel(true);
         }
         executorService.shutdown();
