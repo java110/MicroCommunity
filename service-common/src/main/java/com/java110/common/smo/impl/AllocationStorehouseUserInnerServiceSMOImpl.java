@@ -361,7 +361,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         variables.put("currentUserId", allocationStorehouseApplyDto.getCurrentUserId());
         variables.put("flag", "1200".equals(allocationStorehouseApplyDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", allocationStorehouseApplyDto.getStartUserId());
-        variables.put("nextStaffId", allocationStorehouseApplyDto.getNextUserId());
+        variables.put("nextUserId", allocationStorehouseApplyDto.getNextUserId());
         taskService.complete(allocationStorehouseApplyDto.getTaskId(), variables);
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
