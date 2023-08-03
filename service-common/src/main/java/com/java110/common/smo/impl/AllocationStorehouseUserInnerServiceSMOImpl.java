@@ -3,7 +3,7 @@ package com.java110.common.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.store.StorehouseDto;
 import com.java110.dto.oaWorkflow.WorkflowDto;
@@ -115,7 +115,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
                 machineRecordPo.setApplyOrderId(businessKey);
                 machineRecordPo.setPurchaseUserId(actRuTaskUserId);
                 //传送databus
-                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                dataBusInnerServiceSMOImpl.databusData(DatabusDataDto.getInstance(
                         BusinessTypeConstant.BUSINESS_TYPE_DATABUS_ALLOCATION_STOREHOUSE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
             }
         }
@@ -361,6 +361,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         variables.put("currentUserId", allocationStorehouseApplyDto.getCurrentUserId());
         variables.put("flag", "1200".equals(allocationStorehouseApplyDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", allocationStorehouseApplyDto.getStartUserId());
+        variables.put("nextStaffId", allocationStorehouseApplyDto.getNextUserId());
         taskService.complete(allocationStorehouseApplyDto.getTaskId(), variables);
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
@@ -384,7 +385,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
                 machineRecordPo.setNoticeState(noticeState);
                 machineRecordPo.setAuditMessage(auditMessage);
                 //传送databus
-                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                dataBusInnerServiceSMOImpl.databusData(DatabusDataDto.getInstance(
                         BusinessTypeConstant.BUSINESS_TYPE_DATABUS_ALLOCATION_STOREHOUSE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
             }
         }

@@ -3,7 +3,7 @@ package com.java110.common.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.audit.AuditMessageDto;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.oaWorkflow.WorkflowDto;
@@ -105,7 +105,7 @@ public class GoodCollectionUserInnerServiceSMOImpl extends BaseServiceSMO implem
                 machineRecordPo.setPurchaseUserId(actRuTaskUserId);
                 machineRecordPo.setResOrderType(resOrderType);
                 //传送databus
-                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                dataBusInnerServiceSMOImpl.databusData(DatabusDataDto.getInstance(
                         BusinessTypeConstant.BUSINESS_TYPE_DATABUS_PURCHASE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
             }
         }

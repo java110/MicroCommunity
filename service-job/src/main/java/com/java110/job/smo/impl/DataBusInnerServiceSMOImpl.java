@@ -3,14 +3,16 @@ package com.java110.job.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.dto.data.DatabusQueueDataDto;
 import com.java110.dto.system.BusinessDatabusDto;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.fee.TempCarPayOrderDto;
 import com.java110.dto.system.Business;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.job.adapt.IDatabusAdapt;
+import com.java110.job.databus.DatabusDataQueue;
 import com.java110.utils.cache.DatabusCache;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.vo.ResultVo;
@@ -19,6 +21,7 @@ import com.java110.core.log.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +51,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
         for (Business business : businesses) {
             doExchange(business, businesses, databusDtos);
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -57,6 +60,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
         return databusAdaptImpl.openDoor(reqJson);
 
     }
+
     @Override
     public ResultVo closeDoor(@RequestBody JSONObject reqJson) {
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
@@ -88,8 +92,6 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_OPEN_DOOR_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.heartbeatVideo(reqJson);
     }
-
-
 
 
     @Override
@@ -145,23 +147,37 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     /**
      * 门禁开门记录
      *
-     * @param customBusinessDatabusDto
+     * @param databusDataDto
      * @return
      */
     @Override
-    public void customExchange(@RequestBody CustomBusinessDatabusDto customBusinessDatabusDto) {
-        IDatabusAdapt databusAdaptImpl = null;
+    public boolean databusData(@RequestBody DatabusDataDto databusDataDto) {
+        // IDatabusAdapt databusAdaptImpl = null;
         List<BusinessDatabusDto> databusDtos = DatabusCache.getDatabuss();
+        Business business = null;
+        List<Business> businesses = null;
         for (BusinessDatabusDto databusDto : databusDtos) {
             try {
-                if (customBusinessDatabusDto.getBusinessTypeCd().equals(databusDto.getBusinessTypeCd())) {
-                    databusAdaptImpl = ApplicationContextFactory.getBean(databusDto.getBeanName(), IDatabusAdapt.class);
-                    databusAdaptImpl.customExchange(customBusinessDatabusDto);
+                if (!databusDataDto.getBusinessTypeCd().equals(databusDto.getBusinessTypeCd())) {
+                    continue;
                 }
+                businesses = new ArrayList<>();
+                business = new Business();
+                business.setData(databusDataDto.getData());
+                business.setBusinessTypeCd(databusDataDto.getBusinessTypeCd());
+                businesses.add(business);
+                //todo 存放队列中
+                DatabusDataQueue.addMsg(new DatabusQueueDataDto(databusDto.getBeanName(), business, businesses));
+
+//                databusAdaptImpl = ApplicationContextFactory.getBean(databusDto.getBeanName(), IDatabusAdapt.class);
+//                databusAdaptImpl.customExchange(customBusinessDatabusDto);
             } catch (Exception e) {
                 logger.error("执行databus失败", e);
             }
         }
+
+        return true;
+
     }
 
 
@@ -173,13 +189,16 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
      * @param databusDtos databus
      */
     private void doExchange(Business business, List<Business> businesses, List<BusinessDatabusDto> databusDtos) {
-        IDatabusAdapt databusAdaptImpl = null;
+        // IDatabusAdapt databusAdaptImpl = null;
         for (BusinessDatabusDto databusDto : databusDtos) {
             try {
-                if (business.getBusinessTypeCd().equals(databusDto.getBusinessTypeCd())) {
-                    databusAdaptImpl = ApplicationContextFactory.getBean(databusDto.getBeanName(), IDatabusAdapt.class);
-                    databusAdaptImpl.execute(business, businesses);
+                if (!business.getBusinessTypeCd().equals(databusDto.getBusinessTypeCd())) {
+                    continue;
                 }
+                //todo 存放队列中
+                DatabusDataQueue.addMsg(new DatabusQueueDataDto(databusDto.getBeanName(), business, businesses));
+//                    databusAdaptImpl = ApplicationContextFactory.getBean(databusDto.getBeanName(), IDatabusAdapt.class);
+//                    databusAdaptImpl.execute(business, businesses);
             } catch (Exception e) {
                 logger.error("执行databus失败", e);
             }

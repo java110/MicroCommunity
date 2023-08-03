@@ -3,8 +3,9 @@ package com.java110.job.adapt.purchase.purchaseApply;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.purchase.PurchaseApplyDto;
+import com.java110.dto.system.Business;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.dto.wechat.SmallWechatAttrDto;
 import com.java110.dto.user.StaffAppAuthDto;
@@ -59,8 +60,8 @@ public class MachinePurchaseApplyAdapt extends DatabusAdaptImpl {
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 
     @Override
-    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto) {
-        JSONObject data = customBusinessDatabusDto.getData();
+    public void execute(Business business, List<Business> businesses) {
+        JSONObject data = business.getData();
         //获取申请id
         String applyOrderId = data.getString("applyOrderId");
         //获取下级处理人id
