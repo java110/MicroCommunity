@@ -115,17 +115,17 @@ public class SaveSmallWechatCmd extends Cmd {
         }
 
         //模板ID
-        smallWechatAttrPo = new SmallWechatAttrPo();
-        smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
-        smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_OWE_FEE_TEMPLATE);
-        smallWechatAttrPo.setValue("这里请填写物业缴费通知模板ID");
-        smallWechatAttrPo.setWechatId(wechatId);
-        flag = smallWechatAttrV1InnerServiceSMOImpl.saveSmallWechatAttr(smallWechatAttrPo);
-
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
-        }
+//        smallWechatAttrPo = new SmallWechatAttrPo();
+//        smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+//        smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+//        smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_OWE_FEE_TEMPLATE);
+//        smallWechatAttrPo.setValue("这里请填写物业缴费通知模板ID");
+//        smallWechatAttrPo.setWechatId(wechatId);
+//        flag = smallWechatAttrV1InnerServiceSMOImpl.saveSmallWechatAttr(smallWechatAttrPo);
+//
+//        if (flag < 1) {
+//            throw new CmdException("保存数据失败");
+//        }
         //模板ID
         smallWechatAttrPo = new SmallWechatAttrPo();
         smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
@@ -139,17 +139,17 @@ public class SaveSmallWechatCmd extends Cmd {
             throw new CmdException("保存数据失败");
         }
         //业主缴费成功通知--模板ID
-        smallWechatAttrPo = new SmallWechatAttrPo();
-        smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
-        smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_SUCCESS_TEMPLATE);
-        smallWechatAttrPo.setValue("这里请填写业主缴费成功通知模板ID");
-        smallWechatAttrPo.setWechatId(wechatId);
-        flag = smallWechatAttrV1InnerServiceSMOImpl.saveSmallWechatAttr(smallWechatAttrPo);
-
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
-        }
+//        smallWechatAttrPo = new SmallWechatAttrPo();
+//        smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+//        smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+//        smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_SUCCESS_TEMPLATE);
+//        smallWechatAttrPo.setValue("这里请填写业主缴费成功通知模板ID");
+//        smallWechatAttrPo.setWechatId(wechatId);
+//        flag = smallWechatAttrV1InnerServiceSMOImpl.saveSmallWechatAttr(smallWechatAttrPo);
+//
+//        if (flag < 1) {
+//            throw new CmdException("保存数据失败");
+//        }
         //业主费用到期通知--模板ID
         smallWechatAttrPo = new SmallWechatAttrPo();
         smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
