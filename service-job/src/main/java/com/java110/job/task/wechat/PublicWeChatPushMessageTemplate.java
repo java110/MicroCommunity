@@ -1,6 +1,7 @@
 package com.java110.job.task.wechat;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityDto;
@@ -18,6 +19,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
@@ -87,48 +89,10 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
 
     private void publishMsg(TaskDto taskDto, CommunityDto communityDto) throws Exception {
 
-//
-//        String templateId = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.KEY_PROPERTY_FEE_TEMPLATE_ID);
-//
-//        templateId = StringUtil.isEmpty(templateId) ? DEFAULT_TEMPLATE_ID : templateId;
-
-        //查询公众号配置
-        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setWeChatType("1100");
-        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
-        smallWeChatDto.setObjId(communityDto.getCommunityId());
-        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-
-        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
-            logger.error("未配置微信公众号信息,定时任务执行结束");
-            return;
-        }
-        SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
-
-
-        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
-        smallWechatAttrDto.setCommunityId(communityDto.getCommunityId());
-        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
-        smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_OWE_FEE_TEMPLATE);
-        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
-
-        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
-            logger.error("未配置微信公众号消息模板");
-            return;
-        }
-
-        String templateId = smallWechatAttrDtos.get(0).getValue();
-
-        String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
-
-        if (StringUtil.isEmpty(accessToken)) {
-            logger.error("推送微信模板,获取accessToken失败:{}", accessToken);
-            return;
-        }
 
         //根据小区id查询业主与公众号绑定信息
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setCommunityId(weChatDto.getObjId());
+        ownerAppUserDto.setCommunityId(communityDto.getCommunityId());
         ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
@@ -148,7 +112,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         String[] memberIds = memberIdList.toArray(new String[memberIdList.size()]);
         //查询欠费信息
         BillOweFeeDto billOweFeeDto = new BillOweFeeDto();
-        billOweFeeDto.setCommunityId(weChatDto.getObjId());
+        billOweFeeDto.setCommunityId(communityDto.getCommunityId());
         billOweFeeDto.setOwnerIds(memberIds);
         billOweFeeDto.setState("1000");
         billOweFeeDto.setCurBill("T");
@@ -158,55 +122,36 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         if (StringUtil.isEmpty(sendTemplate)) {
             sendTemplate = sendMsgUrl;
         }
-        String url = sendTemplate + accessToken;
 
-        String oweRoomUrl = UrlCache.getOwnerUrl()+MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
-        String oweCarUrl = UrlCache.getOwnerUrl()+MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
-        Miniprogram miniprogram = null;
-        if (oweRoomUrl.contains("@@")) {
-            miniprogram = new Miniprogram();
-            miniprogram.setAppid(oweRoomUrl.split("@@")[0]);
-        }
-        //车辆费用
-        if (oweCarUrl.contains("@@")) {
-            miniprogram = new Miniprogram();
-            miniprogram.setAppid(oweCarUrl.split("@@")[0]);
-        }
+        String oweRoomUrl = UrlCache.getOwnerUrl() + MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
+        String oweCarUrl = UrlCache.getOwnerUrl() + MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
+//        Miniprogram miniprogram = null;
+//        if (oweRoomUrl.contains("@@")) {
+//            miniprogram = new Miniprogram();
+//            miniprogram.setAppid(oweRoomUrl.split("@@")[0]);
+//        }
+//        //车辆费用
+//        if (oweCarUrl.contains("@@")) {
+//            miniprogram = new Miniprogram();
+//            miniprogram.setAppid(oweCarUrl.split("@@")[0]);
+//        }
 
         String oweUrl = "";
+        JSONObject content = null;
         for (BillOweFeeDto fee : billOweFeeDtos) {
             oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(fee.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
             for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
                 try {
-                    if (fee.getOwnerId().equals(appUserDto.getMemberId())) {
-                        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(fee.getFeeEndTime());
-                        Calendar now = Calendar.getInstance();
-                        now.setTime(date);
-//                    int year = now.get(Calendar.YEAR);
-//                    int month = now.get(Calendar.MONTH);
-                        Data data = new Data();
-                        PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-                        templateMessage.setTemplate_id(templateId);
-                        templateMessage.setTouser(appUserDto.getOpenId());
-                        /*data.setFirst(new Content("物业费缴费提醒"));*/
-                        data.setFirst(new Content(fee.getFeeTypeName() + "提醒"));
-                        data.setKeyword1(new Content(fee.getPayerObjName()));
-                        data.setKeyword2(new Content(fee.getBillAmountOwed()));
-                        data.setKeyword3(new Content(DateUtil.dateTimeToDate(fee.getFeeEndTime()) + "至" + DateUtil.dateTimeToDate(fee.getDeadlineTime())));
-                        data.setRemark(new Content("请您及时缴费,如有疑问请联系相关物业人员"));
-                        if (!StringUtil.isEmpty(oweUrl)) {
-                            if (miniprogram == null) {
-                                templateMessage.setUrl(oweUrl + fee.getPayObjId() + "&wAppId=" + weChatDto.getAppId());
-                            } else {
-                                miniprogram.setPagepath(oweUrl.split("@@")[1] + fee.getPayObjId() + "&wAppId=" + weChatDto.getAppId());
-                                templateMessage.setMiniprogram(miniprogram);
-                            }
-                        }
-                        templateMessage.setData(data);
-                        logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-                        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-                        logger.info("微信模板返回内容:{}", responseEntity);
+                    if (!fee.getOwnerId().equals(appUserDto.getMemberId())) {
+                        continue;
                     }
+                    content = new JSONObject();
+                    content.put("feeTypeName", fee.getFeeTypeName());
+                    content.put("payerObjName", fee.getPayerObjName());
+                    content.put("billAmountOwed", fee.getBillAmountOwed());
+                    content.put("date", DateUtil.dateTimeToDate(fee.getFeeEndTime()) + "~" + DateUtil.dateTimeToDate(fee.getDeadlineTime()));
+                    content.put("url",oweUrl);
+                    MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), appUserDto.getUserId(), content);
                 } catch (Exception e) {
                     logger.error("推送账单异常", e);
                 }

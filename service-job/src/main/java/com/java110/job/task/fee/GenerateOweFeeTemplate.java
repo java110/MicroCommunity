@@ -99,7 +99,6 @@ public class GenerateOweFeeTemplate extends TaskSystemQuartz {
 
 
         //删除无用数据
-
         feeDataFiltering(communityDto.getCommunityId());
 
         //查询费用项

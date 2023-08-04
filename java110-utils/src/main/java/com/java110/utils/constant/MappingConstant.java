@@ -6,6 +6,8 @@ package com.java110.utils.constant;
  */
 public final class MappingConstant {
 
+
+
     private MappingConstant() {
 
     }
@@ -16,6 +18,9 @@ public final class MappingConstant {
 
     // 短信配置
     public static final String SMS_DOMAIN = "SMS_DOMAIN";
+
+    // 微信配置
+    public static final String WECHAT_DOMAIN = "WECHAT";
 
     // 存储配置
     public static final String FILE_DOMAIN = "FILE_DOMAIN";

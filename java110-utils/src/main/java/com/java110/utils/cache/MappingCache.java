@@ -65,12 +65,16 @@ public class MappingCache extends BaseCache {
     }
 
     public static Mapping getMapping(String key) {
+        return getMapping(DomainContant.COMMON_DOMAIN,key);
+    }
+
+    public static Mapping getMapping(String domain,String key) {
         Jedis redis = null;
         long startTime = DateUtil.getCurrentDate().getTime();
 
         try {
             redis = getJedis();
-            Object obj = SerializeUtil.unserialize(redis.get((DomainContant.COMMON_DOMAIN + key + _SUFFIX_MAPPING).getBytes()));
+            Object obj = SerializeUtil.unserialize(redis.get((domain + key + _SUFFIX_MAPPING).getBytes()));
             if (obj instanceof Mapping) {
                 return (Mapping) obj;
             }

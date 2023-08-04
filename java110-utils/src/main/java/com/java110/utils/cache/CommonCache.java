@@ -21,6 +21,9 @@ public class CommonCache extends BaseCache {
     //支付默认回话
     public final static int PAY_DEFAULT_EXPIRE_TIME = 2 * 60 * 60;
 
+    //回话默认回话
+    public final static int TOKEN_EXPIRE_TIME = 2 * 60 * 60;
+
     public static final String RECEIPT_CODE = "_RECEIPT_CODE";// 收据编号
 
 
