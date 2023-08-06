@@ -204,7 +204,7 @@ public class WechatTemplateImpl implements IWechatTemplate {
         JSONObject template = null;
         for (int templateIndex = 0; templateIndex < templateLists.size(); templateIndex++) {
             template = templateLists.getJSONObject(templateIndex);
-            if (title.equals(template.getString("title"))) {
+            if (title.equals(template.getString("title")) && templateHasKey(template.getString("content"), keys)) {
                 return template.getString("template_id");
             }
         }
@@ -217,13 +217,29 @@ public class WechatTemplateImpl implements IWechatTemplate {
         templateLists = templateListObj.getJSONArray("template_list");
         for (int templateIndex = 0; templateIndex < templateLists.size(); templateIndex++) {
             template = templateLists.getJSONObject(templateIndex);
-            if (title.equals(template.getString("title"))) {
+            if (title.equals(template.getString("title")) && templateHasKey(template.getString("content"), keys)) {
                 return template.getString("template_id");
             }
         }
 
 
         return "-1";
+    }
+
+    /**
+     * 关键字是否都包含
+     * @param content
+     * @param keys
+     * @return
+     */
+    private boolean templateHasKey(String content, String[] keys) {
+        for (String key : keys) {
+            if (!content.contains(key)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public String getAccessToken(String communityId) {
