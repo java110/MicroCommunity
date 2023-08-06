@@ -108,6 +108,8 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     private String payTypeName;
 
+    private String repairName;
+
     public String getContext() {
         return context;
     }
@@ -458,5 +460,13 @@ public class RepairUserDto extends PageDto implements Serializable {
 
     public void setPayTypeName(String payTypeName) {
         this.payTypeName = payTypeName;
+    }
+
+    public String getRepairName() {
+        return repairName;
+    }
+
+    public void setRepairName(String repairName) {
+        this.repairName = repairName;
     }
 }

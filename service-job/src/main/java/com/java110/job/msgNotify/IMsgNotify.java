@@ -91,4 +91,34 @@ public interface IMsgNotify {
      * @return
      */
     ResultVo sendDistributeRepairOwnerMsg(String communityId, String userId, JSONObject content);
+
+    /**
+     * 报修完成给业主通知
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    repairObjName，
+     *                    staffName，
+     *                    time，
+     *                    url
+     *                    }
+     * @return
+     */
+    ResultVo sendFinishRepairOwnerMsg(String communityId, String userId, JSONObject content);
+
+    /**
+     * 退单给业主发送消息
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    repairTypeName，
+     *                    repairObjName，
+     *                    repairName，
+     *                    url
+     *                    }
+     * @return
+     */
+    ResultVo sendReturnRepairMsg(String communityId, String userId, JSONObject content);
 }

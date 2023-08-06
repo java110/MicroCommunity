@@ -36,4 +36,9 @@ public class TencentMsgNotifyImpl implements IMsgNotify {
     public ResultVo sendDistributeRepairOwnerMsg(String communityId, String userId, JSONObject content) {
         return null;
     }
+
+    @Override
+    public ResultVo sendFinishRepairOwnerMsg(String communityId, String userId, JSONObject content) {
+        return null;
+    }
 }

@@ -185,6 +185,61 @@ public class MsgNotifyFactory {
     }
 
     /**
+     * 报修完成给业主通知
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    repairObjName，
+     *                    staffName，
+     *                    time，
+     *                    url
+     *                    }
+     * @return
+     */
+    public static ResultVo sendFinishRepairOwnerMsg(String communityId, String userId, JSONObject content) {
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendFinishRepairOwnerMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 报修完成给业主通知 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
+    }
+
+
+    /**
+     * 退单给业主发送消息
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    repairTypeName，
+     *                    repairObjName，
+     *                    repairName，
+     *                    url
+     *                    }
+     * @return
+     */
+    public static ResultVo sendReturnRepairMsg(String communityId, String userId, JSONObject content) {
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendReturnRepairMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 业主报修时 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
+    }
+
+    /**
      * 获取通知适配器
      *
      * @return

@@ -103,7 +103,7 @@
         t.pre_staff_id,t.pre_staff_id preStaffId,t.pre_staff_name,t.pre_staff_name preStaffName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,d.name stateName,
         t.repair_event,t.repair_event repairEvent, t.pre_ru_id,t.pre_ru_id preRuId,t.create_time createTime,
-        rp.pay_type payType,d2.name payTypeName
+        rp.pay_type payType,d2.name payTypeName,rp.repair_name repairName
         from r_repair_user t
         left join r_repair_pool rp on t.repair_id = rp.repair_id and t.state in ('10009','12000')
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_user' and d.table_columns = 'state'

@@ -223,17 +223,17 @@ public class SaveSmallWechatCmd extends Cmd {
 //            throw new CmdException("保存数据失败");
 //        }
         //报修工单维修完成提醒给业主 通知--模板ID
-        smallWechatAttrPo = new SmallWechatAttrPo();
-        smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
-        smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_WORK_ORDER_END_TEMPLATE);
-        smallWechatAttrPo.setValue("这里请填写报修工单维修完成提醒给业主通知模板ID");
-        smallWechatAttrPo.setWechatId(wechatId);
-        flag = smallWechatAttrV1InnerServiceSMOImpl.saveSmallWechatAttr(smallWechatAttrPo);
-
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
-        }
+//        smallWechatAttrPo = new SmallWechatAttrPo();
+//        smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+//        smallWechatAttrPo.setCommunityId(reqJson.getString("objId"));
+//        smallWechatAttrPo.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_WORK_ORDER_END_TEMPLATE);
+//        smallWechatAttrPo.setValue("这里请填写报修工单维修完成提醒给业主通知模板ID");
+//        smallWechatAttrPo.setWechatId(wechatId);
+//        flag = smallWechatAttrV1InnerServiceSMOImpl.saveSmallWechatAttr(smallWechatAttrPo);
+//
+//        if (flag < 1) {
+//            throw new CmdException("保存数据失败");
+//        }
         //装修申请提醒给业主缴纳装修押金等信息 通知--模板ID
         smallWechatAttrPo = new SmallWechatAttrPo();
         smallWechatAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
