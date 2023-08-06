@@ -57,22 +57,11 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
     private ICommunityInnerServiceSMO communityInnerServiceSMO;
 
     @Autowired
-    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
-
-    @Autowired
-    private ISmallWechatAttrInnerServiceSMO smallWechatAttrInnerServiceSMOImpl;
-
-    @Autowired
     private IPrivilegeInnerServiceSMO privilegeInnerServiceSMO;
 
     @Autowired
     private IStaffAppAuthInnerServiceSMO staffAppAuthInnerServiceSMO;
 
-    @Autowired
-    private RestTemplate outRestTemplate;
-
-    //模板信息推送地址
-    private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 
     @Override
     public void execute(Business business, List<Business> businesses) {
@@ -135,32 +124,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
      * @param communityDto
      */
     private void sendMessage(JSONObject paramIn, CommunityDto communityDto) {
-        //查询公众号配置
-        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setWeChatType("1100");
-        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
-        smallWeChatDto.setObjId(communityDto.getCommunityId());
-        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
-            logger.info("未配置微信公众号信息,定时任务执行结束");
-            return;
-        }
-        SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
-        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
-        smallWechatAttrDto.setCommunityId(communityDto.getCommunityId());
-        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
-        smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_WORK_ORDER_REMIND_TEMPLATE);
-        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
-        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
-            logger.info("未配置微信公众号消息模板");
-            return;
-        }
-        String templateId = smallWechatAttrDtos.get(0).getValue();
-        String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
-        if (StringUtil.isEmpty(accessToken)) {
-            logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
-            return;
-        }
+
         //查询小区物业公司
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(communityDto.getCommunityId());
@@ -179,7 +143,6 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             if (userIds.contains(userDto.getUserId())) {
                 continue;
             }
-
             JSONObject content = new JSONObject();
             content.put("repairTypeName",paramIn.getString("repairTypeName"));
             if (communityDto.getName().equals(paramIn.getString("repairObjName"))) {

@@ -1,16 +1,20 @@
 package com.java110.job.msgNotify;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.log.LoggerFactory;
+import com.java110.job.adapt.Repair.MachineAddOwnerRepairAdapt;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
 
 /**
  * 消息通知工具类
  */
 public class MsgNotifyFactory {
+    private static Logger logger = LoggerFactory.getLogger(MsgNotifyFactory.class);
 
     public static final String DEFAULT_MSG_NOTIFY_WAY = "DEFAULT_MSG_NOTIFY_WAY";
 
@@ -32,8 +36,17 @@ public class MsgNotifyFactory {
      * @return
      */
     public static ResultVo sendApplyReturnFeeMsg(String communityId, String userId, JSONObject content) {
-        IMsgNotify msgNotify = getMsgNotify();
-        return msgNotify.sendApplyReturnFeeMsg(communityId, userId, content);
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendApplyReturnFeeMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 申请退费 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
     }
 
     /**
@@ -50,8 +63,17 @@ public class MsgNotifyFactory {
      *                    }
      */
     public static ResultVo sendOweFeeMsg(String communityId, String userId, JSONObject content) {
-        IMsgNotify msgNotify = getMsgNotify();
-        return msgNotify.sendOweFeeMsg(communityId, userId, content);
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendOweFeeMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 发送欠费 账单信息 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
     }
 
     /**
@@ -68,25 +90,98 @@ public class MsgNotifyFactory {
      *                    }
      */
     public static ResultVo sendPayFeeMsg(String communityId, String userId, JSONObject content, String role) {
-        IMsgNotify msgNotify = getMsgNotify();
-        return msgNotify.sendPayFeeMsg(communityId, userId, content, role);
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendPayFeeMsg(communityId, userId, content, role);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 发送缴费成功提醒 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
     }
 
     /**
      * 业主报修时
+     *
      * @param communityId 小区
-     * @param userId 用户
-     * @param content {
-     *                repairTypeName，
-     *                repairObjName，
-     *                repairName，
-     *                url
-     * }
+     * @param userId      用户
+     * @param content     {
+     *                    repairTypeName，
+     *                    repairObjName，
+     *                    repairName，
+     *                    url
+     *                    }
      * @return
      */
-    public static ResultVo sendAddOwnerRepairMsg(String communityId,String userId,JSONObject content){
-        IMsgNotify msgNotify = getMsgNotify();
-        return msgNotify.sendAddOwnerRepairMsg(communityId, userId, content);
+    public static ResultVo sendAddOwnerRepairMsg(String communityId, String userId, JSONObject content) {
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendAddOwnerRepairMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 业主报修时 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
+    }
+
+    /**
+     * 派单给维修师傅
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    repairName，
+     *                    tel，
+     *                    time，
+     *                    address
+     *                    }
+     * @return
+     */
+    public static ResultVo sendDistributeRepairStaffMsg(String communityId, String userId, JSONObject content) {
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendDistributeRepairStaffMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 派单给维修师傅 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
+    }
+
+    /**
+     * 派单给业主通知
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    name，
+     *                    tel，
+     *                    time，
+     *                    url
+     *                    }
+     * @return
+     */
+    public static ResultVo sendDistributeRepairOwnerMsg(String communityId, String userId, JSONObject content) {
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendDistributeRepairOwnerMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 派单给维修师傅 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
     }
 
     /**
