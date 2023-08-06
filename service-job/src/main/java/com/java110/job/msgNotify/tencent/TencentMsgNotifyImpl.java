@@ -21,4 +21,9 @@ public class TencentMsgNotifyImpl implements IMsgNotify {
     public ResultVo sendPayFeeMsg(String communityId, String userId, JSONObject content,String role) {
         return null;
     }
+
+    @Override
+    public ResultVo sendAddOwnerRepairMsg(String communityId, String userId, JSONObject content) {
+        return null;
+    }
 }

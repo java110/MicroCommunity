@@ -73,6 +73,23 @@ public class MsgNotifyFactory {
     }
 
     /**
+     * 业主报修时
+     * @param communityId 小区
+     * @param userId 用户
+     * @param content {
+     *                repairTypeName，
+     *                repairObjName，
+     *                repairName，
+     *                url
+     * }
+     * @return
+     */
+    public static ResultVo sendAddOwnerRepairMsg(String communityId,String userId,JSONObject content){
+        IMsgNotify msgNotify = getMsgNotify();
+        return msgNotify.sendAddOwnerRepairMsg(communityId, userId, content);
+    }
+
+    /**
      * 获取通知适配器
      *
      * @return

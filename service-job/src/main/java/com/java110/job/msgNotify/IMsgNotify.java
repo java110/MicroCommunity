@@ -47,4 +47,18 @@ public interface IMsgNotify {
      * }
      */
     ResultVo sendPayFeeMsg(String communityId, String userId, JSONObject content,String role);
+
+    /**
+     * 业主报修时
+     * @param communityId 小区
+     * @param userId 用户
+     * @param content {
+     *                repairTypeName，
+     *                repairObjName，
+     *                repairName，
+     *                url
+     * }
+     * @return
+     */
+    ResultVo sendAddOwnerRepairMsg(String communityId, String userId, JSONObject content);
 }
