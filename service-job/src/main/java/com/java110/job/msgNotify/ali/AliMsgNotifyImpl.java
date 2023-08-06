@@ -41,4 +41,19 @@ public class AliMsgNotifyImpl implements IMsgNotify {
     public ResultVo sendFinishRepairOwnerMsg(String communityId, String userId, JSONObject content) {
         return null;
     }
+
+    @Override
+    public ResultVo sendReturnRepairMsg(String communityId, String userId, JSONObject content) {
+        return null;
+    }
+
+    @Override
+    public ResultVo sendOaDistributeMsg(String communityId, String userId, JSONObject content) {
+        return null;
+    }
+
+    @Override
+    public ResultVo sendOaCreateStaffMsg(String communityId, String userId, JSONObject content) {
+        return null;
+    }
 }

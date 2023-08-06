@@ -239,6 +239,60 @@ public class MsgNotifyFactory {
         return resultVo;
     }
 
+
+    /**
+     *  oa 流程待审批通知
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    flowName，
+     *                    create_user_name，
+     *                    create_time，
+     *                    url
+     *                    }
+     * @return
+     */
+    public static ResultVo sendOaDistributeMsg(String communityId, String userId, JSONObject content) {
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendOaDistributeMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 业主报修时 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
+    }
+
+    /**
+     *  oa 流程通知发起人
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    flowName，
+     *                    staffName，
+     *                    url
+     *                    }
+     * @return
+     */
+    public static ResultVo sendOaCreateStaffMsg(String communityId, String userId, JSONObject content) {
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendOaCreateStaffMsg(communityId, userId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 业主报修时 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
+    }
+
     /**
      * 获取通知适配器
      *

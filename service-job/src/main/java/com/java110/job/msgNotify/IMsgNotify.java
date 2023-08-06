@@ -121,4 +121,33 @@ public interface IMsgNotify {
      * @return
      */
     ResultVo sendReturnRepairMsg(String communityId, String userId, JSONObject content);
+
+    /**
+     *  oa 流程待审批通知
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    flowName，
+     *                    create_user_name，
+     *                    create_time，
+     *                    url
+     *                    }
+     * @return
+     */
+    ResultVo sendOaDistributeMsg(String communityId, String userId, JSONObject content);
+
+    /**
+     *  oa 流程通知发起人
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    flowName，
+     *                    staffName，
+     *                    url
+     *                    }
+     * @return
+     */
+    ResultVo sendOaCreateStaffMsg(String communityId, String userId, JSONObject content);
 }
