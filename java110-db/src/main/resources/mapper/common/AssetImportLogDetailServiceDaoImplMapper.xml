@@ -16,9 +16,11 @@
     <insert id="saveAssetImportLogDetails" parameterType="Map">
         insert into asset_import_log_detail(
         detail_id,log_id,state,content,community_id,message
+            ,create_time
         ) values
         <foreach collection="assetImportLogDetailPos" item="item" separator=",">
-            (#{item.detailId},#{item.logId},#{item.state},#{item.content},#{item.communityId},#{item.message})
+            (#{item.detailId},#{item.logId},#{item.state},#{item.content},#{item.communityId},#{item.message}
+                ,#{item.createTime})
         </foreach>
     </insert>
 
@@ -50,7 +52,7 @@
         <if test="message !=null and message != ''">
             and t.message= #{message}
         </if>
-        order by t.create_time desc
+        order by t.create_time
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
