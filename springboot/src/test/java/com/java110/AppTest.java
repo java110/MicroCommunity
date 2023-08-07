@@ -19,9 +19,9 @@ public class AppTest
     public void should()
     {
 
-     Calendar calendar = Calendar.getInstance();
-     calendar.set(Calendar.YEAR,2023);
-     calendar.set(Calendar.MONTH,11);
-        System.out.printf(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+        String body = "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><ns2:initTransResponse xmlns:ns2=\"http://ws.conflux.sunshine.com\"><String>&lt;result&gt;&lt;msg&gt;成功&lt;/msg&gt;&lt;code&gt;1&lt;/code&gt;&lt;token&gt;44190044897985894840&lt;/token&gt;&lt;/result&gt;</String></ns2:initTransResponse></soap:Body></soap:Envelope>";
+
+       String token = body.substring(body.indexOf("&lt;token&gt;")+13,body.indexOf("&lt;/token&gt;"));
+        System.out.println(token);
     }
 }

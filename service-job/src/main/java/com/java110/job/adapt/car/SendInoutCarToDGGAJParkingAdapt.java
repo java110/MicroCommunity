@@ -218,7 +218,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
             if(!body.contains("token")){
                 return token;
             }
-            token = body.substring(body.indexOf("<token>")+7,body.indexOf("</token>"));
+            token = body.substring(body.indexOf("&lt;token&gt;")+13,body.indexOf("&lt;/token&gt;"));
             CommonCache.setValue("DGGAJ_Parking_token",token,CommonCache.TOKEN_EXPIRE_TIME);
         }catch (HttpStatusCodeException e){
             logger.error("调用异常",e);
