@@ -20,9 +20,11 @@ import com.java110.boot.smo.api.IApiSMO;
 import com.java110.boot.smo.privilege.IPrivilegeSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.language.Java110Lang;
 import com.java110.core.log.LoggerFactory;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -292,6 +294,83 @@ public class AppController extends BaseController {
         }
 
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
+        return responseEntity;
+    }
+
+    /**
+     * 外部系统使用 get
+     * 对接一些大系统时 他们不会按照HC的要求
+     * 所以将HC要求的appId 放到路劲地址
+     * @param request 请求对象 查询头信息 url等信息
+     * @return http status 200 成功 其他失败
+     */
+
+    @RequestMapping(path = "/ext/{serviceCode}/{appId}", method = RequestMethod.GET)
+    @Java110Lang
+    public ResponseEntity<String> extGet(
+            @PathVariable String serviceCode,
+            @PathVariable String appId,
+            HttpServletRequest request) {
+        ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
+        try {
+            this.getRequestInfo(request, headers);
+            //todo 补充appId信息
+            headers.put("app-id",appId);
+            headers.put("user-id","-1");
+            headers.put("transaction-id", GenerateCodeFactory.getUUID());
+            headers.put("req-time", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
+            headers.put(CommonConstant.HTTP_SERVICE, serviceCode);
+            headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + serviceCode);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+        } catch (Throwable e) {
+            logger.error("请求get 方法[" + serviceCode + "]失败：", e);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.debug("api：{} 返回信息为：{}", serviceCode, responseEntity);
+
+        return responseEntity;
+    }
+
+    /**
+     * 外部系统使用 post
+     * 对接一些大系统时 他们不会按照HC的要求
+     * 所以将HC要求的appId 放到路劲地址
+     * @param request 请求对象 查询头信息 url等信息
+     * @return http status 200 成功 其他失败
+     */
+
+    @RequestMapping(path = "/ext/{serviceCode}/{appId}", method = RequestMethod.POST)
+    @Java110Lang
+    public ResponseEntity<String> extPost(
+            @PathVariable String serviceCode,
+            @PathVariable String appId,
+
+            HttpServletRequest request) {
+        ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
+        try {
+            this.getRequestInfo(request, headers);
+            //todo 补充appId信息
+            headers.put("app-id",appId);
+            headers.put("user-id","-1");
+            headers.put("transaction-id", GenerateCodeFactory.getUUID());
+            headers.put("req-time", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
+            headers.put(CommonConstant.HTTP_SERVICE, serviceCode);
+            headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + serviceCode);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+        } catch (Throwable e) {
+            logger.error("请求get 方法[" + serviceCode + "]失败：", e);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.debug("api：{} 返回信息为：{}", serviceCode, responseEntity);
+
         return responseEntity;
     }
 
