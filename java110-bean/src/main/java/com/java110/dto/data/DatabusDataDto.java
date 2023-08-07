@@ -15,6 +15,9 @@ import java.io.Serializable;
  **/
 public class DatabusDataDto extends PageDto implements Serializable {
 
+    // 车辆进出手动触发
+    public static final String BUSINESS_TYPE_SAVE_CAR_INOUT_DETAIL = "saveCarInoutDetail";
+
     private String businessTypeCd;
 
     private JSONObject data;
