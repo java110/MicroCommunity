@@ -105,7 +105,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
         String reqParam = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.conflux.sunshine.com\">\n" +
                 "   <soapenv:Header/>\n" +
                 "   <soapenv:Body>\n" +
-                "      <ws:parkWriteInfoV2>\n" +
+                "      <ws:vehicleWriteInfoV2>\n" +
                 "         <!--Optional:-->\n" +
                 "         <gateId>441958003150000001</gateId>\n" +
                 "         <!--Optional:-->\n" +
@@ -144,9 +144,10 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
                 "         <inputTime>"+ DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A) +"</inputTime>\n" +
                 "         <!--Optional:-->\n" +
                 "         <token>"+token+"</token>\n" +
-                "      </ws:parkWriteInfoV2>\n" +
+                "      </ws:vehicleWriteInfoV2>\n" +
                 "   </soapenv:Body>\n" +
                 "</soapenv:Envelope>";
+
         logger.debug("请求报文：{}",reqParam);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type","text/xml;charset=UTF-8");
