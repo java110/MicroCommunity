@@ -17,6 +17,7 @@ package com.java110.po.parking;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2022-10-12 19:10:35 mail: 928255095@qq.com
@@ -28,76 +29,95 @@ import java.util.Date;
 public class ParkingCouponCarOrderPo implements Serializable {
 
     private String pccId;
-private String machineId;
-private String orderId;
-private String paId;
-private String carNum;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-private String carOutId;
-private String machineName;
-public String getPccId() {
+    private String machineId;
+    private String orderId;
+    private String paId;
+    private String carNum;
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+    private String carOutId;
+    private String machineName;
+
+    public String getPccId() {
         return pccId;
     }
-public void setPccId(String pccId) {
+
+    public void setPccId(String pccId) {
         this.pccId = pccId;
     }
-public String getMachineId() {
+
+    public String getMachineId() {
         return machineId;
     }
-public void setMachineId(String machineId) {
+
+    public void setMachineId(String machineId) {
         this.machineId = machineId;
     }
-public String getOrderId() {
+
+    public String getOrderId() {
         return orderId;
     }
-public void setOrderId(String orderId) {
+
+    public void setOrderId(String orderId) {
         this.orderId = orderId;
     }
-public String getPaId() {
+
+    public String getPaId() {
         return paId;
     }
-public void setPaId(String paId) {
+
+    public void setPaId(String paId) {
         this.paId = paId;
     }
-public String getCarNum() {
+
+    public String getCarNum() {
         return carNum;
     }
-public void setCarNum(String carNum) {
+
+    public void setCarNum(String carNum) {
         this.carNum = carNum;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCarOutId() {
+
+    public String getCarOutId() {
         return carOutId;
     }
-public void setCarOutId(String carOutId) {
+
+    public void setCarOutId(String carOutId) {
         this.carOutId = carOutId;
     }
-public String getMachineName() {
+
+    public String getMachineName() {
         return machineName;
     }
-public void setMachineName(String machineName) {
+
+    public void setMachineName(String machineName) {
         this.machineName = machineName;
     }
-
 
 
 }

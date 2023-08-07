@@ -17,8 +17,10 @@ package com.java110.acct.smo.impl;
 
 
 import com.java110.acct.dao.IParkingCouponCarOrderV1ServiceDao;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.intf.acct.IParkingCouponCarOrderV1InnerServiceSMO;
 import com.java110.dto.parking.ParkingCouponCarOrderDto;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.po.parking.ParkingCouponCarOrderPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -43,10 +45,16 @@ public class ParkingCouponCarOrderV1InnerServiceSMOImpl extends BaseServiceSMO i
     @Autowired
     private IParkingCouponCarOrderV1ServiceDao parkingCouponCarOrderV1ServiceDaoImpl;
 
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
 
     @Override
     public int saveParkingCouponCarOrder(@RequestBody  ParkingCouponCarOrderPo parkingCouponCarOrderPo) {
         int saveFlag = parkingCouponCarOrderV1ServiceDaoImpl.saveParkingCouponCarOrderInfo(BeanConvertUtil.beanCovertMap(parkingCouponCarOrderPo));
+
+        //todo 触发databus
+        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_SAVE_PARKING_COUPON_CAR_ORDER,BeanConvertUtil.beanCovertJson(parkingCouponCarOrderPo)));
         return saveFlag;
     }
 

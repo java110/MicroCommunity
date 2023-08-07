@@ -343,12 +343,12 @@ public class AppController extends BaseController {
      * @return http status 200 成功 其他失败
      */
 
-    @RequestMapping(path = "/ext/{serviceCode}/{appId}", method = RequestMethod.POST)
+    @RequestMapping(path = "/ext/{serviceCode}/{appId}/{communityId}", method = RequestMethod.POST)
     @Java110Lang
     public ResponseEntity<String> extPost(
             @PathVariable String serviceCode,
             @PathVariable String appId,
-
+            @RequestBody String postInfo,
             HttpServletRequest request) {
         ResponseEntity<String> responseEntity = null;
         Map<String, String> headers = new HashMap<String, String>();
@@ -364,7 +364,7 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + serviceCode);
-            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + serviceCode + "]失败：", e);
             responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

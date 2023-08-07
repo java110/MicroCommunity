@@ -18,6 +18,9 @@ public class DatabusDataDto extends PageDto implements Serializable {
     // 车辆进出手动触发
     public static final String BUSINESS_TYPE_SAVE_CAR_INOUT_DETAIL = "saveCarInoutDetail";
 
+    public static final String BUSINESS_TYPE_SAVE_PARKING_COUPON_CAR_ORDER = "saveParkingCouponCarOrder";
+
+
     private String businessTypeCd;
 
     private JSONObject data;

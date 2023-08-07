@@ -29,6 +29,10 @@
         <if test="quantity !=null and quantity != ''">
             and t.quantity= #{quantity}
         </if>
+
+        <if test="hasQuantity !=null and hasQuantity != ''">
+            and t.quantity &gt;>0
+        </if>
         <if test="paName !=null and paName != ''">
             and t.pa_name= #{paName}
         </if>
