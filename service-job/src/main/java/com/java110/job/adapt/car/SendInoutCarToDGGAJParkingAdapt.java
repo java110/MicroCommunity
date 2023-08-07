@@ -99,7 +99,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
         JSONObject picBase64 = JSONObject.parseObject("{\"SubImageInfo\": [{\"FileFormat\":\"Jpeg\",\"Data\":\"无图片\"}]}");
 
         if(!StringUtil.isEmpty(photo)){
-            picBase64.getJSONArray("SubImageInfo").getJSONObject(0).put("Data","data:image/jpeg;base64,"+photo);
+            picBase64.getJSONArray("SubImageInfo").getJSONObject(0).put("Data","data:image/jpeg;base64,"+photo.replaceAll("\n", ""));
         }
 
         String reqParam = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.conflux.sunshine.com\">\n" +
