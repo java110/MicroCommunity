@@ -107,10 +107,10 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
                 "   <soapenv:Body>\n" +
                 "      <ws:parkWriteInfoV2>\n" +
                 "         <!--Optional:-->\n" +
-                "         <gateId>"+parkingAreaDtos.get(0).getNum()+"</gateId>\n" +
+                "         <gateId>441958003150000001</gateId>\n" +
                 "         <!--Optional:-->\n" +
                 "         <directType>"+directType+"</directType>\n" +
-                "         <driverWayNo>"+carInoutDetailPo.getMachineId()+"</driverWayNo>\n" +
+                "         <driverWayNo>1</driverWayNo>\n" +
                 "         <!--Optional:-->\n" +
                 "         <driverWayType>00</driverWayType>\n" +
                 "         <!--Optional:-->\n" +
@@ -197,10 +197,10 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
                 "   <soapenv:Body>\n" +
                 "      <ws:initTrans>\n" +
                 "         <!--Optional:-->\n" +
-                "         <gateId>" + parkingAreaDtos.get(0).getNum() + "</gateId>\n" +
+                "         <gateId>441958003150000001</gateId>\n" +
                 "         <!--Optional:-->\n" +
                 "         <directType>" + directType + "</directType>\n" +
-                "         <driverWayNo>" + carInoutDetailPo.getMachineId() + "</driverWayNo>\n" +
+                "         <driverWayNo>1</driverWayNo>\n" +
                 "         <!--Optional:-->\n" +
                 "         <initKey>"+key+"</initKey>\n" +
                 "      </ws:initTrans>\n" +
