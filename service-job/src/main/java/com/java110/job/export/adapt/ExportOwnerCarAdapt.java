@@ -14,6 +14,7 @@ import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -107,8 +108,8 @@ public class ExportOwnerCarAdapt implements IExportDataAdapt {
             row.createCell(4).setCellValue(dataObj.getOwnerName());
             row.createCell(5).setCellValue(dataObj.getLink());
             row.createCell(6).setCellValue(dataObj.getAreaNum()+"-"+dataObj.getNum());
-            row.createCell(7).setCellValue(dataObj.getStartTime());
-            row.createCell(8).setCellValue(dataObj.getEndTime());
+            row.createCell(7).setCellValue(DateUtil.getFormatTimeStringA(dataObj.getStartTime()));
+            row.createCell(8).setCellValue(DateUtil.getFormatTimeStringA(dataObj.getEndTime()));
         }
 
     }
