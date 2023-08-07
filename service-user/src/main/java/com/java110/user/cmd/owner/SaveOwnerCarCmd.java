@@ -65,6 +65,13 @@ public class SaveOwnerCarCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "carType", "请求报文中未包含carType");
         Assert.hasKeyAndValue(reqJson, "psId", "未包含psId");
 
+        if (OwnerCarDto.LEASE_TYPE_MONTH.equals(reqJson.getString("leaseType"))) {
+            Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
+            Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含结束时间");
+            Assert.isDate(reqJson.getString("startTime"),DateUtil.DATE_FORMATE_STRING_B,"开始时间格式错误");
+            Assert.isDate(reqJson.getString("endTime"),DateUtil.DATE_FORMATE_STRING_B,"结束时间格式错误");
+        }
+
         //检查车位是否是空闲状态
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setPsId(reqJson.getString("psId"));
