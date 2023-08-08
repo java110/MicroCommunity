@@ -9,4 +9,15 @@
         delete from building_owner where 1=1
             and community_id = #{communityId}
     </delete>
+
+
+    <delete id="deleteUser" parameterType="Map">
+        delete from u_user where user_id in(
+        select t.user_id from owner_app_user t where t.community_id = #{communityId}
+        )
+    </delete>
+    <delete id="deleteOwnerAppUser" parameterType="Map">
+        delete from owner_app_user where 1=1
+        and community_id = #{communityId}
+    </delete>
 </mapper>

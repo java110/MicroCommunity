@@ -19,4 +19,20 @@ public interface IInitializeOwneServiceDao {
      * @return
      */
     int deleteBuildingOwner(Map communityId);
+
+
+    /**
+     * 删除用户
+     *
+     * @param communityId
+     * @return
+     */
+    int deleteUser(Map communityId);
+
+    /**
+     * 删除业主绑定数据
+     *
+     * @param communityId
+     */
+    int deleteOwnerAppUser(Map communityId);
 }

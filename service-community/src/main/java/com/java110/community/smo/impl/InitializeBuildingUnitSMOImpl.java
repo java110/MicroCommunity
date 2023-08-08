@@ -40,6 +40,9 @@ public class InitializeBuildingUnitSMOImpl extends BaseServiceSMO implements Iin
     @Override
     public int deleteBuildingRoom(@RequestBody Map communityId) {
         int deleteFlag = initializeBuildingUnitDaoImpl.deleteBuildingRoom(communityId);
+
+        //todo 自动解绑房屋
+        initializeBuildingUnitDaoImpl.deleteOwnerRoomRel(communityId);
         return deleteFlag;
     }
 
@@ -51,6 +54,12 @@ public class InitializeBuildingUnitSMOImpl extends BaseServiceSMO implements Iin
     @Override
     public int deleteParkingSpace(@RequestBody Map communityId) {
         int deleteFlag = initializeBuildingUnitDaoImpl.deleteParkingSpace(communityId);
+        return deleteFlag;
+    }
+
+    @Override
+    public int deleteOwnerCar(@RequestBody Map communityId) {
+        int deleteFlag = initializeBuildingUnitDaoImpl.deleteOwnerCar(communityId);
         return deleteFlag;
     }
 
