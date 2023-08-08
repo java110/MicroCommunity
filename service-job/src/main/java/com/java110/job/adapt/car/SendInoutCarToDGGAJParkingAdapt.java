@@ -5,8 +5,10 @@ import com.java110.core.client.OutRestTemplate;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.machine.CarInoutDetailDto;
+import com.java110.dto.parking.ParkingAreaAttrDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.system.Business;
+import com.java110.intf.community.IParkingAreaAttrV1InnerServiceSMO;
 import com.java110.intf.community.IParkingAreaV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.car.CarInoutDetailPo;
@@ -53,7 +55,13 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
     private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
 
     @Autowired
+    private IParkingAreaAttrV1InnerServiceSMO parkingAreaAttrV1InnerServiceSMOImpl;
+
+    @Autowired
     private RestTemplate outRestTemplate;
+
+    public static final String SPEC_CD_GATE_ID = "489905"; // 公安停车场ID
+    public static final String SPEC_CD_SECURE = "489906"; //公安停车场秘钥
 
     private static final String url = "http://59.39.179.74:9070/services/hole";
 
@@ -64,11 +72,20 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
         //todo 获取到 参数信息
         CarInoutDetailPo carInoutDetailPo = BeanConvertUtil.covertBean(data, CarInoutDetailPo.class);
 
+        ParkingAreaAttrDto parkingAreaAttrDto = new ParkingAreaAttrDto();
+        parkingAreaAttrDto.setPaId(carInoutDetailPo.getPaId());
+        List<ParkingAreaAttrDto> parkingAreaAttrDtos = parkingAreaAttrV1InnerServiceSMOImpl.queryParkingAreaAttrs(parkingAreaAttrDto);
+        if (parkingAreaAttrDtos == null || parkingAreaAttrDtos.size() < 1) {
+            throw new IllegalArgumentException("公安停车场配置未找到");
+        }
+        String gateId = getParkingAttr(parkingAreaAttrDtos,SPEC_CD_GATE_ID);
+        String secure = getParkingAttr(parkingAreaAttrDtos,SPEC_CD_SECURE);
+
         //todo 获取到token
-        String token = initTrans(carInoutDetailPo);
+        String token = initTrans(carInoutDetailPo,gateId,secure);
 
         //todo 上传进出场车辆信息
-        parkWriteInfoV2(carInoutDetailPo,token);
+        parkWriteInfoV2(carInoutDetailPo,token,gateId);
 
 
     }
@@ -78,7 +95,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
      * @param carInoutDetailPo
      * @param token
      */
-    private void parkWriteInfoV2(CarInoutDetailPo carInoutDetailPo, String token) {
+    private void parkWriteInfoV2(CarInoutDetailPo carInoutDetailPo, String token,String gateId) {
 
         ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
         parkingAreaDto.setPaId(carInoutDetailPo.getPaId());
@@ -88,6 +105,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
         if (parkingAreaDtos == null || parkingAreaDtos.size() < 1) {
             throw new IllegalArgumentException("停车场未找到");
         }
+
 
         //进
         String directType = "1";
@@ -107,7 +125,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
                 "   <soapenv:Body>\n" +
                 "      <ws:vehicleWriteInfoV2>\n" +
                 "         <!--Optional:-->\n" +
-                "         <gateId>441958003150000001</gateId>\n" +
+                "         <gateId>"+gateId+"</gateId>\n" +
                 "         <!--Optional:-->\n" +
                 "         <directType>"+directType+"</directType>\n" +
                 "         <driverWayNo>1</driverWayNo>\n" +
@@ -162,12 +180,22 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
         }
     }
 
+    private String getParkingAttr(List<ParkingAreaAttrDto> parkingAreaAttrDtos, String specCdGateId) {
+
+        for(ParkingAreaAttrDto parkingAreaAttrDto:parkingAreaAttrDtos){
+            if(specCdGateId.equals(parkingAreaAttrDto.getSpecCd())){
+                return parkingAreaAttrDto.getValue().trim();
+            }
+        }
+        return "";
+    }
+
     /**
      * 初始化连接
      * @param carInoutDetailPo
      * @return
      */
-    public String initTrans(CarInoutDetailPo carInoutDetailPo) {
+    public String initTrans(CarInoutDetailPo carInoutDetailPo,String gateId,String secure) {
 
         String token = CommonCache.getValue("DGGAJ_Parking_token");
 
@@ -184,7 +212,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
             throw new IllegalArgumentException("停车场未找到");
         }
 
-        String key = MappingCache.getValue("DOGUAN_PAKRING_KEY");
+       // String key = MappingCache.getValue("DOGUAN_PAKRING_KEY");
 
         //进
         String directType = "1";
@@ -198,12 +226,12 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
                 "   <soapenv:Body>\n" +
                 "      <ws:initTrans>\n" +
                 "         <!--Optional:-->\n" +
-                "         <gateId>441958003150000001</gateId>\n" +
+                "         <gateId>"+gateId+"</gateId>\n" +
                 "         <!--Optional:-->\n" +
                 "         <directType>" + directType + "</directType>\n" +
                 "         <driverWayNo>1</driverWayNo>\n" +
                 "         <!--Optional:-->\n" +
-                "         <initKey>"+key+"</initKey>\n" +
+                "         <initKey>"+secure+"</initKey>\n" +
                 "      </ws:initTrans>\n" +
                 "   </soapenv:Body>\n" +
                 "</soapenv:Envelope>";
