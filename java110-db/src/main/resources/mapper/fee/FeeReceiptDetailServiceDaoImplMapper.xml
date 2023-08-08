@@ -93,7 +93,13 @@
         <if test="cycle !=null and cycle != ''">
             and t.cycle= #{cycle}
         </if>
-        order by t.create_time desc
+        <if test="orderBy !=null and orderBy != ''">
+            order by t.fee_name, t.${orderBy}
+        </if>
+        <if test="orderBy ==null or orderBy == ''">
+            order by t.create_time desc
+        </if>
+
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

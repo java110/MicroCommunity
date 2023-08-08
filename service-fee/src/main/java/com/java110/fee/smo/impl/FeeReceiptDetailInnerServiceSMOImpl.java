@@ -79,6 +79,13 @@ public class FeeReceiptDetailInnerServiceSMOImpl extends BaseServiceSMO implemen
             feeReceiptDetailDto.setPage((page - 1) * feeReceiptDetailDto.getRow());
         }
 
+        switch (feeReceiptDetailDto.getOrderBy()){
+            case "start_time":
+                break;
+            default:
+                feeReceiptDetailDto.setOrderBy("");
+        }
+
         List<FeeReceiptDetailDto> feeReceiptDetails = BeanConvertUtil.covertBeanList(feeReceiptDetailServiceDaoImpl.getFeeReceiptDetailInfo(BeanConvertUtil.beanCovertMap(feeReceiptDetailDto)), FeeReceiptDetailDto.class);
 
         return feeReceiptDetails;

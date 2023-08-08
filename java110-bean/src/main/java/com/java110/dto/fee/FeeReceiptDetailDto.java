@@ -42,6 +42,8 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     private String payOrderId;
 
+    private String orderBy;
+
 
     public String getArea() {
         return area;
@@ -218,5 +220,13 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     public void setPayOrderId(String payOrderId) {
         this.payOrderId = payOrderId;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 }
