@@ -115,7 +115,7 @@ public class DataReportOweDetailStatisticsAdapt implements IExportDataAdapt {
         String feeTypeCdValue = "";
         JSONObject feeTypeData = null;
         for (int roomIndex = 0; roomIndex < datas.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex + 1);
+            row = sheet.createRow(roomIndex + step + 1);
             dataObj = datas.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(dataObj.getString("roomName"));
             row.createCell(1).setCellValue(dataObj.getString("ownerName")+"("+dataObj.getString("link")+")");
