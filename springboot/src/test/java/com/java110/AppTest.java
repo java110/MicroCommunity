@@ -19,9 +19,10 @@ public class AppTest
     public void should()
     {
 
-     Calendar calendar = Calendar.getInstance();
-     calendar.set(Calendar.YEAR,2023);
-     calendar.set(Calendar.MONTH,11);
-        System.out.printf(DateUtil.getFormatTimeString(calendar.getTime(),DateUtil.DATE_FORMATE_STRING_A));
+        Calendar createTimeCal = Calendar.getInstance();
+        for (int i = 0; i< 100;i++) {
+            createTimeCal.add(Calendar.SECOND, 1);
+            System.out.println(DateUtil.getFormatTimeStringA(createTimeCal.getTime()));
+        }
     }
 }

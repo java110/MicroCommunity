@@ -99,13 +99,13 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
         JSONObject picBase64 = JSONObject.parseObject("{\"SubImageInfo\": [{\"FileFormat\":\"Jpeg\",\"Data\":\"无图片\"}]}");
 
         if(!StringUtil.isEmpty(photo)){
-            picBase64.getJSONArray("SubImageInfo").getJSONObject(0).put("Data","data:image/jpeg;base64,"+photo);
+            picBase64.getJSONArray("SubImageInfo").getJSONObject(0).put("Data",photo.replaceAll("\n", ""));
         }
 
         String reqParam = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.conflux.sunshine.com\">\n" +
                 "   <soapenv:Header/>\n" +
                 "   <soapenv:Body>\n" +
-                "      <ws:parkWriteInfoV2>\n" +
+                "      <ws:vehicleWriteInfoV2>\n" +
                 "         <!--Optional:-->\n" +
                 "         <gateId>441958003150000001</gateId>\n" +
                 "         <!--Optional:-->\n" +
@@ -144,9 +144,10 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
                 "         <inputTime>"+ DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A) +"</inputTime>\n" +
                 "         <!--Optional:-->\n" +
                 "         <token>"+token+"</token>\n" +
-                "      </ws:parkWriteInfoV2>\n" +
+                "      </ws:vehicleWriteInfoV2>\n" +
                 "   </soapenv:Body>\n" +
                 "</soapenv:Envelope>";
+
         logger.debug("请求报文：{}",reqParam);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Type","text/xml;charset=UTF-8");
@@ -218,7 +219,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
             if(!body.contains("token")){
                 return token;
             }
-            token = body.substring(body.indexOf("<token>")+7,body.indexOf("</token>"));
+            token = body.substring(body.indexOf("&lt;token&gt;")+13,body.indexOf("&lt;/token&gt;"));
             CommonCache.setValue("DGGAJ_Parking_token",token,CommonCache.TOKEN_EXPIRE_TIME);
         }catch (HttpStatusCodeException e){
             logger.error("调用异常",e);

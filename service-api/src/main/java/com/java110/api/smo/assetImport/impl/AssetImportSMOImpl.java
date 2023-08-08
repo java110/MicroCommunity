@@ -27,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -124,7 +125,9 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
         List<AssetImportLogDetailPo> assetImportLogDetailPos = new ArrayList<>();
         AssetImportLogDetailPo assetImportLogDetailPo = null;
         int flag = 0;
+        Calendar createTimeCal = Calendar.getInstance();
         for (Object data : datas) {
+            createTimeCal.add(Calendar.SECOND,1);
             assetImportLogDetailPo = new AssetImportLogDetailPo();
             assetImportLogDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId("11"));
             assetImportLogDetailPo.setLogId(logId);
@@ -132,6 +135,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
             assetImportLogDetailPo.setMessage("待导入");
             assetImportLogDetailPo.setCommunityId(result.getCommunityId());
             assetImportLogDetailPo.setContent(JSONObject.toJSONString(data));
+            assetImportLogDetailPo.setCreateTime(DateUtil.getFormatTimeStringA(createTimeCal.getTime()));
             assetImportLogDetailPos.add(assetImportLogDetailPo);
             if (assetImportLogDetailPos.size() > DEFAULT_ROWS) {
                 flag = assetImportLogDetailInnerServiceSMOImpl.saveAssetImportLogDetails(assetImportLogDetailPos);
