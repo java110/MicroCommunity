@@ -21,6 +21,7 @@ import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -157,7 +158,7 @@ public class MachineRoomRenovationCompleted extends DatabusAdaptImpl {
                     data.setKeyword4(new Content(paramIn.getString("remark")));
                     data.setKeyword5(new Content("待验收"));
                     data.setRemark(new Content("感谢您的使用。"));
-                    templateMessage.setData(data);
+                    templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
                     //获取员工公众号地址
                     String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
                     templateMessage.setUrl(wechatUrl);

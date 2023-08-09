@@ -23,6 +23,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.UrlCache;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -181,7 +182,8 @@ public class MachineApprovalApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             data.setKeyword2(new Content(paramIn.getString("stateName")));
             data.setKeyword3(new Content(paramIn.getString("reviewRemark")));
             data.setRemark(new Content("感谢您的使用！"));
-            templateMessage.setData(data);
+            templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
             //获取业主公众号地址
             String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);
@@ -258,7 +260,8 @@ public class MachineApprovalApplyRoomDiscountAdapt extends DatabusAdaptImpl {
             data.setKeyword2(new Content(paramIn.getString("stateName")));
             data.setKeyword3(new Content(paramIn.getString("reviewRemark")));
             data.setRemark(new Content("感谢您的使用，如有疑问请联系相关物业人员。"));
-            templateMessage.setData(data);
+            templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
             //获取业主公众号地址
             String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);

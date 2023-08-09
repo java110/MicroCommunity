@@ -212,7 +212,8 @@ public class AddVisitAdapt extends DatabusAdaptImpl {
                     data.setKeyword4(new Content(ownerDtos.get(0).getName() + "提交的访客预约车辆-" + visitPo.getCarNum() + "，需要进行车辆审核。"));
                     data.setKeyword5(new Content("待审核"));
                     data.setRemark(new Content("请及时处理！"));
-                    templateMessage.setData(data);
+                    templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
                     //获取员工公众号地址
                     String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
                     templateMessage.setUrl(wechatUrl);
@@ -307,7 +308,8 @@ public class AddVisitAdapt extends DatabusAdaptImpl {
                 data.setKeyword3(new Content(visitDtos.get(0).getStateRemark()));
                 data.setRemark(new Content("访客预约车辆审核未通过，请您合理安排出行！"));
             }
-            templateMessage.setData(data);
+            templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
             //获取业主公众号地址
             String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);
