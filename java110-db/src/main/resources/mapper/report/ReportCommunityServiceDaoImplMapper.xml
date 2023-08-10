@@ -555,6 +555,7 @@
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
         left join u_user uu on co.user_id = uu.user_id
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
         where 1=1
         <if test="roomId != null and roomId != ''">
             and t.room_id = #{roomId}
