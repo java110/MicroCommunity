@@ -355,13 +355,23 @@
         <if test="deleteFlag != null and deleteFlag != ''">
             and t.operate = 'DEL'
         </if>
+        <if test="staffNameLike != null and staffNameLike != ''">
+            and uu.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="feeNameLike != null and staffNameLike != ''">
+            and pfc.fee_name like concat('%',#{feeNameLike},'%')
+        </if>
+        <if test="logStartTime != null and logStartTime != ''">
+            and co.create_time &gt; #{logStartTime}
+            and co.create_time &lt; #{logEndTime}
+        </if>
         and t.community_id = #{communityId}
     </select>
 
     <select id="queryHisFees" parameterType="Map" resultType="Map">
         select t.operate,t.start_time startTime,t.end_time endTime,t.create_time createTime,pfc.fee_name feeName,
         t.amount,
-        uu.`name` userName,pfa.`value` payerObjName,pfa1.value ownerName
+        uu.`name` userName,pfa.`value` payerObjName,pfa1.value ownerName,co.create_time createTime
         from business_pay_fee t
         left join  pay_fee_config pfc on t.config_id = pfc.config_id
         left join c_business cb on t.b_id = cb.b_id
@@ -378,6 +388,16 @@
         </if>
         <if test="deleteFlag != null and deleteFlag != ''">
             and t.operate = 'DEL'
+        </if>
+        <if test="staffNameLike != null and staffNameLike != ''">
+            and uu.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="feeNameLike != null and staffNameLike != ''">
+            and pfc.fee_name like concat('%',#{feeNameLike},'%')
+        </if>
+        <if test="logStartTime != null and logStartTime != ''">
+            and co.create_time &gt; #{logStartTime}
+            and co.create_time &lt; #{logEndTime}
         </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
@@ -408,7 +428,10 @@
         <if test="feeNameLike != null and staffNameLike != ''">
             and t.fee_name like concat('%',#{feeNameLike},'%')
         </if>
-
+        <if test="logStartTime != null and logStartTime != ''">
+            and co.create_time &gt; #{logStartTime}
+            and co.create_time &lt; #{logEndTime}
+        </if>
         and t.community_id = #{communityId}
     </select>
 
@@ -449,6 +472,10 @@
         </if>
         <if test="feeNameLike != null and feeNameLike != ''">
             and t.fee_name like concat('%',#{feeNameLike},'%')
+        </if>
+        <if test="logStartTime != null and logStartTime != ''">
+            and co.create_time &gt; #{logStartTime}
+            and co.create_time &lt; #{logEndTime}
         </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
