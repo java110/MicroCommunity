@@ -907,6 +907,8 @@ public class ContractApi {
                                                           @RequestParam(value = "contractName", required = false) String contractName,
                                                           @RequestParam(value = "contractCode", required = false) String contractCode,
                                                           @RequestParam(value = "contractType", required = false) String contractType,
+                                                          @RequestParam(value = "logStartTime", required = false) String logStartTime,
+                                                          @RequestParam(value = "logEndTime", required = false) String logEndTime,
                                                           @RequestParam(value = "planId", required = false) String planId
     ) {
         ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
@@ -918,6 +920,8 @@ public class ContractApi {
         contractChangePlanDto.setPlanId(planId);
         contractChangePlanDto.setContractCode(contractCode);
         contractChangePlanDto.setContractType(contractType);
+        contractChangePlanDto.setStartTime(logStartTime);
+        contractChangePlanDto.setEndTime(logEndTime);
         return getContractChangePlanBMOImpl.get(contractChangePlanDto);
     }
 
