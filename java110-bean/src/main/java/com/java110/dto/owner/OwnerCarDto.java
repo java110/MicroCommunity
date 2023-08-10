@@ -103,6 +103,9 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String userName;
 
     private String operate;
+
+    private String staffNameLike;
+
     private List<OwnerCarAttrDto> ownerCarAttrDto;
 
     public String getCarColor() {
@@ -535,5 +538,13 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setOperate(String operate) {
         this.operate = operate;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
     }
 }

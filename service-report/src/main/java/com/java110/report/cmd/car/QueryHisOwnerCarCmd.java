@@ -29,7 +29,6 @@ public class QueryHisOwnerCarCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson,"carNum","未包含车辆");
         Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
 
     }
