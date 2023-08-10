@@ -101,6 +101,8 @@ public class RoomDto extends PageDto implements Serializable {
 
     private String endDate;
 
+    private String bId;
+
 
 
     public String getFeeCoefficient() {
@@ -541,5 +543,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

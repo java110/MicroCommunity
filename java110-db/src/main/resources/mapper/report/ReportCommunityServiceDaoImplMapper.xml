@@ -395,7 +395,7 @@
     <select id="queryHisFees" parameterType="Map" resultType="Map">
         select t.operate,t.start_time startTime,t.end_time endTime,t.create_time createTime,pfc.fee_name feeName,
         t.amount,
-        uu.`name` userName,pfa.`value` payerObjName,pfa1.value ownerName,co.create_time createTime
+        uu.`name` userName,pfa.`value` payerObjName,pfa1.value ownerName,t.b_id bId,co.create_time createTime
         from business_pay_fee t
         left join  pay_fee_config pfc on t.config_id = pfc.config_id
         left join c_business cb on t.b_id = cb.b_id
@@ -471,7 +471,7 @@
         endTime,t.community_id communityId,t.deduct_from deductFrom,
         t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units,t.b_id bId,
         td1.name feeTypeCdName,td2.name feeFlagName,td3.name billTypeName,td4.name computingFormulaName,
-        uu.`name` userName,co.create_time createTime
+        uu.`name` userName,co.create_time createTime,t.b_id bId
         from business_pay_fee_config t
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
@@ -548,7 +548,7 @@
         roomSubType,td1.name roomSubTypeName, t.room_area roomArea,t.room_id
         roomId,t.layer,t.fee_coefficient feeCoefficient,t.built_up_area
         builtUpArea,t.room_num roomNum,t.unit_id unitId,t.state,td.name stateName,t.community_id
-        communityId,t.apartment,t.room_type roomType,t.room_rent roomRent,f.floor_num floorNum,bu.unit_num unitNum
+        communityId,t.apartment,t.room_type roomType,t.room_rent roomRent,f.floor_num floorNum,bu.unit_num unitNum,t.b_id bId
         from business_building_room t
         left join building_unit bu on t.unit_id = bu.unit_id
         left join f_floor f on f.floor_id = bu.floor_id
