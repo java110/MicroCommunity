@@ -389,6 +389,9 @@
         <if test="deleteFlag != null and deleteFlag != ''">
             and t.operate = 'DEL'
         </if>
+        <if test="payerObjName != null and payerObjName != ''">
+            pfa.`value` = #{payerObjName}
+        </if>
         <if test="staffNameLike != null and staffNameLike != ''">
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
