@@ -220,7 +220,8 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         JSONObject paramIn = new JSONObject();
         paramIn.put("payFeeRoom", name + "-" + payerObjName);
         paramIn.put("feeTypeCdName", feeTypeCdName);
-        paramIn.put("payFeeTime", startTime + "至" + endTime);
+        paramIn.put("payFeeTime", startTime + "~" + endTime);
+        paramIn.put("payFeeTime", startTime + "~" + endTime);
         paramIn.put("receivedAmount", receivedAmount);
         paramIn.put("startTime", startTime);
         paramIn.put("endTime", endTime);

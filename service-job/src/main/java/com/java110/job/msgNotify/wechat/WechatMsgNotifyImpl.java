@@ -59,7 +59,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
     static {
         templateKeys.put(SPEC_CD_OWE_FEE_TEMPLATE, new String[]{"缴费类型", "房号", "总金额", "缴费周期"});
         templateKeys.put(SPEC_CD_WECHAT_PROCESS_TEMPLATE, new String[]{"流程名称", "发起时间", "发起人"});
-        templateKeys.put(SPEC_CD_WECHAT_SUCCESS_TEMPLATE, new String[]{"缴费房间", "费用类型", "缴费时间", "缴费金额"});
+        templateKeys.put(SPEC_CD_WECHAT_SUCCESS_TEMPLATE, new String[]{"缴费房间", "费用类型", "费用周期", "缴费金额"});
         templateKeys.put(SPEC_CD_WECHAT_WORK_ORDER_REMIND_TEMPLATE, new String[]{"报修类型", "报修地址", "报修问题"});
         templateKeys.put(SPEC_CD_WECHAT_DISPATCH_REMIND_TEMPLATE, new String[]{"联系人", "手机号", "报修时间", "维修地址"});
         templateKeys.put(SPEC_CD_WECHAT_SCHEDULE_TEMPLATE, new String[]{"平台受理人", "联系电话", "受理时间"});
@@ -225,7 +225,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         templateMessage.setTouser(openId);
         data.put("thing2",new Content(content.getString("feeTypeCdName")));
         data.put("thing10",new Content(content.getString("payFeeRoom")));
-        data.put("time5",new Content(content.getString("payFeeTime")));
+        data.put("time18",new Content(content.getString("payFeeTime")));
         data.put("amount6",new Content(content.getString("receivedAmount")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
