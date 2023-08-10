@@ -316,7 +316,19 @@
         left join c_orders co on cb.o_id = co.o_id
         left join u_user uu on co.user_id = uu.user_id
         where 1=1
-        and t.member_id = #{memberId}
+        <if test="memberId != null and memberId != ''">
+            and t.member_id = #{memberId}
+        </if>
+        <if test="ownerNameLike != null and ownerNameLike != ''">
+            and t.name like concat('%',#{ownerNameLike},'%')
+        </if>
+        <if test="staffNameLike != null and staffNameLike != ''">
+            and uu.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="logStartTime != null and logStartTime != ''">
+            and co.create_time &gt; #{logStartTime}
+            and co.create_time &lt; #{logEndTime}
+        </if>
         and t.community_id = #{communityId}
     </select>
 
@@ -330,7 +342,19 @@
         left join c_orders co on cb.o_id = co.o_id
         left join u_user uu on co.user_id = uu.user_id
         where 1=1
-        and t.member_id = #{memberId}
+        <if test="memberId != null and memberId != ''">
+            and t.member_id = #{memberId}
+        </if>
+        <if test="ownerNameLike != null and ownerNameLike != ''">
+            and t.name like concat('%',#{ownerNameLike},'%')
+        </if>
+        <if test="staffNameLike != null and staffNameLike != ''">
+            and uu.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="logStartTime != null and logStartTime != ''">
+            and co.create_time &gt; #{logStartTime}
+            and co.create_time &lt; #{logEndTime}
+        </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
         <if test="page != -1 and page != null ">
