@@ -421,7 +421,7 @@
         endTime,t.community_id communityId,t.deduct_from deductFrom,
         t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units,t.b_id bId,
         td1.name feeTypeCdName,td2.name feeFlagName,td3.name billTypeName,td4.name computingFormulaName,
-        uu.`name` userName
+        uu.`name` userName,co.create_time createTime
         from business_pay_fee_config t
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
@@ -447,7 +447,7 @@
         <if test="staffNameLike != null and staffNameLike != ''">
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
-        <if test="feeNameLike != null and staffNameLike != ''">
+        <if test="feeNameLike != null and feeNameLike != ''">
             and t.fee_name like concat('%',#{feeNameLike},'%')
         </if>
         and t.community_id = #{communityId}
