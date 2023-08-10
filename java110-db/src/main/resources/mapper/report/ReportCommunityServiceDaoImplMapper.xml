@@ -336,7 +336,7 @@
         select t.operate,t.sex,t.name,t.link,t.remark,t.owner_id ownerId,t.b_id bId,
         t.age,t.member_id memberId,
         t.owner_type_cd ownerTypeCd,t.community_id communityId,t.owner_flag ownerFlag,
-        t.id_card idCard,t.state,t.address,t.create_time createTime,uu.`name` userName,t.operate
+        t.id_card idCard,t.state,t.address,co.create_time createTime,uu.`name` userName,t.operate
         from business_building_owner t
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
@@ -499,6 +499,77 @@
         </if>
         <if test="feeNameLike != null and feeNameLike != ''">
             and t.fee_name like concat('%',#{feeNameLike},'%')
+        </if>
+        <if test="logStartTime != null and logStartTime != ''">
+            and co.create_time &gt; #{logStartTime}
+            and co.create_time &lt; #{logEndTime}
+        </if>
+        and t.community_id = #{communityId}
+        order by t.create_time desc,t.operate
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+
+    <select id="queryHisRoomCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from business_building_room t
+        left join building_unit bu on t.unit_id = bu.unit_id
+        left join f_floor f on f.floor_id = bu.floor_id
+        left join c_business cb on t.b_id = cb.b_id
+        left join c_orders co on cb.o_id = co.o_id
+        left join u_user uu on co.user_id = uu.user_id
+        where 1=1
+        <if test="roomId != null and roomId != ''">
+            and t.room_id = #{roomId}
+        </if>
+        <if test="floorNum != null and floorNum != ''">
+            and f.floor_num = #{floorNum}
+        </if>
+        <if test="unitNum != null and unitNum != ''">
+            and bu.unit_num = #{unitNum}
+        </if>
+        <if test="roomNum != null and roomNum != ''">
+            and t.room_num = #{roomNum}
+        </if>
+        <if test="staffNameLike != null and staffNameLike != ''">
+            and uu.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="logStartTime != null and logStartTime != ''">
+            and co.create_time &gt; #{logStartTime}
+            and co.create_time &lt; #{logEndTime}
+        </if>
+        and t.community_id = #{communityId}
+    </select>
+
+    <select id="queryHisRooms" parameterType="Map" resultType="Map">
+        select t.operate,co.create_time createTime,uu.`name` userName,t.section,t.remark,t.room_sub_type
+        roomSubType,t.room_area roomArea,t.room_id
+        roomId,t.layer,t.fee_coefficient feeCoefficient,t.built_up_area
+        builtUpArea,t.room_num roomNum,t.unit_id unitId,t.state,td.name stateName,t.community_id
+        communityId,t.apartment,t.room_type roomType,t.room_rent roomRent,f.floor_num floorNum,bu.unit_num unitNum
+        from business_building_room t
+        left join building_unit bu on t.unit_id = bu.unit_id
+        left join f_floor f on f.floor_id = bu.floor_id
+        left join c_business cb on t.b_id = cb.b_id
+        left join c_orders co on cb.o_id = co.o_id
+        left join u_user uu on co.user_id = uu.user_id
+        where 1=1
+        <if test="roomId != null and roomId != ''">
+            and t.room_id = #{roomId}
+        </if>
+        <if test="floorNum != null and floorNum != ''">
+            and f.floor_num = #{floorNum}
+        </if>
+        <if test="unitNum != null and unitNum != ''">
+            and bu.unit_num = #{unitNum}
+        </if>
+        <if test="roomNum != null and roomNum != ''">
+            and t.room_num = #{roomNum}
+        </if>
+        <if test="staffNameLike != null and staffNameLike != ''">
+            and uu.name like concat('%',#{staffNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
             and co.create_time &gt; #{logStartTime}

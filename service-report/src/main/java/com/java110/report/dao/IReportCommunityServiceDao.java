@@ -104,7 +104,11 @@ public interface IReportCommunityServiceDao {
 
     List<Map> queryHisFees(Map info);
 
-    int queryHisFeeConfigCount(Map map);
+    int queryHisFeeConfigCount(Map info);
 
-    List<Map> queryHisFeeConfigs(Map map);
+    List<Map> queryHisFeeConfigs(Map info);
+
+    int queryHisRoomCount(Map info);
+
+    List<Map> queryHisRooms(Map info);
 }

@@ -95,4 +95,10 @@ public interface IReportCommunityInnerServiceSMO {
      */
     @RequestMapping(value = "/queryHisFeeConfigs", method = RequestMethod.POST)
     List<FeeConfigDto> queryHisFeeConfigs(@RequestBody FeeConfigDto feeDto);
+
+    @RequestMapping(value = "/queryHisRoomCount", method = RequestMethod.POST)
+    int queryHisRoomCount(@RequestBody RoomDto roomDto);
+
+    @RequestMapping(value = "/queryHisRooms", method = RequestMethod.POST)
+    List<RoomDto> queryHisRooms(@RequestBody RoomDto roomDto);
 }

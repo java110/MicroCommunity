@@ -121,6 +121,26 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
         return ownerDtos;
     }
 
+
+    @Override
+    public int queryHisRoomCount(@RequestBody RoomDto roomDto) {
+        return reportCommunityServiceDaoImpl.queryHisRoomCount(BeanConvertUtil.beanCovertMap(roomDto));
+    }
+
+    @Override
+    public List<RoomDto> queryHisRooms(@RequestBody RoomDto roomDto) {
+        int page = roomDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            roomDto.setPage((page - 1) * roomDto.getRow());
+        }
+
+        List<RoomDto> roomDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.queryHisRooms(BeanConvertUtil.beanCovertMap(roomDto)),
+                RoomDto.class);
+        return roomDtos;
+    }
+
     @Override
     public int queryHisFeeCount(@RequestBody FeeDto feeDto) {
         return reportCommunityServiceDaoImpl.queryHisFeeCount(BeanConvertUtil.beanCovertMap(feeDto));
@@ -160,6 +180,8 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
 
         return feeDtos;
     }
+
+
 
     /**
      * 获取批量userId
