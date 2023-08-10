@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * 查询房屋变更记录
  */
-@Java110Cmd(serviceCode = "owner.queryHisRoom")
+@Java110Cmd(serviceCode = "room.queryHisRoom")
 public class QueryHisRoomCmd extends Cmd {
 
     @Autowired
