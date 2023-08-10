@@ -103,6 +103,9 @@ public class RoomDto extends PageDto implements Serializable {
 
     private String bId;
 
+    private String operate;
+
+
 
 
     public String getFeeCoefficient() {
@@ -551,5 +554,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getOperate() {
+        return operate;
+    }
+
+    public void setOperate(String operate) {
+        this.operate = operate;
     }
 }
