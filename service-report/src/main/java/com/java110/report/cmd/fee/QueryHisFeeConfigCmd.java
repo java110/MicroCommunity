@@ -33,12 +33,6 @@ public class QueryHisFeeConfigCmd extends Cmd {
 
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
 
-        if (reqJson.containsKey("deleteFlag")) {
-            return;
-        }
-
-        Assert.hasKeyAndValue(reqJson, "configId", "未包含费用ID");
-
     }
 
     @Override

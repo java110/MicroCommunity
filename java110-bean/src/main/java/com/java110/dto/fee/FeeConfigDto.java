@@ -53,6 +53,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String[] configIds;
     private String feeFlag;
     private String feeName;
+
+    private String feeNameLike;
     private String feeNameEq;
     private String startTime;
     private String endTime;
@@ -97,6 +99,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
 
     private String prepaymentPeriod;
+
+    private String staffNameLike;
 
 
     public String getFeeTypeCd() {
@@ -396,5 +400,21 @@ public class FeeConfigDto extends PageDto implements Serializable {
     public void setPrepaymentPeriod(String prepaymentPeriod) {
         this.prepaymentPeriod = prepaymentPeriod;
 
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
+    }
+
+    public String getFeeNameLike() {
+        return feeNameLike;
+    }
+
+    public void setFeeNameLike(String feeNameLike) {
+        this.feeNameLike = feeNameLike;
     }
 }

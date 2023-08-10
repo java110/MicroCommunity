@@ -402,6 +402,13 @@
         <if test="deleteFlag != null and deleteFlag != ''">
             and t.operate = 'DEL'
         </if>
+        <if test="staffNameLike != null and staffNameLike != ''">
+            and uu.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="feeNameLike != null and staffNameLike != ''">
+            and t.fee_name like concat('%',#{feeNameLike},'%')
+        </if>
+
         and t.community_id = #{communityId}
     </select>
 
@@ -436,6 +443,12 @@
         </if>
         <if test="deleteFlag != null and deleteFlag != ''">
             and t.operate = 'DEL'
+        </if>
+        <if test="staffNameLike != null and staffNameLike != ''">
+            and uu.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="feeNameLike != null and staffNameLike != ''">
+            and t.fee_name like concat('%',#{feeNameLike},'%')
         </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
