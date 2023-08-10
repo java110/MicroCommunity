@@ -545,7 +545,7 @@
 
     <select id="queryHisRooms" parameterType="Map" resultType="Map">
         select t.operate,co.create_time createTime,uu.`name` userName,t.section,t.remark,t.room_sub_type
-        roomSubType,t.room_area roomArea,t.room_id
+        roomSubType,td1.name roomSubTypeName, t.room_area roomArea,t.room_id
         roomId,t.layer,t.fee_coefficient feeCoefficient,t.built_up_area
         builtUpArea,t.room_num roomNum,t.unit_id unitId,t.state,td.name stateName,t.community_id
         communityId,t.apartment,t.room_type roomType,t.room_rent roomRent,f.floor_num floorNum,bu.unit_num unitNum
@@ -556,6 +556,8 @@
         left join c_orders co on cb.o_id = co.o_id
         left join u_user uu on co.user_id = uu.user_id
         left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
+        left join t_dict td1 on t.room_sub_type = td1.status_cd and td1.table_name = 'building_room' and
+        td1.table_columns = 'room_sub_type'
         where 1=1
         <if test="roomId != null and roomId != ''">
             and t.room_id = #{roomId}
