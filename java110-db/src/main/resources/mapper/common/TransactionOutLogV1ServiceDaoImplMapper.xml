@@ -60,6 +60,10 @@
         <if test="responseMessage !=null and responseMessage != ''">
             and t.response_message= #{responseMessage}
         </if>
+        <if test="startTime != null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+            and t.create_time &lt; #{endTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -139,6 +143,10 @@
         </if>
         <if test="responseMessage !=null and responseMessage != ''">
             and t.response_message= #{responseMessage}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+            and t.create_time &lt; #{endTime}
         </if>
 
 
