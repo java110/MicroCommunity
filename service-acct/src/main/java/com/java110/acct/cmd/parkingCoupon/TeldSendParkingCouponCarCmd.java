@@ -33,8 +33,12 @@ import java.util.List;
 
 /**
  * 特来电同步车牌号给物业系统
+ *
+ *
+ * /app/ext/parkingCoupon.teldSendParkingCouponCar/992020051967020024
+ * /app/ext/login.getTokenForTeld/992020051967020024
  */
-@Java110Cmd(serviceCode = "parkingCoupon.teldSendParkingCouponCar")
+@Java110Cmd(serviceCode = "notification_charge_end_order_info")
 public class TeldSendParkingCouponCarCmd extends Cmd {
 
     @Autowired

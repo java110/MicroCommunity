@@ -14,6 +14,7 @@ public class ServiceConfiguration {
     public FilterRegistrationBean jwtFilter() {
         StringBuffer exclusions = new StringBuffer();
         exclusions.append("/callComponent/login/*,");
+        exclusions.append("/app/ext/992020051967020024/login.getTokenForTeld,");
         exclusions.append("/callComponent/register/*,");
         exclusions.append("/callComponent/validate-code/*,");
         exclusions.append("/callComponent/validate-tel/*,");

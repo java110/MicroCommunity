@@ -13,7 +13,6 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.TeldUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +30,7 @@ import java.util.Map;
                 "token 是这个接口返回的内容<br/> " +
                 "会话保持为2小时，请快要到2小时时，再次登录，保持会话</br>",
         httpMethod = "post",
-        url = "http://{ip}:{port}/app/ext/login.getTokenForTeld/{appId}",
+        url = "http://{ip}:{port}/app/ext/{appId}/query_token",
         resource = "userDoc",
         author = "吴学文",
         serviceCode = "login.getTokenForTeld",
@@ -73,8 +71,8 @@ import java.util.Map;
                 "    \"Sig\": \"58E52010C7DEE87FE183B0AFA5B2BE30\"\n" +
                 "}"
 )
-@Java110Cmd(serviceCode = "login.getTokenForTeld")
-public class GetTokenForTeldCmd extends Cmd {
+@Java110Cmd(serviceCode = "query_token")
+public class QueryTokenForTeldCmd extends Cmd {
 
 
     public static String OPERATOR_SECRET = "1234567890abcdef"; //

@@ -298,7 +298,7 @@ public class AppController extends BaseController {
      * @return http status 200 成功 其他失败
      */
 
-    @RequestMapping(path = "/ext/{serviceCode}/{appId}", method = RequestMethod.POST)
+    @RequestMapping(path = "/ext/{appId}/{serviceCode}", method = RequestMethod.POST)
     @Java110Lang
     public ResponseEntity<String> extPost(
             @PathVariable String serviceCode,
