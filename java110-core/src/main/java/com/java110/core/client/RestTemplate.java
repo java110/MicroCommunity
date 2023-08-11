@@ -5,6 +5,9 @@ import org.slf4j.Logger;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
 
 /**
@@ -38,6 +41,16 @@ public class RestTemplate extends org.springframework.web.client.RestTemplate {
         ResponseEntity<T> responseEntity = super.exchange(url, method, requestEntity, responseType, uriVariables);
         logger.debug("返回信息：responseEntity:{}", responseEntity);
 
+        return responseEntity;
+    }
+
+    @Override
+    public <T> ResponseEntity<T> postForEntity(String url, @Nullable Object request,
+                                               Class<T> responseType, Object... uriVariables) throws RestClientException {
+
+        logger.debug("请求信息：url:{},method:{},request:{},uriVariables:{}", url, request, uriVariables);
+        ResponseEntity<T> responseEntity = super.postForEntity(url, request, responseType, uriVariables);
+        logger.debug("返回信息：responseEntity:{}", responseEntity);
         return responseEntity;
     }
 

@@ -27,6 +27,8 @@ import java.io.Serializable;
  */
 public class TransactionOutLogPo implements Serializable {
 
+
+
     private String requestMessage;
     private String costTime;
     private String requestUrl;
@@ -36,6 +38,8 @@ public class TransactionOutLogPo implements Serializable {
     private String requestHeader;
     private String state;
     private String responseMessage;
+
+    private String logType;
 
     public String getRequestMessage() {
         return requestMessage;
@@ -109,5 +113,11 @@ public class TransactionOutLogPo implements Serializable {
         this.responseMessage = responseMessage;
     }
 
+    public String getLogType() {
+        return logType;
+    }
 
+    public void setLogType(String logType) {
+        this.logType = logType;
+    }
 }

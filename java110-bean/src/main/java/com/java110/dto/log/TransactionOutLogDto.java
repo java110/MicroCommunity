@@ -17,7 +17,18 @@ public class TransactionOutLogDto extends PageDto implements Serializable {
 
     public static final String STATE_S = "S";//成功
     public static final String STATE_F = "F";//失败
+    // 微信支付
+    public static final String LOG_TYPE_WECHAT_PAY = "WECHAT_PAY";
 
+    // 物联网
+    public static final String LOG_TYPE_IOT = "IOT"; // 物联网
+
+    // 物联网
+    public static final String LOG_TYPE_SMS = "SMS"; // 短信验证码
+
+    // oss
+    public static final String LOG_TYPE_OSS = "OSS"; // OSS
+    public static final String LOG_TYPE_DEFAULT = "DEFAULT"; // 默认
     private String requestMessage;
     private String costTime;
     private String requestUrl;
@@ -32,6 +43,8 @@ public class TransactionOutLogDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String logType;
 
 
     public String getRequestMessage() {
@@ -121,5 +134,13 @@ public class TransactionOutLogDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getLogType() {
+        return logType;
+    }
+
+    public void setLogType(String logType) {
+        this.logType = logType;
     }
 }

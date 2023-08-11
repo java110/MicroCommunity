@@ -95,6 +95,7 @@ public class OSSUtil {
             ossClient.putObject(bucketName, objectName, inputStream);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new IllegalArgumentException(e.getMessage());
         } finally {
             if (ossClient != null) {
                 ossClient.shutdown();
