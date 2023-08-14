@@ -57,9 +57,9 @@ public class SendParkingCouponCarOrderToTeldAdapt extends DatabusAdaptImpl {
     @Autowired
     private IParkingCouponCarV1InnerServiceSMO parkingCouponCarV1InnerServiceSMOImpl;
 
-    private static final String query_token = "http://hlht.teld.cc:7777/evcs/v20161110/query_token";
+    private static final String query_token = "http://hlht.teld.cc:7777/evcs/v20191230/query_token";
 
-    private static final String notify_url = "http://hlht.teld.cc:7777/evcs/v20161110/notification_park_order_consumed";
+    private static final String notify_url = "http://hlht.teld.cc:7777/evcs/v20191230/notification_park_order_consumed";
 
 
     @Autowired
