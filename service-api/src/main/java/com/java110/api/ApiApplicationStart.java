@@ -117,6 +117,12 @@ public class ApiApplicationStart {
         StringHttpMessageConverter m = new StringHttpMessageConverter(Charset.forName("UTF-8"));
         RestTemplate restTemplate = new RestTemplateBuilder().additionalMessageConverters(m).build(RestTemplate.class);
         restTemplate.getInterceptors().add(java110RestTemplateInterceptor);
+        //设置超时时间
+        HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        httpRequestFactory.setConnectionRequestTimeout(10000);
+        httpRequestFactory.setConnectTimeout(10000);
+        httpRequestFactory.setReadTimeout(10000);
+        restTemplate.setRequestFactory(httpRequestFactory);
         return restTemplate;
     }
 
