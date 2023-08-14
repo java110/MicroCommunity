@@ -152,7 +152,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         }
 
         if (!headers.containsKey(CommonConstant.USER_ID)) {
-            headers.put(CommonConstant.USER_ID, "-1");
+            headers.put(CommonConstant.USER_ID, headers.get(CommonConstant.HTTP_USER_ID));
         }
         if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
             headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());
