@@ -57,9 +57,9 @@ public class SendParkingCouponCarOrderToTeldAdapt extends DatabusAdaptImpl {
     @Autowired
     private IParkingCouponCarV1InnerServiceSMO parkingCouponCarV1InnerServiceSMOImpl;
 
-    private static final String query_token = "http://hlht.teld.cc:7777/evcs/v20191230/query_token";
+    private static final String query_token = "/query_token";
 
-    private static final String notify_url = "http://hlht.teld.cc:7777/evcs/v20191230/notification_park_order_consumed";
+    private static final String notify_url = "/notification_park_order_consumed";
 
 
     @Autowired
@@ -118,6 +118,7 @@ public class SendParkingCouponCarOrderToTeldAdapt extends DatabusAdaptImpl {
         String aesKey = MappingCache.getValue("TELD_DOMAIN", "AES_KEY");
         String aesIv = MappingCache.getValue("TELD_DOMAIN", "AES_IV");
         String OperatorID = MappingCache.getValue("TELD_DOMAIN","Teld_OperatorID");
+        String teldUrl = MappingCache.getValue("TELD_DOMAIN","Teld_Url");// http://hlht.teld.cc:7777/evcs/v20191230
 
         String param = TeldUtil.generateSecurityParam(paramIn.toJSONString(), aesKey, aesIv, signKey, OperatorID);
 
@@ -128,7 +129,7 @@ public class SendParkingCouponCarOrderToTeldAdapt extends DatabusAdaptImpl {
 
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(param, httpHeaders);
         try {
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(notify_url, HttpMethod.POST, httpEntity, String.class);
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(teldUrl+notify_url, HttpMethod.POST, httpEntity, String.class);
             logger.debug("返回报文,{}", responseEntity);
             String body = responseEntity.getBody();
             JSONObject paramOut = JSONObject.parseObject(body);
@@ -155,6 +156,7 @@ public class SendParkingCouponCarOrderToTeldAdapt extends DatabusAdaptImpl {
         String aesIv = MappingCache.getValue("TELD_DOMAIN", "AES_IV");
         String OperatorID = MappingCache.getValue("TELD_DOMAIN","Teld_OperatorID");
         String OperatorSecret = MappingCache.getValue("TELD_DOMAIN","Teld_OperatorSecret");
+        String teldUrl = MappingCache.getValue("TELD_DOMAIN","Teld_Url");// http://hlht.teld.cc:7777/evcs/v20191230
 
         JSONObject paramIn = new JSONObject();
         paramIn.put("OperatorID", OperatorID);
@@ -167,7 +169,7 @@ public class SendParkingCouponCarOrderToTeldAdapt extends DatabusAdaptImpl {
         httpHeaders.add("Content-Type", "application/json;charset=UTF-8");
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity(param, httpHeaders);
         try {
-            ResponseEntity<String> responseEntity = outRestTemplate.exchange(query_token, HttpMethod.POST, httpEntity, String.class);
+            ResponseEntity<String> responseEntity = outRestTemplate.exchange(teldUrl+query_token, HttpMethod.POST, httpEntity, String.class);
             logger.debug("返回报文,{}", responseEntity);
             String body = responseEntity.getBody();
             JSONObject paramOut = JSONObject.parseObject(body);

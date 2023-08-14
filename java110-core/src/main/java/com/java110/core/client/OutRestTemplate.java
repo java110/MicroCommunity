@@ -73,7 +73,7 @@ public class OutRestTemplate extends RestTemplate {
             } else {
                 tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.BAD_REQUEST);
             }
-            LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, requestEntity.getBody().toString(), tmpResponseEntity);
+            LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, tmpResponseEntity.getBody().toString(), tmpResponseEntity);
 
         }
         return responseEntity;
