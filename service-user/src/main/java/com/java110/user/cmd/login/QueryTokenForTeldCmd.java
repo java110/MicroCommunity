@@ -127,7 +127,7 @@ public class QueryTokenForTeldCmd extends Cmd {
             param.put("AccessToken", token);
             param.put("TokenAvailableTime", 7200);
             param.put("FailReason", 0);
-            paramOut = TeldUtil.generateSecurityParam(param.toJSONString(), aesKey, aesIv, signKey, dataObj.getString("OperatorID"));
+            paramOut = TeldUtil.generateReturnParam(param.toJSONString(), aesKey, aesIv, signKey, dataObj.getString("OperatorID"));
             context.setResponseEntity(new ResponseEntity(paramOut, HttpStatus.OK));
         } catch (Exception e) {
             throw new RuntimeException(e);

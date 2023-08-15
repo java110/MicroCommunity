@@ -95,7 +95,7 @@ public class TeldSendParkingCouponCarCmd extends Cmd {
         paramOut.put("PlateAutFailReason", PlateAutFailReason);
         String paramStr = "";
         try {
-            paramStr = TeldUtil.generateSecurityParam(paramOut.toJSONString(), aesKey, aesIv, signKey, reqJson.getString("OperatorID"));
+            paramStr = TeldUtil.generateReturnParam(paramOut.toJSONString(), aesKey, aesIv, signKey, reqJson.getString("OperatorID"));
         } catch (Exception e) {
             e.printStackTrace();
         }

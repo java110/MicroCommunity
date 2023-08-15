@@ -237,6 +237,32 @@ public class TeldUtil {
         return paramObj.toString();
     }
 
+    /**
+     * 生成加密报文
+     *
+     * @param jsonParam
+     * @param aesKey
+     * @param aesIV
+     * @param signKey
+     * @param OPERATOR_ID
+     * @return
+     * @throws Exception
+     */
+    public static String generateReturnParam(String jsonParam, String aesKey, String aesIV, String signKey, String OPERATOR_ID)
+            throws Exception {
+        System.out.println("generateSecurityParam=" + jsonParam);
+        JSONObject paramObj = new JSONObject();
+        paramObj.put("Ret", 0);
+        paramObj.put("Data", TeldUtil.Encrypt(jsonParam, aesKey, aesIV));
+        paramObj.put("Msg", "成功");
+
+        String signMsg = paramObj.getString("Ret") +paramObj.getString("Msg") + paramObj.getString("Data");
+
+        paramObj.put("Sig", TeldUtil.getHmacMd5Str(signKey, signMsg));
+
+        return paramObj.toString();
+    }
+
     public static String getSeq(String timeStamp) {
 
         if (map.containsKey(timeStamp)) {
