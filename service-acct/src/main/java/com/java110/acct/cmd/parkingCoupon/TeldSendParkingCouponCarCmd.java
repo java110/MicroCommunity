@@ -130,7 +130,7 @@ public class TeldSendParkingCouponCarCmd extends Cmd {
         }
 
 
-        String carNum = dataObj.getString("plateNum");
+        String carNum = dataObj.getString("PlateNum");
 
         int quantity = 0;
 
