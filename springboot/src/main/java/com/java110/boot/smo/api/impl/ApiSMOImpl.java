@@ -88,6 +88,7 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
 
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
+
         //todo 校验员工时 是否有访问小区的权限
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
         //todo 如果 登录用户不为空 则将 前段传递的user-id 重写

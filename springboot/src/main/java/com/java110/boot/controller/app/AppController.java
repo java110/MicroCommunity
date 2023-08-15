@@ -20,6 +20,7 @@ import com.java110.boot.smo.api.IApiSMO;
 import com.java110.boot.smo.privilege.IPrivilegeSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.language.Java110Lang;
 import com.java110.core.log.LoggerFactory;
@@ -324,7 +325,10 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + serviceCode);
+            IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), pd.getReqData(),
+                    "", "", "", pd.getSessionId(), appId, pd.getPayerObjId(), pd.getPayerObjType(), pd.getEndTime());
+            request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,newPd);
+            privilegeSMOImpl.hasPrivilege(restTemplate, newPd, "/app/" + serviceCode);
             responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + serviceCode + "]失败：", e);
@@ -363,7 +367,10 @@ public class AppController extends BaseController {
             headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
             logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
-            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + serviceCode);
+            IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(), pd.getToken(), postInfo,
+                    "", "", "", pd.getSessionId(), appId, pd.getPayerObjId(), pd.getPayerObjType(), pd.getEndTime());
+            request.setAttribute(CommonConstant.CONTEXT_PAGE_DATA,newPd);
+            privilegeSMOImpl.hasPrivilege(restTemplate, newPd, "/app/" + serviceCode);
             responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + serviceCode + "]失败：", e);
