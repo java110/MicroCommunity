@@ -131,12 +131,7 @@ public class SendParkingCouponCarOrderToTeldAdapt extends DatabusAdaptImpl {
         try {
             ResponseEntity<String> responseEntity = outRestTemplate.exchange(teldUrl+notify_url, HttpMethod.POST, httpEntity, String.class);
             logger.debug("返回报文,{}", responseEntity);
-            String body = responseEntity.getBody();
-            JSONObject paramOut = JSONObject.parseObject(body);
-            String data = TeldUtil.Decrypt(paramOut.getString("Data"), aesKey, aesIv);
-            JSONObject dataObj = JSONObject.parseObject(data);
-            token = dataObj.getString("AccessToken");
-            CommonCache.setValue("Teld_Parking_token", token, CommonCache.TOKEN_EXPIRE_TIME);
+
         } catch (HttpStatusCodeException e) {
             logger.error("调用异常", e);
         } catch (Exception e) {

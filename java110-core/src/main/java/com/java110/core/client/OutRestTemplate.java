@@ -73,7 +73,9 @@ public class OutRestTemplate extends RestTemplate {
             } else {
                 tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.BAD_REQUEST);
             }
-            LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, tmpResponseEntity.getBody().toString(), tmpResponseEntity);
+            LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null,
+                    requestEntity != null ? requestEntity.getBody().toString() : "",
+                    tmpResponseEntity);
 
         }
         return responseEntity;
@@ -101,7 +103,7 @@ public class OutRestTemplate extends RestTemplate {
             } else {
                 tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.BAD_REQUEST);
             }
-          //  saveLog(url, "POST", null, tmpResponseEntity, DateUtil.getCurrentDate().getTime() - startTime.getTime());
+            //  saveLog(url, "POST", null, tmpResponseEntity, DateUtil.getCurrentDate().getTime() - startTime.getTime());
 
             LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, request.toString(), tmpResponseEntity);
         }
