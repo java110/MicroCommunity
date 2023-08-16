@@ -2,6 +2,7 @@ package com.java110.acct.cmd.parkingCoupon;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -62,6 +63,7 @@ public class TeldSendParkingCouponCarCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String signKey = MappingCache.getValue("TELD_DOMAIN", "SIGN_KEY");
         String aesKey = MappingCache.getValue("TELD_DOMAIN", "AES_KEY");
