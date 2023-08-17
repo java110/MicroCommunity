@@ -29,7 +29,7 @@ import java.util.*;
 public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFactoryAdapt {
     private static final String READ_URL = "http://api2.tqdianbiao.com/Api_v2/ele_read";
 
-    private static final String NOTIFY_URL = "/app/smartMeter/notify/tqDianBiaoFactoryAdaptImpl/992020051967020024";
+    private static final String NOTIFY_URL = "/app/smartMeter/notify/a";
 
     @Autowired
     private IMeterMachineSpecV1InnerServiceSMO meterMachineSpecV1InnerServiceSMOImpl;

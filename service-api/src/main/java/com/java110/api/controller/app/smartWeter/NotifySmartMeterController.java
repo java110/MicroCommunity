@@ -26,6 +26,40 @@ public class NotifySmartMeterController extends BaseController{
      * @param request
      * @throws Exception
      */
+    @RequestMapping(path = "/{implBean}", method = RequestMethod.POST)
+    public ResponseEntity<String> notifyTq(
+            @PathVariable String implBean,
+            @RequestBody String postInfo,
+            HttpServletRequest request) {
+        String appId = "992020051967020024";
+
+        //todo 为啥写的这么挫 因为拓强的电表 回调路径太长 他会失败
+        switch (implBean) {
+            case "a":
+                implBean = "tqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl";
+                break;
+            case "b":
+                implBean = "tqDianBiaoRemoteDanFeiLvPreFactoryAdaptImpl";
+                break;
+            case "c":
+                implBean = "tqShuiBiaoLoraReadFactoryAdaptImpl";
+                break;
+            case "d":
+                implBean = "tqShuiBiaoLoraRechargeFactoryAdaptImpl";
+                break;
+            default:
+        }
+
+        return notifySmartWeterV1InnerServiceSMOImpl.notifySmartMater(new NotifyMeterWaterOrderDto(appId, postInfo, implBean));
+
+    }
+
+    /**
+     * <p>支付回调Api</p>
+     *
+     * @param request
+     * @throws Exception
+     */
     @RequestMapping(path = "/{implBean}/{appId}", method = RequestMethod.POST)
     public ResponseEntity<String> notify(
                                           @PathVariable String implBean,

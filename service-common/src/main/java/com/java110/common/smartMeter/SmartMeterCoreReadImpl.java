@@ -271,6 +271,9 @@ public class SmartMeterCoreReadImpl implements ISmartMeterCoreRead {
         if(ResultVo.CODE_OK != resultVo.getCode()){
             return 0.0;
         }
+        if(resultVo.getData() == null){
+            return 0.0;
+        }
         return Double.parseDouble(resultVo.getData().toString());
     }
 
