@@ -206,6 +206,9 @@
             and t.create_time &gt; #{createTime}
         </if>
         order by t.plan_ins_time
+        <if test="orderByDesc != null and orderByDesc != ''">
+            desc
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

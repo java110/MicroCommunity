@@ -51,6 +51,8 @@ public class InspectionTaskDto extends PageDto implements Serializable {
     //查询当天巡检任务标识
     private String dayTask;
 
+    private String orderByDesc;
+
     public String getPlanUserId() {
         return planUserId;
     }
@@ -274,5 +276,13 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     public void setTaskType(String taskType) {
         this.taskType = taskType;
+    }
+
+    public String getOrderByDesc() {
+        return orderByDesc;
+    }
+
+    public void setOrderByDesc(String orderByDesc) {
+        this.orderByDesc = orderByDesc;
     }
 }
