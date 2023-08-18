@@ -23,8 +23,11 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.data.DatabusDataDto;
+import com.java110.dto.oweFeeCallable.OweFeeCallableDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.fee.IOweFeeCallableV1InnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.po.oweFeeCallable.OweFeeCallablePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -52,14 +55,31 @@ public class SaveOweFeeCallableCmd extends Cmd {
     public static final String CODE_PREFIX_ID = "10";
 
 
-
     @Autowired
     private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
+    @Autowired
+    private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "callableWay", "请求报文中未包含callableWay");
+
+        //todo 公众号校验
+        if (OweFeeCallableDto.CALLABLE_WAY_WECHAT.equals(reqJson.getString("callableWay"))) {
+            SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setObjId(reqJson.getString("communityId"));
+            smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
+            smallWeChatDto.setWechatType(smallWeChatDto.WECHAT_TYPE_PUBLIC);
+            int count = smallWechatV1InnerServiceSMOImpl.querySmallWechatsCount(smallWeChatDto);
+            if (count < 1) {
+                throw new CmdException("未配置公众号");
+            }
+        }
+
+        //todo 短信暂不校验
+
 
     }
 
@@ -70,8 +90,8 @@ public class SaveOweFeeCallableCmd extends Cmd {
 
         String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
 
-        reqJson.put("staffId",userId);
-        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_OWE_FEE_CALLABLE,reqJson));
+        reqJson.put("staffId", userId);
+        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_OWE_FEE_CALLABLE, reqJson));
 
 //        OweFeeCallablePo oweFeeCallablePo = BeanConvertUtil.covertBean(reqJson, OweFeeCallablePo.class);
 //        oweFeeCallablePo.setOfcId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
