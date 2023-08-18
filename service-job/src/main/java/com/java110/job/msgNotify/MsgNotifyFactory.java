@@ -62,10 +62,10 @@ public class MsgNotifyFactory {
      *                    url
      *                    }
      */
-    public static ResultVo sendOweFeeMsg(String communityId, String userId, JSONObject content) {
+    public static ResultVo sendOweFeeMsg(String communityId, String userId, JSONObject content,String notifyWay) {
         ResultVo resultVo = null;
         try {
-            IMsgNotify msgNotify = getMsgNotify();
+            IMsgNotify msgNotify = getMsgNotify(notifyWay);
             resultVo = msgNotify.sendOweFeeMsg(communityId, userId, content);
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,6 +74,23 @@ public class MsgNotifyFactory {
         }
 
         return resultVo;
+    }
+
+    /**
+     * 发送欠费 账单信息
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    "feeTypeName",
+     *                    "payerObjName",
+     *                    "billAmountOwed",
+     *                    "date",
+     *                    url
+     *                    }
+     */
+    public static ResultVo sendOweFeeMsg(String communityId, String userId, JSONObject content) {
+        return sendOweFeeMsg(communityId,userId,content,null);
     }
 
     /**
