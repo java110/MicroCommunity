@@ -93,7 +93,7 @@
         <if test="qendTime !=null and qendTime != ''">
             and t.create_time &lt;= #{qendTime}
         </if>
-        order by t.create_time desc
+        order by t.create_time desc,t.receipt_code desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
