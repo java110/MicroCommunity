@@ -8,11 +8,27 @@
     <!-- 保存催缴记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveOweFeeCallableInfo" parameterType="Map">
         insert into owe_fee_callable(
-        remark,ofc_id,owner_id,callable_way,fee_id,payer_obj_name,owner_name,config_id,fee_name,staff_name,amountd_owed,state,community_id,payer_obj_type,staff_id,payer_obj_id
+        remark,ofc_id,owner_id,callable_way,fee_id,payer_obj_name,owner_name,config_id,fee_name,staff_name,
+        amountd_owed,state,community_id,payer_obj_type,staff_id,payer_obj_id,start_time,end_time
         ) values (
-        #{remark},#{ofcId},#{ownerId},#{callableWay},#{feeId},#{payerObjName},#{ownerName},#{configId},#{feeName},#{staffName},#{amountdOwed},#{state},#{communityId},#{payerObjType},#{staffId},#{payerObjId}
+        #{remark},#{ofcId},#{ownerId},#{callableWay},#{feeId},#{payerObjName},#{ownerName},#{configId},#{feeName},#{staffName},
+        #{amountdOwed},#{state},#{communityId},#{payerObjType},#{staffId},#{payerObjId},#{startTime},#{endTime}
         )
     </insert>
+
+    <insert id="saveOweFeeCallables" parameterType="Map">
+        insert into owe_fee_callable(
+        remark,ofc_id,owner_id,callable_way,fee_id,payer_obj_name,owner_name,config_id,fee_name,staff_name,
+        amountd_owed,state,community_id,payer_obj_type,staff_id,payer_obj_id,start_time,end_time
+        ) values
+        <foreach collection="oweFeeCallablePos" item="item" open="(" close=")" separator=",">
+            #{item.remark},#{item.ofcId},#{item.ownerId},#{item.callableWay},#{item.feeId},#{item.payerObjName},#{item.ownerName},#{item.configId},#{item.feeName},
+            #{item.staffName},#{item.amountdOwed},#{item.state},#{item.communityId},#{item.payerObjType},#{item.staffId},#{item.payerObjId},#{item.startTime},#{item.endTime}
+        </foreach>
+
+    </insert>
+
+
 
 
     <!-- 查询催缴记录信息 add by wuxw 2018-07-03 -->
@@ -22,7 +38,7 @@
         ownerName,t.config_id,t.config_id configId,t.fee_name,t.fee_name feeName,t.staff_name,t.staff_name
         staffName,t.amountd_owed,t.amountd_owed amountdOwed,t.state,t.community_id,t.community_id
         communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.staff_id,t.staff_id
-        staffId,t.payer_obj_id,t.payer_obj_id payerObjId
+        staffId,t.payer_obj_id,t.payer_obj_id payerObjId,t.start_time startTime,t.end_time endTime
         from owe_fee_callable t
         where 1 =1
         and t.status_cd = '0'

@@ -20,6 +20,9 @@ public class DatabusDataDto extends PageDto implements Serializable {
 
     public static final String BUSINESS_TYPE_SAVE_PARKING_COUPON_CAR_ORDER = "saveParkingCouponCarOrder";
 
+    // 欠费催缴
+    public static final String BUSINESS_TYPE_OWE_FEE_CALLABLE = "oweFeeCallable";
+
 
     private String businessTypeCd;
 

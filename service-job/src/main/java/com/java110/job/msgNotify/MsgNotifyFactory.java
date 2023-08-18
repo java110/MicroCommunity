@@ -302,6 +302,7 @@ public class MsgNotifyFactory {
         return getMsgNotify(null);
     }
 
+
     /**
      * 获取通知适配器
      *

@@ -41,6 +41,10 @@ public interface IOweFeeCallableV1InnerServiceSMO {
     @RequestMapping(value = "/saveOweFeeCallable", method = RequestMethod.POST)
     public int saveOweFeeCallable(@RequestBody  OweFeeCallablePo oweFeeCallablePo);
 
+
+    @RequestMapping(value = "/saveOweFeeCallables", method = RequestMethod.POST)
+    int saveOweFeeCallables(@RequestBody List<OweFeeCallablePo> oweFeeCallablePos);
+
     @RequestMapping(value = "/updateOweFeeCallable", method = RequestMethod.POST)
     public int updateOweFeeCallable(@RequestBody  OweFeeCallablePo oweFeeCallablePo);
 
@@ -65,4 +69,5 @@ public interface IOweFeeCallableV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryOweFeeCallablesCount", method = RequestMethod.POST)
     int queryOweFeeCallablesCount(@RequestBody OweFeeCallableDto oweFeeCallableDto);
+
 }

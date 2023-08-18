@@ -61,6 +61,16 @@ public class OweFeeCallableV1ServiceDaoImpl extends BaseServiceDao implements IO
     }
 
 
+    @Override
+    public int saveOweFeeCallables(Map info) {
+        logger.debug("保存 saveOweFeeCallables 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("oweFeeCallableV1ServiceDaoImpl.saveOweFeeCallables",info);
+
+        return saveFlag;
+    }
+
+
     /**
      * 查询催缴记录信息（instance）
      * @param info bId 信息
@@ -107,6 +117,7 @@ public class OweFeeCallableV1ServiceDaoImpl extends BaseServiceDao implements IO
 
         return Integer.parseInt(businessOweFeeCallableInfos.get(0).get("count").toString());
     }
+
 
 
 }

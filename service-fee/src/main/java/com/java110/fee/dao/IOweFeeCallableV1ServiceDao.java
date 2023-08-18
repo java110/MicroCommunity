@@ -70,4 +70,5 @@ public interface IOweFeeCallableV1ServiceDao {
      */
     int queryOweFeeCallablesCount(Map info);
 
+    int saveOweFeeCallables(Map info);
 }

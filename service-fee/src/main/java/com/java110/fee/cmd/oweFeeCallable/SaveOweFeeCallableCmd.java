@@ -22,7 +22,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.intf.fee.IOweFeeCallableV1InnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.po.oweFeeCallable.OweFeeCallablePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -49,26 +51,15 @@ public class SaveOweFeeCallableCmd extends Cmd {
 
     public static final String CODE_PREFIX_ID = "10";
 
+
+
     @Autowired
-    private IOweFeeCallableV1InnerServiceSMO oweFeeCallableV1InnerServiceSMOImpl;
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "ownerName", "请求报文中未包含ownerName");
-        Assert.hasKeyAndValue(reqJson, "ownerId", "请求报文中未包含ownerId");
-        Assert.hasKeyAndValue(reqJson, "payerObjType", "请求报文中未包含payerObjType");
-        Assert.hasKeyAndValue(reqJson, "payerObjId", "请求报文中未包含payerObjId");
-        Assert.hasKeyAndValue(reqJson, "payerObjName", "请求报文中未包含payerObjName");
-        Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含configId");
-        Assert.hasKeyAndValue(reqJson, "feeId", "请求报文中未包含feeId");
-        Assert.hasKeyAndValue(reqJson, "feeName", "请求报文中未包含feeName");
-        Assert.hasKeyAndValue(reqJson, "amountdOwed", "请求报文中未包含amountdOwed");
         Assert.hasKeyAndValue(reqJson, "callableWay", "请求报文中未包含callableWay");
-        Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
-        Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
-        Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含remark");
 
     }
 
@@ -76,13 +67,19 @@ public class SaveOweFeeCallableCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        OweFeeCallablePo oweFeeCallablePo = BeanConvertUtil.covertBean(reqJson, OweFeeCallablePo.class);
-        oweFeeCallablePo.setOfcId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = oweFeeCallableV1InnerServiceSMOImpl.saveOweFeeCallable(oweFeeCallablePo);
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
-        }
+        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+
+        reqJson.put("staffId",userId);
+        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_OWE_FEE_CALLABLE,reqJson));
+
+//        OweFeeCallablePo oweFeeCallablePo = BeanConvertUtil.covertBean(reqJson, OweFeeCallablePo.class);
+//        oweFeeCallablePo.setOfcId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+//        int flag = oweFeeCallableV1InnerServiceSMOImpl.saveOweFeeCallable(oweFeeCallablePo);
+//
+//        if (flag < 1) {
+//            throw new CmdException("保存数据失败");
+//        }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
