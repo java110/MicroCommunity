@@ -15,6 +15,7 @@
  */
 package com.java110.fee.cmd.oweFeeCallable;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -65,6 +66,21 @@ public class SaveOweFeeCallableCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "callableWay", "请求报文中未包含callableWay");
+
+        if (!reqJson.containsKey("roomIds")) {
+            throw new CmdException("未包含房屋信息");
+        }
+
+        JSONArray roomIds = reqJson.getJSONArray("roomIds");
+
+        if (roomIds == null || roomIds.size() < 1) {
+            throw new CmdException("未包含房屋信息");
+        }
+
+        if (!reqJson.containsKey("feeId") && !reqJson.containsKey("feeIds") && !reqJson.containsKey("configIds")) {
+            throw new CmdException("未包含需要催缴的费用");
+        }
+
 
         //todo 公众号校验
         if (OweFeeCallableDto.CALLABLE_WAY_WECHAT.equals(reqJson.getString("callableWay"))) {
