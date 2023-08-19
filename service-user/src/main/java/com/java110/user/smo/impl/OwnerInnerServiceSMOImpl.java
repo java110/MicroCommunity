@@ -232,17 +232,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     @Override
     public int queryOwnersCount(@RequestBody OwnerDto ownerDto) {
 
-        //调用 小区服务查询 小区成员业主信息
-        /*CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityId(ownerDto.getCommunityId());
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
-        return communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);*/
-        int page = ownerDto.getPage();
-
-        if (page != PageDto.DEFAULT_PAGE) {
-            ownerDto.setPage((page - 1) * ownerDto.getRow());
-        }
-
         Map ownerInfo = BeanConvertUtil.beanCovertMap(ownerDto);
         ownerInfo.put("communityId", ownerDto.getCommunityId());
         ownerInfo.put("ownerTypeCd", OwnerTypeConstant.OWNER);
