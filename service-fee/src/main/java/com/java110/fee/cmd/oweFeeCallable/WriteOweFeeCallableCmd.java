@@ -78,7 +78,7 @@ public class WriteOweFeeCallableCmd extends Cmd {
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setFeeId(feeId);
         reportOweFeeDto.setCommunityId(reqJson.getString("communityId"));
-        List<ReportOweFeeDto> reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
+        List<ReportOweFeeDto> reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
         Assert.listOnlyOne(reportOweFeeDtos, "欠费不存在");
 
         String ownerId = reportOweFeeDtos.get(0).getOwnerId();
