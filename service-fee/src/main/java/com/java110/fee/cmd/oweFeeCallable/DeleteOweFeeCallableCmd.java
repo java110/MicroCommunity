@@ -31,6 +31,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：oweFeeCallable.deleteOweFeeCallable
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "oweFeeCallable.deleteOweFeeCallable")
 public class DeleteOweFeeCallableCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteOweFeeCallableCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteOweFeeCallableCmd.class);
 
     @Autowired
     private IOweFeeCallableV1InnerServiceSMO oweFeeCallableV1InnerServiceSMOImpl;
@@ -51,7 +52,7 @@ public class DeleteOweFeeCallableCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ofcId", "ofcId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -59,7 +60,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       OweFeeCallablePo oweFeeCallablePo = BeanConvertUtil.covertBean(reqJson, OweFeeCallablePo.class);
+        OweFeeCallablePo oweFeeCallablePo = BeanConvertUtil.covertBean(reqJson, OweFeeCallablePo.class);
         int flag = oweFeeCallableV1InnerServiceSMOImpl.deleteOweFeeCallable(oweFeeCallablePo);
 
         if (flag < 1) {
