@@ -16,6 +16,7 @@ import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.oweFeeCallable.OweFeeCallablePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
@@ -80,6 +81,17 @@ public class WriteOweFeeCallableCmd extends Cmd {
         List<ReportOweFeeDto> reportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportOweFees(reportOweFeeDto);
         Assert.listOnlyOne(reportOweFeeDtos, "欠费不存在");
 
+        String ownerId = reportOweFeeDtos.get(0).getOwnerId();
+        String ownerName = reportOweFeeDtos.get(0).getOwnerName();
+
+        if(StringUtil.isEmpty(ownerId)){
+            ownerId = "-1";
+        }
+
+        if(StringUtil.isEmpty(ownerName)){
+            ownerName = "无业主";
+        }
+
         //todo
         OweFeeCallablePo oweFeeCallablePo = new OweFeeCallablePo();
 
@@ -90,8 +102,8 @@ public class WriteOweFeeCallableCmd extends Cmd {
         oweFeeCallablePo.setFeeName(reportOweFeeDtos.get(0).getFeeName());
         oweFeeCallablePo.setCommunityId(reqJson.getString("communityId"));
         oweFeeCallablePo.setConfigId(reportOweFeeDtos.get(0).getConfigId());
-        oweFeeCallablePo.setOwnerId(reportOweFeeDtos.get(0).getOwnerId());
-        oweFeeCallablePo.setOwnerName(reportOweFeeDtos.get(0).getOwnerName());
+        oweFeeCallablePo.setOwnerId(ownerId);
+        oweFeeCallablePo.setOwnerName(ownerName);
         oweFeeCallablePo.setPayerObjId(reportOweFeeDtos.get(0).getPayerObjId());
         oweFeeCallablePo.setPayerObjName(reportOweFeeDtos.get(0).getPayerObjName());
         oweFeeCallablePo.setPayerObjType(reportOweFeeDtos.get(0).getPayerObjType());
