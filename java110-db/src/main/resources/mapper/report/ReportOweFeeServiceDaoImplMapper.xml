@@ -385,6 +385,12 @@
         <if test="feeId !=null and feeId != ''">
             and t.fee_id= #{feeId}
         </if>
+        <if test="feeIds !=null">
+            and t.fee_id in
+            <foreach collection="feeIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="amountOwed !=null and amountOwed != ''">
             and t.amount_owed= #{amountOwed}
         </if>

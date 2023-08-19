@@ -220,6 +220,17 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
         if (data.containsKey("feeId")) {
             reportOweFeeDto.setFeeId(data.getString("feeId"));
         }
+        List<String> feeIds = new ArrayList<>();
+
+        if (data.containsKey("feeIds")) {
+            JSONArray feeIdAs = data.getJSONArray("feeIds");
+            for (int feeIndex = 0; feeIndex < feeIdAs.size(); feeIndex++) {
+                feeIds.add(feeIdAs.getString(feeIndex));
+            }
+            if (feeIds.size() > 0) {
+                reportOweFeeDto.setFeeIds(feeIds.toArray(new String[feeIds.size()]));
+            }
+        }
         List<String> configIdss = new ArrayList<>();
         if (data.containsKey("configIds")) {
             JSONArray configIds = data.getJSONArray("configIds");
