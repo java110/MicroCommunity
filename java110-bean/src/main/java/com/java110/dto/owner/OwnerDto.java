@@ -111,6 +111,9 @@ public class OwnerDto extends PageDto implements Serializable {
 
     private String ownerNameLike;
 
+    private String memberName;
+    private String memberLike;
+
 
     public String getSex() {
         return sex;
@@ -577,5 +580,21 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setOwnerNameLike(String ownerNameLike) {
         this.ownerNameLike = ownerNameLike;
+    }
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public String getMemberLike() {
+        return memberLike;
+    }
+
+    public void setMemberLike(String memberLike) {
+        this.memberLike = memberLike;
     }
 }
