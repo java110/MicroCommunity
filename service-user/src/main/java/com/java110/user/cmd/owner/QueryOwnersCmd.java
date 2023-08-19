@@ -198,8 +198,8 @@ public class QueryOwnersCmd extends Cmd {
         }
 
         OwnerDto tmpOwnerMemberDto = new OwnerDto();
-        tmpOwnerMemberDto.setNameLike(reqJson.getString("memberName"));
-        tmpOwnerMemberDto.setLink(reqJson.getString("link"));
+        tmpOwnerMemberDto.setNameLike(memberName);
+        tmpOwnerMemberDto.setLink(memberLink);
         tmpOwnerMemberDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER,
                 OwnerDto.OWNER_TYPE_CD_OTHER,
                 OwnerDto.OWNER_TYPE_CD_TEMP,
