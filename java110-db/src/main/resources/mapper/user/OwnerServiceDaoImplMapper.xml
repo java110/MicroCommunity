@@ -161,7 +161,7 @@
         </if>
 
         <if test="nameLike !=null and nameLike != ''">
-            and t.name like concat('%',#{name},'%')
+            and t.name like concat('%',#{nameLike},'%')
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
