@@ -38,8 +38,12 @@
         ownerName,t.config_id,t.config_id configId,t.fee_name,t.fee_name feeName,t.staff_name,t.staff_name
         staffName,t.amountd_owed,t.amountd_owed amountdOwed,t.state,t.community_id,t.community_id
         communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.staff_id,t.staff_id
-        staffId,t.payer_obj_id,t.payer_obj_id payerObjId,t.start_time startTime,t.end_time endTime
+        staffId,t.payer_obj_id,t.payer_obj_id payerObjId,t.start_time startTime,t.end_time endTime,t.create_time createTime,
+        td.`name` callableWayName,td1.name stateName
         from owe_fee_callable t
+        left join t_dict td on t.callable_way = td.status_cd and td.table_name = 'owe_fee_callable' and td.table_columns = 'callable_way'
+        left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'owe_fee_callable' and td1.table_columns = 'state'
+
         where 1 =1
         and t.status_cd = '0'
         <if test="remark !=null and remark != ''">

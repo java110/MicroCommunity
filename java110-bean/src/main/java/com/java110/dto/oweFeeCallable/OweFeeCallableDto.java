@@ -29,6 +29,7 @@ public class OweFeeCallableDto extends PageDto implements Serializable {
     private String ofcId;
     private String ownerId;
     private String callableWay;
+    private String callableWayName;
     private String feeId;
     private String payerObjName;
     private String ownerName;
@@ -37,6 +38,7 @@ public class OweFeeCallableDto extends PageDto implements Serializable {
     private String staffName;
     private String amountdOwed;
     private String state;
+    private String stateName;
     private String communityId;
     private String payerObjType;
     private String staffId;
@@ -210,5 +212,21 @@ public class OweFeeCallableDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getCallableWayName() {
+        return callableWayName;
+    }
+
+    public void setCallableWayName(String callableWayName) {
+        this.callableWayName = callableWayName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
