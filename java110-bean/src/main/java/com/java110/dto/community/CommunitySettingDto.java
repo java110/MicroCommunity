@@ -36,6 +36,7 @@ public class CommunitySettingDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+
     public String getCsId() {
         return csId;
     }
