@@ -100,7 +100,7 @@ public class ListCommunitySettingKeyCmd extends Cmd {
         }
 
         CommunitySettingDto communitySettingDto = new CommunitySettingDto();
-        communitySettingDto.setSettingKey(settingType);
+        communitySettingDto.setSettingType(settingType);
         communitySettingDto.setCommunityId(communityId);
         List<CommunitySettingDto> communitySettingDtos = communitySettingInnerServiceSMOImpl.queryCommunitySettings(communitySettingDto);
         if (communitySettingDtos == null || communitySettingDtos.size() < 1) {
