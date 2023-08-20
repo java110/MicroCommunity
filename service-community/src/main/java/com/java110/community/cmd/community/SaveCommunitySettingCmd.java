@@ -63,9 +63,10 @@ public class SaveCommunitySettingCmd extends Cmd {
             communitySettingDto.setCommunityId(reqJson.getString("communityId"));
             settings = communitySettingInnerServiceSMOImpl.queryCommunitySettings(communitySettingDto);
             communitySettingPo = new CommunitySettingPo();
-            communitySettingPo.setSettingValue(reqJson.getString("settingType"));
+            communitySettingPo.setSettingType(reqJson.getString("settingType"));
             communitySettingPo.setCommunityId(reqJson.getString("communityId"));
             communitySettingPo.setSettingKey(keyObj.getString("settingKey"));
+            communitySettingPo.setSettingValue(keyObj.getString("settingValue"));
             communitySettingPo.setSettingName(keyObj.getString("settingName"));
             communitySettingPo.setRemark(keyObj.getString("remark"));
 
