@@ -20,14 +20,7 @@
         select t.key_id,t.key_id keyId,t.remark,t.status_cd,t.status_cd statusCd,t.setting_key,t.setting_key
         settingKey,t.setting_type,t.setting_type settingType,t.setting_name,t.setting_name settingName
         from community_setting_key t
-        <if test="communityId !=null and communityId != ''">
-            left join community_setting cs on t.setting_type = cs.setting_type and t.setting_key = cs.setting_key and
-            cs.status_cd = '0' and cs.community_id = #{communityId}
-        </if>
         where 1 =1
-        <if test="communityId !=null and communityId != ''">
-            and cs.setting_key is null
-        </if>
         <if test="keyId !=null and keyId != ''">
             and t.key_id= #{keyId}
         </if>
