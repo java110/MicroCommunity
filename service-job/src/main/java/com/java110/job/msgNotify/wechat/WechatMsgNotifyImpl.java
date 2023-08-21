@@ -18,6 +18,7 @@ import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,7 +148,11 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
      * @return
      */
     @Override
-    public ResultVo sendOweFeeMsg(String communityId, String userId, JSONObject content) {
+    public ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, JSONObject content) {
+
+        if(StringUtil.isEmpty(userId) || userId.startsWith("-")){
+            throw new IllegalArgumentException("业主未绑定，没有获取到微信openId");
+        }
 
         String accessToken = wechatTemplateImpl.getAccessToken(communityId);
 

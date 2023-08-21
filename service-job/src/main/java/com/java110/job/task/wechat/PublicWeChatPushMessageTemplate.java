@@ -163,6 +163,9 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
 
         OweFeeCallablePo updateOweFeeCallablePo = null;
         OwnerAppUserDto ownerAppUserDto = null;
+
+        ResultVo resultVo = null;
+        String userId = "";
         for (OweFeeCallablePo tmpOweFeeCallablePo : oweFeeCallablePos) {
             if (StringUtil.isEmpty(tmpOweFeeCallablePo.getOwnerId()) || tmpOweFeeCallablePo.getOwnerId().startsWith("-")) {
                 updateOweFeeCallablePo = new OweFeeCallablePo();
@@ -170,20 +173,6 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                 updateOweFeeCallablePo.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
                 updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
                 updateOweFeeCallablePo.setRemark(tmpOweFeeCallablePo.getRemark() + "-业主不存在");
-                oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
-                continue;
-            }
-            ownerAppUserDto = new OwnerAppUserDto();
-            ownerAppUserDto.setMemberId(tmpOweFeeCallablePo.getOwnerId());
-            ownerAppUserDto.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
-            ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
-            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-            if(ownerAppUserDtos == null || ownerAppUserDtos.size() < 1){
-                updateOweFeeCallablePo = new OweFeeCallablePo();
-                updateOweFeeCallablePo.setOfcId(tmpOweFeeCallablePo.getOfcId());
-                updateOweFeeCallablePo.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
-                updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
-                updateOweFeeCallablePo.setRemark(tmpOweFeeCallablePo.getRemark() + "-业主未绑定");
                 oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
                 continue;
             }
@@ -195,7 +184,20 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
             content.put("billAmountOwed", tmpOweFeeCallablePo.getAmountdOwed());
             content.put("date", DateUtil.dateTimeToDate(tmpOweFeeCallablePo.getStartTime()) + "~" + DateUtil.dateTimeToDate(tmpOweFeeCallablePo.getEndTime()));
             content.put("url", oweUrl);
-            ResultVo resultVo = MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), ownerAppUserDtos.get(0).getUserId(), content);
+
+            ownerAppUserDto = new OwnerAppUserDto();
+            ownerAppUserDto.setMemberId(tmpOweFeeCallablePo.getOwnerId());
+            ownerAppUserDto.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
+            ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
+            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+            if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+                userId = ownerAppUserDtos.get(0).getUserId();
+            }
+
+            //todo 发送推送消息
+            resultVo = MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), userId, tmpOweFeeCallablePo.getOwnerId(), content);
+
+
             updateOweFeeCallablePo = new OweFeeCallablePo();
             updateOweFeeCallablePo.setOfcId(tmpOweFeeCallablePo.getOfcId());
             updateOweFeeCallablePo.setCommunityId(tmpOweFeeCallablePo.getCommunityId());

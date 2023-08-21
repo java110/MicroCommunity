@@ -92,6 +92,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
         String oweUrl = "";
         OweFeeCallablePo updateOweFeeCallablePo = null;
         OwnerAppUserDto ownerAppUserDto = null;
+        String userId = "";
         for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
 
             if (StringUtil.isEmpty(oweFeeCallablePo.getOwnerId()) || oweFeeCallablePo.getOwnerId().startsWith("-")) {
@@ -108,14 +109,8 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
             ownerAppUserDto.setCommunityId(oweFeeCallablePo.getCommunityId());
             ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
             List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-            if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
-                updateOweFeeCallablePo = new OweFeeCallablePo();
-                updateOweFeeCallablePo.setOfcId(oweFeeCallablePo.getOfcId());
-                updateOweFeeCallablePo.setCommunityId(oweFeeCallablePo.getCommunityId());
-                updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
-                updateOweFeeCallablePo.setRemark(oweFeeCallablePo.getRemark() + "-业主未绑定");
-                oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
-                continue;
+            if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+                userId = ownerAppUserDtos.get(0).getUserId();
             }
 
             oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(oweFeeCallablePo.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
@@ -129,7 +124,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
             if (OweFeeCallableDto.CALLABLE_WAY_SMS.equals(oweFeeCallablePo.getCallableWay())) {
                 notifyWay = MsgNotifyFactory.NOTIFY_WAY_ALI;
             }
-            ResultVo resultVo = MsgNotifyFactory.sendOweFeeMsg(data.getString("communityId"), ownerAppUserDtos.get(0).getUserId(), content, notifyWay);
+            ResultVo resultVo = MsgNotifyFactory.sendOweFeeMsg(data.getString("communityId"), userId, oweFeeCallablePo.getOwnerId(), content, notifyWay);
             updateOweFeeCallablePo = new OweFeeCallablePo();
             updateOweFeeCallablePo.setOfcId(oweFeeCallablePo.getOfcId());
             updateOweFeeCallablePo.setCommunityId(oweFeeCallablePo.getCommunityId());

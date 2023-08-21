@@ -297,13 +297,14 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
         Assert.listOnlyOne(ownerRoomRelDtos, "当前房屋没有所属业主");
         //获取业主id
         String ownerId = ownerRoomRelDtos.get(0).getOwnerId();
+        String userId = "";
         //查询绑定业主
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setMemberId(ownerId);
         ownerAppUserDto.setAppType("WECHAT");
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMO.queryOwnerAppUsers(ownerAppUserDto);
         if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
-            return;
+            userId = ownerAppUserDtos.get(0).getUserId();
         }
         JSONObject content = new JSONObject();
         content.put("feeTypeName", "维修费");
@@ -317,7 +318,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             wechatUrl += ("?wAppId=" + smallWeChatDtos.get(0).getAppId());
         }
         content.put("url", wechatUrl);
-        MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), ownerAppUserDtos.get(0).getUserId(), content);
+        MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), userId, ownerId, content);
 
     }
 }

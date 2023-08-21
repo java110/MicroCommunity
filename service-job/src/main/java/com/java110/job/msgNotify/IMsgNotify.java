@@ -31,7 +31,7 @@ public interface IMsgNotify {
      * }
      * @return
      */
-    ResultVo sendOweFeeMsg(String communityId, String userId, JSONObject content);
+    ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, JSONObject content);
 
     /**
      * 发送缴费成功提醒
