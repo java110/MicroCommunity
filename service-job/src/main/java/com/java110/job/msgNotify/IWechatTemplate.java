@@ -22,4 +22,6 @@ public interface IWechatTemplate {
      * @return
      */
     String getAccessToken(String communityId);
+
+    String getAppId(String communityId);
 }

@@ -183,7 +183,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         data.put("amount3",new Content(content.getString("billAmountOwed")));
         data.put("time19",new Content(content.getString("date")));
         templateMessage.setData(data);
-        templateMessage.setUrl(content.getString("url"));
+        templateMessage.setUrl(content.getString("url")+"&wAppId="+wechatTemplateImpl.getAppId(communityId));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
         logger.info("微信模板返回内容:{}", responseEntity);

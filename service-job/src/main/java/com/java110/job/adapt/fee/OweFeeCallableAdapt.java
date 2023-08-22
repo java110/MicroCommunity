@@ -119,7 +119,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
             content.put("payerObjName", oweFeeCallablePo.getPayerObjName());
             content.put("billAmountOwed", oweFeeCallablePo.getAmountdOwed());
             content.put("date", DateUtil.dateTimeToDate(oweFeeCallablePo.getStartTime()) + "~" + DateUtil.dateTimeToDate(oweFeeCallablePo.getEndTime()));
-            content.put("url", oweUrl);
+            content.put("url", oweUrl+oweFeeCallablePo.getPayerObjId());
             String notifyWay = MsgNotifyFactory.NOTIFY_WAY_WECHAT;
             if (OweFeeCallableDto.CALLABLE_WAY_SMS.equals(oweFeeCallablePo.getCallableWay())) {
                 notifyWay = MsgNotifyFactory.NOTIFY_WAY_ALI;

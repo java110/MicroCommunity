@@ -267,4 +267,28 @@ public class WechatTemplateImpl implements IWechatTemplate {
 
         return accessToken;
     }
+
+    @Override
+    public String getAppId(String communityId) {
+        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
+        smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
+        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
+        smallWeChatDto.setObjId(communityId);
+        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
+
+        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
+            String appIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId");
+            String appSecretCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret");
+            String mchIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId");
+            String keyCache = MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key");
+            smallWeChatDto = new SmallWeChatDto();
+            smallWeChatDto.setAppId(appIdCache);
+            smallWeChatDto.setAppSecret(appSecretCache);
+            smallWeChatDto.setMchId(mchIdCache);
+            smallWeChatDto.setPayPassword(keyCache);
+        } else {
+            smallWeChatDto = smallWeChatDtos.get(0);
+        }
+        return smallWeChatDto.getAppId();
+    }
 }
