@@ -138,17 +138,17 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
      *
      * @param communityId 小区
      * @param userId      用户
-     * @param content     {
+     * @param contents     [{
      *                    "feeTypeName",
      *                    "payerObjName",
      *                    "billAmountOwed",
      *                    "date",
      *                    url
-     *                    }
+     *                    }]
      * @return
      */
     @Override
-    public ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, JSONObject content) {
+    public ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, List<JSONObject> contents) {
 
         if(StringUtil.isEmpty(userId) || userId.startsWith("-")){
             throw new IllegalArgumentException("业主未绑定，没有获取到微信openId");
@@ -174,22 +174,27 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         String templateId = wechatTemplateImpl.getTemplateId(communityId, mapping.getValue(), mapping.getName(), templateKeys.get(SPEC_CD_OWE_FEE_TEMPLATE));
 
         String url = sendMsgUrl + accessToken;
-        JSONObject data = new JSONObject();
-        PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-        templateMessage.setTemplate_id(templateId);
-        templateMessage.setTouser(openId);
-        data.put("thing2",new Content(content.getString("feeTypeName")));
-        data.put("thing12",new Content(content.getString("payerObjName")));
-        data.put("amount3",new Content(content.getString("billAmountOwed")));
-        data.put("time19",new Content(content.getString("date")));
-        templateMessage.setData(data);
-        templateMessage.setUrl(content.getString("url")+"&wAppId="+wechatTemplateImpl.getAppId(communityId));
-        logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-        logger.info("微信模板返回内容:{}", responseEntity);
-
-        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
-        return new ResultVo(paramOut.getIntValue("errcode"), paramOut.getString("errmsg"));
+        JSONObject paramOut = null;
+        for(JSONObject content: contents) {
+            JSONObject data = new JSONObject();
+            PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+            templateMessage.setTemplate_id(templateId);
+            templateMessage.setTouser(openId);
+            data.put("thing2", new Content(content.getString("feeTypeName")));
+            data.put("thing12", new Content(content.getString("payerObjName")));
+            data.put("amount3", new Content(content.getString("billAmountOwed")));
+            data.put("time19", new Content(content.getString("date")));
+            templateMessage.setData(data);
+            templateMessage.setUrl(content.getString("url") + "&wAppId=" + wechatTemplateImpl.getAppId(communityId));
+            logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+            ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+            logger.info("微信模板返回内容:{}", responseEntity);
+            paramOut = JSONObject.parseObject(responseEntity.getBody());
+            if(paramOut.getIntValue("errcode")!=0){
+                return new ResultVo(paramOut.getIntValue("errcode"), paramOut.getString("errmsg"));
+            }
+        }
+        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
     @Override

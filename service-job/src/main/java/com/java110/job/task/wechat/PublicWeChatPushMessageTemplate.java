@@ -1,24 +1,14 @@
 package com.java110.job.task.wechat;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityDto;
-import com.java110.dto.fee.BillOweFeeDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.oweFeeCallable.OweFeeCallableDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.reportFee.ReportOweFeeDto;
-import com.java110.dto.wechat.SmallWeChatDto;
-import com.java110.dto.wechat.SmallWechatAttrDto;
 import com.java110.dto.task.TaskDto;
-import com.java110.dto.wechat.Content;
-import com.java110.dto.wechat.Data;
-import com.java110.dto.wechat.Miniprogram;
-import com.java110.dto.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IOweFeeCallableV1InnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
@@ -37,15 +27,13 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @program: MicroCommunity
@@ -166,48 +154,94 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
 
         ResultVo resultVo = null;
         String userId = "";
-        for (OweFeeCallablePo tmpOweFeeCallablePo : oweFeeCallablePos) {
-            if (StringUtil.isEmpty(tmpOweFeeCallablePo.getOwnerId()) || tmpOweFeeCallablePo.getOwnerId().startsWith("-")) {
-                updateOweFeeCallablePo = new OweFeeCallablePo();
-                updateOweFeeCallablePo.setOfcId(tmpOweFeeCallablePo.getOfcId());
-                updateOweFeeCallablePo.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
-                updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
-                updateOweFeeCallablePo.setRemark(tmpOweFeeCallablePo.getRemark() + "-业主不存在");
-                oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
+
+        //todo 根据房屋发送欠费信息
+        Map<String, List<OweFeeCallablePo>> roomOweFeeCallables = computeRoomOweFeeCallable(oweFeeCallablePos);
+        List<JSONObject> contents = null;
+        for (String key : roomOweFeeCallables.keySet()) {
+            contents = new ArrayList<>();
+            for (OweFeeCallablePo tmpOweFeeCallablePo : roomOweFeeCallables.get(key)) {
+                if (StringUtil.isEmpty(tmpOweFeeCallablePo.getOwnerId()) || tmpOweFeeCallablePo.getOwnerId().startsWith("-")) {
+                    updateOweFeeCallablePo = new OweFeeCallablePo();
+                    updateOweFeeCallablePo.setOfcId(tmpOweFeeCallablePo.getOfcId());
+                    updateOweFeeCallablePo.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
+                    updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
+                    updateOweFeeCallablePo.setRemark(tmpOweFeeCallablePo.getRemark() + "-业主不存在");
+                    oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
+                    continue;
+                }
+
+                oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(tmpOweFeeCallablePo.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
+                content = new JSONObject();
+                content.put("feeTypeName", tmpOweFeeCallablePo.getFeeName());
+                content.put("payerObjName", tmpOweFeeCallablePo.getPayerObjName());
+                content.put("billAmountOwed", tmpOweFeeCallablePo.getAmountdOwed());
+                content.put("date", DateUtil.dateTimeToDate(tmpOweFeeCallablePo.getStartTime()) + "~" + DateUtil.dateTimeToDate(tmpOweFeeCallablePo.getEndTime()));
+                content.put("url", oweUrl);
+
+                ownerAppUserDto = new OwnerAppUserDto();
+                ownerAppUserDto.setMemberId(tmpOweFeeCallablePo.getOwnerId());
+                ownerAppUserDto.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
+                ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
+                List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+                if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+                    userId = ownerAppUserDtos.get(0).getUserId();
+                }
+                contents.add(content);
+
+            }
+            if (contents.size() < 1) {
                 continue;
             }
 
-            oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(tmpOweFeeCallablePo.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
-            content = new JSONObject();
-            content.put("feeTypeName", tmpOweFeeCallablePo.getFeeName());
-            content.put("payerObjName", tmpOweFeeCallablePo.getPayerObjName());
-            content.put("billAmountOwed", tmpOweFeeCallablePo.getAmountdOwed());
-            content.put("date", DateUtil.dateTimeToDate(tmpOweFeeCallablePo.getStartTime()) + "~" + DateUtil.dateTimeToDate(tmpOweFeeCallablePo.getEndTime()));
-            content.put("url", oweUrl);
-
-            ownerAppUserDto = new OwnerAppUserDto();
-            ownerAppUserDto.setMemberId(tmpOweFeeCallablePo.getOwnerId());
-            ownerAppUserDto.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
-            ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
-            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-            if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
-                userId = ownerAppUserDtos.get(0).getUserId();
-            }
-
             //todo 发送推送消息
-            resultVo = MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), userId, tmpOweFeeCallablePo.getOwnerId(), content);
+            resultVo = MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), userId, roomOweFeeCallables.get(key).get(0).getOwnerId(), contents);
 
 
-            updateOweFeeCallablePo = new OweFeeCallablePo();
-            updateOweFeeCallablePo.setOfcId(tmpOweFeeCallablePo.getOfcId());
-            updateOweFeeCallablePo.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
-            if (resultVo.getCode() != ResultVo.CODE_OK) {
-                updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
-                updateOweFeeCallablePo.setRemark(tmpOweFeeCallablePo.getRemark() + "-" + resultVo.getMsg());
-            } else {
-                updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_COMPLETE);
+            for (OweFeeCallablePo tmpOweFeeCallablePo : roomOweFeeCallables.get(key)) {
+                if (StringUtil.isEmpty(tmpOweFeeCallablePo.getOwnerId()) || tmpOweFeeCallablePo.getOwnerId().startsWith("-")) {
+                    continue;
+                }
+                updateOweFeeCallablePo = new OweFeeCallablePo();
+                updateOweFeeCallablePo.setOfcId(tmpOweFeeCallablePo.getOfcId());
+                updateOweFeeCallablePo.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
+                if (resultVo.getCode() != ResultVo.CODE_OK) {
+                    updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
+                    updateOweFeeCallablePo.setRemark(tmpOweFeeCallablePo.getRemark() + "-" + resultVo.getMsg());
+                } else {
+                    updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_COMPLETE);
+                }
+                oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
             }
-            oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
+
         }
+
+
+    }
+
+    /**
+     * 根据房屋
+     *
+     * @param oweFeeCallablePos
+     * @return
+     */
+    private Map<String, List<OweFeeCallablePo>> computeRoomOweFeeCallable(List<OweFeeCallablePo> oweFeeCallablePos) {
+
+        Map<String, List<OweFeeCallablePo>> infos = new HashMap<>();
+
+        List<OweFeeCallablePo> tmps = null;
+        for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
+            if (infos.containsKey(oweFeeCallablePo.getPayerObjId())) {
+                tmps = infos.get(oweFeeCallablePo.getPayerObjId());
+                tmps.add(oweFeeCallablePo);
+                continue;
+            }
+
+            tmps = new ArrayList<>();
+            tmps.add(oweFeeCallablePo);
+            infos.put(oweFeeCallablePo.getPayerObjId(), tmps);
+        }
+
+        return infos;
     }
 }

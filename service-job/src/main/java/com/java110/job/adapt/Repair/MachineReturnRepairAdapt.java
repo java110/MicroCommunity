@@ -41,6 +41,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -306,6 +307,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
         if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
             userId = ownerAppUserDtos.get(0).getUserId();
         }
+        List<JSONObject> contents = new ArrayList<>();
         JSONObject content = new JSONObject();
         content.put("feeTypeName", "维修费");
         content.put("payerObjName", paramIn.getString("roomName"));
@@ -318,7 +320,8 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             wechatUrl += ("?wAppId=" + smallWeChatDtos.get(0).getAppId());
         }
         content.put("url", wechatUrl);
-        MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), userId, ownerId, content);
+        contents.add(content);
+        MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), userId, ownerId, contents);
 
     }
 }

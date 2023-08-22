@@ -10,6 +10,8 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 
+import java.util.List;
+
 /**
  * 消息通知工具类
  */
@@ -54,19 +56,19 @@ public class MsgNotifyFactory {
      *
      * @param communityId 小区
      * @param userId      用户
-     * @param content     {
+     * @param contents     [{
      *                    "feeTypeName",
      *                    "payerObjName",
      *                    "billAmountOwed",
      *                    "date",
      *                    url
-     *                    }
+     *                    }]
      */
-    public static ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, JSONObject content,String notifyWay) {
+    public static ResultVo sendOweFeeMsg(String communityId, String userId, String ownerId, List<JSONObject> contents, String notifyWay) {
         ResultVo resultVo = null;
         try {
             IMsgNotify msgNotify = getMsgNotify(notifyWay);
-            resultVo = msgNotify.sendOweFeeMsg(communityId, userId,ownerId, content);
+            resultVo = msgNotify.sendOweFeeMsg(communityId, userId,ownerId, contents);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("通知 发送欠费 账单信息 消息", e);
@@ -81,16 +83,16 @@ public class MsgNotifyFactory {
      *
      * @param communityId 小区
      * @param userId      用户
-     * @param content     {
+     * @param contents     [{
      *                    "feeTypeName",
      *                    "payerObjName",
      *                    "billAmountOwed",
      *                    "date",
      *                    url
-     *                    }
+     *                    }]
      */
-    public static ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, JSONObject content) {
-        return sendOweFeeMsg(communityId,userId, ownerId,content,null);
+    public static ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, List<JSONObject> contents) {
+        return sendOweFeeMsg(communityId,userId, ownerId,contents,null);
     }
 
     /**

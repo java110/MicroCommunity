@@ -3,6 +3,8 @@ package com.java110.job.msgNotify;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.vo.ResultVo;
 
+import java.util.List;
+
 /**
  * 消息通知 接口类
  */
@@ -22,16 +24,16 @@ public interface IMsgNotify {
      *
      * @param communityId 小区
      * @param userId 用户
-     * @param content {
+     * @param contents [{
      *                    "feeTypeName",
      *                     "payerObjName",
      *                     "billAmountOwed",
      *                     "date",
      *                url
-     * }
+     * }]
      * @return
      */
-    ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, JSONObject content);
+    ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, List<JSONObject> contents);
 
     /**
      * 发送缴费成功提醒

@@ -93,48 +93,65 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
         OweFeeCallablePo updateOweFeeCallablePo = null;
         OwnerAppUserDto ownerAppUserDto = null;
         String userId = "";
-        for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
+        List<JSONObject> contents = null;
+        for (int roomIndex = 0; roomIndex < roomIds.size(); roomIndex++) {
+            contents = new ArrayList<>();
+            String notifyWay = MsgNotifyFactory.NOTIFY_WAY_WECHAT;
+            for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
+                if (StringUtil.isEmpty(oweFeeCallablePo.getOwnerId()) || oweFeeCallablePo.getOwnerId().startsWith("-")) {
+                    updateOweFeeCallablePo = new OweFeeCallablePo();
+                    updateOweFeeCallablePo.setOfcId(oweFeeCallablePo.getOfcId());
+                    updateOweFeeCallablePo.setCommunityId(oweFeeCallablePo.getCommunityId());
+                    updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
+                    updateOweFeeCallablePo.setRemark(oweFeeCallablePo.getRemark() + "-业主不存在");
+                    oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
+                    continue;
+                }
+                ownerAppUserDto = new OwnerAppUserDto();
+                ownerAppUserDto.setMemberId(oweFeeCallablePo.getOwnerId());
+                ownerAppUserDto.setCommunityId(oweFeeCallablePo.getCommunityId());
+                ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
+                List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+                if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+                    userId = ownerAppUserDtos.get(0).getUserId();
+                }
 
-            if (StringUtil.isEmpty(oweFeeCallablePo.getOwnerId()) || oweFeeCallablePo.getOwnerId().startsWith("-")) {
+                oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(oweFeeCallablePo.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
+                content = new JSONObject();
+                content.put("feeTypeName", oweFeeCallablePo.getFeeName());
+                content.put("payerObjName", oweFeeCallablePo.getPayerObjName());
+                content.put("billAmountOwed", oweFeeCallablePo.getAmountdOwed());
+                content.put("date", DateUtil.dateTimeToDate(oweFeeCallablePo.getStartTime()) + "~" + DateUtil.dateTimeToDate(oweFeeCallablePo.getEndTime()));
+                content.put("url", oweUrl + oweFeeCallablePo.getPayerObjId());
+
+                if (OweFeeCallableDto.CALLABLE_WAY_SMS.equals(oweFeeCallablePo.getCallableWay())) {
+                    notifyWay = MsgNotifyFactory.NOTIFY_WAY_ALI;
+                }
+                contents.add(content);
+
+            }
+
+            if(contents.size()< 1){
+                continue;
+            }
+
+            //todo 催缴
+            ResultVo resultVo = MsgNotifyFactory.sendOweFeeMsg(data.getString("communityId"), userId, oweFeeCallablePos.get(0).getOwnerId(), contents, notifyWay);
+            for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
+                if (StringUtil.isEmpty(oweFeeCallablePo.getOwnerId()) || oweFeeCallablePo.getOwnerId().startsWith("-")) {
+                    continue;
+                }
                 updateOweFeeCallablePo = new OweFeeCallablePo();
                 updateOweFeeCallablePo.setOfcId(oweFeeCallablePo.getOfcId());
                 updateOweFeeCallablePo.setCommunityId(oweFeeCallablePo.getCommunityId());
-                updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
-                updateOweFeeCallablePo.setRemark(oweFeeCallablePo.getRemark() + "-业主不存在");
+                if (resultVo.getCode() != ResultVo.CODE_OK) {
+                    updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
+                    updateOweFeeCallablePo.setRemark(oweFeeCallablePo.getRemark() + "-" + resultVo.getMsg());
+                } else {
+                    updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_COMPLETE);
+                }
                 oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
-                continue;
             }
-            ownerAppUserDto = new OwnerAppUserDto();
-            ownerAppUserDto.setMemberId(oweFeeCallablePo.getOwnerId());
-            ownerAppUserDto.setCommunityId(oweFeeCallablePo.getCommunityId());
-            ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
-            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-            if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
-                userId = ownerAppUserDtos.get(0).getUserId();
-            }
-
-            oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(oweFeeCallablePo.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
-            content = new JSONObject();
-            content.put("feeTypeName", oweFeeCallablePo.getFeeName());
-            content.put("payerObjName", oweFeeCallablePo.getPayerObjName());
-            content.put("billAmountOwed", oweFeeCallablePo.getAmountdOwed());
-            content.put("date", DateUtil.dateTimeToDate(oweFeeCallablePo.getStartTime()) + "~" + DateUtil.dateTimeToDate(oweFeeCallablePo.getEndTime()));
-            content.put("url", oweUrl+oweFeeCallablePo.getPayerObjId());
-            String notifyWay = MsgNotifyFactory.NOTIFY_WAY_WECHAT;
-            if (OweFeeCallableDto.CALLABLE_WAY_SMS.equals(oweFeeCallablePo.getCallableWay())) {
-                notifyWay = MsgNotifyFactory.NOTIFY_WAY_ALI;
-            }
-            ResultVo resultVo = MsgNotifyFactory.sendOweFeeMsg(data.getString("communityId"), userId, oweFeeCallablePo.getOwnerId(), content, notifyWay);
-            updateOweFeeCallablePo = new OweFeeCallablePo();
-            updateOweFeeCallablePo.setOfcId(oweFeeCallablePo.getOfcId());
-            updateOweFeeCallablePo.setCommunityId(oweFeeCallablePo.getCommunityId());
-            if (resultVo.getCode() != ResultVo.CODE_OK) {
-                updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_FAIL);
-                updateOweFeeCallablePo.setRemark(oweFeeCallablePo.getRemark() + "-" + resultVo.getMsg());
-            } else {
-                updateOweFeeCallablePo.setState(OweFeeCallableDto.STATE_COMPLETE);
-            }
-            oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
         }
     }
 

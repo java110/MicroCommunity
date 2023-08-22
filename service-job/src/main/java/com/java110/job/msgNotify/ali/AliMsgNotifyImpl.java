@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service("aliMsgNotifyImpl")
@@ -46,21 +47,21 @@ public class AliMsgNotifyImpl implements IMsgNotify {
      * 发送欠费 账单信息
      * <p>
      * 需要在阿里云 申请短信模板为
-     * 尊敬的业主，您${house}的${feeType}，账单日期${date}至${date2}，缴费金额：${mount}元，请及时缴费
+     * 尊敬的业主，您${house}的账单已生成，缴费金额：${mount}元，请及时缴费
      *
      * @param communityId 小区
      * @param userId      用户
-     * @param content     {
+     * @param contents     [{
      *                    "feeTypeName",
      *                    "payerObjName",
      *                    "billAmountOwed",
      *                    "date",
      *                    url
-     *                    }
+     *                    }]
      * @return
      */
     @Override
-    public ResultVo sendOweFeeMsg(String communityId, String userId, String ownerId, JSONObject content) {
+    public ResultVo sendOweFeeMsg(String communityId, String userId, String ownerId, List<JSONObject> contents) {
 
 
         if (StringUtil.isEmpty(ownerId) || ownerId.startsWith("-")) {
@@ -95,12 +96,18 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         request.putQueryParameter("SignName", signName);
         request.putQueryParameter("TemplateCode", templateCode);
 
+        BigDecimal oweFee = new BigDecimal(0);
+
+        for(JSONObject content : contents){
+            oweFee = oweFee.add(new BigDecimal(content.getDouble("billAmountOwed")));
+        }
+
         JSONObject param = new JSONObject();
-        param.put("house", content.getString("payerObjName"));
-        param.put("feeType", content.getString("feeTypeName"));
-        param.put("date", content.getString("date").split("~")[0]);
-        param.put("date2", content.getString("date").split("~")[1]);
-        param.put("mount", content.getString("billAmountOwed"));
+        param.put("house", contents.get(0).getString("payerObjName"));
+//        param.put("feeType", content.getString("feeTypeName"));
+//        param.put("date", content.getString("date").split("~")[0]);
+//        param.put("date2", content.getString("date").split("~")[1]);
+        param.put("mount", oweFee.doubleValue());
         request.putQueryParameter("TemplateParam", param.toString());
 
         String resParam = "";
