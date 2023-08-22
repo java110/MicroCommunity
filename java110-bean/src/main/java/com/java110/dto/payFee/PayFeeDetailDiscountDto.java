@@ -20,6 +20,8 @@ public class PayFeeDetailDiscountDto extends PageDto implements Serializable {
     private String detailDiscountId;
     private String discountPrice;
     private String detailId;
+    private String[] detailIds;
+
     private String remark;
     private String communityId;
     private String discountId;
@@ -148,5 +150,13 @@ public class PayFeeDetailDiscountDto extends PageDto implements Serializable {
 
     public void setRuleName(String ruleName) {
         this.ruleName = ruleName;
+    }
+
+    public String[] getDetailIds() {
+        return detailIds;
+    }
+
+    public void setDetailIds(String[] detailIds) {
+        this.detailIds = detailIds;
     }
 }

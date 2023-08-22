@@ -74,4 +74,10 @@ public interface IPayFeeDetailDiscountServiceDao {
      */
     int queryPayFeeDetailDiscountsCount(Map info);
 
+    /**
+     * 计算 优惠金额
+     * @param info
+     * @return
+     */
+    List<Map> computeDiscountFee(Map info);
 }

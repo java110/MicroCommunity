@@ -220,4 +220,24 @@
 
     </select>
 
+    <!-- 计算费用优惠 -->
+    <select id="computeDiscountFee" parameterType="Map" resultType="Map">
+        select t.detail_id detailId,sum(t.discount_price) discountPrice
+        from pay_fee_detail_discount t
+        where 1 =1
+        <if test="detailIds !=null ">
+            and t.detail_id in
+            <foreach collection="detailIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+            and t.status_cd= '0'
+
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        group by t.detail_id
+
+    </select>
+
 </mapper>
