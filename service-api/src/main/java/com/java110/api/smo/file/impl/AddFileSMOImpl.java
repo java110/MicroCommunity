@@ -37,37 +37,47 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
     @Override
     public ResponseEntity<String> saveFile(IPageData pd, MultipartFile uploadFile) throws IOException {
+        InputStream is = null;
+        try {
+            JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+            if (uploadFile.getSize() > 2 * 1024 * 1024) {
+                throw new IllegalArgumentException("上传文件超过两兆");
+            }
+            Assert.hasKeyAndValue(paramIn, "suffix", "必填，请填写文件类型");
+            is = uploadFile.getInputStream();
+            String fileContext = Base64Convert.ioToBase64(is);
+            paramIn.put("context", fileContext);
+            paramIn.put("fileName", uploadFile.getOriginalFilename());
 
-        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-        if (uploadFile.getSize() > 2 * 1024 * 1024) {
-            throw new IllegalArgumentException("上传文件超过两兆");
+            FileDto fileDto = BeanConvertUtil.covertBean(paramIn, FileDto.class);
+            fileDto.setCommunityId("-1");
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+
+            JSONObject outParam = new JSONObject();
+            outParam.put("fileId", fileName);
+            String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+            outParam.put("url", imgUrl + fileName);
+
+            ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
+            return responseEntity;
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (Exception e) {
+                }
+            }
         }
-        Assert.hasKeyAndValue(paramIn, "suffix", "必填，请填写文件类型");
-        InputStream is = uploadFile.getInputStream();
-        String fileContext = Base64Convert.ioToBase64(is);
-        paramIn.put("context", fileContext);
-        paramIn.put("fileName", uploadFile.getOriginalFilename());
 
-        FileDto fileDto = BeanConvertUtil.covertBean(paramIn, FileDto.class);
-        fileDto.setCommunityId("-1");
-        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-
-        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-
-        JSONObject outParam = new JSONObject();
-        outParam.put("fileId", fileName);
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
-        outParam.put("url", imgUrl + fileName);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
-        return responseEntity;
     }
 
     @Override
     public ResponseEntity<String> savePhotoFile(IPageData pd) {
 
         String images = pd.getReqData();
-        JSONObject imageObj=JSONObject.parseObject(images);
+        JSONObject imageObj = JSONObject.parseObject(images);
         JSONObject paramIn = new JSONObject();
         paramIn.put("context", imageObj.getString("uploadFile"));
         paramIn.put("fileName", "upload.jpg");
@@ -87,7 +97,7 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
         JSONObject outParam = new JSONObject();
         outParam.put("fileId", fileName);
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
         outParam.put("url", imgUrl + fileName);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
