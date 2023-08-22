@@ -44,7 +44,7 @@ public class AliMsgNotifyImpl implements IMsgNotify {
 
     /**
      * 发送欠费 账单信息
-     *
+     * <p>
      * 需要在阿里云 申请短信模板为
      * 尊敬的业主，您${house}的${feeType}，账单日期${date}至${date2}，缴费金额：${mount}元，请及时缴费
      *
@@ -103,16 +103,19 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         param.put("mount", content.getString("billAmountOwed"));
         request.putQueryParameter("TemplateParam", param.toString());
 
+        String resParam = "";
         try {
             CommonResponse response = client.getCommonResponse(request);
             logger.debug("发送验证码信息：{}", response.getData());
-            LogFactory.saveOutLog("SMS", param.toString(), new ResponseEntity(response.getData(), HttpStatus.OK));
-        } catch (ServerException e) {
+            resParam = response.getData();
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ClientException e) {
-            e.printStackTrace();
+            resParam = e.getMessage();
+            throw new IllegalArgumentException("短信催缴失败" + e.getMessage());
+        } finally {
+            LogFactory.saveOutLog("SMS", param.toString(), new ResponseEntity(resParam, HttpStatus.OK));
         }
-        return null;
+        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
     @Override
