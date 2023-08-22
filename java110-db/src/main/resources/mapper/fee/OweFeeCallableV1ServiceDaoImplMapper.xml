@@ -21,9 +21,10 @@
         remark,ofc_id,owner_id,callable_way,fee_id,payer_obj_name,owner_name,config_id,fee_name,staff_name,
         amountd_owed,state,community_id,payer_obj_type,staff_id,payer_obj_id,start_time,end_time
         ) values
-        <foreach collection="oweFeeCallablePos" item="item" open="(" close=")" separator=",">
-            #{item.remark},#{item.ofcId},#{item.ownerId},#{item.callableWay},#{item.feeId},#{item.payerObjName},#{item.ownerName},#{item.configId},#{item.feeName},
-            #{item.staffName},#{item.amountdOwed},#{item.state},#{item.communityId},#{item.payerObjType},#{item.staffId},#{item.payerObjId},#{item.startTime},#{item.endTime}
+        <foreach collection="oweFeeCallablePos" item="item"  separator=",">
+            (#{item.remark},#{item.ofcId},#{item.ownerId},#{item.callableWay},#{item.feeId},#{item.payerObjName},#{item.ownerName},#{item.configId},#{item.feeName},
+            #{item.staffName},#{item.amountdOwed},#{item.state},#{item.communityId},#{item.payerObjType},#{item.staffId},#{item.payerObjId},#{item.startTime},
+            #{item.endTime})
         </foreach>
 
     </insert>

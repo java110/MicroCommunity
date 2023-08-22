@@ -151,7 +151,7 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
      * @return
      */
     @Override
-    public boolean databusData(@RequestBody DatabusDataDto databusDataDto) {
+    public boolean  databusData(@RequestBody DatabusDataDto databusDataDto) {
         // IDatabusAdapt databusAdaptImpl = null;
         List<BusinessDatabusDto> databusDtos = DatabusCache.getDatabuss();
         Business business = null;
