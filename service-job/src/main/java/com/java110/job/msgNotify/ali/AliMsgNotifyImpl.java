@@ -29,6 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Service("aliMsgNotifyImpl")
@@ -51,7 +52,7 @@ public class AliMsgNotifyImpl implements IMsgNotify {
      *
      * @param communityId 小区
      * @param userId      用户
-     * @param contents     [{
+     * @param contents    [{
      *                    "feeTypeName",
      *                    "payerObjName",
      *                    "billAmountOwed",
@@ -98,15 +99,32 @@ public class AliMsgNotifyImpl implements IMsgNotify {
 
         BigDecimal oweFee = new BigDecimal(0);
 
-        for(JSONObject content : contents){
+        Date startDate = null;
+        Date endDate = null;
+        Date tmpStartDate = null;
+        Date tmpEndDate = null;
+        for (JSONObject content : contents) {
             oweFee = oweFee.add(new BigDecimal(content.getDouble("billAmountOwed")));
+            tmpStartDate = DateUtil.getDateFromStringB(content.getString("date").split("~")[0]);
+            tmpEndDate = DateUtil.getDateFromStringB(content.getString("date").split("~")[1]);
+            if(startDate == null){
+                startDate = tmpStartDate;
+                endDate = tmpEndDate;
+                continue;
+            }
+            if(startDate.getTime()> tmpStartDate.getTime()){
+                startDate = tmpStartDate;
+            }
+            if(endDate.getTime() < tmpEndDate.getTime()){
+                endDate = tmpEndDate;
+            }
         }
 
         JSONObject param = new JSONObject();
         param.put("house", contents.get(0).getString("payerObjName"));
 //        param.put("feeType", content.getString("feeTypeName"));
-//        param.put("date", content.getString("date").split("~")[0]);
-//        param.put("date2", content.getString("date").split("~")[1]);
+        param.put("date", DateUtil.getFormatTimeStringB(startDate));
+        param.put("date2", DateUtil.getFormatTimeStringB(endDate));
         param.put("mount", oweFee.doubleValue());
         request.putQueryParameter("TemplateParam", param.toString());
 
