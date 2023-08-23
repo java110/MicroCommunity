@@ -104,7 +104,7 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         Date tmpStartDate = null;
         Date tmpEndDate = null;
         for (JSONObject content : contents) {
-            oweFee = oweFee.add(new BigDecimal(content.getDouble("billAmountOwed")));
+            oweFee = oweFee.add(new BigDecimal(content.getDouble("billAmountOwed"))).setScale(2,BigDecimal.ROUND_HALF_UP);
             tmpStartDate = DateUtil.getDateFromStringB(content.getString("date").split("~")[0]);
             tmpEndDate = DateUtil.getDateFromStringB(content.getString("date").split("~")[1]);
             if(startDate == null){
