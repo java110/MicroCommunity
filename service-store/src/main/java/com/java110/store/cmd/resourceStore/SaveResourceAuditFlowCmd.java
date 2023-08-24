@@ -27,12 +27,15 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflow.WorkflowModelDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.intf.store.IResourceAuditFlowV1InnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowPo;
+import com.java110.po.oaWorkflow.OaWorkflowXmlPo;
 import com.java110.po.resource.ResourceAuditFlowPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.BpmnXml;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -64,6 +67,9 @@ public class SaveResourceAuditFlowCmd extends Cmd {
     @Autowired
     private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
+    @Autowired
+    private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
@@ -79,7 +85,7 @@ public class SaveResourceAuditFlowCmd extends Cmd {
         OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
         oaWorkflowPo.setStoreId(storeId);
         oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
-        oaWorkflowPo.setFlowName(reqJson.getString("flowName") + "审批流程");
+        oaWorkflowPo.setFlowName(reqJson.getString("flowName"));
         oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_ITEM_RELEASE);
 
         //创建model
@@ -94,6 +100,19 @@ public class SaveResourceAuditFlowCmd extends Cmd {
         int flag = oaWorkflowInnerServiceSMOImpl.saveOaWorkflow(oaWorkflowPo);
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+        //默认 流程图以防画错
+        OaWorkflowXmlPo oaWorkflowXmlPo = new OaWorkflowXmlPo();
+        oaWorkflowXmlPo.setStoreId(oaWorkflowPo.getStoreId());
+        oaWorkflowXmlPo.setFlowId(oaWorkflowPo.getFlowId());
+        oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId("79"));
+        oaWorkflowXmlPo.setSvgXml("");
+        oaWorkflowXmlPo.setBpmnXml(BpmnXml.getResourceBpmnXml(oaWorkflowPo.getFlowId()));
+
+        flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
+        if (flag < 1) {
+            throw new CmdException("保存模型数据失败");
         }
 
         ResourceAuditFlowPo resourceAuditFlowPo = BeanConvertUtil.covertBean(reqJson, ResourceAuditFlowPo.class);
