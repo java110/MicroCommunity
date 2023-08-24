@@ -41,8 +41,8 @@ public class InitializeBuildingUnitSMOImpl extends BaseServiceSMO implements Iin
     public int deleteBuildingRoom(@RequestBody Map communityId) {
         int deleteFlag = initializeBuildingUnitDaoImpl.deleteBuildingRoom(communityId);
 
-        //todo 自动解绑房屋
-        initializeBuildingUnitDaoImpl.deleteOwnerRoomRel(communityId);
+        //todo 自动解绑房屋 先注释，子查询删除报错
+        // initializeBuildingUnitDaoImpl.deleteOwnerRoomRel(communityId);
         return deleteFlag;
     }
 
