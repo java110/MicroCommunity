@@ -72,7 +72,7 @@ public class SaveResourceAuditFlowCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
+        Assert.hasKeyAndValue(reqJson, "auditType", "请求报文中未包含flowType");
         Assert.hasKeyAndValue(reqJson, "flowName", "请求报文中未包含flowType");
 
     }
