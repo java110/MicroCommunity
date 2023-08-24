@@ -152,7 +152,7 @@
     </select>
 
     <select id="queryResourceStoreTypeTree" parameterType="Map" resultType="Map">
-        select t.rst_id rstId,t.name,t.description ,rst.rst_id parentRstId,rst.name parentRstName,rst.description parentDescription
+        select t.rst_id rstId,t.name,t.description ,rst.rst_id parentRstId,rst.name parentName,rst.description parentDescription
         from resource_store_type t
         inner join resource_store_type rst on t.parent_id = rst.rst_id and rst.status_cd = '0'
         where t.parent_id != '0'
