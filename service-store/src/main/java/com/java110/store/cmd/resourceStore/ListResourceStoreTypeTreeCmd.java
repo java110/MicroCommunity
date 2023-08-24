@@ -57,10 +57,10 @@ public class ListResourceStoreTypeTreeCmd extends Cmd {
             //todo 一级分类
             tResourceStoreTypeDto = getParentResoureceStoreTypes(storeTypes, tmpResourceStoreTypeDto);
 
-            //todo 如果现在就是一级分类 跳过
-            if (tmpResourceStoreTypeDto.getRstId().equals(tResourceStoreTypeDto.getRstId())) {
-                continue;
-            }
+//            //todo 如果现在就是一级分类 跳过
+//            if (tmpResourceStoreTypeDto.getRstId().equals(tResourceStoreTypeDto.getRstId())) {
+//                continue;
+//            }
 
             if (tResourceStoreTypeDto.getSubTypes() == null) {
                 tResourceStoreTypeDto.setSubTypes(new ArrayList<>());
