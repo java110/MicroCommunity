@@ -94,6 +94,12 @@ public class ResourceStoreTypeInnerServiceSMOImpl extends BaseServiceSMO impleme
         return resourceResourceStoreTypeTypeServiceDaoImpl.queryResourceStoreTypesCount(BeanConvertUtil.beanCovertMap(resourceResourceStoreTypeTypeDto));
     }
 
+    @Override
+    public List<ResourceStoreTypeDto> queryResourceStoreTypeTree(@RequestBody ResourceStoreTypeDto resourceStoreTypeDto) {
+        return BeanConvertUtil.covertBeanList(
+                resourceResourceStoreTypeTypeServiceDaoImpl.queryResourceStoreTypeTree(BeanConvertUtil.beanCovertMap(resourceStoreTypeDto)), ResourceStoreTypeDto.class);
+    }
+
     public IResourceStoreTypeServiceDao getResourceStoreTypeServiceDaoImpl() {
         return resourceResourceStoreTypeTypeServiceDaoImpl;
     }
