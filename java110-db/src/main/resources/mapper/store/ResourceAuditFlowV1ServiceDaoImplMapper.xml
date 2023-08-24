@@ -18,7 +18,8 @@
     <!-- 查询物品流程信息 add by wuxw 2018-07-03 -->
     <select id="getResourceAuditFlowInfo" parameterType="Map" resultType="Map">
         select t.raf_id,t.raf_id rafId,t.remark,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
-        storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type flowType
+        storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type flowType,
+        t.create_time createTime
         from resource_audit_flow t
         where 1 =1
         <if test="rafId !=null and rafId != ''">
@@ -59,9 +60,7 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="flowId !=null and flowId != ''">
             , t.flow_id= #{flowId}
         </if>
@@ -74,6 +73,9 @@
         where 1=1
         <if test="rafId !=null and rafId != ''">
             and t.raf_id= #{rafId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>
