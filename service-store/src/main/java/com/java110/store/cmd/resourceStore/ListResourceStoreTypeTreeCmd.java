@@ -86,7 +86,7 @@ public class ListResourceStoreTypeTreeCmd extends Cmd {
         }
 
         for (ResourceStoreTypeDto storeType : storeTypes) {
-            if (storeType.getRstId().equals(tmpResourceStoreTypeDto.getParentRstId())) {
+            if (storeType.getParentRstId().equals(tmpResourceStoreTypeDto.getParentRstId())) {
                 return storeType;
             }
         }
