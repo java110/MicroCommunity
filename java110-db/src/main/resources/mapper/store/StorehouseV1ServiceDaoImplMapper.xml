@@ -11,7 +11,7 @@
         sh_desc,sh_id,sh_name,store_id,is_show,purchase_switch,purchase_raf_id,
         use_switch,use_raf_id,allocation_switch,allocation_raf_id
         ) values (
-        #{shDesc},#{shType},#{shObjId},#{shId},#{shName},#{storeId},#{isShow}
+        #{shDesc},#{shId},#{shName},#{storeId},#{isShow}
         ,#{purchaseSwitch},#{purchaseRafId},#{useSwitch},#{useRafId},#{allocationSwitch},#{allocationRafId}
         )
     </insert>
@@ -104,12 +104,7 @@
         <if test="shDesc !=null and shDesc != ''">
             and t.sh_desc= #{shDesc}
         </if>
-        <if test="shType !=null and shType != ''">
-            and t.sh_type= #{shType}
-        </if>
-        <if test="shObjId !=null and shObjId != ''">
-            and t.sh_obj_id= #{shObjId}
-        </if>
+
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
