@@ -27,7 +27,7 @@ public class InitializeOwnerInnerServiceSMOImpl extends BaseServiceSMO implement
         int deleteFast = initializeOwnerServiceDaoImpl.deleteBuildingOwner(communityId);
 
         //todo 删除 业主绑定数据
-        initializeOwnerServiceDaoImpl.deleteUser(communityId);
+        //initializeOwnerServiceDaoImpl.deleteUser(communityId);
         initializeOwnerServiceDaoImpl.deleteOwnerAppUser(communityId);
         return deleteFast;
     }
