@@ -86,7 +86,7 @@ public class SaveResourceAuditFlowCmd extends Cmd {
         oaWorkflowPo.setStoreId(storeId);
         oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
         oaWorkflowPo.setFlowName(reqJson.getString("flowName"));
-        oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_ITEM_RELEASE);
+        oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_RESOURCE);
 
         //创建model
         WorkflowModelDto workflowModelDto = new WorkflowModelDto();

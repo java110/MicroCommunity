@@ -21,7 +21,7 @@ public class ResourceAuditFlowDto extends OaWorkflowDto implements Serializable 
     private String storeId;
     private String flowId;
     private String flowName;
-    private String flowType;
+    private String auditType;
 
 
     private Date createTime;
@@ -69,14 +69,14 @@ public class ResourceAuditFlowDto extends OaWorkflowDto implements Serializable 
         this.flowName = flowName;
     }
 
-    public String getFlowType() {
-        return flowType;
+
+    public String getAuditType() {
+        return auditType;
     }
 
-    public void setFlowType(String flowType) {
-        this.flowType = flowType;
+    public void setAuditType(String auditType) {
+        this.auditType = auditType;
     }
-
 
     public Date getCreateTime() {
         return createTime;

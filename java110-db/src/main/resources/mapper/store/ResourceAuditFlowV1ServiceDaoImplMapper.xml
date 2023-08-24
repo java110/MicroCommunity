@@ -8,9 +8,9 @@
     <!-- 保存物品流程信息 add by wuxw 2018-07-03 -->
     <insert id="saveResourceAuditFlowInfo" parameterType="Map">
         insert into resource_audit_flow(
-        raf_id,remark,store_id,flow_id,flow_name,flow_type
+        raf_id,remark,store_id,flow_id,flow_name,audit_type
         ) values (
-        #{rafId},#{remark},#{storeId},#{flowId},#{flowName},#{flowType}
+        #{rafId},#{remark},#{storeId},#{flowId},#{flowName},#{auditType}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <!-- 查询物品流程信息 add by wuxw 2018-07-03 -->
     <select id="getResourceAuditFlowInfo" parameterType="Map" resultType="Map">
         select t.raf_id,t.raf_id rafId,t.remark,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
-        storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name flowName,t.flow_type,t.flow_type flowType,
+        storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name flowName,t.audit_type,t.audit_type auditType,
         t.create_time createTime
         from resource_audit_flow t
         where 1 =1
@@ -40,8 +40,8 @@
         <if test="flowName !=null and flowName != ''">
             and t.flow_name= #{flowName}
         </if>
-        <if test="flowType !=null and flowType != ''">
-            and t.flow_type= #{flowType}
+        <if test="auditType !=null and auditType != ''">
+            and t.audit_type= #{auditType}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -67,8 +67,8 @@
         <if test="flowName !=null and flowName != ''">
             , t.flow_name= #{flowName}
         </if>
-        <if test="flowType !=null and flowType != ''">
-            , t.flow_type= #{flowType}
+        <if test="auditType !=null and auditType != ''">
+            , t.audit_type= #{auditType}
         </if>
         where 1=1
         <if test="rafId !=null and rafId != ''">
@@ -103,8 +103,8 @@
         <if test="flowName !=null and flowName != ''">
             and t.flow_name= #{flowName}
         </if>
-        <if test="flowType !=null and flowType != ''">
-            and t.flow_type= #{flowType}
+        <if test="auditType !=null and auditType != ''">
+            and t.audit_type= #{auditType}
         </if>
 
 
