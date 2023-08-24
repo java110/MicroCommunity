@@ -6,8 +6,6 @@ import java.util.Date;
 public class StorehousePo implements Serializable {
 
     private String shDesc;
-    private String shType;
-    private String shObjId;
     private String shId;
     private String shName;
     private String storeId;
@@ -30,21 +28,7 @@ public class StorehousePo implements Serializable {
         this.shDesc = shDesc;
     }
 
-    public String getShType() {
-        return shType;
-    }
 
-    public void setShType(String shType) {
-        this.shType = shType;
-    }
-
-    public String getShObjId() {
-        return shObjId;
-    }
-
-    public void setShObjId(String shObjId) {
-        this.shObjId = shObjId;
-    }
 
     public String getShId() {
         return shId;

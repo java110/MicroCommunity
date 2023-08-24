@@ -18,6 +18,7 @@ package com.java110.store.cmd.resourceStore;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -60,17 +61,30 @@ public class SaveStorehouseCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "shName", "请求报文中未包含shName");
-        Assert.hasKeyAndValue(reqJson, "shType", "请求报文中未包含shType");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "purchaseSwitch", "请求报文中未包含shName");
+        Assert.hasKeyAndValue(reqJson, "useSwitch", "请求报文中未包含shName");
+        Assert.hasKeyAndValue(reqJson, "allocationSwitch", "请求报文中未包含shName");
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+        reqJson.put("storeId", storeId);
 
         StorehouseDto storehouseDto = new StorehouseDto();
         storehouseDto.setShName(reqJson.getString("shName"));
         storehouseDto.setStoreId(reqJson.getString("storeId"));
-        storehouseDto.setShType(reqJson.getString("shType"));
-        int flag  =  storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
-
-        if(flag > 0){
+        int flag = storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
+        if (flag > 0) {
             throw new IllegalArgumentException("已存在仓库");
+        }
+
+        if ("ON".equals(reqJson.getString("purchaseSwitch"))) {
+            Assert.hasKeyAndValue(reqJson, "purchaseRafId", "请求报文中未包含采购流程");
+        }
+
+        if ("ON".equals(reqJson.getString("useSwitch"))) {
+            Assert.hasKeyAndValue(reqJson, "useRafId", "请求报文中未包含领用流程");
+        }
+
+        if ("ON".equals(reqJson.getString("allocationSwitch"))) {
+            Assert.hasKeyAndValue(reqJson, "allocationRafId", "请求报文中未包含调拨流程");
         }
     }
 
@@ -81,11 +95,6 @@ public class SaveStorehouseCmd extends Cmd {
         StorehousePo storehousePo = BeanConvertUtil.covertBean(reqJson, StorehousePo.class);
         storehousePo.setShId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
 
-        if (StorehouseDto.SH_TYPE_GROUP.equals(storehousePo.getShType())) {
-            storehousePo.setShObjId(storehousePo.getStoreId());
-        } else {
-            storehousePo.setShObjId(reqJson.getString("communityId"));
-        }
         int flag = storehouseV1InnerServiceSMOImpl.saveStorehouse(storehousePo);
 
         if (flag < 1) {
