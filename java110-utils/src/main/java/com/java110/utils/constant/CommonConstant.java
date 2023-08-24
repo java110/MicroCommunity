@@ -87,7 +87,7 @@ public class CommonConstant {
     public final static String TEMPLATE_URL_INSERT = "INSERT->";
     public final static String TEMPLATE_URL_SPILT = ";";
 
-
+    public final static String HTTP_SESSION_ID = "session-id";
     /**
      * 添加数据
      */

@@ -17,6 +17,7 @@ package com.java110.store.cmd.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -26,8 +27,10 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.resource.ResourceAuditFlowDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -47,7 +50,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "resourceStore.listResourceAuditFlow")
 public class ListResourceAuditFlowCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListResourceAuditFlowCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListResourceAuditFlowCmd.class);
     @Autowired
     private IResourceAuditFlowV1InnerServiceSMO resourceAuditFlowV1InnerServiceSMOImpl;
 
@@ -59,22 +62,24 @@ public class ListResourceAuditFlowCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ResourceAuditFlowDto resourceAuditFlowDto = BeanConvertUtil.covertBean(reqJson, ResourceAuditFlowDto.class);
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
 
-           int count = resourceAuditFlowV1InnerServiceSMOImpl.queryResourceAuditFlowsCount(resourceAuditFlowDto);
+        ResourceAuditFlowDto resourceAuditFlowDto = BeanConvertUtil.covertBean(reqJson, ResourceAuditFlowDto.class);
+        resourceAuditFlowDto.setStoreId(storeId);
+        int count = resourceAuditFlowV1InnerServiceSMOImpl.queryResourceAuditFlowsCount(resourceAuditFlowDto);
 
-           List<ResourceAuditFlowDto> resourceAuditFlowDtos = null;
+        List<ResourceAuditFlowDto> resourceAuditFlowDtos = null;
 
-           if (count > 0) {
-               resourceAuditFlowDtos = resourceAuditFlowV1InnerServiceSMOImpl.queryResourceAuditFlows(resourceAuditFlowDto);
-           } else {
-               resourceAuditFlowDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            resourceAuditFlowDtos = resourceAuditFlowV1InnerServiceSMOImpl.queryResourceAuditFlows(resourceAuditFlowDto);
+        } else {
+            resourceAuditFlowDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, resourceAuditFlowDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, resourceAuditFlowDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
