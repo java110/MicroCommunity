@@ -20,8 +20,6 @@ public class StorehouseDto extends PageDto implements Serializable {
 
     private String shDesc;
     private String shType;
-    private String shObjId;
-    private String[] shObjIds;
     private String shId;
     private String shName;
     private String storeId;
@@ -30,6 +28,13 @@ public class StorehouseDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String purchaseSwitch;
+    private String purchaseRafId;
+    private String useSwitch;
+    private String useRafId;
+    private String allocationSwitch;
+    private String allocationRafId;
 
     public String getShDesc() {
         return shDesc;
@@ -47,13 +52,6 @@ public class StorehouseDto extends PageDto implements Serializable {
         this.shType = shType;
     }
 
-    public String getShObjId() {
-        return shObjId;
-    }
-
-    public void setShObjId(String shObjId) {
-        this.shObjId = shObjId;
-    }
 
     public String getShId() {
         return shId;
@@ -95,13 +93,6 @@ public class StorehouseDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public String[] getShObjIds() {
-        return shObjIds;
-    }
-
-    public void setShObjIds(String[] shObjIds) {
-        this.shObjIds = shObjIds;
-    }
 
     public String getIsShow() {
         return isShow;
@@ -109,5 +100,54 @@ public class StorehouseDto extends PageDto implements Serializable {
 
     public void setIsShow(String isShow) {
         this.isShow = isShow;
+    }
+
+
+    public String getPurchaseSwitch() {
+        return purchaseSwitch;
+    }
+
+    public void setPurchaseSwitch(String purchaseSwitch) {
+        this.purchaseSwitch = purchaseSwitch;
+    }
+
+    public String getPurchaseRafId() {
+        return purchaseRafId;
+    }
+
+    public void setPurchaseRafId(String purchaseRafId) {
+        this.purchaseRafId = purchaseRafId;
+    }
+
+    public String getUseSwitch() {
+        return useSwitch;
+    }
+
+    public void setUseSwitch(String useSwitch) {
+        this.useSwitch = useSwitch;
+    }
+
+    public String getUseRafId() {
+        return useRafId;
+    }
+
+    public void setUseRafId(String useRafId) {
+        this.useRafId = useRafId;
+    }
+
+    public String getAllocationSwitch() {
+        return allocationSwitch;
+    }
+
+    public void setAllocationSwitch(String allocationSwitch) {
+        this.allocationSwitch = allocationSwitch;
+    }
+
+    public String getAllocationRafId() {
+        return allocationRafId;
+    }
+
+    public void setAllocationRafId(String allocationRafId) {
+        this.allocationRafId = allocationRafId;
     }
 }

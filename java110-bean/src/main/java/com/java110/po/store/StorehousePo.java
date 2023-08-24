@@ -15,6 +15,13 @@ public class StorehousePo implements Serializable {
 
     private String statusCd = "0";
 
+    private String purchaseSwitch;
+    private String purchaseRafId;
+    private String useSwitch;
+    private String useRafId;
+    private String allocationSwitch;
+    private String allocationRafId;
+
     public String getShDesc() {
         return shDesc;
     }
@@ -77,5 +84,53 @@ public class StorehousePo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPurchaseSwitch() {
+        return purchaseSwitch;
+    }
+
+    public void setPurchaseSwitch(String purchaseSwitch) {
+        this.purchaseSwitch = purchaseSwitch;
+    }
+
+    public String getPurchaseRafId() {
+        return purchaseRafId;
+    }
+
+    public void setPurchaseRafId(String purchaseRafId) {
+        this.purchaseRafId = purchaseRafId;
+    }
+
+    public String getUseSwitch() {
+        return useSwitch;
+    }
+
+    public void setUseSwitch(String useSwitch) {
+        this.useSwitch = useSwitch;
+    }
+
+    public String getUseRafId() {
+        return useRafId;
+    }
+
+    public void setUseRafId(String useRafId) {
+        this.useRafId = useRafId;
+    }
+
+    public String getAllocationSwitch() {
+        return allocationSwitch;
+    }
+
+    public void setAllocationSwitch(String allocationSwitch) {
+        this.allocationSwitch = allocationSwitch;
+    }
+
+    public String getAllocationRafId() {
+        return allocationRafId;
+    }
+
+    public void setAllocationRafId(String allocationRafId) {
+        this.allocationRafId = allocationRafId;
     }
 }

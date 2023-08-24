@@ -89,11 +89,6 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         if (storehouseDtoList != null && storehouseDtoList.size() > 0) {
             storehouseDto1 = storehouseDtoList.get(0);
         }
-        if (SH_TYPE_GROUP.equals(storehouseDto1.getShType())) {//集团仓库
-            communityId = "9999";
-        } else {//小区仓库
-            communityId = storehouseDto1.getShObjId();
-        }
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(allocationStorehouseApplyDto.getStoreId(), communityId), allocationStorehouseApplyDto.getApplyId(), variables);
         //将得到的实例流程id值赋给之前设置的变量

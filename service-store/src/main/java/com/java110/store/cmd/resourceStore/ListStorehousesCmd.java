@@ -2,6 +2,7 @@ package com.java110.store.cmd.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -37,33 +38,9 @@ public class ListStorehousesCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        String storeId = CmdContextUtils.getStoreId(context);
         StorehouseDto storehouseDto = BeanConvertUtil.covertBean(reqJson, StorehouseDto.class);
-
-        //是否具有查看集团仓库权限
-        String userId = reqJson.getString("userId");
-        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-        basePrivilegeDto.setResource("/viewGroupWarehouse");
-        basePrivilegeDto.setUserId(userId);
-        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (privileges.size() == 0) {
-            storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId")});
-        } else {
-            if (reqJson.containsKey("operationType") && reqJson.getString("operationType").equals("1000")) {
-                storehouseDto.setShType("");
-            }
-            storehouseDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
-        }
-
-        BasePrivilegeDto basePrivilegeDto1 = new BasePrivilegeDto();
-        basePrivilegeDto1.setResource("/viewHiddenWarehouse");
-        basePrivilegeDto1.setUserId(userId);
-        List<Map> viewHiddenWarehousePrivileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto1);
-        if (viewHiddenWarehousePrivileges.size() == 0) {
-            storehouseDto.setIsShow("true");
-        }
-        if (reqJson.containsKey("flag") && reqJson.getString("flag").equals("0")) {//调拨申请查看所有仓库
-            storehouseDto.setShObjIds(null);
-        }
+        storehouseDto.setStoreId(storeId);
         int count = storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
 
         List<StorehouseDto> storehouseDtos = null;
