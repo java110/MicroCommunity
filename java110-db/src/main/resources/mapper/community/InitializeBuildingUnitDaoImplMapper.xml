@@ -24,9 +24,10 @@
             and community_id = #{communityId}
     </delete>
     <delete id="deleteOwnerRoomRel" parameterType="Map">
-        delete from building_owner_room_rel where room_id in(
-        select t.room_id from building_room t where t.community_id = #{communityId}
-        )
+        delete from building_owner_room_rel where room_id in
+        <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </delete>
 
     <!-- 初始化数据 add by wuxw 2018-07-03 -->
