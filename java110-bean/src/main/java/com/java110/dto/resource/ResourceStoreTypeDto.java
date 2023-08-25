@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,13 +16,20 @@ import java.util.Date;
  **/
 public class ResourceStoreTypeDto extends PageDto implements Serializable {
 
+
+    private String parentRstId;
+    private String parentName;
+    private String parentDescription;
+
     private String rstId;
     private String name;
     private String description;
     private String storeId;
     private Date createTime;
     private String statusCd = "0";
-    private String parentId = "0"; //父级id,默认为0
+    private String parentId ; //父级id,默认为0
+
+    private List<ResourceStoreTypeDto> subTypes;
 
     public String getRstId() {
         return rstId;
@@ -77,5 +85,37 @@ public class ResourceStoreTypeDto extends PageDto implements Serializable {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public String getParentDescription() {
+        return parentDescription;
+    }
+
+    public void setParentDescription(String parentDescription) {
+        this.parentDescription = parentDescription;
+    }
+
+    public List<ResourceStoreTypeDto> getSubTypes() {
+        return subTypes;
+    }
+
+    public void setSubTypes(List<ResourceStoreTypeDto> subTypes) {
+        this.subTypes = subTypes;
     }
 }

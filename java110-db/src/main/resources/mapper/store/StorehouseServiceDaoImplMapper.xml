@@ -5,27 +5,19 @@
 <mapper namespace="storehouseServiceDaoImpl">
     <!-- 查询仓库信息 add by wuxw 2018-07-03 -->
     <select id="getStorehouseInfo" parameterType="Map" resultType="Map">
-        select t.sh_desc,t.sh_desc shDesc,t.sh_type,t.sh_id,t.sh_id
+        select t.sh_desc,t.sh_desc shDesc,t.sh_id,t.sh_id
         shId,t.status_cd,t.status_cd statusCd,t.sh_name,t.sh_name shName,t.store_id,t.store_id
         storeId,t.is_show,t.is_show isShow,t.create_time createTime,t.purchase_switch purchaseSwitch,
         t.purchase_raf_id purchaseRafId,t.use_switch useSwitch,t.use_raf_id useRafId,
-        t.allocation_switch allocationSwitch,t.allocation_raf_id allocationRafId
+        t.allocation_switch allocationSwitch,t.allocation_raf_id allocationRafId,raf.flow_name purchaseFlowName,
+        raf1.flow_name useFlowName,raf2.flow_name allocationFlowName
         from storehouse t
+        left join resource_audit_flow raf on t.purchase_raf_id = raf.raf_id and raf.status_cd = '0'
+        left join resource_audit_flow raf1 on t.use_raf_id = raf1.raf_id and raf1.status_cd = '0'
+        left join resource_audit_flow raf2 on t.allocation_raf_id = raf2.raf_id and raf2.status_cd = '0'
         where 1 =1
         <if test="shDesc !=null and shDesc != ''">
             and t.sh_desc= #{shDesc}
-        </if>
-        <if test="shType !=null and shType != ''">
-            and t.sh_type= #{shType}
-        </if>
-        <if test="shObjId !=null and shObjId != ''">
-            and t.sh_obj_id= #{shObjId}
-        </if>
-        <if test="shObjIds !=null">
-            and t.sh_obj_id in
-            <foreach collection="shObjIds" item="item" index="index" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
         </if>
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
@@ -59,18 +51,7 @@
         <if test="shDesc !=null and shDesc != ''">
             and t.sh_desc= #{shDesc}
         </if>
-        <if test="shType !=null and shType != ''">
-            and t.sh_type= #{shType}
-        </if>
-        <if test="shObjId !=null and shObjId != ''">
-            and t.sh_obj_id= #{shObjId}
-        </if>
-        <if test="shObjIds !=null">
-            and t.sh_obj_id in
-            <foreach collection="shObjIds" item="item" index="index" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
+
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
