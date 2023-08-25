@@ -33,6 +33,7 @@ import com.java110.po.resource.ResourceStoreTimesPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,15 +107,16 @@ public class SaveResourceStoreCmd extends Cmd {
         businessResourceStore.put("miniStock", "0");
         businessResourceStore.put("createTime", new Date());
         ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(businessResourceStore, ResourceStorePo.class);
-        if (resourceStorePo.getAveragePrice() == null || resourceStorePo.getAveragePrice().equals("")) {
+        if (StringUtil.isEmpty(resourceStorePo.getAveragePrice())) {
             resourceStorePo.setAveragePrice("0.00");
         }
+        //todo 写入物品
         int flag = resourceStoreV1InnerServiceSMOImpl.saveResourceStore(resourceStorePo);
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
 
-        // 保存至 物品 times表
+        // todo 保存至 物品 times表
         ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
         resourceStoreTimesPo.setApplyOrderId("-1");
         resourceStoreTimesPo.setPrice(resourceStorePo.getPrice());

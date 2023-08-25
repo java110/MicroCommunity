@@ -210,7 +210,7 @@
         t.create_time,t.create_time createTime,t.sh_id,t.sh_id shId,sh.sh_name shName,t.average_price,t.average_price
         averagePrice,rss.spec_name rssName,t.mini_unit_code,t.mini_unit_code miniUnitCode,t.mini_stock,t.mini_stock
         miniStock,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name
-        miniUnitCodeName,sh.sh_type shType,t.parent_rst_id parentRstId,t.rst_id rstId,rst1.name parentRstName,rst.name
+        miniUnitCodeName,t.parent_rst_id parentRstId,t.rst_id rstId,rst1.name parentRstName,rst.name
         rstName,
         t.is_fixed,t.is_fixed isFixed,td2.name isFixedName
         from resource_store t
