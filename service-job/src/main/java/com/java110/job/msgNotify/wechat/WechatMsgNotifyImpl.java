@@ -69,7 +69,6 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         templateKeys.put(SPEC_CD_WECHAT_OA_WORKFLOW_AUDIT_FINISH_TEMPLATE, new String[]{"流程名称", "流程状态"});
 
 
-
     }
 
     @Autowired
@@ -118,9 +117,9 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing2",new Content("退费申请审批"));
-        data.put("time10",new Content(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
-        data.put("thing9",new Content(content.getString("name")));
+        data.put("thing2", new Content("退费申请审批"));
+        data.put("time10", new Content(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
+        data.put("thing9", new Content(content.getString("name")));
         templateMessage.setData(data);
         //获取员工公众号地址
         String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
@@ -138,7 +137,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
      *
      * @param communityId 小区
      * @param userId      用户
-     * @param contents     [{
+     * @param contents    [{
      *                    "feeTypeName",
      *                    "payerObjName",
      *                    "billAmountOwed",
@@ -148,9 +147,9 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
      * @return
      */
     @Override
-    public ResultVo sendOweFeeMsg(String communityId, String userId,String ownerId, List<JSONObject> contents) {
+    public ResultVo sendOweFeeMsg(String communityId, String userId, String ownerId, List<JSONObject> contents) {
 
-        if(StringUtil.isEmpty(userId) || userId.startsWith("-")){
+        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
             throw new IllegalArgumentException("业主未绑定，没有获取到微信openId");
         }
 
@@ -175,7 +174,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
 
         String url = sendMsgUrl + accessToken;
         JSONObject paramOut = null;
-        for(JSONObject content: contents) {
+        for (JSONObject content : contents) {
             JSONObject data = new JSONObject();
             PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
             templateMessage.setTemplate_id(templateId);
@@ -190,7 +189,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
             ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
             logger.info("微信模板返回内容:{}", responseEntity);
             paramOut = JSONObject.parseObject(responseEntity.getBody());
-            if(paramOut.getIntValue("errcode")!=0){
+            if (paramOut.getIntValue("errcode") != 0) {
                 return new ResultVo(paramOut.getIntValue("errcode"), paramOut.getString("errmsg"));
             }
         }
@@ -233,10 +232,10 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing2",new Content(content.getString("feeTypeCdName")));
-        data.put("thing10",new Content(content.getString("payFeeRoom")));
-        data.put("time18",new Content(content.getString("payFeeTime")));
-        data.put("amount6",new Content(content.getString("receivedAmount")));
+        data.put("thing2", new Content(content.getString("feeTypeCdName")));
+        data.put("thing10", new Content(content.getString("payFeeRoom")));
+        data.put("time18", new Content(content.getString("payFeeTime")));
+        data.put("amount6", new Content(content.getString("receivedAmount")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -287,9 +286,13 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing8",new Content(content.getString("repairTypeName")));
-        data.put("thing11",new Content(content.getString("repairObjName")));
-        data.put("thing10",new Content(content.getString("repairName")));
+        data.put("thing8", new Content(content.getString("repairTypeName")));
+        data.put("thing11", new Content(content.getString("repairObjName")));
+        String context = content.getString("context");
+        if (!StringUtil.isEmpty(context) && context.length() > 100) {
+            context = context.substring(0, 100);
+        }
+        data.put("thing10", new Content(context));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -338,10 +341,10 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing2",new Content(content.getString("repairName")));
-        data.put("phone_number3",new Content(content.getString("tel")));
-        data.put("time13",new Content(content.getString("time")));
-        data.put("thing9",new Content(content.getString("address")));
+        data.put("thing2", new Content(content.getString("repairName")));
+        data.put("phone_number3", new Content(content.getString("tel")));
+        data.put("time13", new Content(content.getString("time")));
+        data.put("thing9", new Content(content.getString("address")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -391,9 +394,9 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing6",new Content(content.getString("name")));
-        data.put("phone_number9",new Content(content.getString("tel")));
-        data.put("time3",new Content(content.getString("time")));
+        data.put("thing6", new Content(content.getString("name")));
+        data.put("phone_number9", new Content(content.getString("tel")));
+        data.put("time3", new Content(content.getString("time")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -444,9 +447,9 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing9",new Content(content.getString("repairObjName")));
-        data.put("thing10",new Content(content.getString("staffName")));
-        data.put("time5",new Content(content.getString("time")));
+        data.put("thing9", new Content(content.getString("repairObjName")));
+        data.put("thing10", new Content(content.getString("staffName")));
+        data.put("time5", new Content(content.getString("time")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -482,9 +485,9 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing8",new Content(content.getString("repairTypeName")));
-        data.put("thing11",new Content(content.getString("repairObjName")));
-        data.put("thing10",new Content(content.getString("repairName")));
+        data.put("thing8", new Content(content.getString("repairTypeName")));
+        data.put("thing11", new Content(content.getString("repairObjName")));
+        data.put("thing10", new Content(content.getString("repairName")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -496,7 +499,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
     }
 
     /**
-     *  oa 流程待审批通知
+     * oa 流程待审批通知
      *
      * @param communityId 小区
      * @param userId      用户
@@ -533,9 +536,9 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing2",new Content(content.getString("flowName")));
-        data.put("thing9",new Content(content.getString("create_user_name")));
-        data.put("time10",new Content(content.getString("create_time")));
+        data.put("thing2", new Content(content.getString("flowName")));
+        data.put("thing9", new Content(content.getString("create_user_name")));
+        data.put("time10", new Content(content.getString("create_time")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
@@ -547,7 +550,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
     }
 
     /**
-     *  oa 流程通知发起人
+     * oa 流程通知发起人
      *
      * @param communityId 小区
      * @param userId      用户
@@ -583,8 +586,8 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing2",new Content(content.getString("flowName")));
-        data.put("thing6",new Content(content.getString("staffName")));
+        data.put("thing2", new Content(content.getString("flowName")));
+        data.put("thing6", new Content(content.getString("staffName")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
