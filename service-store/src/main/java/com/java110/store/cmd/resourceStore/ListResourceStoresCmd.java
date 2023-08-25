@@ -111,9 +111,11 @@ public class ListResourceStoresCmd extends Cmd {
         }
 
 
-        BigDecimal stock = new BigDecimal(0.0);
-        BigDecimal totalPrice = new BigDecimal(0.0);
+        BigDecimal stock = null;
+        BigDecimal totalPrice = null;
         for (ApiResourceStoreDataVo resourceStore : resourceStores) {
+            stock = new BigDecimal(0.0);
+            totalPrice = new BigDecimal(0.0);
             List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStore.getTimes();
             if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
                 continue;
