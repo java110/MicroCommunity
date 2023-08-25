@@ -27,7 +27,7 @@
         rs.sh_id,rs.sh_id shId,sh.sh_name shName,rs.average_price,rs.average_price
         averagePrice,rss.spec_name rssName,rs.mini_unit_code,rs.mini_unit_code miniUnitCode,rs.mini_stock,rs.mini_stock
         miniStock,rs.mini_unit_stock,rs.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name
-        miniUnitCodeName,sh.sh_type shType,rs.parent_rst_id parentRstId,rs.rst_id rstId,rst1.name parentRstName,rst.name
+        miniUnitCodeName,rs.parent_rst_id parentRstId,rs.rst_id rstId,rst1.name parentRstName,rst.name
         rstName,
         rs.is_fixed,rs.is_fixed isFixed,td2.name isFixedName
         from resource_store_times t

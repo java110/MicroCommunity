@@ -282,9 +282,7 @@
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
-        <if test="shType !=null and shType != ''">
-            and sh.sh_type= #{shType}
-        </if>
+
         <if test="shObjId !=null and shObjId != ''">
             and sh.sh_obj_id= #{shObjId}
         </if>
@@ -475,9 +473,6 @@
                 #{item}
             </foreach>
         </if>
-        <if test="shType !=null and shType != ''">
-            and sh.sh_type= #{shType}
-        </if>
         <if test="averagePrice != null and averagePrice != ''">
             and t.average_price = #{averagePrice}
         </if>
@@ -573,9 +568,6 @@
         </if>
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
-        </if>
-        <if test="shType !=null and shType != ''">
-            and sh.sh_type= #{shType}
         </if>
         <if test="shObjId !=null and shObjId != ''">
             and sh.sh_obj_id= #{shObjId}
