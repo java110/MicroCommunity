@@ -18,27 +18,37 @@ package com.java110.store.cmd.resourceStore;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.doc.annotation.*;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.resource.ResourceStoreDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.intf.store.IResourceStoreV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
+import com.java110.po.purchase.PurchaseApplyDetailPo;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.po.resource.ResourceStoreTimesPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +62,45 @@ import java.util.List;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
+@Java110CmdDoc(title = "添加物品",
+        description = "外部系统通过此接口添加物品",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/resourceStore.saveResourceStore",
+        resource = "storeDoc",
+        author = "吴学文",
+        serviceCode = "resourceStore.saveResourceStore"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "resName", length = 64, remark = "名称"),
+        @Java110ParamDoc(name = "resCode", length = 64, remark = "编号"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody = "{" +
+                "\"resName\":\"电动车\",\"resCode\":\"002\",\"resId\":\"\",\"parentRstId\":\"282023082523150002\"," +
+                "\"rstId\":\"282023082516650004\",\"price\":\"15\",\"description\":\"\",\"outLowPrice\":\"1\"," +
+                "\"outHighPrice\":\"3\",\"showMobile\":\"N\",\"remark\":\"\",\"unitCode\":\"1001\",\"shId\":\"102023082412640003\"," +
+                "\"isFixed\":\"N\",\"rssId\":\"\",\"miniUnitCode\":\"1001\",\"miniUnitStock\":\"1\",\"warningStock\":\"10\"," +
+                "\"communityId\":\"2023052267100146\"}",
+        resBody = "{\n" +
+                "    \"code\": 0,\n" +
+                "    \"data\": [\n" +
+                "    ],\n" +
+                "    \"msg\": \"成功\",\n" +
+                "    \"page\": 0,\n" +
+                "    \"records\": 1,\n" +
+                "    \"rows\": 0,\n" +
+                "    \"total\": 1\n" +
+                "}"
+)
 @Java110Cmd(serviceCode = "resourceStore.saveResourceStore")
 public class SaveResourceStoreCmd extends Cmd {
 
@@ -69,6 +118,13 @@ public class SaveResourceStoreCmd extends Cmd {
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
     @Autowired
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -100,10 +156,12 @@ public class SaveResourceStoreCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
         JSONObject businessResourceStore = new JSONObject();
         businessResourceStore.putAll(reqJson);
         businessResourceStore.put("resId", GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));
-        businessResourceStore.put("stock", "0");
+        // businessResourceStore.put("stock", "0");
         businessResourceStore.put("miniStock", "0");
         businessResourceStore.put("createTime", new Date());
         ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(businessResourceStore, ResourceStorePo.class);
@@ -117,14 +175,17 @@ public class SaveResourceStoreCmd extends Cmd {
         }
 
         // todo 保存至 物品 times表
-        ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
-        resourceStoreTimesPo.setApplyOrderId("-1");
-        resourceStoreTimesPo.setPrice(resourceStorePo.getPrice());
-        resourceStoreTimesPo.setStock(resourceStorePo.getStock());
-        resourceStoreTimesPo.setResCode(resourceStorePo.getResCode());
-        resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
-        resourceStoreTimesPo.setShId(resourceStorePo.getShId());
-        resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+//        ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+//        resourceStoreTimesPo.setApplyOrderId("-1");
+//        resourceStoreTimesPo.setPrice(resourceStorePo.getPrice());
+//        resourceStoreTimesPo.setStock(resourceStorePo.getStock());
+//        resourceStoreTimesPo.setResCode(resourceStorePo.getResCode());
+//        resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
+//        resourceStoreTimesPo.setShId(resourceStorePo.getShId());
+//        resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+
+        //todo 入库
+        inStore(reqJson, userId, storeId, resourceStorePo);
 
         //将图片插入文件表里
         FileRelPo fileRelPo = new FileRelPo();
@@ -148,5 +209,76 @@ public class SaveResourceStoreCmd extends Cmd {
             }
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+    }
+
+    /**
+     * 直接入库
+     *
+     * @param reqJson
+     * @param userId
+     * @param storeId
+     */
+    private void inStore(JSONObject reqJson, String userId, String storeId, ResourceStorePo resourceStorePo) {
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        userDto.setPage(1);
+        userDto.setRow(1);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户不存在");
+
+        String applyOrderId = "-1";
+        int stock = Integer.parseInt(resourceStorePo.getStock());
+        //todo 如果有库存才生成 采购流程
+        if (stock > 0) {
+            applyOrderId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId);
+            PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
+            purchaseApplyPo.setApplyOrderId(applyOrderId);
+            purchaseApplyPo.setDescription("入库单（物品导入）");
+            purchaseApplyPo.setUserId(userId);
+            purchaseApplyPo.setUserName(userDtos.get(0).getName());
+            purchaseApplyPo.setEndUserName(userDtos.get(0).getName());
+            purchaseApplyPo.setEndUserTel(userDtos.get(0).getTel());
+            purchaseApplyPo.setStoreId(storeId);
+            purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_ENTER);
+            purchaseApplyPo.setState(PurchaseApplyDto.STATE_END);
+            purchaseApplyPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            purchaseApplyPo.setCreateUserId(userId);
+            purchaseApplyPo.setCreateUserName(userDtos.get(0).getName());
+            purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT);
+            purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
+            //获取采购物品信息
+            List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
+
+            PurchaseApplyDetailPo purchaseApplyDetailPo = new PurchaseApplyDetailPo();
+            purchaseApplyDetailPo.setApplyOrderId(applyOrderId);
+            purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
+            purchaseApplyDetailPo.setPurchaseQuantity(resourceStorePo.getStock());
+            purchaseApplyDetailPo.setPurchaseRemark(resourceStorePo.getRemark());
+            purchaseApplyDetailPo.setOriginalStock(resourceStorePo.getStock());
+            purchaseApplyDetailPo.setQuantity(resourceStorePo.getStock());
+            purchaseApplyDetailPo.setPrice(resourceStorePo.getPrice());
+            purchaseApplyDetailPo.setResId(resourceStorePo.getResId());
+            purchaseApplyDetailPo.setRsId(resourceStorePo.getRssId());
+            purchaseApplyDetailPos.add(purchaseApplyDetailPo);
+            purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
+            int saveFlag = purchaseApplyInnerServiceSMOImpl.savePurchaseApply(purchaseApplyPo);
+            if (saveFlag < 1) {
+                throw new CmdException("采购申请失败");
+            }
+        }
+
+        // 保存至 物品 times表
+        ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+        resourceStoreTimesPo.setApplyOrderId(applyOrderId);
+        resourceStoreTimesPo.setPrice(resourceStorePo.getPrice());
+        resourceStoreTimesPo.setStock(resourceStorePo.getStock());
+        resourceStoreTimesPo.setResCode(resourceStorePo.getResCode());
+        resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
+        resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+        resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+
+
     }
 }

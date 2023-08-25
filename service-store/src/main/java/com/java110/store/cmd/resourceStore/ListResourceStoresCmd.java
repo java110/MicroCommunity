@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.doc.annotation.*;
 import com.java110.dto.PageDto;
 import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.resource.ResourceStoreDto;
@@ -31,6 +32,116 @@ import java.util.Map;
  * 查询物品
  * add by wuxw 2023-01-19
  */
+
+@Java110CmdDoc(title = "查询物品",
+        description = "外部系统通过此接口查询物品",
+        httpMethod = "get",
+        url = "http://{ip}:{port}/app/resourceStore.listResourceStores",
+        resource = "storeDoc",
+        author = "吴学文",
+        serviceCode = "resourceStore.listResourceStores"
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "page", length = 11,type = "int",remark = "页数"),
+        @Java110ParamDoc(name = "row", length = 11,type = "int", remark = "行业数"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+                @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
+                @Java110ParamDoc(parentNodeName = "data",name = "resCode", type = "String", remark = "物品编号"),
+                @Java110ParamDoc(parentNodeName = "data",name = "resName", type = "String", remark = "物品名称"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody="http://localhost:3000/app/resourceStore.listResourceStores?resId=&resName=&resCode=&shId=&parentRstId=&rstId=&rssId=&isFixed=&page=1&row=10",
+        resBody="{\n" +
+                "    \"page\": 0,\n" +
+                "    \"records\": 1,\n" +
+                "    \"resourceStores\": [\n" +
+                "        {\n" +
+                "            \"averagePrice\": \"0.00\",\n" +
+                "            \"createTime\": 1692976986000,\n" +
+                "            \"description\": \"\",\n" +
+                "            \"isFixed\": \"N\",\n" +
+                "            \"isFixedName\": \"否\",\n" +
+                "            \"miniStock\": \"0\",\n" +
+                "            \"miniUnitCode\": \"1001\",\n" +
+                "            \"miniUnitCodeName\": \"个\",\n" +
+                "            \"miniUnitStock\": \"1\",\n" +
+                "            \"outHighPrice\": \"2.00\",\n" +
+                "            \"outLowPrice\": \"1.00\",\n" +
+                "            \"parentRstId\": \"282023082523150002\",\n" +
+                "            \"parentRstName\": \"77\",\n" +
+                "            \"price\": \"1.00\",\n" +
+                "            \"remark\": \"\",\n" +
+                "            \"resCode\": \"001\",\n" +
+                "            \"resId\": \"852023082533060002\",\n" +
+                "            \"resName\": \"钢笔\",\n" +
+                "            \"rssId\": \"\",\n" +
+                "            \"rstId\": \"282023082516650004\",\n" +
+                "            \"rstName\": \"mm\",\n" +
+                "            \"shId\": \"102023082412640003\",\n" +
+                "            \"shName\": \"A仓库\",\n" +
+                "            \"showMobile\": \"N\",\n" +
+                "            \"stock\": \"0.0\",\n" +
+                "            \"times\": [\n" +
+                "                {\n" +
+                "                    \"applyOrderId\": \"-1\",\n" +
+                "                    \"averagePrice\": \"0.00\",\n" +
+                "                    \"createTime\": 1692976987000,\n" +
+                "                    \"description\": \"\",\n" +
+                "                    \"isFixed\": \"N\",\n" +
+                "                    \"isFixedName\": \"否\",\n" +
+                "                    \"miniStock\": \"0\",\n" +
+                "                    \"miniUnitCode\": \"1001\",\n" +
+                "                    \"miniUnitCodeName\": \"个\",\n" +
+                "                    \"miniUnitStock\": \"1\",\n" +
+                "                    \"outHighPrice\": \"2.00\",\n" +
+                "                    \"outLowPrice\": \"1.00\",\n" +
+                "                    \"page\": -1,\n" +
+                "                    \"parentRstId\": \"282023082523150002\",\n" +
+                "                    \"parentRstName\": \"77\",\n" +
+                "                    \"price\": \"1.00\",\n" +
+                "                    \"records\": 0,\n" +
+                "                    \"remark\": \"\",\n" +
+                "                    \"resCode\": \"001\",\n" +
+                "                    \"resId\": \"852023082533060002\",\n" +
+                "                    \"resName\": \"钢笔\",\n" +
+                "                    \"row\": 0,\n" +
+                "                    \"rssId\": \"\",\n" +
+                "                    \"rstId\": \"282023082516650004\",\n" +
+                "                    \"rstName\": \"mm\",\n" +
+                "                    \"shId\": \"102023082412640003\",\n" +
+                "                    \"shName\": \"A仓库\",\n" +
+                "                    \"showMobile\": \"N\",\n" +
+                "                    \"statusCd\": \"0\",\n" +
+                "                    \"stock\": \"0\",\n" +
+                "                    \"storeId\": \"10202305221014329108000168\",\n" +
+                "                    \"timesId\": \"112023082573090004\",\n" +
+                "                    \"total\": 0,\n" +
+                "                    \"totalPrice\": \"0.0\",\n" +
+                "                    \"unitCode\": \"1002\",\n" +
+                "                    \"unitCodeName\": \"次\",\n" +
+                "                    \"warningStock\": \"10\"\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            \"totalPrice\": \"0.0\",\n" +
+                "            \"unitCode\": \"1002\",\n" +
+                "            \"unitCodeName\": \"次\",\n" +
+                "            \"warningStock\": \"10\"\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"rows\": 0,\n" +
+                "    \"subTotal\": \"0.00\",\n" +
+                "    \"total\": 1,\n" +
+                "    \"totalPrice\": \"0.00\"\n" +
+                "}"
+)
 @Java110Cmd(serviceCode = "resourceStore.listResourceStores")
 public class ListResourceStoresCmd extends Cmd {
 
@@ -53,18 +164,7 @@ public class ListResourceStoresCmd extends Cmd {
         //采购2806集团仓库 物品领用2807小区仓库  默认查询当前小区所有商品
         //是否具有查看集团仓库物品权限
         String userId = reqJson.getString("userId");
-        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-        basePrivilegeDto.setResource("/viewGroupResource");
-        basePrivilegeDto.setUserId(userId);
-        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if ("1000".equals(reqJson.getString("operationType")) && privileges.size() > 0) {
-            resourceStoreDto.setShType("");
-            resourceStoreDto.setShObjIds(new String[]{reqJson.getString("communityId"), reqJson.getString("storeId")});
-        } else if (StorehouseDto.SH_TYPE_COMMUNITY.equals(resourceStoreDto.getShType()) || privileges.size() == 0) {
-            //add by wuxw 这里 修改为 小区仓库也能采购 模式 所以这里不限制
-            //resourceStoreDto.setShType(StorehouseDto.SH_TYPE_COMMUNITY);
-            resourceStoreDto.setShObjId(reqJson.getString("communityId"));
-        }
+
         BasePrivilegeDto basePrivilegeDto1 = new BasePrivilegeDto();
         basePrivilegeDto1.setResource("/viewHiddenWarehouse");
         basePrivilegeDto1.setUserId(userId);
