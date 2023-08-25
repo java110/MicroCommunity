@@ -27,7 +27,7 @@ public class ResourceStoreTypeDto extends PageDto implements Serializable {
     private String storeId;
     private Date createTime;
     private String statusCd = "0";
-    private String parentId = "0"; //父级id,默认为0
+    private String parentId ; //父级id,默认为0
 
     private List<ResourceStoreTypeDto> subTypes;
 

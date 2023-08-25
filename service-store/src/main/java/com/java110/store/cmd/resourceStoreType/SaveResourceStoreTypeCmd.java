@@ -12,6 +12,7 @@ import com.java110.po.resource.ResourceStoreTypePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
@@ -28,6 +29,16 @@ public class SaveResourceStoreTypeCmd extends Cmd {
 //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         //Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+
+        if(!reqJson.containsKey("parentId")){
+            reqJson.put("parentId", "0");
+        }
+
+        String parentId = reqJson.getString("parentId");
+
+        if(StringUtil.isEmpty(parentId)){
+            reqJson.put("parentId", "0");
+        }
 
         if (!reqJson.containsKey("storeId")) {
             String storeId = context.getReqHeaders().get("store-id");
