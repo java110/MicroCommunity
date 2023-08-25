@@ -50,19 +50,33 @@ public class ListResourceStoreTypeTreeCmd extends Cmd {
 
 
         List<ResourceStoreTypeDto> storeTypes = new ArrayList<>();
+
+        //todo 计算一级分类
+        for (ResourceStoreTypeDto tmpResourceStoreTypeDto : storeTypeDtos) {
+            if (!StringUtil.isEmpty(tmpResourceStoreTypeDto.getParentRstId())) {
+                continue;
+            }
+            ResourceStoreTypeDto selfResourceStoreTypeDto = BeanConvertUtil.covertBean(tmpResourceStoreTypeDto, ResourceStoreTypeDto.class);
+            selfResourceStoreTypeDto.setParentRstId(tmpResourceStoreTypeDto.getRstId());
+            selfResourceStoreTypeDto.setParentName(tmpResourceStoreTypeDto.getName());
+            selfResourceStoreTypeDto.setParentDescription(tmpResourceStoreTypeDto.getDescription());
+            storeTypes.add(selfResourceStoreTypeDto);
+        }
+
+        //todo 计算二级分类
         ResourceStoreTypeDto tResourceStoreTypeDto = null;
         List<ResourceStoreTypeDto> subStoreTypes = null;
         for (ResourceStoreTypeDto tmpResourceStoreTypeDto : storeTypeDtos) {
+            //todo 这个可能是一级分类
+            if (StringUtil.isEmpty(tmpResourceStoreTypeDto.getParentRstId())) {
+                continue;
+            }
 
             //todo 一级分类
             tResourceStoreTypeDto = getParentResoureceStoreTypes(storeTypes, tmpResourceStoreTypeDto);
 
-            //todo 如果现在就是一级分类 跳过
-            if (tmpResourceStoreTypeDto.getRstId().equals(tResourceStoreTypeDto.getRstId())) {
-                subStoreTypes = new ArrayList<>();
-                ResourceStoreTypeDto selfResourceStoreTypeDto = BeanConvertUtil.covertBean(tmpResourceStoreTypeDto,ResourceStoreTypeDto.class);
-                subStoreTypes.add(selfResourceStoreTypeDto);
-                tResourceStoreTypeDto.setSubTypes(subStoreTypes);
+            //todo 说明没有 一级 分类 跳过，这种场景 除非改数据库不然不太可能存在
+            if (tResourceStoreTypeDto == null) {
                 continue;
             }
 
@@ -81,16 +95,15 @@ public class ListResourceStoreTypeTreeCmd extends Cmd {
     private ResourceStoreTypeDto getParentResoureceStoreTypes(List<ResourceStoreTypeDto> storeTypes, ResourceStoreTypeDto tmpResourceStoreTypeDto) {
         //todo 没有数据直接写入
         if (storeTypes.size() < 1) {
-            storeTypes.add(tmpResourceStoreTypeDto);
-            return tmpResourceStoreTypeDto;
+            return null;
         }
 
         for (ResourceStoreTypeDto storeType : storeTypes) {
-            if (storeType.getParentRstId().equals(tmpResourceStoreTypeDto.getParentRstId())) {
+            if (storeType.getRstId().equals(tmpResourceStoreTypeDto.getParentRstId())) {
                 return storeType;
             }
         }
-        storeTypes.add(tmpResourceStoreTypeDto);
-        return tmpResourceStoreTypeDto;
+
+        return null;
     }
 }
