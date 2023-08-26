@@ -58,10 +58,6 @@
     <select id="queryCordersCount" parameterType="Map" resultType="Map">
         select count(1) count
         from c_orders t
-        left join c_business cb on t.o_id = cb.o_id
-        left join c_business_type cbt on cb.business_type_cd = cbt.business_type_cd
-        left join u_user u on t.user_id = u.user_id
-        left join c_app ca on t.app_id = ca.app_id
         where 1 =1
         <if test="oId !=null and oId != ''">
             and t.o_id= #{oId}
