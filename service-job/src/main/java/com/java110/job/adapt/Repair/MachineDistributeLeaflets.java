@@ -234,6 +234,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
      */
     private void sendStaffMsg(JSONObject paramIn, CommunityDto communityDto) {
         JSONObject content = new JSONObject();
+        content.put("repairId", paramIn.getString("repairId"));
         content.put("repairName", paramIn.getString("repairName"));
         content.put("tel", paramIn.getString("tel"));
         content.put("time", paramIn.getString("time"));

@@ -56,7 +56,10 @@
             and rs.parent_rst_id= #{parentRstId}
         </if>
         <if test="resCode !=null and resCode != ''">
-            and t.res_code like concat('%',#{resCode},'%')
+            and t.res_code =#{resCode}
+        </if>
+        <if test="resCodeLike !=null and resCodeLike != ''">
+            and t.res_code like concat('%',#{resCodeLike},'%')
         </if>
         <if test="price !=null and price != ''">
             and t.price= #{price}
@@ -154,7 +157,10 @@
             and rs.parent_rst_id= #{parentRstId}
         </if>
         <if test="resCode !=null and resCode != ''">
-            and t.res_code like concat('%',#{resCode},'%')
+            and t.res_code =#{resCode}
+        </if>
+        <if test="resCodeLike !=null and resCodeLike != ''">
+            and t.res_code like concat('%',#{resCodeLike},'%')
         </if>
         <if test="price !=null and price != ''">
             and t.price= #{price}

@@ -14,7 +14,10 @@ import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.LogFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.user.StaffAppAuthDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.job.msgNotify.IMsgNotify;
 import com.java110.utils.cache.MappingCache;
@@ -37,6 +40,9 @@ public class AliMsgNotifyImpl implements IMsgNotify {
     private final static Logger logger = LoggerFactory.getLogger(AliMsgNotifyImpl.class);
     @Autowired
     private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
     public ResultVo sendApplyReturnFeeMsg(String communityId, String userId, JSONObject content) {
@@ -104,18 +110,18 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         Date tmpStartDate = null;
         Date tmpEndDate = null;
         for (JSONObject content : contents) {
-            oweFee = oweFee.add(new BigDecimal(content.getDouble("billAmountOwed"))).setScale(2,BigDecimal.ROUND_HALF_UP);
+            oweFee = oweFee.add(new BigDecimal(content.getDouble("billAmountOwed"))).setScale(2, BigDecimal.ROUND_HALF_UP);
             tmpStartDate = DateUtil.getDateFromStringB(content.getString("date").split("~")[0]);
             tmpEndDate = DateUtil.getDateFromStringB(content.getString("date").split("~")[1]);
-            if(startDate == null){
+            if (startDate == null) {
                 startDate = tmpStartDate;
                 endDate = tmpEndDate;
                 continue;
             }
-            if(startDate.getTime()> tmpStartDate.getTime()){
+            if (startDate.getTime() > tmpStartDate.getTime()) {
                 startDate = tmpStartDate;
             }
-            if(endDate.getTime() < tmpEndDate.getTime()){
+            if (endDate.getTime() < tmpEndDate.getTime()) {
                 endDate = tmpEndDate;
             }
         }
@@ -148,29 +154,226 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         return null;
     }
 
+    /**
+     * 发送内容  尊敬的员工，您有一个报修单需要处理，单号为{repairId}，请您及时处理
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    repairId,
+     *                    repairTypeName，
+     *                    repairObjName，
+     *                    repairName，
+     *                    url
+     *                    }
+     * @return
+     */
     @Override
     public ResultVo sendAddOwnerRepairMsg(String communityId, String userId, JSONObject content) {
-        return null;
+        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
+            throw new IllegalArgumentException("员工不存在,userId = " + userId);
+        }
+
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos == null || userDtos.size() < 1) {
+            throw new IllegalArgumentException("员工不存在");
+        }
+
+
+        String accessKeyId = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_KEY_ID");
+        String accessSecret = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_SECRET");
+        String region = CommunitySettingFactory.getValue(communityId, "ALI_REGION");
+        String signName = CommunitySettingFactory.getValue(communityId, "ALI_SIGN_NAME");
+        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_OWE_TEMPLATE_CODE");
+        DefaultProfile profile = DefaultProfile.getProfile(region,
+                accessKeyId,
+                accessSecret);
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        CommonRequest request = new CommonRequest();
+        request.setSysMethod(MethodType.POST);
+        request.setSysDomain("dysmsapi.aliyuncs.com");
+        request.setSysVersion("2017-05-25");
+        request.setSysAction("SendSms");
+        request.putQueryParameter("RegionId", region);
+        request.putQueryParameter("PhoneNumbers", userDtos.get(0).getTel());
+        request.putQueryParameter("SignName", signName);
+        request.putQueryParameter("TemplateCode", templateCode);
+
+        BigDecimal oweFee = new BigDecimal(0);
+
+
+        JSONObject param = new JSONObject();
+        param.put("repairId", content.getString("repairId"));
+        request.putQueryParameter("TemplateParam", param.toString());
+
+        String resParam = "";
+        try {
+            CommonResponse response = client.getCommonResponse(request);
+            logger.debug("发送验证码信息：{}", response.getData());
+            resParam = response.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resParam = e.getMessage();
+            throw new IllegalArgumentException("短信工单失败" + e.getMessage());
+        } finally {
+            LogFactory.saveOutLog("SMS", param.toString(), new ResponseEntity(resParam, HttpStatus.OK));
+        }
+        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
+    /**
+     *  发送内容  尊敬的员工，您有一个报修单需要处理，单号为{repairId}，请您及时处理
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    repairId,
+     *                    repairName，
+     *                    tel，
+     *                    time，
+     *                    address
+     *                    }
+     * @return
+     */
     @Override
     public ResultVo sendDistributeRepairStaffMsg(String communityId, String userId, JSONObject content) {
-        return null;
+
+        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
+            throw new IllegalArgumentException("员工不存在,userId = " + userId);
+        }
+
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos == null || userDtos.size() < 1) {
+            throw new IllegalArgumentException("员工不存在");
+        }
+
+
+        String accessKeyId = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_KEY_ID");
+        String accessSecret = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_SECRET");
+        String region = CommunitySettingFactory.getValue(communityId, "ALI_REGION");
+        String signName = CommunitySettingFactory.getValue(communityId, "ALI_SIGN_NAME");
+        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_OWE_TEMPLATE_CODE");
+        DefaultProfile profile = DefaultProfile.getProfile(region,
+                accessKeyId,
+                accessSecret);
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        CommonRequest request = new CommonRequest();
+        request.setSysMethod(MethodType.POST);
+        request.setSysDomain("dysmsapi.aliyuncs.com");
+        request.setSysVersion("2017-05-25");
+        request.setSysAction("SendSms");
+        request.putQueryParameter("RegionId", region);
+        request.putQueryParameter("PhoneNumbers", userDtos.get(0).getTel());
+        request.putQueryParameter("SignName", signName);
+        request.putQueryParameter("TemplateCode", templateCode);
+
+        BigDecimal oweFee = new BigDecimal(0);
+
+
+        JSONObject param = new JSONObject();
+        param.put("repairId", content.getString("repairId"));
+        request.putQueryParameter("TemplateParam", param.toString());
+
+        String resParam = "";
+        try {
+            CommonResponse response = client.getCommonResponse(request);
+            logger.debug("发送验证码信息：{}", response.getData());
+            resParam = response.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resParam = e.getMessage();
+            throw new IllegalArgumentException("短信工单失败" + e.getMessage());
+        } finally {
+            LogFactory.saveOutLog("SMS", param.toString(), new ResponseEntity(resParam, HttpStatus.OK));
+        }
+        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
     @Override
     public ResultVo sendDistributeRepairOwnerMsg(String communityId, String userId, JSONObject content) {
-        return null;
+
+        return new ResultVo(ResultVo.CODE_OK,"成功");
+
     }
 
     @Override
     public ResultVo sendFinishRepairOwnerMsg(String communityId, String userId, JSONObject content) {
-        return null;
+
+        return new ResultVo(ResultVo.CODE_OK,"成功");
     }
 
+    /**
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    repairTypeName，
+     *                    repairObjName，
+     *                    repairName，
+     *                    url
+     *                    }
+     * @return
+     */
     @Override
     public ResultVo sendReturnRepairMsg(String communityId, String userId, JSONObject content) {
-        return null;
+        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
+            throw new IllegalArgumentException("员工不存在,userId = " + userId);
+        }
+
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos == null || userDtos.size() < 1) {
+            throw new IllegalArgumentException("员工不存在");
+        }
+
+
+        String accessKeyId = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_KEY_ID");
+        String accessSecret = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_SECRET");
+        String region = CommunitySettingFactory.getValue(communityId, "ALI_REGION");
+        String signName = CommunitySettingFactory.getValue(communityId, "ALI_SIGN_NAME");
+        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_OWE_TEMPLATE_CODE");
+        DefaultProfile profile = DefaultProfile.getProfile(region,
+                accessKeyId,
+                accessSecret);
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        CommonRequest request = new CommonRequest();
+        request.setSysMethod(MethodType.POST);
+        request.setSysDomain("dysmsapi.aliyuncs.com");
+        request.setSysVersion("2017-05-25");
+        request.setSysAction("SendSms");
+        request.putQueryParameter("RegionId", region);
+        request.putQueryParameter("PhoneNumbers", userDtos.get(0).getTel());
+        request.putQueryParameter("SignName", signName);
+        request.putQueryParameter("TemplateCode", templateCode);
+
+
+        JSONObject param = new JSONObject();
+        param.put("repairId", content.getString("repairId"));
+        request.putQueryParameter("TemplateParam", param.toString());
+
+        String resParam = "";
+        try {
+            CommonResponse response = client.getCommonResponse(request);
+            logger.debug("发送验证码信息：{}", response.getData());
+            resParam = response.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resParam = e.getMessage();
+            throw new IllegalArgumentException("短信工单失败" + e.getMessage());
+        } finally {
+            LogFactory.saveOutLog("SMS", param.toString(), new ResponseEntity(resParam, HttpStatus.OK));
+        }
+        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
     @Override

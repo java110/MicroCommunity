@@ -114,6 +114,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         paramIn.put("repairObjName", repairObjName);
         paramIn.put("context", context);
         paramIn.put("repairName", repairName);
+        paramIn.put("repairId", repairDtos.get(0).getRepairId());
         sendMessage(paramIn, communityDtos.get(0));
     }
 
@@ -152,6 +153,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             }
             content.put("repairName",paramIn.getString("repairName"));
             content.put("context",paramIn.getString("context"));
+            content.put("repairId",paramIn.getString("repairId"));
             String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             content.put("url",wechatUrl);
 

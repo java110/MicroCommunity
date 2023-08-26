@@ -161,6 +161,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             String preStaffId = repairUserDtos.get(0).getPreStaffId();
             //上级操作人姓名
             String preStaffName = repairUserDtos.get(0).getPreStaffName();
+            paramIn.put("repairId",  repairUserDtos.get(0).getRepairId());
             paramIn.put("repairTypeName", repairTypeName);
             paramIn.put("repairObjName", repairObjName);
             paramIn.put("staffName", staffName);
@@ -224,6 +225,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
 
         JSONObject content = new JSONObject();
         content.put("repairTypeName", paramIn.getString("repairTypeName"));
+        content.put("repairId", paramIn.getString("repairId"));
         if (communityDto.getName().equals(paramIn.getString("repairObjName"))) {
             content.put("repairObjName", paramIn.getString("repairObjName"));
         } else {

@@ -21,6 +21,7 @@ public class ResourceStoreTimesDto extends ResourceStoreDto implements Serializa
 
     private String hasStock;
     private String resCode;
+    private String resCodeLike;
     private String[] resCodes;
     private String timesId;
     private String shId;
@@ -126,5 +127,13 @@ public class ResourceStoreTimesDto extends ResourceStoreDto implements Serializa
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public String getResCodeLike() {
+        return resCodeLike;
+    }
+
+    public void setResCodeLike(String resCodeLike) {
+        this.resCodeLike = resCodeLike;
     }
 }

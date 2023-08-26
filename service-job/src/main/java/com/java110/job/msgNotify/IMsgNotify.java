@@ -55,6 +55,7 @@ public interface IMsgNotify {
      * @param communityId 小区
      * @param userId 用户
      * @param content {
+     *                repairId,
      *                repairTypeName，
      *                repairObjName，
      *                repairName，
@@ -70,6 +71,7 @@ public interface IMsgNotify {
      * @param communityId 小区
      * @param userId      用户
      * @param content     {
+     *                    repairId,
      *                    repairName，
      *                    tel，
      *                    time，
