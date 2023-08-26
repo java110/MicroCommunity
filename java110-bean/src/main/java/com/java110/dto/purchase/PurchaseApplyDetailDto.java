@@ -34,6 +34,8 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
     private String userId;
     private String createUserId;
 
+    private String resOrderType;
+
     private String rsId;
 
     public String getApplyOrderId() {
@@ -242,6 +244,14 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setRsId(String rsId) {
         this.rsId = rsId;
+    }
+
+    public String getResOrderType() {
+        return resOrderType;
+    }
+
+    public void setResOrderType(String resOrderType) {
+        this.resOrderType = resOrderType;
     }
 }
 
