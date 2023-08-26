@@ -203,7 +203,6 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         request.putQueryParameter("SignName", signName);
         request.putQueryParameter("TemplateCode", templateCode);
 
-        BigDecimal oweFee = new BigDecimal(0);
 
 
         JSONObject param = new JSONObject();
@@ -273,9 +272,6 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         request.putQueryParameter("PhoneNumbers", userDtos.get(0).getTel());
         request.putQueryParameter("SignName", signName);
         request.putQueryParameter("TemplateCode", templateCode);
-
-        BigDecimal oweFee = new BigDecimal(0);
-
 
         JSONObject param = new JSONObject();
         param.put("repairId", content.getString("repairId"));

@@ -206,6 +206,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             paramIn.put("repairName", repairName);
             paramIn.put("tel", tel);
             paramIn.put("repairObjName", repairObjName);
+            paramIn.put("repairId", repairId);
             //抢单成功给维修师傅推送信息
             sendStaffMsg(paramIn, communityDtos.get(0));
             //抢单成功给业主推送信息
@@ -219,6 +220,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             paramIn.put("time", time);
             paramIn.put("staffId", businessRepairUser.getString("staffId"));
             paramIn.put("preStaffName", businessRepairUser.getString("preStaffName"));
+            paramIn.put("repairId", repairId);
             //给维修师傅推送信息
             sendStaffMsg(paramIn, communityDtos.get(0));
         }
