@@ -19,7 +19,8 @@ public class TransactionOutLogDto extends PageDto implements Serializable {
     public static final String STATE_F = "F";//失败
     // 微信支付
     public static final String LOG_TYPE_WECHAT_PAY = "WECHAT_PAY";
-
+    // 微信
+    public static final String LOG_TYPE_WECHAT = "WECHAT";
     // 物联网
     public static final String LOG_TYPE_IOT = "IOT"; // 物联网
 

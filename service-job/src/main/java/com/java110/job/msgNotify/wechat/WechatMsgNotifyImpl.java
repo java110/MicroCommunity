@@ -2,13 +2,12 @@ package com.java110.job.msgNotify.wechat;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.mapping.Mapping;
-import com.java110.dto.mapping.MappingDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.user.StaffAppAuthDto;
 import com.java110.dto.wechat.Content;
-import com.java110.dto.wechat.Data;
 import com.java110.dto.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
@@ -24,7 +23,6 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.List;

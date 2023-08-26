@@ -107,6 +107,10 @@ public class LogFactory {
             return TransactionOutLogDto.LOG_TYPE_WECHAT_PAY;
         }
 
+        if (url.contains("api.weixin.qq.com")) {
+            return TransactionOutLogDto.LOG_TYPE_WECHAT;
+        }
+
         if(TransactionOutLogDto.LOG_TYPE_SMS.equals(url)){
             return TransactionOutLogDto.LOG_TYPE_SMS;
         }
