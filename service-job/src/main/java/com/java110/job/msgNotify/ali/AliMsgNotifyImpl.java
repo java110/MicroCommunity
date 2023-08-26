@@ -187,7 +187,7 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         String accessSecret = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_SECRET");
         String region = CommunitySettingFactory.getValue(communityId, "ALI_REGION");
         String signName = CommunitySettingFactory.getValue(communityId, "ALI_SIGN_NAME");
-        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_OWE_TEMPLATE_CODE");
+        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_REPAIR_TEMPLATE_CODE");
         DefaultProfile profile = DefaultProfile.getProfile(region,
                 accessKeyId,
                 accessSecret);
@@ -257,7 +257,7 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         String accessSecret = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_SECRET");
         String region = CommunitySettingFactory.getValue(communityId, "ALI_REGION");
         String signName = CommunitySettingFactory.getValue(communityId, "ALI_SIGN_NAME");
-        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_OWE_TEMPLATE_CODE");
+        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_REPAIR_TEMPLATE_CODE");
         DefaultProfile profile = DefaultProfile.getProfile(region,
                 accessKeyId,
                 accessSecret);
@@ -336,7 +336,7 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         String accessSecret = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_SECRET");
         String region = CommunitySettingFactory.getValue(communityId, "ALI_REGION");
         String signName = CommunitySettingFactory.getValue(communityId, "ALI_SIGN_NAME");
-        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_OWE_TEMPLATE_CODE");
+        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_REPAIR_TEMPLATE_CODE");
         DefaultProfile profile = DefaultProfile.getProfile(region,
                 accessKeyId,
                 accessSecret);

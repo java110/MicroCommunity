@@ -21,9 +21,15 @@
         staffId,td1.`name` stateName,t.opinion,t.audit_id,t.audit_id auditId,t.audit_name,t.audit_name
         auditName,t.audit_tel,t.audit_tel auditTel,t.audit_time,t.audit_time auditTime
         from asset_inventory t
+        <if test="resId != null and resId != ''">
+            left join asset_inventory_detail aid on t.ai_id = aid.apply_order_id and aid.status_cd = '0'
+        </if>
         LEFT JOIN t_dict td1 on t.state = td1.status_cd and td1.table_name = 'asset_inventory' and td1.table_columns =
         'state'
         where 1 =1
+        <if test="resId !=null and resId != ''">
+            and aid.res_id= #{resId}
+        </if>
         <if test="auditId !=null and auditId != ''">
             and t.audit_id= #{auditId}
         </if>
@@ -147,7 +153,13 @@
     <select id="queryAssetInventorysCount" parameterType="Map" resultType="Map">
         select count(1) count
         from asset_inventory t
+        <if test="resId != null and resId != ''">
+            left join asset_inventory_detail aid on t.ai_id = aid.apply_order_id and aid.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="resId !=null and resId != ''">
+            and aid.res_id= #{resId}
+        </if>
         <if test="auditId !=null and auditId != ''">
             and t.audit_id= #{auditId}
         </if>

@@ -17,6 +17,7 @@ package com.java110.store.cmd.assetInventory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -48,10 +49,9 @@ import java.util.List;
 @Java110Cmd(serviceCode = "assetInventory.listAssetInventory")
 public class ListAssetInventoryCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListAssetInventoryCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListAssetInventoryCmd.class);
     @Autowired
     private IAssetInventoryV1InnerServiceSMO assetInventoryV1InnerServiceSMOImpl;
-
 
 
     @Override
@@ -62,23 +62,25 @@ public class ListAssetInventoryCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           AssetInventoryDto assetInventoryDto = BeanConvertUtil.covertBean(reqJson, AssetInventoryDto.class);
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
 
-           int count = assetInventoryV1InnerServiceSMOImpl.queryAssetInventorysCount(assetInventoryDto);
+        AssetInventoryDto assetInventoryDto = BeanConvertUtil.covertBean(reqJson, AssetInventoryDto.class);
+        assetInventoryDto.setStoreId(storeId);
+        int count = assetInventoryV1InnerServiceSMOImpl.queryAssetInventorysCount(assetInventoryDto);
 
-           List<AssetInventoryDto> assetInventoryDtos = null;
+        List<AssetInventoryDto> assetInventoryDtos = null;
 
 
-           if (count > 0) {
-               assetInventoryDtos = assetInventoryV1InnerServiceSMOImpl.queryAssetInventorys(assetInventoryDto);
-           } else {
-               assetInventoryDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            assetInventoryDtos = assetInventoryV1InnerServiceSMOImpl.queryAssetInventorys(assetInventoryDto);
+        } else {
+            assetInventoryDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, assetInventoryDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, assetInventoryDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
