@@ -277,6 +277,8 @@ public class SaveResourceStoreCmd extends Cmd {
         resourceStoreTimesPo.setResCode(resourceStorePo.getResCode());
         resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
         resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
+        resourceStoreTimesPo.setShId(resourceStorePo.getShId());
+
         resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
 
 
