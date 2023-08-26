@@ -31,10 +31,13 @@ public class StorehouseDto extends PageDto implements Serializable {
 
     private String purchaseSwitch;
     private String purchaseRafId;
+    private String purchaseFlowId;
     private String useSwitch;
     private String useRafId;
+    private String useRafFlowId;
     private String allocationSwitch;
     private String allocationRafId;
+    private String allocationFlowId;
 
     private String purchaseFlowName;
     private String useFlowName;
@@ -177,5 +180,29 @@ public class StorehouseDto extends PageDto implements Serializable {
 
     public void setAllocationFlowName(String allocationFlowName) {
         this.allocationFlowName = allocationFlowName;
+    }
+
+    public String getPurchaseFlowId() {
+        return purchaseFlowId;
+    }
+
+    public void setPurchaseFlowId(String purchaseFlowId) {
+        this.purchaseFlowId = purchaseFlowId;
+    }
+
+    public String getUseRafFlowId() {
+        return useRafFlowId;
+    }
+
+    public void setUseRafFlowId(String useRafFlowId) {
+        this.useRafFlowId = useRafFlowId;
+    }
+
+    public String getAllocationFlowId() {
+        return allocationFlowId;
+    }
+
+    public void setAllocationFlowId(String allocationFlowId) {
+        this.allocationFlowId = allocationFlowId;
     }
 }

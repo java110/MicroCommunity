@@ -10,6 +10,7 @@
         storeId,t.is_show,t.is_show isShow,t.create_time createTime,t.purchase_switch purchaseSwitch,
         t.purchase_raf_id purchaseRafId,t.use_switch useSwitch,t.use_raf_id useRafId,
         t.allocation_switch allocationSwitch,t.allocation_raf_id allocationRafId,raf.flow_name purchaseFlowName,
+        raf.flow_id purchaseFlowId,raf1.flow_id useFlowId,raf2.flow_id allocationFlowId,
         raf1.flow_name useFlowName,raf2.flow_name allocationFlowName
         from storehouse t
         left join resource_audit_flow raf on t.purchase_raf_id = raf.raf_id and raf.status_cd = '0'
