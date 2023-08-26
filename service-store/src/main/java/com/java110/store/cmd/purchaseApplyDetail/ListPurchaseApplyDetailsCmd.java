@@ -2,6 +2,7 @@ package com.java110.store.cmd.purchaseApplyDetail;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -38,19 +39,9 @@ public class ListPurchaseApplyDetailsCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        String storeId = CmdContextUtils.getStoreId(context);
         PurchaseApplyDetailDto purchaseApplyDetailDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDetailDto.class);
-        //是否具有查看所有出入库明细的权限
-        String userId = reqJson.getString("userId");
-        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-        basePrivilegeDto.setResource("/viewAllPurchaseApplyDetail");
-        basePrivilegeDto.setUserId(userId);
-        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        purchaseApplyDetailDto.setUserId("");//申请人
-        if (privileges.size() != 0) {
-            purchaseApplyDetailDto.setUserId("");//创建人
-        } else {
-            purchaseApplyDetailDto.setCreateUserId(userId);//创建人
-        }
+        purchaseApplyDetailDto.setStoreId(storeId);
         int count = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetailsCount(purchaseApplyDetailDto);
         List<ApiPurchaseApplyDetailDataVo> purchaseApplyDetails = null;
         if (count > 0) {

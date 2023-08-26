@@ -7,36 +7,62 @@ import java.util.List;
 
 //采购明细表
 public class PurchaseApplyDetailDto extends PageDto implements Serializable {
-    private String applyOrderId;
-    private String resId;
-    private String quantity;
-    private String remark;
-    private List<String> applyOrderIds;
-    private String resName;
-    private String resCode;
-    private String price;
-    private String stock;
-    private String purchaseQuantity;
-    private String purchaseRemark;
-    private String purchasePrice;
+
     private String id;
-    private String rstName;
-    private String parentRstName;
-    private String specName;
+    private String applyOrderId;
+    private String statusCd;
+
+    private String resId;
+    private String rsId;
+    private String resName;
+    private String remark;
+    private String  quantity;
+    private String  purchaseQuantity;
+    private String  purchaseRemark;
+    private String price;
+    private String  resOrderType;
+    private String  userId;
+    private String  userName;
+    private String description;
+    private String state;
+    private String  endUserName;
+    private String  endUserTel;
+    private String  warehousingWay;
+    private String  createTime;
+    private String  supplierName;
+    private String  resOrderTypeName;
+    private String  stateName;
+    private String  warehousingWayName;
+    private String  rstName;
+    private String  parentRstName;
+    private String  specName;
+    private String  shId;
+    private String  unitCodeName;
+    private String  miniUnitCodeName;
+    private String  shName;
+    private String  isFixed;
+    private String  isFixedName;
+
+
+    private List<String> applyOrderIds;
+
+    private String resCode;
+
+    private String stock;
+
+    private String purchasePrice;
+
     private String standardPrice;
     private String originalStock;
-    private String supplierName;
-    private String unitCodeName;
-    private String miniUnitCodeName;
+
     private String consultPrice;
     private String timesId;
 
-    private String userId;
     private String createUserId;
 
-    private String resOrderType;
 
-    private String rsId;
+
+    private String storeId;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -252,6 +278,134 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setResOrderType(String resOrderType) {
         this.resOrderType = resOrderType;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getEndUserName() {
+        return endUserName;
+    }
+
+    public void setEndUserName(String endUserName) {
+        this.endUserName = endUserName;
+    }
+
+    public String getEndUserTel() {
+        return endUserTel;
+    }
+
+    public void setEndUserTel(String endUserTel) {
+        this.endUserTel = endUserTel;
+    }
+
+    public String getWarehousingWay() {
+        return warehousingWay;
+    }
+
+    public void setWarehousingWay(String warehousingWay) {
+        this.warehousingWay = warehousingWay;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getResOrderTypeName() {
+        return resOrderTypeName;
+    }
+
+    public void setResOrderTypeName(String resOrderTypeName) {
+        this.resOrderTypeName = resOrderTypeName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getWarehousingWayName() {
+        return warehousingWayName;
+    }
+
+    public void setWarehousingWayName(String warehousingWayName) {
+        this.warehousingWayName = warehousingWayName;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
+    }
+
+    public String getShName() {
+        return shName;
+    }
+
+    public void setShName(String shName) {
+        this.shName = shName;
+    }
+
+    public String getIsFixed() {
+        return isFixed;
+    }
+
+    public void setIsFixed(String isFixed) {
+        this.isFixed = isFixed;
+    }
+
+    public String getIsFixedName() {
+        return isFixedName;
+    }
+
+    public void setIsFixedName(String isFixedName) {
+        this.isFixedName = isFixedName;
     }
 }
 
