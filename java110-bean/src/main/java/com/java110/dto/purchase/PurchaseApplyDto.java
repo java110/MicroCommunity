@@ -82,6 +82,8 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     private String endTime;
 
+    private String resOrderTypeName;
+
     public String getResOrderType() {
         return resOrderType;
     }
@@ -424,5 +426,13 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getResOrderTypeName() {
+        return resOrderTypeName;
+    }
+
+    public void setResOrderTypeName(String resOrderTypeName) {
+        this.resOrderTypeName = resOrderTypeName;
     }
 }

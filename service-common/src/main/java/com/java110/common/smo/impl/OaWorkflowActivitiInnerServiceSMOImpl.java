@@ -284,8 +284,8 @@ public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implem
      *
      * @param user 用户信息{
      *             processDefinitionKeys:[],
-     *
-     * }
+     *             <p>
+     *             }
      */
     public List<JSONObject> getDefinitionKeysUserTasks(@RequestBody AuditUser user) {
         TaskService taskService = processEngine.getTaskService();
@@ -712,6 +712,30 @@ public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implem
         reqJson.put("taskId", taskIds);
         return reqJson;
 
+    }
+
+    /**
+     * 获取当前节点信息
+     *
+     * @param reqJson{ taskId:'',
+     *                 startUserId:''
+     *                 }
+     * @return
+     */
+    public JSONObject getCurrentNodeTask(@RequestBody JSONObject reqJson) {
+        JSONObject curNode = new JSONObject();
+        TaskService taskService = processEngine.getTaskService();
+        Task task = taskService.createTaskQuery().taskId(reqJson.getString("taskId")).singleResult();
+        if (task == null) {
+            throw new IllegalArgumentException("任务已处理");
+        }
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+
+        FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(task.getTaskDefinitionKey());
+        flowNode.getName();
+
+        curNode.put("curTaskName",flowNode.getName());
+        return curNode;
     }
 
     @Override

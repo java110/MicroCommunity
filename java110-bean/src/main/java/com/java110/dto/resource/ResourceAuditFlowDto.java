@@ -16,6 +16,11 @@ import java.util.Date;
  **/
 public class ResourceAuditFlowDto extends OaWorkflowDto implements Serializable {
 
+
+    public static final String AUDIT_TYPE_PURCHASE_APPLY="10001";//采购
+    public static final String AUDIT_TYPE_RESOURCE_OUT="10002";//领用
+    public static final String AUDIT_TYPE_ALLOCATION="10003";//调拨流程
+
     private String rafId;
     private String remark;
     private String storeId;

@@ -25,6 +25,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflow.WorkflowModelDto;
+import com.java110.dto.resource.ResourceAuditFlowDto;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
@@ -86,7 +87,15 @@ public class SaveResourceAuditFlowCmd extends Cmd {
         oaWorkflowPo.setStoreId(storeId);
         oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
         oaWorkflowPo.setFlowName(reqJson.getString("flowName"));
-        oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_RESOURCE);
+
+        String auditType = reqJson.getString("auditType");
+        if(ResourceAuditFlowDto.AUDIT_TYPE_PURCHASE_APPLY.equals(auditType)) {
+            oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_PURCHASE_APPLY);
+        }else if(ResourceAuditFlowDto.AUDIT_TYPE_RESOURCE_OUT.equals(auditType)) {
+            oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_RESOURCE_OUT);
+        }else{
+            oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_ALLOCATION);
+        }
 
         //创建model
         WorkflowModelDto workflowModelDto = new WorkflowModelDto();
