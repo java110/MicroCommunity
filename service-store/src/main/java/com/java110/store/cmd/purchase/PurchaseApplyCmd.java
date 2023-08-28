@@ -98,7 +98,6 @@ public class PurchaseApplyCmd extends Cmd {
         Assert.listOnlyOne(storehouseDtos, "仓库不存在");
 
         if (!StorehouseDto.SWITCH_ON.equals(storehouseDto.getPurchaseSwitch())) {
-            //todo 直接入库
             return;
         }
         String storeId = CmdContextUtils.getStoreId(context);
