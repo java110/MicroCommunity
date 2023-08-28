@@ -160,14 +160,14 @@ public class PurchaseApplyCmd extends Cmd {
             resourceStore.put("originalStock", resourceStore.getString("stock"));
             JSONArray timeList = resourceStore.getJSONArray("times");
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
-            purchaseApplyDetailPo.setPurchaseQuantity(resourceStore.getString("stock"));
+            purchaseApplyDetailPo.setPurchaseQuantity(resourceStore.getString("quantity"));
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             //获取采购参考价格
             String consultPrice = null;
             if (resourceStore.containsKey("timesId") && !StringUtil.isEmpty(resourceStore.getString("timesId"))) {
                 for (int timesIndex = 0; timesIndex < timeList.size(); timesIndex++) {
                     JSONObject times = timeList.getJSONObject(timesIndex);
-                    if (times.getString("timesId").toString().equals(resourceStore.getString("timesId").toString())) {
+                    if (times.getString("timesId").equals(resourceStore.getString("timesId"))) {
                         consultPrice = times.getString("price");
                     }
                 }
