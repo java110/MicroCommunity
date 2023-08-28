@@ -105,7 +105,7 @@ public class PurchaseApplyCmd extends Cmd {
 
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setStoreId(storeId);
-        oaWorkflowDto.setFlowId(storehouseDto.getPurchaseFlowId());
+        oaWorkflowDto.setFlowId(storehouseDtos.get(0).getPurchaseFlowId());
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
         Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
         if (!OaWorkflowDto.STATE_COMPLAINT.equals(oaWorkflowDtos.get(0).getState())) {
