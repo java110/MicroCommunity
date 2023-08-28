@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 紧急采购
+ */
 @Java110Cmd(serviceCode = "/purchase/urgentPurchaseApply")
 public class UrgentPurchaseApplyCmd extends Cmd {
 
@@ -78,9 +81,10 @@ public class UrgentPurchaseApplyCmd extends Cmd {
 
     /**
      * 紧急采购-仓库物品入库
-     * @param event              事件对象
+     *
+     * @param event   事件对象
      * @param context 数据上文对象
-     * @param reqJson            请求报文
+     * @param reqJson 请求报文
      * @throws CmdException
      */
     @Override
@@ -94,7 +98,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
         userDto.setPage(1);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
-        Assert.listOnlyOne(userDtos,"用户不存在");
+        Assert.listOnlyOne(userDtos, "用户不存在");
 
         userName = userDtos.get(0).getName();
 

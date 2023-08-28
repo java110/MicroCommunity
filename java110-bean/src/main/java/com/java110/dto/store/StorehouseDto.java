@@ -18,6 +18,8 @@ public class StorehouseDto extends PageDto implements Serializable {
     public static final String SH_TYPE_GROUP = "2806"; //集团仓库
     public static final String SH_TYPE_COMMUNITY = "2807"; //项目仓库
 
+    public static final String SWITCH_ON = "ON";
+
     private String shDesc;
     private String shType;
     private String shId;

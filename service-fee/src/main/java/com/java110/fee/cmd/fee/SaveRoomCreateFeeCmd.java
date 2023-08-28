@@ -40,6 +40,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 创建费用
+ */
 @Java110Cmd(serviceCode = "fee.saveRoomCreateFee")
 public class SaveRoomCreateFeeCmd extends Cmd {
 
@@ -292,6 +295,7 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         }
         payFeeMonthImpl.doGeneratorFeeMonths(feeIds, feePos.get(0).getCommunityId());
 
+        payFeeMonthImpl.doGeneratorOweFees(feeIds,feePos.get(0).getCommunityId());
         return flag;
     }
 
