@@ -97,7 +97,7 @@ public class PurchaseApplyCmd extends Cmd {
         List<StorehouseDto> storehouseDtos = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
         Assert.listOnlyOne(storehouseDtos, "仓库不存在");
 
-        if (!StorehouseDto.SWITCH_ON.equals(storehouseDto.getPurchaseSwitch())) {
+        if (!StorehouseDto.SWITCH_ON.equals(storehouseDtos.get(0).getPurchaseSwitch())) {
             return;
         }
         String storeId = CmdContextUtils.getStoreId(context);
