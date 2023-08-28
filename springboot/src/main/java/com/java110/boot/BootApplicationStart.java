@@ -207,7 +207,7 @@ public class BootApplicationStart {
             Environment.setSystemStartWay(Environment.SPRING_BOOT);
 
             //刷新缓存
-            flushMainCache(args);
+           // flushMainCache(args);
 
             //服务启动完成
             ServiceStartInit.printStartSuccessInfo();

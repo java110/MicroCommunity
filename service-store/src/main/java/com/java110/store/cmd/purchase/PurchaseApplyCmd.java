@@ -157,10 +157,10 @@ public class PurchaseApplyCmd extends Cmd {
         List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
-            resourceStore.remove("price");//采购价格默认空
             resourceStore.put("originalStock", resourceStore.getString("stock"));
             JSONArray timeList = resourceStore.getJSONArray("times");
             PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
+            purchaseApplyDetailPo.setPurchaseQuantity(resourceStore.getString("stock"));
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
             //获取采购参考价格
             String consultPrice = null;
