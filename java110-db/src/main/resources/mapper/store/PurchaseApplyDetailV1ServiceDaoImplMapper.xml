@@ -8,9 +8,11 @@
     <!-- 保存采购申请明细信息 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApplyDetailInfo" parameterType="Map">
         insert into purchase_apply_detail(
-        original_stock,quantity,operate,price,purchase_remark,purchase_quantity,rs_id,apply_order_id,remark,id,res_id
+        original_stock,quantity,operate,price,purchase_remark,purchase_quantity,rs_id,apply_order_id,remark,id,res_id,
+        times_id,consult_price
         ) values (
-        #{originalStock},#{quantity},'ADD',#{price},#{purchaseRemark},#{purchaseQuantity},#{rsId},#{applyOrderId},#{remark},#{id},#{resId}
+        #{originalStock},#{quantity},'ADD',#{price},#{purchaseRemark},#{purchaseQuantity},#{rsId},#{applyOrderId},#{remark},#{id},
+        #{resId},#{timesId},#{consultPrice}
         )
     </insert>
 
