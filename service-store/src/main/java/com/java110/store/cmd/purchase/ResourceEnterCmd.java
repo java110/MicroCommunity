@@ -3,6 +3,7 @@ package com.java110.store.cmd.purchase;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -10,6 +11,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.resource.ResourceStoreDto;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyDetailInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
@@ -83,6 +85,9 @@ public class ResourceEnterCmd extends Cmd{
 
     @Autowired
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -172,9 +177,24 @@ public class ResourceEnterCmd extends Cmd{
         String applyOrderId = purchaseApplyPo.getApplyOrderId();
         PurchaseApplyPo purchaseApply = new PurchaseApplyPo();
         purchaseApply.setApplyOrderId(applyOrderId);
-        purchaseApply.setState(PurchaseApplyDto.STATE_AUDITED);
+
+        reqJson.put("auditCode","1100");
+        reqJson.put("auditMessage","入库成功");
+        reqJson.put("storeId", CmdContextUtils.getStoreId(context));
+        reqJson.put("nextUserId", reqJson.getString("staffId"));
+        boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
+
+        if (isLastTask) {
+            purchaseApply.setState(PurchaseApplyDto.STATE_END);
+        } else {
+            purchaseApply.setState(PurchaseApplyDto.STATE_DEALING);
+        }
         purchaseApply.setStatusCd("0");
         purchaseApplyInnerServiceSMOImpl.updatePurchaseApply(purchaseApply);
+
+        //todo 如果包含taskId 流程提交下去
+
+
         context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, "采购申请成功"));
     }
 }

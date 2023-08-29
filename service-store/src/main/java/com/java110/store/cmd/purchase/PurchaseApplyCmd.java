@@ -82,7 +82,7 @@ public class PurchaseApplyCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "endUserName", "必填，请填写采购联系人");
         Assert.hasKeyAndValue(reqJson, "endUserTel", "必填，请填写采购联系电话");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
-        Assert.hasKeyAndValue(reqJson, "shId", "必填，请填写商户ID");
+        Assert.hasKeyAndValue(reqJson, "shId", "必填，请填写仓库");
         Assert.hasKey(reqJson, "resourceStores", "必填，请填写申请采购的物资");
 
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");

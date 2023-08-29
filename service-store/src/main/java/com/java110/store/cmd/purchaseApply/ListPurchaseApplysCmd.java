@@ -116,48 +116,8 @@ public class ListPurchaseApplysCmd extends Cmd {
             List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
             purchaseApplyDtos = freshCurrentUser(purchaseApplyDtos);
             purchaseApplys = BeanConvertUtil.covertBeanList(purchaseApplyDtos, ApiPurchaseApplyDataVo.class);
-            for (ApiPurchaseApplyDataVo apiPurchaseApplyDataVo : purchaseApplys) {
-                List<PurchaseApplyDetailVo> applyDetailList = apiPurchaseApplyDataVo.getPurchaseApplyDetailVo();
-                if (applyDetailList.size() > 0) {
-                    StringBuffer resNames = new StringBuffer();
-                    BigDecimal totalPrice = new BigDecimal(0);
-                    BigDecimal purchaseTotalPrice = new BigDecimal(0);
-                    Integer cursor = 0;
-                    for (PurchaseApplyDetailVo purchaseApplyDetailVo : applyDetailList) {
-                        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
-                        resourceStoreDto.setResId(purchaseApplyDetailVo.getResId());
-                        List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-                        Assert.listOnlyOne(resourceStoreDtos, "查询物品信息错误！");
-                        //是否是固定物品
-                        apiPurchaseApplyDataVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
-                        apiPurchaseApplyDataVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
-                        purchaseApplyDetailVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
-                        purchaseApplyDetailVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
-                        //获取仓库名称
-                        String shName = resourceStoreDtos.get(0).getShName();
-                        String shId = resourceStoreDtos.get(0).getShId();
-                        purchaseApplyDetailVo.setShName(shName);
-                        purchaseApplyDetailVo.setShId(shId);
-                        cursor++;
-                        if (applyDetailList.size() > 1) {
-                            resNames.append(cursor + "：" + purchaseApplyDetailVo.getResName() + "      ");
-                        } else {
-                            resNames.append(purchaseApplyDetailVo.getResName());
-                        }
-                        BigDecimal price = new BigDecimal(purchaseApplyDetailVo.getPrice());
-                        BigDecimal quantity = new BigDecimal(purchaseApplyDetailVo.getQuantity());
-                        totalPrice = totalPrice.add(price.multiply(quantity));
-                        if (!StringUtil.isEmpty(purchaseApplyDetailVo.getPurchasePrice()) && !StringUtil.isEmpty(purchaseApplyDetailVo.getPurchaseQuantity())) {
-                            BigDecimal purchasePrice = new BigDecimal(purchaseApplyDetailVo.getPurchasePrice());
-                            BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailVo.getPurchaseQuantity());
-                            purchaseTotalPrice = purchaseTotalPrice.add(purchasePrice.multiply(purchaseQuantity));
-                        }
-                    }
-                    apiPurchaseApplyDataVo.setResourceNames(resNames.toString());
-                    apiPurchaseApplyDataVo.setTotalPrice(totalPrice.toString());
-                    apiPurchaseApplyDataVo.setPurchaseTotalPrice(purchaseTotalPrice.toString());
-                }
-            }
+            //todo 查询结果刷新
+            refreshApplys(purchaseApplys);
         } else {
             purchaseApplys = new ArrayList<>();
         }
@@ -167,6 +127,66 @@ public class ListPurchaseApplysCmd extends Cmd {
         apiPurchaseApplyVo.setPurchaseApplys(purchaseApplys);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiPurchaseApplyVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 查询结果 洗礼
+     *
+     * @param purchaseApplys
+     */
+    private void refreshApplys(List<ApiPurchaseApplyDataVo> purchaseApplys) {
+        for (ApiPurchaseApplyDataVo apiPurchaseApplyDataVo : purchaseApplys) {
+            List<PurchaseApplyDetailVo> applyDetailList = apiPurchaseApplyDataVo.getPurchaseApplyDetailVo();
+            //todo 如果没有物品直接 跳过
+            if (applyDetailList == null || applyDetailList.size() < 1) {
+                continue;
+            }
+            StringBuffer resNames = new StringBuffer();
+            BigDecimal totalPrice = new BigDecimal(0);
+            BigDecimal purchaseTotalPrice = new BigDecimal(0);
+            Integer cursor = 0;
+            for (PurchaseApplyDetailVo purchaseApplyDetailVo : applyDetailList) {
+                ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
+                resourceStoreDto.setResId(purchaseApplyDetailVo.getResId());
+                List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+
+                if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
+                    continue;
+                }
+
+                purchaseApplyDetailVo.setTimes(resourceStoreDtos.get(0).getTimes());
+
+                //todo 是否是固定物品
+                apiPurchaseApplyDataVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
+                apiPurchaseApplyDataVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
+                purchaseApplyDetailVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
+                purchaseApplyDetailVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
+                //todo 获取仓库名称
+                String shName = resourceStoreDtos.get(0).getShName();
+                String shId = resourceStoreDtos.get(0).getShId();
+                purchaseApplyDetailVo.setShName(shName);
+                purchaseApplyDetailVo.setShId(shId);
+                apiPurchaseApplyDataVo.setShId(shId);
+                cursor++;
+                if (applyDetailList.size() > 1) {
+                    resNames.append(cursor + "：" + purchaseApplyDetailVo.getResName() + "      ");
+                } else {
+                    resNames.append(purchaseApplyDetailVo.getResName());
+                }
+                BigDecimal price = new BigDecimal(purchaseApplyDetailVo.getPrice());
+                BigDecimal quantity = new BigDecimal(purchaseApplyDetailVo.getQuantity());
+                totalPrice = totalPrice.add(price.multiply(quantity));
+                if (!StringUtil.isEmpty(purchaseApplyDetailVo.getPurchasePrice()) && !StringUtil.isEmpty(purchaseApplyDetailVo.getPurchaseQuantity())) {
+                    BigDecimal purchasePrice = new BigDecimal(purchaseApplyDetailVo.getPurchasePrice());
+                    BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailVo.getPurchaseQuantity());
+                    purchaseTotalPrice = purchaseTotalPrice.add(purchasePrice.multiply(purchaseQuantity));
+                }
+            }
+            apiPurchaseApplyDataVo.setResourceNames(resNames.toString());
+            apiPurchaseApplyDataVo.setTotalPrice(totalPrice.toString());
+            apiPurchaseApplyDataVo.setPurchaseTotalPrice(purchaseTotalPrice.toString());
+        }
+
     }
 
     private List<PurchaseApplyDto> freshCurrentUser(List<PurchaseApplyDto> purchaseApplyDtos) {

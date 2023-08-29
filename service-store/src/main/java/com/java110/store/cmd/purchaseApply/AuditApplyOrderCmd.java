@@ -5,13 +5,11 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.purchaseApply.PurchaseApplyDto;
 import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyV1InnerServiceSMO;
-import com.java110.po.purchaseApply.PurchaseApplyPo;
 import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -86,6 +84,7 @@ public class AuditApplyOrderCmd extends Cmd {
         } else if ("1200".equals(reqJson.getString("auditCode"))
                 || "1400".equals(reqJson.getString("auditCode"))
         ) { //退回操作
+            reqJson.put("startUserId",purchaseApplyDtos.get(0).getCreateUserId());
             oaWorkflowUserInnerServiceSMOImpl.goBackTask(reqJson);
             //reqJson.put("state", "1003"); //工单退单
             purchaseApplyPo.setState(PurchaseApplyDto.STATE_NOT_PASS);

@@ -32,6 +32,8 @@ public class ApiPurchaseApplyDataVo implements Serializable {
     private String isFixed;
     private String isFixedName;
 
+    private String shId;
+
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -215,5 +217,13 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public String getShId() {
+        return shId;
+    }
+
+    public void setShId(String shId) {
+        this.shId = shId;
     }
 }

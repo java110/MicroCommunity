@@ -10,7 +10,7 @@
         insert into purchase_apply_detail(
         original_stock,quantity,operate,price,purchase_remark,purchase_quantity,rs_id,apply_order_id,remark,id,res_id
         ) values (
-        #{originalStock},#{quantity},#{operate},#{price},#{purchaseRemark},#{purchaseQuantity},#{rsId},#{applyOrderId},#{remark},#{id},#{resId}
+        #{originalStock},#{quantity},'ADD',#{price},#{purchaseRemark},#{purchaseQuantity},#{rsId},#{applyOrderId},#{remark},#{id},#{resId}
         )
     </insert>
 
@@ -88,9 +88,7 @@
         <if test="rsId !=null and rsId != ''">
             , t.rs_id= #{rsId}
         </if>
-        <if test="applyOrderId !=null and applyOrderId != ''">
-            , t.apply_order_id= #{applyOrderId}
-        </if>
+
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
@@ -100,6 +98,9 @@
         where 1=1
         <if test="id !=null and id != ''">
             and t.id= #{id}
+        </if>
+        <if test="applyOrderId !=null and applyOrderId != ''">
+            and t.apply_order_id= #{applyOrderId}
         </if>
 
     </update>
