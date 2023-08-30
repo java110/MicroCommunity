@@ -98,7 +98,7 @@ public class SaveStoreInfoCmd extends Cmd {
         addOrg(reqJson);
         //公司总部
         addStaffOrg(reqJson);
-        addPurchase(reqJson);
+        //addPurchase(reqJson);
         //businesses.add(storeBMOImpl.addCollection(paramObj)); //物品领用 各个小区设置各自的流程  废弃次操作
         contractApply(reqJson);
         contractChange(reqJson);

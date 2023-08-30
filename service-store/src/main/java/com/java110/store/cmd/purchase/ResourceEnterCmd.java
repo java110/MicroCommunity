@@ -49,11 +49,11 @@ import java.util.List;
 
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "applyOrderId", length = 30, remark = "采购申请单订单ID"),
-        @Java110ParamDoc(name = "purchaseApplyDetailVo", type = "Array",length = 30, remark = "采购物品信息"),
-        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "purchaseQuantity", type = "Int",length = 30, remark = "数量"),
-        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "price", type = "String",length = 30, remark = "价格"),
-        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "id", type = "String",length = 30, remark = "采购明细ID"),
-        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "resId", type = "String",length = 30, remark = "物品ID"),
+        @Java110ParamDoc(name = "purchaseApplyDetailVo", type = "Array", length = 30, remark = "采购物品信息"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "purchaseQuantity", type = "Int", length = 30, remark = "数量"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "price", type = "String", length = 30, remark = "价格"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "id", type = "String", length = 30, remark = "采购明细ID"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "resId", type = "String", length = 30, remark = "物品ID"),
 })
 
 @Java110ResponseDoc(
@@ -64,15 +64,15 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{'applyOrderId':'123123','purchaseApplyDetailVo':[{'purchaseQuantity':'10','price':'1.3','id':'123123','resId':'343434'}]}",
-        resBody="{'code':0,'msg':'成功'}"
+        reqBody = "{'applyOrderId':'123123','purchaseApplyDetailVo':[{'purchaseQuantity':'10','price':'1.3','id':'123123','resId':'343434'}]}",
+        resBody = "{'code':0,'msg':'成功'}"
 )
 
 /**
  * 采购人员采购入库功能
  */
 @Java110Cmd(serviceCode = "/purchase/resourceEnter")
-public class ResourceEnterCmd extends Cmd{
+public class ResourceEnterCmd extends Cmd {
 
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
@@ -96,7 +96,7 @@ public class ResourceEnterCmd extends Cmd{
         purchaseApplyDto.setApplyOrderId(reqJson.getString("applyOrderId"));
         purchaseApplyDto.setStatusCd("0");
         List<PurchaseApplyDto> purchaseApplyDtoList = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
-        if(purchaseApplyDtoList!=null && PurchaseApplyDto.STATE_AUDITED.equals(purchaseApplyDtoList.get(0).getState())){
+        if (purchaseApplyDtoList != null && PurchaseApplyDto.STATE_AUDITED.equals(purchaseApplyDtoList.get(0).getState())) {
             throw new IllegalArgumentException("该订单已经处理，请刷新确认订单状态！");
         }
         JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
@@ -110,9 +110,10 @@ public class ResourceEnterCmd extends Cmd{
 
     /**
      * 采采购申请-采购审核确认入库
-     * @param event              事件对象
+     *
+     * @param event   事件对象
      * @param context 数据上文对象
-     * @param reqJson            请求报文
+     * @param reqJson 请求报文
      * @throws CmdException
      * @throws ParseException
      */
@@ -177,22 +178,25 @@ public class ResourceEnterCmd extends Cmd{
         String applyOrderId = purchaseApplyPo.getApplyOrderId();
         PurchaseApplyPo purchaseApply = new PurchaseApplyPo();
         purchaseApply.setApplyOrderId(applyOrderId);
-
-        reqJson.put("auditCode","1100");
-        reqJson.put("auditMessage","入库成功");
-        reqJson.put("storeId", CmdContextUtils.getStoreId(context));
-        reqJson.put("nextUserId", reqJson.getString("staffId"));
-        boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
-
-        if (isLastTask) {
-            purchaseApply.setState(PurchaseApplyDto.STATE_END);
+        //todo 如果包含taskId 流程提交下去
+        if (reqJson.containsKey("taskId")) {
+            reqJson.put("auditCode", "1100");
+            reqJson.put("auditMessage", "入库成功");
+            reqJson.put("id", reqJson.getString("applyOrderId"));
+            reqJson.put("storeId", CmdContextUtils.getStoreId(context));
+            reqJson.put("nextUserId", reqJson.getString("staffId"));
+            boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
+            if (isLastTask) {
+                purchaseApply.setState(PurchaseApplyDto.STATE_END);
+            } else {
+                purchaseApply.setState(PurchaseApplyDto.STATE_DEALING);
+            }
         } else {
-            purchaseApply.setState(PurchaseApplyDto.STATE_DEALING);
+            purchaseApply.setState(PurchaseApplyDto.STATE_AUDITED);
         }
         purchaseApply.setStatusCd("0");
         purchaseApplyInnerServiceSMOImpl.updatePurchaseApply(purchaseApply);
 
-        //todo 如果包含taskId 流程提交下去
 
 
         context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, "采购申请成功"));
