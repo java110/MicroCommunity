@@ -120,7 +120,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
 
         resourceStorePo = new ResourceStorePo();
         resourceStorePo.setResId(resourceStoreDtoZs.get(0).getResId());
-        resourceStorePo.setStoreId(resourceStoreDtoZs.get(0).getResId());
+        resourceStorePo.setStoreId(resourceStoreDtoZs.get(0).getStoreId());
         resourceStorePo.setStock(allocationStock + "");// 这里去扣出
         resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
 
