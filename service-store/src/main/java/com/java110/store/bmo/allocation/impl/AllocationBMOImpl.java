@@ -131,6 +131,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
         resourceStoreTimesPo.setResCode(resourceStoreTimesDtoAs.get(0).getResCode());
         resourceStoreTimesPo.setStoreId(resourceStoreTimesDtoAs.get(0).getStoreId());
         resourceStoreTimesPo.setStock(allocationStock + "");// 这里去增加
+        resourceStoreTimesPo.setApplyOrderId(tmpAllocationStorehouseDto.getApplyId());
         resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         // todo -------------------------------------------------目标仓库中做增加 (end)-----------------------------------------------------//
 
