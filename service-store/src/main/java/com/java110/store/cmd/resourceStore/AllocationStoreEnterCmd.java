@@ -69,7 +69,7 @@ public class AllocationStoreEnterCmd extends Cmd {
                 = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
         Assert.listOnlyOne(allocationStorehouseDtos, "调拨申请单存在多条");
 
-        if (reqJson.containsKey("resourceStores")) {
+        if (!reqJson.containsKey("resourceStores")) {
             throw new CmdException("未包含物品");
         }
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
