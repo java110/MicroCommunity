@@ -48,7 +48,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
         // todo -------------------------------------------------原仓库中做扣除 (start)-----------------------------------------------------//
         // todo 原仓库中扣除 数量
         ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
-        resourceStoreDto.setResCode(tmpAllocationStorehouseDto.getResCode());
+        resourceStoreDto.setResId(tmpAllocationStorehouseDto.getResId());
         resourceStoreDto.setShId(tmpAllocationStorehouseDto.getShIda());
         List<ResourceStoreDto> resourceStoreDtoAs = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
         //todo 这种场景不存在
@@ -96,7 +96,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
         // todo -------------------------------------------------目标仓库中做增加 (start)-----------------------------------------------------//
         //todo 查询目标仓库中 库存
         resourceStoreDto = new ResourceStoreDto();
-        resourceStoreDto.setResCode(tmpAllocationStorehouseDto.getResCode());
+        resourceStoreDto.setResCode(resourceStoreDtoAs.get(0).getResCode());
         resourceStoreDto.setShId(tmpAllocationStorehouseDto.getShIdz());
         List<ResourceStoreDto> resourceStoreDtoZs = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
         //todo 这种场景不存在
