@@ -211,7 +211,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 allocationStorehouseApplyDto.setRemark("紧急采购入库并调拨");
                 allocationStorehouseApplyDto.setApplyCount(purchaseApplyDetailPo.getQuantity());
                 allocationStorehouseApplyDto.setStoreId(storeId);
-                allocationStorehouseApplyDto.setCreateTime(new Date());
+                allocationStorehouseApplyDto.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                 allocationStorehouseApplyDto.setState(AllocationStorehouseDto.STATE_SUCCESS);
                 allocationStorehouseApplyDto.setCommunityId(reqJson.getString("communityId"));
                 //调拨
@@ -280,7 +280,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 allocationStorehouseApplyDto.setRemark("紧急采购入库并调拨");
                 allocationStorehouseApplyDto.setApplyCount(purchaseApplyDetailPo.getQuantity());
                 allocationStorehouseApplyDto.setStoreId(storeId);
-                allocationStorehouseApplyDto.setCreateTime(new Date());
+                allocationStorehouseApplyDto.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                 allocationStorehouseApplyDto.setState(AllocationStorehouseDto.STATE_SUCCESS);
                 allocationStorehouseApplyDto.setCommunityId(reqJson.getString("communityId"));
                 //调拨

@@ -47,7 +47,7 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     private String communityId;
     private String nextUserId;
 
-    private Date createTime;
+    private String createTime;
 
     private String statusCd = "0";
 
@@ -120,11 +120,11 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
         this.storeId = storeId;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

@@ -21,6 +21,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -89,7 +90,7 @@ public class MachineAllocationStorehouse extends DatabusAdaptImpl {
         //获取小区id
         String communityId = allocationStorehouseApplyDtos.get(0).getCommunityId();
         //获取申请时间
-        Date createTime = allocationStorehouseApplyDtos.get(0).getCreateTime();
+        Date createTime = DateUtil.getDateFromStringA(allocationStorehouseApplyDtos.get(0).getCreateTime());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject paramIn = new JSONObject();
         paramIn.put("applyOrderId", applyOrderId);
