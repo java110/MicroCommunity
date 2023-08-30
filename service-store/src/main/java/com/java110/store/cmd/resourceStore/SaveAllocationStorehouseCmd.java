@@ -89,6 +89,9 @@ public class SaveAllocationStorehouseCmd extends Cmd {
     @Autowired
     private IAllocationBMO allocationBMOImpl;
 
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含申请信息");
@@ -314,6 +317,28 @@ public class SaveAllocationStorehouseCmd extends Cmd {
             //todo 每条记录调拨
             allocationBMOImpl.doToAllocationStorehouse(tmpAllocationStorehouseDto, allocationStock);
         }
+
+        String applyId = allocationStorehouseApplyPo.getApplyId();
+        AllocationStorehouseApplyPo tmpAllocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
+        tmpAllocationStorehouseApplyPo.setApplyId(applyId);
+        //todo 如果包含taskId 流程提交下去
+        if (reqJson.containsKey("taskId")) {
+            reqJson.put("auditCode", "1100");
+            reqJson.put("auditMessage", "入库成功");
+            reqJson.put("id", reqJson.getString("applyId"));
+            reqJson.put("storeId", reqJson.getString("storeId"));
+            reqJson.put("nextUserId", reqJson.getString("staffId"));
+            boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
+            if (isLastTask) {
+                tmpAllocationStorehouseApplyPo.setState(AllocationStorehouseApplyDto.STATE_END);
+            } else {
+                tmpAllocationStorehouseApplyPo.setState(AllocationStorehouseApplyDto.STATE_DEALING);
+            }
+        } else {
+            tmpAllocationStorehouseApplyPo.setState(AllocationStorehouseApplyDto.STATE_DEALING);
+        }
+        tmpAllocationStorehouseApplyPo.setStatusCd("0");
+        allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(tmpAllocationStorehouseApplyPo);
     }
 
     /**

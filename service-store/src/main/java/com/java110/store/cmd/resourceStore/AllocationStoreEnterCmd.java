@@ -3,24 +3,29 @@ package com.java110.store.cmd.resourceStore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
 import com.java110.dto.purchase.AllocationStorehouseDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
 import com.java110.dto.store.StorehouseDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.po.purchase.AllocationStorehouseApplyPo;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.po.resource.ResourceStoreTimesPo;
 import com.java110.store.bmo.allocation.IAllocationBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
@@ -34,6 +39,7 @@ public class AllocationStoreEnterCmd extends Cmd {
 
     @Autowired
     private IAllocationStorehouseApplyInnerServiceSMO allocationStorehouseApplyInnerServiceSMOImpl;
+
 
     @Autowired
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
@@ -58,6 +64,9 @@ public class AllocationStoreEnterCmd extends Cmd {
 
     @Autowired
     private IAllocationBMO allocationBMOImpl;
+
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -107,8 +116,6 @@ public class AllocationStoreEnterCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-
-
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         JSONObject resourceStore = null;
         int quantity = 0;
@@ -123,6 +130,33 @@ public class AllocationStoreEnterCmd extends Cmd {
             //todo 每条记录调拨
             allocationBMOImpl.doToAllocationStorehouse(allocationStorehouseDtos.get(0), quantity);
         }
+
+        //
+        String applyId = reqJson.getString("applyId");
+        AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
+        allocationStorehouseApplyPo.setApplyId(applyId);
+        //todo 如果包含taskId 流程提交下去
+        if (reqJson.containsKey("taskId")) {
+            reqJson.put("auditCode", "1100");
+            reqJson.put("auditMessage", "入库成功");
+            reqJson.put("id", reqJson.getString("applyId"));
+            reqJson.put("storeId", CmdContextUtils.getStoreId(context));
+            reqJson.put("nextUserId", reqJson.getString("staffId"));
+            boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
+            if (isLastTask) {
+                allocationStorehouseApplyPo.setState(AllocationStorehouseApplyDto.STATE_END);
+            } else {
+                allocationStorehouseApplyPo.setState(AllocationStorehouseApplyDto.STATE_DEALING);
+            }
+        } else {
+            allocationStorehouseApplyPo.setState(AllocationStorehouseApplyDto.STATE_DEALING);
+        }
+        allocationStorehouseApplyPo.setStatusCd("0");
+        allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+
+
+
+        context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, "采购申请成功"));
     }
 
 }
