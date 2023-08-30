@@ -4,17 +4,23 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.purchase.AllocationStorehouseDto;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
+import com.java110.dto.store.StorehouseDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.user.UserStorehouseDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.AllocationStorehousePo;
@@ -37,7 +43,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * 调拨申请
  */
 @Java110Cmd(serviceCode = "resourceStore.saveAllocationStorehouse")
 public class SaveAllocationStorehouseCmd extends Cmd {
@@ -69,6 +75,16 @@ public class SaveAllocationStorehouseCmd extends Cmd {
     @Autowired
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IStorehouseV1InnerServiceSMO storehouseV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含申请信息");
@@ -88,6 +104,31 @@ public class SaveAllocationStorehouseCmd extends Cmd {
             validateResoureStore(reqJson, resourceStores, applyType, resIndex);
         }
         reqJson.put("resourceStores", resourceStores);
+
+
+        //todo 查询仓库是否存在
+        StorehouseDto storehouseDto = new StorehouseDto();
+        storehouseDto.setShId(reqJson.getString("shId"));
+        List<StorehouseDto> storehouseDtos = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
+        Assert.listOnlyOne(storehouseDtos, "仓库不存在");
+
+        if (!StorehouseDto.SWITCH_ON.equals(storehouseDtos.get(0).getAllocationSwitch())) {
+            return;
+        }
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setStoreId(storeId);
+        oaWorkflowDto.setFlowId(storehouseDtos.get(0).getAllocationFlowId());
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        Assert.listOnlyOne(oaWorkflowDtos, "流程不存在");
+        if (!OaWorkflowDto.STATE_COMPLAINT.equals(oaWorkflowDtos.get(0).getState())) {
+            throw new IllegalArgumentException(oaWorkflowDtos.get(0).getFlowName() + "流程未部署");
+        }
+
+        if (StringUtil.isEmpty(oaWorkflowDtos.get(0).getProcessDefinitionKey())) {
+            throw new IllegalArgumentException(oaWorkflowDtos.get(0).getFlowName() + "流程未部署");
+        }
     }
 
     /**
@@ -141,6 +182,7 @@ public class SaveAllocationStorehouseCmd extends Cmd {
 
     /**
      * 调拨申请-调拨申请发起
+     *
      * @param event              事件对象
      * @param cmdDataFlowContext
      * @param reqJson            请求报文
@@ -169,34 +211,206 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         for (int resIndex = 0; resIndex < resourceStores.size(); resIndex++) {
             //处理 物品信息
             resObj = resourceStores.getJSONObject(resIndex);
-            doDealResourceStore(reqJson, applyType, allocationStorehouseApplyPo, resourceStores, resObj);
+            //todo 记录明细
+            saveAllocationStorehouse(reqJson, applyType, allocationStorehouseApplyPo, resObj);
+            //todo 退还 时 源仓库加库存
+            if (!AllocationStorehouseApplyDto.STORE_TYPE_ALLOCATION.equals(applyType)) {
+                addAResourceStore(reqJson, allocationStorehouseApplyPo, resObj);
+            }
         }
         flag = allocationStorehouseApplyV1InnerServiceSMOImpl.saveAllocationStorehouseApply(allocationStorehouseApplyPo);
         if (flag < 1) {
             throw new CmdException("保存修改物品失败");
         }
-        //采购的情况下走流程
-        if (AllocationStorehouseApplyDto.STORE_TYPE_ALLOCATION.equals(applyType)) {
-            AllocationStorehouseApplyDto allocationStorehouseDto = BeanConvertUtil.covertBean(allocationStorehouseApplyPo, AllocationStorehouseApplyDto.class);
-            allocationStorehouseDto.setCurrentUserId(reqJson.getString("userId"));
-            allocationStorehouseDto.setNextUserId(reqJson.getString("staffId"));
-            allocationStorehouseUserInnerServiceSMOImpl.startProcess(allocationStorehouseDto);
+
+        if (!AllocationStorehouseApplyDto.STORE_TYPE_ALLOCATION.equals(applyType)) {
+            return;
         }
+        // todo 开启流程
+        toStartWorkflow(allocationStorehouseApplyPo, reqJson);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
-    private void doDealResourceStore(JSONObject reqJson, String applyType, AllocationStorehouseApplyPo allocationStorehouseApplyPo, JSONArray resourceStores, JSONObject resObj) {
-        //保存调拨申请的物品调拨记录
-        saveAllocationStorehouse(reqJson, applyType, allocationStorehouseApplyPo, resObj);
-        if (AllocationStorehouseApplyDto.STORE_TYPE_ALLOCATION.equals(applyType)) { //调拨减去库存
-            //开始锁代码
-            //原仓库物品减去 调拨的数量
-            subAResourceStore(reqJson, allocationStorehouseApplyPo, resObj);
-        } else {
-            //退还 时 源仓库加库存
-            addAResourceStore(reqJson, allocationStorehouseApplyPo, resObj);
+    /**
+     * 启动审批流程
+     *
+     * @param allocationStorehouseApplyPo
+     */
+    private void toStartWorkflow(AllocationStorehouseApplyPo allocationStorehouseApplyPo, JSONObject reqJson) {
+
+        //todo 查询仓库是否存在
+        StorehouseDto storehouseDto = new StorehouseDto();
+        storehouseDto.setShId(reqJson.getString("shId"));
+        List<StorehouseDto> storehouseDtos = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
+        Assert.listOnlyOne(storehouseDtos, "仓库不存在");
+
+        if (!StorehouseDto.SWITCH_ON.equals(storehouseDtos.get(0).getAllocationSwitch())) {
+            //todo 直接调拨
+            toAllocationStorehouse(allocationStorehouseApplyPo, storehouseDto, reqJson);
+            return;
         }
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setStoreId(allocationStorehouseApplyPo.getStoreId());
+        oaWorkflowDto.setFlowId(storehouseDto.getAllocationFlowId());
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        //todo 提交审核
+        JSONObject flowJson = new JSONObject();
+        flowJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
+        flowJson.put("createUserId", allocationStorehouseApplyPo.getStartUserId());
+        flowJson.put("flowId", oaWorkflowDtos.get(0).getFlowId());
+        flowJson.put("id", allocationStorehouseApplyPo.getApplyId());
+        flowJson.put("auditMessage", "提交审核");
+        flowJson.put("storeId", allocationStorehouseApplyPo.getStoreId());
+        reqJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
+        JSONObject result = oaWorkflowActivitiInnerServiceSMOImpl.startProcess(flowJson);
+
+        JSONObject audit = reqJson.getJSONObject("audit");
+        String nextUserId = "-1";
+        if (audit != null) {
+            nextUserId = reqJson.getJSONObject("audit").getString("staffId");
+        }
+
+        //提交者提交
+        flowJson = new JSONObject();
+        flowJson.put("processInstanceId", result.getString("processInstanceId"));
+        flowJson.put("createUserId", allocationStorehouseApplyPo.getStartUserId());
+        flowJson.put("nextUserId", nextUserId);
+        flowJson.put("storeId", allocationStorehouseApplyPo.getStoreId());
+        flowJson.put("id", allocationStorehouseApplyPo.getApplyId());
+        flowJson.put("flowId", oaWorkflowDtos.get(0).getFlowId());
+
+        oaWorkflowActivitiInnerServiceSMOImpl.autoFinishFirstTask(flowJson);
+
+
+    }
+
+    /**
+     * 直接调拨
+     *
+     * @param allocationStorehouseApplyPo
+     * @param storehouseDto
+     * @param reqJson
+     */
+    private void toAllocationStorehouse(AllocationStorehouseApplyPo allocationStorehouseApplyPo, StorehouseDto storehouseDto, JSONObject reqJson) {
+
+        //查询调拨记录
+        AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
+        allocationStorehouseDto.setApplyId(allocationStorehouseApplyPo.getApplyId());
+        List<AllocationStorehouseDto> allocationStorehouseDtos = allocationStorehouseV1InnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
+
+        if (allocationStorehouseDtos == null || allocationStorehouseDtos.size() < 1) {
+            return;
+        }
+
+        for (AllocationStorehouseDto tmpAllocationStorehouseDto : allocationStorehouseDtos) {
+            int allocationStock = Integer.parseInt(tmpAllocationStorehouseDto.getStock());
+            //todo 每条记录调拨
+            doToAllocationStorehouse(tmpAllocationStorehouseDto, allocationStock);
+        }
+    }
+
+    /**
+     * 调拨实现
+     *
+     * @param tmpAllocationStorehouseDto
+     * @param allocationStock
+     */
+    private void doToAllocationStorehouse(AllocationStorehouseDto tmpAllocationStorehouseDto, int allocationStock) {
+
+
+        // todo -------------------------------------------------原仓库中做扣除 (start)-----------------------------------------------------//
+        // todo 原仓库中扣除 数量
+        ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
+        resourceStoreDto.setResCode(tmpAllocationStorehouseDto.getResCode());
+        resourceStoreDto.setShId(tmpAllocationStorehouseDto.getShIda());
+        List<ResourceStoreDto> resourceStoreDtoAs = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+        //todo 这种场景不存在
+        if (resourceStoreDtoAs == null || resourceStoreDtoAs.size() < 1) {
+            return;
+        }
+
+        ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+        resourceStoreTimesDto.setTimesId(tmpAllocationStorehouseDto.getTimesId());
+        resourceStoreTimesDto.setShId(tmpAllocationStorehouseDto.getShIda());
+        List<ResourceStoreTimesDto> resourceStoreTimesDtoAs = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+        //todo 这种场景不存在
+        if (resourceStoreTimesDtoAs == null || resourceStoreTimesDtoAs.size() < 1) {
+            return;
+        }
+
+        int stockA = Integer.parseInt(resourceStoreDtoAs.get(0).getStock());
+
+        //todo 库存不够时，只能调拨 库存，这种场景应该执行不到 前文做了校验
+        if (stockA < allocationStock) {
+            allocationStock = stockA;
+        }
+        ResourceStorePo resourceStorePo = new ResourceStorePo();
+        resourceStorePo.setResId(resourceStoreDtoAs.get(0).getResId());
+        resourceStorePo.setStoreId(resourceStoreDtoAs.get(0).getStoreId());
+        resourceStorePo.setStock(allocationStock * -1 + "");// 这里去扣出
+        resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+
+        stockA = Integer.parseInt(resourceStoreTimesDtoAs.get(0).getStock());
+
+        //todo 库存不够时，只能调拨 库存，这种场景应该执行不到 前文做了校验
+        if (stockA < allocationStock) {
+            allocationStock = stockA;
+        }
+
+        ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
+        resourceStoreTimesPo.setPrice(resourceStoreTimesDtoAs.get(0).getPrice());
+        resourceStoreTimesPo.setShId(resourceStoreTimesDtoAs.get(0).getShId());
+        resourceStoreTimesPo.setResCode(resourceStoreTimesDtoAs.get(0).getResCode());
+        resourceStoreTimesPo.setStoreId(resourceStoreTimesDtoAs.get(0).getStoreId());
+        resourceStoreTimesPo.setStock(allocationStock * -1 + "");// 这里去扣出
+        resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+        // todo -------------------------------------------------原仓库中做扣除 (end)-----------------------------------------------------//
+
+        // todo -------------------------------------------------目标仓库中做增加 (start)-----------------------------------------------------//
+        //todo 查询目标仓库中 库存
+        resourceStoreDto = new ResourceStoreDto();
+        resourceStoreDto.setResCode(tmpAllocationStorehouseDto.getResCode());
+        resourceStoreDto.setShId(tmpAllocationStorehouseDto.getShIdz());
+        List<ResourceStoreDto> resourceStoreDtoZs = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+        //todo 这种场景不存在
+        if (resourceStoreDtoZs == null || resourceStoreDtoZs.size() < 1) {
+            //todo 添加物品到该仓库
+            ResourceStorePo tmpResourceStorePo = BeanConvertUtil.covertBean(resourceStoreDtoAs.get(0), ResourceStorePo.class);
+            tmpResourceStorePo.setResId(GenerateCodeFactory.getGeneratorId("11"));
+            tmpResourceStorePo.setStock(allocationStock + "");
+            tmpResourceStorePo.setShId(tmpAllocationStorehouseDto.getShIdz());
+            resourceStoreV1InnerServiceSMOImpl.saveResourceStore(tmpResourceStorePo);
+
+            // todo 添加 times
+            ResourceStoreTimesPo tmpResourceStoreTimesPo = BeanConvertUtil.covertBean(resourceStoreTimesDtoAs.get(0), ResourceStoreTimesPo.class);
+            tmpResourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));
+            tmpResourceStoreTimesPo.setStock(allocationStock + "");
+            tmpResourceStoreTimesPo.setShId(tmpAllocationStorehouseDto.getShIdz());
+
+            resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(tmpResourceStoreTimesPo);
+            return;
+        }
+
+        resourceStorePo = new ResourceStorePo();
+        resourceStorePo.setResId(resourceStoreDtoZs.get(0).getResId());
+        resourceStorePo.setStoreId(resourceStoreDtoZs.get(0).getResId());
+        resourceStorePo.setStock(allocationStock + "");// 这里去扣出
+        resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
+
+
+        resourceStoreTimesPo = new ResourceStoreTimesPo();
+        resourceStoreTimesPo.setPrice(resourceStoreTimesDtoAs.get(0).getPrice());
+        resourceStoreTimesPo.setShId(resourceStoreDtoZs.get(0).getShId());
+        resourceStoreTimesPo.setResCode(resourceStoreTimesDtoAs.get(0).getResCode());
+        resourceStoreTimesPo.setStoreId(resourceStoreTimesDtoAs.get(0).getStoreId());
+        resourceStoreTimesPo.setStock(allocationStock + "");// 这里去增加
+        resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+        // todo -------------------------------------------------目标仓库中做增加 (end)-----------------------------------------------------//
+
+
     }
 
     /**
@@ -252,13 +466,13 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存修改物品失败");
         }
-        //退还数量
+        //todo 退还数量
         allocationStorehouseApplyPo.setApplyCount(resObj.getString("curStock"));
-        //返还的仓库物品加上库存
+        //todo 返还的仓库物品加上库存
         ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
         resourceStoreDto.setResCode(resObj.getString("resCode"));
         resourceStoreDto.setShId(resObj.getString("shzId"));
-        //查询目标仓库下该物品信息(根据目标仓库和物品编码查询)
+        //todo 查询目标仓库下该物品信息(根据目标仓库和物品编码查询)
         List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
         if (resourceStoreDtos != null && resourceStoreDtos.size() > 0) { //如果目标仓库下有这个物品信息，就更新该物品库存
             for (ResourceStoreDto resourceStore : resourceStoreDtos) {
@@ -366,9 +580,7 @@ public class SaveAllocationStorehouseCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("保存修改物品失败");
             }
-
-
-            // 保存至 物品 times表
+            //todo 保存至 物品 times表
             //查询调拨批次价格
             ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
             resourceStoreTimesDto.setTimesId(resObj.getString("timesId"));
@@ -383,9 +595,6 @@ public class SaveAllocationStorehouseCmd extends Cmd {
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
             resourceStoreTimesPo.setShId(resObj.getString("shzId"));
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
-
-
-
         }
     }
 

@@ -115,8 +115,9 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 throw new IllegalArgumentException("库存不足，参数有误");
             }
             //入库操作 对物品进行加权平均
-            if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)
-                    || (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT) && resourceStorePo.getOperationType().equals(PurchaseApplyDto.WEIGHTED_MEAN_TRUE))) {
+            if (PurchaseApplyDto.RES_ORDER_TYPE_ENTER.equals(resourceStorePo.getResOrderType())
+                    || (PurchaseApplyDto.WAREHOUSING_TYPE_URGENT.equals(resourceStorePo.getResOrderType())
+                    && PurchaseApplyDto.WEIGHTED_MEAN_TRUE.equals(resourceStorePo.getOperationType()))) {
                 //获取原均价
                 Object averageOldPrice = stores.get(0).get("averagePrice");
                 BigDecimal price = new BigDecimal(0);
@@ -130,7 +131,8 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 BigDecimal averagePrice = averagePriceTotal.divide(totalStock, 2, BigDecimal.ROUND_HALF_UP);
                 resourceStorePo.setAveragePrice(averagePrice.toString());
             }
-            if (resourceStorePo.getResOrderType().equals(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT) && resourceStorePo.getOperationType().equals(PurchaseApplyDto.WEIGHTED_MEAN_TRUE)) {
+            if (PurchaseApplyDto.WAREHOUSING_TYPE_URGENT.equals(resourceStorePo.getResOrderType())
+                    && PurchaseApplyDto.WEIGHTED_MEAN_TRUE.equals(resourceStorePo.getOperationType())) {
                 resourceStorePo.setStock(stock + "");
             } else {
                 resourceStorePo.setStock(totalStock + "");
