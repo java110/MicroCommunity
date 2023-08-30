@@ -9,11 +9,14 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchase.AllocationStorehouseDto;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.po.purchase.AllocationStorehouseApplyPo;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.po.resource.ResourceStoreTimesPo;
 import com.java110.utils.exception.CmdException;
@@ -29,6 +32,9 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
 
+/**
+ * 调拨审核
+ */
 @Java110Cmd(serviceCode = "resourceStore.auditAllocationStoreOrder")
 public class AuditAllocationStoreOrderCmd extends Cmd {
 
@@ -53,25 +59,82 @@ public class AuditAllocationStoreOrderCmd extends Cmd {
     @Autowired
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.hasKeyAndValue(reqJson, "applyId", "订单号不能为空");
-        Assert.hasKeyAndValue(reqJson, "taskId", "必填，请填写任务ID");
-        Assert.hasKeyAndValue(reqJson, "state", "必填，请填写审核状态");
-        Assert.hasKeyAndValue(reqJson, "remark", "必填，请填写批注");
+//        Assert.hasKeyAndValue(reqJson, "applyId", "订单号不能为空");
+//        Assert.hasKeyAndValue(reqJson, "taskId", "必填，请填写任务ID");
+//        Assert.hasKeyAndValue(reqJson, "state", "必填，请填写审核状态");
+//        Assert.hasKeyAndValue(reqJson, "remark", "必填，请填写批注");
+        Assert.hasKeyAndValue(reqJson, "taskId", "未包含任务");
+        Assert.hasKeyAndValue(reqJson, "id", "订单号不能为空");
+        Assert.hasKeyAndValue(reqJson, "auditCode", "未包含状态");
+        Assert.hasKeyAndValue(reqJson, "auditMessage", "未包含状态说明");
+    }
+
+    @Override
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+        String storeId = context.getReqHeaders().get("store-id");
+
+        AllocationStorehouseApplyDto allocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
+        allocationStorehouseApplyDto.setApplyId(reqJson.getString("id"));
+        List<AllocationStorehouseApplyDto> allocationStorehouseDtos
+                = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
+        Assert.listOnlyOne(allocationStorehouseDtos, "调拨申请单存在多条");
+
+        //状态 W待审核 D 审核中 C 审核完成 D 审核失败
+        AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
+        allocationStorehouseApplyPo.setApplyId(allocationStorehouseDtos.get(0).getApplyId());
+        reqJson.put("id", reqJson.getString("id"));
+        reqJson.put("storeId", storeId);
+
+
+        //业务办理
+        if ("1100".equals(reqJson.getString("auditCode"))
+                || "1500".equals(reqJson.getString("auditCode"))) { //办理操作
+            reqJson.put("nextUserId", reqJson.getString("staffId"));
+            boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
+            if (isLastTask) {
+                allocationStorehouseApplyPo.setState(AllocationStorehouseApplyDto.STATE_END);
+            } else {
+                allocationStorehouseApplyPo.setState(AllocationStorehouseApplyDto.STATE_DEALING);
+            }
+            allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+            //完成当前流程 插入下一处理人
+        } else if ("1300".equals(reqJson.getString("auditCode"))) { //转单操作
+            reqJson.put("nextUserId", reqJson.getString("staffId"));
+            oaWorkflowUserInnerServiceSMOImpl.changeTaskToOtherUser(reqJson);
+            //reqJson.put("state", "1004"); //工单转单
+            allocationStorehouseApplyPo.setState(PurchaseApplyDto.STATE_DEALING);
+            allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+        } else if ("1200".equals(reqJson.getString("auditCode"))
+                || "1400".equals(reqJson.getString("auditCode"))
+        ) { //退回操作
+            reqJson.put("startUserId", allocationStorehouseDtos.get(0).getStartUserId());
+            oaWorkflowUserInnerServiceSMOImpl.goBackTask(reqJson);
+            //reqJson.put("state", "1003"); //工单退单
+            allocationStorehouseApplyPo.setState(PurchaseApplyDto.STATE_NOT_PASS);
+            allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+        } else {
+            throw new IllegalArgumentException("不支持的类型");
+        }
     }
 
     /**
      * 调拨申请-物品调拨审核
-     * @param event              事件对象
+     *
+     * @param event   事件对象
      * @param context 数据上文对象
-     * @param reqJson            请求报文
+     * @param reqJson 请求报文
      * @throws CmdException
      * @throws ParseException
      */
-    @Override
-    @Java110Transactional
-    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+    public void doCmd1(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         int flag = 0;
         AllocationStorehouseApplyDto allocationStorehouseDto = new AllocationStorehouseApplyDto();

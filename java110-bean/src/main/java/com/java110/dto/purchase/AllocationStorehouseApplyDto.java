@@ -23,6 +23,10 @@ public class AllocationStorehouseApplyDto extends PageDto implements Serializabl
     public static final String STORE_TYPE_ALLOCATION = "10000"; //调拨
     public static final String STORE_TYPE_RETURN = "20000";
     public static final String STORE_TYPE_URGENT_ALLOCATION = "30000"; //紧急调拨
+    public static final String STATE_END = "1202"; // 状态，1201 调拨审核 1202 调拨完成 1202 调拨失败
+    public static final String STATE_DEALING = "1201"; // 状态，1201 调拨审核 1202 调拨完成 1202 调拨失败
+    public static final String STATE_NOT_PASS = "1202"; // 状态，1201 调拨审核 1202 调拨完成 1202 调拨失败
+
 
     private String applyId;
     private String[] applyIds;
