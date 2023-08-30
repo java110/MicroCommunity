@@ -5,22 +5,32 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflow.WorkflowDto;
 import com.java110.dto.oaWorkflow.WorkflowStepStaffDto;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
 import com.java110.dto.audit.AuditUser;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
+import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.common.IWorkflowStepStaffInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.store.IAllocationStorehouseApplyInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 查询调拨
+ */
 @Java110Cmd(serviceCode = "resourceStore.listAllocationStoreAuditOrders")
 public class ListAllocationStoreAuditOrdersCmd extends Cmd {
 
@@ -31,10 +41,21 @@ public class ListAllocationStoreAuditOrdersCmd extends Cmd {
     @Autowired
     private IWorkflowStepStaffInnerServiceSMO workflowStepStaffInnerServiceSMOImpl;
 
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
+
+    @Autowired
+    private IAllocationStorehouseApplyInnerServiceSMO allocationStorehouseApplyInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
-        Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户ID");
+
         Assert.hasKeyAndValue(reqJson, "row", "必填，请填写每页显示数");
         Assert.hasKeyAndValue(reqJson, "page", "必填，请填写页数");
 
@@ -43,63 +64,100 @@ public class ListAllocationStoreAuditOrdersCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+        String userId = context.getReqHeaders().get("user-id");
+        String storeId = context.getReqHeaders().get("store-id");
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setState(OaWorkflowDto.STATE_COMPLAINT);
+        oaWorkflowDto.setFlowType(OaWorkflowDto.FLOW_TYPE_ALLOCATION);
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+
+        if (oaWorkflowDtos == null || oaWorkflowDtos.size() < 1) {
+            return;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+            flowIds.add(WorkflowDto.DEFAULT_PROCESS + tmpOaWorkflowDto.getFlowId());
+        }
+
         AuditUser auditUser = new AuditUser();
-        auditUser.setUserId(reqJson.getString("userId"));
+        auditUser.setProcessDefinitionKeys(flowIds);
+        auditUser.setUserId(userId);
+        auditUser.setStoreId(storeId);
         auditUser.setPage(reqJson.getInteger("page"));
         auditUser.setRow(reqJson.getInteger("row"));
-        auditUser.setStoreId(reqJson.getString("storeId"));
-        //调拨待办（默认只查询和当前登录用户相关并且是审批或者结束待办事项）
-        long count = allocationStorehouseUserInnerServiceSMOImpl.getUserTaskCount(auditUser);
 
-        List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtos = null;
+        long count = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserTaskCount(auditUser);
+
+        List<JSONObject> datas = null;
 
         if (count > 0) {
-            allocationStorehouseApplyDtos = allocationStorehouseUserInnerServiceSMOImpl.getUserTasks(auditUser);
+            datas = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserTasks(auditUser);
+            //刷新 表单数据
+            refreshFormData(datas, reqJson, storeId);
         } else {
-            allocationStorehouseApplyDtos = new ArrayList<>();
+            datas = new ArrayList<>();
         }
 
-        //todo 计算  仓库管理员
-        computeStoreManager(allocationStorehouseApplyDtos, auditUser);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, datas);
 
-        ResponseEntity responseEntity
-                = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")),
-                (int) count,
-                allocationStorehouseApplyDtos);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
+
     }
 
-    /**
-     * 计算仓库管理员
-     * @param allocationStorehouseApplyDtos
-     * @param auditUser
-     */
-    private void computeStoreManager(List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtos, AuditUser auditUser) {
+    private void refreshFormData(List<JSONObject> datas, JSONObject paramIn, String storeId) {
 
-        if (allocationStorehouseApplyDtos == null || allocationStorehouseApplyDtos.size() < 1) {
+        List<String> ids = new ArrayList<>();
+        for (JSONObject data : datas) {
+            ids.add(data.getString("id"));
+        }
+        if (ids.size() < 1) {
             return;
         }
 
-        for(AllocationStorehouseApplyDto allocationStorehouseApplyDto: allocationStorehouseApplyDtos){
-            allocationStorehouseApplyDto.setStoreManager("N");
-        }
+        //查询 投诉信息
+        AllocationStorehouseApplyDto allocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
+        allocationStorehouseApplyDto.setStoreId(storeId);
+        allocationStorehouseApplyDto.setApplyIds(ids.toArray(new String[ids.size()]));
+        List<AllocationStorehouseApplyDto> tmpAllocationStorehouseApplyDtos
+                = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
 
-        //todo 查询调拨 中是否为管理员
-        WorkflowStepStaffDto workflowStepStaffDto = new WorkflowStepStaffDto();
-        workflowStepStaffDto.setFlowType(WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE);
-        workflowStepStaffDto.setStaffId(auditUser.getUserId());
-        List<WorkflowStepStaffDto> workflowStepStaffDtos = workflowStepStaffInnerServiceSMOImpl.queryWorkflowStepStaffs(workflowStepStaffDto);
 
-        if(workflowStepStaffDtos == null || workflowStepStaffDtos.size() < 1){
+        if (tmpAllocationStorehouseApplyDtos == null || tmpAllocationStorehouseApplyDtos.size() < 1) {
             return;
         }
 
-        for(AllocationStorehouseApplyDto allocationStorehouseApplyDto: allocationStorehouseApplyDtos){
-            for(WorkflowStepStaffDto tmpWorkflowStepStaffDto : workflowStepStaffDtos) {
-                if (allocationStorehouseApplyDto.getProcessDefinitionKey().equals("java110_"+tmpWorkflowStepStaffDto.getFlowId())){
-                    allocationStorehouseApplyDto.setStoreManager("Y");
+        for (AllocationStorehouseApplyDto tmpAllocationStorehouseApplyDto : tmpAllocationStorehouseApplyDtos) {
+            switch (tmpAllocationStorehouseApplyDto.getState()) {
+                case "1000":
+                    tmpAllocationStorehouseApplyDto.setStateName("待审核");
+                    break;
+                case "1001":
+                    tmpAllocationStorehouseApplyDto.setStateName("审核中");
+                    break;
+                case "1002":
+                    tmpAllocationStorehouseApplyDto.setStateName("已审核");
+                    break;
+            }
+        }
+        JSONObject curTaskNode = null;
+        for (JSONObject data : datas) {
+
+            //todo 计算 当前节点名称
+            curTaskNode = new JSONObject();
+            curTaskNode.put("taskId", data.getString("taskId"));
+            curTaskNode = oaWorkflowActivitiInnerServiceSMOImpl.getCurrentNodeTask(curTaskNode);
+            data.put("curTaskName", curTaskNode.getString("curTaskName"));
+
+            for (AllocationStorehouseApplyDto form : tmpAllocationStorehouseApplyDtos) {
+                if (data.getString("id").equals(form.getApplyId())) {
+                    data.putAll(BeanConvertUtil.beanCovertJson(form));
                 }
             }
         }
     }
+
+
 }
