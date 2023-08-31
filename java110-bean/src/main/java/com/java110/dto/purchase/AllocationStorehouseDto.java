@@ -68,6 +68,7 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String isFixed;
     private String isFixedName;
     private String timesId;
+    private String communityId;
 
     private List<ResourceStoreTimesDto> times;
 
@@ -423,5 +424,13 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setTimes(List<ResourceStoreTimesDto> times) {
         this.times = times;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
