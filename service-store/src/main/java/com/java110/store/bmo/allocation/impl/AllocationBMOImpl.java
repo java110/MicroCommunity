@@ -106,6 +106,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
             tmpResourceStorePo.setResId(GenerateCodeFactory.getGeneratorId("11"));
             tmpResourceStorePo.setStock(allocationStock + "");
             tmpResourceStorePo.setShId(tmpAllocationStorehouseDto.getShIdz());
+            tmpResourceStorePo.setCommunityId(resourceStoreDtoZs.get(0).getCommunityId());
             resourceStoreV1InnerServiceSMOImpl.saveResourceStore(tmpResourceStorePo);
 
             // todo 添加 times
@@ -113,6 +114,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
             tmpResourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));
             tmpResourceStoreTimesPo.setStock(allocationStock + "");
             tmpResourceStoreTimesPo.setShId(tmpAllocationStorehouseDto.getShIdz());
+            tmpResourceStoreTimesPo.setCommunityId(resourceStoreDtoZs.get(0).getCommunityId());
 
             resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(tmpResourceStoreTimesPo);
             return;

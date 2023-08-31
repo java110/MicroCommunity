@@ -23,12 +23,12 @@
         insert into resource_store(res_id, b_id, store_id, res_name, res_code, unit_code, remark, out_low_price,
                                    out_high_price, show_mobile, description,
                                    price, stock, create_time, sh_id, warning_stock, average_price, rss_id, rst_id,
-                                   mini_unit_code, mini_unit_stock, mini_stock, parent_rst_id, is_fixed)
+                                   mini_unit_code, mini_unit_stock, mini_stock, parent_rst_id, is_fixed,community_id)
         values (#{resId}, #{bId}, #{storeId}, #{resName}, #{resCode}, #{unitCode}, #{remark}, #{outLowPrice},
                 #{outHighPrice},
                 #{showMobile}, #{description}, #{price}, #{stock}, #{createTime}, #{shId}, #{warningStock},
                 #{averagePrice}, #{rssId}, #{rstId}, #{miniUnitCode}, #{miniUnitStock}, #{miniStock}, #{parentRstId},
-                #{isFixed})
+                #{isFixed},#{communityId})
     </insert>
 
     <!-- 查询资源信息（Business） add by wuxw 2018-07-03 -->
@@ -212,7 +212,7 @@
         miniStock,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name
         miniUnitCodeName,t.parent_rst_id parentRstId,t.rst_id rstId,rst1.name parentRstName,rst.name
         rstName,
-        t.is_fixed,t.is_fixed isFixed,td2.name isFixedName
+        t.is_fixed,t.is_fixed isFixed,td2.name isFixedName,t.community_id communityId
         from resource_store t
         left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
@@ -269,6 +269,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}
@@ -367,9 +370,7 @@
         <if test="description !=null and description != ''">
             , t.description= #{description}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         , t.stock= #{stock}
         <if test="warningStock !=null and warningStock != ''">
             , t.warning_stock= #{warningStock}
@@ -398,6 +399,12 @@
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
     </update>
 
@@ -436,6 +443,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}
@@ -556,6 +566,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}

@@ -132,6 +132,7 @@ public class SaveResourceStoreCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户信息");
         Assert.hasKeyAndValue(reqJson, "price", "必填，请填写物品价格");
         Assert.hasKeyAndValue(reqJson, "shId", "必填，请填写仓库");
+        Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
 
         //获取最低收费标准
         double outLowPrice = Double.parseDouble(reqJson.getString("outLowPrice"));
@@ -173,16 +174,6 @@ public class SaveResourceStoreCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
-        // todo 保存至 物品 times表
-//        ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
-//        resourceStoreTimesPo.setApplyOrderId("-1");
-//        resourceStoreTimesPo.setPrice(resourceStorePo.getPrice());
-//        resourceStoreTimesPo.setStock(resourceStorePo.getStock());
-//        resourceStoreTimesPo.setResCode(resourceStorePo.getResCode());
-//        resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
-//        resourceStoreTimesPo.setShId(resourceStorePo.getShId());
-//        resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
 
         //todo 入库
         inStore(reqJson, userId, storeId, resourceStorePo);
@@ -278,6 +269,7 @@ public class SaveResourceStoreCmd extends Cmd {
         resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
         resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
         resourceStoreTimesPo.setShId(resourceStorePo.getShId());
+        resourceStoreTimesPo.setCommunityId(reqJson.getString("communityId"));
 
         resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
 

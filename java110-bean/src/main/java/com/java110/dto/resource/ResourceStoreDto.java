@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 物品实体类
  * @ClassName FloorDto
  * @Description 资源数据层封装
  * @Author wuxw
@@ -74,6 +75,8 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     //是否是固定物品
     private String isFixed;
     private String isFixedName;
+
+    private String communityId;
 
     private List<ResourceStoreTimesDto> times;
 
@@ -407,5 +410,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setResCodeLike(String resCodeLike) {
         this.resCodeLike = resCodeLike;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

@@ -8,10 +8,10 @@
         insert into resource_store(sh_id, description, remark, store_id, res_id, parent_rst_id, warning_stock, rss_id,
                                    res_name, rst_id, out_low_price, price, mini_unit_stock, unit_code, res_code,
                                    mini_unit_code, average_price, stock, out_high_price, show_mobile, is_fixed,
-                                   mini_stock)
+                                   mini_stock,community_id)
         values (#{shId}, #{description}, #{remark}, #{storeId}, #{resId}, #{parentRstId}, #{warningStock}, #{rssId},
                 #{resName}, #{rstId}, #{outLowPrice}, #{price}, #{miniUnitStock}, #{unitCode}, #{resCode},
-                #{miniUnitCode}, #{averagePrice}, #{stock}, #{outHighPrice}, #{showMobile}, #{isFixed}, #{miniStock})
+                #{miniUnitCode}, #{averagePrice}, #{stock}, #{outHighPrice}, #{showMobile}, #{isFixed}, #{miniStock},#{communityId})
     </insert>
 
     <!-- 查询物品信息信息 add by wuxw 2018-07-03 -->
@@ -40,6 +40,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
@@ -116,9 +119,7 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="parentRstId !=null and parentRstId != ''">
             , t.parent_rst_id= #{parentRstId}
         </if>
@@ -174,6 +175,12 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
     </update>
 
     <!-- 查询物品信息数量 add by wuxw 2018-07-03 -->
@@ -195,6 +202,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}

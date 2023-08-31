@@ -8,9 +8,9 @@
     <!-- 保存物品次数信息 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreTimesInfo" parameterType="Map">
         insert into resource_store_times(
-        price,apply_order_id,store_id,stock,res_code,times_id,sh_id
+        price,apply_order_id,store_id,stock,res_code,times_id,sh_id,community_id
         ) values (
-        #{price},#{applyOrderId},#{storeId},#{stock},#{resCode},#{timesId},#{shId}
+        #{price},#{applyOrderId},#{storeId},#{stock},#{resCode},#{timesId},#{shId},#{communityId}
         )
     </insert>
 
@@ -29,7 +29,7 @@
         miniStock,rs.mini_unit_stock,rs.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name
         miniUnitCodeName,rs.parent_rst_id parentRstId,rs.rst_id rstId,rst1.name parentRstName,rst.name
         rstName,
-        rs.is_fixed,rs.is_fixed isFixed,td2.name isFixedName
+        rs.is_fixed,rs.is_fixed isFixed,td2.name isFixedName,t.community_id communityId
         from resource_store_times t
         inner join resource_store rs on t.res_code = rs.res_code and rs.status_cd = '0' and t.sh_id = rs.sh_id
         left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
@@ -72,6 +72,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}
@@ -125,6 +128,9 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
     </update>
 
@@ -174,6 +180,9 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}
         </if>
@@ -212,6 +221,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
         <if test="stock !=null and stock != ''">
             and t.stock= #{stock}

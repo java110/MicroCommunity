@@ -63,6 +63,7 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
 
     private String storeId;
+    private String communityId;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -406,6 +407,14 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
 

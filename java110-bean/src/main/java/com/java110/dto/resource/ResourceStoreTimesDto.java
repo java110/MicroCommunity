@@ -31,6 +31,8 @@ public class ResourceStoreTimesDto extends ResourceStoreDto implements Serializa
 
     private String statusCd = "0";
 
+    private String communityId;
+
 
     public String getPrice() {
         return price;
@@ -135,5 +137,15 @@ public class ResourceStoreTimesDto extends ResourceStoreDto implements Serializa
 
     public void setResCodeLike(String resCodeLike) {
         this.resCodeLike = resCodeLike;
+    }
+
+    @Override
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    @Override
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
