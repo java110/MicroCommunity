@@ -39,7 +39,8 @@ import java.util.Map;
         url = "http://{ip}:{port}/app/resourceStore.listResourceStores",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "resourceStore.listResourceStores"
+        serviceCode = "resourceStore.listResourceStores",
+        seq = 8
 )
 
 @Java110ParamsDoc(params = {

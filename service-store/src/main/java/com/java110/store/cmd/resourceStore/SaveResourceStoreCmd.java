@@ -68,7 +68,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/resourceStore.saveResourceStore",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "resourceStore.saveResourceStore"
+        serviceCode = "resourceStore.saveResourceStore",
+        seq = 9
 )
 
 @Java110ParamsDoc(params = {

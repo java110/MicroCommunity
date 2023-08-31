@@ -46,7 +46,8 @@ import java.util.List;
         url = "http://{ip}:{port}/app/collection/resourceOut",
         resource = "storeDoc",
         author = "吴学文",
-        serviceCode = "collection.resourceOut"
+        serviceCode = "collection.resourceOut",
+        seq = 11
 )
 
 @Java110ParamsDoc(params = {
