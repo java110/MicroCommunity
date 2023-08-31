@@ -40,7 +40,8 @@ public class AllocationStorehouseApplyInnerServiceSMOImpl extends BaseServiceSMO
             allocationAllocationStorehouseApplyhouseApplyDto.setPage((page - 1) * allocationAllocationStorehouseApplyhouseApplyDto.getRow());
         }
 
-        List<AllocationStorehouseApplyDto> allocationAllocationStorehouseApplyhouseApplys = BeanConvertUtil.covertBeanList(allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.getAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyDto)), AllocationStorehouseApplyDto.class);
+        List<AllocationStorehouseApplyDto> allocationAllocationStorehouseApplyhouseApplys = BeanConvertUtil.covertBeanList(
+                allocationAllocationStorehouseApplyhouseApplyServiceDaoImpl.getAllocationStorehouseApplyInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehouseApplyhouseApplyDto)), AllocationStorehouseApplyDto.class);
 
         return allocationAllocationStorehouseApplyhouseApplys;
     }

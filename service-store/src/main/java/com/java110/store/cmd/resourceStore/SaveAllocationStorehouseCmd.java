@@ -213,6 +213,8 @@ public class SaveAllocationStorehouseCmd extends Cmd {
 
         //封装调拨对象
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = covertAllocationStorehouseApply(reqJson);
+        //todo 默认写0 后面 相加
+        allocationStorehouseApplyPo.setApplyCount("0");
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         JSONObject resObj = null;
         for (int resIndex = 0; resIndex < resourceStores.size(); resIndex++) {
@@ -604,6 +606,10 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存调拨物品失败");
         }
+
+        int applyCount = Integer.parseInt(allocationStorehouseApplyPo.getApplyCount());
+        applyCount += resObj.getIntValue("curStock");
+        allocationStorehouseApplyPo.setApplyCount(applyCount + "");
     }
 
     /**

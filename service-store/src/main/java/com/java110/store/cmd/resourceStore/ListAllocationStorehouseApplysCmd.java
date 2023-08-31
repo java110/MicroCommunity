@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 查询调拨记录
+ */
 @Java110Cmd(serviceCode = "resourceStore.listAllocationStorehouseApplys")
 public class ListAllocationStorehouseApplysCmd extends Cmd {
 
@@ -45,7 +48,7 @@ public class ListAllocationStorehouseApplysCmd extends Cmd {
         basePrivilegeDto.setResource("/viewlistAllocationStorehouses");
         basePrivilegeDto.setUserId(userId);
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (privileges.size()==0) {
+        if (privileges.size() == 0) {
             allocationStorehouseApplyDto.setStartUserId(userId);
         }
         int count = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplysCount(allocationStorehouseApplyDto);
