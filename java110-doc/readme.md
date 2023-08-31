@@ -191,3 +191,28 @@ resBody 返回报文
         resBody="{'code':0,'msg':'成功','data':{'userId':'123123','token':'123213'}}"
 )
 
+### nginx 配置api 文档供外网访问
+
+apidoc.conf
+```agsl
+server {
+	listen       80;
+	server_name  apidoc.homecommunity.cn;
+
+	location / {
+	   proxy_pass http://dev.api.java110.com:8008/doc-ui.html;
+	}
+    location /js {
+	   proxy_pass http://dev.api.java110.com:8008;
+	}
+    location /css {
+	   proxy_pass http://dev.api.java110.com:8008;
+	}
+	location /doc
+	{
+	  add_header 'Access-Control-Allow-Origin' '*';
+	  proxy_pass   http://dev.api.java110.com:8088;
+	}
+}
+```
+
