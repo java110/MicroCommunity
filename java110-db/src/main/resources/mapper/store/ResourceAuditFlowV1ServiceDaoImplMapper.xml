@@ -8,9 +8,9 @@
     <!-- 保存物品流程信息 add by wuxw 2018-07-03 -->
     <insert id="saveResourceAuditFlowInfo" parameterType="Map">
         insert into resource_audit_flow(
-        raf_id,remark,store_id,flow_id,flow_name,audit_type
+        raf_id,remark,store_id,flow_id,flow_name,audit_type,community_id
         ) values (
-        #{rafId},#{remark},#{storeId},#{flowId},#{flowName},#{auditType}
+        #{rafId},#{remark},#{storeId},#{flowId},#{flowName},#{auditType},#{communityId}
         )
     </insert>
 
@@ -19,7 +19,7 @@
     <select id="getResourceAuditFlowInfo" parameterType="Map" resultType="Map">
         select t.raf_id,t.raf_id rafId,t.remark,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id
         storeId,t.flow_id,t.flow_id flowId,t.flow_name,t.flow_name flowName,t.audit_type,t.audit_type auditType,
-        t.create_time createTime
+        t.create_time createTime,t.community_id communityId
         from resource_audit_flow t
         where 1 =1
         <if test="rafId !=null and rafId != ''">
@@ -33,6 +33,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{storeId}
         </if>
         <if test="flowId !=null and flowId != ''">
             and t.flow_id= #{flowId}
@@ -77,6 +80,9 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{storeId}
+        </if>
 
     </update>
 
@@ -105,6 +111,9 @@
         </if>
         <if test="auditType !=null and auditType != ''">
             and t.audit_type= #{auditType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{storeId}
         </if>
 
 

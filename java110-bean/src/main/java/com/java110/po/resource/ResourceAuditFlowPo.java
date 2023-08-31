@@ -35,6 +35,8 @@ public class ResourceAuditFlowPo implements Serializable {
     private String flowName;
     private String auditType;
 
+    private String communityId;
+
     public String getRafId() {
         return rafId;
     }
@@ -89,5 +91,13 @@ public class ResourceAuditFlowPo implements Serializable {
 
     public void setAuditType(String auditType) {
         this.auditType = auditType;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

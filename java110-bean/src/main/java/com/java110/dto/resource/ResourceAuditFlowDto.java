@@ -28,6 +28,8 @@ public class ResourceAuditFlowDto extends OaWorkflowDto implements Serializable 
     private String flowName;
     private String auditType;
 
+    private String communityId;
+
 
     private Date createTime;
 
@@ -97,5 +99,13 @@ public class ResourceAuditFlowDto extends OaWorkflowDto implements Serializable 
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }
