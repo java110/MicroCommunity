@@ -13,6 +13,7 @@ import com.java110.dto.purchase.AllocationStorehouseDto;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
 import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.resource.ResourceStoreDto;
+import com.java110.dto.store.StorehouseDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
@@ -72,11 +73,30 @@ public class UrgentPurchaseApplyCmd extends Cmd {
     @Autowired
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IStorehouseV1InnerServiceSMO storehouseV1InnerServiceSMOImpl;
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
         Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
+        Assert.hasKeyAndValue(reqJson, "shId", "必填，请填写仓库");
+        JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
+
+        if (resourceStores == null || resourceStores.size() < 1) {
+            throw new CmdException("未包含采购物品");
+        }
+
+        //todo 查询仓库是否存在
+        StorehouseDto storehouseDto = new StorehouseDto();
+        storehouseDto.setShId(reqJson.getString("shId"));
+        List<StorehouseDto> storehouseDtos = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
+        Assert.listOnlyOne(storehouseDtos, "仓库不存在");
+
+        //todo 不允许采购
+        if (!"ON".equals(storehouseDtos.get(0).getAllowPurchase())) {
+            throw new CmdException(storehouseDtos.get(0).getShName() + "不允许采购");
+        }
     }
 
     /**

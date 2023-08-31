@@ -45,6 +45,12 @@ public class StorehouseDto extends PageDto implements Serializable {
     private String useFlowName;
     private String allocationFlowName;
 
+    private String communityId;
+
+    private String allowPurchase;
+
+    private String allowUse;
+
     public String getShDesc() {
         return shDesc;
     }
@@ -206,5 +212,29 @@ public class StorehouseDto extends PageDto implements Serializable {
 
     public void setAllocationFlowId(String allocationFlowId) {
         this.allocationFlowId = allocationFlowId;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getAllowPurchase() {
+        return allowPurchase;
+    }
+
+    public void setAllowPurchase(String allowPurchase) {
+        this.allowPurchase = allowPurchase;
+    }
+
+    public String getAllowUse() {
+        return allowUse;
+    }
+
+    public void setAllowUse(String allowUse) {
+        this.allowUse = allowUse;
     }
 }

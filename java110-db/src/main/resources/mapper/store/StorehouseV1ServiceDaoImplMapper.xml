@@ -9,10 +9,11 @@
     <insert id="saveStorehouseInfo" parameterType="Map">
         insert into storehouse(
         sh_desc,sh_id,sh_name,store_id,is_show,purchase_switch,purchase_raf_id,
-        use_switch,use_raf_id,allocation_switch,allocation_raf_id
+        use_switch,use_raf_id,allocation_switch,allocation_raf_id,community_id,allow_purchase,allow_use
         ) values (
         #{shDesc},#{shId},#{shName},#{storeId},#{isShow}
-        ,#{purchaseSwitch},#{purchaseRafId},#{useSwitch},#{useRafId},#{allocationSwitch},#{allocationRafId}
+        ,#{purchaseSwitch},#{purchaseRafId},#{useSwitch},#{useRafId},#{allocationSwitch},#{allocationRafId},
+        #{communityId},#{allowPurchase},#{allowUse}
         )
     </insert>
 
@@ -26,7 +27,8 @@
         t.allocation_switch allocationSwitch,t.allocation_raf_id allocationRafId,
         raf.flow_name purchaseFlowName,
         raf.flow_id purchaseFlowId,raf1.flow_id useFlowId,raf2.flow_id allocationFlowId,
-        raf1.flow_name useFlowName,raf2.flow_name allocationFlowName
+        raf1.flow_name useFlowName,raf2.flow_name allocationFlowName,t.community_id communityId,
+        t.allow_purchase allowPurchase,t.allow_use allowUse
         from storehouse t
         left join resource_audit_flow raf on t.purchase_raf_id = raf.raf_id and raf.status_cd = '0'
         left join resource_audit_flow raf1 on t.use_raf_id = raf1.raf_id and raf1.status_cd = '0'
@@ -47,6 +49,15 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="allowPurchase !=null and allowPurchase != ''">
+            and t.allow_purchase= #{allowPurchase}
+        </if>
+        <if test="allowUse !=null and allowUse != ''">
+            and t.allow_use= #{allowUse}
         </if>
         <if test="isShow !=null and isShow != ''">
             and t.is_show= #{isShow}
@@ -89,15 +100,26 @@
         <if test="shName !=null and shName != ''">
             , t.sh_name= #{shName}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="isShow !=null and isShow != ''">
             , t.is_show= #{isShow}
+        </if>
+
+        <if test="allowPurchase !=null and allowPurchase != ''">
+            , t.allow_purchase= #{allowPurchase}
+        </if>
+        <if test="allowUse !=null and allowUse != ''">
+            , t.allow_use= #{allowUse}
         </if>
         where 1=1
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>
@@ -125,6 +147,15 @@
         </if>
         <if test="isShow !=null and isShow != ''">
             and t.is_show= #{isShow}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="allowPurchase !=null and allowPurchase != ''">
+            and t.allow_purchase= #{allowPurchase}
+        </if>
+        <if test="allowUse !=null and allowUse != ''">
+            and t.allow_use= #{allowUse}
         </if>
 
 

@@ -35,7 +35,7 @@
             and t.store_id= #{storeId}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{storeId}
+            and t.community_id= #{communityId}
         </if>
         <if test="flowId !=null and flowId != ''">
             and t.flow_id= #{flowId}
@@ -81,7 +81,7 @@
             and t.store_id= #{storeId}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{storeId}
+            and t.community_id= #{communityId}
         </if>
 
     </update>
@@ -113,7 +113,7 @@
             and t.audit_type= #{auditType}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{storeId}
+            and t.community_id= #{communityId}
         </if>
 
 
