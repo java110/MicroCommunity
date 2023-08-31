@@ -124,7 +124,7 @@ public class AllocationStoreEnterCmd extends Cmd {
             //todo 查询调拨记录
             AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
             allocationStorehouseDto.setApplyId(reqJson.getString("applyId"));
-            allocationStorehouseDto.setAsId(reqJson.getString("asId"));
+            allocationStorehouseDto.setAsId(resourceStore.getString("asId"));
             List<AllocationStorehouseDto> allocationStorehouseDtos = allocationStorehouseV1InnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
             quantity = resourceStore.getIntValue("quantity");
             //todo 每条记录调拨
