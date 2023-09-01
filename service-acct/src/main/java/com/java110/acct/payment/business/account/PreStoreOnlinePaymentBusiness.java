@@ -58,7 +58,7 @@ import java.util.List;
 )
 
 /**
- * 场地预约
+ * 账户预存
  */
 @Service("preStoreOnline")
 public class PreStoreOnlinePaymentBusiness implements IPaymentBusiness {
