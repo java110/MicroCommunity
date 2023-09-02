@@ -262,7 +262,7 @@ public class SaveAllocationStorehouseCmd extends Cmd {
 
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setStoreId(allocationStorehouseApplyPo.getStoreId());
-        oaWorkflowDto.setFlowId(storehouseDto.getAllocationFlowId());
+        oaWorkflowDto.setFlowId(storehouseDtos.get(0).getAllocationFlowId());
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
 
         //todo 提交审核
