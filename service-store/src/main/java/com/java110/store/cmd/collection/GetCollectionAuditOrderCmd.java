@@ -83,7 +83,7 @@ public class GetCollectionAuditOrderCmd extends Cmd {
         if (count > 0) {
             datas = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserTasks(auditUser);
             //刷新 表单数据
-            refreshFormData(datas, reqJson, storeId);
+            refreshFormData(datas, reqJson, storeId,oaWorkflowDtos.get(0).getFlowId());
         } else {
             datas = new ArrayList<>();
         }
@@ -94,11 +94,12 @@ public class GetCollectionAuditOrderCmd extends Cmd {
         context.setResponseEntity(responseEntity);
     }
 
-    private void refreshFormData(List<JSONObject> datas, JSONObject paramIn, String storeId) {
+    private void refreshFormData(List<JSONObject> datas, JSONObject paramIn, String storeId,String flowId) {
 
         List<String> ids = new ArrayList<>();
         for (JSONObject data : datas) {
             ids.add(data.getString("id"));
+            data.put("flowId", flowId);
         }
         if (ids.size() < 1) {
             return;
