@@ -355,11 +355,17 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             FeeDiscountDto feeDiscountDto = new FeeDiscountDto();
             feeDiscountDto.setDiscountId(payFeeConfigDiscount.getDiscountId());
             List<FeeDiscountDto> feeDiscountDtos = feeDiscountInnerServiceSMOImpl.queryFeeDiscounts(feeDiscountDto);
-            Assert.listOnlyOne(feeDiscountDtos, "查询打折优惠表错误");
+            //Assert.listOnlyOne(feeDiscountDtos, "查询打折优惠表错误");
+            if(feeDiscountDtos == null || feeDiscountDtos.size() < 1){
+                continue;
+            }
             FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
             feeDiscountRuleDto.setRuleId(feeDiscountDtos.get(0).getRuleId());
             List<FeeDiscountRuleDto> feeDiscountRuleDtos = feeDiscountRuleInnerServiceSMOImpl.queryFeeDiscountRules(feeDiscountRuleDto);
-            Assert.listOnlyOne(feeDiscountRuleDtos, "查询规则表错误");
+            //Assert.listOnlyOne(feeDiscountRuleDtos, "查询规则表错误");
+            if(feeDiscountRuleDtos == null || feeDiscountRuleDtos.size() < 1){
+                continue;
+            }
             //获取实现方式
             String beanImpl = feeDiscountRuleDtos.get(0).getBeanImpl();
             if (!"reductionMonthFeeRule".equals(beanImpl)) { //赠送规则
@@ -374,7 +380,10 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             feeDiscountSpecDto.setSpecId(SPEC_RATE); //赠送规则
             //查询打折规格
             List<FeeDiscountSpecDto> feeDiscountSpecDtos = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(feeDiscountSpecDto);
-            Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
+           // Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
+            if(feeDiscountSpecDtos == null || feeDiscountSpecDtos.size() < 1){
+                continue;
+            }
             //获取赠送月份
             String specValue = feeDiscountSpecDtos.get(0).getSpecValue();
             BigDecimal value = new BigDecimal(specValue);
