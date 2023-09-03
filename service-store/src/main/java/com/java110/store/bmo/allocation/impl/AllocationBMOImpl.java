@@ -106,7 +106,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
             tmpResourceStorePo.setResId(GenerateCodeFactory.getGeneratorId("11"));
             tmpResourceStorePo.setStock(allocationStock + "");
             tmpResourceStorePo.setShId(tmpAllocationStorehouseDto.getShIdz());
-            tmpResourceStorePo.setCommunityId(resourceStoreDtoZs.get(0).getCommunityId());
+            tmpResourceStorePo.setCommunityId(resourceStoreDtoAs.get(0).getCommunityId());
             resourceStoreV1InnerServiceSMOImpl.saveResourceStore(tmpResourceStorePo);
 
             // todo 添加 times
@@ -114,7 +114,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
             tmpResourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));
             tmpResourceStoreTimesPo.setStock(allocationStock + "");
             tmpResourceStoreTimesPo.setShId(tmpAllocationStorehouseDto.getShIdz());
-            tmpResourceStoreTimesPo.setCommunityId(resourceStoreDtoZs.get(0).getCommunityId());
+            tmpResourceStoreTimesPo.setCommunityId(resourceStoreDtoAs.get(0).getCommunityId());
 
             resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(tmpResourceStoreTimesPo);
             return;
@@ -133,6 +133,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
         resourceStoreTimesPo.setResCode(resourceStoreTimesDtoAs.get(0).getResCode());
         resourceStoreTimesPo.setStoreId(resourceStoreTimesDtoAs.get(0).getStoreId());
         resourceStoreTimesPo.setStock(allocationStock + "");// 这里去增加
+        resourceStoreTimesPo.setCommunityId(resourceStoreDtoAs.get(0).getCommunityId());
         resourceStoreTimesPo.setApplyOrderId(tmpAllocationStorehouseDto.getApplyId());
         resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         // todo -------------------------------------------------目标仓库中做增加 (end)-----------------------------------------------------//
