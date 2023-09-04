@@ -20,7 +20,8 @@
         select t.create_staff_name,t.create_staff_name createStaffName,t.query_way,t.query_way
         queryWay,t.create_staff_id,t.create_staff_id createStaffId,t.pre_fee,t.pre_fee preFee,t.status_cd,t.status_cd
         statusCd,t.custom_fee,t.custom_fee customFee,t.pfq_id,t.pfq_id pfqId,t.qrcode_name,t.qrcode_name
-        qrcodeName,t.community_id,t.community_id communityId,t.sms_validate,t.sms_validate smsValidate,t.content
+        qrcodeName,t.community_id,t.community_id communityId,t.sms_validate,t.sms_validate smsValidate,t.content,
+        t.create_time createTime
         from pay_fee_qrcode t
         where 1 =1
         <if test="createStaffName !=null and createStaffName != ''">

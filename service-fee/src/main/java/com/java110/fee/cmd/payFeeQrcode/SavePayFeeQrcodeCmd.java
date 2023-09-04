@@ -18,11 +18,14 @@ package com.java110.fee.cmd.payFeeQrcode;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.fee.IPayFeeQrcodeV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.payFeeQrcode.PayFeeQrcodePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,6 +34,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,6 +57,9 @@ public class SavePayFeeQrcodeCmd extends Cmd {
     @Autowired
     private IPayFeeQrcodeV1InnerServiceSMO payFeeQrcodeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "qrcodeName", "请求报文中未包含qrcodeName");
@@ -68,8 +76,17 @@ public class SavePayFeeQrcodeCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos, "员工不存在");
+
         PayFeeQrcodePo payFeeQrcodePo = BeanConvertUtil.covertBean(reqJson, PayFeeQrcodePo.class);
         payFeeQrcodePo.setPfqId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        payFeeQrcodePo.setCreateStaffId(userId);
+        payFeeQrcodePo.setCreateStaffName(userDtos.get(0).getName());
         int flag = payFeeQrcodeV1InnerServiceSMOImpl.savePayFeeQrcode(payFeeQrcodePo);
 
         if (flag < 1) {
