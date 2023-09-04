@@ -29,10 +29,7 @@ import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -180,13 +177,16 @@ public class PayFeePreCmd extends Cmd {
         feeDto = feeDtos.get(0);
         reqJson.put("feeTypeCd", feeDto.getFeeTypeCd());
         reqJson.put("feeId", feeDto.getFeeId());
+
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
+        //todo 计算应收
         BigDecimal receivableAmount = new BigDecimal(feePriceAll.get("feePrice").toString());
         BigDecimal cycles = new BigDecimal(Double.parseDouble(reqJson.getString("cycles")));
         double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         JSONObject paramOut = new JSONObject();
         paramOut.put("receivableAmount", tmpReceivableAmount);
         paramOut.put("oId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oId));
+
 
         //实收金额
         BigDecimal tmpReceivedAmout = new BigDecimal(tmpReceivableAmount);
@@ -208,6 +208,13 @@ public class PayFeePreCmd extends Cmd {
         if (receivedAmount <= 0) {
             receivedAmount = 0.0;
         }
+        //todo 小数点处理
+        receivedAmount = MoneyUtil.computePriceScale(
+                receivedAmount,
+                feeDto.getScale(),
+                Integer.parseInt(feeDto.getDecimalPlace())
+        );
+
         paramOut.put("receivedAmount", receivedAmount);
 
         String feeName = getObjName(feeDto);
