@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="payFeeQrcodeV1ServiceDaoImpl">
+
+
+    <!-- 保存支付二维码信息 add by wuxw 2018-07-03 -->
+    <insert id="savePayFeeQrcodeInfo" parameterType="Map">
+        insert into pay_fee_qrcode(
+        create_staff_name,query_way,create_staff_id,pre_fee,custom_fee,pfq_id,qrcode_name,community_id,sms_validate,content
+        ) values (
+        #{createStaffName},#{queryWay},#{createStaffId},#{preFee},#{customFee},#{pfqId},#{qrcodeName},#{communityId},#{smsValidate},#{content}
+        )
+    </insert>
+
+
+    <!-- 查询支付二维码信息 add by wuxw 2018-07-03 -->
+    <select id="getPayFeeQrcodeInfo" parameterType="Map" resultType="Map">
+        select t.create_staff_name,t.create_staff_name createStaffName,t.query_way,t.query_way
+        queryWay,t.create_staff_id,t.create_staff_id createStaffId,t.pre_fee,t.pre_fee preFee,t.status_cd,t.status_cd
+        statusCd,t.custom_fee,t.custom_fee customFee,t.pfq_id,t.pfq_id pfqId,t.qrcode_name,t.qrcode_name
+        qrcodeName,t.community_id,t.community_id communityId,t.sms_validate,t.sms_validate smsValidate,t.content
+        from pay_fee_qrcode t
+        where 1 =1
+        <if test="createStaffName !=null and createStaffName != ''">
+            and t.create_staff_name= #{createStaffName}
+        </if>
+        <if test="queryWay !=null and queryWay != ''">
+            and t.query_way= #{queryWay}
+        </if>
+        <if test="createStaffId !=null and createStaffId != ''">
+            and t.create_staff_id= #{createStaffId}
+        </if>
+        <if test="preFee !=null and preFee != ''">
+            and t.pre_fee= #{preFee}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="customFee !=null and customFee != ''">
+            and t.custom_fee= #{customFee}
+        </if>
+        <if test="pfqId !=null and pfqId != ''">
+            and t.pfq_id= #{pfqId}
+        </if>
+        <if test="qrcodeName !=null and qrcodeName != ''">
+            and t.qrcode_name= #{qrcodeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="smsValidate !=null and smsValidate != ''">
+            and t.sms_validate= #{smsValidate}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改支付二维码信息 add by wuxw 2018-07-03 -->
+    <update id="updatePayFeeQrcodeInfo" parameterType="Map">
+        update pay_fee_qrcode t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createStaffName !=null and createStaffName != ''">
+            , t.create_staff_name= #{createStaffName}
+        </if>
+        <if test="queryWay !=null and queryWay != ''">
+            , t.query_way= #{queryWay}
+        </if>
+        <if test="createStaffId !=null and createStaffId != ''">
+            , t.create_staff_id= #{createStaffId}
+        </if>
+        <if test="preFee !=null and preFee != ''">
+            , t.pre_fee= #{preFee}
+        </if>
+        <if test="customFee !=null and customFee != ''">
+            , t.custom_fee= #{customFee}
+        </if>
+        <if test="qrcodeName !=null and qrcodeName != ''">
+            , t.qrcode_name= #{qrcodeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="smsValidate !=null and smsValidate != ''">
+            , t.sms_validate= #{smsValidate}
+        </if>
+        <if test="content !=null and content != ''">
+            , t.content= #{content}
+        </if>
+        where 1=1
+        <if test="pfqId !=null and pfqId != ''">
+            and t.pfq_id= #{pfqId}
+        </if>
+
+    </update>
+
+    <!-- 查询支付二维码数量 add by wuxw 2018-07-03 -->
+    <select id="queryPayFeeQrcodesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee_qrcode t
+        where 1 =1
+        <if test="createStaffName !=null and createStaffName != ''">
+            and t.create_staff_name= #{createStaffName}
+        </if>
+        <if test="queryWay !=null and queryWay != ''">
+            and t.query_way= #{queryWay}
+        </if>
+        <if test="createStaffId !=null and createStaffId != ''">
+            and t.create_staff_id= #{createStaffId}
+        </if>
+        <if test="preFee !=null and preFee != ''">
+            and t.pre_fee= #{preFee}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="customFee !=null and customFee != ''">
+            and t.custom_fee= #{customFee}
+        </if>
+        <if test="pfqId !=null and pfqId != ''">
+            and t.pfq_id= #{pfqId}
+        </if>
+        <if test="qrcodeName !=null and qrcodeName != ''">
+            and t.qrcode_name= #{qrcodeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="smsValidate !=null and smsValidate != ''">
+            and t.sms_validate= #{smsValidate}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+
+
+    </select>
+
+</mapper>
