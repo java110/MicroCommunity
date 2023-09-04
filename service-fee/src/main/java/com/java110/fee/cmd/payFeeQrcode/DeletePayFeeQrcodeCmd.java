@@ -31,6 +31,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：payFeeQrcode.deletePayFeeQrcode
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "payFeeQrcode.deletePayFeeQrcode")
 public class DeletePayFeeQrcodeCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeletePayFeeQrcodeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeletePayFeeQrcodeCmd.class);
 
     @Autowired
     private IPayFeeQrcodeV1InnerServiceSMO payFeeQrcodeV1InnerServiceSMOImpl;
@@ -51,7 +52,7 @@ public class DeletePayFeeQrcodeCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "pfqId", "pfqId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -59,7 +60,7 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       PayFeeQrcodePo payFeeQrcodePo = BeanConvertUtil.covertBean(reqJson, PayFeeQrcodePo.class);
+        PayFeeQrcodePo payFeeQrcodePo = BeanConvertUtil.covertBean(reqJson, PayFeeQrcodePo.class);
         int flag = payFeeQrcodeV1InnerServiceSMOImpl.deletePayFeeQrcode(payFeeQrcodePo);
 
         if (flag < 1) {

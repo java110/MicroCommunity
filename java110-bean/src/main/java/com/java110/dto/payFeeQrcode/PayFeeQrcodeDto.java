@@ -1,6 +1,7 @@
 package com.java110.dto.payFeeQrcode;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,15 +16,17 @@ import java.util.Date;
 public class PayFeeQrcodeDto extends PageDto implements Serializable {
 
     private String createStaffName;
-private String queryWay;
-private String createStaffId;
-private String preFee;
-private String customFee;
-private String pfqId;
-private String qrcodeName;
-private String communityId;
-private String smsValidate;
-private String content;
+    private String queryWay;
+    private String createStaffId;
+    private String preFee;
+    private String customFee;
+    private String pfqId;
+    private String qrcodeName;
+    private String communityId;
+    private String smsValidate;
+    private String content;
+
+    private String qrCodeUrl;
 
 
     private Date createTime;
@@ -34,61 +37,80 @@ private String content;
     public String getCreateStaffName() {
         return createStaffName;
     }
-public void setCreateStaffName(String createStaffName) {
+
+    public void setCreateStaffName(String createStaffName) {
         this.createStaffName = createStaffName;
     }
-public String getQueryWay() {
+
+    public String getQueryWay() {
         return queryWay;
     }
-public void setQueryWay(String queryWay) {
+
+    public void setQueryWay(String queryWay) {
         this.queryWay = queryWay;
     }
-public String getCreateStaffId() {
+
+    public String getCreateStaffId() {
         return createStaffId;
     }
-public void setCreateStaffId(String createStaffId) {
+
+    public void setCreateStaffId(String createStaffId) {
         this.createStaffId = createStaffId;
     }
-public String getPreFee() {
+
+    public String getPreFee() {
         return preFee;
     }
-public void setPreFee(String preFee) {
+
+    public void setPreFee(String preFee) {
         this.preFee = preFee;
     }
-public String getCustomFee() {
+
+    public String getCustomFee() {
         return customFee;
     }
-public void setCustomFee(String customFee) {
+
+    public void setCustomFee(String customFee) {
         this.customFee = customFee;
     }
-public String getPfqId() {
+
+    public String getPfqId() {
         return pfqId;
     }
-public void setPfqId(String pfqId) {
+
+    public void setPfqId(String pfqId) {
         this.pfqId = pfqId;
     }
-public String getQrcodeName() {
+
+    public String getQrcodeName() {
         return qrcodeName;
     }
-public void setQrcodeName(String qrcodeName) {
+
+    public void setQrcodeName(String qrcodeName) {
         this.qrcodeName = qrcodeName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getSmsValidate() {
+
+    public String getSmsValidate() {
         return smsValidate;
     }
-public void setSmsValidate(String smsValidate) {
+
+    public void setSmsValidate(String smsValidate) {
         this.smsValidate = smsValidate;
     }
-public String getContent() {
+
+    public String getContent() {
         return content;
     }
-public void setContent(String content) {
+
+    public void setContent(String content) {
         this.content = content;
     }
 
@@ -107,5 +129,13 @@ public void setContent(String content) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getQrCodeUrl() {
+        return qrCodeUrl;
+    }
+
+    public void setQrCodeUrl(String qrCodeUrl) {
+        this.qrCodeUrl = qrCodeUrl;
     }
 }
