@@ -72,6 +72,7 @@ public class OwnerSendSmsCmd extends Cmd {
 
 //super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "queryWay", "未包含查询方式");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
 
         if ("room".equals(reqJson.getString("queryWay"))) {
             Assert.hasKeyAndValue(reqJson, "roomNum", "未包含房屋信息");
