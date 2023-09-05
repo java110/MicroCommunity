@@ -16,6 +16,7 @@ import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.ValidatorUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,10 @@ public class GetQrcodeOwnerCmd extends Cmd {
 
         OwnerDto ownerDto = computeOwner(reqJson);
         String smsCode = CommonCache.getValue(reqJson.getString(ownerDto.getLink()) + SendSmsFactory.VALIDATE_CODE);
+
+        if (!StringUtil.isEmpty(smsCode) && smsCode.contains("-")) {
+            smsCode = smsCode.substring(0, smsCode.indexOf("-"));
+        }
 
         if (!reqJson.getString("msgCode").equals(smsCode)) {
             throw new CmdException("验证码错误");
