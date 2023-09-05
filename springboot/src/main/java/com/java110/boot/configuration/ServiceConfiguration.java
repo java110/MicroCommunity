@@ -108,6 +108,11 @@ public class ServiceConfiguration {
         exclusions.append("/app/login.accessTokenLogin,");// 放开接口登录
         exclusions.append("/app/login.getAccessToken,");// 放开接口登录
 
+        // todo 静态二维码支付 相关接口放开
+        exclusions.append("/app/payFeeQrcode.getQrcodeConfig,");// 放开接口登录
+
+
+
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
 
