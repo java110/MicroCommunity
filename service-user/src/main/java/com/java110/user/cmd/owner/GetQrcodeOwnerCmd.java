@@ -73,7 +73,7 @@ public class GetQrcodeOwnerCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "msgCode", "未包含验证码信息");
 
         OwnerDto ownerDto = computeOwner(reqJson);
-        String smsCode = CommonCache.getValue(reqJson.getString(ownerDto.getLink()) + SendSmsFactory.VALIDATE_CODE);
+        String smsCode = CommonCache.getValue(ownerDto.getLink() + SendSmsFactory.VALIDATE_CODE);
 
         if (!StringUtil.isEmpty(smsCode) && smsCode.contains("-")) {
             smsCode = smsCode.substring(0, smsCode.indexOf("-"));
