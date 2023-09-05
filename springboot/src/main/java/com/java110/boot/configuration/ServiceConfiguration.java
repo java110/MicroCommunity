@@ -110,7 +110,7 @@ public class ServiceConfiguration {
 
         // todo 静态二维码支付 相关接口放开
         exclusions.append("/app/payFeeQrcode.getQrcodeConfig,");// 放开接口登录
-
+        exclusions.append("/app/user.ownerSendSms,");// 向业主发送验证码
 
 
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
@@ -122,7 +122,7 @@ public class ServiceConfiguration {
         registrationBean.addUrlPatterns("/callComponent/*");
         registrationBean.addUrlPatterns("/flow/*");
         registrationBean.addUrlPatterns("/app/*");
-        registrationBean.addInitParameter("excludedUri",exclusions.toString());
+        registrationBean.addInitParameter("excludedUri", exclusions.toString());
 
         return registrationBean;
     }
