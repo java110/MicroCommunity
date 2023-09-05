@@ -21,6 +21,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.ValidatorUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -159,14 +160,13 @@ public class OwnerSendSmsCmd extends Cmd {
         smsDto.setCode(msgCode);
         if ("ON".equals(MappingCache.getValue(MappingConstant.SMS_DOMAIN, SendSmsFactory.SMS_SEND_SWITCH))) {
             smsDto = smsInnerServiceSMOImpl.send(smsDto);
-            smsDto.setMsg("向业主手机(尾号"+tel.substring(7,tel.length())+")下发验证码");
+            smsDto.setMsg("向业主手机(尾号" + tel.substring(7, tel.length()) + ")下发验证码");
         } else {
             CommonCache.setValue(smsDto.getTel() + SendSmsFactory.VALIDATE_CODE, smsDto.getCode().toLowerCase() + "-" + new Date().getTime(), CommonCache.defaultExpireTime);
             smsDto.setSuccess(true);
             smsDto.setMsg("您的验证码为" + msgCode);
         }
-        ResponseEntity<String> sendMessageResult = new ResponseEntity<String>(smsDto.getMsg(), smsDto.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
-        context.setResponseEntity(sendMessageResult);
+        context.setResponseEntity(ResultVo.createResponseEntity(smsDto.isSuccess() ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, smsDto.getMsg()));
 
     }
 }
