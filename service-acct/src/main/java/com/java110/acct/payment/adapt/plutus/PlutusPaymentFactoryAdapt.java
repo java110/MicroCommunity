@@ -232,14 +232,23 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         String signature = json.getString("signature");
         String content = json.getString("content");
-        String appId = null;
-        if (json.containsKey("wId")) {
-            String wId = json.get("wId").toString();
-            wId = wId.replace(" ", "+");
-            appId = WechatFactory.getAppId(wId);
-        } else {
-            appId = json.get("appid").toString();
+
+        String publicKey = CommunitySettingFactory.getRemark(notifyPaymentOrderDto.getCommunityId(),"PLUTUS_PUBLIC_KEY");
+        //验签
+        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
+        //验签成功
+        if (!verify) {
+            throw new IllegalArgumentException("支付失败签名失败");
         }
+
+        String appId = null;
+//        if (json.containsKey("wId")) {
+//            String wId = json.get("wId").toString();
+//            wId = wId.replace(" ", "+");
+//            appId = WechatFactory.getAppId(wId);
+//        } else {
+//            appId = json.get("appid").toString();
+//        }
 
         JSONObject paramIn = new JSONObject();
         paramIn.put("appId", appId);
@@ -248,13 +257,7 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         if (smallWeChatDto == null) {
             throw new IllegalArgumentException("未配置公众号或者小程序信息");
         }
-        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(),"PLUTUS_PUBLIC_KEY");
-        //验签
-        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
-        //验签成功
-        if (!verify) {
-            throw new IllegalArgumentException("支付失败签名失败");
-        }
+
         //解密
         byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDto.getPayPassword());
         //服务器返回内容

@@ -114,6 +114,8 @@ public class SmartMeterCoreReadImpl implements ISmartMeterCoreRead {
         meterMachineV1InnerServiceSMOImpl.updateMeterMachine(meterMachinePo);
 
         if (!MeterMachineDto.MACHINE_MODEL_READ.equals(meterMachineDtos.get(0).getMachineModel())) {
+
+
             return;
         }
 

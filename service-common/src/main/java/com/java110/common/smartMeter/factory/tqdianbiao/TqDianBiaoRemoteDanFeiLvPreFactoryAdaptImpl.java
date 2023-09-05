@@ -202,7 +202,7 @@ public class TqDianBiaoRemoteDanFeiLvPreFactoryAdaptImpl implements ISmartMeterF
             item.put("retry_times", 1);
             item.put("cid", meterMachineSpecDtos.get(0).getSpecValue());
             item.put("address", meterMachineDto.getAddress());
-            item.put("type", 3);
+            item.put("type", 22);
             req.add(item);
 
             MeterMachineDetailPo meterMachineDetailPo = new MeterMachineDetailPo();

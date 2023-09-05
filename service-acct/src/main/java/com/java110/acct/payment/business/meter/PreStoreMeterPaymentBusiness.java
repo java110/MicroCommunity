@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -147,18 +148,30 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         payFeePos.add(payFeePo);
         feeInnerServiceSMOImpl.saveFee(payFeePos);
 
-        //查询业主信息
+        //todo 计算用量
+        BigDecimal receivedAmountDec = new BigDecimal(reqJson.getString("receivedAmount"));
+        receivedAmountDec = receivedAmountDec.subtract(new BigDecimal(feeConfigDtos.get(0).getAdditionalAmount()));
+        receivedAmountDec = receivedAmountDec.divide(new BigDecimal(feeConfigDtos.get(0).getSquarePrice()), 0, BigDecimal.ROUND_HALF_UP);
+        List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
+        feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_PROXY_CONSUMPTION, receivedAmountDec.doubleValue() + ""));
+
+
+        //todo 查询业主信息
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setRoomId(reqJson.getString("roomId"));
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
         if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
-            List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
+
             feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
                     payFeePo.getEndTime()));
 
             feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_ID, ownerRoomRelDtos.get(0).getOwnerId()));
             feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_LINK, ownerRoomRelDtos.get(0).getLink()));
             feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_NAME, ownerRoomRelDtos.get(0).getOwnerName()));
+
+        }
+
+        if (feeAttrsPos.size() > 0) {
             feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
         }
 
