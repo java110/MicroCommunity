@@ -11,6 +11,7 @@ import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
@@ -57,12 +58,14 @@ public class GetWechatMiniOpenIdCmd extends Cmd {
             smallWeChatDto.setAppId(reqJson.getString("appId"));
             List<SmallWeChatDto> smallWeChatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto);
 
+            //todo 读取全局
             if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
-                throw new IllegalArgumentException("未配置小程序信息");
+                appId = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId");
+                appSecret = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret");
+            } else {
+                appId = smallWeChatDtos.get(0).getAppId();
+                appSecret = smallWeChatDtos.get(0).getAppSecret();
             }
-
-            appId = smallWeChatDtos.get(0).getAppId();
-            appSecret = smallWeChatDtos.get(0).getAppSecret();
         }
 
 
