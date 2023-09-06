@@ -5,19 +5,14 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
-import com.java110.po.user.UserAttrPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.StringUtil;
-import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,15 +22,12 @@ import java.text.ParseException;
 import java.util.List;
 
 /**
- * 这个接口没有写好 给商城专用，
- * 重新写一个，这个接口查询完后还要 刷入用户中
- * 没有考虑 不登录情况下 的openId 获取
- * 根据小程序code 获取openId
+ * 获取小程序的openId
  */
+@Java110Cmd(serviceCode = "wechat.getWechatMiniOpenId")
+public class GetWechatMiniOpenIdCmd extends Cmd {
+    private final static Logger logger = LoggerFactory.getLogger(GetWechatMiniOpenIdCmd.class);
 
-@Java110Cmd(serviceCode = "wechat.getOpenIdByCode")
-public class GetOpenIdByCodeCmd extends Cmd {
-    private final static Logger logger = LoggerFactory.getLogger(GetOpenIdByCodeCmd.class);
     @Autowired
     private RestTemplate outRestTemplate;
 
@@ -54,10 +46,9 @@ public class GetOpenIdByCodeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-        String userId = context.getReqHeaders().get("user-id");
-
         String appId = "";
         String appSecret = "";
+
         if ("MALL".equals(reqJson.getString("appId"))) {
             appId = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "wechatAppId");
             appSecret = MappingCache.getValue(MappingConstant.MALL_WECHAT_DOMAIN, "wechatAppSecret");
@@ -95,30 +86,5 @@ public class GetOpenIdByCodeCmd extends Cmd {
         }
 
         String openId = responseObj.getString("openid");
-
-        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
-            context.setResponseEntity(ResultVo.createResponseEntity(openId));
-            return;
-        }
-
-        UserAttrDto userAttrDto = new UserAttrDto();
-        userAttrDto.setUserId(userId);
-        userAttrDto.setSpecCd(UserAttrDto.SPEC_MALL_OPEN_ID);
-        List<UserAttrDto> userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
-        if (userAttrDtos == null || userAttrDtos.size() < 1) {
-            UserAttrPo userAttrPo = new UserAttrPo();
-            userAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
-            userAttrPo.setUserId(userId);
-            userAttrPo.setSpecCd(UserAttrDto.SPEC_MALL_OPEN_ID);
-            userAttrPo.setValue(openId);
-            userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
-        } else {
-            UserAttrPo userAttrPo = new UserAttrPo();
-            userAttrPo.setAttrId(userAttrDtos.get(0).getAttrId());
-            userAttrPo.setValue(openId);
-            userAttrV1InnerServiceSMOImpl.updateUserAttr(userAttrPo);
-        }
-        context.setResponseEntity(ResultVo.createResponseEntity(openId));
-
     }
 }

@@ -113,6 +113,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/user.ownerSendSms,");// 向业主发送验证码
         exclusions.append("/app/owner.getQrcodeOwner,");// 根据二维码查询业主信息
         exclusions.append("/app/payFeeQrcode.getQrcodeOweFees,");// 根据二维码查询业主欠费
+        exclusions.append("/app/wechat.getWechatMiniOpenId,");// 根据二维码查询业主欠费
 
 
 
