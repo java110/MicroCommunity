@@ -6,16 +6,21 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
+
   <artifactId>service-acct</artifactId>
   <packaging>jar</packaging>
+
   <name>service-acct</name>
   <url>http://maven.apache.org</url>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
+
   <dependencies>
+
     <dependency>
       <groupId>com.java110</groupId>
       <artifactId>java110-service</artifactId>
@@ -24,83 +29,9 @@
       <groupId>com.alipay.sdk</groupId>
       <artifactId>alipay-sdk-java</artifactId>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>com.icbc</groupId>-->
-<!--      <artifactId>b2cVerify</artifactId>-->
-<!--      <version>2.0.0.5</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.icbc</groupId>-->
-<!--      <artifactId>icbc</artifactId>-->
-<!--      <version>2.0.0.5</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.icbc</groupId>-->
-<!--      <artifactId>icbc-api-sdk-cop</artifactId>-->
-<!--      <version>2.0.0.5</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.icbc</groupId>-->
-<!--      <artifactId>icbc-api-sdk-cop-io</artifactId>-->
-<!--      <version>v1.0</version>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>com.icbc</groupId>-->
-<!--      <artifactId>icbc-ca</artifactId>-->
-<!--      <version>2.0.0.5</version>-->
-<!--    </dependency>-->
-
-    <!-- 浦发银行专用 -->
-        <dependency>
-          <groupId>cn.hutool</groupId>
-          <artifactId>hutool-all</artifactId>
-          <version>5.6.5</version>
-        </dependency>
 
 
-        <dependency>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk15to18</artifactId>
-          <version>1.68</version>
-        </dependency>
 
   </dependencies>
-  <build>
-    <finalName>service-acct</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.10</version>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>com.java110</groupId>
-                  <artifactId>java110-interface</artifactId>
-                  <version>${microcommunity.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <mainClass>com.java110.acct.AcctServiceApplicationStart</mainClass>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+
 </project>

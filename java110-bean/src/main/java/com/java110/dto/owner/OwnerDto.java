@@ -105,6 +105,15 @@ public class OwnerDto extends PageDto implements Serializable {
 
     private String oweFee;
     private String contractCount;
+    private String staffNameLike;
+    private String logStartTime;
+    private String logEndTime;
+
+    private String ownerNameLike;
+
+    private String memberName;
+    private String memberLike;
+
 
     public String getSex() {
         return sex;
@@ -539,5 +548,53 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
+    }
+
+    public String getLogStartTime() {
+        return logStartTime;
+    }
+
+    public void setLogStartTime(String logStartTime) {
+        this.logStartTime = logStartTime;
+    }
+
+    public String getLogEndTime() {
+        return logEndTime;
+    }
+
+    public void setLogEndTime(String logEndTime) {
+        this.logEndTime = logEndTime;
+    }
+
+    public String getOwnerNameLike() {
+        return ownerNameLike;
+    }
+
+    public void setOwnerNameLike(String ownerNameLike) {
+        this.ownerNameLike = ownerNameLike;
+    }
+
+    public String getMemberName() {
+        return memberName;
+    }
+
+    public void setMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public String getMemberLike() {
+        return memberLike;
+    }
+
+    public void setMemberLike(String memberLike) {
+        this.memberLike = memberLike;
     }
 }

@@ -13,6 +13,8 @@ public class AssetImportLogDetailPo implements Serializable {
     private String communityId;
     private String message;
 
+    private String createTime;
+
     public String getDetailId() {
         return detailId;
     }
@@ -69,5 +71,11 @@ public class AssetImportLogDetailPo implements Serializable {
         this.message = message;
     }
 
+    public String getCreateTime() {
+        return createTime;
+    }
 
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
 }

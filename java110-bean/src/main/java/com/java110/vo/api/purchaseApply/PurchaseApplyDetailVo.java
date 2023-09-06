@@ -1,5 +1,7 @@
 package com.java110.vo.api.purchaseApply;
 
+import com.java110.dto.resource.ResourceStoreTimesDto;
+
 import java.util.List;
 
 //采购明细表
@@ -36,6 +38,8 @@ public class PurchaseApplyDetailVo {
     private String isFixedName;
     private String consultPrice;
     private String timesId;
+
+    private List<ResourceStoreTimesDto> times;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -291,6 +295,14 @@ public class PurchaseApplyDetailVo {
 
     public void setTimesId(String timesId) {
         this.timesId = timesId;
+    }
+
+    public List<ResourceStoreTimesDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<ResourceStoreTimesDto> times) {
+        this.times = times;
     }
 }
 

@@ -126,5 +126,14 @@ public class PayFeeDetailDiscountServiceDaoImpl extends BaseServiceDao implement
         return Integer.parseInt(businessPayFeeDetailDiscountInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> computeDiscountFee(Map info) {
+        logger.debug("查询缴费优惠信息 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailDiscountServiceDaoImpl.computeDiscountFee",info);
+
+        return infos;
+    }
+
 
 }

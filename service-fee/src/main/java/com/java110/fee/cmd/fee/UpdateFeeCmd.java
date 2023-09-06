@@ -2,6 +2,7 @@ package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -68,6 +69,7 @@ public class UpdateFeeCmd extends Cmd {
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         PayFeePo payFeePo = BeanConvertUtil.covertBean(reqJson, PayFeePo.class);

@@ -76,6 +76,14 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
     private String consultPrice;
     private String timesId;
 
+    private String resName;
+
+    private String startTime;
+
+    private String endTime;
+
+    private String resOrderTypeName;
+
     public String getResOrderType() {
         return resOrderType;
     }
@@ -394,5 +402,37 @@ public class PurchaseApplyDto extends PageDto implements Serializable {
 
     public void setTimesId(String timesId) {
         this.timesId = timesId;
+    }
+
+    public String getResName() {
+        return resName;
+    }
+
+    public void setResName(String resName) {
+        this.resName = resName;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getResOrderTypeName() {
+        return resOrderTypeName;
+    }
+
+    public void setResOrderTypeName(String resOrderTypeName) {
+        this.resOrderTypeName = resOrderTypeName;
     }
 }

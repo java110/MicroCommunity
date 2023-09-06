@@ -16,17 +16,17 @@ import java.util.Date;
 public class AssetInventoryDto extends PageDto implements Serializable {
 
     private String code;
-private String shId;
-private String remark;
-private String aiId;
-private String invTime;
-private String name;
-private String staffName;
-private String shName;
-private String state;
-private String stateName;
-private String communityId;
-private String staffId;
+    private String shId;
+    private String remark;
+    private String aiId;
+    private String invTime;
+    private String name;
+    private String staffName;
+    private String shName;
+    private String state;
+    private String stateName;
+    private String communityId;
+    private String staffId;
     private String opinion;
     private String auditId;
     private String auditName;
@@ -34,73 +34,98 @@ private String staffId;
     private String auditTime;
     private Date createTime;
 
+    private String storeId;
+
     private String statusCd = "0";
+
+    private String resId;
 
 
     public String getCode() {
         return code;
     }
-public void setCode(String code) {
+
+    public void setCode(String code) {
         this.code = code;
     }
-public String getShId() {
+
+    public String getShId() {
         return shId;
     }
-public void setShId(String shId) {
+
+    public void setShId(String shId) {
         this.shId = shId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getAiId() {
+
+    public String getAiId() {
         return aiId;
     }
-public void setAiId(String aiId) {
+
+    public void setAiId(String aiId) {
         this.aiId = aiId;
     }
-public String getInvTime() {
+
+    public String getInvTime() {
         return invTime;
     }
-public void setInvTime(String invTime) {
+
+    public void setInvTime(String invTime) {
         this.invTime = invTime;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getStaffName() {
+
+    public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getShName() {
+
+    public String getShName() {
         return shName;
     }
-public void setShName(String shName) {
+
+    public void setShName(String shName) {
         this.shName = shName;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -166,5 +191,21 @@ public void setStaffId(String staffId) {
 
     public void setAuditTime(String auditTime) {
         this.auditTime = auditTime;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getResId() {
+        return resId;
+    }
+
+    public void setResId(String resId) {
+        this.resId = resId;
     }
 }

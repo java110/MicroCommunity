@@ -29,6 +29,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFee.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;
+import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IMeterWaterV1InnerServiceSMO;
@@ -98,6 +99,7 @@ public class SaveMeterWaterCmd extends Cmd {
     @Autowired
     private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
 
+
     @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
@@ -114,7 +116,7 @@ public class SaveMeterWaterCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "meterType", "请求报文中未包含抄表类型");
 
-        if(reqJson.getDoubleValue("curDegrees") < reqJson.getDoubleValue("preDegrees")){
+        if (reqJson.getDoubleValue("curDegrees") < reqJson.getDoubleValue("preDegrees")) {
             throw new CmdException("当前读数小于上期读数");
         }
     }
@@ -173,6 +175,11 @@ public class SaveMeterWaterCmd extends Cmd {
             payFeePo.setState(FeeDto.STATE_DOING);
             payFeePo.setBatchId(reqJson.getString("batchId"));
             payFeePo.setUserId("-1");
+
+            //todo 先写 不然 写月离散表 查询费用时 查不到
+            reqJson.put("feeId", payFeePo.getFeeId());
+            addMeterWater(reqJson);
+
             int flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
@@ -226,8 +233,7 @@ public class SaveMeterWaterCmd extends Cmd {
                     throw new CmdException("保存数据失败");
                 }
             }
-            reqJson.put("feeId", payFeePo.getFeeId());
-            addMeterWater(reqJson);
+
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

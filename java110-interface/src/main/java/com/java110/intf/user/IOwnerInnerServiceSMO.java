@@ -41,6 +41,9 @@ public interface IOwnerInnerServiceSMO {
     @RequestMapping(value = "/queryOwnerMembers", method = RequestMethod.POST)
     List<OwnerDto> queryOwnerMembers(@RequestBody OwnerDto ownerDto);
 
+    @RequestMapping(value = "/queryOwnersMemberCount", method = RequestMethod.POST)
+    int queryOwnersMemberCount(@RequestBody OwnerDto ownerDto);
+
     /**
      * 查询<p>小区楼</p>总记录数
      *
@@ -133,4 +136,6 @@ public interface IOwnerInnerServiceSMO {
      */
     @RequestMapping(value = "/queryAllOwners", method = RequestMethod.POST)
     List<OwnerDto> queryAllOwners(@RequestBody OwnerDto ownerDto);
+
+
 }

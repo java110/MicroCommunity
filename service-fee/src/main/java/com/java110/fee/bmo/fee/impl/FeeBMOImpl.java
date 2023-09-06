@@ -18,10 +18,7 @@ import com.java110.fee.bmo.fee.IFeeBMO;
 import com.java110.intf.common.ICarInoutInnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.car.CarInoutPo;
 import com.java110.po.fee.FeeAttrPo;
@@ -30,6 +27,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.fee.FeeReceiptPo;
 import com.java110.po.fee.FeeReceiptDetailPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.*;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
@@ -83,6 +81,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
 
     /**
      * 添加小区信息
@@ -372,6 +373,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
      */
     public JSONObject addFeePreDetail(JSONObject paramInJson) {
 
+        //todo 生成收据编号
+        String receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(paramInJson.getString("communityId"));
+
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", paramInJson.getString("detailId"));
@@ -423,6 +427,8 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
             payFeeDetail.setPayableAmount("0.0");
         }
         payFeeDetail.setPayOrderId(paramInJson.getString("oId"));
+        //todo 缓存收据编号
+        CommonCache.setValue(payFeeDetail.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
         // todo 刷入收银人员信息
         freshCashierInfo(payFeeDetail, paramInJson);
 
@@ -697,6 +703,9 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("feeTypeCd", paramInJson.getString("feeTypeCd"));
         businessUnit.put("incomeObjId", paramInJson.getString("storeId"));
         businessUnit.put("amount", "-1.00");
+        if (paramInJson.containsKey("amount") && !StringUtil.isEmpty(paramInJson.getString("amount"))) {
+            businessUnit.put("amount", paramInJson.getString("amount"));
+        }
         businessUnit.put("startTime", time);
         businessUnit.put("endTime", time);
         businessUnit.put("communityId", paramInJson.getString("communityId"));

@@ -3,9 +3,13 @@ package com.java110.store.smo.impl;
 
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.dto.purchase.AllocationStorehouseDto;
+import com.java110.dto.resource.ResourceStoreDto;
+import com.java110.dto.resource.ResourceStoreTimesDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IAllocationStorehouseInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.store.dao.IAllocationStorehouseServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,9 @@ public class AllocationStorehouseInnerServiceSMOImpl extends BaseServiceSMO impl
     @Autowired
     private IAllocationStorehouseServiceDao allocationAllocationStorehousehouseServiceDaoImpl;
 
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
+
 
     @Override
     public List<AllocationStorehouseDto> queryAllocationStorehouses(@RequestBody AllocationStorehouseDto allocationAllocationStorehousehouseDto) {
@@ -41,10 +48,26 @@ public class AllocationStorehouseInnerServiceSMOImpl extends BaseServiceSMO impl
             allocationAllocationStorehousehouseDto.setPage((page - 1) * allocationAllocationStorehousehouseDto.getRow());
         }
 
-        List<AllocationStorehouseDto> allocationAllocationStorehousehouses = BeanConvertUtil.covertBeanList(allocationAllocationStorehousehouseServiceDaoImpl.getAllocationStorehouseInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehousehouseDto)), AllocationStorehouseDto.class);
+        List<AllocationStorehouseDto> allocationStorehouseDtos = BeanConvertUtil.covertBeanList(
+                allocationAllocationStorehousehouseServiceDaoImpl.getAllocationStorehouseInfo(BeanConvertUtil.beanCovertMap(allocationAllocationStorehousehouseDto)),
+                AllocationStorehouseDto.class);
+
+        if(allocationStorehouseDtos == null || allocationStorehouseDtos.size() < 1){
+            return allocationStorehouseDtos;
+        }
+
+        //todo 计算times
+        for (AllocationStorehouseDto allocationStorehouseDto : allocationStorehouseDtos) {
+            ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+            resourceStoreTimesDto.setStoreId(allocationStorehouseDto.getStoreId());
+            resourceStoreTimesDto.setResCode(allocationStorehouseDto.getResCode());
+            resourceStoreTimesDto.setShId(allocationStorehouseDto.getShIda());
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+            allocationStorehouseDto.setTimes(resourceStoreTimesDtos);
+        }
 
 
-        return allocationAllocationStorehousehouses;
+        return allocationStorehouseDtos;
     }
 
     /**

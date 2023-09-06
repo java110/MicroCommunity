@@ -21,7 +21,7 @@ import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.room.RoomAttrDto;
 import com.java110.dto.room.RoomDto;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileRelDto;
@@ -120,11 +120,11 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
     private RestTemplate outRestTemplate;
 
     /**
-     * @param customBusinessDatabusDto 当前处理业务
+     * @param business 当前处理业务
      */
     @Override
-    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto) {
-        JSONObject data = customBusinessDatabusDto.getData();
+    public void execute(Business business, List<Business> businesses) {
+        JSONObject data = business.getData();
         doInoutRecord(null, data);
     }
 
@@ -221,7 +221,7 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         fileRelDto.setObjId(machineRecordPo.getMachineRecordId());
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
         String url = "";
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
         if (fileRelDtos != null && fileRelDtos.size() > 0) {
             url = imgUrl + fileRelDtos.get(0).getFileRealName();
         }
@@ -280,7 +280,7 @@ public class PersonToTianchuangAdapt extends DatabusAdaptImpl {
         dataObj.put("lvgmsfhm", ownerDto.getIdCard());
         dataObj.put("lvxm", ownerDto.getName());
         dataObj.put("lvlxdh", ownerDto.getLink());
-        dataObj.put("lvdjsj", DateUtil.getFormatTimeString(ownerDto.getCreateTime(),"yyyyMMdd HH:mm:ss"));
+        dataObj.put("lvdjsj", DateUtil.getFormatTimeString(ownerDto.getCreateTime(), "yyyyMMdd HH:mm:ss"));
         dataObj.put("lvrybm", ownerDto.getMemberId());
         String qrCodeAddress = "";
         for (RoomAttrDto roomAttrDto : roomDtos.get(0).getRoomAttrDto()) {

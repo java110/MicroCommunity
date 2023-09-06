@@ -35,7 +35,7 @@ public class TqShuiBiaoLoraRechargeFactoryAdaptImpl implements ISmartMeterFactor
 
     private static final String RECHARGE_URL = "http://api2.tqdianbiao.com/Api_v2/water_security/recharge";
 
-    private static final String NOTIFY_URL = "/app/smartMeter/notify/tqShuiBiaoLoraRechargeFactoryAdaptImpl/992020051967020024";
+    private static final String NOTIFY_URL = "/app/smartMeter/notify/d";
     @Autowired
     private IMeterMachineSpecV1InnerServiceSMO meterMachineSpecV1InnerServiceSMOImpl;
 
@@ -136,7 +136,7 @@ public class TqShuiBiaoLoraRechargeFactoryAdaptImpl implements ISmartMeterFactor
         String detailId = GenerateCodeFactory.getGeneratorId("11");
         Map<String, Object> item = new HashMap<>();
         item.put("opr_id", detailId);
-        item.put("time_out", 0);
+        item.put("time_out", 3);
         item.put("must_online", true);
         item.put("retry_times", 1);
         item.put("cid", meterMachineSpecDtos.get(0).getSpecValue());

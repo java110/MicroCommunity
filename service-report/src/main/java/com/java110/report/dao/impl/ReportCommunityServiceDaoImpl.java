@@ -171,6 +171,27 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
     }
 
     @Override
+    public int queryHisRoomCount(Map info) {
+        logger.debug("查询 queryHisRoomCount 入参 info : {}", info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.queryHisRoomCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryHisRooms(Map info) {
+        logger.debug("查询 queryHisRooms 入参 info : {}", info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.queryHisRooms", info);
+
+        return infos;
+    }
+
+    @Override
     public int queryHisFeeCount(Map info) {
         logger.debug("查询queryHisFeeCount 入参 info : {}", info);
 
@@ -211,4 +232,6 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
 
         return infos;
     }
+
+
 }

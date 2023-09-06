@@ -1,5 +1,11 @@
 ## java110 api 文档使用说明
 
+### 文档查看地址
+
+http://ip:port/doc-ui.html
+
+比如:hc的文档 http://127.0.0.1:8008/doc-ui.html
+
 ### @Java110ApiDoc 的使用
 
 样例
@@ -184,4 +190,29 @@ resBody 返回报文
         reqBody="{'username':'wuxw','passwd':'admin'}",
         resBody="{'code':0,'msg':'成功','data':{'userId':'123123','token':'123213'}}"
 )
+
+### nginx 配置api 文档供外网访问
+
+apidoc.conf
+```agsl
+server {
+	listen       80;
+	server_name  apidoc.homecommunity.cn;
+
+	location / {
+	   proxy_pass http://dev.api.java110.com:8008/doc-ui.html;
+	}
+    location /js {
+	   proxy_pass http://dev.api.java110.com:8008;
+	}
+    location /css {
+	   proxy_pass http://dev.api.java110.com:8008;
+	}
+	location /doc
+	{
+	  add_header 'Access-Control-Allow-Origin' '*';
+	  proxy_pass   http://dev.api.java110.com:8088;
+	}
+}
+```
 

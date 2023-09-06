@@ -21,9 +21,11 @@ import com.java110.api.smo.api.IApiSMO;
 import com.java110.api.smo.privilege.IPrivilegeSMO;
 import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.language.Java110Lang;
 import com.java110.core.log.LoggerFactory;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -52,7 +54,6 @@ import java.util.Map;
 @RequestMapping(path = "/app")
 public class AppController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(AppController.class);
-
 
 
     @Autowired
@@ -93,12 +94,12 @@ public class AppController extends BaseController {
             logger.debug("api：{} 请求报文为：{},header信息为：{}", service, postInfo, headers);
             IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
             privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + service);
-            responseEntity = apiSMOImpl.doApi(postInfo, headers,request);
+            responseEntity = apiSMOImpl.doApi(postInfo, headers, request);
             //todo 写入 token
-            wirteToken(request,pd,service,responseEntity);
+            wirteToken(request, pd, service, responseEntity);
         } catch (Throwable e) {
             logger.error("请求post 方法[" + service + "]失败：" + postInfo, e);
-            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
 
@@ -107,6 +108,7 @@ public class AppController extends BaseController {
 
     /**
      * 写入 token
+     *
      * @param request
      * @param pd
      * @param service
@@ -117,22 +119,22 @@ public class AppController extends BaseController {
                 "login.accessTokenLogin"
         };
 
-        if(responseEntity.getStatusCode() != HttpStatus.OK){
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
             return;
         }
         boolean flag = false;
-        for(String tmpService : services){
-            if(tmpService.equals(service)){
-                flag =true;
+        for (String tmpService : services) {
+            if (tmpService.equals(service)) {
+                flag = true;
             }
         }
 
-        if(!flag){
+        if (!flag) {
             return;
         }
 
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
-        if(!"0".equals(paramOut.getString("code"))){
+        if (!"0".equals(paramOut.getString("code"))) {
             return;
         }
         String token = paramOut.getJSONObject("data").getString("token");
@@ -166,7 +168,7 @@ public class AppController extends BaseController {
 
         } catch (Throwable e) {
             logger.error("请求get 方法[" + service + "]失败：", e);
-            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
 
@@ -203,7 +205,7 @@ public class AppController extends BaseController {
             //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求get 方法[" + action + "]失败：", e);
-            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", action, responseEntity);
 
@@ -242,12 +244,91 @@ public class AppController extends BaseController {
 
         } catch (Throwable e) {
             logger.error("请求post 方法[" + action + "]失败：" + postInfo, e);
-            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", action, responseEntity);
 
         return responseEntity;
     }
+
+
+    /**
+     * 外部系统使用 get
+     * 对接一些大系统时 他们不会按照HC的要求
+     * 所以将HC要求的appId 放到路劲地址
+     * @param request 请求对象 查询头信息 url等信息
+     * @return http status 200 成功 其他失败
+     */
+
+    @RequestMapping(path = "/ext/{serviceCode}/{appId}", method = RequestMethod.GET)
+    @Java110Lang
+    public ResponseEntity<String> extGet(
+            @PathVariable String serviceCode,
+            @PathVariable String appId,
+            HttpServletRequest request) {
+        ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
+        try {
+            this.getRequestInfo(request, headers);
+            //todo 补充appId信息
+            headers.put("app-id",appId);
+            headers.put("user-id","-1");
+            headers.put("transaction-id", GenerateCodeFactory.getUUID());
+            headers.put("req-time", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
+            headers.put(CommonConstant.HTTP_SERVICE, serviceCode);
+            headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_GET);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + serviceCode);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+        } catch (Throwable e) {
+            logger.error("请求get 方法[" + serviceCode + "]失败：", e);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.debug("api：{} 返回信息为：{}", serviceCode, responseEntity);
+
+        return responseEntity;
+    }
+
+    /**
+     * 外部系统使用 post
+     * 对接一些大系统时 他们不会按照HC的要求
+     * 所以将HC要求的appId 放到路劲地址
+     * @param request 请求对象 查询头信息 url等信息
+     * @return http status 200 成功 其他失败
+     */
+
+    @RequestMapping(path = "/ext/{appId}/{serviceCode}", method = RequestMethod.POST)
+    @Java110Lang
+    public ResponseEntity<String> extPost(
+            @PathVariable String serviceCode,
+            @PathVariable String appId,
+
+            HttpServletRequest request) {
+        ResponseEntity<String> responseEntity = null;
+        Map<String, String> headers = new HashMap<String, String>();
+        try {
+            this.getRequestInfo(request, headers);
+            //todo 补充appId信息
+            headers.put("app-id",appId);
+            headers.put("user-id","-1");
+            headers.put("transaction-id", GenerateCodeFactory.getUUID());
+            headers.put("req-time", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT));
+            headers.put(CommonConstant.HTTP_SERVICE, serviceCode);
+            headers.put(CommonConstant.HTTP_METHOD, CommonConstant.HTTP_METHOD_POST);
+            logger.debug("api：{} 请求报文为：{},header信息为：{}", "", headers);
+            IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
+            privilegeSMOImpl.hasPrivilege(restTemplate, pd, "/app/" + serviceCode);
+            responseEntity = apiSMOImpl.doApi(JSONObject.toJSONString(getParameterStringMap(request)), headers, request);
+        } catch (Throwable e) {
+            logger.error("请求get 方法[" + serviceCode + "]失败：", e);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.debug("api：{} 返回信息为：{}", serviceCode, responseEntity);
+
+        return responseEntity;
+    }
+
 
     /**
      * 资源请求 put方式
@@ -278,7 +359,7 @@ public class AppController extends BaseController {
             //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求put 方法[" + service + "]失败：", e);
-            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
         return responseEntity;
@@ -311,7 +392,7 @@ public class AppController extends BaseController {
             //responseEntity = apiServiceSMOImpl.service(JSONObject.toJSONString(getParameterStringMap(request)), headers);
         } catch (Throwable e) {
             logger.error("请求delete 方法[" + service + "]失败：", e);
-            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            responseEntity = ResultVo.error("请求发生异常，" + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         logger.debug("api：{} 返回信息为：{}", service, responseEntity);
@@ -350,6 +431,9 @@ public class AppController extends BaseController {
 
             if ("userId".equals(key)) {
                 headers.put("user_id", claims.get(key));
+            }
+            if ("userName".equals(key)) {
+                headers.put("userName", "-");
             }
             headers.put(key, claims.get(key));
         }

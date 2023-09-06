@@ -37,6 +37,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -326,7 +327,7 @@ public class FeeDueReminderTemplate extends TaskSystemQuartz {
             data.setKeyword2(new Content(communityName + location));
             data.setKeyword3(new Content(finishTime));
             data.setRemark(new Content("请您及时续费，以免影响您的正常使用！"));
-            templateMessage.setData(data);
+            templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
             //获取业主公众号地址
             String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);

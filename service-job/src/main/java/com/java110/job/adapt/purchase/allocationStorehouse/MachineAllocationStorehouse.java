@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
+import com.java110.dto.system.Business;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.dto.wechat.SmallWechatAttrDto;
 import com.java110.dto.user.StaffAppAuthDto;
@@ -19,6 +20,8 @@ import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -61,8 +64,8 @@ public class MachineAllocationStorehouse extends DatabusAdaptImpl {
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 
     @Override
-    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto) {
-        JSONObject data = customBusinessDatabusDto.getData();
+    public void execute(Business business, List<Business> businesses) {
+        JSONObject data = business.getData();
         //获取下级处理人id
         String purchaseUserId = data.getString("purchaseUserId");
         //获取调拨申请id
@@ -87,7 +90,7 @@ public class MachineAllocationStorehouse extends DatabusAdaptImpl {
         //获取小区id
         String communityId = allocationStorehouseApplyDtos.get(0).getCommunityId();
         //获取申请时间
-        Date createTime = allocationStorehouseApplyDtos.get(0).getCreateTime();
+        Date createTime = DateUtil.getDateFromStringA(allocationStorehouseApplyDtos.get(0).getCreateTime());
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         JSONObject paramIn = new JSONObject();
         paramIn.put("applyOrderId", applyOrderId);
@@ -168,7 +171,8 @@ public class MachineAllocationStorehouse extends DatabusAdaptImpl {
                 data.setKeyword5(new Content(paramIn.getString("stateName")));
                 data.setRemark(new Content("请及时处理！"));
             }
-            templateMessage.setData(data);
+            templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
             //获取员工公众号地址
             String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             templateMessage.setUrl(wechatUrl);

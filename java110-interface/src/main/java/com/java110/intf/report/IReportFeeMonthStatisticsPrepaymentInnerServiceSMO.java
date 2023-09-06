@@ -18,7 +18,7 @@ import java.util.List;
  * @descrip0tion预付期费用月统计接口类
  * @date 2023-03-29 09:46
  */
-@FeignClient(name = "${java110.report-service}", configuration = {FeignConfiguration.class})
+@FeignClient(name = "report-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/reportFeeMonthStatisticsPrepaymentApi")
 public interface IReportFeeMonthStatisticsPrepaymentInnerServiceSMO {
 

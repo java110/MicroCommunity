@@ -24,57 +24,6 @@ public class StorehouseServiceDaoImpl extends BaseServiceDao implements IStoreho
 
     private static Logger logger = LoggerFactory.getLogger(StorehouseServiceDaoImpl.class);
 
-    /**
-     * 仓库信息封装
-     * @param businessStorehouseInfo 仓库信息 封装
-     * @throws DAOException DAO异常
-     */
-    @Override
-    public void saveBusinessStorehouseInfo(Map businessStorehouseInfo) throws DAOException {
-        businessStorehouseInfo.put("month", DateUtil.getCurrentMonth());
-        // 查询business_user 数据是否已经存在
-        logger.debug("保存仓库信息 入参 businessStorehouseInfo : {}",businessStorehouseInfo);
-        int saveFlag = sqlSessionTemplate.insert("storehouseServiceDaoImpl.saveBusinessStorehouseInfo",businessStorehouseInfo);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存仓库数据失败："+ JSONObject.toJSONString(businessStorehouseInfo));
-        }
-    }
-
-
-    /**
-     * 查询仓库信息
-     * @param info bId 信息
-     * @return 仓库信息
-     * @throws DAOException DAO异常
-     */
-    @Override
-    public List<Map> getBusinessStorehouseInfo(Map info) throws DAOException {
-
-        logger.debug("查询仓库信息 入参 info : {}",info);
-
-        List<Map> businessStorehouseInfos = sqlSessionTemplate.selectList("storehouseServiceDaoImpl.getBusinessStorehouseInfo",info);
-
-        return businessStorehouseInfos;
-    }
-
-
-
-    /**
-     * 保存仓库信息 到 instance
-     * @param info   bId 信息
-     * @throws DAOException DAO异常
-     */
-    @Override
-    public void saveStorehouseInfoInstance(Map info) throws DAOException {
-        logger.debug("保存仓库信息Instance 入参 info : {}",info);
-
-        int saveFlag = sqlSessionTemplate.insert("storehouseServiceDaoImpl.saveStorehouseInfoInstance",info);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"保存仓库信息Instance数据失败："+ JSONObject.toJSONString(info));
-        }
-    }
 
 
     /**
@@ -93,21 +42,6 @@ public class StorehouseServiceDaoImpl extends BaseServiceDao implements IStoreho
     }
 
 
-    /**
-     * 修改仓库信息
-     * @param info 修改信息
-     * @throws DAOException DAO异常
-     */
-    @Override
-    public void updateStorehouseInfoInstance(Map info) throws DAOException {
-        logger.debug("修改仓库信息Instance 入参 info : {}",info);
-
-        int saveFlag = sqlSessionTemplate.update("storehouseServiceDaoImpl.updateStorehouseInfoInstance",info);
-
-        if(saveFlag < 1){
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR,"修改仓库信息Instance数据失败："+ JSONObject.toJSONString(info));
-        }
-    }
 
      /**
      * 查询仓库数量

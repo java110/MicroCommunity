@@ -2,6 +2,7 @@ package com.java110.store.cmd.resourceStore;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -38,7 +39,9 @@ public class ListAllocationStorehousesCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        String storeId = CmdContextUtils.getStoreId(context);
         AllocationStorehouseDto allocationStorehouseDto = BeanConvertUtil.covertBean(reqJson, AllocationStorehouseDto.class);
+        allocationStorehouseDto.setStoreId(storeId);
         //获取用户id
         String userId = reqJson.getString("userId");
         //调拨记录（调拨记录所有权限查看所有数据）
@@ -46,7 +49,7 @@ public class ListAllocationStorehousesCmd extends Cmd {
         basePrivilegeDto.setResource("/viewlistAllocationStorehouses");
         basePrivilegeDto.setUserId(userId);
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (privileges.size()==0) {
+        if (privileges.size() == 0) {
             allocationStorehouseDto.setStartUserId(userId);
         }
         //调拨记录详情、调拨待办查看、调拨已办查看

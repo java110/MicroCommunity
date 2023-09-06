@@ -2,7 +2,7 @@ package com.java110.intf.job;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.fee.TempCarPayOrderDto;
@@ -36,6 +36,13 @@ public interface IDataBusInnerServiceSMO {
     @RequestMapping(value = "/exchange", method = RequestMethod.POST)
     boolean exchange(@RequestBody List<Business> businesses);
 
+    /**
+     * 自定义databus 数据 传输
+     * @param databusDataDto
+     * @return
+     */
+    @RequestMapping(value = "/databusData", method = RequestMethod.POST)
+    boolean databusData(@RequestBody DatabusDataDto databusDataDto);
 
     /**
      * <p>开门</p>
@@ -85,13 +92,7 @@ public interface IDataBusInnerServiceSMO {
     ResultVo notifyTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto);
 
 
-    /**
-     * 自定义databus 数据 传输
-     * @param customBusinessDatabusDto
-     * @return
-     */
-    @RequestMapping(value = "/customExchange", method = RequestMethod.POST)
-    void customExchange(@RequestBody CustomBusinessDatabusDto customBusinessDatabusDto);
+
 
     @RequestMapping(value = "/getQRcode", method = RequestMethod.POST)
     ResultVo getQRcode(@RequestBody JSONObject reqJson);

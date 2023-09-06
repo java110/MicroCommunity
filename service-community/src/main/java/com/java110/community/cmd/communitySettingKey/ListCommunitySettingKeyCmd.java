@@ -20,9 +20,12 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.community.CommunitySettingDto;
 import com.java110.dto.community.CommunitySettingKeyDto;
+import com.java110.intf.community.ICommunitySettingInnerServiceSMO;
 import com.java110.intf.community.ICommunitySettingKeyV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -52,9 +55,14 @@ public class ListCommunitySettingKeyCmd extends Cmd {
     @Autowired
     private ICommunitySettingKeyV1InnerServiceSMO communitySettingKeyV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunitySettingInnerServiceSMO communitySettingInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         //super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
+        Assert.hasKeyAndValue(reqJson, "settingType", "未包含类型");
     }
 
     @Override
@@ -71,6 +79,10 @@ public class ListCommunitySettingKeyCmd extends Cmd {
         } else {
             communitySettingKeyDtos = new ArrayList<>();
         }
+
+        // todo 刷入 小区值
+        computeKeyValue(communitySettingKeyDtos, reqJson.getString("communityId"), reqJson.getString("settingType"));
+
         if (!reqJson.containsKey("row")) {
             reqJson.put("row", 10);
         }
@@ -80,5 +92,29 @@ public class ListCommunitySettingKeyCmd extends Cmd {
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void computeKeyValue(List<CommunitySettingKeyDto> communitySettingKeyDtos, String communityId, String settingType) {
+        if (communitySettingKeyDtos == null || communitySettingKeyDtos.size() < 1) {
+            return;
+        }
+
+        CommunitySettingDto communitySettingDto = new CommunitySettingDto();
+        communitySettingDto.setSettingType(settingType);
+        communitySettingDto.setCommunityId(communityId);
+        List<CommunitySettingDto> communitySettingDtos = communitySettingInnerServiceSMOImpl.queryCommunitySettings(communitySettingDto);
+        if (communitySettingDtos == null || communitySettingDtos.size() < 1) {
+            return;
+        }
+
+        for (CommunitySettingKeyDto communitySettingKeyDto : communitySettingKeyDtos) {
+            for (CommunitySettingDto tmpCommunitySettingDto : communitySettingDtos) {
+                if (!communitySettingKeyDto.getSettingKey().equals(tmpCommunitySettingDto.getSettingKey())) {
+                    continue;
+                }
+                communitySettingKeyDto.setSettingValue(tmpCommunitySettingDto.getSettingValue());
+            }
+
+        }
     }
 }

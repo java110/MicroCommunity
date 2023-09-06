@@ -272,6 +272,7 @@ public class FeeReceiptApi {
                                                         @RequestParam(value = "receiptId", required = false) String receiptId,
                                                         @RequestParam(value = "receiptIds", required = false) String receiptIds,
                                                         @RequestParam(value = "detailIds", required = false) String detailIds,
+                                                        @RequestParam(value = "orderBy", required = false) String orderBy,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
@@ -279,6 +280,7 @@ public class FeeReceiptApi {
         feeReceiptDetailDto.setRow(row);
         feeReceiptDetailDto.setCommunityId(communityId);
         feeReceiptDetailDto.setReceiptId(receiptId);
+        feeReceiptDetailDto.setOrderBy(orderBy);
         if (!StringUtil.isEmpty(receiptIds)) {
             feeReceiptDetailDto.setReceiptIds(receiptIds.split(","));
         }

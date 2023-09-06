@@ -19,10 +19,19 @@ public interface IPayFeeMonth {
 
     /**
      * 批量生成 月数据
+     *
      * @param feeIds
      * @param communityId
      */
-     void doGeneratorFeeMonths(List<String> feeIds, String communityId);
+    void doGeneratorFeeMonths(List<String> feeIds, String communityId);
+
+    /**
+     * 批量生成 欠费数据
+     *
+     * @param feeIds
+     * @param communityId
+     */
+    void doGeneratorOweFees(List<String> feeIds, String communityId);
 
     /**
      * 所有费用 生成月数据
@@ -33,17 +42,19 @@ public interface IPayFeeMonth {
 
     /**
      * 缴费 离散数据
+     *
      * @param feeId
      * @param detailId
      * @param communityId
      */
-    void payFeeDetailRefreshFeeMonth(String feeId,String detailId,String communityId);
+    void payFeeDetailRefreshFeeMonth(String feeId, String detailId, String communityId);
 
     /**
      * 删除 费用离散月
+     *
      * @param feeId
      * @param communityId
      */
-    void deleteFeeMonth(String feeId,String communityId);
+    void deleteFeeMonth(String feeId, String communityId);
 
 }

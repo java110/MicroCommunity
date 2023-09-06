@@ -220,6 +220,17 @@ public interface IOaWorkflowActivitiInnerServiceSMO {
     @RequestMapping(value = "/getTaskCurrentUser", method = RequestMethod.POST)
     JSONObject getTaskCurrentUser(@RequestBody JSONObject reqJson);
 
+
+    /**
+     *
+     * @param reqJson{
+     *               taskId:'',
+     *               startUserId:''
+     * }
+     * @return
+     */
+    @RequestMapping(value = "/getCurrentNodeTask", method = RequestMethod.POST)
+    JSONObject getCurrentNodeTask(@RequestBody JSONObject reqJson);
     /**
      *
      * @param reqJson{

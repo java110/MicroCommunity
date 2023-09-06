@@ -22,6 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 查询审批人员
+ */
 @Java110Cmd(serviceCode = "/workflow/getFirstStaff")
 public class GetFirstStaffCmd extends Cmd {
 

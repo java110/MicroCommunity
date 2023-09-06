@@ -18,6 +18,7 @@ import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,7 +157,8 @@ public class PublishStaffAttendanceTaskTemplate extends TaskSystemQuartz {
         data.setKeyword2(new Content(attendanceClassesTaskDetailDto.getValue()));
         data.setKeyword3(new Content("请到考勤机及时考勤"));
         data.setRemark(new Content("如有疑问请联系管理员"));
-        templateMessage.setData(data);
+        templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
 
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 物品实体类
  * @ClassName FloorDto
  * @Description 资源数据层封装
  * @Author wuxw
@@ -21,6 +22,7 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String name;
     private String price;
     private String resCode;
+    private String resCodeLike;
 
     private String[] resCodes;
     private String description;
@@ -45,9 +47,7 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     private String showMobile;
     private String shId;
     private String warningStock;
-    private String shType;
-    private String shObjId;
-    private String[] shObjIds;
+
     private String averagePrice;
     private List<String> fileUrls;
     private Date createTime;
@@ -75,6 +75,8 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     //是否是固定物品
     private String isFixed;
     private String isFixedName;
+
+    private String communityId;
 
     private List<ResourceStoreTimesDto> times;
 
@@ -230,21 +232,7 @@ public class ResourceStoreDto extends PageDto implements Serializable {
         this.shName = shName;
     }
 
-    public String getShType() {
-        return shType;
-    }
 
-    public void setShType(String shType) {
-        this.shType = shType;
-    }
-
-    public String getShObjId() {
-        return shObjId;
-    }
-
-    public void setShObjId(String shObjId) {
-        this.shObjId = shObjId;
-    }
 
     public String getWarningStock() {
         return warningStock;
@@ -398,13 +386,7 @@ public class ResourceStoreDto extends PageDto implements Serializable {
         this.isFixedName = isFixedName;
     }
 
-    public String[] getShObjIds() {
-        return shObjIds;
-    }
 
-    public void setShObjIds(String[] shObjIds) {
-        this.shObjIds = shObjIds;
-    }
 
     public List<ResourceStoreTimesDto> getTimes() {
         return times;
@@ -420,5 +402,21 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setResCodes(String[] resCodes) {
         this.resCodes = resCodes;
+    }
+
+    public String getResCodeLike() {
+        return resCodeLike;
+    }
+
+    public void setResCodeLike(String resCodeLike) {
+        this.resCodeLike = resCodeLike;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

@@ -23,11 +23,14 @@ import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.po.oaWorkflow.OaWorkflowDataPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -122,42 +125,6 @@ public class OaWorkflowDistributeOrder extends DatabusAdaptImpl {
      * @param communityMemberDto
      */
     private void sendMsg(OaWorkflowDataPo oaWorkflowDataPo, CommunityMemberDto communityMemberDto) {
-        //查询公众号配置
-        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setWeChatType("1100");
-        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
-        smallWeChatDto.setObjId(communityMemberDto.getCommunityId());
-        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
-            logger.info("未配置微信公众号信息,定时任务执行结束");
-            return;
-        }
-        SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
-        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
-        smallWechatAttrDto.setCommunityId(communityMemberDto.getCommunityId());
-        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
-        smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_OA_WORKFLOW_AUDIT_TEMPLATE);
-        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
-        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
-            logger.info("未配置微信公众号消息模板");
-            return;
-        }
-        String templateId = smallWechatAttrDtos.get(0).getValue();
-        String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
-        if (StringUtil.isEmpty(accessToken)) {
-            logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
-            return;
-        }
-
-        String url = sendMsgUrl + accessToken;
-        //根据 userId 查询到openId
-        StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
-        staffAppAuthDto.setStaffId(oaWorkflowDataPo.getStaffId());
-        staffAppAuthDto.setAppType("WECHAT");
-        List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
-        if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
-            return;
-        }
         //查询流程是否存在
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setStoreId(oaWorkflowDataPo.getStoreId());
@@ -181,68 +148,28 @@ public class OaWorkflowDistributeOrder extends DatabusAdaptImpl {
         paramMap.put("row", 1);
         List<Map> formDatas = oaWorkflowFormInnerServiceSMOImpl.queryOaWorkflowFormDatas(paramMap);
         Assert.listOnlyOne(formDatas, "工单数据不存在");
-        String openId = staffAppAuthDtos.get(0).getOpenId();
-        Data data = new Data();
-        PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-        templateMessage.setTemplate_id(templateId);
-        templateMessage.setTouser(openId);
-        data.setFirst(new Content("您有新的OA工单，工单信息如下："));
-        data.setKeyword1(new Content(oaWorkflowDtos.get(0).getFlowName()));
-        data.setKeyword2(new Content(formDatas.get(0).get("create_user_name").toString()));
-        data.setKeyword3(new Content(formDatas.get(0).get("create_time").toString()));
-        data.setKeyword4(new Content("请进入工单查看"));
-        data.setRemark(new Content("请及时登录公众号接单确认！"));
-        templateMessage.setData(data);
-        //获取员工公众号地址
+
+        JSONObject content = new JSONObject();
+        content.put("flowName", oaWorkflowDtos.get(0).getFlowName());
+        content.put("create_user_name", formDatas.get(0).get("create_user_name").toString());
+        content.put("create_time", formDatas.get(0).get("create_time").toString());
+        content.put("date", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
-        templateMessage.setUrl(wechatUrl);
-        logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-        logger.info("微信模板返回内容:{}", responseEntity);
+        content.put("url", wechatUrl);
+        MsgNotifyFactory.sendOaDistributeMsg(communityMemberDto.getCommunityId(), oaWorkflowDataPo.getStaffId(), content);
 
         String createUserId = formDatas.get(0).get("create_user_id").toString();
         if (createUserId.equals(oaWorkflowDataPo.getStaffId())) {
             return;
         }
 
-        //给申请人发消息
-
-        //根据 userId 查询到openId
-        staffAppAuthDto = new StaffAppAuthDto();
-        staffAppAuthDto.setStaffId(createUserId);
-        staffAppAuthDto.setAppType("WECHAT");
-        staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
-        if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
-            return;
-        }
-
-        weChatDto = smallWeChatDtos.get(0);
-        smallWechatAttrDto = new SmallWechatAttrDto();
-        smallWechatAttrDto.setCommunityId(communityMemberDto.getCommunityId());
-        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
-        smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_OA_WORKFLOW_AUDIT_FINISH_TEMPLATE);
-        smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
-        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
-            logger.info("未配置微信公众号消息模板");
-            return;
-        }
-
-        openId = staffAppAuthDtos.get(0).getOpenId();
-        data = new Data();
-        templateMessage = new PropertyFeeTemplateMessage();
-        templateMessage.setTemplate_id(templateId);
-        templateMessage.setTouser(openId);
-        data.setFirst(new Content("您好，您有新的流程待处理通知"));
-        data.setKeyword1(new Content(oaWorkflowDtos.get(0).getFlowName()));
-        data.setKeyword2(new Content(oaWorkflowDataPo.getStaffName()));
-        data.setRemark(new Content("请及时查看！"));
-        templateMessage.setData(data);
-        //获取员工公众号地址
+        //todo 给申请人发消息
+        content = new JSONObject();
+        content.put("flowName", oaWorkflowDtos.get(0).getFlowName());
+        content.put("staffName", oaWorkflowDataPo.getStaffName());
         wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
-        templateMessage.setUrl(wechatUrl);
-        logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-        responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-        logger.info("微信模板返回内容:{}", responseEntity);
+        content.put("url", wechatUrl);
+        MsgNotifyFactory.sendOaCreateStaffMsg(communityMemberDto.getCommunityId(), createUserId, content);
 
     }
 }

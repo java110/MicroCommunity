@@ -358,14 +358,14 @@ public class RepairFinishCmd extends Cmd {
             repairUserDto.setRepairId(reqJson.getString("repairId"));
             repairUserDto.setCommunityId(reqJson.getString("communityId"));
             repairUserDto.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
-            repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-            if (repairUserDtos.size() != 1) {
+           List<RepairUserDto> startRepairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
+            if (startRepairUserDtos.size() != 1) {
                 ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "数据错误 该订单没有发起人！");
                 context.setResponseEntity(responseEntity);
                 return;
             }
             repairUserPo = new RepairUserPo();
-            repairUserPo.setRuId("-1");
+            repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId("83"));
             repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
             if ("1001".equals(maintenanceType)) { //如果是有偿的就走下面(业主报修有偿或者电话申请有偿或者员工报修有偿)
                 repairUserPo.setState(RepairUserDto.STATE_PAY_FEE);
@@ -376,8 +376,8 @@ public class RepairFinishCmd extends Cmd {
             }
             repairUserPo.setRepairId(reqJson.getString("repairId"));
             if ("Z".equals(repairChannel)) {  //如果是业主端报修的走下面的方法
-                repairUserPo.setStaffId(repairUserDtos.get(0).getStaffId());
-                repairUserPo.setStaffName(repairUserDtos.get(0).getStaffName());
+                repairUserPo.setStaffId(startRepairUserDtos.get(0).getStaffId());
+                repairUserPo.setStaffName(startRepairUserDtos.get(0).getStaffName());
             } else { //如果不是业主报修，并且有偿
                 RepairDto repairDto = new RepairDto();
                 repairDto.setRepairId(reqJson.getString("repairId"));

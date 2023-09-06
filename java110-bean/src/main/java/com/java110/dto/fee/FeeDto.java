@@ -157,6 +157,18 @@ public class FeeDto extends PageDto implements Serializable {
     private String customStartTime;
     private String customEndTime;
 
+    private String deleteFlag;
+
+    private String prepaymentPeriod;
+
+
+    private String feeNameLike;
+
+    private String staffNameLike;
+
+    private String logStartTime;
+    private String logEndTime;
+
     public String getAmount() {
         return amount;
     }
@@ -766,5 +778,53 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setCustomEndTime(String customEndTime) {
         this.customEndTime = customEndTime;
+    }
+
+    public String getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(String deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
+    public String getPrepaymentPeriod() {
+        return prepaymentPeriod;
+    }
+
+    public void setPrepaymentPeriod(String prepaymentPeriod) {
+        this.prepaymentPeriod = prepaymentPeriod;
+    }
+
+    public String getFeeNameLike() {
+        return feeNameLike;
+    }
+
+    public void setFeeNameLike(String feeNameLike) {
+        this.feeNameLike = feeNameLike;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
+    }
+
+    public String getLogStartTime() {
+        return logStartTime;
+    }
+
+    public void setLogStartTime(String logStartTime) {
+        this.logStartTime = logStartTime;
+    }
+
+    public String getLogEndTime() {
+        return logEndTime;
+    }
+
+    public void setLogEndTime(String logEndTime) {
+        this.logEndTime = logEndTime;
     }
 }

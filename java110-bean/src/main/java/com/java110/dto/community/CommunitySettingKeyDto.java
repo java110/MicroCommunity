@@ -18,6 +18,7 @@ public class CommunitySettingKeyDto extends PageDto implements Serializable {
     private String keyId;
     private String remark;
     private String settingKey;
+    private String settingValue;
     private String settingType;
     private String settingName;
     private String communityId;
@@ -91,5 +92,13 @@ public class CommunitySettingKeyDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getSettingValue() {
+        return settingValue;
+    }
+
+    public void setSettingValue(String settingValue) {
+        this.settingValue = settingValue;
     }
 }

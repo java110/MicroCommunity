@@ -37,6 +37,8 @@ public class ResourceStoreTimesPo implements Serializable {
     private String timesId;
     private String shId;
 
+    private String communityId;
+
     public String getPrice() {
         return price;
     }
@@ -100,5 +102,13 @@ public class ResourceStoreTimesPo implements Serializable {
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

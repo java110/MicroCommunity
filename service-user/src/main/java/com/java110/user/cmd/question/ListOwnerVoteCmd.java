@@ -91,16 +91,20 @@ public class ListOwnerVoteCmd extends Cmd {
             return;
         }
         List<QuestionTitleValueDto> values = null;
+        long votedCount = 0;
         for (QuestionAnswerDto tmpQuestionAnswerDto : questionAnswerDtos) {
             values = new ArrayList<>();
+            votedCount = 0;
             for (QuestionTitleValueDto tmpQuestionTitleValueDto : questionTitleValueDtos) {
                 if (!tmpQuestionTitleValueDto.getQaId().equals(tmpQuestionAnswerDto.getQaId())) {
                     continue;
                 }
                 values.add(tmpQuestionTitleValueDto);
                 tmpQuestionAnswerDto.setTitleType(tmpQuestionTitleValueDto.getTitleType());
+                votedCount += tmpQuestionTitleValueDto.getPersonCount();
             }
             tmpQuestionAnswerDto.setTitleValues(values);
+            tmpQuestionAnswerDto.setVotedCount(votedCount);
         }
     }
 }

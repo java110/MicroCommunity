@@ -34,7 +34,7 @@ import java.util.Map;
 @Service("tqShuiBiaoLoraReadFactoryAdaptImpl")
 public class TqShuiBiaoLoraReadFactoryAdaptImpl implements ISmartMeterFactoryAdapt {
     private static final String READ_URL = "http://api2.tqdianbiao.com/Api_v2/water_read";
-    private static final String NOTIFY_URL = "/app/smartMeter/notify/tqShuiBiaoLoraReadFactoryAdaptImpl/992020051967020024";
+    private static final String NOTIFY_URL = "/app/smartMeter/notify/c";
 
     @Autowired
     private IMeterMachineSpecV1InnerServiceSMO meterMachineSpecV1InnerServiceSMOImpl;

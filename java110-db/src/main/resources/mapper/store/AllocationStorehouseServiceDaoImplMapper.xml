@@ -151,6 +151,9 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and asa.community_id= #{communityId}
+        </if>
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
@@ -276,6 +279,10 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and asa.community_id= #{communityId}
+        </if>
+
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>

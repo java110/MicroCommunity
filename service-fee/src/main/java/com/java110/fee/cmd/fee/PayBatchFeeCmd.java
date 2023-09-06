@@ -29,6 +29,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.FeeFlagTypeConstant;
 import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -103,6 +104,9 @@ public class PayBatchFeeCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -139,15 +143,15 @@ public class PayBatchFeeCmd extends Cmd {
                 throw new IllegalArgumentException("费用项不存在");
             }
             Date maxEndTime = feeDtos.get(0).getDeadlineTime();
-            if (!FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
-                try {
-                    maxEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-                } catch (ParseException e) {
-                    logger.error("比较费用日期失败", e);
-                }
-                Date newDate = DateUtil.stepMonth(endTime, paramInObj.getInteger("cycles") - 1);
+            //周期性费用
+            if (maxEndTime == null || FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+                maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
+            }
+
+            if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+                Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
                 if (newDate.getTime() > maxEndTime.getTime()) {
-                    throw new IllegalArgumentException("缴费周期超过 缴费结束时间");
+                    throw new IllegalArgumentException("缴费周期超过 缴费结束时间,请用按结束时间方式缴费");
                 }
             }
 
@@ -164,13 +168,17 @@ public class PayBatchFeeCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
 
+        //todo 生成收据编号
+        String receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(reqJson.getString("communityId"));
+
+
         JSONArray fees = reqJson.getJSONArray("fees");
         JSONObject paramInObj = null;
         JSONArray details = new JSONArray();
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             try {
                 paramInObj = fees.getJSONObject(feeIndex);
-                doDeal(paramInObj, reqJson.getString("communityId"), cmdDataFlowContext, userDtos.get(0));
+                doDeal(paramInObj, reqJson.getString("communityId"),receiptCode, cmdDataFlowContext, userDtos.get(0));
             } catch (Exception e) {
                 logger.error("处理异常", e);
                 throw new CmdException(e.getMessage());
@@ -184,7 +192,7 @@ public class PayBatchFeeCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 
-    private void doDeal(JSONObject paramObj, String communityId, ICmdDataFlowContext cmdDataFlowContext, UserDto userDto) throws Exception {
+    private void doDeal(JSONObject paramObj, String communityId,String receiptCode, ICmdDataFlowContext cmdDataFlowContext, UserDto userDto) throws Exception {
         paramObj.put("communityId", communityId);
         //获取订单ID
         String oId = Java110TransactionalFactory.getOId();
@@ -203,6 +211,8 @@ public class PayBatchFeeCmd extends Cmd {
             payFeeDetailPo.setPayOrderId(oId);
             payFeeDetailPo.setCashierId(userDto.getUserId());
             payFeeDetailPo.setCashierName(userDto.getName());
+            //todo 缓存收据编号
+            CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");

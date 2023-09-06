@@ -1274,7 +1274,7 @@
     <select id="getMonthReceivedDetailInfo" parameterType="Map" resultType="Map">
         select concat(f.floor_num,'-',bu.unit_num,'-',br.room_num) objName,t.owner_name ownerName,t.link,t.fee_name feeName, pfd.start_time startTime,pfd.end_time endTime,
         pfd.pay_order_id payOrderId,pfd.cashier_name cashierName,
-        t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfd.create_time createTime
+        t.receivable_amount receivableAmount,t.received_amount receivedAmount,pfd.create_time createTime,concat(t.detail_year,'-',t.detail_month) curYearMonth
         from pay_fee_detail_month t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
         left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
@@ -1304,6 +1304,7 @@
         <if test="link != null and link != ''">
             and t.link = #{link}
         </if>
+        order by t.obj_name,t.fee_name,t.detail_year,t.detail_month
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -1377,7 +1378,7 @@
     <!-- 月实收 查询-->
     <select id="getMonthOweDetailInfo" parameterType="Map" resultType="Map">
         select concat(f.floor_num,'-',bu.unit_num,'-',br.room_num) objName,t.owner_name ownerName,t.link,t.fee_name feeName, pf.end_time startTime,t.deadline_time endTime,
-        t.receivable_amount receivableAmount,t.received_amount receivedAmount
+        t.receivable_amount receivableAmount,t.received_amount receivedAmount,concat(t.detail_year,'-',t.detail_month) curYearMonth
         from pay_fee_detail_month t
         inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0' and pf.payer_obj_type = '3333'
         left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0'
@@ -1406,6 +1407,7 @@
         <if test="link != null and link != ''">
             and t.link = #{link}
         </if>
+        order by t.obj_name,t.fee_name,t.detail_year,t.detail_month
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

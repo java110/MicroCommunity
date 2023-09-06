@@ -23,6 +23,7 @@ import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -56,22 +57,11 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
     private ICommunityInnerServiceSMO communityInnerServiceSMO;
 
     @Autowired
-    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
-
-    @Autowired
-    private ISmallWechatAttrInnerServiceSMO smallWechatAttrInnerServiceSMOImpl;
-
-    @Autowired
     private IPrivilegeInnerServiceSMO privilegeInnerServiceSMO;
 
     @Autowired
     private IStaffAppAuthInnerServiceSMO staffAppAuthInnerServiceSMO;
 
-    @Autowired
-    private RestTemplate outRestTemplate;
-
-    //模板信息推送地址
-    private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 
     @Override
     public void execute(Business business, List<Business> businesses) {
@@ -124,6 +114,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         paramIn.put("repairObjName", repairObjName);
         paramIn.put("context", context);
         paramIn.put("repairName", repairName);
+        paramIn.put("repairId", repairDtos.get(0).getRepairId());
         sendMessage(paramIn, communityDtos.get(0));
     }
 
@@ -134,32 +125,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
      * @param communityDto
      */
     private void sendMessage(JSONObject paramIn, CommunityDto communityDto) {
-        //查询公众号配置
-        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setWeChatType("1100");
-        smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
-        smallWeChatDto.setObjId(communityDto.getCommunityId());
-        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
-            logger.info("未配置微信公众号信息,定时任务执行结束");
-            return;
-        }
-        SmallWeChatDto weChatDto = smallWeChatDtos.get(0);
-        SmallWechatAttrDto smallWechatAttrDto = new SmallWechatAttrDto();
-        smallWechatAttrDto.setCommunityId(communityDto.getCommunityId());
-        smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
-        smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_WORK_ORDER_REMIND_TEMPLATE);
-        List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
-        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
-            logger.info("未配置微信公众号消息模板");
-            return;
-        }
-        String templateId = smallWechatAttrDtos.get(0).getValue();
-        String accessToken = WechatFactory.getAccessToken(weChatDto.getAppId(), weChatDto.getAppSecret());
-        if (StringUtil.isEmpty(accessToken)) {
-            logger.info("推送微信模板,获取accessToken失败:{}", accessToken);
-            return;
-        }
+
         //查询小区物业公司
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
         communityMemberDto.setCommunityId(communityDto.getCommunityId());
@@ -173,42 +139,25 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         basePrivilegeDto.setStoreId(communityMemberDtos.get(0).getMemberId());
         basePrivilegeDto.setCommunityId(communityMemberDtos.get(0).getCommunityId());
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
-        String url = sendMsgUrl + accessToken;
         List<String> userIds = new ArrayList<>();
         for (UserDto userDto : userDtos) {
             if (userIds.contains(userDto.getUserId())) {
                 continue;
             }
-            userIds.add(userDto.getUserId());
-            //根据 userId 查询到openId
-            StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
-            staffAppAuthDto.setStaffId(userDto.getUserId());
-            staffAppAuthDto.setAppType("WECHAT");
-            List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMO.queryStaffAppAuths(staffAppAuthDto);
-            if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
-                continue;
-            }
-            String openId = staffAppAuthDtos.get(0).getOpenId();
-            Data data = new Data();
-            PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
-            templateMessage.setTemplate_id(templateId);
-            templateMessage.setTouser(openId);
-            data.setFirst(new Content("业主" + paramIn.getString("repairName") + "提交了新的报修工单，报修信息如下："));
-            data.setKeyword1(new Content(paramIn.getString("repairTypeName")));
+            JSONObject content = new JSONObject();
+            content.put("repairTypeName",paramIn.getString("repairTypeName"));
             if (communityDto.getName().equals(paramIn.getString("repairObjName"))) {
-                data.setKeyword2(new Content(paramIn.getString("repairObjName")));
+                content.put("repairObjName",paramIn.getString("repairObjName"));
             } else {
-                data.setKeyword2(new Content(communityDto.getName() + paramIn.getString("repairObjName")));
+                content.put("repairObjName",communityDto.getName() + paramIn.getString("repairObjName"));
             }
-            data.setKeyword3(new Content(paramIn.getString("context")));
-            data.setRemark(new Content("请您及时确认信息，并安排相关人员进行处理，感谢您的使用！"));
-            templateMessage.setData(data);
-            //获取员工公众号地址
+            content.put("repairName",paramIn.getString("repairName"));
+            content.put("context",paramIn.getString("context"));
+            content.put("repairId",paramIn.getString("repairId"));
             String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
-            templateMessage.setUrl(wechatUrl);
-            logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
-            ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
-            logger.info("微信模板返回内容:{}", responseEntity);
+            content.put("url",wechatUrl);
+
+            MsgNotifyFactory.sendAddOwnerRepairMsg(communityDto.getCommunityId(),userDto.getUserId(),content);
         }
     }
 }

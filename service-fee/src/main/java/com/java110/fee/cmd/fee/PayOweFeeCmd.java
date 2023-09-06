@@ -23,6 +23,7 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.user.UserDto;
+import com.java110.fee.smo.impl.FeeReceiptInnerServiceSMOImpl;
 import com.java110.intf.community.*;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
@@ -34,6 +35,7 @@ import com.java110.po.fee.FeeReceiptPo;
 import com.java110.po.fee.FeeReceiptDetailPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
@@ -119,6 +121,24 @@ public class PayOweFeeCmd extends Cmd {
             Assert.hasKeyAndValue(feeObject, "startTime", "未包含开始时间");
             Assert.hasKeyAndValue(feeObject, "endTime", "未包含结束时间");
             Assert.hasKeyAndValue(feeObject, "receivedAmount", "未包含实收金额");
+
+            //计算 应收金额
+            FeeDto feeDto = new FeeDto();
+            feeDto.setFeeId(feeObject.getString("feeId"));
+            feeDto.setCommunityId(feeObject.getString("communityId"));
+            Date pageEndTime = null;
+            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+            if (feeDtos == null || feeDtos.size() != 1) {
+                throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
+            }
+            feeDto = feeDtos.get(0);
+
+            pageEndTime = DateUtil.getDateFromStringB(feeObject.getString("endTime"));
+            if (pageEndTime.getTime() <= feeDto.getEndTime().getTime()) {
+                throw new IllegalArgumentException("可能存在重复缴费，请刷新页面重新缴费");
+            }
+
+            feeObject.put("feeDto", feeDto);
         }
     }
 
@@ -138,6 +158,11 @@ public class PayOweFeeCmd extends Cmd {
         JSONObject feeObj = null;
         String appId = dataFlowContext.getReqHeaders().get("app-id");
 
+
+        //todo 生成收据编号
+        String receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(paramObj.getString("communityId"));
+
+
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             feeObj = fees.getJSONObject(feeIndex);
             feeObj.put("communityId", paramObj.getString("communityId"));
@@ -152,7 +177,7 @@ public class PayOweFeeCmd extends Cmd {
             }
 
             //todo 去缴费
-            getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos, userDtos.get(0));
+            getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos, userDtos.get(0), receiptCode);
         }
 
         //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
@@ -178,7 +203,7 @@ public class PayOweFeeCmd extends Cmd {
         List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
         JSONObject data = new JSONObject();
-        data.put("receipts",feeReceiptDetailDtos);
+        data.put("receipts", feeReceiptDetailDtos);
 
         dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(data));
     }
@@ -186,7 +211,8 @@ public class PayOweFeeCmd extends Cmd {
     private void getFeeReceiptDetailPo(ICmdDataFlowContext dataFlowContext, JSONObject paramObj,
                                        List<FeeReceiptDetailPo> feeReceiptDetailPos,
                                        List<FeeReceiptPo> feeReceiptPos,
-                                       UserDto userDto) {
+                                       UserDto userDto,
+                                       String receiptCode) {
         int flag = 0;
         if (!paramObj.containsKey("primeRate")) {
             paramObj.put("primeRate", "6");
@@ -202,7 +228,7 @@ public class PayOweFeeCmd extends Cmd {
         }
         paramObj.put("state", "1400");
         // todo 添加交费明细
-        addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos, userDto);
+        addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos, userDto, receiptCode);
         modifyOweFee(paramObj, dataFlowContext);
 
         //修改车辆
@@ -325,24 +351,18 @@ public class PayOweFeeCmd extends Cmd {
     public void addOweFeeDetail(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext,
                                 List<FeeReceiptDetailPo> feeReceiptDetailPos,
                                 List<FeeReceiptPo> feeReceiptPos,
-                                UserDto userDto) {
+                                UserDto userDto,
+                                String receiptCode) {
 
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
         businessFeeDetail.put("detailId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         businessFeeDetail.put("primeRate", paramInJson.getString("primeRate"));
-        //计算 应收金额
-        FeeDto feeDto = new FeeDto();
-        feeDto.setFeeId(paramInJson.getString("feeId"));
-        feeDto.setCommunityId(paramInJson.getString("communityId"));
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (feeDtos == null || feeDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
-        }
+        FeeDto feeDto = (FeeDto) paramInJson.get("feeDto");
         if (!businessFeeDetail.containsKey("state") || StringUtil.isEmpty(businessFeeDetail.getString("state"))) {
             businessFeeDetail.put("state", "1400");
         }
-        feeDto = feeDtos.get(0);
+
         businessFeeDetail.put("startTime", paramInJson.getString("startTime"));
         BigDecimal cycles = null;
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
@@ -377,7 +397,8 @@ public class PayOweFeeCmd extends Cmd {
         }
         payFeeDetailPo.setCashierId(userDto.getUserId());
         payFeeDetailPo.setCashierName(userDto.getName());
-
+        //todo 缓存收据编号
+        CommonCache.setValue(payFeeDetailPo.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
         int flag = payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
 
         if (flag < 1) {

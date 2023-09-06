@@ -151,7 +151,7 @@ public class CarOutParkingAreaAdapt extends DatabusAdaptImpl {
 
         String remark = getRemark(communityId, ownerCarDtos.get(0).getOwnerId());
         data.setRemark(new Content(remark));
-        templateMessage.setData(data);
+        templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
         //获取业主公众号地址
         String wechatUrl = UrlCache.getOwnerUrl();
         wechatUrl += "/#/pages/fee/oweFee";

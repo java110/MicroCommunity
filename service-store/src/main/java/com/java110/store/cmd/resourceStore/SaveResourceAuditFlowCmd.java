@@ -18,15 +18,25 @@ package com.java110.store.cmd.resourceStore;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflow.WorkflowModelDto;
+import com.java110.dto.resource.ResourceAuditFlowDto;
+import com.java110.intf.common.IWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowXmlInnerServiceSMO;
 import com.java110.intf.store.IResourceAuditFlowV1InnerServiceSMO;
+import com.java110.po.oaWorkflow.OaWorkflowPo;
+import com.java110.po.oaWorkflow.OaWorkflowXmlPo;
 import com.java110.po.resource.ResourceAuditFlowPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.BpmnXml;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -52,20 +62,74 @@ public class SaveResourceAuditFlowCmd extends Cmd {
     @Autowired
     private IResourceAuditFlowV1InnerServiceSMO resourceAuditFlowV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkflowInnerServiceSMO workflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IOaWorkflowXmlInnerServiceSMO oaWorkflowXmlInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "flowType", "请求报文中未包含flowType");
-Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        Assert.hasKeyAndValue(reqJson, "auditType", "请求报文中未包含flowType");
+        Assert.hasKeyAndValue(reqJson, "flowName", "请求报文中未包含flowType");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区");
 
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
 
-       ResourceAuditFlowPo resourceAuditFlowPo = BeanConvertUtil.covertBean(reqJson, ResourceAuditFlowPo.class);
+        OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
+        oaWorkflowPo.setStoreId(storeId);
+        oaWorkflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
+        oaWorkflowPo.setFlowName(reqJson.getString("flowName"));
+
+        String auditType = reqJson.getString("auditType");
+        if(ResourceAuditFlowDto.AUDIT_TYPE_PURCHASE_APPLY.equals(auditType)) {
+            oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_PURCHASE_APPLY);
+        }else if(ResourceAuditFlowDto.AUDIT_TYPE_RESOURCE_OUT.equals(auditType)) {
+            oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_RESOURCE_OUT);
+        }else{
+            oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_ALLOCATION);
+        }
+
+        //创建model
+        WorkflowModelDto workflowModelDto = new WorkflowModelDto();
+        workflowModelDto.setName(oaWorkflowPo.getFlowName());
+        workflowModelDto.setKey(oaWorkflowPo.getFlowId());
+        workflowModelDto = workflowInnerServiceSMOImpl.createModel(workflowModelDto);
+
+        oaWorkflowPo.setModelId(workflowModelDto.getModelId());
+        oaWorkflowPo.setFlowKey(workflowModelDto.getKey());
+        oaWorkflowPo.setState(OaWorkflowDto.STATE_WAIT);
+        int flag = oaWorkflowInnerServiceSMOImpl.saveOaWorkflow(oaWorkflowPo);
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
+
+        //默认 流程图以防画错
+        OaWorkflowXmlPo oaWorkflowXmlPo = new OaWorkflowXmlPo();
+        oaWorkflowXmlPo.setStoreId(oaWorkflowPo.getStoreId());
+        oaWorkflowXmlPo.setFlowId(oaWorkflowPo.getFlowId());
+        oaWorkflowXmlPo.setXmlId(GenerateCodeFactory.getGeneratorId("79"));
+        oaWorkflowXmlPo.setSvgXml("");
+        oaWorkflowXmlPo.setBpmnXml(BpmnXml.getResourceBpmnXml(oaWorkflowPo.getFlowId()));
+
+        flag = oaWorkflowXmlInnerServiceSMOImpl.saveOaWorkflowXml(oaWorkflowXmlPo);
+        if (flag < 1) {
+            throw new CmdException("保存模型数据失败");
+        }
+
+        ResourceAuditFlowPo resourceAuditFlowPo = BeanConvertUtil.covertBean(reqJson, ResourceAuditFlowPo.class);
+        resourceAuditFlowPo.setStoreId(storeId);
         resourceAuditFlowPo.setRafId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = resourceAuditFlowV1InnerServiceSMOImpl.saveResourceAuditFlow(resourceAuditFlowPo);
+        resourceAuditFlowPo.setFlowId(oaWorkflowPo.getFlowId());
+        flag = resourceAuditFlowV1InnerServiceSMOImpl.saveResourceAuditFlow(resourceAuditFlowPo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");

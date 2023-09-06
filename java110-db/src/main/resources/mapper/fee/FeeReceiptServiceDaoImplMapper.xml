@@ -8,12 +8,12 @@
     <!-- 保存收据信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeReceiptInfo" parameterType="Map">
         insert into fee_receipt(
-        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name
+        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name,receipt_code
         <if test="createTime != null">
             ,create_time
         </if>
         ) values (
-        #{amount},#{objId},#{remark},#{objName},#{communityId},#{receiptId},#{objType},#{payObjId},#{payObjName}
+        #{amount},#{objId},#{remark},#{objName},#{communityId},#{receiptId},#{objType},#{payObjId},#{payObjName},#{receiptCode}
         <if test="createTime != null">
             ,#{createTime}
         </if>
@@ -24,10 +24,10 @@
     <!-- 批量插入费用 -->
     <insert id="saveFeeReceipts" parameterType="Map">
         insert into fee_receipt(
-        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name
+        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name,receipt_code
         ) values
         <foreach collection="feeReceiptPos" item="item" separator=",">
-            (#{item.amount},#{item.objId},#{item.remark},#{item.objName},#{item.communityId},#{item.receiptId},#{item.objType},#{item.payObjId},#{item.payObjName})
+            (#{item.amount},#{item.objId},#{item.remark},#{item.objName},#{item.communityId},#{item.receiptId},#{item.objType},#{item.payObjId},#{item.payObjName},#{item.receiptCode})
         </foreach>
     </insert>
 
@@ -37,7 +37,7 @@
         select t.amount,t.obj_id,t.obj_id objId,t.remark,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name
         objName,t.community_id,t.community_id communityId,t.receipt_id,t.receipt_id receiptId,t.obj_type,t.obj_type
         objType,t.create_time createTime,frd.fee_name feeName,t.pay_obj_id payObjId,t.pay_obj_name payObjName,pf.fee_type_cd feeTypeCd,
-        frd.start_time startTime,frd.end_time endTime,pf.fee_flag feeFlag
+        frd.start_time startTime,frd.end_time endTime,pf.fee_flag feeFlag,t.receipt_code receiptCode
         from fee_receipt t
         inner join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
         inner join pay_fee pf on frd.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -93,7 +93,7 @@
         <if test="qendTime !=null and qendTime != ''">
             and t.create_time &lt;= #{qendTime}
         </if>
-        order by t.create_time desc
+        order by t.create_time desc,t.receipt_code desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -319,6 +319,9 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="receiptCode !=null and receiptCode != ''">
+            and t.receipt_code = #{receiptCode}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

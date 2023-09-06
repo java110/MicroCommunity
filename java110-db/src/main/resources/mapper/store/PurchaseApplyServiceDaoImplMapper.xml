@@ -218,8 +218,15 @@
         t.warehousing_way warehousingWay,
         t.community_id communityId
         from purchase_apply t
+        <if test="resName != null and resName != ''" >
+        left join purchase_apply_detail pad on t.apply_order_id = pad.apply_order_id and pad.status_cd = '0'
+        left join resource_store rs on pad.res_id = rs.res_id and rs.status_cd = '0'
+       </if>
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 = 1
+        <if test="resName != null and resName != ''" >
+        and rs.res_name like concat('%','','%')
+        </if>
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
         </if>
@@ -262,6 +269,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{startTime}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -406,7 +419,14 @@
     <select id="queryPurchaseApplysCount" parameterType="Map" resultType="Map">
         select count(1) count
         from purchase_apply t
+        <if test="resName != null and resName != ''" >
+            left join purchase_apply_detail pad on t.apply_order_id = pad.apply_order_id and pad.status_cd = '0'
+            left join resource_store rs on pad.res_id = rs.res_id and rs.status_cd = '0'
+        </if>
         where 1 = 1
+        <if test="resName != null and resName != ''" >
+            and rs.res_name like concat('%','','%')
+        </if>
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
         </if>
@@ -452,6 +472,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id = #{communityId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{startTime}
         </if>
         <if test='urgentFlag !=null and urgentFlag == "1"'>
             and date_format(t.create_time,'%Y-%m') = date_format(now(),'%Y-%m')

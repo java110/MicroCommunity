@@ -149,7 +149,7 @@ public class RoomBMOImpl extends ApiBaseBMO implements IRoomBMO {
         OwnerRoomRelDto ownerRoomRelDto = BeanConvertUtil.covertBean(paramInJson, OwnerRoomRelDto.class);
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
+        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() <1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，业主和房屋对应关系不是一条");
         }
 

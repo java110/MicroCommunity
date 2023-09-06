@@ -334,7 +334,8 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
                             templateMessage.setMiniprogram(miniprogram);
                         }
                     }
-                    templateMessage.setData(data);
+                    templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
                     logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                     ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
                     logger.info("微信模板返回内容:{}", responseEntity);

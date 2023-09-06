@@ -39,4 +39,7 @@ public interface IPayFeeDetailDiscountInnerServiceSMO {
      */
     @RequestMapping(value = "/queryPayFeeDetailDiscountsCount", method = RequestMethod.POST)
     int queryPayFeeDetailDiscountsCount(@RequestBody PayFeeDetailDiscountDto payFeeDetailDiscountDto);
+
+    @RequestMapping(value = "/computeDiscountFee", method = RequestMethod.POST)
+    List<PayFeeDetailDiscountDto> computeDiscountFee(@RequestBody PayFeeDetailDiscountDto payFeeDetailDiscountDto);
 }

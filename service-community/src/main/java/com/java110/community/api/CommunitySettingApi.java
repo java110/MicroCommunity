@@ -35,17 +35,17 @@ public class CommunitySettingApi {
      * @serviceCode /communitySetting/saveCommunitySetting
      * @path /app/communitySetting/saveCommunitySetting
      */
-    @RequestMapping(value = "/saveCommunitySetting", method = RequestMethod.POST)
-    public ResponseEntity<String> saveCommunitySetting(@RequestBody JSONObject reqJson) {
-
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "settingType", "请求报文中未包含settingType");
-        Assert.hasKeyAndValue(reqJson, "settingKey", "请求报文中未包含settingKey");
-
-
-        CommunitySettingPo communitySettingPo = BeanConvertUtil.covertBean(reqJson, CommunitySettingPo.class);
-        return saveCommunitySettingBMOImpl.save(communitySettingPo);
-    }
+//    @RequestMapping(value = "/saveCommunitySetting", method = RequestMethod.POST)
+//    public ResponseEntity<String> saveCommunitySetting(@RequestBody JSONObject reqJson) {
+//
+//        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+//        Assert.hasKeyAndValue(reqJson, "settingType", "请求报文中未包含settingType");
+//        Assert.hasKeyAndValue(reqJson, "settingKey", "请求报文中未包含settingKey");
+//
+//
+//        CommunitySettingPo communitySettingPo = BeanConvertUtil.covertBean(reqJson, CommunitySettingPo.class);
+//        return saveCommunitySettingBMOImpl.save(communitySettingPo);
+//    }
 
     /**
      * 微信修改消息模板

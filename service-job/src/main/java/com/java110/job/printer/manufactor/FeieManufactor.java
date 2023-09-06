@@ -139,6 +139,7 @@ public class FeieManufactor implements IPrinter {
 
         /*************************************头部******************************************/
         List<FeieLine> feieLines = new ArrayList<>();
+        feieLines.add(new FeieLine("收据编号", feeReceiptDtos.get(0).getReceiptCode()));
         feieLines.add(new FeieLine("单号", feeReceiptDetailDtos.get(0).getPayOrderId()));
         feieLines.add(new FeieLine("房号", feeReceiptDtos.get(0).getObjName()));
         feieLines.add(new FeieLine("业主", feeReceiptDtos.get(0).getPayObjName()));

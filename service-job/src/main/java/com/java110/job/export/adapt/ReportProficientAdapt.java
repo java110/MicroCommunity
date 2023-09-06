@@ -2,8 +2,8 @@ package com.java110.job.export.adapt;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
-import com.java110.dto.reportFeeYearCollection.ReportFeeYearCollectionDto;
-import com.java110.dto.reportFeeYearCollectionDetail.ReportFeeYearCollectionDetailDto;
+import com.java110.dto.reportFee.ReportFeeYearCollectionDetailDto;
+import com.java110.dto.reportFee.ReportFeeYearCollectionDto;
 import com.java110.intf.report.IReportFeeYearCollectionDetailInnerServiceSMO;
 import com.java110.intf.report.IReportFeeYearCollectionInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;

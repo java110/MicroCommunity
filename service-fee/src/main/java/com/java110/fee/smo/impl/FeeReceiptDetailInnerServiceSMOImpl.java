@@ -8,6 +8,7 @@ import com.java110.fee.dao.IFeeReceiptDetailServiceDao;
 import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.po.fee.FeeReceiptDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -77,6 +78,14 @@ public class FeeReceiptDetailInnerServiceSMOImpl extends BaseServiceSMO implemen
 
         if (page != PageDto.DEFAULT_PAGE) {
             feeReceiptDetailDto.setPage((page - 1) * feeReceiptDetailDto.getRow());
+        }
+        if(!StringUtil.isEmpty(feeReceiptDetailDto.getOrderBy())) {
+            switch (feeReceiptDetailDto.getOrderBy()) {
+                case "start_time":
+                    break;
+                default:
+                    feeReceiptDetailDto.setOrderBy("");
+            }
         }
 
         List<FeeReceiptDetailDto> feeReceiptDetails = BeanConvertUtil.covertBeanList(feeReceiptDetailServiceDaoImpl.getFeeReceiptDetailInfo(BeanConvertUtil.beanCovertMap(feeReceiptDetailDto)), FeeReceiptDetailDto.class);

@@ -15,14 +15,22 @@
  */
 package com.java110.user.cmd.question;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.questionAnswer.QuestionAnswerDto;
+import com.java110.intf.user.IQuestionAnswerTitleRelV1InnerServiceSMO;
 import com.java110.intf.user.IQuestionAnswerV1InnerServiceSMO;
+import com.java110.intf.user.IUserQuestionAnswerV1InnerServiceSMO;
 import com.java110.po.questionAnswer.QuestionAnswerPo;
+import com.java110.po.questionAnswerTitleRel.QuestionAnswerTitleRelPo;
+import com.java110.po.user.UserQuestionAnswerPo;
+import com.java110.user.bmo.question.IQuestionAnswerBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -47,14 +55,32 @@ public class UpdateQuestionAnswerCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateQuestionAnswerCmd.class);
 
-
     @Autowired
     private IQuestionAnswerV1InnerServiceSMO questionAnswerV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IQuestionAnswerTitleRelV1InnerServiceSMO questionAnswerTitleRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IQuestionAnswerBMO questionAnswerBMOImpl;
+
+    @Autowired
+    private IUserQuestionAnswerV1InnerServiceSMO userQuestionAnswerV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "qaId", "qaId不能为空");
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "qaName", "请求报文中未包含投票名称");
+        Assert.hasKeyAndValue(reqJson, "qaId", "请求报文中未包含题目");
+        Assert.hasKeyAndValue(reqJson, "startTime", "未包含开始时间");
+        Assert.hasKeyAndValue(reqJson, "endTime", "未包含结束时间");
+        Assert.hasKeyAndValue(reqJson, "content", "未包含说明");
+        Assert.hasKey(reqJson, "questionTitles", "请求报文中未包含题目");
+
+        JSONArray questionTitles = reqJson.getJSONArray("questionTitles");
+        if (questionTitles == null || questionTitles.size() < 1) {
+            throw new IllegalArgumentException("未包含题目");
+        }
 
     }
 
@@ -62,12 +88,52 @@ public class UpdateQuestionAnswerCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        QuestionAnswerPo questionAnswerPo = BeanConvertUtil.covertBean(reqJson, QuestionAnswerPo.class);
+        //todo 写入投票信息
+        QuestionAnswerPo questionAnswerPo = new QuestionAnswerPo();
+        questionAnswerPo.setContent(reqJson.getString("content"));
+        questionAnswerPo.setEndTime(reqJson.getString("endTime"));
+        questionAnswerPo.setStartTime(reqJson.getString("startTime"));
+        questionAnswerPo.setQaId(reqJson.getString("qaId"));
+        questionAnswerPo.setQaName(reqJson.getString("qaName"));
+        questionAnswerPo.setCommunityId(reqJson.getString("communityId"));
+        questionAnswerPo.setQaType(QuestionAnswerDto.QA_TYPE_QUESTION);
+        questionAnswerPo.setState(QuestionAnswerDto.STATE_WAIT);
         int flag = questionAnswerV1InnerServiceSMOImpl.updateQuestionAnswer(questionAnswerPo);
 
         if (flag < 1) {
-            throw new CmdException("更新数据失败");
+            throw new CmdException("保存数据失败");
         }
+        JSONArray questionTitles = reqJson.getJSONArray("questionTitles");
+        QuestionAnswerTitleRelPo questionAnswerTitleRelPo = new QuestionAnswerTitleRelPo();
+        questionAnswerTitleRelPo.setQaId(reqJson.getString("qaId"));
+        questionAnswerTitleRelPo.setCommunityId(reqJson.getString("communityId"));
+        questionAnswerTitleRelV1InnerServiceSMOImpl.deleteQuestionAnswerTitleRel(questionAnswerTitleRelPo);
+        JSONObject title = null;
+        for (int titleIndex = 0; titleIndex < questionTitles.size(); titleIndex++) {
+            title= questionTitles.getJSONObject(titleIndex);
+            questionAnswerTitleRelPo = new QuestionAnswerTitleRelPo();
+            questionAnswerTitleRelPo.setCommunityId(reqJson.getString("communityId"));
+            questionAnswerTitleRelPo.setTitleId(title.getString("titleId"));
+            questionAnswerTitleRelPo.setSeq((titleIndex + 1) + "");
+            questionAnswerTitleRelPo.setScore("0");
+            if(title.containsKey("score")){
+                questionAnswerTitleRelPo.setScore(title.getString("score"));
+            }
+            questionAnswerTitleRelPo.setQaId(questionAnswerPo.getQaId());
+            questionAnswerTitleRelPo.setQatrId(GenerateCodeFactory.getGeneratorId("11"));
+            questionAnswerTitleRelV1InnerServiceSMOImpl.saveQuestionAnswerTitleRel(questionAnswerTitleRelPo);
+        }
+
+        JSONArray roomIds = reqJson.getJSONArray("roomIds");
+        if(roomIds == null || roomIds.size() < 1){
+            return ;
+        }
+        UserQuestionAnswerPo userQuestionAnswerPo = new UserQuestionAnswerPo();
+        userQuestionAnswerPo.setQaId(reqJson.getString("qaId"));
+        userQuestionAnswerPo.setCommunityId(reqJson.getString("communityId"));
+        userQuestionAnswerV1InnerServiceSMOImpl.deleteUserQuestionAnswer(userQuestionAnswerPo);
+
+        questionAnswerBMOImpl.saveUserQuestionAnswer(questionAnswerPo, reqJson.getJSONArray("roomIds"));
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

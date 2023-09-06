@@ -20,6 +20,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
@@ -154,7 +155,8 @@ public class MachineRoomRenovation extends DatabusAdaptImpl {
             data.setKeyword2(new Content(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A)));
             data.setKeyword3(new Content("您的" + communityDtos.get(0).getName() + "小区" + paramIn.getString("roomName") + "房屋，有新的现场巡检记录，请您及时了解近期房屋装修状况！"));
             data.setRemark(new Content("如有其它问题，请联系" + communityDtos.get(0).getName() + "客服，联系电话" + tel + "，感谢您的使用。"));
-            templateMessage.setData(data);
+            templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
             //获取业主公众号地址
             String wechatUrl = UrlCache.getOwnerUrl();
             templateMessage.setUrl(wechatUrl);

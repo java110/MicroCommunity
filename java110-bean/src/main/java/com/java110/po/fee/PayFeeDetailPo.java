@@ -38,6 +38,7 @@ public class PayFeeDetailPo implements Serializable {
     private String cashierName;
 
 
+
     public String getDetailId() {
         return detailId;
     }
@@ -181,4 +182,5 @@ public class PayFeeDetailPo implements Serializable {
     public void setCashierName(String cashierName) {
         this.cashierName = cashierName;
     }
+
 }

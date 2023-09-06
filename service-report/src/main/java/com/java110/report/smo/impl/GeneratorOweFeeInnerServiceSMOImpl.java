@@ -210,6 +210,9 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         //刷入欠费金额
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
+        //考虑租金递增
+        computeFeeSMOImpl.dealRentRate(feeDto);
+
         //保存数据
         ReportOweFeePo reportOweFeePo = new ReportOweFeePo();
         reportOweFeePo.setAmountOwed(feeDto.getFeeTotalPrice() + "");

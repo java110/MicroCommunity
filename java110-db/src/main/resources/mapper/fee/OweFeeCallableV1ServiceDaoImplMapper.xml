@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="oweFeeCallableV1ServiceDaoImpl">
+
+
+    <!-- 保存催缴记录信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOweFeeCallableInfo" parameterType="Map">
+        insert into owe_fee_callable(
+        remark,ofc_id,owner_id,callable_way,fee_id,payer_obj_name,owner_name,config_id,fee_name,staff_name,
+        amountd_owed,state,community_id,payer_obj_type,staff_id,payer_obj_id,start_time,end_time
+        ) values (
+        #{remark},#{ofcId},#{ownerId},#{callableWay},#{feeId},#{payerObjName},#{ownerName},#{configId},#{feeName},#{staffName},
+        #{amountdOwed},#{state},#{communityId},#{payerObjType},#{staffId},#{payerObjId},#{startTime},#{endTime}
+        )
+    </insert>
+
+    <insert id="saveOweFeeCallables" parameterType="Map">
+        insert into owe_fee_callable(
+        remark,ofc_id,owner_id,callable_way,fee_id,payer_obj_name,owner_name,config_id,fee_name,staff_name,
+        amountd_owed,state,community_id,payer_obj_type,staff_id,payer_obj_id,start_time,end_time
+        ) values
+        <foreach collection="oweFeeCallablePos" item="item"  separator=",">
+            (#{item.remark},#{item.ofcId},#{item.ownerId},#{item.callableWay},#{item.feeId},#{item.payerObjName},#{item.ownerName},#{item.configId},#{item.feeName},
+            #{item.staffName},#{item.amountdOwed},#{item.state},#{item.communityId},#{item.payerObjType},#{item.staffId},#{item.payerObjId},#{item.startTime},
+            #{item.endTime})
+        </foreach>
+
+    </insert>
+
+
+
+
+    <!-- 查询催缴记录信息 add by wuxw 2018-07-03 -->
+    <select id="getOweFeeCallableInfo" parameterType="Map" resultType="Map">
+        select t.remark,t.ofc_id,t.ofc_id ofcId,t.owner_id,t.owner_id ownerId,t.callable_way,t.callable_way
+        callableWay,t.fee_id,t.fee_id feeId,t.payer_obj_name,t.payer_obj_name payerObjName,t.owner_name,t.owner_name
+        ownerName,t.config_id,t.config_id configId,t.fee_name,t.fee_name feeName,t.staff_name,t.staff_name
+        staffName,t.amountd_owed,t.amountd_owed amountdOwed,t.state,t.community_id,t.community_id
+        communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.staff_id,t.staff_id
+        staffId,t.payer_obj_id,t.payer_obj_id payerObjId,t.start_time startTime,t.end_time endTime,t.create_time createTime,
+        td.`name` callableWayName,td1.name stateName
+        from owe_fee_callable t
+        left join t_dict td on t.callable_way = td.status_cd and td.table_name = 'owe_fee_callable' and td.table_columns = 'callable_way'
+        left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'owe_fee_callable' and td1.table_columns = 'state'
+
+        where 1 =1
+        and t.status_cd = '0'
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ofcId !=null and ofcId != ''">
+            and t.ofc_id= #{ofcId}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="callableWay !=null and callableWay != ''">
+            and t.callable_way= #{callableWay}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="payerObjName !=null and payerObjName != ''">
+            and t.payer_obj_name= #{payerObjName}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="amountdOwed !=null and amountdOwed != ''">
+            and t.amountd_owed= #{amountdOwed}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type= #{payerObjType}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id= #{payerObjId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改催缴记录信息 add by wuxw 2018-07-03 -->
+    <update id="updateOweFeeCallableInfo" parameterType="Map">
+        update owe_fee_callable t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            , t.owner_id= #{ownerId}
+        </if>
+        <if test="callableWay !=null and callableWay != ''">
+            , t.callable_way= #{callableWay}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="payerObjName !=null and payerObjName != ''">
+            , t.payer_obj_name= #{payerObjName}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="amountdOwed !=null and amountdOwed != ''">
+            , t.amountd_owed= #{amountdOwed}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            , t.payer_obj_type= #{payerObjType}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            , t.payer_obj_id= #{payerObjId}
+        </if>
+        where 1=1
+        <if test="ofcId !=null and ofcId != ''">
+            and t.ofc_id= #{ofcId}
+        </if>
+
+    </update>
+
+    <!-- 查询催缴记录数量 add by wuxw 2018-07-03 -->
+    <select id="queryOweFeeCallablesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owe_fee_callable t
+        where 1 =1
+        and t.status_cd = '0'
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ofcId !=null and ofcId != ''">
+            and t.ofc_id= #{ofcId}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="callableWay !=null and callableWay != ''">
+            and t.callable_way= #{callableWay}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="payerObjName !=null and payerObjName != ''">
+            and t.payer_obj_name= #{payerObjName}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="amountdOwed !=null and amountdOwed != ''">
+            and t.amountd_owed= #{amountdOwed}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="payerObjType !=null and payerObjType != ''">
+            and t.payer_obj_type= #{payerObjType}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id= #{payerObjId}
+        </if>
+
+
+    </select>
+
+</mapper>

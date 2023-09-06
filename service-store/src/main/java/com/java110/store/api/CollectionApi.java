@@ -64,59 +64,7 @@ public class CollectionApi {
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
 
-    /**
-     * 物品领用 接口类
-     *
-     * @param reqJson
-     * @param userId
-     * @param storeId
-     * @return {"resourceStores":[{"resId":"852020070239060001","resName":"水性笔","resCode":"002","price":"2.00","stock":"2",
-     * "description":"黑色","quantity":"1"}],"description":"123123","endUserName":"1","endUserTel":"17797173942","file":"",
-     * "resOrderType":"20000","staffId":"","staffName":""}
-     */
-    @RequestMapping(value = "/goodsCollection", method = RequestMethod.POST)
-    public ResponseEntity<String> goodsCollection(@RequestBody JSONObject reqJson,
-                                                  @RequestHeader(value = "user-id") String userId,
-                                                  @RequestHeader(value = "store-id") String storeId) {
 
-        UserDto userDto = new UserDto();
-        userDto.setUserId(userId);
-        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
-        Assert.listOnlyOne(userDtos,"未包含用户");
-
-
-        String userName  = userDtos.get(0).getName();
-
-        Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写物品领用的物资");
-        Assert.hasKeyAndValue(reqJson, "description", "必填，请填写采购申请说明");
-        PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
-        purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
-        purchaseApplyPo.setDescription(reqJson.getString("description"));
-        purchaseApplyPo.setUserId(userId);
-        purchaseApplyPo.setUserName(userName);
-        purchaseApplyPo.setEndUserName(reqJson.getString("endUserName"));
-        purchaseApplyPo.setEndUserTel(reqJson.getString("endUserTel"));
-        purchaseApplyPo.setStoreId(storeId);
-        purchaseApplyPo.setResOrderType(PurchaseApplyDto.RES_ORDER_TYPE_OUT);
-        purchaseApplyPo.setState(PurchaseApplyDto.STATE_WAIT_DEAL);
-        purchaseApplyPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        purchaseApplyPo.setCreateUserId(userId);
-        purchaseApplyPo.setCreateUserName(userName);
-        purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_APPLY);
-        purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
-        JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
-        List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
-        for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
-            JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
-            resourceStore.put("originalStock", resourceStore.get("stock"));
-            PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(resourceStore, PurchaseApplyDetailPo.class);
-            purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
-            purchaseApplyDetailPos.add(purchaseApplyDetailPo);
-        }
-        purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return goodsCollectionBMOImpl.collection(purchaseApplyPo,reqJson);
-    }
 
     /**
      * 查询审核单
@@ -140,31 +88,6 @@ public class CollectionApi {
         auditUser.setStoreId(storeId);
         auditUser.setCommunityId(communityId);
         return getCollectionAuditOrderBMOImpl.auditOrder(auditUser);
-    }
-
-    /**
-     * 物品发放(物品发放之后直接到个人手中)
-     * {"resourceOuts":[],"applyOrderId":"152020071665420001","taskId":"237506","resOrderType":"20000",
-     * "purchaseApplyDetailVo":[{"applyOrderId":"152020071665420001","id":"152020071690120002","price":"","quantity":"1",
-     * "resCode":"002","resId":"852020070239060001","resName":"水性笔","stock":"2","purchaseQuantity":"2","purchaseRemark":""}]}
-     */
-
-    @RequestMapping(value = "/resourceOut", method = RequestMethod.POST)
-    public ResponseEntity<String> resourceOut(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单ID为空");
-        JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
-        List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
-        for (int detailIndex = 0; detailIndex < purchaseApplyDetails.size(); detailIndex++) {
-            JSONObject purchaseApplyDetail = purchaseApplyDetails.getJSONObject(detailIndex);
-            Assert.hasKeyAndValue(purchaseApplyDetail, "purchaseQuantity", "采购数量未填写");
-            Assert.hasKeyAndValue(purchaseApplyDetail, "id", "明细ID为空");
-            PurchaseApplyDetailPo purchaseApplyDetailPo = BeanConvertUtil.covertBean(purchaseApplyDetail, PurchaseApplyDetailPo.class);
-            purchaseApplyDetailPos.add(purchaseApplyDetailPo);
-        }
-        PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
-        purchaseApplyPo.setApplyOrderId(reqJson.getString("applyOrderId"));
-        purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-        return resourceOutBMOImpl.out(purchaseApplyPo);
     }
 
     /**

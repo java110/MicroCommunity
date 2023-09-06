@@ -69,9 +69,6 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
         <if test="settingKey !=null and settingKey != ''">
             , t.setting_key= #{settingKey}
         </if>
@@ -84,6 +81,9 @@
         where 1=1
         <if test="csId !=null and csId != ''">
             and t.cs_id= #{csId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

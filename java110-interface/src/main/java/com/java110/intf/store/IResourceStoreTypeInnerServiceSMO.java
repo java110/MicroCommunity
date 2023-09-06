@@ -39,4 +39,7 @@ public interface IResourceStoreTypeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryResourceStoreTypesCount", method = RequestMethod.POST)
     int queryResourceStoreTypesCount(@RequestBody ResourceStoreTypeDto resourceResourceStoreTypeTypeDto);
+
+    @RequestMapping(value = "/queryResourceStoreTypeTree", method = RequestMethod.POST)
+    List<ResourceStoreTypeDto> queryResourceStoreTypeTree(@RequestBody ResourceStoreTypeDto resourceStoreTypeDto);
 }

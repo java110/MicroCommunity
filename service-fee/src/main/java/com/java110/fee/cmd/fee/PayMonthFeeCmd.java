@@ -29,6 +29,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.constant.FeeFlagTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
@@ -95,6 +96,9 @@ public class PayMonthFeeCmd extends Cmd {
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMO;
 
+    @Autowired
+    private IFeeReceiptInnerServiceSMO feeReceiptInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -157,6 +161,10 @@ public class PayMonthFeeCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
 
+
+        //todo 生成收据编号
+        String receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(reqJson.getString("communityId"));
+
         List<PayFeeDetailMonthDto> payFeeDetailMonthDtos = (List<PayFeeDetailMonthDto>) reqJson.get("payFeeDetailMonthDtos");
 
         Calendar createTimeCal = Calendar.getInstance();
@@ -179,7 +187,7 @@ public class PayMonthFeeCmd extends Cmd {
             }
             createTimeCal.add(Calendar.SECOND, 1);
             try {
-                doMonthFee(payFeeDetailMonthDto, context, userDtos.get(0), reqJson, createTimeCal.getTime(), feeDtoMap);
+                doMonthFee(payFeeDetailMonthDto, context, userDtos.get(0), reqJson, createTimeCal.getTime(), feeDtoMap,receiptCode);
             } catch (Exception e) {
                 logger.error("处理异常", e);
                 throw new CmdException(e.getMessage());
@@ -201,7 +209,7 @@ public class PayMonthFeeCmd extends Cmd {
      * @param userDto
      * @param reqJson
      */
-    private void doMonthFee(PayFeeDetailMonthDto payFeeDetailMonthDto, ICmdDataFlowContext context, UserDto userDto, JSONObject reqJson, Date createTime, Map<String, FeeDto> feeDtoMap) {
+    private void doMonthFee(PayFeeDetailMonthDto payFeeDetailMonthDto, ICmdDataFlowContext context, UserDto userDto, JSONObject reqJson, Date createTime, Map<String, FeeDto> feeDtoMap,String receiptCode) {
         //todo 计算结束时间
         Date startTime = DateUtil.getDateFromStringB(payFeeDetailMonthDto.getCurMonthTime());
         Calendar calendar = Calendar.getInstance();
@@ -228,7 +236,8 @@ public class PayMonthFeeCmd extends Cmd {
             payFeeDetailPo.setEndTime(endTime);
             // todo 按月交费时 主要按时间顺序排序时 能够整齐
             payFeeDetailPo.setCreateTime(DateUtil.getFormatTimeStringA(createTime));
-
+            //todo 缓存收据编号
+            CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");

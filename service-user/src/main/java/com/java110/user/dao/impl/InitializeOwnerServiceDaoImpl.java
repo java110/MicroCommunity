@@ -36,4 +36,28 @@ public class InitializeOwnerServiceDaoImpl extends BaseServiceDao implements IIn
         }*/
         return deleteFlag;
     }
+
+    @Override
+    public int deleteUser(Map info) {
+        logger.debug("删除业主信息 入参 info : {}", info);
+
+        int deleteFlag = sqlSessionTemplate.delete("initializeOwnerServiceDaoImpl.deleteUser", info);
+
+    /*    if (deleteFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "building_owner初始化失败：" + JSONObject.toJSONString(info));
+        }*/
+        return deleteFlag;
+    }
+
+    @Override
+    public int deleteOwnerAppUser(Map info) {
+        logger.debug("删除业主信息 入参 info : {}", info);
+
+        int deleteFlag = sqlSessionTemplate.delete("initializeOwnerServiceDaoImpl.deleteOwnerAppUser", info);
+
+    /*    if (deleteFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "building_owner初始化失败：" + JSONObject.toJSONString(info));
+        }*/
+        return deleteFlag;
+    }
 }

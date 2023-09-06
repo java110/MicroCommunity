@@ -18,6 +18,7 @@ package com.java110.store.cmd.resourceStore;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -30,6 +31,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * 类表述：删除
  * 服务编码：resourceAuditFlow.deleteResourceAuditFlow
@@ -42,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 @Java110Cmd(serviceCode = "resourceStore.deleteResourceAuditFlow")
 public class DeleteResourceAuditFlowCmd extends Cmd {
-  private static Logger logger = LoggerFactory.getLogger(DeleteResourceAuditFlowCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(DeleteResourceAuditFlowCmd.class);
 
     @Autowired
     private IResourceAuditFlowV1InnerServiceSMO resourceAuditFlowV1InnerServiceSMOImpl;
@@ -50,15 +52,17 @@ public class DeleteResourceAuditFlowCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "rafId", "rafId不能为空");
-Assert.hasKeyAndValue(reqJson, "storeId", "storeId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区");
 
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
 
-       ResourceAuditFlowPo resourceAuditFlowPo = BeanConvertUtil.covertBean(reqJson, ResourceAuditFlowPo.class);
+        ResourceAuditFlowPo resourceAuditFlowPo = BeanConvertUtil.covertBean(reqJson, ResourceAuditFlowPo.class);
+        resourceAuditFlowPo.setStoreId(storeId);
         int flag = resourceAuditFlowV1InnerServiceSMOImpl.deleteResourceAuditFlow(resourceAuditFlowPo);
 
         if (flag < 1) {

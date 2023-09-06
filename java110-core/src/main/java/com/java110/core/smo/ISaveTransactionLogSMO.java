@@ -2,6 +2,7 @@ package com.java110.core.smo;
 
 import com.java110.dto.log.AssetImportLogDto;
 import com.java110.po.log.TransactionLogPo;
+import com.java110.po.log.TransactionOutLogPo;
 
 /**
  * @ClassName ISaveTransactionLog
@@ -22,4 +23,6 @@ public interface ISaveTransactionLogSMO {
      * @param assetImportLogDto
      */
     void saveAssetImportLog(AssetImportLogDto assetImportLogDto);
+
+
 }

@@ -134,18 +134,18 @@ public class SaveCommunityCmd extends Cmd {
             throw new IllegalArgumentException("添加流程失败");
         }
 
-        WorkflowPo workflowPo1 = null;
-        workflowPo1 = new WorkflowPo();
-        workflowPo1.setCommunityId(reqJson.getString("communityId"));
-        workflowPo1.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
-        workflowPo1.setFlowName("物品领用");
-        workflowPo1.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
-        workflowPo1.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-        workflowPo1.setStoreId(reqJson.getString("storeId"));
-        flag = workflowV1InnerServiceSMOImpl.saveWorkflow(workflowPo1);
-        if (flag < 1) {
-            throw new IllegalArgumentException("添加流程失败");
-        }
+//        WorkflowPo workflowPo1 = null;
+//        workflowPo1 = new WorkflowPo();
+//        workflowPo1.setCommunityId(reqJson.getString("communityId"));
+//        workflowPo1.setFlowId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_flowId));
+//        workflowPo1.setFlowName("物品领用");
+//        workflowPo1.setFlowType(WorkflowDto.FLOW_TYPE_COLLECTION);
+//        workflowPo1.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
+//        workflowPo1.setStoreId(reqJson.getString("storeId"));
+//        flag = workflowV1InnerServiceSMOImpl.saveWorkflow(workflowPo1);
+//        if (flag < 1) {
+//            throw new IllegalArgumentException("添加流程失败");
+//        }
 
         WorkflowPo workflowPo2 = new WorkflowPo();
         workflowPo2.setCommunityId(reqJson.getString("communityId")); //被调拨小区

@@ -23,7 +23,7 @@ import java.util.List;
  * 查询收费项目 变更记录
  */
 @Java110Cmd(serviceCode = "fee.queryHisFeeConfig")
-public class QueryHisFeeConfigCmd extends Cmd{
+public class QueryHisFeeConfigCmd extends Cmd {
 
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
@@ -31,8 +31,8 @@ public class QueryHisFeeConfigCmd extends Cmd{
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-        Assert.hasKeyAndValue(reqJson,"configId","未包含费用ID");
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
+
     }
 
     @Override

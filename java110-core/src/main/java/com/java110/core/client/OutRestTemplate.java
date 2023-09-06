@@ -1,6 +1,7 @@
 package com.java110.core.client;
 
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.factory.LogFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.log.TransactionOutLogDto;
 import com.java110.intf.common.ITransactionOutLogV1ServiceSMO;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 
@@ -71,49 +73,42 @@ public class OutRestTemplate extends RestTemplate {
             } else {
                 tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.BAD_REQUEST);
             }
-            saveLog(url, method.name(), requestEntity, tmpResponseEntity, DateUtil.getCurrentDate().getTime() - startTime.getTime());
+            LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null,
+                    requestEntity != null ? requestEntity.getBody().toString() : "",
+                    tmpResponseEntity);
+
         }
         return responseEntity;
     }
 
+    @Override
+    public <T> ResponseEntity<T> postForEntity(String url, @Nullable Object request,
+                                               Class<T> responseType, Object... uriVariables) throws RestClientException {
+        String errMsg = "";
 
-    private void saveLog(String url, String method, HttpEntity<?> requestEntity, ResponseEntity<String> responseEntity, long costTime) {
-
-        String logServiceCode = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingCache.CALL_OUT_LOG);
-
-        if(StringUtil.isEmpty(logServiceCode) || "OFF".equalsIgnoreCase(logServiceCode) || url.startsWith(ServiceConstant.BOOT_SERVICE_ORDER_URL)){
-            return;
-        }
-
-
-
-        ITransactionOutLogV1ServiceSMO transactionOutLogV1InnerServiceSMO = null;
-
+        ResponseEntity<T> responseEntity = null;
+        ResponseEntity tmpResponseEntity = null;
+        Date startTime = DateUtil.getCurrentDate();
         try {
-            transactionOutLogV1InnerServiceSMO
-                    = ApplicationContextFactory.getBean(ITransactionOutLogV1ServiceSMO.class.getName(), ITransactionOutLogV1ServiceSMO.class);
-        }catch (Exception e){
-            transactionOutLogV1InnerServiceSMO
-                    = ApplicationContextFactory.getBean("transactionOutLogV1ServiceSMOImpl",ITransactionOutLogV1ServiceSMO.class);
+            logger.debug("请求信息：url:{},method:{},request:{},uriVariables:{}", url, "POST", request, uriVariables);
+            responseEntity = super.postForEntity(url, request, responseType, uriVariables);
+            logger.debug("返回信息：responseEntity:{}", responseEntity);
+        } catch (HttpStatusCodeException e) {
+            errMsg = ExceptionUtil.getStackTrace(e);
+            throw e;
+        } finally {
+
+            if (responseEntity != null) {
+                tmpResponseEntity = new ResponseEntity(responseEntity.getBody(), responseEntity.getStatusCode());
+            } else {
+                tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.BAD_REQUEST);
+            }
+            //  saveLog(url, "POST", null, tmpResponseEntity, DateUtil.getCurrentDate().getTime() - startTime.getTime());
+
+            LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, request.toString(), tmpResponseEntity);
         }
-        if(transactionOutLogV1InnerServiceSMO == null){
-            transactionOutLogV1InnerServiceSMO
-                    = ApplicationContextFactory.getBean("transactionOutLogV1ServiceSMOImpl",ITransactionOutLogV1ServiceSMO.class);
-        }
-
-        TransactionOutLogPo transactionOutLogPo = new TransactionOutLogPo();
-
-        transactionOutLogPo.setCostTime(costTime + "");
-        transactionOutLogPo.setLogId(GenerateCodeFactory.getGeneratorId("11"));
-        transactionOutLogPo.setRequestHeader(requestEntity.getHeaders() == null ? "" : requestEntity.getHeaders().toSingleValueMap().toString());
-        transactionOutLogPo.setRequestMessage(requestEntity.getBody() == null ? "" : requestEntity.getBody().toString());
-        transactionOutLogPo.setRequestMethod(method);
-        transactionOutLogPo.setRequestUrl(url);
-        transactionOutLogPo.setResponseHeader(responseEntity.getHeaders() == null ? "" : responseEntity.getHeaders().toSingleValueMap().toString());
-        transactionOutLogPo.setResponseMessage(responseEntity.getBody() == null ? "": responseEntity.getBody().toString());
-        transactionOutLogPo.setState(responseEntity.getStatusCode() == HttpStatus.OK ? TransactionOutLogDto.STATE_S:TransactionOutLogDto.STATE_F);
-
-        transactionOutLogV1InnerServiceSMO.saveTransactionOutLog(transactionOutLogPo);
+        return responseEntity;
     }
+
 
 }

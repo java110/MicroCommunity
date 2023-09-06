@@ -5,120 +5,160 @@
 <mapper namespace="storehouseV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存使用记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveStorehouseInfo" parameterType="Map">
         insert into storehouse(
-sh_desc,sh_type,sh_obj_id,sh_id,sh_name,store_id,is_show
-) values (
-#{shDesc},#{shType},#{shObjId},#{shId},#{shName},#{storeId},#{isShow}
-)
+        sh_desc,sh_id,sh_name,store_id,is_show,purchase_switch,purchase_raf_id,
+        use_switch,use_raf_id,allocation_switch,allocation_raf_id,community_id,allow_purchase,allow_use
+        ) values (
+        #{shDesc},#{shId},#{shName},#{storeId},#{isShow}
+        ,#{purchaseSwitch},#{purchaseRafId},#{useSwitch},#{useRafId},#{allocationSwitch},#{allocationRafId},
+        #{communityId},#{allowPurchase},#{allowUse}
+        )
     </insert>
-
 
 
     <!-- 查询使用记录信息 add by wuxw 2018-07-03 -->
     <select id="getStorehouseInfo" parameterType="Map" resultType="Map">
-        select  t.sh_desc,t.sh_desc shDesc,t.sh_type,t.sh_type shType,t.sh_obj_id,t.sh_obj_id shObjId,t.sh_id,t.sh_id shId,t.status_cd,t.status_cd statusCd,t.sh_name,t.sh_name shName,t.store_id,t.store_id storeId,t.is_show,t.is_show isShow 
-from storehouse t 
-where 1 =1 
-<if test="shDesc !=null and shDesc != ''">
-   and t.sh_desc= #{shDesc}
-</if> 
-<if test="shType !=null and shType != ''">
-   and t.sh_type= #{shType}
-</if> 
-<if test="shObjId !=null and shObjId != ''">
-   and t.sh_obj_id= #{shObjId}
-</if> 
-<if test="shId !=null and shId != ''">
-   and t.sh_id= #{shId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="shName !=null and shName != ''">
-   and t.sh_name= #{shName}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="isShow !=null and isShow != ''">
-   and t.is_show= #{isShow}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.sh_desc,t.sh_desc shDesc,t.sh_id,t.sh_id
+        shId,t.status_cd,t.status_cd statusCd,t.sh_name,t.sh_name shName,t.store_id,t.store_id
+        storeId,t.is_show,t.is_show isShow,t.create_time createTime,t.purchase_switch purchaseSwitch,
+        t.purchase_raf_id purchaseRafId,t.use_switch useSwitch,t.use_raf_id useRafId,
+        t.allocation_switch allocationSwitch,t.allocation_raf_id allocationRafId,
+        raf.flow_name purchaseFlowName,
+        raf.flow_id purchaseFlowId,raf1.flow_id useFlowId,raf2.flow_id allocationFlowId,
+        raf1.flow_name useFlowName,raf2.flow_name allocationFlowName,t.community_id communityId,
+        t.allow_purchase allowPurchase,t.allow_use allowUse
+        from storehouse t
+        left join resource_audit_flow raf on t.purchase_raf_id = raf.raf_id and raf.status_cd = '0'
+        left join resource_audit_flow raf1 on t.use_raf_id = raf1.raf_id and raf1.status_cd = '0'
+        left join resource_audit_flow raf2 on t.allocation_raf_id = raf2.raf_id and raf2.status_cd = '0'
+        where 1 =1
+        <if test="shDesc !=null and shDesc != ''">
+            and t.sh_desc= #{shDesc}
+        </if>
+
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shName !=null and shName != ''">
+            and t.sh_name= #{shName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="allowPurchase !=null and allowPurchase != ''">
+            and t.allow_purchase= #{allowPurchase}
+        </if>
+        <if test="allowUse !=null and allowUse != ''">
+            and t.allow_use= #{allowUse}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改使用记录信息 add by wuxw 2018-07-03 -->
     <update id="updateStorehouseInfo" parameterType="Map">
-        update  storehouse t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="shDesc !=null and shDesc != ''">
-, t.sh_desc= #{shDesc}
-</if> 
-<if test="shType !=null and shType != ''">
-, t.sh_type= #{shType}
-</if> 
-<if test="shObjId !=null and shObjId != ''">
-, t.sh_obj_id= #{shObjId}
-</if> 
-<if test="shName !=null and shName != ''">
-, t.sh_name= #{shName}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="isShow !=null and isShow != ''">
-, t.is_show= #{isShow}
-</if> 
- where 1=1 <if test="shId !=null and shId != ''">
-and t.sh_id= #{shId}
-</if> 
+        update storehouse t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="shDesc !=null and shDesc != ''">
+            , t.sh_desc= #{shDesc}
+        </if>
+        <if test="purchaseSwitch !=null and purchaseSwitch != ''">
+            , t.purchase_switch= #{purchaseSwitch}
+        </if>
+        <if test="purchaseRafId !=null and purchaseRafId != ''">
+            , t.purchase_raf_id= #{purchaseRafId}
+        </if>
+        <if test="useSwitch !=null and useSwitch != ''">
+            , t.use_switch= #{useSwitch}
+        </if>
+        <if test="useRafId !=null and useRafId != ''">
+            , t.use_raf_id= #{useRafId}
+        </if>
+        <if test="allocationSwitch !=null and allocationSwitch != ''">
+            , t.allocation_switch= #{allocationSwitch}
+        </if>
+        <if test="allocationRafId !=null and allocationRafId != ''">
+            , t.allocation_raf_id= #{allocationRafId}
+        </if>
+        <if test="shName !=null and shName != ''">
+            , t.sh_name= #{shName}
+        </if>
+
+        <if test="isShow !=null and isShow != ''">
+            , t.is_show= #{isShow}
+        </if>
+
+        <if test="allowPurchase !=null and allowPurchase != ''">
+            , t.allow_purchase= #{allowPurchase}
+        </if>
+        <if test="allowUse !=null and allowUse != ''">
+            , t.allow_use= #{allowUse}
+        </if>
+        where 1=1
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
 
     </update>
 
     <!-- 查询使用记录数量 add by wuxw 2018-07-03 -->
-     <select id="queryStorehousesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from storehouse t 
-where 1 =1 
-<if test="shDesc !=null and shDesc != ''">
-   and t.sh_desc= #{shDesc}
-</if> 
-<if test="shType !=null and shType != ''">
-   and t.sh_type= #{shType}
-</if> 
-<if test="shObjId !=null and shObjId != ''">
-   and t.sh_obj_id= #{shObjId}
-</if> 
-<if test="shId !=null and shId != ''">
-   and t.sh_id= #{shId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="shName !=null and shName != ''">
-   and t.sh_name= #{shName}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="isShow !=null and isShow != ''">
-   and t.is_show= #{isShow}
-</if> 
+    <select id="queryStorehousesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from storehouse t
+        where 1 =1
+        <if test="shDesc !=null and shDesc != ''">
+            and t.sh_desc= #{shDesc}
+        </if>
+
+        <if test="shId !=null and shId != ''">
+            and t.sh_id= #{shId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="shName !=null and shName != ''">
+            and t.sh_name= #{shName}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="isShow !=null and isShow != ''">
+            and t.is_show= #{isShow}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="allowPurchase !=null and allowPurchase != ''">
+            and t.allow_purchase= #{allowPurchase}
+        </if>
+        <if test="allowUse !=null and allowUse != ''">
+            and t.allow_use= #{allowUse}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

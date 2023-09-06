@@ -3,7 +3,7 @@ package com.java110.common.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.store.StorehouseDto;
 import com.java110.dto.oaWorkflow.WorkflowDto;
@@ -89,11 +89,6 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         if (storehouseDtoList != null && storehouseDtoList.size() > 0) {
             storehouseDto1 = storehouseDtoList.get(0);
         }
-        if (SH_TYPE_GROUP.equals(storehouseDto1.getShType())) {//集团仓库
-            communityId = "9999";
-        } else {//小区仓库
-            communityId = storehouseDto1.getShObjId();
-        }
         //开启流程
         ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(getWorkflowDto(allocationStorehouseApplyDto.getStoreId(), communityId), allocationStorehouseApplyDto.getApplyId(), variables);
         //将得到的实例流程id值赋给之前设置的变量
@@ -115,7 +110,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
                 machineRecordPo.setApplyOrderId(businessKey);
                 machineRecordPo.setPurchaseUserId(actRuTaskUserId);
                 //传送databus
-                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                dataBusInnerServiceSMOImpl.databusData(DatabusDataDto.getInstance(
                         BusinessTypeConstant.BUSINESS_TYPE_DATABUS_ALLOCATION_STOREHOUSE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
             }
         }
@@ -167,6 +162,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
             String business_key = pi.getBusinessKey();
             appIyIds.add(business_key);
             taskBusinessKeyMap.put(business_key, task.getId());
+            taskBusinessKeyMap.put(business_key+"_ProcessDefinitionKey", pi.getProcessDefinitionKey());
         }
 
         if (appIyIds == null || appIyIds.size() == 0) {
@@ -180,6 +176,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         List<AllocationStorehouseApplyDto> tmpAllocationStorehouseApplyDtos = allocationStorehouseApplyInnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
         for (AllocationStorehouseApplyDto tmpAllocationStorehouseApplyDto : tmpAllocationStorehouseApplyDtos) {
             tmpAllocationStorehouseApplyDto.setTaskId(taskBusinessKeyMap.get(tmpAllocationStorehouseApplyDto.getApplyId()));
+            tmpAllocationStorehouseApplyDto.setProcessDefinitionKey(taskBusinessKeyMap.get(tmpAllocationStorehouseApplyDto.getApplyId()+"_ProcessDefinitionKey"));
         }
         return tmpAllocationStorehouseApplyDtos;
     }
@@ -359,6 +356,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
         variables.put("currentUserId", allocationStorehouseApplyDto.getCurrentUserId());
         variables.put("flag", "1200".equals(allocationStorehouseApplyDto.getAuditCode()) ? "false" : "true");
         variables.put("startUserId", allocationStorehouseApplyDto.getStartUserId());
+        variables.put("nextUserId", allocationStorehouseApplyDto.getNextUserId());
         taskService.complete(allocationStorehouseApplyDto.getTaskId(), variables);
         ProcessInstance pi = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (pi == null) {
@@ -382,7 +380,7 @@ public class AllocationStorehouseUserInnerServiceSMOImpl extends BaseServiceSMO 
                 machineRecordPo.setNoticeState(noticeState);
                 machineRecordPo.setAuditMessage(auditMessage);
                 //传送databus
-                dataBusInnerServiceSMOImpl.customExchange(CustomBusinessDatabusDto.getInstance(
+                dataBusInnerServiceSMOImpl.databusData(DatabusDataDto.getInstance(
                         BusinessTypeConstant.BUSINESS_TYPE_DATABUS_ALLOCATION_STOREHOUSE_APPLY, BeanConvertUtil.beanCovertJson(machineRecordPo)));
             }
         }

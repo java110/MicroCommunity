@@ -1,9 +1,11 @@
 package com.java110.dto.purchase;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.resource.ResourceStoreTimesDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -66,6 +68,9 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String isFixed;
     private String isFixedName;
     private String timesId;
+    private String communityId;
+
+    private List<ResourceStoreTimesDto> times;
 
     public String getAsId() {
         return asId;
@@ -411,5 +416,21 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setTimesId(String timesId) {
         this.timesId = timesId;
+    }
+
+    public List<ResourceStoreTimesDto> getTimes() {
+        return times;
+    }
+
+    public void setTimes(List<ResourceStoreTimesDto> times) {
+        this.times = times;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

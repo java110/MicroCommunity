@@ -17,7 +17,7 @@ spring:
     name: boot-service
   redis:
     database: 0
-    host: dev.redis.java110.com
+    host: 192.168.1.108
     port: 6379
     password: hc12345678
     pool:

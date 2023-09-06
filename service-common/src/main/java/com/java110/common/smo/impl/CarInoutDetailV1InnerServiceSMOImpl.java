@@ -17,8 +17,10 @@ package com.java110.common.smo.impl;
 
 
 import com.java110.common.dao.ICarInoutDetailV1ServiceDao;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.machine.CarInoutDetailDto;
 import com.java110.intf.common.ICarInoutDetailV1InnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.po.car.CarInoutDetailPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
@@ -45,10 +47,17 @@ public class CarInoutDetailV1InnerServiceSMOImpl extends BaseServiceSMO implemen
     @Autowired
     private ICarInoutDetailV1ServiceDao carInoutDetailV1ServiceDaoImpl;
 
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
 
     @Override
     public int saveCarInoutDetail(@RequestBody CarInoutDetailPo carInoutDetailPo) {
         int saveFlag = carInoutDetailV1ServiceDaoImpl.saveCarInoutDetailInfo(BeanConvertUtil.beanCovertMap(carInoutDetailPo));
+
+        //todo 手工触发databus
+        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_SAVE_CAR_INOUT_DETAIL,BeanConvertUtil.beanCovertJson(carInoutDetailPo)));
+
         return saveFlag;
     }
 

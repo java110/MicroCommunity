@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,8 +40,15 @@ public class QueryOwnerMembersCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        Assert.jsonObjectHaveKey(reqJson, "ownerId", "请求中未包含ownerId信息");
         // Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求中未包含ownerTypeCd信息");
+
+        if(!reqJson.containsKey("page")){
+            reqJson.put("page",1);
+        }
+        if(!reqJson.containsKey("row")){
+            reqJson.put("row",10);
+        }
+
     }
 
     @Override
@@ -48,7 +56,17 @@ public class QueryOwnerMembersCmd extends Cmd {
         String userId = context.getReqHeaders().get("user-id");
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
         ownerDto.setOwnerTypeCds(new String[]{"1002", "1003", "1004", "1005"});
-        List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+
+        int row = reqJson.getInteger("row");
+        //查询总记录数
+        int total = ownerInnerServiceSMOImpl.queryOwnersMemberCount(ownerDto);
+
+        List<OwnerDto> ownerDtoList = null;
+        if (total > 0) {
+            ownerDtoList = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+        }else {
+            ownerDtoList = new ArrayList<>();
+        }
         //查询是否有脱敏权限
         List<Map> privileges = null;
         BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
@@ -79,8 +97,8 @@ public class QueryOwnerMembersCmd extends Cmd {
         }
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
         apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
-        apiOwnerVo.setTotal(ownerDtoList.size());
-        apiOwnerVo.setRecords(1);
+        apiOwnerVo.setTotal(total);
+        apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);

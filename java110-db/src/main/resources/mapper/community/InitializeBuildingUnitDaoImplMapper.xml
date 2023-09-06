@@ -23,6 +23,13 @@
         delete from building_room where 1=1
             and community_id = #{communityId}
     </delete>
+    <delete id="deleteOwnerRoomRel" parameterType="Map">
+        delete from building_owner_room_rel where room_id in
+        <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
     <!-- 初始化数据 add by wuxw 2018-07-03 -->
     <delete id="deleteParkingArea" parameterType="Map">
         delete from parking_area where 1=1
@@ -33,4 +40,9 @@
         delete from parking_space where 1=1
             and community_id = #{communityId}
     </delete>
+    <delete id="deleteOwnerCar" parameterType="Map">
+        delete from owner_car where 1=1
+        and community_id = #{communityId}
+    </delete>
+
 </mapper>

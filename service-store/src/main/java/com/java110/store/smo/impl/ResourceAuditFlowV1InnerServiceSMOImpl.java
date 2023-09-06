@@ -16,6 +16,9 @@
 package com.java110.store.smo.impl;
 
 
+import com.java110.dto.itemRelease.ItemReleaseTypeDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.store.dao.IResourceAuditFlowV1ServiceDao;
 import com.java110.intf.store.IResourceAuditFlowV1InnerServiceSMO;
 import com.java110.dto.resource.ResourceAuditFlowDto;
@@ -27,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +46,8 @@ public class ResourceAuditFlowV1InnerServiceSMOImpl extends BaseServiceSMO imple
 
     @Autowired
     private IResourceAuditFlowV1ServiceDao resourceAuditFlowV1ServiceDaoImpl;
-
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
 
     @Override
     public int saveResourceAuditFlow(@RequestBody  ResourceAuditFlowPo resourceAuditFlowPo) {
@@ -75,7 +80,7 @@ public class ResourceAuditFlowV1InnerServiceSMOImpl extends BaseServiceSMO imple
         }
 
         List<ResourceAuditFlowDto> resourceAuditFlows = BeanConvertUtil.covertBeanList(resourceAuditFlowV1ServiceDaoImpl.getResourceAuditFlowInfo(BeanConvertUtil.beanCovertMap(resourceAuditFlowDto)), ResourceAuditFlowDto.class);
-
+        refreshWorkflow(resourceAuditFlows);
         return resourceAuditFlows;
     }
 
@@ -84,4 +89,30 @@ public class ResourceAuditFlowV1InnerServiceSMOImpl extends BaseServiceSMO imple
     public int queryResourceAuditFlowsCount(@RequestBody ResourceAuditFlowDto resourceAuditFlowDto) {
         return resourceAuditFlowV1ServiceDaoImpl.queryResourceAuditFlowsCount(BeanConvertUtil.beanCovertMap(resourceAuditFlowDto));    }
 
+
+    /**
+     * 查询工作流信息
+     *
+     * @param resourceAuditFlows
+     */
+    private void refreshWorkflow(List<ResourceAuditFlowDto> resourceAuditFlows) {
+        if(resourceAuditFlows == null || resourceAuditFlows.size()< 1){
+            return ;
+        }
+        List<String> flowIds = new ArrayList<>();
+        for (ResourceAuditFlowDto resourceAuditFlowDto : resourceAuditFlows) {
+            flowIds.add(resourceAuditFlowDto.getFlowId());
+        }
+
+        OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
+        oaWorkflowDto.setFlowIds(flowIds.toArray(new String[flowIds.size()]));
+        List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
+        for (ResourceAuditFlowDto resourceAuditFlowDto : resourceAuditFlows) {
+            for (OaWorkflowDto tmpOaWorkflowDto : oaWorkflowDtos) {
+                if (resourceAuditFlowDto.getFlowId().equals(tmpOaWorkflowDto.getFlowId())) {
+                    BeanConvertUtil.covertBean(tmpOaWorkflowDto, resourceAuditFlowDto);
+                }
+            }
+        }
+    }
 }

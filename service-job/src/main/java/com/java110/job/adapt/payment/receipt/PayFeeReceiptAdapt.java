@@ -30,6 +30,7 @@ import com.java110.po.fee.FeeReceiptPo;
 import com.java110.po.fee.FeeReceiptDetailPo;
 import com.java110.po.log.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
@@ -87,6 +88,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IMachinePrinterV1InnerServiceSMO machinePrinterV1InnerServiceSMOImpl;
+
 
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
@@ -154,6 +156,13 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
                     && businessPayFeeDetail.getDoubleValue("receivedAmount") < 0) {
                 return;
             }
+
+            String receiptCode = CommonCache.getValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE);
+            //todo 如果为空重新生成收据编号
+            if(StringUtil.isEmpty(receiptCode)){
+                receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(payFeeDetailPo.getCommunityId());
+            }
+
             //添加收据和收据详情
             FeeReceiptPo feeReceiptPo = new FeeReceiptPo();
             FeeReceiptDetailPo feeReceiptDetailPo = new FeeReceiptDetailPo();
@@ -180,6 +189,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
             feeReceiptPo.setPayObjId(ownerDto.getOwnerId());
             feeReceiptPo.setPayObjName(ownerDto.getName());
             feeReceiptPo.setCreateTime(payFeeDetailPo.getCreateTime());
+            feeReceiptPo.setReceiptCode(receiptCode);
             //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
             feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetail(feeReceiptDetailPo);
             feeReceiptInnerServiceSMOImpl.saveFeeReceipt(feeReceiptPo);

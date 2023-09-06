@@ -242,11 +242,11 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
 
         for (OwnerCarDto ownerCarDto : ownerCars) {
 
-            if(!"1001".equals(ownerCarDto.getTypeCd()) && !"2001".equals(ownerCarDto.getTypeCd())){
-                throw new IllegalArgumentException(ownerCarDto.getCarNum()+"停车场类型应填写 1001(地上停车场)或者 2001 (地下停车场)");
+            if (!"1001".equals(ownerCarDto.getTypeCd()) && !"2001".equals(ownerCarDto.getTypeCd())) {
+                throw new IllegalArgumentException(ownerCarDto.getCarNum() + "停车场类型应填写 1001(地上停车场)或者 2001 (地下停车场)");
             }
-            if(!"H".equals(ownerCarDto.getSpaceSate()) && !"S".equals(ownerCarDto.getSpaceSate())){
-                throw new IllegalArgumentException(ownerCarDto.getCarNum()+"车位状态应填写 S（出售）或者 H （出租）");
+            if (!"H".equals(ownerCarDto.getSpaceSate()) && !"S".equals(ownerCarDto.getSpaceSate())) {
+                throw new IllegalArgumentException(ownerCarDto.getCarNum() + "车位状态应填写 S（出售）或者 H （出租）");
             }
 
             OwnerDto ownerDto = new OwnerDto();
@@ -256,8 +256,8 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             //查询业主
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             //Assert.listOnlyOne(ownerDtos, ownerCarDto.getCarNum() + "查询业主信息错误！");
-            if(ownerDtos == null || ownerDtos.size() < 1){
-                throw new IllegalArgumentException("业主不存在");
+            if (ownerDtos == null || ownerDtos.size() < 1) {
+                throw new IllegalArgumentException(ownerCarDto.getCarNum() + "的业主不存在");
             }
             ownerCarDto.setOwnerId(ownerDtos.get(0).getOwnerId());
         }

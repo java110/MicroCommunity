@@ -22,8 +22,10 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.common.IMeterMachineSpecV1InnerServiceSMO;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.po.meter.MeterMachinePo;
 import com.java110.po.meter.MeterMachineSpecPo;
 import com.java110.utils.exception.CmdException;
@@ -33,6 +35,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 /**
@@ -56,6 +60,9 @@ public class UpdateMeterMachineCmd extends Cmd {
 
     @Autowired
     private IMeterMachineSpecV1InnerServiceSMO meterMachineSpecV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -87,7 +94,19 @@ public class UpdateMeterMachineCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+
         MeterMachinePo meterMachinePo = BeanConvertUtil.covertBean(reqJson, MeterMachinePo.class);
+
+        if (reqJson.containsKey("feeConfigId")) {
+            FeeConfigDto feeConfigDto = new FeeConfigDto();
+            feeConfigDto.setConfigId(reqJson.getString("feeConfigId"));
+            feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+            List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+            Assert.listOnlyOne(feeConfigDtos, "费用项不存在");
+            meterMachinePo.setFeeConfigName(feeConfigDtos.get(0).getFeeName());
+        }
+
+
         int flag = meterMachineV1InnerServiceSMOImpl.updateMeterMachine(meterMachinePo);
 
         if (flag < 1) {

@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.wechat.SmallWeChatDto;
@@ -207,14 +207,7 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
 
     }
 
-    /**
-     * 手工 送数据
-     *
-     * @param customBusinessDatabusDto
-     */
-    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto) {
 
-    }
 
     /**
      * 查询模板信息

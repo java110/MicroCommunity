@@ -21,6 +21,7 @@ public class CustomMVCConfiguration extends WebMvcConfigurerAdapter {
     public HttpMessageConverter<String> responseBodyConverter() {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(
                 Charset.forName("UTF-8"));
+        converter.setWriteAcceptCharset(false);
         return converter;
     }
 

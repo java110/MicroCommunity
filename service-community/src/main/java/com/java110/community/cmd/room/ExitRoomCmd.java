@@ -50,12 +50,12 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\n" +
+        reqBody = "{\n" +
                 "\t\"ownerId\": 121231,\n" +
                 "\t\"roomId\": \"123123\",\n" +
                 "\t\"communityId\": \"2022121921870161\"\n" +
                 "}",
-        resBody="{\"code\":0,\"msg\":\"成功\"}"
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 @Java110Cmd(serviceCode = "room.exitRoom")
 public class ExitRoomCmd extends Cmd {
@@ -100,11 +100,11 @@ public class ExitRoomCmd extends Cmd {
         OwnerRoomRelDto ownerRoomRelDto = BeanConvertUtil.covertBean(reqJson, OwnerRoomRelDto.class);
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() != 1) {
+        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "数据存在问题，业主和房屋对应关系不是一条");
         }
 
-        if(StringUtil.isEmpty(ownerRoomRelDtos.get(0).getRelId())){
+        if (StringUtil.isEmpty(ownerRoomRelDtos.get(0).getRelId())) {
             throw new CmdException("未包含关系");
         }
 

@@ -73,6 +73,18 @@ public class InitializeBuildingUnitDaoImpl extends BaseServiceDao implements IIn
         return deleteFlag;
     }
 
+    @Override
+    public int deleteOwnerRoomRel(Map info) {
+        logger.debug("初始化房屋业主Instance 入参 info : {}", info);
+
+        int deleteFlag = sqlSessionTemplate.delete("initializeBuildingUnitDaoImpl.deleteOwnerRoomRel", info);
+
+ /*       if (deleteFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "f_floor初始化失败：" + JSONObject.toJSONString(info));
+        }*/
+        return deleteFlag;
+    }
+
     public int deleteParkingArea(Map info) throws DAOException {
         logger.debug("停车场Instance 入参 info : {}", info);
 
@@ -93,6 +105,18 @@ public class InitializeBuildingUnitDaoImpl extends BaseServiceDao implements IIn
         logger.debug("停车位Instance 入参 info : {}", info);
 
         int deleteFlag = sqlSessionTemplate.delete("initializeBuildingUnitDaoImpl.deleteParkingSpace", info);
+
+  /*      if (deleteFlag < 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "f_floor初始化失败：" + JSONObject.toJSONString(info));
+        }*/
+        return deleteFlag;
+    }
+
+    @Override
+    public int deleteOwnerCar(Map info) {
+        logger.debug("车辆Instance 入参 info : {}", info);
+
+        int deleteFlag = sqlSessionTemplate.delete("initializeBuildingUnitDaoImpl.deleteOwnerCar", info);
 
   /*      if (deleteFlag < 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "f_floor初始化失败：" + JSONObject.toJSONString(info));

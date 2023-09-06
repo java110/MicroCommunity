@@ -114,6 +114,8 @@ public class SmartMeterCoreReadImpl implements ISmartMeterCoreRead {
         meterMachineV1InnerServiceSMOImpl.updateMeterMachine(meterMachinePo);
 
         if (!MeterMachineDto.MACHINE_MODEL_READ.equals(meterMachineDtos.get(0).getMachineModel())) {
+
+
             return;
         }
 
@@ -269,6 +271,9 @@ public class SmartMeterCoreReadImpl implements ISmartMeterCoreRead {
         ResultVo resultVo = smartMeterFactoryAdapt.requestRead(meterMachineDto);
 
         if(ResultVo.CODE_OK != resultVo.getCode()){
+            return 0.0;
+        }
+        if(resultVo.getData() == null){
             return 0.0;
         }
         return Double.parseDouble(resultVo.getData().toString());

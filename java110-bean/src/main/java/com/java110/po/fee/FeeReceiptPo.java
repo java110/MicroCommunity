@@ -16,6 +16,8 @@ public class FeeReceiptPo implements Serializable {
     private String payObjName;
     private String createTime;
 
+    private String receiptCode;
+
     public String getAmount() {
         return amount;
     }
@@ -102,5 +104,13 @@ public class FeeReceiptPo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getReceiptCode() {
+        return receiptCode;
+    }
+
+    public void setReceiptCode(String receiptCode) {
+        this.receiptCode = receiptCode;
     }
 }

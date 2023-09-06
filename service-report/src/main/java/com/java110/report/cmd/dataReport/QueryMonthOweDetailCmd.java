@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 查询月实收明细统计
+ * 查询月欠费明细
  */
 @Java110Cmd(serviceCode = "dataReport.queryMonthOweDetail")
 public class QueryMonthOweDetailCmd extends Cmd {

@@ -41,6 +41,7 @@ import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
@@ -389,7 +390,8 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 data.setKeyword2(new Content(noticeDto.getStartTime()));
                 data.setKeyword3(new Content(StringUtil.delHtmlTag(noticeDto.getContext())));
                 data.setRemark(new Content("如有疑问请联系相关物业人员"));
-                templateMessage.setData(data);
+                templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
                 if (!StringUtil.isEmpty(wechatUrl)) {
                     if (miniprogram == null) {
                         templateMessage.setUrl(wechatUrl + "/#/pages/notice/detail/detail?noticeId=" + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId() + "&communityId=" + noticeDto.getCommunityId());
@@ -476,7 +478,8 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                         data.setKeyword2(new Content(noticeDto.getStartTime()));
                         data.setKeyword3(new Content(StringUtil.delHtmlTag(noticeDto.getContext())));
                         data.setRemark(new Content("如有疑问请联系相关物业人员"));
-                        templateMessage.setData(data);
+                        templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
                         //获取业主公众号地址
                         String wechatUrl = UrlCache.getOwnerUrl();
                         if (!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")) {
@@ -567,7 +570,8 @@ public class WeChatPushMessageTemplate extends TaskSystemQuartz {
                 data.setKeyword2(new Content(noticeDto.getStartTime()));
                 data.setKeyword3(new Content(StringUtil.delHtmlTag(noticeDto.getContext())));
                 data.setRemark(new Content("如有疑问请联系相关物业人员"));
-                templateMessage.setData(data);
+                templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
                 templateMessage.setUrl(wechatUrl + noticeDto.getNoticeId() + "&wAppId=" + weChatDto.getAppId() + "&communityId=" + noticeDto.getCommunityId());
                 logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
                 responseEntity = outRestTemplate.postForEntity(sendTemplate + accessToken, JSON.toJSONString(templateMessage), String.class);

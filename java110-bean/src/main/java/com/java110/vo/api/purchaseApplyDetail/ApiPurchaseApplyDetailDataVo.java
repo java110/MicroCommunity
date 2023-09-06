@@ -1,54 +1,64 @@
 package com.java110.vo.api.purchaseApplyDetail;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ApiPurchaseApplyDetailDataVo implements Serializable {
 
-    private String operate;
+
+    private String id;
     private String applyOrderId;
     private String statusCd;
-    private String id;
-    private String bId;
+
     private String resId;
+    private String rsId;
     private String resName;
-    private String createTime;
-    private String quantity;
-    private String price;
-    private String purchaseQuantity;
-    private String purchaseRemark;
-    private String resOrderType;
-    private String resOrderTypeName;
     private String remark;
-    private String userId;
-    private String userName;
+    private String  quantity;
+    private String  purchaseQuantity;
+    private String  purchaseRemark;
+    private String price;
+    private String  resOrderType;
+    private String  userId;
+    private String  userName;
     private String description;
     private String state;
-    private String stateName;
-    private String endUserName;
-    private String endUserTel;
-    private String warehousingWay;
-    private String warehousingWayName;
-    private String startTime;
-    private String endTime;
-    private String rsId;
-    private String supplierName;
-    private String rstName;
-    private String parentRstName;
-    private String specName;
-    private String shId;
-    private String shName;
-    private String unitCodeName;
-    private String miniUnitCodeName;
-    private String isFixed;
-    private String isFixedName;
+    private String  endUserName;
+    private String  endUserTel;
+    private String  warehousingWay;
+    private String  createTime;
+    private String  supplierName;
+    private String  resOrderTypeName;
+    private String  stateName;
+    private String  warehousingWayName;
+    private String  rstName;
+    private String  parentRstName;
+    private String  specName;
+    private String  shId;
+    private String  unitCodeName;
+    private String  miniUnitCodeName;
+    private String  shName;
+    private String  isFixed;
+    private String  isFixedName;
 
-    public String getOperate() {
-        return operate;
-    }
+    private String resCode;
 
-    public void setOperate(String operate) {
-        this.operate = operate;
-    }
+    private String stock;
+
+    private String purchasePrice;
+
+    private String standardPrice;
+    private String originalStock;
+
+    private String consultPrice;
+    private String timesId;
+
+    private String createUserId;
+
+
+
+    private String storeId;
+
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -74,13 +84,7 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
         this.id = id;
     }
 
-    public String getBId() {
-        return bId;
-    }
 
-    public void setBId(String bId) {
-        this.bId = bId;
-    }
 
     public String getResId() {
         return resId;
@@ -90,13 +94,6 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
         this.resId = resId;
     }
 
-    public String getbId() {
-        return bId;
-    }
-
-    public void setbId(String bId) {
-        this.bId = bId;
-    }
 
     public String getResName() {
         return resName;
@@ -242,21 +239,7 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
         this.remark = remark;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
 
     public String getRsId() {
         return rsId;
@@ -344,5 +327,77 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public String getResCode() {
+        return resCode;
+    }
+
+    public void setResCode(String resCode) {
+        this.resCode = resCode;
+    }
+
+    public String getStock() {
+        return stock;
+    }
+
+    public void setStock(String stock) {
+        this.stock = stock;
+    }
+
+    public String getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(String purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public String getStandardPrice() {
+        return standardPrice;
+    }
+
+    public void setStandardPrice(String standardPrice) {
+        this.standardPrice = standardPrice;
+    }
+
+    public String getOriginalStock() {
+        return originalStock;
+    }
+
+    public void setOriginalStock(String originalStock) {
+        this.originalStock = originalStock;
+    }
+
+    public String getConsultPrice() {
+        return consultPrice;
+    }
+
+    public void setConsultPrice(String consultPrice) {
+        this.consultPrice = consultPrice;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
+    }
+
+    public String getCreateUserId() {
+        return createUserId;
+    }
+
+    public void setCreateUserId(String createUserId) {
+        this.createUserId = createUserId;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 }

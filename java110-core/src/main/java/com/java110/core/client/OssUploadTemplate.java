@@ -1,11 +1,15 @@
 package com.java110.core.client;
 
+import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.OSSClient;
+import com.java110.core.factory.LogFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.OSSUtil;
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +46,7 @@ public class OssUploadTemplate {
         OSSClient ossClient = null;
         ByteArrayInputStream is = null;
         String urlPath = "";
+        String resMsg = "上传成功";
         try {
             ossClient = OSSUtil.getOSSClient();
             fileName = UUID.randomUUID().toString();
@@ -67,7 +72,8 @@ public class OssUploadTemplate {
             OSSUtil.uploadByInputStream(ossClient, is, ftpPath + urlPath);
         } catch (Exception e) {
             logger.error("上传文件失败", e);
-            throw new IllegalArgumentException("上传文件失败");
+            resMsg = e.getMessage()+e.getLocalizedMessage();
+            throw new IllegalArgumentException("上传文件失败" + e.getMessage());
         } finally {
             if (is != null) {
                 try {
@@ -76,6 +82,9 @@ public class OssUploadTemplate {
                     e.printStackTrace();
                 }
             }
+
+            LogFactory.saveOutLog("OSS", "文件", new ResponseEntity(resMsg, HttpStatus.OK));
+
         }
         return urlPath;
     }

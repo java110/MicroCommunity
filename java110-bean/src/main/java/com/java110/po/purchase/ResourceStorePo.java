@@ -50,6 +50,8 @@ public class ResourceStorePo implements Serializable {
     private String isFixed;
     private String isFixedName;
 
+    private String communityId;
+
     public String getResId() {
         return resId;
     }
@@ -312,5 +314,13 @@ public class ResourceStorePo implements Serializable {
 
     public void setIsFixedName(String isFixedName) {
         this.isFixedName = isFixedName;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

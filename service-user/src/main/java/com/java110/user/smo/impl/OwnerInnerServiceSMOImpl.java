@@ -113,7 +113,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
             return true;
         }
 
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
 
         for (OwnerDto tmpOwnerDto : owners) {
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
@@ -134,6 +134,13 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
     @Override
     public List<OwnerDto> queryOwnerMembers(@RequestBody OwnerDto ownerDto) {
+
+        int page = ownerDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            ownerDto.setPage((page - 1) * ownerDto.getRow());
+        }
+
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
         if (owners == null || owners.size() == 0) {
             return owners;
@@ -154,6 +161,11 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
         updateOwnerPhone(owners);
         return owners;
+    }
+
+    @Override
+    public int queryOwnersMemberCount(@RequestBody OwnerDto ownerDto) {
+        return ownerServiceDaoImpl.getOwnerInfoCount(BeanConvertUtil.beanCovertMap(ownerDto));
     }
 
     /**
@@ -231,17 +243,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
     @Override
     public int queryOwnersCount(@RequestBody OwnerDto ownerDto) {
-
-        //调用 小区服务查询 小区成员业主信息
-        /*CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityId(ownerDto.getCommunityId());
-        communityMemberDto.setMemberTypeCd(CommunityMemberTypeConstant.OWNER);
-        return communityInnerServiceSMOImpl.getCommunityMemberCount(communityMemberDto);*/
-        int page = ownerDto.getPage();
-
-        if (page != PageDto.DEFAULT_PAGE) {
-            ownerDto.setPage((page - 1) * ownerDto.getRow());
-        }
 
         Map ownerInfo = BeanConvertUtil.beanCovertMap(ownerDto);
         ownerInfo.put("communityId", ownerDto.getCommunityId());

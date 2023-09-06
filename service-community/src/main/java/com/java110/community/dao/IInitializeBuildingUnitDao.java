@@ -37,6 +37,14 @@ public interface IInitializeBuildingUnitDao {
 
 
     /**
+     * 删除房屋对应的 房屋业主关系
+     * @param info
+     * @return
+     */
+    int deleteOwnerRoomRel(Map info);
+
+
+    /**
      * 修改服务信息
      * @param info 修改信息
      * @throws DAOException DAO异常
@@ -49,4 +57,5 @@ public interface IInitializeBuildingUnitDao {
      */
     int deleteParkingSpace(Map info) throws DAOException;
 
+    int deleteOwnerCar(Map info);
 }

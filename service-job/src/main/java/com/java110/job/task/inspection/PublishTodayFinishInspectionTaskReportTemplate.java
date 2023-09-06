@@ -22,6 +22,7 @@ import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +141,8 @@ public class PublishTodayFinishInspectionTaskReportTemplate extends TaskSystemQu
             data.setKeyword2(new Content(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
             data.setKeyword3(new Content("今日巡检情况已生成，请点击查看详情"));
             data.setRemark(new Content("感谢您的使用！"));
-            templateMessage.setData(data);
+            templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
             //获取员工公众号地址
             String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             if(wechatUrl.endsWith("/")){

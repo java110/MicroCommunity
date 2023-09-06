@@ -5,111 +5,107 @@
 <mapper namespace="questionAnswerTitleRelV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存问卷题目信息 add by wuxw 2018-07-03 -->
     <insert id="saveQuestionAnswerTitleRelInfo" parameterType="Map">
         insert into question_answer_title_rel(
-score,title_id,qatr_id,community_id,seq,qa_id
-) values (
-#{score},#{titleId},#{qatrId},#{communityId},#{seq},#{qaId}
-)
+        score,title_id,qatr_id,community_id,seq,qa_id
+        ) values (
+        #{score},#{titleId},#{qatrId},#{communityId},#{seq},#{qaId}
+        )
     </insert>
-
 
 
     <!-- 查询问卷题目信息 add by wuxw 2018-07-03 -->
     <select id="getQuestionAnswerTitleRelInfo" parameterType="Map" resultType="Map">
-        select  t.score,t.title_id,t.title_id titleId,t.qatr_id,t.qatr_id qatrId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.seq,t.qa_id,t.qa_id qaId 
-from question_answer_title_rel t 
-where 1 =1 
-<if test="score !=null and score != ''">
-   and t.score= #{score}
-</if> 
-<if test="titleId !=null and titleId != ''">
-   and t.title_id= #{titleId}
-</if> 
-<if test="qatrId !=null and qatrId != ''">
-   and t.qatr_id= #{qatrId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="seq !=null and seq != ''">
-   and t.seq= #{seq}
-</if> 
-<if test="qaId !=null and qaId != ''">
-   and t.qa_id= #{qaId}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.score,t.title_id,t.title_id titleId,t.qatr_id,t.qatr_id qatrId,t.status_cd,t.status_cd
+        statusCd,t.community_id,t.community_id communityId,t.seq,t.qa_id,t.qa_id qaId
+        from question_answer_title_rel t
+        where 1 =1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="qatrId !=null and qatrId != ''">
+            and t.qatr_id= #{qatrId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改问卷题目信息 add by wuxw 2018-07-03 -->
     <update id="updateQuestionAnswerTitleRelInfo" parameterType="Map">
-        update  question_answer_title_rel t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="score !=null and score != ''">
-, t.score= #{score}
-</if> 
-<if test="titleId !=null and titleId != ''">
-, t.title_id= #{titleId}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="seq !=null and seq != ''">
-, t.seq= #{seq}
-</if> 
-<if test="qaId !=null and qaId != ''">
-, t.qa_id= #{qaId}
-</if> 
- where 1=1 <if test="qatrId !=null and qatrId != ''">
-and t.qatr_id= #{qatrId}
-</if> 
+        update question_answer_title_rel t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="score !=null and score != ''">
+            , t.score= #{score}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            , t.title_id= #{titleId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            , t.seq= #{seq}
+        </if>
+        where 1=1
+        <if test="qatrId !=null and qatrId != ''">
+            and t.qatr_id= #{qatrId}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
 
     </update>
 
     <!-- 查询问卷题目数量 add by wuxw 2018-07-03 -->
-     <select id="queryQuestionAnswerTitleRelsCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from question_answer_title_rel t 
-where 1 =1 
-<if test="score !=null and score != ''">
-   and t.score= #{score}
-</if> 
-<if test="titleId !=null and titleId != ''">
-   and t.title_id= #{titleId}
-</if> 
-<if test="qatrId !=null and qatrId != ''">
-   and t.qatr_id= #{qatrId}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="seq !=null and seq != ''">
-   and t.seq= #{seq}
-</if> 
-<if test="qaId !=null and qaId != ''">
-   and t.qa_id= #{qaId}
-</if> 
+    <select id="queryQuestionAnswerTitleRelsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from question_answer_title_rel t
+        where 1 =1
+        <if test="score !=null and score != ''">
+            and t.score= #{score}
+        </if>
+        <if test="titleId !=null and titleId != ''">
+            and t.title_id= #{titleId}
+        </if>
+        <if test="qatrId !=null and qatrId != ''">
+            and t.qatr_id= #{qatrId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="seq !=null and seq != ''">
+            and t.seq= #{seq}
+        </if>
+        <if test="qaId !=null and qaId != ''">
+            and t.qa_id= #{qaId}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

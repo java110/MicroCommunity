@@ -28,55 +28,76 @@ import java.io.Serializable;
 public class ResourceAuditFlowPo implements Serializable {
 
     private String rafId;
-private String remark;
-private String statusCd = "0";
-private String storeId;
-private String flowId;
-private String flowName;
-private String flowType;
-public String getRafId() {
+    private String remark;
+    private String statusCd = "0";
+    private String storeId;
+    private String flowId;
+    private String flowName;
+    private String auditType;
+
+    private String communityId;
+
+    public String getRafId() {
         return rafId;
     }
-public void setRafId(String rafId) {
+
+    public void setRafId(String rafId) {
         this.rafId = rafId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getFlowId() {
+
+    public String getFlowId() {
         return flowId;
     }
-public void setFlowId(String flowId) {
+
+    public void setFlowId(String flowId) {
         this.flowId = flowId;
     }
-public String getFlowName() {
+
+    public String getFlowName() {
         return flowName;
     }
-public void setFlowName(String flowName) {
+
+    public void setFlowName(String flowName) {
         this.flowName = flowName;
     }
-public String getFlowType() {
-        return flowType;
-    }
-public void setFlowType(String flowType) {
-        this.flowType = flowType;
+
+    public String getAuditType() {
+        return auditType;
     }
 
+    public void setAuditType(String auditType) {
+        this.auditType = auditType;
+    }
 
+    public String getCommunityId() {
+        return communityId;
+    }
 
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
 }

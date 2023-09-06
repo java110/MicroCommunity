@@ -11,8 +11,11 @@ import com.aliyuncs.profile.DefaultProfile;
 import com.java110.dto.sms.SmsConfigDto;
 import com.java110.utils.cache.MappingCache;
 import com.java110.vo.ResultVo;
+import org.apache.juli.logging.Log;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Random;
 /*
@@ -85,6 +88,7 @@ public class AliSendMessageFactory {
         try {
             CommonResponse response = client.getCommonResponse(request);
             logger.debug("发送验证码信息：{}", response.getData());
+            LogFactory.saveOutLog("SMS","{\"code\":" + code + "}",new ResponseEntity(response.getData(),HttpStatus.OK));
         } catch (ServerException e) {
             e.printStackTrace();
         } catch (ClientException e) {

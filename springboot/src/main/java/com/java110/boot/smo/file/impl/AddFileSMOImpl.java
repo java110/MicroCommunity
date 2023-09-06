@@ -41,45 +41,39 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
     @Override
     public ResponseEntity<String> saveFile(IPageData pd, MultipartFile uploadFile) throws IOException {
+        InputStream is = null;
+        try {
+            JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+            if (uploadFile.getSize() > 2 * 1024 * 1024) {
+                throw new IllegalArgumentException("上传文件超过两兆");
+            }
+            Assert.hasKeyAndValue(paramIn, "suffix", "必填，请填写文件类型");
+            is = uploadFile.getInputStream();
+            String fileContext = Base64Convert.ioToBase64(is);
+            paramIn.put("context", fileContext);
+            paramIn.put("fileName", uploadFile.getOriginalFilename());
 
-        JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
-        if (uploadFile.getSize() > 2 * 1024 * 1024) {
-            throw new IllegalArgumentException("上传文件超过两兆");
+            FileDto fileDto = BeanConvertUtil.covertBean(paramIn, FileDto.class);
+            fileDto.setCommunityId("-1");
+            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+
+            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+
+            JSONObject outParam = new JSONObject();
+            outParam.put("fileId", fileName);
+            String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+            outParam.put("url", imgUrl + fileName);
+
+            ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
+            return responseEntity;
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (Exception e) {
+                }
+            }
         }
-
-        Assert.hasKeyAndValue(paramIn, "communityId", "必填，请填写小区ID");
-        Assert.hasKeyAndValue(paramIn, "suffix", "必填，请填写文件类型");
-        super.checkUserHasPrivilege(pd, restTemplate, PrivilegeCodeConstant.SAVE_FILE);
-
-        ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
-        InputStream is = uploadFile.getInputStream();
-        String fileContext = Base64Convert.ioToBase64(is);
-        paramIn.put("context", fileContext);
-        paramIn.put("fileName", uploadFile.getOriginalFilename());
-
-        FileDto fileDto = BeanConvertUtil.covertBean(paramIn, FileDto.class);
-
-        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-
-        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-
-
-
-        JSONObject outParam = new JSONObject();
-        outParam.put("fileId", fileName);
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
-        outParam.put("url",imgUrl+fileName);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
-
-//
-//        String apiUrl = "file.saveFile" ;
-//
-//
-//        ResponseEntity<String> responseEntity = this.callCenterService(restTemplate, pd, paramIn.toJSONString(),
-//                apiUrl,
-//                HttpMethod.POST);
-        return responseEntity;
 
     }
 

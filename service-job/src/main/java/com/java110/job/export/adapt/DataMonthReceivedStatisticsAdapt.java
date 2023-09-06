@@ -107,7 +107,8 @@ public class DataMonthReceivedStatisticsAdapt implements IExportDataAdapt {
             row.createCell(1).setCellValue(getValue(dataObj, "ownerName") + "(" + getValue(dataObj, "link") + ")");
             row.createCell(2).setCellValue(getValue(dataObj, "receivedAmount"));
             row.createCell(3).setCellValue(getValue(dataObj, "feeName"));
-            row.createCell(4).setCellValue(getValue(dataObj, "startTime") + "~" + getValue(dataObj, "endTime"));
+            //row.createCell(4).setCellValue(getValue(dataObj, "startTime") + "~" + getValue(dataObj, "endTime"));
+            row.createCell(4).setCellValue(getValue(dataObj, "curYearMonth"));
             row.createCell(5).setCellValue(getValue(dataObj, "cashierName"));
             row.createCell(5).setCellValue(getValue(dataObj, "createTime"));
         }

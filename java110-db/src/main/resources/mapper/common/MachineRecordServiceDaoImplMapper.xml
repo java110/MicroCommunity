@@ -221,11 +221,8 @@
     <!-- 查询设备上报数量 add by wuxw 2018-07-03 -->
     <select id="queryMachineRecordsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from machine_record t,t_dict td1
+        from machine_record t
         where 1 =1
-        and t.open_type_cd = td1.status_cd
-        and td1.table_name = 'machine_record'
-        and td1.table_columns = 'open_type_cd'
         <if test="fileTime !=null and fileTime != ''">
             and t.file_time= #{fileTime}
         </if>

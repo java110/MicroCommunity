@@ -40,8 +40,8 @@ import java.util.Map;
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "page", type = "int",length = 11, remark = "页数"),
-        @Java110ParamDoc(name = "row", type = "int",length = 11, remark = "行数"),
+        @Java110ParamDoc(name = "page", type = "int", length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row", type = "int", length = 11, remark = "行数"),
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
         @Java110ParamDoc(name = "name", length = 64, remark = "业主名称"),
         @Java110ParamDoc(name = "link", length = 11, remark = "业主手机号"),
@@ -56,22 +56,22 @@ import java.util.Map;
                 @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
                 @Java110ParamDoc(name = "owners", type = "Array", length = -1, defaultValue = "成功", remark = "数据"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "communityId", length = 30, remark = "小区ID"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "name", length = 64, remark = "业主名称"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "link", length = 11, remark = "业主手机号"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "idCard", length = 30, remark = "业主身份证号"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "address", length = 512, remark = "地址"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "sex", length = 12, remark = "性别 男 1 女 0"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "ownerTypeCd", length = 12, remark = "业主类型 1001 业主 2002 家庭成员 家庭成员 需要传业主的ownerId"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "remark", length = 512, remark = "备注"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "memberId", length = 30, remark = "业主ID"),
-                @Java110ParamDoc(parentNodeName = "owners",name = "ownerPhoto", length = -1, remark = "业主人脸 用于同步门禁 人脸开门"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "communityId", length = 30, remark = "小区ID"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "name", length = 64, remark = "业主名称"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "link", length = 11, remark = "业主手机号"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "idCard", length = 30, remark = "业主身份证号"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "address", length = 512, remark = "地址"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "sex", length = 12, remark = "性别 男 1 女 0"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "ownerTypeCd", length = 12, remark = "业主类型 1001 业主 2002 家庭成员 家庭成员 需要传业主的ownerId"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "remark", length = 512, remark = "备注"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "memberId", length = 30, remark = "业主ID"),
+                @Java110ParamDoc(parentNodeName = "owners", name = "ownerPhoto", length = -1, remark = "业主人脸 用于同步门禁 人脸开门"),
         }
 )
 
 @Java110ExampleDoc(
-        reqBody="http://ip:port/app/owner.queryOwners?ownerTypeCd=1001&page=1&row=10&communityId=2022121921870161",
-        resBody="{\n" +
+        reqBody = "http://ip:port/app/owner.queryOwners?ownerTypeCd=1001&page=1&row=10&communityId=2022121921870161",
+        resBody = "{\n" +
                 "\t\"owners\": [{\n" +
                 "\t\t\"address\": \"张三\",\n" +
                 "\t\t\"idCard\": \"\",\n" +
@@ -120,8 +120,15 @@ public class QueryOwnersCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        //根据房屋查询时 先用 房屋信息查询 业主ID
+        //todo 根据房屋查询时 先用 房屋信息查询 业主ID
         freshRoomId(reqJson);
+
+        OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
+
+        //todo 根据成员查询
+        queryByOwnerMember(reqJson, ownerDto);
+
+
         if (reqJson.containsKey("name") && !StringUtil.isEmpty(reqJson.getString("name"))) {
             queryByCondition(reqJson, cmdDataFlowContext);
             return;
@@ -129,18 +136,18 @@ public class QueryOwnersCmd extends Cmd {
         int row = reqJson.getInteger("row");
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
         //查询总记录数
-        int total = ownerInnerServiceSMOImpl.queryOwnersCount(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+        int total = ownerInnerServiceSMOImpl.queryOwnersCount(ownerDto);
         apiOwnerVo.setTotal(total);
         List<OwnerDto> ownerDtos = new ArrayList<>();
         if (total > 0) {
-            List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwners(BeanConvertUtil.covertBean(reqJson, OwnerDto.class));
+            List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             // 查询统计数据
             ownerDtoList = queryOwnerStatisticsBMOImpl.query(ownerDtoList);
             List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", reqJson.getString("userId"));
-            for (OwnerDto ownerDto : ownerDtoList) {
+            for (OwnerDto tmpOwnerDto : ownerDtoList) {
                 //查询照片
                 FileRelDto fileRelDto = new FileRelDto();
-                fileRelDto.setObjId(ownerDto.getMemberId());
+                fileRelDto.setObjId(tmpOwnerDto.getMemberId());
                 fileRelDto.setRelTypeCd("10000"); //业主照片
                 List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
                 if (fileRelDtos != null && fileRelDtos.size() > 0) {
@@ -148,27 +155,69 @@ public class QueryOwnersCmd extends Cmd {
                     for (FileRelDto fileRel : fileRelDtos) {
                         urls.add(fileRel.getFileRealName());
                     }
-                    ownerDto.setUrls(urls);
+                    tmpOwnerDto.setUrls(urls);
                 }
                 //对业主身份证号隐藏处理
-                String idCard = ownerDto.getIdCard();
+                String idCard = tmpOwnerDto.getIdCard();
                 if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {
                     idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
-                    ownerDto.setIdCard(idCard);
+                    tmpOwnerDto.setIdCard(idCard);
                 }
                 //对业主手机号隐藏处理
-                String link = ownerDto.getLink();
+                String link = tmpOwnerDto.getLink();
                 if (mark.size() == 0 && link != null && !link.equals("") && link.length() == 11) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
-                    ownerDto.setLink(link);
+                    tmpOwnerDto.setLink(link);
                 }
-                ownerDtos.add(ownerDto);
+                ownerDtos.add(tmpOwnerDto);
             }
             apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
         }
         apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 根据 成员查询
+     *
+     * @param reqJson
+     * @param ownerDto
+     */
+    private void queryByOwnerMember(JSONObject reqJson, OwnerDto ownerDto) {
+
+        if (!reqJson.containsKey("memberName") && !reqJson.containsKey("memberLink")) {
+            return;
+        }
+
+        String memberName = reqJson.getString("memberName");
+        String memberLink = reqJson.getString("memberLink");
+
+        if (StringUtil.isEmpty(memberName) && StringUtil.isEmpty(memberLink)) {
+            return;
+        }
+
+        OwnerDto tmpOwnerMemberDto = new OwnerDto();
+        tmpOwnerMemberDto.setNameLike(memberName);
+        tmpOwnerMemberDto.setLink(memberLink);
+        tmpOwnerMemberDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER,
+                OwnerDto.OWNER_TYPE_CD_OTHER,
+                OwnerDto.OWNER_TYPE_CD_TEMP,
+                OwnerDto.OWNER_TYPE_CD_RENTING
+        });
+        List<OwnerDto> ownerMembers = ownerInnerServiceSMOImpl.queryOwnerMembers(tmpOwnerMemberDto);
+
+        if (ownerMembers == null || ownerMembers.size() < 1) {
+            ownerDto.setOwnerId("-1"); // 写入-1 查询不到数据
+            return;
+        }
+
+        List<String> ownerIds = new ArrayList<>();
+        for (OwnerDto tmpOwnerMember : ownerMembers) {
+            ownerIds.add(tmpOwnerMember.getOwnerId());
+        }
+
+        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
     }
 
     private void freshRoomId(JSONObject reqJson) {

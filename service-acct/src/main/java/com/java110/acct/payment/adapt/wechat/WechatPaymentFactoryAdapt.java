@@ -2,6 +2,7 @@ package com.java110.acct.payment.adapt.wechat;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.WechatFactory;
@@ -28,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;

@@ -29,11 +29,7 @@ public class StorehouseBMOImpl extends ApiBaseBMO implements IStorehouseBMO {
 
         paramInJson.put("shId", "-1");
         StorehousePo storehousePo = BeanConvertUtil.covertBean(paramInJson, StorehousePo.class);
-        if (StorehouseDto.SH_TYPE_GROUP.equals(storehousePo.getShType())) {
-            storehousePo.setShObjId(storehousePo.getStoreId());
-        } else {
-            storehousePo.setShObjId(paramInJson.getString("communityId"));
-        }
+
         super.insert(dataFlowContext, storehousePo, BusinessTypeConstant.BUSINESS_TYPE_SAVE_STOREHOUSE);
     }
 

@@ -1,5 +1,7 @@
 package com.java110.dto.wechat;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @program: MicroCommunity
  * @description: 微信公众号发送物业费信息模板
@@ -11,7 +13,7 @@ public class PropertyFeeTemplateMessage {
     private String template_id;//模板ID
     private String url;//模板跳转链接（海外帐号没有跳转能力）
 //    private String color;//模板内容字体颜色，不填默认为黑色
-    private Data data;//模板数据
+    private JSONObject data;//模板数据
 
     private Miniprogram miniprogram;
 
@@ -40,12 +42,11 @@ public class PropertyFeeTemplateMessage {
     }
 
 
-
-    public Data getData() {
+    public JSONObject getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(JSONObject data) {
         this.data = data;
     }
 

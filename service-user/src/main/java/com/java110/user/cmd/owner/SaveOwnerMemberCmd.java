@@ -3,6 +3,7 @@ package com.java110.user.cmd.owner;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -76,7 +77,6 @@ public class SaveOwnerMemberCmd extends Cmd {
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.jsonObjectHaveKey(reqJson, "name", "请求报文中未包含name");
@@ -88,6 +88,7 @@ public class SaveOwnerMemberCmd extends Cmd {
 
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
 
+        //todo 验证吗校验
         if (reqJson.containsKey("msgCode")) {
             SmsDto smsDto = new SmsDto();
             smsDto.setTel(reqJson.getString("link"));
@@ -97,13 +98,24 @@ public class SaveOwnerMemberCmd extends Cmd {
                 throw new IllegalArgumentException(smsDto.getMsg());
             }
         }
+        //todo 校验手机号重复
+        String userValidate = MappingCache.getValue("USER_VALIDATE");
+        if ("ON".equals(userValidate)) {
+            String link = reqJson.getString("link");
+            OwnerDto ownerDto = new OwnerDto();
+            ownerDto.setLink(link);
+            ownerDto.setCommunityId(reqJson.getString("communityId"));
+            List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
+            Assert.listIsNull(ownerDtos, "手机号重复，请重新输入");
+        }
 
-        //属性校验
+        //todo 属性校验
         Assert.judgeAttrValue(reqJson);
 
     }
 
     @Override
+    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         //todo 生成memberId

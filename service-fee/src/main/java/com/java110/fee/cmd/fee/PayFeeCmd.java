@@ -19,6 +19,7 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.user.UserDto;
+import com.java110.fee.smo.impl.FeeReceiptInnerServiceSMOImpl;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
@@ -138,6 +139,9 @@ public class PayFeeCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private FeeReceiptInnerServiceSMOImpl feeReceiptInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -175,18 +179,18 @@ public class PayFeeCmd extends Cmd {
         if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
             throw new IllegalArgumentException("费用项不存在");
         }
-        /*//一次性费用 和间接性费用
+        //一次性费用 和间接性费用
         Date maxEndTime = feeDtos.get(0).getDeadlineTime();
         //周期性费用
         if (maxEndTime == null || FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
-        }*/
-        Date maxEndTime = null;
-        if (!StringUtil.isEmpty(feeDto.getFeeFlag()) && feeDto.getFeeFlag().equals(FeeDto.FEE_FLAG_CYCLE)) { //周期性费用
-            maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
-        } else { //一次性费用 和间接性费用
-            maxEndTime = feeDtos.get(0).getDeadlineTime();
         }
+//        Date maxEndTime = null;
+//        if (!StringUtil.isEmpty(feeDto.getFeeFlag()) && feeDto.getFeeFlag().equals(FeeDto.FEE_FLAG_CYCLE)) { //周期性费用
+//            maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
+//        } else { //一次性费用 和间接性费用
+//            maxEndTime = feeDtos.get(0).getDeadlineTime();
+//        }
 
         if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
@@ -221,6 +225,9 @@ public class PayFeeCmd extends Cmd {
         String cycles = paramObj.getString("cycles");
         Date endTime = null;
 
+        //todo 生成收据编号
+        String receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(paramObj.getString("communityId"));
+
         PayFeePo payFeePo = null;
         String requestId = DistributedLock.getLockUUID();
         String key = this.getClass().getSimpleName() + paramObj.get("feeId");
@@ -236,7 +243,10 @@ public class PayFeeCmd extends Cmd {
             payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
             payFeeDetailPo.setReceivableAmount(feeDetail.getString("totalFeePrice"));
-            //判断是否有赠送规则
+            //todo 缓存收据编号
+            CommonCache.setValue(payFeeDetailPo.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
+
+            //todo 判断是否有赠送规则
             hasDiscount(paramObj, payFeePo, payFeeDetailPo);
 
             // todo 处理用户账户
@@ -298,6 +308,7 @@ public class PayFeeCmd extends Cmd {
                 applyRoomDiscountInnerServiceSMOImpl.updateApplyRoomDiscount(applyRoomDiscountPo);
             }
         }
+
 
         //根据明细ID 查询收据信息
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
@@ -1059,6 +1070,11 @@ public class PayFeeCmd extends Cmd {
             return;
         }
 
+        //todo 如果是同一天不创建
+        if (DateUtil.getFormatTimeStringB(endTime).equals(reqJson.getString("customStartTime"))) {
+            return;
+        }
+
         FeeDto feeInfo = (FeeDto) reqJson.get("feeInfo");
         String payObjNameRemark = "房屋";
         if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeInfo.getPayerObjType())) {
@@ -1124,7 +1140,7 @@ public class PayFeeCmd extends Cmd {
             tmpFeeAttrPos.add(tmpFeeAttrPo);
         }
         //todo 没有结束时间时
-        if(!hasDeadLineTime){
+        if (!hasDeadLineTime) {
             tmpFeeAttrPo = new FeeAttrPo();
             tmpFeeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
             tmpFeeAttrPo.setFeeId(tmpPayFeePo.getFeeId());

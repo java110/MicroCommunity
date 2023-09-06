@@ -12,6 +12,8 @@ import com.tencentcloudapi.sms.v20190711.models.SendSmsRequest;
 import com.tencentcloudapi.sms.v20190711.models.SendSmsResponse;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Random;
 /*
@@ -85,13 +87,16 @@ public class TencentSendMessageFactory {
         sendSmsRequest.setTemplateParamSet(templateParam);
         sendSmsRequest.setSign(MappingCache.getValue(TENCENT_SMS_DOMAIN, "Sign")); //签名内容，不是填签名id,见《创建短信签名和模版》小节
         SendSmsResponse sendSmsResponse = null;
+        String errMsg= "发送短信失败:";
         try {
             sendSmsResponse = smsClient.SendSms(sendSmsRequest); //发送短信
         } catch (TencentCloudSDKException e) {
             logger.error("发送短信失败", e);
+            errMsg = e.getMessage();
         }
 
         logger.debug("腾讯短信验证码发送，请求报文" + JSONObject.toJSONString(sendSmsRequest) + ",返回日志" + (sendSmsResponse != null ? JSONObject.toJSONString(sendSmsResponse) : ""));
+        LogFactory.saveOutLog("SMS", JSONObject.toJSONString(sendSmsRequest), new ResponseEntity((sendSmsResponse != null ? JSONObject.toJSONString(sendSmsResponse) : errMsg), HttpStatus.OK));
 
 
     }

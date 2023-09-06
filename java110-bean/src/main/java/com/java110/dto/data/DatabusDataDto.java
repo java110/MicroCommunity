@@ -1,4 +1,4 @@
-package com.java110.dto.system;
+package com.java110.dto.data;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.PageDto;
@@ -13,22 +13,31 @@ import java.io.Serializable;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class CustomBusinessDatabusDto extends PageDto implements Serializable {
+public class DatabusDataDto extends PageDto implements Serializable {
+
+    // 车辆进出手动触发
+    public static final String BUSINESS_TYPE_SAVE_CAR_INOUT_DETAIL = "saveCarInoutDetail";
+
+    public static final String BUSINESS_TYPE_SAVE_PARKING_COUPON_CAR_ORDER = "saveParkingCouponCarOrder";
+
+    // 欠费催缴
+    public static final String BUSINESS_TYPE_OWE_FEE_CALLABLE = "oweFeeCallable";
+
 
     private String businessTypeCd;
 
     private JSONObject data;
 
-    public CustomBusinessDatabusDto() {
+    public DatabusDataDto() {
     }
 
-    public CustomBusinessDatabusDto(String businessTypeCd, JSONObject data) {
+    public DatabusDataDto(String businessTypeCd, JSONObject data) {
         this.businessTypeCd = businessTypeCd;
         this.data = data;
     }
 
-    public static CustomBusinessDatabusDto getInstance(String businessTypeCd, JSONObject data) {
-        return new CustomBusinessDatabusDto(businessTypeCd, data);
+    public static DatabusDataDto getInstance(String businessTypeCd, JSONObject data) {
+        return new DatabusDataDto(businessTypeCd, data);
     }
 
 

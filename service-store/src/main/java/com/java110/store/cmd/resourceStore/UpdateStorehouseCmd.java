@@ -18,6 +18,7 @@ package com.java110.store.cmd.resourceStore;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -55,9 +56,19 @@ public class UpdateStorehouseCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "shId", "shId不能为空");
         Assert.hasKeyAndValue(reqJson, "shName", "请求报文中未包含shName");
-        Assert.hasKeyAndValue(reqJson, "shType", "请求报文中未包含shType");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+        reqJson.put("storeId", storeId);
+        if ("ON".equals(reqJson.getString("purchaseSwitch"))) {
+            Assert.hasKeyAndValue(reqJson, "purchaseRafId", "请求报文中未包含采购流程");
+        }
 
+        if ("ON".equals(reqJson.getString("useSwitch"))) {
+            Assert.hasKeyAndValue(reqJson, "useRafId", "请求报文中未包含领用流程");
+        }
+
+        if ("ON".equals(reqJson.getString("allocationSwitch"))) {
+            Assert.hasKeyAndValue(reqJson, "allocationRafId", "请求报文中未包含调拨流程");
+        }
     }
 
     @Override

@@ -173,6 +173,9 @@
         <if test="storeId !=null and storeId != ''">
             and pa.store_id= #{storeId}
         </if>
+        <if test="communityId !=null and communityId != ''">
+            and pa.community_id= #{communityId}
+        </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}
         </if>
@@ -321,6 +324,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and pa.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and pa.community_id= #{communityId}
         </if>
         <if test="rssId !=null and rssId != ''">
             and rs.rss_id= #{rssId}

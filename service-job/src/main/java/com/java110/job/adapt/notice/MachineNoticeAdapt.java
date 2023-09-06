@@ -31,6 +31,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -198,7 +199,7 @@ public class MachineNoticeAdapt extends DatabusAdaptImpl {
                 data.setKeyword2(new Content(paramIn.getString("startTime")));
                 data.setKeyword3(new Content(StringUtil.delHtmlTag(paramIn.getString("context"))));
                 data.setRemark(new Content("如有疑问请联系相关物业人员"));
-                templateMessage.setData(data);
+                templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
                 //获取员工公众号地址
                 String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
                 templateMessage.setUrl(wechatUrl);
@@ -264,7 +265,7 @@ public class MachineNoticeAdapt extends DatabusAdaptImpl {
                 data.setKeyword2(new Content(paramIn.getString("startTime")));
                 data.setKeyword3(new Content(StringUtil.delHtmlTag(paramIn.getString("context"))));
                 data.setRemark(new Content("如有疑问请联系相关物业人员"));
-                templateMessage.setData(data);
+                templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
                 //获取业主公众号地址
                 String wechatUrl = UrlCache.getOwnerUrl();
                 if (!StringUtil.isEmpty(wechatUrl) && wechatUrl.contains("?")) {

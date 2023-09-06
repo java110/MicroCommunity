@@ -83,6 +83,13 @@ public class PayFeeDetailDiscountInnerServiceSMOImpl extends BaseServiceSMO impl
         return payFeeDetailDiscountServiceDaoImpl.queryPayFeeDetailDiscountsCount(BeanConvertUtil.beanCovertMap(payFeeDetailDiscountDto));
     }
 
+    @Override
+    public List<PayFeeDetailDiscountDto> computeDiscountFee(@RequestBody PayFeeDetailDiscountDto payFeeDetailDiscountDto) {
+        List<PayFeeDetailDiscountDto> payFeeDetailDiscounts = BeanConvertUtil.covertBeanList(payFeeDetailDiscountServiceDaoImpl.computeDiscountFee(BeanConvertUtil.beanCovertMap(payFeeDetailDiscountDto)), PayFeeDetailDiscountDto.class);
+
+        return payFeeDetailDiscounts;
+    }
+
     public IPayFeeDetailDiscountServiceDao getPayFeeDetailDiscountServiceDaoImpl() {
         return payFeeDetailDiscountServiceDaoImpl;
     }

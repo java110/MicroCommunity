@@ -16,7 +16,7 @@
 package com.java110.job.adapt.hcGov.inoutRecord;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.system.CustomBusinessDatabusDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.community.CommunityAttrDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.community.CommunityLocationAttrDto;
@@ -68,11 +68,11 @@ public class AddInoutRecordToHcGovAdapt extends DatabusAdaptImpl {
 
 
     /**
-     * @param customBusinessDatabusDto 当前处理业务
+     * @param business 当前处理业务
      */
     @Override
-    public void customExchange(CustomBusinessDatabusDto customBusinessDatabusDto) {
-        JSONObject data = customBusinessDatabusDto.getData();
+    public void execute(Business business,List<Business> businesses) {
+        JSONObject data = business.getData();
         doInoutRecord(null, data);
     }
 

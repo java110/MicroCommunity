@@ -4,11 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.boot.smo.DefaultAbstractComponentSMO;
 import com.java110.boot.smo.undo.IUndoSMO;
 import com.java110.core.context.IPageData;
+import com.java110.dto.inspection.InspectionTaskDto;
+import com.java110.dto.maintainance.MaintainanceTaskDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflow.WorkflowDto;
 import com.java110.dto.audit.AuditUser;
 import com.java110.dto.system.ComponentValidateResult;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
+import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
+import com.java110.intf.community.IMaintainanceTaskV1InnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.utils.exception.SMOException;
 import com.java110.vo.ResultVo;
@@ -38,6 +42,12 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
 
     @Autowired
     private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
+    @Autowired
+    private IInspectionTaskInnerServiceSMO inspectionTaskInnerServiceSMOImpl;
+
+    @Autowired
+    private IMaintainanceTaskV1InnerServiceSMO maintainanceTaskV1InnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<String> listUndos(IPageData pd) throws SMOException {
@@ -148,13 +158,54 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
         } else {
             doing.put("allocation", "0");
         }
+        //todo 物品放行
         getItemReleaseCount(result, doing);
 
+        //todo 访客审核
         getVisitCount(result, doing);
 
+        //todo 业主入驻
         getOwnerSettledApplyCount(result, doing);
 
+        //todo 待巡检
+        getInspectionTaskCount(result, doing);
+
+        //todo 待保养
+        getMaintainanceTaskCount(result, doing);
+
         return ResultVo.createResponseEntity(doing);
+    }
+
+    /**
+     * 查询待保养
+     * @param result
+     * @param doing
+     */
+    private void getMaintainanceTaskCount(ComponentValidateResult result, JSONObject doing) {
+
+        MaintainanceTaskDto maintainanceTaskDto = new MaintainanceTaskDto();
+        maintainanceTaskDto.setPlanUserId(result.getUserId());
+        maintainanceTaskDto.setCommunityId(result.getCommunityId());
+        maintainanceTaskDto.setStates(new String[]{"20200405","20200406"});
+        int maintainanceTaskCount = maintainanceTaskV1InnerServiceSMOImpl.queryMaintainanceTasksCount(maintainanceTaskDto);
+        doing.put("maintainanceTaskCount", maintainanceTaskCount);
+
+    }
+
+    /**
+     * 查询待巡检
+     *
+     * @param result
+     * @param doing
+     */
+    private void getInspectionTaskCount(ComponentValidateResult result, JSONObject doing) {
+        InspectionTaskDto inspectionTaskDto = new InspectionTaskDto();
+        inspectionTaskDto.setPlanUserId(result.getUserId());
+        inspectionTaskDto.setCommunityId(result.getCommunityId());
+        inspectionTaskDto.setDayTask("1");
+        inspectionTaskDto.setStates(new String[]{"20200405","20200406"});
+        int inspectionTaskCount = inspectionTaskInnerServiceSMOImpl.queryInspectionTasksCount(inspectionTaskDto);
+        doing.put("inspectionTaskCount", inspectionTaskCount);
     }
 
     private void getOwnerSettledApplyCount(ComponentValidateResult result, JSONObject data) {

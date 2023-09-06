@@ -85,18 +85,14 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="storeId !=null and storeId != ''">
-            , t.store_id= #{storeId}
-        </if>
+
         <if test="resId !=null and resId != ''">
             , t.res_id= #{resId}
         </if>
         <if test="shIdz !=null and shIdz != ''">
             , t.sh_id_z= #{shIdz}
         </if>
-        <if test="applyId !=null and applyId != ''">
-            , t.apply_id= #{applyId}
-        </if>
+
         <if test="resName !=null and resName != ''">
             , t.res_name= #{resName}
         </if>
@@ -121,6 +117,12 @@
         </if>
         <if test="timesId !=null and timesId != ''">
             and t.times_id= #{timesId}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
         </if>
 
     </update>

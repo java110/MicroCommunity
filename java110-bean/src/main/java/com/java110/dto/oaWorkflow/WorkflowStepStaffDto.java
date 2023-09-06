@@ -29,6 +29,10 @@ public class WorkflowStepStaffDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String processDefinitionKey;
+
+    private String flowId;
+
 
     public String getWssId() {
         return wssId;
@@ -109,5 +113,21 @@ public class WorkflowStepStaffDto extends PageDto implements Serializable {
 
     public void setFlowTypes(String[] flowTypes) {
         this.flowTypes = flowTypes;
+    }
+
+    public String getProcessDefinitionKey() {
+        return processDefinitionKey;
+    }
+
+    public void setProcessDefinitionKey(String processDefinitionKey) {
+        this.processDefinitionKey = processDefinitionKey;
+    }
+
+    public String getFlowId() {
+        return flowId;
+    }
+
+    public void setFlowId(String flowId) {
+        this.flowId = flowId;
     }
 }

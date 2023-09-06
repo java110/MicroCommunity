@@ -20,6 +20,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,7 +174,8 @@ public class PublishStaffInspectionTaskTemplate extends TaskSystemQuartz {
         data.setKeyword3(new Content(inspectionTaskDetailDto.getInspectionName() + "未巡检，请及时巡检"));
         data.setRemark(new Content("如有疑问请联系管理员"));
 
-        templateMessage.setData(data);
+        templateMessage.setData(BeanConvertUtil.beanCovertJson(data));
+
 
         String staffWechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
         staffWechatUrl =  staffWechatUrl
