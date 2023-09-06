@@ -14,6 +14,7 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -89,5 +90,7 @@ public class GetWechatMiniOpenIdCmd extends Cmd {
         }
 
         String openId = responseObj.getString("openid");
+
+        context.setResponseEntity(ResultVo.createResponseEntity(openId));
     }
 }
