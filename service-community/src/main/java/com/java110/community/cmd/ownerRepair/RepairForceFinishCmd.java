@@ -117,11 +117,6 @@ public class RepairForceFinishCmd extends Cmd {
         repairDto.setState(RepairDto.STATE_TAKING);
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
         Assert.listOnlyOne(repairDtos, "当前没有需要处理订单");
-        if (repairDtos != null && repairDtos.size() != 1) {
-            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "非常抱歉当前不能退单！");
-            context.setResponseEntity(responseEntity);
-            return;
-        }
         //查询正在处理 工单的师傅
         RepairUserDto repairUserDto = new RepairUserDto();
         repairUserDto.setRepairId(reqJson.getString("repairId"));
@@ -399,7 +394,7 @@ public class RepairForceFinishCmd extends Cmd {
                 throw new CmdException("添加维修工单流程信息失败");
             }
         }
-        // 1.0 关闭自己订单吧
+        // 1.0 关闭自己订单
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));

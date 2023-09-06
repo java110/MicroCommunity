@@ -262,9 +262,9 @@
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}
         </if>
-        <if test="userId !=null and userId != ''">
+        <!--<if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
-        </if>
+        </if>-->
         <if test="userName !=null and userName != ''">
             and u.name= #{userName}
         </if>
