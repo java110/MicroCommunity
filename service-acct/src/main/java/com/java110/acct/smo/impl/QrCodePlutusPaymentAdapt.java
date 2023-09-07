@@ -82,7 +82,7 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         }
 
         JSONObject paramMap = new JSONObject();
-        paramMap.put("sn", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
+        paramMap.put("sn", shopSmallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
         paramMap.put("authCode", authCode);
         paramMap.put("tradeAmount", PayUtil.moneyToIntegerStr(payAmount));
@@ -114,7 +114,7 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         String paramOut = new String(bb);
 
         JSONObject paramObj = JSONObject.parseObject(paramOut);
-        if ("1".equals(paramObj.get("status"))) {
+        if ("1".equals(paramObj.getString("status"))) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
             return new ResultVo(ResultVo.CODE_ERROR, paramObj.getString("remark"));
@@ -171,9 +171,9 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
 
         JSONObject paramObj = JSONObject.parseObject(paramOut);
 
-        if ("1".equals(paramObj.get("status"))) {
+        if ("1".equals(paramObj.getString("status"))) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
-        } else if ("0".equals(paramObj.get("status"))) {
+        } else if ("0".equals(paramObj.getString("status"))) {
             return new ResultVo(ResultVo.CODE_WAIT_PAY, "等待支付完成");
         } else {
             return new ResultVo(ResultVo.CODE_ERROR, paramObj.getString("remark"));
