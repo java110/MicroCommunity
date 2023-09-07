@@ -38,7 +38,8 @@ public class GetCommunityWechatAppIdCmd extends Cmd {
 
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setObjId(reqJson.getString("communityId"));
-        smallWeChatDto.setObjType(reqJson.getString("objType"));
+        smallWeChatDto.setWechatType(reqJson.getString("objType"));
+        smallWeChatDto.setWeChatType(reqJson.getString("objType"));
         List<SmallWeChatDto> smallWeChatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto);
         String appId = "";
         //todo 读取全局
