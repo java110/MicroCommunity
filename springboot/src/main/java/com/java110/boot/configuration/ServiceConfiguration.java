@@ -114,6 +114,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/owner.getQrcodeOwner,");// 根据二维码查询业主信息
         exclusions.append("/app/payFeeQrcode.getQrcodeOweFees,");// 根据二维码查询业主欠费
         exclusions.append("/app/wechat.getWechatMiniOpenId,");// 根据二维码查询业主欠费
+        exclusions.append("/app/wechat.getCommunityWechatAppId,");// 查询小区微信appID
 
 
 
