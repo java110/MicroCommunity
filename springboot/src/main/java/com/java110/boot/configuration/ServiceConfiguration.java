@@ -115,6 +115,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/payFeeQrcode.getQrcodeOweFees,");// 根据二维码查询业主欠费
         exclusions.append("/app/wechat.getWechatMiniOpenId,");// 根据二维码查询业主欠费
         exclusions.append("/app/wechat.getCommunityWechatAppId,");// 查询小区微信appID
+        exclusions.append("/app/payment.cashier,");// 收银接口
 
 
 
