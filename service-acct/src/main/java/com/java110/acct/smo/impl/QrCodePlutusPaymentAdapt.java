@@ -26,6 +26,8 @@ import java.util.TreeMap;
 
 /**
  * 微信支付
+ * WECHAT
+ * PAY_QR_ADAPT
  */
 @Service
 public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {

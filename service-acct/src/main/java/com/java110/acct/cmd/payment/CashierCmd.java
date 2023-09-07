@@ -50,6 +50,7 @@ public class CashierCmd extends Cmd {
 
         Assert.hasKeyAndValue(reqJson, "business", "未包含业务");
         Assert.hasKeyAndValue(reqJson, "cashierUserId", "未包含收银人员");
+        Assert.hasKeyAndValue(reqJson, "openId", "未包含openId");
 
         context.getReqHeaders().put("user-id", reqJson.getString("cashierUserId"));
     }
