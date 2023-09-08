@@ -112,11 +112,11 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
         params.put("mcht_no", mchtNo_SM4);// 收款商户编号
-        params.put("tran_no", onlinePayDto.getOrderId());// 商户流水
-        params.put("org_txn_no", onlinePayDto.getTransactionId());// 原平台流水
+        params.put("tran_no", onlinePayDtos.get(0).getOrderId());// 商户流水
+        params.put("org_txn_no", onlinePayDtos.get(0).getTransactionId());// 原平台流水
         params.put("device_ip", "172.0.0.1");// 设备发起交易IP
         params.put("amt", onlinePayDtos.get(0).getRefundFee());// 交易金额
-        params.put("ware_name", onlinePayDto.getPayName());// 摘要备注
+        params.put("ware_name", onlinePayDtos.get(0).getPayName());// 摘要备注
 
         // 对准备加签参数排序
         String decryParams = EncryptDecryptFactory.execute(communityId, refundUrl, params);
