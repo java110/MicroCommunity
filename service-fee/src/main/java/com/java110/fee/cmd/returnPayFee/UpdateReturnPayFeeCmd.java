@@ -363,14 +363,14 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             feeDiscountDto.setDiscountId(payFeeConfigDiscount.getDiscountId());
             List<FeeDiscountDto> feeDiscountDtos = feeDiscountInnerServiceSMOImpl.queryFeeDiscounts(feeDiscountDto);
             //Assert.listOnlyOne(feeDiscountDtos, "查询打折优惠表错误");
-            if(feeDiscountDtos == null || feeDiscountDtos.size() < 1){
+            if (feeDiscountDtos == null || feeDiscountDtos.size() < 1) {
                 continue;
             }
             FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
             feeDiscountRuleDto.setRuleId(feeDiscountDtos.get(0).getRuleId());
             List<FeeDiscountRuleDto> feeDiscountRuleDtos = feeDiscountRuleInnerServiceSMOImpl.queryFeeDiscountRules(feeDiscountRuleDto);
             //Assert.listOnlyOne(feeDiscountRuleDtos, "查询规则表错误");
-            if(feeDiscountRuleDtos == null || feeDiscountRuleDtos.size() < 1){
+            if (feeDiscountRuleDtos == null || feeDiscountRuleDtos.size() < 1) {
                 continue;
             }
             //获取实现方式
@@ -387,8 +387,8 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             feeDiscountSpecDto.setSpecId(SPEC_RATE); //赠送规则
             //查询打折规格
             List<FeeDiscountSpecDto> feeDiscountSpecDtos = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(feeDiscountSpecDto);
-           // Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
-            if(feeDiscountSpecDtos == null || feeDiscountSpecDtos.size() < 1){
+            // Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
+            if (feeDiscountSpecDtos == null || feeDiscountSpecDtos.size() < 1) {
                 continue;
             }
             //获取赠送月份
@@ -629,6 +629,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         onlinePayRefundPo.setMessage("待退费");
         onlinePayRefundPo.setBusiId(feeDetailDto.getDetailId());
         onlinePayRefundPo.setRefundFee(feeDetailDto.getReceivedAmount());
+        onlinePayRefundPo.setCommunityId(feeDetailDto.getCommunityId());
         onlinePayRefundV1InnerServiceSMOImpl.saveOnlinePayRefund(onlinePayRefundPo);
     }
 }

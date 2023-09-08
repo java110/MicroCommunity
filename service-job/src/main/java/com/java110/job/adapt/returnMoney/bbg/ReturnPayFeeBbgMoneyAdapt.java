@@ -111,11 +111,7 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
         if (onlinePayDtos == null || onlinePayDtos.size() < 1) {
             return;
         }
-
         String communityId = "";
-
-        String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
-
         // todo 查询退费明细
         OnlinePayRefundDto onlinePayRefundDto = new OnlinePayRefundDto();
         onlinePayRefundDto.setPayId(onlinePayDtos.get(0).getPayId());
@@ -124,14 +120,21 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
         String tranNo = GenerateCodeFactory.getGeneratorId("11");
         if(onlinePayRefundDtos != null && onlinePayRefundDtos.size() >0){
             tranNo = onlinePayRefundDtos.get(0).getRefundId();
+            communityId = onlinePayRefundDtos.get(0).getCommunityId();
         }
+
+
+
+        String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
+
+
 
 
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
         params.put("mcht_no", mchtNo_SM4);// 收款商户编号
         params.put("tran_no", tranNo);// 商户流水
-        params.put("org_tran_no", onlinePayDtos.get(0).getTransactionId());// 原平台流水
+        params.put("org_tran_no", onlinePayDtos.get(0).getOrderId());// 原平台流水
         params.put("device_ip", "172.0.0.1");// 设备发起交易IP
         params.put("amt", onlinePayDtos.get(0).getRefundFee());// 交易金额
         params.put("ware_name", onlinePayDtos.get(0).getPayName());// 摘要备注

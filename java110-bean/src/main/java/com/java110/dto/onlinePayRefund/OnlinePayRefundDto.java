@@ -1,6 +1,7 @@
 package com.java110.dto.onlinePayRefund;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,13 @@ import java.util.Date;
 public class OnlinePayRefundDto extends PageDto implements Serializable {
 
     private String refundFee;
-private String busiId;
-private String payId;
-private String state;
-private String message;
-private String refundId;
+    private String busiId;
+    private String payId;
+    private String state;
+    private String message;
+    private String refundId;
+
+    private String communityId;
 
 
     private Date createTime;
@@ -30,37 +33,48 @@ private String refundId;
     public String getRefundFee() {
         return refundFee;
     }
-public void setRefundFee(String refundFee) {
+
+    public void setRefundFee(String refundFee) {
         this.refundFee = refundFee;
     }
-public String getBusiId() {
+
+    public String getBusiId() {
         return busiId;
     }
-public void setBusiId(String busiId) {
+
+    public void setBusiId(String busiId) {
         this.busiId = busiId;
     }
-public String getPayId() {
+
+    public String getPayId() {
         return payId;
     }
-public void setPayId(String payId) {
+
+    public void setPayId(String payId) {
         this.payId = payId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getMessage() {
+
+    public String getMessage() {
         return message;
     }
-public void setMessage(String message) {
+
+    public void setMessage(String message) {
         this.message = message;
     }
-public String getRefundId() {
+
+    public String getRefundId() {
         return refundId;
     }
-public void setRefundId(String refundId) {
+
+    public void setRefundId(String refundId) {
         this.refundId = refundId;
     }
 
@@ -79,5 +93,13 @@ public void setRefundId(String refundId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 }

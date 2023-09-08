@@ -36,6 +36,8 @@ public class OnlinePayRefundPo implements Serializable {
     private String message;
     private String refundId;
 
+    private String communityId;
+
     public String getRefundFee() {
         return refundFee;
     }
@@ -92,5 +94,11 @@ public class OnlinePayRefundPo implements Serializable {
         this.refundId = refundId;
     }
 
+    public String getCommunityId() {
+        return communityId;
+    }
 
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
 }
