@@ -108,7 +108,14 @@ public class ServiceConfiguration {
         exclusions.append("/app/login.pcUserLogin,");// 放开接口登录
         exclusions.append("/app/login.accessTokenLogin,");// 放开接口登录
         exclusions.append("/app/login.getAccessToken,");// 放开接口登录
-
+        // todo 静态二维码支付 相关接口放开
+        exclusions.append("/app/payFeeQrcode.getQrcodeConfig,");// 放开接口登录
+        exclusions.append("/app/user.ownerSendSms,");// 向业主发送验证码
+        exclusions.append("/app/owner.getQrcodeOwner,");// 根据二维码查询业主信息
+        exclusions.append("/app/payFeeQrcode.getQrcodeOweFees,");// 根据二维码查询业主欠费
+        exclusions.append("/app/wechat.getWechatMiniOpenId,");// 根据二维码查询业主欠费
+        exclusions.append("/app/wechat.getCommunityWechatAppId,");// 查询小区微信appID
+        exclusions.append("/app/payment.cashier,");// 收银接口
 
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
