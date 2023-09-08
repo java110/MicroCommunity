@@ -93,7 +93,8 @@ public class GetQrcodeOweFeesCmd extends Cmd {
                 );
 
                 tmpFeeDto.setVal(val);
-                if (tmpFeeDto.getFeePrice() > 0) {
+                //todo 这里考虑负数金额，有些可能要红冲
+                if (tmpFeeDto.getFeePrice() !=0) {
                     tmpFeeDto.setFeeAttrDtos(null); //todo 这里删掉 以免信息泄露带来的风险
                     tmpFeeDtos.add(tmpFeeDto);
                 }
@@ -104,6 +105,5 @@ public class GetQrcodeOweFeesCmd extends Cmd {
 
 
         context.setResponseEntity(ResultVo.createResponseEntity(feeDtos));
-        return;
     }
 }

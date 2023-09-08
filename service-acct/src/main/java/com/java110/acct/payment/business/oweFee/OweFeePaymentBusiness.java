@@ -111,7 +111,8 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
                 //如果金额为0 就排除
                 //if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
                 tmpFeeDto.setVal(val);
-                if (tmpFeeDto.getFeeTotalPrice() > 0 && "Y".equals(tmpFeeDto.getPayOnline())) {
+                //todo  考虑 负数金额 可能用于红冲
+                if (tmpFeeDto.getFeeTotalPrice() != 0 && "Y".equals(tmpFeeDto.getPayOnline())) {
                     tmpFeeDtos.add(tmpFeeDto);
                     feeTotalPrice = new BigDecimal(tmpFeeDto.getFeeTotalPrice());
                     tmpMoney = tmpMoney.add(feeTotalPrice);
