@@ -4,15 +4,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
 import com.java110.core.factory.CommunitySettingFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.file.FileDto;
+import com.java110.dto.onlinePayRefund.OnlinePayRefundDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.system.Business;
+import com.java110.intf.acct.IOnlinePayRefundV1InnerServiceSMO;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.po.onlinePayRefund.OnlinePayRefundPo;
 import com.java110.po.wechat.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -79,6 +83,9 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
     @Autowired
     private OssUploadTemplate ossUploadTemplate;
 
+    @Autowired
+    private IOnlinePayRefundV1InnerServiceSMO onlinePayRefundV1InnerServiceSMOImpl;
+
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
@@ -109,11 +116,22 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
 
         String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
 
+        // todo 查询退费明细
+        OnlinePayRefundDto onlinePayRefundDto = new OnlinePayRefundDto();
+        onlinePayRefundDto.setPayId(onlinePayDtos.get(0).getPayId());
+        onlinePayRefundDto.setState(OnlinePayDto.STATE_WT);
+        List<OnlinePayRefundDto> onlinePayRefundDtos = onlinePayRefundV1InnerServiceSMOImpl.queryOnlinePayRefunds(onlinePayRefundDto);
+        String tranNo = GenerateCodeFactory.getGeneratorId("11");
+        if(onlinePayRefundDtos != null && onlinePayRefundDtos.size() >0){
+            tranNo = onlinePayRefundDtos.get(0).getRefundId();
+        }
+
+
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
         params.put("mcht_no", mchtNo_SM4);// 收款商户编号
-        params.put("tran_no", onlinePayDtos.get(0).getOrderId());// 商户流水
-        params.put("org_txn_no", onlinePayDtos.get(0).getTransactionId());// 原平台流水
+        params.put("tran_no", tranNo);// 商户流水
+        params.put("org_tran_no", onlinePayDtos.get(0).getTransactionId());// 原平台流水
         params.put("device_ip", "172.0.0.1");// 设备发起交易IP
         params.put("amt", onlinePayDtos.get(0).getRefundFee());// 交易金额
         params.put("ware_name", onlinePayDtos.get(0).getPayName());// 摘要备注
@@ -125,19 +143,35 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
         if (!"0000".equals(paramOut.getString("return_code"))
                 || !"SUCCESS".equals(paramOut.getString("status"))
                 || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
-            doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_FT, "退款失败" + paramOut.getString("return_message"));
+            doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_FT, "退款失败" + paramOut.getString("return_message"));
             return;
         }
-        doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_CT, "退款完成");
+        doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_CT, "退款完成");
 
     }
 
-    private void doUpdateOnlinePay(String orderId, String state, String message) {
+    private void doUpdateOnlinePay(String payId, String state, String message) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
         onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
-        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setPayId(payId);
         onlinePayPo.setState(state);
         onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
+
+        // todo 查询退费明细
+        OnlinePayRefundDto onlinePayRefundDto = new OnlinePayRefundDto();
+        onlinePayRefundDto.setPayId(payId);
+        onlinePayRefundDto.setState(OnlinePayDto.STATE_WT);
+        List<OnlinePayRefundDto> onlinePayRefundDtos = onlinePayRefundV1InnerServiceSMOImpl.queryOnlinePayRefunds(onlinePayRefundDto);
+
+        if(onlinePayRefundDtos == null || onlinePayRefundDtos.size() < 1){
+            return;
+        }
+
+        OnlinePayRefundPo onlinePayRefundPo = new OnlinePayRefundPo();
+        onlinePayRefundPo.setRefundId(onlinePayRefundDtos.get(0).getRefundId());
+        onlinePayRefundPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayRefundPo.setState(state);
+        onlinePayRefundV1InnerServiceSMOImpl.updateOnlinePayRefund(onlinePayRefundPo);
     }
 
     private byte[] getPkcs12(String fileName) {

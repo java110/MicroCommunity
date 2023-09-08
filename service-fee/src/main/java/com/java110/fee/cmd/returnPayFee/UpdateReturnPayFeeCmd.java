@@ -41,6 +41,7 @@ import com.java110.dto.payFee.ReturnPayFeeDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.acct.IOnlinePayRefundV1InnerServiceSMO;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
@@ -54,6 +55,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.fee.FeeReceiptPo;
 import com.java110.po.fee.FeeReceiptDetailPo;
+import com.java110.po.onlinePayRefund.OnlinePayRefundPo;
 import com.java110.po.wechat.OnlinePayPo;
 import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.po.payFee.ReturnPayFeePo;
@@ -152,6 +154,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOnlinePayRefundV1InnerServiceSMO onlinePayRefundV1InnerServiceSMOImpl;
 
 
     private static final String SPEC_RATE = "89002020980015"; //赠送月份
@@ -614,5 +619,16 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         onlinePayPo.setState(OnlinePayDto.STATE_WT);
         onlinePayPo.setRefundFee(feeDetailDto.getReceivedAmount());
         onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
+
+        //todo 保存 退费明细
+
+        OnlinePayRefundPo onlinePayRefundPo = new OnlinePayRefundPo();
+        onlinePayRefundPo.setPayId(onlinePayDtos.get(0).getPayId());
+        onlinePayRefundPo.setRefundId(GenerateCodeFactory.getGeneratorId("11"));
+        onlinePayRefundPo.setState(OnlinePayDto.STATE_WT);
+        onlinePayRefundPo.setMessage("待退费");
+        onlinePayRefundPo.setBusiId(feeDetailDto.getDetailId());
+        onlinePayRefundPo.setRefundFee(feeDetailDto.getReceivedAmount());
+        onlinePayRefundV1InnerServiceSMOImpl.saveOnlinePayRefund(onlinePayRefundPo);
     }
 }
