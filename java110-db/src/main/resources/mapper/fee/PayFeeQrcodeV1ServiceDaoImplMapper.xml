@@ -8,9 +8,9 @@
     <!-- 保存支付二维码信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeQrcodeInfo" parameterType="Map">
         insert into pay_fee_qrcode(
-        create_staff_name,query_way,create_staff_id,pre_fee,custom_fee,pfq_id,qrcode_name,community_id,sms_validate,content
+        create_staff_name,query_way,create_staff_id,pre_fee,custom_fee,pfq_id,qrcode_name,community_id,sms_validate,content,state
         ) values (
-        #{createStaffName},#{queryWay},#{createStaffId},#{preFee},#{customFee},#{pfqId},#{qrcodeName},#{communityId},#{smsValidate},#{content}
+        #{createStaffName},#{queryWay},#{createStaffId},#{preFee},#{customFee},#{pfqId},#{qrcodeName},#{communityId},#{smsValidate},#{content},#{state}
         )
     </insert>
 
@@ -21,7 +21,7 @@
         queryWay,t.create_staff_id,t.create_staff_id createStaffId,t.pre_fee,t.pre_fee preFee,t.status_cd,t.status_cd
         statusCd,t.custom_fee,t.custom_fee customFee,t.pfq_id,t.pfq_id pfqId,t.qrcode_name,t.qrcode_name
         qrcodeName,t.community_id,t.community_id communityId,t.sms_validate,t.sms_validate smsValidate,t.content,
-        t.create_time createTime
+        t.create_time createTime,t.state
         from pay_fee_qrcode t
         where 1 =1
         <if test="createStaffName !=null and createStaffName != ''">
@@ -57,6 +57,9 @@
         <if test="content !=null and content != ''">
             and t.content= #{content}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -79,6 +82,9 @@
         </if>
         <if test="createStaffId !=null and createStaffId != ''">
             , t.create_staff_id= #{createStaffId}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
         </if>
         <if test="preFee !=null and preFee != ''">
             , t.pre_fee= #{preFee}
@@ -143,7 +149,9 @@
         <if test="content !=null and content != ''">
             and t.content= #{content}
         </if>
-
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
 
     </select>
 
