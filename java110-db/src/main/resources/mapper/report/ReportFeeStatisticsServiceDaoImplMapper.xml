@@ -337,7 +337,7 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pfc.fee_type_cd = #{feeTypeCd}
         </if>
-        group by a.payer_obj_id
+        group by t.payer_obj_id
         ) a
     </select>
 
