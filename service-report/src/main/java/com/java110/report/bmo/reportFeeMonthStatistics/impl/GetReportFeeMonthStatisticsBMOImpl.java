@@ -911,7 +911,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             startTime = (Date) paramIn.get("startTime");
             endTime = (Date) paramIn.get("endTime");
             BigDecimal money = (BigDecimal) paramIn.get("oweAmount");
-            double month = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+            double month = Math.ceil(DateUtil.dayCompare(startTime, endTime));
             if (month < 1) {
                 paramIn.put("btAmount", 0);
                 paramIn.put("bfAmount", 0);
@@ -924,7 +924,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
             if (startTime.getTime() < curStart.getTime()) {
                 BigDecimal btAmountDec = monthAmount.multiply(new BigDecimal(curMonth)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 paramIn.put("btAmount", btAmountDec.doubleValue());
-                double preMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, curStart));
+                double preMonth = Math.ceil(DateUtil.dayCompare(startTime, curStart));
                 BigDecimal bfAmountDec = monthAmount.multiply(new BigDecimal(preMonth)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
                 paramIn.put("bfAmount", bfAmountDec.doubleValue());
                 continue;

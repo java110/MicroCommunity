@@ -591,7 +591,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
             return feePriceDec.subtract(hisDayDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
 
-        month = computeFeeSMOImpl.dayCompare(curDate, tmpReportFeeDto.getDeadlineTime());
+        month = DateUtil.dayCompare(curDate, tmpReportFeeDto.getDeadlineTime());
         if (month < 0) {
             return 0;
         }
@@ -641,9 +641,9 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
 
         double month = 0.0;
         if (tmpReportFeeDto.getDeadlineTime().getTime() < curDate.getTime()) {
-            month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), tmpReportFeeDto.getDeadlineTime());
+            month = DateUtil.dayCompare(tmpReportFeeDto.getEndTime(), tmpReportFeeDto.getDeadlineTime());
         } else {
-            month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), curDate);
+            month = DateUtil.dayCompare(tmpReportFeeDto.getEndTime(), curDate);
         }
         BigDecimal curDegree = new BigDecimal(month);
         return curDegree.multiply(feePriceDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_EVEN).doubleValue();
@@ -697,7 +697,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpReportFeeDto.getFeeFlag())) {
             receivableAmount = tmpReportFeeDto.getFeePrice();
         } else {
-            double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), curMonthDate.getTime());
+            double month = DateUtil.dayCompare(tmpReportFeeDto.getEndTime(), curMonthDate.getTime());
             BigDecimal curDegree = new BigDecimal(month);
             receivableAmount = curDegree.multiply(new BigDecimal(tmpReportFeeDto.getFeePrice())).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
@@ -839,7 +839,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (belongCurMonth(tmpReportFeeDto.getEndTime())
                 && !belongCurMonth(endTime)) {
             //算天数
-            double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), DateUtil.getNextMonthFirstDate());
+            double month = DateUtil.dayCompare(tmpReportFeeDto.getEndTime(), DateUtil.getNextMonthFirstDate());
             BigDecimal curDegree = new BigDecimal(month);
             return curDegree.multiply(feePriceDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
@@ -847,7 +847,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (!belongCurMonth(tmpReportFeeDto.getEndTime())
                 && belongCurMonth(endTime)) {
             //算天数
-            double month = computeFeeSMOImpl.dayCompare(DateUtil.getFirstDate(), maxEndDate);
+            double month = DateUtil.dayCompare(DateUtil.getFirstDate(), maxEndDate);
             BigDecimal curDegree = new BigDecimal(month);
             return curDegree.multiply(feePriceDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
@@ -860,7 +860,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
                 || tmpReportFeeDto.getDeadlineTime().getTime() < nowTime.getTime()) {
             return 0.0;
         }
-        double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getDeadlineTime(), tmpReportFeeDto.getEndTime());
+        double month = DateUtil.dayCompare(tmpReportFeeDto.getDeadlineTime(), tmpReportFeeDto.getEndTime());
         month = Math.ceil(month);
 
         if (month == 0) {
@@ -909,7 +909,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (belongCurMonth(tmpReportFeeDto.getEndTime())
                 && !belongCurMonth(maxEndDate)) {
             //算天数
-            double month = computeFeeSMOImpl.dayCompare(tmpReportFeeDto.getEndTime(), DateUtil.getNextMonthFirstDate());
+            double month = DateUtil.dayCompare(tmpReportFeeDto.getEndTime(), DateUtil.getNextMonthFirstDate());
             BigDecimal curDegree = new BigDecimal(month);
             return curDegree.multiply(feePriceDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }
@@ -917,7 +917,7 @@ public class GeneratorFeeMonthStatisticsInnerServiceSMOImpl implements IGenerato
         if (!belongCurMonth(tmpReportFeeDto.getEndTime())
                 && belongCurMonth(maxEndDate)) {
             //算天数
-            double month = computeFeeSMOImpl.dayCompare(DateUtil.getFirstDate(), maxEndDate);
+            double month = DateUtil.dayCompare(DateUtil.getFirstDate(), maxEndDate);
             BigDecimal curDegree = new BigDecimal(month);
             return curDegree.multiply(feePriceDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_EVEN).doubleValue();
         }

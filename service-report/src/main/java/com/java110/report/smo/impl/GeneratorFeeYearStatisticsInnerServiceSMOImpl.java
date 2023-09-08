@@ -439,7 +439,7 @@ public class GeneratorFeeYearStatisticsInnerServiceSMOImpl implements IGenerator
 
         if (endYear == curYear) {
             try {
-                cycleMonth = computeFeeSMOImpl.dayCompare(DateUtil.getDateFromString(curYear + "-01-01", DateUtil.DATE_FORMATE_STRING_B), tmpReportFeeDto.getConfigEndTime());
+                cycleMonth = DateUtil.dayCompare(DateUtil.getDateFromString(curYear + "-01-01", DateUtil.DATE_FORMATE_STRING_B), tmpReportFeeDto.getConfigEndTime());
             } catch (ParseException e) {
                 logger.error("计算 时间差出错", e);
                 cycleMonth = configEndTime.get(Calendar.MONTH) + 1;

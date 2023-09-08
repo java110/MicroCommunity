@@ -227,7 +227,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         billOweFeeDto.setBillId(billDto.getBillId());
         double month = 0.0;
         if (TASK_ATTR_VALUE_DAY.equals(feeConfigDto.getBillType())) {
-            month = dayCompare(feeDto.getEndTime(), billEndTime);
+            month = DateUtil.dayCompare(feeDto.getEndTime(), billEndTime);
         } else {
             month = monthCompare(feeDto.getEndTime(), billEndTime);
         }
@@ -235,7 +235,7 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         curFeePrice = curFeePrice.multiply(new BigDecimal(month));
         billOweFeeDto.setAmountOwed(curFeePrice.doubleValue() + "");
         if (TASK_ATTR_VALUE_DAY.equals(feeConfigDto.getBillType())) {
-            month = dayCompare(feeDto.getEndTime(), billEndTime);
+            month = DateUtil.dayCompare(feeDto.getEndTime(), billEndTime);
         } else {
             month = monthCompare(feeDto.getEndTime(), billEndTime);
         }
@@ -522,30 +522,5 @@ public class GenerateBillTemplate extends TaskSystemQuartz {
         return month;
     }
 
-    /**
-     * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
-     * 比如：2011-02-02 到  2017-03-02
-     * 以年为单位相差为：6年
-     * 以月为单位相差为：73个月
-     * 以日为单位相差为：2220天
-     *
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    public static double dayCompare(Date fromDate, Date toDate) {
-        Calendar from = Calendar.getInstance();
-        from.setTime(fromDate);
-        Calendar to = Calendar.getInstance();
-        to.setTime(toDate);
 
-        long t1 = from.getTimeInMillis();
-        long t2 = to.getTimeInMillis();
-        double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
-
-        BigDecimal tmpDays = new BigDecimal(days);
-        BigDecimal monthDay = new BigDecimal(30);
-
-        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
-    }
 }

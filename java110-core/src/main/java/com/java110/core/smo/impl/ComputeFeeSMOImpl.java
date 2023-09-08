@@ -968,12 +968,12 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         //todo 如果 cycle 为105 则 根据缴费时间段 改写下
         if ("105".equals(feeDto.getCycle())) {
-            double cycle = dayCompare(DateUtil.getDateFromStringB(feeDto.getCustomStartTime()), DateUtil.getDateFromStringB(feeDto.getCustomEndTime()));
+            double cycle = DateUtil.dayCompare(DateUtil.getDateFromStringB(feeDto.getCustomStartTime()), DateUtil.getDateFromStringB(feeDto.getCustomEndTime()));
             feeDto.setCycle(cycle + "");
         }
         // todo 按结束时间缴费
         if (!StringUtil.isEmpty(feeDto.getCustEndTime())) {
-            double cycle = dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime()));
+            double cycle = DateUtil.dayCompare(feeDto.getEndTime(), DateUtil.getDateFromStringB(feeDto.getCustEndTime()));
             feeDto.setCycle(cycle + "");
         }
 
@@ -1734,7 +1734,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
             double mulMonth = 0.0;
-            mulMonth = dayCompare(startDate, billEndTime);
+            mulMonth = DateUtil.dayCompare(startDate, billEndTime);
 
             // 月份/ 周期 = 轮数（向上取整）
             double round = 0.0;
@@ -1761,7 +1761,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             //说明欠费
             if (endDate.getTime() < targetEndDate.getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
-                oweMonth = dayCompare(endDate, targetEndDate);
+                oweMonth = DateUtil.dayCompare(endDate, targetEndDate);
             }
 
             if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
@@ -1778,7 +1778,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
             double mulMonth = 0.0;
-            mulMonth = dayCompare(startDate, billEndTime);
+            mulMonth = DateUtil.dayCompare(startDate, billEndTime);
 
             // 月份/ 周期 = 轮数（向上取整）
             double round = 0.0;
@@ -1804,7 +1804,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             //说明欠费
             if (endDate.getTime() < targetEndDate.getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
-                oweMonth = dayCompare(endDate, targetEndDate);
+                oweMonth = DateUtil.dayCompare(endDate, targetEndDate);
             }
 
             if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
@@ -1821,68 +1821,69 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         return getTargetEndDateAndOweMonth(feeDto, null);
     }
 
-    /**
-     * 计算 两个时间点月份
-     *
-     * @param fromDate 开始时间
-     * @param toDate   结束时间
-     * @return
-     */
-    @Override
-    public double dayCompare(Date fromDate, Date toDate) {
-        double resMonth = 0.0;
-        Calendar from = Calendar.getInstance();
-        from.setTime(fromDate);
-        Calendar to = Calendar.getInstance();
-        to.setTime(toDate);
-        //比较月份差 可能有整数 也会负数
-        int result = to.get(Calendar.MONTH) - from.get(Calendar.MONTH);
-        //比较年差
-        int month = (to.get(Calendar.YEAR) - from.get(Calendar.YEAR)) * 12;
 
-        //真实 相差月份
-        result = result + month;
-
-        //开始时间  2021-06-01  2021-08-05   result = 2    2021-08-01
-        Calendar newFrom = Calendar.getInstance();
-        newFrom.setTime(fromDate);
-        newFrom.add(Calendar.MONTH, result);
-        //如果加月份后 大于了当前时间 默认加 月份 -1 情况 12-19  21-01-10
-        //这个是神的逻辑一定好好理解
-        if (newFrom.getTime().getTime() > toDate.getTime()) {
-            newFrom.setTime(fromDate);
-            result = result - 1;
-            newFrom.add(Calendar.MONTH, result);
-        }
-
-        // t1 2021-08-01   t2 2021-08-05
-        long t1 = newFrom.getTime().getTime();
-        long t2 = to.getTime().getTime();
-        //相差毫秒
-        double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
-        BigDecimal tmpDays = new BigDecimal(days); //相差天数
-        BigDecimal monthDay = null;
-        Calendar newFromMaxDay = Calendar.getInstance();
-        newFromMaxDay.set(newFrom.get(Calendar.YEAR), newFrom.get(Calendar.MONTH), 1, 0, 0, 0);
-        newFromMaxDay.add(Calendar.MONTH, 1); //下个月1号
-        //在当前月中 这块有问题
-        if (toDate.getTime() < newFromMaxDay.getTime().getTime()) {
-            monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
-            return tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
-        }
-        // 上月天数
-        days = (newFromMaxDay.getTimeInMillis() - t1) * 1.00 / (24 * 60 * 60 * 1000);
-        tmpDays = new BigDecimal(days);
-        monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
-        BigDecimal preRresMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP);
-
-        //下月天数
-        days = (t2 - newFromMaxDay.getTimeInMillis()) * 1.00 / (24 * 60 * 60 * 1000);
-        tmpDays = new BigDecimal(days);
-        monthDay = new BigDecimal(newFromMaxDay.getActualMaximum(Calendar.DAY_OF_MONTH));
-        resMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).add(preRresMonth).doubleValue();
-        return resMonth;
-    }
+//    /**
+//     * 计算 两个时间点月份
+//     *
+//     * @param fromDate 开始时间
+//     * @param toDate   结束时间
+//     * @return
+//     */
+//
+//    public double dayCompareOld(Date fromDate, Date toDate) {
+//        double resMonth = 0.0;
+//        Calendar from = Calendar.getInstance();
+//        from.setTime(fromDate);
+//        Calendar to = Calendar.getInstance();
+//        to.setTime(toDate);
+//        //比较月份差 可能有整数 也会负数
+//        int result = to.get(Calendar.MONTH) - from.get(Calendar.MONTH);
+//        //比较年差
+//        int month = (to.get(Calendar.YEAR) - from.get(Calendar.YEAR)) * 12;
+//
+//        //真实 相差月份
+//        result = result + month;
+//
+//        //开始时间  2021-06-01  2021-08-05   result = 2    2021-08-01
+//        Calendar newFrom = Calendar.getInstance();
+//        newFrom.setTime(fromDate);
+//        newFrom.add(Calendar.MONTH, result);
+//        //如果加月份后 大于了当前时间 默认加 月份 -1 情况 12-19  21-01-10
+//        //这个是神的逻辑一定好好理解
+//        if (newFrom.getTime().getTime() > toDate.getTime()) {
+//            newFrom.setTime(fromDate);
+//            result = result - 1;
+//            newFrom.add(Calendar.MONTH, result);
+//        }
+//
+//        // t1 2021-08-01   t2 2021-08-05
+//        long t1 = newFrom.getTime().getTime();
+//        long t2 = to.getTime().getTime();
+//        //相差毫秒
+//        double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
+//        BigDecimal tmpDays = new BigDecimal(days); //相差天数
+//        BigDecimal monthDay = null;
+//        Calendar newFromMaxDay = Calendar.getInstance();
+//        newFromMaxDay.set(newFrom.get(Calendar.YEAR), newFrom.get(Calendar.MONTH), 1, 0, 0, 0);
+//        newFromMaxDay.add(Calendar.MONTH, 1); //下个月1号
+//        //在当前月中 这块有问题
+//        if (toDate.getTime() < newFromMaxDay.getTime().getTime()) {
+//            monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
+//            return tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
+//        }
+//        // 上月天数
+//        days = (newFromMaxDay.getTimeInMillis() - t1) * 1.00 / (24 * 60 * 60 * 1000);
+//        tmpDays = new BigDecimal(days);
+//        monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
+//        BigDecimal preRresMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP);
+//
+//        //下月天数
+//        days = (t2 - newFromMaxDay.getTimeInMillis()) * 1.00 / (24 * 60 * 60 * 1000);
+//        tmpDays = new BigDecimal(days);
+//        monthDay = new BigDecimal(newFromMaxDay.getActualMaximum(Calendar.DAY_OF_MONTH));
+//        resMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).add(preRresMonth).doubleValue();
+//        return resMonth;
+//    }
 
 
     //手机端缴费处理
@@ -2204,15 +2205,15 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         // todo 如果计费起始时间 小区 递增开始时间
         if (feeDto.getEndTime().getTime() < rateStartTime.getTime()) {
             //todo 递增前的欠费
-            curOweMonth = dayCompare(feeDto.getEndTime(), rateStartTime);
+            curOweMonth = DateUtil.dayCompare(feeDto.getEndTime(), rateStartTime);
             oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
             // todo 递增
-            curOweMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
+            curOweMonth = DateUtil.dayCompare(rateStartTime, feeDto.getDeadlineTime());
         } else {
             // todo 递增
-            curOweMonth = dayCompare(feeDto.getEndTime(), feeDto.getDeadlineTime());
+            curOweMonth = DateUtil.dayCompare(feeDto.getEndTime(), feeDto.getDeadlineTime());
         }
-        double rateMonth = dayCompare(rateStartTime, feeDto.getDeadlineTime());
+        double rateMonth = DateUtil.dayCompare(rateStartTime, feeDto.getDeadlineTime());
 
         // todo 最大周期
         double maxCycle = Math.ceil(rateMonth / rateCycle);

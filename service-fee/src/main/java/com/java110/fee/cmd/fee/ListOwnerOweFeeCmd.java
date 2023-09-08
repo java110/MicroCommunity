@@ -153,7 +153,7 @@ public class ListOwnerOweFeeCmd extends Cmd {
 
             if (FeeConfigDto.BILL_TYPE_EVERY.equals(tmpFeeConfigDto.getBillType())) {//直接计算 欠费金额
                 computeFeePriceByRoom(feeDto);
-                double month = dayCompare(endTime, DateUtil.getCurrentDate());
+                double month = DateUtil.dayCompare(endTime, DateUtil.getCurrentDate());
                 BigDecimal feePrice = new BigDecimal(feeDto.getFeePrice());
                 feePrice = feePrice.multiply(new BigDecimal(month));
                 FeeDto tmpFeeDto = new FeeDto();
@@ -255,33 +255,5 @@ public class ListOwnerOweFeeCmd extends Cmd {
         }
 
         feeDto.setFeePrice(feePrice);
-    }
-
-
-    /**
-     * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
-     * 比如：2011-02-02 到  2017-03-02
-     * 以年为单位相差为：6年
-     * 以月为单位相差为：73个月
-     * 以日为单位相差为：2220天
-     *
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    public static double dayCompare(Date fromDate, Date toDate) {
-        Calendar from = Calendar.getInstance();
-        from.setTime(fromDate);
-        Calendar to = Calendar.getInstance();
-        to.setTime(toDate);
-
-        long t1 = from.getTimeInMillis();
-        long t2 = to.getTimeInMillis();
-        double days = (t2 - t1)*1.00/ (24 * 60 * 60 * 1000);
-
-        BigDecimal tmpDays = new BigDecimal(days);
-        BigDecimal monthDay = new BigDecimal(30);
-
-        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
     }
 }

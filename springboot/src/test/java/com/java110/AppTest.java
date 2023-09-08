@@ -11,6 +11,7 @@ import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,25 +20,26 @@ import java.util.Map;
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-{
+public class AppTest {
     /**
      * Rigorous Test :-)
      */
     @Test
-    public void should()
-    {
+    public void should() {
 //解密
-        FeeDto feeDto = new FeeDto();
-        feeDto.setStartTime(DateUtil.getDateFromStringB("2023-01-01"));
-        feeDto.setEndTime(DateUtil.getDateFromStringB("2023-01-12"));
-        feeDto.setPrepaymentPeriod("20");
-        feeDto.setState(FeeDto.STATE_DOING);
-        feeDto.setConfigEndTime(DateUtil.getDateFromStringB("2050-01-01"));
-        feeDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
-        feeDto.setPaymentCd("1200");
-        feeDto.setPaymentCycle("12");
-        getTargetEndDateAndOweMonth(feeDto,null);
+//        FeeDto feeDto = new FeeDto();
+//        feeDto.setStartTime(DateUtil.getDateFromStringB("2023-01-01"));
+//        feeDto.setEndTime(DateUtil.getDateFromStringB("2023-01-12"));
+//        feeDto.setPrepaymentPeriod("20");
+//        feeDto.setState(FeeDto.STATE_DOING);
+//        feeDto.setConfigEndTime(DateUtil.getDateFromStringB("2050-01-01"));
+//        feeDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
+//        feeDto.setPaymentCd("1200");
+//        feeDto.setPaymentCycle("12");
+//        getTargetEndDateAndOweMonth(feeDto,null);
+// 0.3667 0.3226
+        double month = dayCompare(DateUtil.getDateFromStringB("2023-01-12"), DateUtil.getDateFromStringB("2023-09-15"));
+        System.out.println("month=" + month);
     }
 
     public Map getTargetEndDateAndOweMonth(FeeDto feeDto, OwnerCarDto ownerCarDto) {
@@ -188,7 +190,78 @@ public class AppTest
         return endDate.getTime();
     }
 
+
+    /**
+     * 计算 fromDate 2023-01-12  toDate 2023-09-15
+     * 2023-01-12--->2023-01-01        --->  2023-09-01    ------> 2023-09-15
+     * fromDate ---> fromDateFirstDate --->  toDateFirstDate ----> toDate
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
     public double dayCompare(Date fromDate, Date toDate) {
+
+
+        //todo 需要计算三端时间 相加即可
+        Date fromDateFirstDate = fromDate; // 第一个1日
+
+        Date toDateFirstDate = toDate; // 最后一个1日
+
+        boolean firstDay = true;
+
+        //todo 1.0 计算 fromDateFirstDate
+        Calendar fromDateCal = Calendar.getInstance();
+        fromDateCal.setTime(fromDate);
+        fromDateCal.set(Calendar.DAY_OF_MONTH, 1);
+        if (fromDate.getTime() > fromDateCal.getTime().getTime()) {
+            fromDateCal.add(Calendar.MONTH, 1);
+            firstDay = false;
+            fromDateFirstDate = fromDateCal.getTime();
+        }
+
+        //todo 2.0 计算 toDateFirstDate
+        Calendar toDateCal = Calendar.getInstance();
+        toDateCal.setTime(toDate);
+        toDateCal.set(Calendar.DAY_OF_MONTH, 1);
+        if (toDate.getTime() > toDateCal.getTime().getTime()) {
+            toDateFirstDate = toDateCal.getTime();
+        }
+
+        // todo 3.0 计算整数月  fromDateFirstDate --->  toDateFirstDate
+        Calendar from = Calendar.getInstance();
+        from.setTime(fromDateFirstDate);
+        Calendar to = Calendar.getInstance();
+        to.setTime(toDateFirstDate);
+        //比较月份差 可能有整数 也会负数
+        int result = to.get(Calendar.MONTH) - from.get(Calendar.MONTH);
+        //比较年差
+        int month = (to.get(Calendar.YEAR) - from.get(Calendar.YEAR)) * 12;
+        //真实 相差月份
+        result = result + month;
+
+        //todo 3.1  如果 fromDate 和toDate 是同一天 则直接返回整月，不再计算 4.0 和5.0
+        if (DateUtil.sameMonthDay(fromDate, toDate)) {
+            return firstDay ? result : result + 1;
+        }
+
+        // todo 4.0 计算 fromDate ---> fromDateFirstDate 的月份
+        double days = (fromDateFirstDate.getTime() - fromDate.getTime()) * 1.00 / (24 * 60 * 60 * 1000);
+        BigDecimal tmpDays = new BigDecimal(days); //相差天数
+        BigDecimal monthDay = new BigDecimal(DateUtil.getMonthDay(fromDate));
+        BigDecimal resMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result));
+
+        // todo 5.0 计算  toDateFirstDate ----> toDate 月份
+        days = (toDate.getTime() - toDateFirstDate.getTime()) * 1.00 / (24 * 60 * 60 * 1000);
+        tmpDays = new BigDecimal(days); //相差天数
+        monthDay = new BigDecimal(DateUtil.getMonthDay(toDate));
+        resMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(resMonth);
+
+        return resMonth.doubleValue();
+
+    }
+
+    public double dayCompare1(Date fromDate, Date toDate) {
         double resMonth = 0.0;
         Calendar from = Calendar.getInstance();
         from.setTime(fromDate);

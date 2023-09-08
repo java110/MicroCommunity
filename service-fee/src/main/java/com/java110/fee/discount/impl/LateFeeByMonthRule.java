@@ -83,7 +83,7 @@ public class LateFeeByMonthRule implements IComputeDiscount {
             return computeDiscountDto;
         }
         //查询费用
-        Double month = computeFeeSMOImpl.dayCompare(endTime, curTime);
+        Double month = DateUtil.dayCompare(endTime, curTime);
 
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDtos.get(0));
 

@@ -117,7 +117,7 @@ public class PayFeeMonthImplV1 implements IPayFeeMonth {
     }
 
     private void doGeneratorTimeMonthData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date startTime, Date endTime) {
-        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+        double maxMonth = Math.ceil(DateUtil.dayCompare(startTime, endTime));
 
         if (maxMonth < 1) {
             return;

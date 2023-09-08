@@ -146,7 +146,7 @@ public interface IComputeFeeSMO {
      * @param toDate   结束时间
      * @return 相差月数
      */
-    double dayCompare(Date fromDate, Date toDate);
+//    double dayCompare(Date fromDate, Date toDate);
 
     /**
      　　 *字符串的日期格式的计算

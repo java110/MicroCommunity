@@ -203,7 +203,7 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
                 }else if(CouponRuleCppsDto.FREQUENCY_MONTH.equals(couponRuleCppsDto.getGiftFrequency())){ // 每月赠送
                     startTime = DateUtil.getDateFromString(payFeeDetailPo.getStartTime(), DateUtil.DATE_FORMATE_STRING_B);
                     endTime = DateUtil.getDateFromString(payFeeDetailPo.getEndTime(), DateUtil.DATE_FORMATE_STRING_B);
-                    double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+                    double maxMonth = Math.ceil(DateUtil.dayCompare(startTime, endTime));
                     if (maxMonth < 1) {
                         doGiftCoupon(couponRuleCppsDto, feeDto, DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
                         continue;

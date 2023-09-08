@@ -139,7 +139,7 @@ public class PayFeeDetailToMonthIImpl implements IPayFeeDetailToMonth {
     private void toMonth(JSONObject businessPayFeeDetail, FeeDto feeDto, Date startTime, Date endTime, Date createTime) {
         double maxMonth = 1;
         if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-            maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(startTime, endTime));
+            maxMonth = Math.ceil(DateUtil.dayCompare(startTime, endTime));
         }
 
         if (maxMonth < 1) {

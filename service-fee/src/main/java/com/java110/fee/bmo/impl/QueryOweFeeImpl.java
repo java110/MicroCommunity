@@ -657,32 +657,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
     }
 
 
-    /**
-     * 计算2个日期之间相差的  以年、月、日为单位，各自计算结果是多少
-     * 比如：2011-02-02 到  2017-03-02
-     * 以年为单位相差为：6年
-     * 以月为单位相差为：73个月
-     * 以日为单位相差为：2220天
-     *
-     * @param fromDate
-     * @param toDate
-     * @return
-     */
-    public static double dayCompare(Date fromDate, Date toDate) {
-        Calendar from = Calendar.getInstance();
-        from.setTime(fromDate);
-        Calendar to = Calendar.getInstance();
-        to.setTime(toDate);
 
-        long t1 = from.getTimeInMillis();
-        long t2 = to.getTimeInMillis();
-        double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
-
-        BigDecimal tmpDays = new BigDecimal(days);
-        BigDecimal monthDay = new BigDecimal(30);
-
-        return tmpDays.divide(monthDay, 2, RoundingMode.HALF_UP).doubleValue();
-    }
 
     private Map getTargetEndDateAndOweMonth(FeeDto feeDto) {
         Date targetEndDate = null;
@@ -743,7 +718,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
             double mulMonth = 0.0;
-            mulMonth = dayCompare(startDate, billEndTime);
+            mulMonth = DateUtil.dayCompare(startDate, billEndTime);
 
             // 月份/ 周期 = 轮数（向上取整）
             double round = 0.0;
@@ -761,7 +736,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             //说明没有欠费
             if (endDate.getTime() < targetEndDate.getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
-                oweMonth = dayCompare(endDate, targetEndDate);
+                oweMonth = DateUtil.dayCompare(endDate, targetEndDate);
             }
 
             if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
