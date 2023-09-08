@@ -241,7 +241,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             reqJson.put("payerObjType", feeDto1.getPayerObjType());
             reqJson.put("feeId", feeDto1.getFeeId());
             //1003006 周期性费用  2006012 一次性费用  4012024 间接性费用
-            if ("2006012".equals(feeDto1.getFeeFlag()) || "888800010006".equals(feeDto1.getFeeTypeCd())) { //888800010006 押金
+            //todo 这里一次性费用还是要恢复成 再用状态 不然会让 物业感觉懵逼，让他自己手工点击结束去
+            //if ("2006012".equals(feeDto1.getFeeFlag()) || "888800010006".equals(feeDto1.getFeeTypeCd())) { //888800010006 押金
+            if ("888800010006".equals(feeDto1.getFeeTypeCd())) { //888800010006 押金
                 reqJson.put("state", "2009001"); //2007001 收费未开始  2008001 有效  2009001 收费结束
             } else {
                 reqJson.put("state", "2008001");
