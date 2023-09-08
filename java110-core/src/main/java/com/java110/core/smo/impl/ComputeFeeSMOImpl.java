@@ -1767,7 +1767,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
                 targetEndDate = feeDto.getEndTime();
             }
-        } else { //周期性费用
+        } else { // todo 周期性费用
             //当前时间
             Date billEndTime = DateUtil.getCurrentDate();
             //建账时间
@@ -1778,7 +1778,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
             // 当前时间 - 开始时间  = 月份
             double mulMonth = 0.0;
-            mulMonth = dayCompare(endDate, billEndTime);
+            mulMonth = dayCompare(startDate, billEndTime);
 
             // 月份/ 周期 = 轮数（向上取整）
             double round = 0.0;
@@ -1788,7 +1788,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 round = Math.floor(mulMonth / paymentCycle);
             }
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-            targetEndDate = getTargetEndTime(round * paymentCycle, endDate);//目标结束时间
+            targetEndDate = getTargetEndTime(round * paymentCycle, startDate);//目标结束时间
 
             //todo 如果 到了 预付期 产生下个周期的费用
             if (DateUtil.getFormatTimeStringB(targetEndDate).equals(DateUtil.getFormatTimeStringB(endDate))
