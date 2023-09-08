@@ -408,11 +408,9 @@
         (
         select count(DISTINCT t.payer_obj_id)
         from report_owe_fee t
+        inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
         left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        <if test="feeTypeCd != null and feeTypeCd != ''">
-            left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
-        </if>
         where
         1=1
         and t.payer_obj_type = '3333'
@@ -425,7 +423,7 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pfc.fee_type_cd = #{feeTypeCd}
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
         and bu.floor_id = a.floor_id
         ) feeRoomCount,
@@ -606,9 +604,9 @@
         (
         select count(DISTINCT t.payer_obj_id)
         from report_owe_fee t
+        inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
         left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where
         1=1
         and t.payer_obj_type = '3333'
@@ -621,9 +619,9 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pfc.fee_type_cd = #{feeTypeCd}
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
-        and pfc.fee_type_cd = a.status_cd
+        and pf.fee_type_cd = a.status_cd
         ) feeRoomCount,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
@@ -787,15 +785,15 @@
     </select>
 
     <select id="getObjFeeSummaryCount" parameterType="Map" resultType="Map">
-        select count(1) feeRoomCount
-        from
-        (
-        select a.obj_name objName,a.obj_id objId,a.owner_name ownerName,a.link
-        from pay_fee_detail_month a
-        where a.status_cd = '0'
-        and a.community_id = #{communityId}
-        group by a.obj_name,a.obj_id,a.owner_name,a.link
-        ) b
+        select count(DISTINCT t.payer_obj_id) feeRoomCount
+        from report_owe_fee t
+        inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and t.payer_obj_type = '3333'
+        and t.community_id= #{communityId}
     </select>
     <!-- 查询房屋费用明细表-->
     <select id="getObjFeeSummary" parameterType="Map" resultType="Map">
@@ -1065,9 +1063,9 @@
         (
         select count(DISTINCT t.payer_obj_id)
         from report_owe_fee t
+        inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
         left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where
         1=1
         and t.payer_obj_type = '3333'
