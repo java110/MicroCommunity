@@ -115,7 +115,7 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
         params.put("tran_no", onlinePayDto.getOrderId());// 商户流水
         params.put("org_txn_no", onlinePayDto.getTransactionId());// 原平台流水
         params.put("device_ip", "172.0.0.1");// 设备发起交易IP
-        params.put("amt", onlinePayDto.getRefundFee());// 交易金额
+        params.put("amt", onlinePayDtos.get(0).getRefundFee());// 交易金额
         params.put("ware_name", onlinePayDto.getPayName());// 摘要备注
 
         // 对准备加签参数排序
