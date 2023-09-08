@@ -298,17 +298,19 @@
 
     <!-- 查询欠费户数 -->
     <select id="getOweRoomCount" parameterType="Map" resultType="Map">
-
-        select count(1) oweRoomCount
-        from (
-        select a.room_id
-        from building_room a
-        left join pay_fee_detail_month t on t.obj_id = a.room_id
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        <if test="floorId != null and floorId != ''">
-            left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
+        select count(DISTINCT t.payer_obj_id)
+        from report_owe_fee t
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         </if>
-        where 1=1
+        where
+        1=1
+        and t.payer_obj_type = '3333'
+        and t.community_id=  #{communityId}
+        and t.end_time &lt; #{endDate}
+        and t.amount_owed != 0
         <if test="floorId != null and floorId != ''">
             and bu.floor_id = #{floorId}
         </if>
@@ -316,13 +318,13 @@
             and t.config_id = #{configId}
         </if>
         <if test="objName != null and objName != ''">
-            and t.obj_name like concat('%',#{objName},'%')
+            and t.payer_obj_name like concat('%',#{objName},'%')
         </if>
         <if test="ownerName != null and ownerName != ''">
             and t.owner_name like concat('%',#{ownerName},'%')
         </if>
         <if test="link != null and link != ''">
-            and t.link = #{link}
+            and t.owner_tel = #{link}
         </if>
         <if test="configIds !=null ">
             and t.config_id in
@@ -331,29 +333,24 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
-        and a.status_cd = '0'
-        and pf.payer_obj_type = '3333'
-        and t.community_id= #{communityId}
-        and t.cur_month_time &lt; #{endDate}
-        and t.detail_id = '-1'
-        group by a.room_id
-        ) a
     </select>
 
     <!-- 查询收费户数 -->
     <select id="getFeeRoomCount" parameterType="Map" resultType="Map">
-        select count(1) feeRoomCount
-        from (
-        select a.room_id
-        from building_room a
-        left join pay_fee_detail_month t on t.obj_id = a.room_id
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        <if test="floorId != null and floorId != ''">
-            left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
+        select count(DISTINCT t.payer_obj_id)
+        from report_owe_fee t
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         </if>
-        where 1=1
+        where
+        1=1
+        and t.payer_obj_type = '3333'
+        and t.community_id=  #{communityId}
+        and t.end_time &lt; #{endDate}
         <if test="floorId != null and floorId != ''">
             and bu.floor_id = #{floorId}
         </if>
@@ -361,13 +358,13 @@
             and t.config_id = #{configId}
         </if>
         <if test="objName != null and objName != ''">
-            and t.obj_name like concat('%',#{objName},'%')
+            and t.payer_obj_name like concat('%',#{objName},'%')
         </if>
         <if test="ownerName != null and ownerName != ''">
             and t.owner_name like concat('%',#{ownerName},'%')
         </if>
         <if test="link != null and link != ''">
-            and t.link = #{link}
+            and t.owner_tel = #{link}
         </if>
         <if test="configIds !=null ">
             and t.config_id in
@@ -376,34 +373,27 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
-        and a.status_cd = '0'
-        and pf.payer_obj_type = '3333'
-        and t.community_id= #{communityId}
-        and t.cur_month_time &lt; #{endDate}
-        group by a.room_id
-        ) a
     </select>
 
 
     <select id="getFloorFeeSummary" parameterType="Map" resultType="Map">
-
         select a.floor_id floorId,a.floor_num floorNum,a.name floorName,
         (
-        select count(1) from (
-        select bu.floor_id,a.room_id
-        from building_room a
-        left join pay_fee_detail_month t on t.obj_id = a.room_id
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
+        select count(DISTINCT t.payer_obj_id)
+        from report_owe_fee t
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        </if>
         where
         1=1
-        and a.status_cd = '0'
-        and pf.payer_obj_type = '3333'
+        and t.payer_obj_type = '3333'
         and t.community_id= a.community_id
-        and t.cur_month_time &lt; #{endDate}
-        and detail_id = '-1'
+        and t.end_time &lt;= #{endDate}
+        and t.amount_owed != 0
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -411,25 +401,23 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
-        group by bu.floor_id,t.obj_id
-        ) b
-        where b.floor_id = a.floor_id
+        and bu.floor_id = a.floor_id
         ) oweRoomCount,
         (
-        select count(1) from (
-        select bu.floor_id,a.room_id
-        from building_room a
-        left join pay_fee_detail_month t on t.obj_id = a.room_id
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
+        select count(DISTINCT t.payer_obj_id)
+        from report_owe_fee t
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        </if>
         where
         1=1
-        and a.status_cd = '0'
-        and pf.payer_obj_type = '3333'
+        and t.payer_obj_type = '3333'
         and t.community_id= a.community_id
-        and t.cur_month_time &lt; #{endDate}
+        and t.end_time &lt;= #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -437,11 +425,9 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
-        group by bu.floor_id,t.obj_id
-        ) b
-        where b.floor_id = a.floor_id
+        and bu.floor_id = a.floor_id
         ) feeRoomCount,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
@@ -595,19 +581,17 @@
     <select id="getConfigFeeSummary" parameterType="Map" resultType="Map">
         select a.name,
         (
-        select count(1) from (
-        select pf.fee_type_cd,t.obj_id
-        from building_room a
-        left join pay_fee_detail_month t on t.obj_id = a.room_id
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
+        select count(DISTINCT t.payer_obj_id)
+        from report_owe_fee t
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where
         1=1
-        and a.status_cd = '0'
-        and pf.payer_obj_type = '3333'
-        and t.community_id= #{communityId}
-        and t.cur_month_time &lt; #{endDate}
-        and t.detail_id = '-1'
+        and t.payer_obj_type = '3333'
+        and t.community_id= a.community_id
+        and t.end_time &lt;= #{endDate}
+        and t.amount_owed != 0
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -615,25 +599,21 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
-        group by pf.fee_type_cd,t.obj_id
-        ) b
-        where b.fee_type_cd = a.status_cd
+        and pfc.fee_type_cd = a.status_cd
         ) oweRoomCount,
         (
-        select count(1) from (
-        select pf.fee_type_cd,t.obj_id
-        from building_room a
-        left join pay_fee_detail_month t on t.obj_id = a.room_id
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        left join building_unit bu on a.unit_id = bu.unit_id and bu.status_cd = '0'
+        select count(DISTINCT t.payer_obj_id)
+        from report_owe_fee t
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where
         1=1
-        and a.status_cd = '0'
-        and pf.payer_obj_type = '3333'
-        and t.community_id= #{communityId}
-        and t.cur_month_time &lt; #{endDate}
+        and t.payer_obj_type = '3333'
+        and t.community_id= a.community_id
+        and t.end_time &lt;= #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
             <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
@@ -641,11 +621,9 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and pfc.fee_type_cd = #{feeTypeCd}
         </if>
-        group by pf.fee_type_cd,t.obj_id
-        ) b
-        where b.fee_type_cd = a.status_cd
+        and pfc.fee_type_cd = a.status_cd
         ) feeRoomCount,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
@@ -1085,34 +1063,31 @@
         and bu.floor_id = a.floor_id
         ) roomCount,
         (
-        select count(1) from (
-        select bu.floor_id,br.room_id
-        from building_room br
-        INNER JOIN pay_fee pf on br.room_id = pf.payer_obj_id and pf.payer_obj_type = '3333' and pf.status_cd = '0'
+        select count(DISTINCT t.payer_obj_id)
+        from report_owe_fee t
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where
         1=1
-        and br.status_cd = '0'
-        and br.community_id= #{communityId}
-        group by bu.floor_id,br.room_id
-        ) b
-        where b.floor_id = a.floor_id
+        and t.payer_obj_type = '3333'
+        and t.community_id= #{communityId}
+        and t.end_time &lt; #{endDate}
+        and bu.floor_id = a.floor_id
         ) feeRoomCount,
         (
-        select count(1) from (
-        select bu.floor_id,br.room_id
-        from building_room br
-        INNER JOIN pay_fee_detail_month pf on br.room_id = pf.obj_id and pf.status_cd = '0'
+        select count(DISTINCT t.payer_obj_id)
+        from report_owe_fee t
+        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         where
         1=1
-        and br.status_cd = '0'
-        and br.community_id= #{communityId}
-        and pf.detail_id = '-1'
-        and pf.cur_month_time &lt; #{endDate}
-        group by bu.floor_id,br.room_id
-        ) b
-        where b.floor_id = a.floor_id
+        and t.payer_obj_type = '3333'
+        and t.community_id= #{communityId}
+        and t.end_time &lt; #{endDate}
+        and t.amount_owed != 0
+        and bu.floor_id = a.floor_id
         ) oweRoomCount,
         (
         select ifnull(sum(t.amount_owed),0.0) oweFee
