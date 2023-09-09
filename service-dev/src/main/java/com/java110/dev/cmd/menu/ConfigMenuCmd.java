@@ -17,6 +17,7 @@ import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,9 +79,7 @@ public class ConfigMenuCmd extends Cmd {
         outParam.put("mId", addMenuView.getString("mId"));
 
 
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toString(), HttpStatus.OK);
-
-        context.setResponseEntity(responseEntity);
+        context.setResponseEntity(ResultVo.createResponseEntity(outParam));
 
     }
 
