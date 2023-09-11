@@ -302,7 +302,7 @@
         from (
         select t.payer_obj_id
         from report_owe_fee t
-        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         <if test="feeTypeCd != null and feeTypeCd != ''">
             left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -347,7 +347,7 @@
         from (
             select t.payer_obj_id
             from report_owe_fee t
-            left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+            inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
             left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
             <if test="feeTypeCd != null and feeTypeCd != ''">
                 left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -392,7 +392,7 @@
         select count(1) from (
             select bu.floor_id,t.payer_obj_id
             from report_owe_fee t
-            left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
             left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
             <if test="feeTypeCd != null and feeTypeCd != ''">
                 left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
@@ -421,7 +421,7 @@
             select bu.floor_id,t.payer_obj_id
             from report_owe_fee t
             inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
-            left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
             left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
             where
             1=1
@@ -596,7 +596,7 @@
         select count(1) from (
             select pfc.fee_type_cd,t.payer_obj_id
             from report_owe_fee t
-            left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
             left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
             left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
             where
@@ -623,7 +623,7 @@
         select pf.fee_type_cd,t.payer_obj_id
         from report_owe_fee t
         inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
-        left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         where
         1=1
@@ -811,7 +811,7 @@
             select t.payer_ob_id
             from report_owe_fee t
             inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
-            left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
             left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
             where
             1=1
@@ -1021,7 +1021,7 @@
         select bu.floor_id,br.room_id
         from pay_fee_detail t
         INNER JOIN pay_fee pf1 on t.fee_id = pf1.fee_id and pf1.payer_obj_type='3333' and pf1.status_cd = '0'
-        LEFT JOIN building_room br on pf1.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner JOIN building_room br on pf1.payer_obj_id = br.room_id and br.status_cd = '0'
         left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         where
         1=1
@@ -1090,7 +1090,7 @@
             select bu.floor_id,br.room_id
             from report_owe_fee t
             inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
-            left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
             left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
             where
             1=1
@@ -1105,7 +1105,7 @@
         select count(1) from (
             select bu.floor_id,br.room_id
             from report_owe_fee t
-            left join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
             left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
             left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
             where
