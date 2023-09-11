@@ -69,6 +69,9 @@
         <if test="receiptId !=null and receiptId != ''">
             and t.receipt_id= #{receiptId}
         </if>
+        <if test="receiptCode !=null and receiptCode != ''">
+            and t.receipt_code= #{receiptCode}
+        </if>
         <if test="receiptIds !=null">
             and t.receipt_id in
             <foreach collection="receiptIds" item="item" open="(" close=")" separator=",">
@@ -328,6 +331,9 @@
         </if>
         <if test="receiptId !=null and receiptId != ''">
             and t.receipt_id= #{receiptId}
+        </if>
+        <if test="receiptCode !=null and receiptCode != ''">
+            and t.receipt_code= #{receiptCode}
         </if>
         <if test="receiptIds !=null">
             and t.receipt_id in
