@@ -222,7 +222,7 @@
 
     <!-- 计算费用优惠 -->
     <select id="computeDiscountFee" parameterType="Map" resultType="Map">
-        select t.detail_id detailId,sum(t.discount_price) discountPrice
+        select t.detail_id detailId,ifnull(sum(t.discount_price),0) discountPrice
         from pay_fee_detail_discount t
         where 1 =1
         <if test="detailIds !=null ">
