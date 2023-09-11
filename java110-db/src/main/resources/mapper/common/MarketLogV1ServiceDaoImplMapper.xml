@@ -31,7 +31,7 @@
             and t.person_name= #{personName}
         </if>
         <if test="personNameLike !=null and personNameLike != ''">
-            and t.person_name concat('%', #{personName},'%')
+            and t.person_name like concat('%', #{personName},'%')
         </if>
         <if test="startTime !=null and startTime != ''">
             and t.create_time &gt; #{startTime}
@@ -132,7 +132,7 @@
             and t.person_name= #{personName}
         </if>
         <if test="personNameLike !=null and personNameLike != ''">
-            and t.person_name concat('%', #{personName},'%')
+            and t.person_name like concat('%', #{personName},'%')
         </if>
         <if test="startTime !=null and startTime != ''">
             and t.create_time &gt; #{startTime}
