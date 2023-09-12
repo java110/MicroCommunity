@@ -117,7 +117,11 @@ public class TqShuiBiaoLoraRechargeFactoryAdaptImpl implements ISmartMeterFactor
         if (meterMachineDetailPos.size() > 0) {
             meterMachineDetailV1InnerServiceSMOImpl.saveMeterMachineDetails(meterMachineDetailPos);
         }
-        return new ResultVo(ResultVo.CODE_OK, "提交重置");
+
+        //todo 下发查询余额
+        requestRead(meterMachineDto);
+
+        return new ResultVo(ResultVo.CODE_OK, "提交成功");
     }
 
     @Override
