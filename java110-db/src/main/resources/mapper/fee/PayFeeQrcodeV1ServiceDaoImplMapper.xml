@@ -8,9 +8,9 @@
     <!-- 保存支付二维码信息 add by wuxw 2018-07-03 -->
     <insert id="savePayFeeQrcodeInfo" parameterType="Map">
         insert into pay_fee_qrcode(
-        create_staff_name,query_way,create_staff_id,pre_fee,custom_fee,pfq_id,qrcode_name,community_id,sms_validate,content,state
+        create_staff_name,query_way,create_staff_id,pre_fee,custom_fee,pfq_id,qrcode_name,community_id,sms_validate,content,state,fee_type
         ) values (
-        #{createStaffName},#{queryWay},#{createStaffId},#{preFee},#{customFee},#{pfqId},#{qrcodeName},#{communityId},#{smsValidate},#{content},#{state}
+        #{createStaffName},#{queryWay},#{createStaffId},#{preFee},#{customFee},#{pfqId},#{qrcodeName},#{communityId},#{smsValidate},#{content},#{state},#{feeType}
         )
     </insert>
 
@@ -21,7 +21,7 @@
         queryWay,t.create_staff_id,t.create_staff_id createStaffId,t.pre_fee,t.pre_fee preFee,t.status_cd,t.status_cd
         statusCd,t.custom_fee,t.custom_fee customFee,t.pfq_id,t.pfq_id pfqId,t.qrcode_name,t.qrcode_name
         qrcodeName,t.community_id,t.community_id communityId,t.sms_validate,t.sms_validate smsValidate,t.content,
-        t.create_time createTime,t.state
+        t.create_time createTime,t.state,t.fee_type feeType
         from pay_fee_qrcode t
         where 1 =1
         <if test="createStaffName !=null and createStaffName != ''">
@@ -60,6 +60,9 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
+        <if test="feeType !=null and feeType != ''">
+            and t.fee_type= #{feeType}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -95,18 +98,22 @@
         <if test="qrcodeName !=null and qrcodeName != ''">
             , t.qrcode_name= #{qrcodeName}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="smsValidate !=null and smsValidate != ''">
             , t.sms_validate= #{smsValidate}
         </if>
         <if test="content !=null and content != ''">
             , t.content= #{content}
         </if>
+        <if test="feeType !=null and feeType != ''">
+            , t.fee_type= #{feeType}
+        </if>
         where 1=1
         <if test="pfqId !=null and pfqId != ''">
             and t.pfq_id= #{pfqId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>
@@ -151,6 +158,9 @@
         </if>
         <if test="state !=null and state != ''">
             and t.state= #{state}
+        </if>
+        <if test="feeType !=null and feeType != ''">
+            and t.fee_type= #{feeType}
         </if>
 
     </select>
