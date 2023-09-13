@@ -94,7 +94,7 @@ public class GetQrcodeOwnerCmd extends Cmd {
         data.put("ownerId",ownerDto.getOwnerId());
         data.put("roomId",ownerDto.getRoomId());
 
-        context.setResponseEntity(ResultVo.createResponseEntity(ownerDto.getOwnerId()));
+        context.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 
     /**
