@@ -42,6 +42,8 @@ public class PayFeeQrcodePo implements Serializable {
 
     private String state;
 
+    private String feeType;
+
     public String getCreateStaffName() {
         return createStaffName;
     }
@@ -136,5 +138,13 @@ public class PayFeeQrcodePo implements Serializable {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getFeeType() {
+        return feeType;
+    }
+
+    public void setFeeType(String feeType) {
+        this.feeType = feeType;
     }
 }
