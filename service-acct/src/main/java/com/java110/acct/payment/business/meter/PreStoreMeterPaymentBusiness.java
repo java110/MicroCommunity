@@ -13,9 +13,11 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.meter.MeterMachineDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.payment.PaymentOrderDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -70,6 +72,9 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
 
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
 
 
     @Override
@@ -155,6 +160,15 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
         feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_PROXY_CONSUMPTION, receivedAmountDec.doubleValue() + ""));
 
+        //todo 查询房屋信息
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(meterMachineDtos.get(0).getCommunityId());
+        roomDto.setRoomId(reqJson.getString("roomId"));
+        List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
+        if(roomDtos != null && roomDtos.size() > 0){
+            feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME,
+                    roomDtos.get(0).getFloorNum() + "-" + roomDtos.get(0).getUnitNum() + "-" + roomDtos.get(0).getRoomNum()));
+        }
 
         //todo 查询业主信息
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();

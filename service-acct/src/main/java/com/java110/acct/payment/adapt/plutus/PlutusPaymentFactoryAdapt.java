@@ -19,6 +19,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.PayUtil;
@@ -109,8 +110,15 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             ownerAppUserDto.setAppType(appType);
             List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
-            Assert.listOnlyOne(ownerAppUserDtos, "未找到开放账号信息");
-            openId = ownerAppUserDtos.get(0).getOpenId();
+            if(ownerAppUserDtos == null || ownerAppUserDtos.size() < 1){
+                throw new IllegalArgumentException("未找到开放账号信息");
+            }
+            for(OwnerAppUserDto tmpOwnerAppUserDto : ownerAppUserDtos){
+                if(!StringUtil.isEmpty(tmpOwnerAppUserDto.getOpenId())){
+                    openId = tmpOwnerAppUserDto.getOpenId();
+                }
+            }
+            //openId = ownerAppUserDtos.get(0).getOpenId();
         }
 
 
