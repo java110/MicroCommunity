@@ -96,7 +96,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         if ("SUCCESS".equals(paramOut.getString("deal_status"))) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
-            return new ResultVo(ResultVo.CODE_ERROR, resMap.get("等待用户支付中"));
+            return new ResultVo(ResultVo.CODE_ERROR, "等待用户支付中");
         }
     }
 
