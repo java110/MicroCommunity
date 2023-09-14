@@ -194,6 +194,19 @@ public class SaveMeterWaterCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
             }
+
+            //todo 保存 房屋名称
+            feeAttrPo = new FeeAttrPo();
+            feeAttrPo.setCommunityId(reqJson.getString("communityId"));
+            feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME);
+            feeAttrPo.setValue(roomList.get(0).getFloorNum() + "-" + roomList.get(0).getUnitNum() + "-" + roomList.get(0).getRoomNum());
+            feeAttrPo.setFeeId(payFeePo.getFeeId());
+            feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
+
             OwnerDto ownerDto = new OwnerDto();
             ownerDto.setCommunityId(reqJson.getString("communityId"));
             ownerDto.setRoomId(reqJson.getString("objId"));
