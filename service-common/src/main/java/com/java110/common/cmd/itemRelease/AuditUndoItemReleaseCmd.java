@@ -55,6 +55,7 @@ public class AuditUndoItemReleaseCmd extends Cmd {
         reqJson.put("id",reqJson.getString("irId"));
         reqJson.put("storeId",storeId);
 
+        reqJson.put("startUserId",itemReleaseDtos.get(0).getCreateUserId());
 
         //业务办理
         if ("1100".equals(reqJson.getString("auditCode"))

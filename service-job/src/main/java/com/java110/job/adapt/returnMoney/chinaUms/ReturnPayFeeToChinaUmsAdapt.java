@@ -1,4 +1,4 @@
-package com.java110.job.adapt.fee;
+package com.java110.job.adapt.returnMoney.chinaUms;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
