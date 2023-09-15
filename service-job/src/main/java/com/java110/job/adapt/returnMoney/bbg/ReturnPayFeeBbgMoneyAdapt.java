@@ -143,12 +143,19 @@ public class ReturnPayFeeBbgMoneyAdapt extends DatabusAdaptImpl {
         String decryParams = EncryptDecryptFactory.execute(communityId, refundUrl, params);
 
         JSONObject paramOut = JSONObject.parseObject(decryParams);
-        if (!"0000".equals(paramOut.getString("return_code"))
-                || !"SUCCESS".equals(paramOut.getString("status"))
-                || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
+        if ( !"SUCCESS".equals(paramOut.getString("status")) || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
             doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_FT, "退款失败" + paramOut.getString("return_message"));
             return;
         }
+        if ( !"0000".equals(paramOut.getString("return_code")) && !"0001".equals(paramOut.getString("return_code"))) {
+            doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_FT, "退款失败" + paramOut.getString("return_message"));
+            return;
+        }
+        if("0001".equals(paramOut.getString("return_code"))){
+            doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_CT, paramOut.getString("return_message"));
+            return;
+        }
+
         doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_CT, "退款完成");
 
     }
