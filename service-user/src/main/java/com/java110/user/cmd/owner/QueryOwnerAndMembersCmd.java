@@ -215,14 +215,9 @@ public class QueryOwnerAndMembersCmd extends Cmd {
             fileRelDto.setObjId(tmpOwnerDto.getMemberId());
             fileRelDto.setRelTypeCd("10000"); //业主照片
             List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-            if (fileRelDtos == null || fileRelDtos.size() < 1) {
-                continue;
+            if(fileRelDtos != null && fileRelDtos.size() > 0){
+                tmpOwnerDto.setUrl(fileRelDtos.get(0).getFileSaveName());
             }
-            List<String> urls = new ArrayList<>();
-            for (FileRelDto fileRel : fileRelDtos) {
-                urls.add(fileRel.getFileRealName());
-            }
-            tmpOwnerDto.setUrls(urls);
         }
     }
 
