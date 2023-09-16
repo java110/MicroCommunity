@@ -90,9 +90,13 @@ public class GetQrcodeOwnerCmd extends Cmd {
 
         OwnerDto ownerDto = computeOwner(reqJson);
 
+        String ownerName = ownerDto.getName();
+
+
         JSONObject data = new JSONObject();
         data.put("ownerId",ownerDto.getOwnerId());
         data.put("roomId",ownerDto.getRoomId());
+        data.put("ownerName",StringUtil.maskName(ownerName));
 
         context.setResponseEntity(ResultVo.createResponseEntity(data));
     }

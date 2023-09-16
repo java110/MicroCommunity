@@ -38,8 +38,9 @@ public class AppTest {
 //        feeDto.setPaymentCycle("12");
 //        getTargetEndDateAndOweMonth(feeDto,null);
 // 0.3667 0.3226
-        double month = dayCompare(DateUtil.getDateFromStringB("2023-01-1"), DateUtil.getDateFromStringB("2023-09-1"));
-        System.out.println("month=" + month);
+//        double month = dayCompare(DateUtil.getDateFromStringB("2023-01-1"), DateUtil.getDateFromStringB("2023-09-1"));
+//        System.out.println("month=" + month);
+        System.out.println(StringUtil.maskName("张三三sss"));
     }
 
     public Map getTargetEndDateAndOweMonth(FeeDto feeDto, OwnerCarDto ownerCarDto) {
