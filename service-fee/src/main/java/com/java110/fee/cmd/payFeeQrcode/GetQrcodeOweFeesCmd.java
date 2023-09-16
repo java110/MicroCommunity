@@ -8,6 +8,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.fee.bmo.impl.QueryOweFeeImpl;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -95,7 +96,10 @@ public class GetQrcodeOweFeesCmd extends Cmd {
                 tmpFeeDto.setVal(val);
                 //todo 这里考虑负数金额，有些可能要红冲
                 if (tmpFeeDto.getFeePrice() !=0) {
+                    String ownerName = FeeAttrDto.getFeeAttrValue(tmpFeeDto,FeeAttrDto.SPEC_CD_OWNER_NAME);
+                    ownerName = StringUtil.maskName(ownerName);
                     tmpFeeDto.setFeeAttrDtos(null); //todo 这里删掉 以免信息泄露带来的风险
+                    tmpFeeDto.setOwnerName(ownerName);
                     tmpFeeDtos.add(tmpFeeDto);
                 }
             } catch (Exception e) {
