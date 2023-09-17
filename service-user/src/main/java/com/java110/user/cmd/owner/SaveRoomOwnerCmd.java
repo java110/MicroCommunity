@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -14,22 +15,28 @@ import com.java110.core.smo.IPhotoSMO;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.po.owner.OwnerPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.user.UserPo;
+import com.java110.user.bmo.owner.IGeneratorOwnerUserBMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -65,21 +72,23 @@ public class SaveRoomOwnerCmd extends Cmd {
     @Autowired
     private IPhotoSMO photoSMOImpl;
 
-    @Autowired
-    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
 
     @Autowired
-    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
+
     @Autowired
-    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IGeneratorOwnerUserBMO generatorOwnerUserBMOImpl;
 
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.jsonObjectHaveKey(reqJson, "name", "请求报文中未包含name");
-        Assert.jsonObjectHaveKey(reqJson, "userId", "请求报文中未包含userId");
         Assert.jsonObjectHaveKey(reqJson, "link", "请求报文中未包含link");
         Assert.jsonObjectHaveKey(reqJson, "roomName", "请求报文中未包含房屋");
+        Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求报文中未包含类型");
 
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
 
@@ -97,96 +106,116 @@ public class SaveRoomOwnerCmd extends Cmd {
         //todo 属性校验
         Assert.judgeAttrValue(reqJson);
 
+        //todo 校验房屋
+        String roomName = reqJson.getString("roomName");
+        String[] roomNames = roomName.split("-", 3);
+
+        if (roomNames == null || roomNames.length != 3) {
+            throw new CmdException("房屋格式错误，楼栋-单元-房屋");
+        }
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setFloorNum(roomNames[0]);
+        roomDto.setUnitNum(roomNames[1]);
+        roomDto.setRoomNum(roomNames[2]);
+        roomDto.setCommunityId(reqJson.getString("communityId"));
+        List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
+
+        if (roomDtos == null || roomDtos.size() < 1) {
+            throw new CmdException("房屋不存在");
+        }
+
+        reqJson.put("roomId", roomDtos.get(0).getRoomId());
+
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setRoomId(roomDtos.get(0).getRoomId());
+
+        List<OwnerRoomRelDto> roomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+
+        String ownerTypeCd = reqJson.getString("ownerTypeCd");
+        //todo 业主 如果存在 则失败
+        if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(ownerTypeCd) && roomRelDtos != null && roomRelDtos.size() > 0) {
+            throw new CmdException("已经存在业主");
+        }
+
+        //todo  业主直接返回
+        if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(ownerTypeCd)) {
+            return;
+        }
+
+        //todo 不是业主，业主 不存在 则失败
+        if (!OwnerDto.OWNER_TYPE_CD_OWNER.equals(ownerTypeCd) && (roomRelDtos == null || roomRelDtos.size() < 1)) {
+            throw new CmdException("业主不存在 先添加业主");
+        }
+
+        reqJson.put("ownerId",roomRelDtos.get(0).getOwnerId());
+
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-        //todo 生成memberId
-        generateMemberId(reqJson);
-
-        JSONObject businessOwner = new JSONObject();
-        businessOwner.putAll(reqJson);
-        businessOwner.put("state", "2000");
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
-        if (reqJson.containsKey("age") && StringUtil.isEmpty(reqJson.getString("age"))) {
-            ownerPo.setAge(null);
+        String memberId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
+        String ownerId = memberId;
+        String ownerTypeCd = reqJson.getString("ownerTypeCd");
+        if (!OwnerDto.OWNER_TYPE_CD_OWNER.equals(ownerTypeCd)) {
+            ownerId = reqJson.getString("ownerId");
         }
+        // todo 保存业主
+        OwnerPo ownerPo = BeanConvertUtil.covertBean(reqJson,OwnerPo.class);
+        ownerPo.setMemberId(memberId);
+        ownerPo.setOwnerId(ownerId);
+        ownerPo.setState(OwnerDto.STATE_FINISH);
+        ownerPo.setUserId(CmdContextUtils.getUserId(context));
+        ownerPo.setAge(null);
+        ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
+
         int flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
         if (flag < 1) {
             throw new CmdException("保存业主失败");
         }
 
-        //保存照片
+        //todo 保存照片
         photoSMOImpl.savePhoto(reqJson.getString("ownerPhoto"),
-                reqJson.getString("memberId"),
+                memberId,
                 reqJson.getString("communityId"),
                 "10000");
+        //todo 保存属性
+        dealOwnerAttr(reqJson, memberId);
 
-        dealOwnerAttr(reqJson, context);
+        //todo 保存和房屋关系
+        saveOwnerRoomRel(ownerPo,reqJson.getString("roomId"));
 
-        String autoUser = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, "AUTO_GENERATOR_OWNER_USER");
+        //todo 生成登录账号
+        generatorOwnerUserBMOImpl.generator(ownerPo);
 
-        if (!"ON".equals(autoUser)) {
+    }
+
+    /**
+     * 保存 业主房屋关系
+     * @param ownerPo
+     * @param roomId
+     */
+    private void saveOwnerRoomRel(OwnerPo ownerPo, String roomId) {
+        //todo 不是业主就跳过
+        if(!OwnerDto.OWNER_TYPE_CD_OWNER.equals(ownerPo.getOwnerTypeCd())){
             return;
         }
 
-        CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityId(ownerPo.getCommunityId());
-        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-        Assert.listNotNull(communityDtos, "未包含小区信息");
-        CommunityDto tmpCommunityDto = communityDtos.get(0);
-
-        UserPo userPo = new UserPo();
-        userPo.setUserId(GenerateCodeFactory.getUserId());
-        userPo.setName(ownerPo.getName());
-        userPo.setTel(ownerPo.getLink());
-        userPo.setPassword(AuthenticationFactory.passwdMd5(ownerPo.getLink()));
-        userPo.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
-        userPo.setAge(ownerPo.getAge());
-        userPo.setAddress(ownerPo.getAddress());
-        userPo.setSex(ownerPo.getSex());
-        flag = userV1InnerServiceSMOImpl.saveUser(userPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
-        }
-
-        OwnerAppUserPo ownerAppUserPo = new OwnerAppUserPo();
-        //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-        ownerAppUserPo.setState("12000");
-        ownerAppUserPo.setAppTypeCd("10010");
-        ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
-        ownerAppUserPo.setMemberId(ownerPo.getMemberId());
-        ownerAppUserPo.setCommunityName(tmpCommunityDto.getName());
-        ownerAppUserPo.setCommunityId(ownerPo.getCommunityId());
-        ownerAppUserPo.setAppUserName(ownerPo.getName());
-        ownerAppUserPo.setIdCard(ownerPo.getIdCard());
-        ownerAppUserPo.setAppType("WECHAT");
-        ownerAppUserPo.setLink(ownerPo.getLink());
-        ownerAppUserPo.setUserId(userPo.getUserId());
-        ownerAppUserPo.setOpenId("-1");
-
-        flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
-        if (flag < 1) {
-            throw new CmdException("添加用户业主关系失败");
-        }
-
+        OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
+        ownerRoomRelPo.setRelId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
+        ownerRoomRelPo.setUserId("-1");
+        ownerRoomRelPo.setOwnerId(ownerPo.getOwnerId());
+        ownerRoomRelPo.setRoomId(roomId);
+        ownerRoomRelPo.setState("2001");
+        ownerRoomRelPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        ownerRoomRelPo.setEndTime(DateUtil.getLastTime());
+        ownerRoomRelV1InnerServiceSMOImpl.saveOwnerRoomRel(ownerRoomRelPo);
     }
 
-
-    /**
-     * 生成小区楼ID
-     *
-     * @param paramObj 请求入参数据
-     */
-    private void generateMemberId(JSONObject paramObj) {
-        String memberId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId);
-        paramObj.put("memberId", memberId);
-
-    }
-
-    private void dealOwnerAttr(JSONObject paramObj, ICmdDataFlowContext cmdDataFlowContext) {
+    private void dealOwnerAttr(JSONObject paramObj, String memberId) {
 
         if (!paramObj.containsKey("attrs")) {
             return;
@@ -202,7 +231,7 @@ public class SaveRoomOwnerCmd extends Cmd {
         for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
             attr = attrs.getJSONObject(attrIndex);
             attr.put("communityId", paramObj.getString("communityId"));
-            attr.put("memberId", paramObj.getString("memberId"));
+            attr.put("memberId", memberId);
             attr.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
             OwnerAttrPo ownerAttrPo = BeanConvertUtil.covertBean(attr, OwnerAttrPo.class);
             flag = ownerAttrInnerServiceSMOImpl.saveOwnerAttr(ownerAttrPo);

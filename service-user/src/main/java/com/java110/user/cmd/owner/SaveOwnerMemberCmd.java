@@ -24,6 +24,7 @@ import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.po.owner.OwnerPo;
 import com.java110.po.user.UserPo;
+import com.java110.user.bmo.owner.IGeneratorOwnerUserBMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.UserLevelConstant;
@@ -69,12 +70,7 @@ public class SaveOwnerMemberCmd extends Cmd {
     private IPhotoSMO photoSMOImpl;
 
     @Autowired
-    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
-
-    @Autowired
-    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
-    @Autowired
-    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+    private IGeneratorOwnerUserBMO generatorOwnerUserBMOImpl;
 
 
     @Override
@@ -133,59 +129,17 @@ public class SaveOwnerMemberCmd extends Cmd {
             throw new CmdException("保存业主失败");
         }
 
-        //保存照片
+        //todo 保存照片
         photoSMOImpl.savePhoto(reqJson.getString("ownerPhoto"),
                 reqJson.getString("memberId"),
                 reqJson.getString("communityId"),
                 "10000");
 
+        //todo 保存属性
         dealOwnerAttr(reqJson, context);
 
-        String autoUser = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, "AUTO_GENERATOR_OWNER_USER");
-
-        if (!"ON".equals(autoUser)) {
-            return;
-        }
-
-        CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityId(ownerPo.getCommunityId());
-        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-        Assert.listNotNull(communityDtos, "未包含小区信息");
-        CommunityDto tmpCommunityDto = communityDtos.get(0);
-
-        UserPo userPo = new UserPo();
-        userPo.setUserId(GenerateCodeFactory.getUserId());
-        userPo.setName(ownerPo.getName());
-        userPo.setTel(ownerPo.getLink());
-        userPo.setPassword(AuthenticationFactory.passwdMd5(ownerPo.getLink()));
-        userPo.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
-        userPo.setAge(ownerPo.getAge());
-        userPo.setAddress(ownerPo.getAddress());
-        userPo.setSex(ownerPo.getSex());
-        flag = userV1InnerServiceSMOImpl.saveUser(userPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
-        }
-
-        OwnerAppUserPo ownerAppUserPo = new OwnerAppUserPo();
-        //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-        ownerAppUserPo.setState("12000");
-        ownerAppUserPo.setAppTypeCd("10010");
-        ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
-        ownerAppUserPo.setMemberId(ownerPo.getMemberId());
-        ownerAppUserPo.setCommunityName(tmpCommunityDto.getName());
-        ownerAppUserPo.setCommunityId(ownerPo.getCommunityId());
-        ownerAppUserPo.setAppUserName(ownerPo.getName());
-        ownerAppUserPo.setIdCard(ownerPo.getIdCard());
-        ownerAppUserPo.setAppType("WECHAT");
-        ownerAppUserPo.setLink(ownerPo.getLink());
-        ownerAppUserPo.setUserId(userPo.getUserId());
-        ownerAppUserPo.setOpenId("-1");
-
-        flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
-        if (flag < 1) {
-            throw new CmdException("添加用户业主关系失败");
-        }
+        //todo 生成登录账号
+        generatorOwnerUserBMOImpl.generator(ownerPo);
 
     }
 
