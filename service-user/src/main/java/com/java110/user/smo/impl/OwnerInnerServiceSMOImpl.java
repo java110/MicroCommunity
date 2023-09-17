@@ -94,7 +94,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     }
 
     private boolean updateOwnerPhone(List<OwnerDto> owners) {
-        if (owners.size() > 15) {
+        if (owners.size() > 50) {
             return true;
         }
 
