@@ -209,16 +209,16 @@ public class QueryOwnerAndMembersCmd extends Cmd {
                 tmpOwnerDto.setLink(link);
             }
         }
-        for (OwnerDto tmpOwnerDto : ownerDtos) {
-            //查询照片
-            FileRelDto fileRelDto = new FileRelDto();
-            fileRelDto.setObjId(tmpOwnerDto.getMemberId());
-            fileRelDto.setRelTypeCd("10000"); //业主照片
-            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-            if(fileRelDtos != null && fileRelDtos.size() > 0){
-                tmpOwnerDto.setUrl(fileRelDtos.get(0).getFileSaveName());
-            }
-        }
+//        for (OwnerDto tmpOwnerDto : ownerDtos) {
+//            //查询照片
+//            FileRelDto fileRelDto = new FileRelDto();
+//            fileRelDto.setObjId(tmpOwnerDto.getMemberId());
+//            fileRelDto.setRelTypeCd("10000"); //业主照片
+//            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+//            if(fileRelDtos != null && fileRelDtos.size() > 0){
+//                tmpOwnerDto.setUrl(fileRelDtos.get(0).getFileSaveName());
+//            }
+//        }
     }
 
 
