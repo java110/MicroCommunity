@@ -132,7 +132,7 @@ public class QueryOwnerAndMembersCmd extends Cmd {
         int total = ownerInnerServiceSMOImpl.queryOwnersMemberCount(ownerDto);
         List<OwnerDto> ownerDtos = null;
         if (total > 0) {
-            ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+            ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         } else {
             ownerDtos = new ArrayList<>();
         }
