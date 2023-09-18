@@ -159,12 +159,15 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
      * @return
      */
     @Override
-    public boolean  databusData(@RequestBody DatabusDataDto databusDataDto) {
+    public boolean databusData(@RequestBody DatabusDataDto databusDataDto) {
         // IDatabusAdapt databusAdaptImpl = null;
         List<BusinessDatabusDto> databusDtos = DatabusCache.getDatabuss();
         Business business = null;
         List<Business> businesses = null;
+        DatabusQueueDataDto databusQueueDataDto = null;
+        String dataId = "";
         for (BusinessDatabusDto databusDto : databusDtos) {
+            dataId = GenerateCodeFactory.getUUID();
             try {
                 if (!databusDataDto.getBusinessTypeCd().equals(databusDto.getBusinessTypeCd())) {
                     continue;
@@ -174,8 +177,11 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
                 business.setData(databusDataDto.getData());
                 business.setBusinessTypeCd(databusDataDto.getBusinessTypeCd());
                 businesses.add(business);
+                databusQueueDataDto = new DatabusQueueDataDto(databusDto.getBeanName(), business, businesses);
+                databusQueueDataDto.setDataId(dataId);
+
                 //todo 存放队列中
-                DatabusDataQueue.addMsg(new DatabusQueueDataDto(databusDto.getBeanName(), business, businesses));
+                DatabusDataQueue.addMsg(databusQueueDataDto);
 
 //                databusAdaptImpl = ApplicationContextFactory.getBean(databusDto.getBeanName(), IDatabusAdapt.class);
 //                databusAdaptImpl.customExchange(customBusinessDatabusDto);
