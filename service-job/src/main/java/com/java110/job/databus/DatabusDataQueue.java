@@ -18,23 +18,17 @@ public class DatabusDataQueue {
      *
      * @param databusQueueDataDto
      */
-    public static void addMsg(DatabusQueueDataDto databusQueueDataDto) {
-        try {
+    public static void addMsg(DatabusQueueDataDto databusQueueDataDto) throws Exception {
 
-            msgs.offer(databusQueueDataDto, 3, TimeUnit.MILLISECONDS);
-        } catch (Exception e) {
-            log.error("写入队列失败", e);
-            e.printStackTrace();
-        }
+
+        msgs.offer(databusQueueDataDto, 3, TimeUnit.MILLISECONDS);
+
     }
 
-    public static DatabusQueueDataDto getData() {
-        try {
-            return msgs.take();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static DatabusQueueDataDto getData() throws Exception {
+
+        return msgs.take();
+
     }
 
 }

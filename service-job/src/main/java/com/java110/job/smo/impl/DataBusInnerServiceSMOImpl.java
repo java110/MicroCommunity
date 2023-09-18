@@ -3,7 +3,9 @@ package com.java110.job.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.data.DatabusQueueDataDto;
+import com.java110.dto.log.LogSystemErrorDto;
 import com.java110.dto.system.BusinessDatabusDto;
 import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.machine.CarInoutDto;
@@ -13,11 +15,15 @@ import com.java110.dto.system.Business;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.job.adapt.IDatabusAdapt;
 import com.java110.job.databus.DatabusDataQueue;
+import com.java110.po.log.LogSystemErrorPo;
+import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.DatabusCache;
 import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.ExceptionUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,6 +50,8 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
     public static final String DEFAULT_NOTIFY_TEMP_CAR_FEE_ORDER_PROTOCOL = "notifyTempCarFeeOrderAdapt";//重新送数据
     public static final String DEFAULT_DEFAULT_SEND_MACHINE_RECORD = "defaultSendMachineRecordAdapt";//默认设备记录适配器
 
+    @Autowired
+    private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
 
     @Override
     public boolean exchange(@RequestBody List<Business> businesses) {
@@ -201,6 +209,13 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
 //                    databusAdaptImpl.execute(business, businesses);
             } catch (Exception e) {
                 logger.error("执行databus失败", e);
+
+                LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+                logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_NOTICE);
+                logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+                saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
+                logger.error("通知异常", e);
             }
         }
     }
