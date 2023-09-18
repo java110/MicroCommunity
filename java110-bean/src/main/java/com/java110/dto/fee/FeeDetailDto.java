@@ -87,6 +87,8 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     private String feeFlag;
 
+    private String receiptCode;
+
     public String getPrimeRate() {
         return primeRate;
     }
@@ -405,5 +407,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setFeeFlag(String feeFlag) {
         this.feeFlag = feeFlag;
+    }
+
+    public String getReceiptCode() {
+        return receiptCode;
+    }
+
+    public void setReceiptCode(String receiptCode) {
+        this.receiptCode = receiptCode;
     }
 }
