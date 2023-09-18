@@ -19,7 +19,7 @@ public class DatabusDataQueue {
      * @param databusQueueDataDto
      */
     public static void addMsg(DatabusQueueDataDto databusQueueDataDto) throws Exception {
-        msgs.offer(databusQueueDataDto, 3, TimeUnit.MILLISECONDS);
+        msgs.offer(databusQueueDataDto, 3, TimeUnit.SECONDS);
     }
 
     public static DatabusQueueDataDto getData() throws Exception {
