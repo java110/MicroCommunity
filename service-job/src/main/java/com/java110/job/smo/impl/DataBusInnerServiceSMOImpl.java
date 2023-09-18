@@ -209,13 +209,11 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
 //                    databusAdaptImpl.execute(business, businesses);
             } catch (Exception e) {
                 logger.error("执行databus失败", e);
-
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
                 logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
-                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_NOTICE);
+                logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_DATABUS);
                 logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
                 saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
-                logger.error("通知异常", e);
             }
         }
     }
