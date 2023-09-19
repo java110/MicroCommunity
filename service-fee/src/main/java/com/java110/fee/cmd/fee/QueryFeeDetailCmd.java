@@ -73,7 +73,7 @@ public class QueryFeeDetailCmd extends Cmd {
             for (FeeDetailDto feeDetail : feeDetailDtos) {
                 //获取状态
                 String state = feeDetail.getState();
-                if (!StringUtil.isEmpty(state) && (state.equals("1300") || state.equals("1100") || state.equals("1200"))) { //退费单、已退费、退费失败状态
+                if ("1300".equals(state) || "1100".equals(state) || "1200".equals(state)) { //退费单、已退费、退费失败状态
                     //获取周期
                     String cycles = feeDetail.getCycles();
                     if (!StringUtil.isEmpty(cycles) && cycles.contains("-")) {

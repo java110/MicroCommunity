@@ -206,7 +206,7 @@
         <if test="cashierName !=null and cashierName != ''">
             and t.cashier_name= #{cashierName}
         </if>
-        order by t.create_time desc
+        order by pf.payer_obj_id, pfc.fee_name, t.end_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
