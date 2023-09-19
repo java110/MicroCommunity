@@ -488,9 +488,13 @@
         <if test="detailMonth !=null and detailMonth != ''">
             and t.detail_month= #{detailMonth}
         </if>
+        <if test="feeState !=null and feeState != ''">
+            and pf.state= #{feeState}
+        </if>
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and pf.fee_type_cd= #{feeTypeCd}
         </if>
+
         <if test="feeTypeCds != null ">
             and pf.fee_type_cd in
             <foreach collection="feeTypeCds" item="item" open="(" close=")" separator=",">

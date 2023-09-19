@@ -49,6 +49,8 @@ public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
     private String ownerId;
     private String link;
     private String state;
+
+    private String feeState;
     private String payFeeTime;
 
     private String curMonthTime;
@@ -265,5 +267,13 @@ public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
 
     public void setMonthIds(String[] monthIds) {
         this.monthIds = monthIds;
+    }
+
+    public String getFeeState() {
+        return feeState;
+    }
+
+    public void setFeeState(String feeState) {
+        this.feeState = feeState;
     }
 }
