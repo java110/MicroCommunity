@@ -102,6 +102,9 @@ public class UserLoginApi {
     public ResponseEntity<String> queryUserLogin(@RequestParam(value = "userName", required = false) String userName,
                                                  @RequestParam(value = "parentOrgName", required = false) String parentOrgName,
                                                  @RequestParam(value = "orgName", required = false) String orgName,
+                                                 @RequestParam(value = "storeId", required = false) String storeId,
+                                                 @RequestParam(value = "startTime", required = false) String startTime,
+                                                 @RequestParam(value = "endTime", required = false) String endTime,
                                                  @RequestParam(value = "page") int page,
                                                  @RequestParam(value = "row") int row) {
         UserLoginDto userLoginDto = new UserLoginDto();
@@ -110,6 +113,9 @@ public class UserLoginApi {
         userLoginDto.setUserName(userName);
         userLoginDto.setParentOrgName(parentOrgName);
         userLoginDto.setOrgName(orgName);
+        userLoginDto.setStoreId(storeId);
+        userLoginDto.setStartTime(startTime);
+        userLoginDto.setEndTime(endTime);
         return getUserLoginBMOImpl.get(userLoginDto);
     }
 
