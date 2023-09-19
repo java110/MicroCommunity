@@ -34,6 +34,10 @@ public class ListUnitemLogCmd extends Cmd {
         info.put("bId", reqJson.getString("bId"));
         Map log = cordersInnerServiceSMOImpl.queryUnitemLog(info);
 
+        if(log == null){
+            throw new CmdException("数据不存在");
+        }
+
         context.setResponseEntity(ResultVo.createResponseEntity(log));
     }
 }
