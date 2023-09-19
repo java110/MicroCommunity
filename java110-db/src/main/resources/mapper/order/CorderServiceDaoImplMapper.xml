@@ -71,6 +71,7 @@
         <if test="staffNameLike !=null and staffNameLike != ''">
             and u.name like concat('%',#{staffNameLike},'%')
         </if>
+        and u.name != 'dev'
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -110,7 +111,14 @@
         <if test="staffNameLike !=null and staffNameLike != ''">
             and u.name like concat('%',#{staffNameLike},'%')
         </if>
+        and u.name != 'dev'
 
     </select>
+
+    <select id="queryUnitemLog" parameterType="Map" resultType="Map">
+        select t.service_name serviceName,t.log_text logText from unitem_log t
+        where t.b_id = #{bId}
+    </select>
+
 
 </mapper>

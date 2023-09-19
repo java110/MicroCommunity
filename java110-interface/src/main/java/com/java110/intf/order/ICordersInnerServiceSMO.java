@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 @FeignClient(name = "order-service", configuration = {FeignConfiguration.class})
 @RequestMapping("/ordersApi")
@@ -20,4 +21,6 @@ public interface ICordersInnerServiceSMO {
     @RequestMapping(value = "/queryCorders", method = RequestMethod.POST)
     List<CorderDto> queryCorders(@RequestBody CorderDto corderDto);
 
+    @RequestMapping(value = "/queryUnitemLog", method = RequestMethod.POST)
+    Map queryUnitemLog(@RequestBody Map info);
 }

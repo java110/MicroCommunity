@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,19 +23,18 @@ public class CorderServiceDaoImpl extends BaseServiceDao implements ICorderServi
     private static Logger logger = LoggerFactory.getLogger(CorderServiceDaoImpl.class);
 
 
-
     @Override
     public List<ApiCorderDataVo> getCorderInfo(Map info) throws DAOException {
-        logger.debug("查询demo信息 入参 info : {}",info);
+        logger.debug("查询demo信息 入参 info : {}", info);
 
-        List<ApiCorderDataVo> businessDemoInfos = sqlSessionTemplate.selectList("corderServiceDaoImpl.getCorderInfo",info);
+        List<ApiCorderDataVo> businessDemoInfos = sqlSessionTemplate.selectList("corderServiceDaoImpl.getCorderInfo", info);
 
         return businessDemoInfos;
     }
 
     @Override
     public int queryCordersCount(Map info) {
-        logger.debug("查询order数据 入参 info : {}",info);
+        logger.debug("查询order数据 入参 info : {}", info);
 
         List<Map> businessDemoInfos = sqlSessionTemplate.selectList("corderServiceDaoImpl.queryCordersCount", info);
         if (businessDemoInfos.size() < 1) {
@@ -42,5 +42,15 @@ public class CorderServiceDaoImpl extends BaseServiceDao implements ICorderServi
         }
 
         return Integer.parseInt(businessDemoInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public Map queryUnitemLog(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("corderServiceDaoImpl.queryUnitemLog", info);
+
+        if (infos == null || infos.size() < 1) {
+            return null;
+        }
+        return infos.get(0);
     }
 }
