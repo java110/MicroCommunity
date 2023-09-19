@@ -101,6 +101,7 @@
         <if test="whileListIp !=null and whileListIp != ''">
             and t.while_list_ip= #{whileListIp}
         </if>
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
