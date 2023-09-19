@@ -42,7 +42,7 @@ import java.util.Map;
 @Component
 public class GenerateOweFeeTemplate extends TaskSystemQuartz {
 
-    public static final double DEFAULT_ROW = 200.0;
+    public static final double DEFAULT_ROW = 1000.0;
 
 
     @Autowired
