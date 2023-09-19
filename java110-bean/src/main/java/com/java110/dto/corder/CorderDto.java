@@ -34,6 +34,8 @@ public class CorderDto extends PageDto implements Serializable {
 
     private String actionObj;
 
+    private String businessTypeNameLike;
+
     public String getoId() {
         return oId;
     }
@@ -208,5 +210,13 @@ public class CorderDto extends PageDto implements Serializable {
 
     public void setActionObj(String actionObj) {
         this.actionObj = actionObj;
+    }
+
+    public String getBusinessTypeNameLike() {
+        return businessTypeNameLike;
+    }
+
+    public void setBusinessTypeNameLike(String businessTypeNameLike) {
+        this.businessTypeNameLike = businessTypeNameLike;
     }
 }

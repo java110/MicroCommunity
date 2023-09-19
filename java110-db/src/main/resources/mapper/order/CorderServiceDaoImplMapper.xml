@@ -71,6 +71,10 @@
         <if test="staffNameLike !=null and staffNameLike != ''">
             and u.name like concat('%',#{staffNameLike},'%')
         </if>
+        <if test="businessTypeNameLike !=null and businessTypeNameLike != ''">
+            and cbt.name like concat('%',#{businessTypeNameLike},'%')
+        </if>
+
         and u.name != 'dev'
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -110,6 +114,9 @@
         </if>
         <if test="staffNameLike !=null and staffNameLike != ''">
             and u.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="businessTypeNameLike !=null and businessTypeNameLike != ''">
+            and cbt.name like concat('%',#{businessTypeNameLike},'%')
         </if>
         and u.name != 'dev'
 
