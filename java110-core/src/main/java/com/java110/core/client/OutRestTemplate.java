@@ -74,7 +74,7 @@ public class OutRestTemplate extends RestTemplate {
                 tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.BAD_REQUEST);
             }
             LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null,
-                    requestEntity != null ? requestEntity.getBody().toString() : "",
+                    (requestEntity != null && requestEntity.getBody() != null) ? requestEntity.getBody().toString() : "",
                     tmpResponseEntity);
 
         }
