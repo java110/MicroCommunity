@@ -211,7 +211,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
         //考虑租金递增
-        computeFeeSMOImpl.dealRentRate(feeDto);
+        //computeFeeSMOImpl.dealRentRate(feeDto);
 
         //保存数据
         ReportOweFeePo reportOweFeePo = new ReportOweFeePo();
