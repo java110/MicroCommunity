@@ -133,7 +133,10 @@ public class OpenDoorAdapt extends DatabusAdaptImpl {
                 machineTranslateDto.setRemark("同步物联网系统成功");
             }
             return new ResultVo(paramOut.getInteger("code"), paramOut.getString("msg"));
-        } finally {
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }finally {
             machineTranslateDto.setbId("-1");
             machineTranslateDto.setObjBId("-1");
             machineTranslateDto.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
