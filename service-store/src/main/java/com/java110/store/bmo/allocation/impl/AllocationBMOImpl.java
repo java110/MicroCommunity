@@ -4,11 +4,13 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchase.AllocationStorehouseDto;
 import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
+import com.java110.dto.store.StorehouseDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.po.resource.ResourceStoreTimesPo;
 import com.java110.store.bmo.allocation.IAllocationBMO;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class AllocationBMOImpl implements IAllocationBMO {
 
     @Autowired
     private IAllocationStorehouseApplyInnerServiceSMO allocationStorehouseApplyInnerServiceSMOImpl;
+
+    @Autowired
+    private IStorehouseInnerServiceSMO storehouseInnerServiceSMOImpl;
 
     @Autowired
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
@@ -45,6 +50,13 @@ public class AllocationBMOImpl implements IAllocationBMO {
     @Override
     public void doToAllocationStorehouse(AllocationStorehouseDto tmpAllocationStorehouseDto, int allocationStock) {
 
+
+        //查询z 仓库
+        StorehouseDto storehouseDto = new StorehouseDto();
+        storehouseDto.setShId(tmpAllocationStorehouseDto.getShIdz());
+        List<StorehouseDto> targetStorehouseDtos = storehouseInnerServiceSMOImpl.queryStorehouses(storehouseDto);
+
+        Assert.listOnlyOne(targetStorehouseDtos,"目标仓库不存在");
         // todo -------------------------------------------------原仓库中做扣除 (start)-----------------------------------------------------//
         // todo 原仓库中扣除 数量
         ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
@@ -94,6 +106,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
         // todo -------------------------------------------------原仓库中做扣除 (end)-----------------------------------------------------//
 
         // todo -------------------------------------------------目标仓库中做增加 (start)-----------------------------------------------------//
+
         //todo 查询目标仓库中 库存
         resourceStoreDto = new ResourceStoreDto();
         resourceStoreDto.setResCode(resourceStoreDtoAs.get(0).getResCode());
@@ -106,7 +119,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
             tmpResourceStorePo.setResId(GenerateCodeFactory.getGeneratorId("11"));
             tmpResourceStorePo.setStock(allocationStock + "");
             tmpResourceStorePo.setShId(tmpAllocationStorehouseDto.getShIdz());
-            tmpResourceStorePo.setCommunityId(resourceStoreDtoZs.get(0).getCommunityId());
+            tmpResourceStorePo.setCommunityId(targetStorehouseDtos.get(0).getCommunityId());
             resourceStoreV1InnerServiceSMOImpl.saveResourceStore(tmpResourceStorePo);
 
             // todo 添加 times
@@ -114,7 +127,7 @@ public class AllocationBMOImpl implements IAllocationBMO {
             tmpResourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));
             tmpResourceStoreTimesPo.setStock(allocationStock + "");
             tmpResourceStoreTimesPo.setShId(tmpAllocationStorehouseDto.getShIdz());
-            tmpResourceStoreTimesPo.setCommunityId(resourceStoreDtoZs.get(0).getCommunityId());
+            tmpResourceStoreTimesPo.setCommunityId(targetStorehouseDtos.get(0).getCommunityId());
 
             resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(tmpResourceStoreTimesPo);
             return;
