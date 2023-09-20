@@ -188,6 +188,7 @@ public class GetReportOweFeeBMOImpl implements IGetReportOweFeeBMO {
         }
         ReportOweFeeDto reportOweFeeDto = new ReportOweFeeDto();
         reportOweFeeDto.setPayerObjIds(payObjIds.toArray(new String[payObjIds.size()]));
+        reportOweFeeDto.setConfigIds(configIds);
         List<ReportOweFeeDto> allReportOweFeeDtos = reportOweFeeInnerServiceSMOImpl.queryReportAllOweFees(reportOweFeeDto);
         List<ReportOweFeeDto> reportOweFeeDtos = new ArrayList<>();
         for (ReportOweFeeDto reportOweFee : allReportOweFeeDtos) {
