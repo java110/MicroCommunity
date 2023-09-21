@@ -174,7 +174,7 @@
                 and qa.qa_type = #{qaType}
             </if>
         <if test="userQaId != null and userQaId != ''">
-            and qa.user_qa_id = #{userQaId}
+            and t.user_qa_id = #{userQaId}
         </if>
             and qa.state = 'C'
             and qa.start_time &lt; NOW()
