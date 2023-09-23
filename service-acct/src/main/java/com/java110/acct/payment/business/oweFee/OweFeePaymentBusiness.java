@@ -85,7 +85,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
 
 
         //查询费用信息arrearsEndTime
-        feeDto.setArrearsEndTime(DateUtil.getCurrentDate());
+        //feeDto.setArrearsEndTime(DateUtil.getCurrentDate());
         feeDto.setState(FeeDto.STATE_DOING);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
