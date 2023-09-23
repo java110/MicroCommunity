@@ -103,7 +103,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                 );
 
                 tmpFeeDto.setVal(val);
-                if (tmpFeeDto.getFeePrice() > 0) {
+                if (tmpFeeDto.getOweFee() > 0) {
                     tmpFeeDtos.add(tmpFeeDto);
                 }
             } catch (Exception e) {
