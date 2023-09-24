@@ -8,6 +8,7 @@ package com.java110.utils.util;
  * @Version 1.0
  * add by wuxw 2020/2/10
  **/
+
 import java.util.regex.Pattern;
 
 /**
@@ -64,6 +65,9 @@ public class ValidatorUtil {
      * @return 校验通过返回true，否则返回false
      */
     public static boolean isUsername(String username) {
+        if (StringUtil.isEmpty(username)) {
+            return false;
+        }
         return Pattern.matches(REGEX_USERNAME, username);
     }
 
@@ -74,6 +78,9 @@ public class ValidatorUtil {
      * @return 校验通过返回true，否则返回false
      */
     public static boolean isPassword(String password) {
+        if (StringUtil.isEmpty(password)) {
+            return false;
+        }
         return Pattern.matches(REGEX_PASSWORD, password);
     }
 
@@ -84,6 +91,9 @@ public class ValidatorUtil {
      * @return 校验通过返回true，否则返回false
      */
     public static boolean isMobile(String mobile) {
+        if (StringUtil.isEmpty(mobile)) {
+            return false;
+        }
         return Pattern.matches(REGEX_MOBILE, mobile);
     }
 
@@ -94,6 +104,9 @@ public class ValidatorUtil {
      * @return 校验通过返回true，否则返回false
      */
     public static boolean isEmail(String email) {
+        if (StringUtil.isEmpty(email)) {
+            return false;
+        }
         return Pattern.matches(REGEX_EMAIL, email);
     }
 
@@ -104,6 +117,9 @@ public class ValidatorUtil {
      * @return 校验通过返回true，否则返回false
      */
     public static boolean isChinese(String chinese) {
+        if (StringUtil.isEmpty(chinese)) {
+            return false;
+        }
         return Pattern.matches(REGEX_CHINESE, chinese);
     }
 
@@ -114,6 +130,9 @@ public class ValidatorUtil {
      * @return 校验通过返回true，否则返回false
      */
     public static boolean isIDCard(String idCard) {
+        if (StringUtil.isEmpty(idCard)) {
+            return false;
+        }
         return Pattern.matches(REGEX_ID_CARD, idCard);
     }
 
@@ -124,6 +143,9 @@ public class ValidatorUtil {
      * @return 校验通过返回true，否则返回false
      */
     public static boolean isUrl(String url) {
+        if (StringUtil.isEmpty(url)) {
+            return false;
+        }
         return Pattern.matches(REGEX_URL, url);
     }
 
@@ -134,6 +156,9 @@ public class ValidatorUtil {
      * @return
      */
     public static boolean isIPAddr(String ipAddr) {
+        if (StringUtil.isEmpty(ipAddr)) {
+            return false;
+        }
         return Pattern.matches(REGEX_IP_ADDR, ipAddr);
     }
 

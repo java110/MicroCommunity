@@ -79,7 +79,7 @@ public class OwnerUserLoginCmd extends Cmd {
         //todo 验证码登录
         if (reqJson.containsKey("loginByPhone") && reqJson.getBoolean("loginByPhone")) {
             SmsDto smsDto = new SmsDto();
-            smsDto.setTel(reqJson.getString("userName"));
+            smsDto.setTel(reqJson.getString("username"));
             smsDto.setCode(reqJson.getString("password"));
             smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
             if (!smsDto.isSuccess()) {
@@ -94,10 +94,10 @@ public class OwnerUserLoginCmd extends Cmd {
 
         UserDto userDto = new UserDto();
         userDto.setLevelCd(UserDto.LEVEL_CD_USER);
-        if (ValidatorUtil.isMobile(reqJson.getString("userName"))) {//用户临时秘钥登录
-            userDto.setTel(reqJson.getString("userName"));
+        if (ValidatorUtil.isMobile(reqJson.getString("username"))) {//用户临时秘钥登录
+            userDto.setTel(reqJson.getString("username"));
         } else {
-            userDto.setUserName(reqJson.getString("userName"));
+            userDto.setUserName(reqJson.getString("username"));
         }
 
         // todo 不是验证码登录
