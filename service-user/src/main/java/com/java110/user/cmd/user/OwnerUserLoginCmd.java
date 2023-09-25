@@ -159,6 +159,7 @@ public class OwnerUserLoginCmd extends Cmd {
         loginOwnerResDto.setCommunityName(communityDtos.get(0).getName());
         loginOwnerResDto.setToken(token);
         loginOwnerResDto.setKey(newKey);
+        loginOwnerResDto.setAppUserId(ownerAppUserDtos.get(0).getAppUserId());
         context.setResponseEntity(ResultVo.createResponseEntity(loginOwnerResDto));
 
     }

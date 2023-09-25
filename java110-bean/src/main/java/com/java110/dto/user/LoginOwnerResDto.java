@@ -27,6 +27,8 @@ public class LoginOwnerResDto implements Serializable {
 
     private String key;
 
+    private String appUserId;
+
     public String getUserId() {
         return userId;
     }
@@ -105,5 +107,13 @@ public class LoginOwnerResDto implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getAppUserId() {
+        return appUserId;
+    }
+
+    public void setAppUserId(String appUserId) {
+        this.appUserId = appUserId;
     }
 }
