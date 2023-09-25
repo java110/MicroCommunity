@@ -103,7 +103,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                 );
 
                 tmpFeeDto.setVal(val);
-                if (tmpFeeDto.getOweFee() > 0) {
+                if (tmpFeeDto.getFeeTotalPrice() != 0) {
                     tmpFeeDtos.add(tmpFeeDto);
                 }
             } catch (Exception e) {
@@ -656,8 +656,6 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
 
     }
-
-
 
 
     private Map getTargetEndDateAndOweMonth(FeeDto feeDto) {
