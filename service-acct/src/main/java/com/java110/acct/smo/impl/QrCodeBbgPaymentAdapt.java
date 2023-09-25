@@ -114,12 +114,23 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         // 对准备加签参数排序
         String decryParams = EncryptDecryptFactory.execute(communityId, queryUrl, params);
 
+        /**
+         * {"amt":"0.01","deal_status":"PROCESSING","jump_url":"","mcht_name":"广西蓉慧科技有限公司","mcht_no":"MCT2023060100029734",
+         * "real_amt":"0.01","return_code":"5019","return_message":"用户正在输入密码，请等待","status":"SUCCESS",
+         * "tran_no":"962023092519710062","txn_date":"20230925",
+         * "txn_no":"P11082023092523543816778858","txn_time":"235438","ware_name":"云星花园-1栋1单元101室-住宅物业费"}
+         */
         JSONObject paramOut = JSONObject.parseObject(decryParams);
+
+        if("PROCESSING".equals(paramOut.getString("deal_status")) && "5019".equals(paramOut.getString("return_code"))){
+            return new ResultVo(ResultVo.CODE_WAIT_PAY, "等待支付完成");
+        }
 
         if (!"SUCCESS".equals(paramOut.getString("status"))
                 || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
             throw new IllegalArgumentException("支付失败" + paramOut.getString("return_message"));
         }
+
 
         if (!"0000".equals(paramOut.getString("return_code"))
                 && !"0001".equals(paramOut.getString("return_code"))
