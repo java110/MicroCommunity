@@ -115,18 +115,19 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         String decryParams = EncryptDecryptFactory.execute(communityId, queryUrl, params);
 
         JSONObject paramOut = JSONObject.parseObject(decryParams);
+
+        if (!"SUCCESS".equals(paramOut.getString("status"))
+                || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
+            throw new IllegalArgumentException("支付失败" + paramOut.getString("return_message"));
+        }
+
         if (!"0000".equals(paramOut.getString("return_code"))
-                || !"SUCCESS".equals(paramOut.getString("status"))
+                && !"0001".equals(paramOut.getString("return_code"))
         ) {
-            return new ResultVo(ResultVo.CODE_ERROR, "支付失败" + paramOut.getString("return_message"));
-
+            throw new IllegalArgumentException("支付失败" + paramOut.getString("return_message"));
         }
 
-        if ("FAIL".equals(paramOut.getString("deal_status"))) {
-            return new ResultVo(ResultVo.CODE_ERROR, "业务失败");
-        }
-
-        if ("SUCCESS".equals(paramOut.getString("deal_status"))) {
+        if ("0000".equals(paramOut.getString("return_code"))) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
             return new ResultVo(ResultVo.CODE_WAIT_PAY, "等待支付完成");
