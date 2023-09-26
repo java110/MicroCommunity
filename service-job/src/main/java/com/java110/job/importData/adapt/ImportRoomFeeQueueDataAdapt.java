@@ -6,15 +6,13 @@ import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.importData.ImportCustomCreateFeeDto;
+import com.java110.dto.importData.ImportFeeDto;
 import com.java110.dto.importData.ImportRoomFee;
 import com.java110.dto.log.AssetImportLogDetailDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFee.PayFeeDetailRefreshFeeMonthDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeMonthInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
@@ -23,6 +21,7 @@ import com.java110.job.importData.IImportDataAdapt;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.importFee.ImportFeeDetailPo;
+import com.java110.po.importFee.ImportFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
@@ -58,6 +57,12 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
 
     @Autowired
     private IPayFeeMonthInnerServiceSMO payFeeMonthInnerServiceSMOImpl;
+
+    @Autowired
+    private IImportFeeDetailInnerServiceSMO importFeeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IImportFeeInnerServiceSMO importFeeInnerServiceSMOImpl;
 
     //    @Autowired
 //    private IPayFeeMonth payFeeMonthImpl;
@@ -273,11 +278,58 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
 
         feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrPos);
 
+        //todo 保存导入记录日志
+        saveImportFee(importRoomFee, payFeePo);
+
         // todo 这里异步的方式计算 月数据 和欠费数据
 
         PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto = new PayFeeDetailRefreshFeeMonthDto();
         payFeeDetailRefreshFeeMonthDto.setCommunityId(importRoomFee.getCommunityId());
         payFeeDetailRefreshFeeMonthDto.setFeeId(payFeePos.get(0).getFeeId());
         payFeeMonthInnerServiceSMOImpl.doGeneratorOrRefreshFeeMonth(payFeeDetailRefreshFeeMonthDto);
+    }
+
+    private void saveImportFee(ImportRoomFee importRoomFee, PayFeePo payFeePo) {
+        ImportFeeDetailPo importFeeDetailPo;
+        List<ImportFeeDetailPo> importFeeDetailPos = new ArrayList<>();
+        importFeeDetailPo = new ImportFeeDetailPo();
+        importFeeDetailPo.setAmount(importRoomFee.getAmount());
+        importFeeDetailPo.setCommunityId(payFeePo.getCommunityId());
+        importFeeDetailPo.setEndTime(importRoomFee.getEndTime());
+        importFeeDetailPo.setFeeId(payFeePo.getFeeId());
+        importFeeDetailPo.setFeeName(importRoomFee.getFeeName());
+        importFeeDetailPo.setFloorNum(importRoomFee.getFloorNum());
+        importFeeDetailPo.setUnitNum(importRoomFee.getUnitNum());
+        importFeeDetailPo.setRoomNum(importRoomFee.getRoomNum());
+        importFeeDetailPo.setRoomId(importRoomFee.getRoomId());
+        importFeeDetailPo.setObjId(importRoomFee.getRoomId());
+        importFeeDetailPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        importFeeDetailPo.setObjName(!"0".equals(importRoomFee.getUnitNum())
+                ? importRoomFee.getFloorNum() + "栋" + importRoomFee.getUnitNum() + "单元" + importRoomFee.getRoomNum() + "室" :
+                importRoomFee.getFloorNum() + "栋" + importRoomFee.getRoomNum() + "室"
+        );
+        importFeeDetailPo.setStartTime(importRoomFee.getStartTime());
+        importFeeDetailPo.setIfdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_IfdId, true));
+        importFeeDetailPo.setState("1000");
+        importFeeDetailPo.setImportFeeId(importRoomFee.getBatchId());
+        importFeeDetailPos.add(importFeeDetailPo);
+
+        ImportFeeDto importFeeDto = new ImportFeeDto();
+        importFeeDto.setCommunityId(payFeePo.getCommunityId());
+        importFeeDto.setImportFeeId(importRoomFee.getBatchId());
+
+        List<ImportFeeDto> importRoomFeess = importFeeInnerServiceSMOImpl.queryImportFees(importFeeDto);
+
+        if (importRoomFeess == null || importRoomFeess.size() < 1) {
+            //保存日志
+            ImportFeePo importFeePo = new ImportFeePo();
+            importFeePo.setCommunityId(importRoomFee.getCommunityId());
+            importFeePo.setFeeTypeCd(importRoomFee.getFeeTypeCd());
+            importFeePo.setImportFeeId(importRoomFee.getBatchId());
+            importFeeInnerServiceSMOImpl.saveImportFee(importFeePo);
+        }
+
+
+        importFeeDetailInnerServiceSMOImpl.saveImportFeeDetails(importFeeDetailPos);
     }
 }
