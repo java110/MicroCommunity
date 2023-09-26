@@ -101,7 +101,7 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
      * @param batchId
      */
     private void doImportRoomCreateFee(ImportRoomFee importRoomFee, String batchId) {
-        if (!ImportCustomCreateFeeDto.TYPE_ROOM.equals(importRoomFee.getObjType())) {
+        if (!FeeDto.PAYER_OBJ_TYPE_ROOM.equals(importRoomFee.getObjType())) {
             return;
         }
         List<ImportRoomFee> rooms = new ArrayList<>();
@@ -150,7 +150,7 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
      * @param batchId
      */
     private void doImportCarCreateFee(ImportRoomFee importRoomFee, String batchId) {
-        if (!ImportCustomCreateFeeDto.TYPE_CAR.equals(importRoomFee.getObjType())) {
+        if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(importRoomFee.getObjType())) {
             return;
         }
         List<ImportRoomFee> cars = new ArrayList<>();
