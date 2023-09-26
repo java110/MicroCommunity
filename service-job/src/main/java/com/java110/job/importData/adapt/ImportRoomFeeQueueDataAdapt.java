@@ -209,7 +209,7 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
         payFeePo.setIncomeObjId(importRoomFee.getStoreId());
         payFeePo.setFeeTypeCd(feeConfigDtos.get(0).getFeeTypeCd());
         payFeePo.setFeeFlag(feeConfigDtos.get(0).getFeeFlag());
-        payFeePo.setAmount("-1");
+        payFeePo.setAmount(importRoomFee.getAmount());
         payFeePo.setBatchId(batchId);
         payFeePo.setEndTime(importRoomFee.getStartTime());
         payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
