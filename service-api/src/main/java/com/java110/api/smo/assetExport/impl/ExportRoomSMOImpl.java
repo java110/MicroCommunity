@@ -305,7 +305,8 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
                 row.createCell(3).setCellValue(tmpFeeConfigDto.getFeeName());
                 row.createCell(4).setCellValue("");
                 row.createCell(5).setCellValue("");
-                row.createCell(6).setCellValue(tmpRoomDto.getStateName());
+                row.createCell(6).setCellValue("");
+                row.createCell(7).setCellValue(tmpRoomDto.getStateName());
                 roomIndex += 1;
             }
         }
