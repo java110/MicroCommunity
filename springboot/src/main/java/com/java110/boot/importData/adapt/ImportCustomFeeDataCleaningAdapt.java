@@ -84,7 +84,7 @@ public class ImportCustomFeeDataCleaningAdapt extends DefaultImportDataAdapt imp
             Assert.isDate(createTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行建账时间格式错误 请填写YYYY-MM-DD 文本格式");
             Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行计费起始时间格式错误 请填写YYYY-MM-DD 文本格式");
             String endTime = "";
-            if(os.length > 6){
+            if(os.length > 6 && os[6] != null){
                 endTime = excelDoubleToDate(os[6].toString());
                 Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行计费结束时间格式错误 请填写YYYY-MM-DD 文本格式");
             }
