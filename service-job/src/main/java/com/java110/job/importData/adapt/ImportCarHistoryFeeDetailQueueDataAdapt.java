@@ -185,7 +185,7 @@ public class ImportCarHistoryFeeDetailQueueDataAdapt extends DefaultImportData i
         PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
         payFeeDetailPo.setCommunityId(importRoomFee.getCommunityId());
         payFeeDetailPo.setReceivedAmount(importRoomFee.getAmount());
-        payFeeDetailPo.setReceivableAmount(importRoomFee.getAmount());
+        payFeeDetailPo.setReceivableAmount(importRoomFee.getReceivableAmount());
         payFeeDetailPo.setCycles(importRoomFee.getCycle());
         payFeeDetailPo.setPrimeRate("1.0");
         payFeeDetailPo.setFeeId(tmpFeeDto.getFeeId());
@@ -204,6 +204,7 @@ public class ImportCarHistoryFeeDetailQueueDataAdapt extends DefaultImportData i
         payFeeDetailPo.setRemark(importRoomFee.getRemark());
         payFeeDetailPo.setCreateTime(importRoomFee.getCreateTime());
         payFeeDetailPo.setState("1400");
+        payFeeDetailPo.setCashierName(importRoomFee.getStaffName());
         payFeeDetailPo.setPayableAmount(importRoomFee.getAmount());
         int saved = feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
 

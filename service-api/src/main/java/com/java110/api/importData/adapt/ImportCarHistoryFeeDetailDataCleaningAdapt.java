@@ -113,7 +113,9 @@ public class ImportCarHistoryFeeDetailDataCleaningAdapt extends DefaultImportDat
             Assert.hasValue(os[3], (osIndex + 1) + "行开始时间不能为空");
             Assert.hasValue(os[4], (osIndex + 1) + "行结束时间不能为空");
             Assert.hasValue(os[5], (osIndex + 1) + "行缴费时间不能为空");
-            Assert.hasValue(os[6], (osIndex + 1) + "行缴费金额不能为空");
+            Assert.hasValue(os[6], (osIndex + 1) + "行应缴金额不能为空");
+            Assert.hasValue(os[7], (osIndex + 1) + "行实缴金额不能为空");
+            Assert.hasValue(os[8], (osIndex + 1) + "行收银员不能为空");
 
 //
 
@@ -132,7 +134,9 @@ public class ImportCarHistoryFeeDetailDataCleaningAdapt extends DefaultImportDat
             importRoomFee.setStartTime(startTime);
             importRoomFee.setEndTime(endTime);
             importRoomFee.setCreateTime(createTime);
-            importRoomFee.setAmount(os[6].toString());
+            importRoomFee.setReceivableAmount(os[6].toString());
+            importRoomFee.setAmount(os[7].toString());
+            importRoomFee.setStaffName(os[8].toString());
             importRoomFee.setRemark(!StringUtil.isNullOrNone(os[7]) ? os[7].toString() : "");
             rooms.add(importRoomFee);
         }

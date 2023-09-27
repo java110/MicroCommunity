@@ -84,6 +84,7 @@ public class ImportRoomHistoryFeeDetailDataCleaningAdapt extends DefaultImportDa
             importRoomFee.setStoreId(paramIn.getString("storeId"));
             importRoomFee.setObjType(paramIn.getString("objType"));
             importRoomFee.setCommunityId(paramIn.getString("communityId"));
+
         }
         return rooms;
     }
@@ -112,40 +113,41 @@ public class ImportRoomHistoryFeeDetailDataCleaningAdapt extends DefaultImportDa
             if (StringUtil.isNullOrNone(os[4])) {
                 continue;
             }
-            Assert.hasValue(os[0], (osIndex + 1) + "行楼栋编号不能为空");
-            Assert.hasValue(os[1], (osIndex + 1) + "行单元编号不能为空");
-            Assert.hasValue(os[2], (osIndex + 1) + "行房屋编号不能为空");
-            Assert.hasValue(os[3], (osIndex + 1) + "行收费项目不能为空");
-            Assert.hasValue(os[4], (osIndex + 1) + "行缴费周期不能为空");
-            Assert.hasValue(os[5], (osIndex + 1) + "行开始时间不能为空");
-            Assert.hasValue(os[6], (osIndex + 1) + "行结束时间不能为空");
-            Assert.hasValue(os[7], (osIndex + 1) + "行缴费时间不能为空");
-            Assert.hasValue(os[8], (osIndex + 1) + "行缴费金额不能为空");
+            Assert.hasValue(os[0], (osIndex + 1) + "行房屋编号不能为空");
+            Assert.hasValue(os[1], (osIndex + 1) + "行收费项目不能为空");
+            Assert.hasValue(os[2], (osIndex + 1) + "行缴费周期不能为空");
+            Assert.hasValue(os[3], (osIndex + 1) + "行开始时间不能为空");
+            Assert.hasValue(os[4], (osIndex + 1) + "行结束时间不能为空");
+            Assert.hasValue(os[5], (osIndex + 1) + "行缴费时间不能为空");
+            Assert.hasValue(os[6], (osIndex + 1) + "行应缴金额不能为空");
+            Assert.hasValue(os[7], (osIndex + 1) + "行实缴金额不能为空");
+            Assert.hasValue(os[8], (osIndex + 1) + "行收银员不能为空");
 
 //
 
-            String startTime = excelDoubleToDate(os[5].toString());
-            String endTime = excelDoubleToDate(os[6].toString());
-            String createTime = excelDoubleToDate(os[7].toString());
+            String startTime = excelDoubleToDate(os[3].toString());
+            String endTime = excelDoubleToDate(os[4].toString());
+            String createTime = excelDoubleToDate(os[5].toString());
             Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD 文本格式");
             Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
             Assert.isDate(createTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD 文本格式");
 
-
+            String[] roomNames = os[0].toString().split("-",3);
             importRoomFee = new ImportRoomFee();
-            importRoomFee.setFloorNum(os[0].toString());
-            importRoomFee.setUnitNum(os[1].toString());
-            importRoomFee.setRoomNum(os[2].toString());
-            importRoomFee.setFeeName(os[3].toString());
-            importRoomFee.setCycle(os[4].toString());
+            importRoomFee.setFloorNum(roomNames[0]);
+            importRoomFee.setUnitNum(roomNames[1]);
+            importRoomFee.setRoomNum(roomNames[2]);
+            importRoomFee.setFeeName(os[1].toString());
+            importRoomFee.setCycle(os[2].toString());
             importRoomFee.setStartTime(startTime);
             importRoomFee.setEndTime(endTime);
             importRoomFee.setCreateTime(createTime);
-            importRoomFee.setAmount(os[8].toString());
+            importRoomFee.setReceivableAmount(os[6].toString());
+            importRoomFee.setAmount(os[7].toString());
+            importRoomFee.setStaffName(os[8].toString());
             importRoomFee.setRemark(!StringUtil.isNullOrNone(os[9]) ? os[9].toString() : "");
             rooms.add(importRoomFee);
         }
     }
-
 
 }

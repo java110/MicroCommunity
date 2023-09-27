@@ -56,6 +56,17 @@ public class ImportRoomFee {
 
     private String feeTypeCd;
 
+    private String receivableAmount;
+
+    private String staffName;
+
+    public String getReceivableAmount() {
+        return receivableAmount;
+    }
+
+    public void setReceivableAmount(String receivableAmount) {
+        this.receivableAmount = receivableAmount;
+    }
 
     public String getFloorNum() {
         return floorNum;
@@ -271,6 +282,14 @@ public class ImportRoomFee {
 
     public String getPayerObjName() {
         return payerObjName;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
     }
 
     public void setPayerObjName(String payerObjName) {
