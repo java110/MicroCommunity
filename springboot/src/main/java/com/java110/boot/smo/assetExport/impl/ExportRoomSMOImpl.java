@@ -173,8 +173,9 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         Row row = sheet.createRow(0);
         Cell cell0 = row.createCell(0);
         cell0.setCellValue("费用名称: 请填写系统中费用类型，如物业费，押金等 ；\n计费起始时间: " +
-                "计费起始时间时间，格式为YYYY-MM-DD；\n建账时间: 建账时间，格式为YYYY-MM-DD； \n 类型：表明是合同 房屋 还是车辆 房屋 1001 车辆 2002 合同 3003" +
-                "\n注意：所有单元格式为文本");
+                "计费起始时间，格式为YYYY-MM-DD；\n计费结束时间，格式为YYYY-MM-DD；\n" +
+                "建账时间: 建账时间，格式为YYYY-MM-DD； \n 类型：表明是合同 房屋 还是车辆 房屋 1001 车辆 2002 合同 3003" +
+                "\n注意：所有单元格式为文本，计费结束时间只有一次性费用和间接性费用时需要填写");
         CellStyle cs = workbook.createCellStyle();
         cs.setWrapText(true);  //关键
         cell0.setCellStyle(cs);
@@ -186,6 +187,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         row.createCell(3).setCellValue("收费项目");
         row.createCell(4).setCellValue("建账时间");
         row.createCell(5).setCellValue("计费起始时间");
+        row.createCell(6).setCellValue("计费结束时间");
 
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setCommunityId(paramIn.getString("communityId"));
@@ -258,8 +260,9 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         Row row = sheet.createRow(0);
         Cell cell0 = row.createCell(0);
         cell0.setCellValue("费用名称: 请填写系统中费用类型，如物业费，押金等 ；\n计费起始时间: " +
-                "计费起始时间时间，格式为YYYY-MM-DD；\n建账时间: 建账时间，格式为YYYY-MM-DD； \n 类型：表明是合同 房屋 还是车辆 房屋 1001 车辆 2002 合同 3003" +
-                "\n注意：所有单元格式为文本");
+                "计费起始时间，格式为YYYY-MM-DD；\n计费结束时间，格式为YYYY-MM-DD；\n" +
+                "建账时间: 建账时间，格式为YYYY-MM-DD； \n 类型：表明是合同 房屋 还是车辆 房屋 1001 车辆 2002 合同 3003" +
+                "\n注意：所有单元格式为文本，计费结束时间只有一次性费用和间接性费用时需要填写");
         CellStyle cs = workbook.createCellStyle();
         cs.setWrapText(true);  //关键
         cell0.setCellStyle(cs);
@@ -271,7 +274,8 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         row.createCell(3).setCellValue("收费项目");
         row.createCell(4).setCellValue("建账时间");
         row.createCell(5).setCellValue("计费起始时间");
-        row.createCell(6).setCellValue("房屋状态");
+        row.createCell(6).setCellValue("计费结束时间");
+        row.createCell(7).setCellValue("房屋状态");
 
 
         RoomDto roomDto = new RoomDto();
@@ -301,7 +305,8 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
                 row.createCell(3).setCellValue(tmpFeeConfigDto.getFeeName());
                 row.createCell(4).setCellValue("");
                 row.createCell(5).setCellValue("");
-                row.createCell(6).setCellValue(tmpRoomDto.getStateName());
+                row.createCell(6).setCellValue("");
+                row.createCell(7).setCellValue(tmpRoomDto.getStateName());
                 roomIndex += 1;
             }
         }
@@ -444,7 +449,7 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         Sheet sheet = workbook.createSheet("房屋费用信息");
         Row row = sheet.createRow(0);
         Cell cell0 = row.createCell(0);
-        cell0.setCellValue("费用名称: 请填写系统中费用类型，如物业费，押金等 ；\n开始时间: " +
+        cell0.setCellValue("房屋编号: 楼栋-单元-房号 ；\n费用名称: 请填写系统中费用类型，如物业费，押金等 ；\n开始时间: " +
                 "收费开始时间，格式为YYYY-MM-DD；\n结束时间: 费用结束时间，格式为YYYY-MM-DD； \n收费金额: 本次收取金额 单位元； " +
                 "\n注意：所有单元格式为文本");
         CellStyle cs = workbook.createCellStyle();
@@ -452,13 +457,11 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
         cell0.setCellStyle(cs);
         row.setHeight((short) (200 * 10));
         row = sheet.createRow(1);
-        row.createCell(0).setCellValue("楼栋编号");
-        row.createCell(1).setCellValue("单元编号");
-        row.createCell(2).setCellValue("房屋编码");
-        row.createCell(3).setCellValue("费用名称");
-        row.createCell(4).setCellValue("开始时间");
-        row.createCell(5).setCellValue("结束时间");
-        row.createCell(6).setCellValue("收费金额");
+        row.createCell(0).setCellValue("房屋编码");
+        row.createCell(1).setCellValue("费用名称");
+        row.createCell(2).setCellValue("开始时间");
+        row.createCell(3).setCellValue("结束时间");
+        row.createCell(4).setCellValue("收费金额");
 
         //查询楼栋信息
         JSONArray rooms = this.getExistsRoom(pd, componentValidateResult);
@@ -467,15 +470,17 @@ public class ExportRoomSMOImpl extends DefaultAbstractComponentSMO implements IE
             sheet.addMergedRegion(region);
             return;
         }
+        String roomName = "";
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 2);
-            row.createCell(0).setCellValue(rooms.getJSONObject(roomIndex).getString("floorNum"));
-            row.createCell(1).setCellValue(rooms.getJSONObject(roomIndex).getString("unitNum"));
-            row.createCell(2).setCellValue(rooms.getJSONObject(roomIndex).getString("roomNum"));
+            roomName = rooms.getJSONObject(roomIndex).getString("floorNum")
+                    +"-"+rooms.getJSONObject(roomIndex).getString("unitNum")
+                    +"-"+rooms.getJSONObject(roomIndex).getString("roomNum");
+            row.createCell(0).setCellValue(roomName);
+            row.createCell(1).setCellValue("");
+            row.createCell(2).setCellValue("");
             row.createCell(3).setCellValue("");
             row.createCell(4).setCellValue("");
-            row.createCell(5).setCellValue("");
-            row.createCell(6).setCellValue("");
         }
 
         CellRangeAddress region = new CellRangeAddress(0, 0, 0, 6);

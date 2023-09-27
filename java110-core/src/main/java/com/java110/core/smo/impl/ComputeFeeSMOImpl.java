@@ -35,10 +35,7 @@ import com.java110.po.fee.FeeReceiptDetailPo;
 import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -2253,8 +2250,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             }
             preCycleAmount = curAmount;
         }
-        feeDto.setAmountOwed(addTotalAmount.doubleValue() + "");
-        feeDto.setFeeTotalPrice(addTotalAmount.doubleValue());
+
+        Double amountOwed = MoneyUtil.computePriceScale(addTotalAmount.doubleValue(), feeDto.getScale(), Integer.parseInt(feeDto.getDecimalPlace()));
+        feeDto.setAmountOwed(amountOwed + "");
+        feeDto.setFeeTotalPrice(amountOwed);
     }
 }
 

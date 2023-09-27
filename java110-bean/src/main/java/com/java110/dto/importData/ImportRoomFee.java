@@ -5,6 +5,8 @@ package com.java110.dto.importData;
  */
 public class ImportRoomFee {
 
+    private String payerObjName;
+
     private String floorNum;
 
     private String unitNum;
@@ -51,6 +53,8 @@ public class ImportRoomFee {
     private String detailId;
 
     private String configId;
+
+    private String feeTypeCd;
 
 
     public String getFloorNum() {
@@ -255,5 +259,21 @@ public class ImportRoomFee {
 
     public void setConfigId(String configId) {
         this.configId = configId;
+    }
+
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
+    }
+
+    public String getPayerObjName() {
+        return payerObjName;
+    }
+
+    public void setPayerObjName(String payerObjName) {
+        this.payerObjName = payerObjName;
     }
 }

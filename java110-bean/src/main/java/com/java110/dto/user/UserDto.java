@@ -94,6 +94,9 @@ public class UserDto extends PageDto implements Serializable {
 
     private List<String> urls;
 
+
+
+
     public String getUserId() {
         return userId;
     }
