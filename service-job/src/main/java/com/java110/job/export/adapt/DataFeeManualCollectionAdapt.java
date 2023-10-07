@@ -62,26 +62,13 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
 
         JSONObject reqJson = exportDataDto.getReqJson();
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
+        Assert.hasKeyAndValue(reqJson, "configIds", "未包含小区");
+        Assert.hasKeyAndValue(reqJson, "roomIds", "未包含小区");
 
-        if (reqJson.containsKey("configIds")) {
-            throw new IllegalArgumentException("未包含费用项");
-        }
+        String configIds = reqJson.getString("configIds");
 
-        JSONArray configIds = reqJson.getJSONArray("configIds");
+        String roomIds = reqJson.getString("roomIds");
 
-        if (configIds == null || configIds.isEmpty()) {
-            throw new IllegalArgumentException("未包含费用项");
-        }
-
-        if (reqJson.containsKey("roomIds")) {
-            throw new IllegalArgumentException("未包含房屋");
-        }
-
-        JSONArray roomIds = reqJson.getJSONArray("roomIds");
-
-        if (roomIds == null || roomIds.isEmpty()) {
-            throw new IllegalArgumentException("未包含房屋");
-        }
 
         SXSSFWorkbook workbook = null;  //工作簿
         workbook = new SXSSFWorkbook();
@@ -106,7 +93,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         double totalPageHeight = 0;
 
         RoomDto roomDto = new RoomDto();
-        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        roomDto.setRoomIds(roomIds.split(","));
         roomDto.setCommunityId(reqJson.getString("communityId"));
         List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
 
@@ -374,14 +361,14 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         return info;
     }
 
-    private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto,JSONArray configIds) {
+    private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto,String configIds) {
         FeeDto tmpFeeDto = null;
         tmpFeeDto = new FeeDto();
         tmpFeeDto.setArrearsEndTime(DateUtil.getCurrentDate());
         tmpFeeDto.setState(FeeDto.STATE_DOING);
         tmpFeeDto.setPayerObjId(tmpRoomDto.getRoomId());
         tmpFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-        tmpFeeDto.setConfigIds(configIds.toArray(new String[configIds.size()]));
+        tmpFeeDto.setConfigIds(configIds.split(","));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.querySimpleFees(tmpFeeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
