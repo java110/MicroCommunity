@@ -89,6 +89,7 @@ public class QueryPreMeterWaterImpl implements IQueryPreMeterWater {
         MeterWaterDto meterWaterDto = null;
         List<ImportExportMeterWaterDto> importExportMeterWaterDtos = new ArrayList<>();
         ImportExportMeterWaterDto importExportMeterWaterDto = null;
+
         for (RoomDto tmpRoomDto : roomDtos) {
             meterWaterDto = new MeterWaterDto();
             meterWaterDto.setMeterType(meterType);
