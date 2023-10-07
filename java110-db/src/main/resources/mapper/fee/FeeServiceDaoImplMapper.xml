@@ -220,6 +220,12 @@
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
         </if>
+        <if test="configIds != null and configIds.length > 0">
+            and t.config_id in
+            <foreach collection="configIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="payerObjType !=null and payerObjType != ''">
             and t.payer_obj_type = #{payerObjType}
         </if>
