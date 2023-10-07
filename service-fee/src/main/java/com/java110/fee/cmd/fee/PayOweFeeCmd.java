@@ -183,24 +183,14 @@ public class PayOweFeeCmd extends Cmd {
 
 
         //根据明细ID 查询收据信息
-        List<String> detailIds = new ArrayList<>();
+        JSONArray details = new JSONArray();
 
         for (FeeReceiptDetailPo feeReceiptDetailPo : feeReceiptDetailPos) {
-            detailIds.add(feeReceiptDetailPo.getDetailId());
+            details.add(feeReceiptDetailPo.getDetailId());
         }
-
-        FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
-        feeReceiptDetailDto.setDetailIds(detailIds.toArray(new String[detailIds.size()]));
-        feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
-        try {
-            Thread.currentThread().sleep(2000);
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        }
-        List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
         JSONObject data = new JSONObject();
-        data.put("receipts", feeReceiptDetailDtos);
+        data.put("details",details);
 
         dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(data));
     }
