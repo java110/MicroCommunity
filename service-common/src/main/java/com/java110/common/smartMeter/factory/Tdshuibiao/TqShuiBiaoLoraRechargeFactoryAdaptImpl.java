@@ -54,7 +54,7 @@ public class TqShuiBiaoLoraRechargeFactoryAdaptImpl implements ISmartMeterFactor
     private ISmartMeterCoreRead smartMeterCoreReadImpl;
 
     @Override
-    public ResultVo requestRecharge(MeterMachineDto meterMachineDto, double degree,double money) {
+    public ResultVo requestRecharge(MeterMachineDto meterMachineDto, double degree, double money) {
         List<Map<String, Object>> req = new ArrayList<>();
 
 
@@ -80,7 +80,6 @@ public class TqShuiBiaoLoraRechargeFactoryAdaptImpl implements ISmartMeterFactor
         item.put("address", meterMachineDto.getAddress());
         item.put("params", params);
         req.add(item);
-
 
 
         String request_content = JSON.toJSONString(req);
@@ -290,6 +289,7 @@ public class TqShuiBiaoLoraRechargeFactoryAdaptImpl implements ISmartMeterFactor
                 JSONObject contentObject = contentArray.getJSONObject(i);
                 doBusiness(contentObject, batchId);
             } catch (Exception e) {
+                System.out.println("异常数据：" + response_content);
                 e.printStackTrace();
             }
 
