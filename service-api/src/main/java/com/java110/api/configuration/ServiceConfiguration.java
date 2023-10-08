@@ -109,6 +109,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/login.pcUserLogin,");// 放开接口登录
         exclusions.append("/app/login.accessTokenLogin,");// 放开接口登录
         exclusions.append("/app/login.getAccessToken,");// 放开接口登录
+        exclusions.append("/app/user.ownerUserLoginByOpenId,");// 放开接口登录
         // todo 静态二维码支付 相关接口放开
         exclusions.append("/app/payFeeQrcode.getQrcodeConfig,");// 放开接口登录
         exclusions.append("/app/user.ownerSendSms,");// 向业主发送验证码
