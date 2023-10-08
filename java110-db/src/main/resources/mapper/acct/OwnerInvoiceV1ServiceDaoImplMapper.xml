@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ownerInvoiceV1ServiceDaoImpl">
+
+
+
+
+
+    <!-- 保存业主发票信息 add by wuxw 2018-07-03 -->
+    <insert id="saveOwnerInvoiceInfo" parameterType="Map">
+        insert into owner_invoice(
+oi_id,invoice_name,owner_name,invoice_type,invoice_address,remark,owner_id,community_id,invoice_num
+) values (
+#{oiId},#{invoiceName},#{ownerName},#{invoiceType},#{invoiceAddress},#{remark},#{ownerId},#{communityId},#{invoiceNum}
+)
+    </insert>
+
+
+
+    <!-- 查询业主发票信息 add by wuxw 2018-07-03 -->
+    <select id="getOwnerInvoiceInfo" parameterType="Map" resultType="Map">
+        select  t.oi_id,t.oi_id oiId,t.invoice_name,t.invoice_name invoiceName,t.owner_name,t.owner_name ownerName,t.invoice_type,t.invoice_type invoiceType,t.invoice_address,t.invoice_address invoiceAddress,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.community_id,t.community_id communityId,t.invoice_num,t.invoice_num invoiceNum 
+from owner_invoice t 
+where 1 =1 
+<if test="oiId !=null and oiId != ''">
+   and t.oi_id= #{oiId}
+</if> 
+<if test="invoiceName !=null and invoiceName != ''">
+   and t.invoice_name= #{invoiceName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="invoiceType !=null and invoiceType != ''">
+   and t.invoice_type= #{invoiceType}
+</if> 
+<if test="invoiceAddress !=null and invoiceAddress != ''">
+   and t.invoice_address= #{invoiceAddress}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="invoiceNum !=null and invoiceNum != ''">
+   and t.invoice_num= #{invoiceNum}
+</if> 
+order by t.create_time desc
+<if test="page != -1 and page != null ">
+   limit #{page}, #{row}
+</if> 
+
+    </select>
+
+
+
+
+    <!-- 修改业主发票信息 add by wuxw 2018-07-03 -->
+    <update id="updateOwnerInvoiceInfo" parameterType="Map">
+        update  owner_invoice t set t.status_cd = #{statusCd}
+<if test="newBId != null and newBId != ''">
+,t.b_id = #{newBId}
+</if> 
+<if test="invoiceName !=null and invoiceName != ''">
+, t.invoice_name= #{invoiceName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+, t.owner_name= #{ownerName}
+</if> 
+<if test="invoiceType !=null and invoiceType != ''">
+, t.invoice_type= #{invoiceType}
+</if> 
+<if test="invoiceAddress !=null and invoiceAddress != ''">
+, t.invoice_address= #{invoiceAddress}
+</if> 
+<if test="remark !=null and remark != ''">
+, t.remark= #{remark}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+, t.owner_id= #{ownerId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+, t.community_id= #{communityId}
+</if> 
+<if test="invoiceNum !=null and invoiceNum != ''">
+, t.invoice_num= #{invoiceNum}
+</if> 
+ where 1=1 <if test="oiId !=null and oiId != ''">
+and t.oi_id= #{oiId}
+</if> 
+
+    </update>
+
+    <!-- 查询业主发票数量 add by wuxw 2018-07-03 -->
+     <select id="queryOwnerInvoicesCount" parameterType="Map" resultType="Map">
+        select  count(1) count 
+from owner_invoice t 
+where 1 =1 
+<if test="oiId !=null and oiId != ''">
+   and t.oi_id= #{oiId}
+</if> 
+<if test="invoiceName !=null and invoiceName != ''">
+   and t.invoice_name= #{invoiceName}
+</if> 
+<if test="ownerName !=null and ownerName != ''">
+   and t.owner_name= #{ownerName}
+</if> 
+<if test="invoiceType !=null and invoiceType != ''">
+   and t.invoice_type= #{invoiceType}
+</if> 
+<if test="invoiceAddress !=null and invoiceAddress != ''">
+   and t.invoice_address= #{invoiceAddress}
+</if> 
+<if test="remark !=null and remark != ''">
+   and t.remark= #{remark}
+</if> 
+<if test="statusCd !=null and statusCd != ''">
+   and t.status_cd= #{statusCd}
+</if> 
+<if test="ownerId !=null and ownerId != ''">
+   and t.owner_id= #{ownerId}
+</if> 
+<if test="communityId !=null and communityId != ''">
+   and t.community_id= #{communityId}
+</if> 
+<if test="invoiceNum !=null and invoiceNum != ''">
+   and t.invoice_num= #{invoiceNum}
+</if> 
+
+
+     </select>
+
+</mapper>
