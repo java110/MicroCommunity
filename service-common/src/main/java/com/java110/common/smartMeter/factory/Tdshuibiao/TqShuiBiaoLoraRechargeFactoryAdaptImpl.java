@@ -317,7 +317,7 @@ public class TqShuiBiaoLoraRechargeFactoryAdaptImpl implements ISmartMeterFactor
          * [{"opr_id":"10d9cf7ac3ea4ffd9ec2216e07a17d6e","resolve_time":"2020-06-05 15:22:48","status":"SUCCESS",
          * "data":[{"type":42,"value":["0.0","0.0","0.0"],"dsp":"总用量：0.0 m³ 剩余量：0.0 m³ 总购量：0.0 m³ 阀门状态：Off"}]}]
          */
-        double degree = contentObject.getJSONArray("data").getJSONObject(0).getJSONArray("value").getDouble(1);
+        double degree = contentObject.getJSONArray("data").getJSONObject(0).getJSONArray("value").getDouble(0);
 
         smartMeterCoreReadImpl.saveMeterAndCreateFee(meterMachineDetailDtos.get(0), degree + "", batchId);
     }
