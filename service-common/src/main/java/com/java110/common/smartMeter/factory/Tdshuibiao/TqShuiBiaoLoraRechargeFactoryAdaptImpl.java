@@ -314,12 +314,18 @@ public class TqShuiBiaoLoraRechargeFactoryAdaptImpl implements ISmartMeterFactor
         }
 
         /**
-         * [{"opr_id":"10d9cf7ac3ea4ffd9ec2216e07a17d6e","resolve_time":"2020-06-05 15:22:48","status":"SUCCESS",
-         * "data":[{"type":42,"value":["0.0","0.0","0.0"],"dsp":"总用量：0.0 m³ 剩余量：0.0 m³ 总购量：0.0 m³ 阀门状态：Off"}]}]
+         * [{"opr_id":"112023100894930005","resolve_time":"2023-10-08 23:45:52","status":"SUCCESS","data":[{"type":42,"value":["0.66|0.11|677.30"],
+         * "dsp":"总用量：0.66 m³  本月用量：0.11 m³ 阀门状态：开阀 表类型：远程预付费 购买次数：6 累计消费金额：2.70 元 剩余金额:677.30 元 电池电压：3.8V 信号强度：-94"}]}]
          */
-        double degree = contentObject.getJSONArray("data").getJSONObject(0).getJSONArray("value").getDouble(0);
+        //double degree = contentObject.getJSONArray("data").getJSONObject(0).getJSONArray("value").getDouble(0);
+        String value = contentObject.getJSONArray("data").getJSONObject(0).getJSONArray("value").getString(0);
+        String[] values = value.split("\\|", 3);
+        String degree = "0.0";
+        if (values.length == 3) {
+            degree = values[2];
+        }
 
-        smartMeterCoreReadImpl.saveMeterAndCreateFee(meterMachineDetailDtos.get(0), degree + "", batchId);
+        smartMeterCoreReadImpl.saveMeterAndCreateFee(meterMachineDetailDtos.get(0), degree, batchId);
     }
 
 
