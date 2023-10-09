@@ -62,8 +62,8 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
 
         JSONObject reqJson = exportDataDto.getReqJson();
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
-        Assert.hasKeyAndValue(reqJson, "configIds", "未包含小区");
-        Assert.hasKeyAndValue(reqJson, "roomIds", "未包含小区");
+        Assert.hasKeyAndValue(reqJson, "configIds", "未包含费用");
+        Assert.hasKeyAndValue(reqJson, "roomIds", "未包含房屋");
 
         String configIds = reqJson.getString("configIds");
 
@@ -102,7 +102,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         }
 
         for (RoomDto roomDto1 : roomDtos) {
-            getTmpRoomDtos(roomDto1,configIds);
+            getTmpRoomDtos(roomDto1, configIds, reqJson);
         }
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
             //todo 有可能房屋下没有欠费
@@ -119,7 +119,8 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
     }
 
     private Map<String, Object> generatorRoomOweFee(Sheet sheet, SXSSFWorkbook workbook, RoomDto roomDto, int line,
-                                                    double totalPageHeight, Drawing patriarch, FeePrintSpecDto feePrintSpecDto) {
+                                                    double totalPageHeight, Drawing patriarch, FeePrintSpecDto feePrintSpecDto
+    ) {
         List<FeeDto> fees = roomDto.getFees();
         String[] feePrintRemarks = null;
         if (feePrintSpecDto != null) {
@@ -361,7 +362,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         return info;
     }
 
-    private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto,String configIds) {
+    private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto, String configIds, JSONObject reqJson) {
         FeeDto tmpFeeDto = null;
         tmpFeeDto = new FeeDto();
         tmpFeeDto.setArrearsEndTime(DateUtil.getCurrentDate());
@@ -381,6 +382,10 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
             computeFeeSMOImpl.computeEveryOweFee(tempFeeDto, tmpRoomDto);//计算欠费金额
             //如果金额为0 就排除
             //if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
+            // todo  校验 时间范围
+            if (!hasInTime(tempFeeDto, reqJson)) {
+                continue;
+            }
             if (tempFeeDto.getFeePrice() != 0) {
                 tmpFeeDtos.add(tempFeeDto);
             }
@@ -391,5 +396,29 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         }
         tmpRoomDto.setFees(tmpFeeDtos);
         return tmpRoomDto;
+    }
+
+    private boolean hasInTime(FeeDto tempFeeDto, JSONObject reqJson) {
+        if (!reqJson.containsKey("startTime") || !reqJson.containsKey("endTime")) {
+            return true;
+        }
+
+        String startTime = reqJson.getString("startTime");
+        String endTime = reqJson.getString("endTime");
+
+        if (StringUtil.isEmpty(startTime) || StringUtil.isEmpty(endTime)) {
+            return true;
+        }
+        if (tempFeeDto.getDeadlineTime() == null) {
+            return true;
+        }
+
+        if (tempFeeDto.getEndTime().before(DateUtil.getDateFromStringB(startTime))
+                && tempFeeDto.getDeadlineTime().after(DateUtil.getDateFromStringB(endTime))
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

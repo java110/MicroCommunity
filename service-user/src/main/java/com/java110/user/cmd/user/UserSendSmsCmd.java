@@ -55,7 +55,7 @@ public class UserSendSmsCmd extends Cmd {
         String smsCode = CommonCache.getValue(reqJson.getString("tel") + SendSmsFactory.VALIDATE_CODE);
 
         if (!StringUtil.isEmpty(smsCode) && smsCode.contains("-")) {
-            long oldTime = Long.parseLong(smsCode.substring(smsCode.indexOf("-"), smsCode.length()));
+            long oldTime = Long.parseLong(smsCode.substring(smsCode.indexOf("-")+1, smsCode.length()));
             long nowTime = new Date().getTime();
             if (nowTime - oldTime < 1000 * 60 * 2) {
                 throw new IllegalArgumentException("请不要重复发送验证码");

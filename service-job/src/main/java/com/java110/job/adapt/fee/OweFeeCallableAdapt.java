@@ -131,7 +131,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
 
             }
 
-            if(contents.size()< 1){
+            if (contents.size() < 1) {
                 continue;
             }
 
@@ -179,6 +179,11 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
         OweFeeCallablePo oweFeeCallablePo = null;
 
         for (ReportOweFeeDto reportOweFeeDto : feeDtos) {
+
+            // todo  校验 时间范围
+            if (!hasInTime(reportOweFeeDto, data)) {
+                continue;
+            }
             oweFeeCallablePo = new OweFeeCallablePo();
 
             oweFeeCallablePo.setAmountdOwed(reportOweFeeDto.getAmountOwed());
@@ -257,6 +262,33 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
 
         return reportOweFeeDtos;
 
+    }
+
+    private boolean hasInTime(ReportOweFeeDto tempFeeDto, JSONObject reqJson) {
+        if (!reqJson.containsKey("startTime") || !reqJson.containsKey("endTime")) {
+            return true;
+        }
+
+        String startTime = reqJson.getString("startTime");
+        String endTime = reqJson.getString("endTime");
+
+        if (StringUtil.isEmpty(startTime) || StringUtil.isEmpty(endTime)) {
+            return true;
+        }
+        if (StringUtil.isEmpty(tempFeeDto.getDeadlineTime())) {
+            return true;
+        }
+        if (StringUtil.isEmpty(tempFeeDto.getEndTime())) {
+            return true;
+        }
+
+        if (DateUtil.getDateFromStringB(tempFeeDto.getEndTime()).before(DateUtil.getDateFromStringB(startTime))
+                && DateUtil.getDateFromStringB(tempFeeDto.getDeadlineTime()).after(DateUtil.getDateFromStringB(endTime))
+        ) {
+            return true;
+        }
+
+        return false;
     }
 
 
