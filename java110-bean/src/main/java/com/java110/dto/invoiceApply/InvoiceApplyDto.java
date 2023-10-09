@@ -1,6 +1,8 @@
 package com.java110.dto.invoiceApply;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.ownerInvoice.OwnerInvoiceDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,19 +14,19 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class InvoiceApplyDto extends PageDto implements Serializable {
+public class InvoiceApplyDto extends OwnerInvoiceDto implements Serializable {
 
     private String applyId;
-private String oiId;
-private String createUserId;
-private String ownerName;
-private String invoiceType;
-private String applyTel;
-private String invoiceAmount;
-private String createUserName;
-private String remark;
-private String state;
-private String communityId;
+    private String oiId;
+    private String createUserId;
+    private String ownerName;
+    private String invoiceType;
+    private String applyTel;
+    private String invoiceAmount;
+    private String createUserName;
+    private String remark;
+    private String state;
+    private String communityId;
 
 
     private Date createTime;
@@ -35,67 +37,88 @@ private String communityId;
     public String getApplyId() {
         return applyId;
     }
-public void setApplyId(String applyId) {
+
+    public void setApplyId(String applyId) {
         this.applyId = applyId;
     }
-public String getOiId() {
+
+    public String getOiId() {
         return oiId;
     }
-public void setOiId(String oiId) {
+
+    public void setOiId(String oiId) {
         this.oiId = oiId;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getInvoiceType() {
+
+    public String getInvoiceType() {
         return invoiceType;
     }
-public void setInvoiceType(String invoiceType) {
+
+    public void setInvoiceType(String invoiceType) {
         this.invoiceType = invoiceType;
     }
-public String getApplyTel() {
+
+    public String getApplyTel() {
         return applyTel;
     }
-public void setApplyTel(String applyTel) {
+
+    public void setApplyTel(String applyTel) {
         this.applyTel = applyTel;
     }
-public String getInvoiceAmount() {
+
+    public String getInvoiceAmount() {
         return invoiceAmount;
     }
-public void setInvoiceAmount(String invoiceAmount) {
+
+    public void setInvoiceAmount(String invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 

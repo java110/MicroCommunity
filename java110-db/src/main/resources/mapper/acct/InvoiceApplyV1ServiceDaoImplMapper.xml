@@ -21,8 +21,9 @@
         createUserId,t.owner_name,t.owner_name ownerName,t.invoice_type,t.invoice_type
         invoiceType,t.apply_tel,t.apply_tel applyTel,t.invoice_amount,t.invoice_amount
         invoiceAmount,t.create_user_name,t.create_user_name createUserName,t.remark,t.status_cd,t.status_cd
-        statusCd,t.state,t.community_id,t.community_id communityId
+        statusCd,t.state,t.community_id,t.community_id communityId,oi.invoice_name invoiceName,oi.invoice_num invoiceNum,oi.invoice_address invoiceAddress
         from invoice_apply t
+        left join owner_invoice oi on t.oi_id = oi.oi_id
         where 1 =1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
