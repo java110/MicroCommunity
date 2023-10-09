@@ -54,7 +54,6 @@ public class SaveOwnerInvoiceCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "oiId", "请求报文中未包含oiId");
         Assert.hasKeyAndValue(reqJson, "ownerId", "请求报文中未包含ownerId");
         Assert.hasKeyAndValue(reqJson, "ownerName", "请求报文中未包含ownerName");
         Assert.hasKeyAndValue(reqJson, "invoiceType", "请求报文中未包含invoiceType");
