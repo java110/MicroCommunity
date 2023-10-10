@@ -113,7 +113,7 @@ public class OwnerUserLoginCmd extends Cmd {
             userDtos = ifOwnerLoginByPhone(reqJson, context);
         }
         if (userDtos == null || userDtos.size() < 1) {
-            throw new CmdException("业主不存在，请先注册");
+            throw new CmdException("用户不存在，请先注册");
         }
 
         // todo  2.0 校验 业主用户绑定表是否存在记录
@@ -127,12 +127,24 @@ public class OwnerUserLoginCmd extends Cmd {
         }
 
         // todo 3.0 查询业主是否存在
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setMemberId(ownerAppUserDtos.get(0).getMemberId());
-        ownerDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
-        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+        OwnerDto ownerDto = null;
+        if (ownerAppUserDtos.get(0).getMemberId().startsWith("-1")){
+            //todo 这里考虑游客的情况
+            ownerDto = new OwnerDto();
+            ownerDto.setOwnerId(ownerAppUserDtos.get(0).getMemberId());
+            ownerDto.setMemberId(ownerAppUserDtos.get(0).getMemberId());
+            ownerDto.setName(ownerAppUserDtos.get(0).getAppUserName());
+            ownerDto.setLink(ownerAppUserDtos.get(0).getLink());
+            ownerDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
+        }else {
+            ownerDto = new OwnerDto();
+            ownerDto.setMemberId(ownerAppUserDtos.get(0).getMemberId());
+            ownerDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
+            List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
+            Assert.listOnlyOne(ownerDtos, "业主不存在");
+            ownerDto = ownerDtos.get(0);
+        }
 
-        Assert.listOnlyOne(ownerDtos, "业主不存在");
 
         // todo 4.0 查询小区是否存在
         CommunityDto communityDto = new CommunityDto();
@@ -149,13 +161,13 @@ public class OwnerUserLoginCmd extends Cmd {
         String token = generatorLoginToken(tmpUserDto);
 
         LoginOwnerResDto loginOwnerResDto = new LoginOwnerResDto();
-        loginOwnerResDto.setOwnerId(ownerDtos.get(0).getOwnerId());
-        loginOwnerResDto.setMemberId(ownerDtos.get(0).getMemberId());
-        loginOwnerResDto.setOwnerName(ownerDtos.get(0).getName());
+        loginOwnerResDto.setOwnerId(ownerDto.getOwnerId());
+        loginOwnerResDto.setMemberId(ownerDto.getMemberId());
+        loginOwnerResDto.setOwnerName(ownerDto.getName());
         loginOwnerResDto.setUserId(tmpUserDto.getUserId());
         loginOwnerResDto.setUserName(tmpUserDto.getName());
-        loginOwnerResDto.setOwnerTel(ownerDtos.get(0).getLink());
-        loginOwnerResDto.setCommunityId(ownerDtos.get(0).getCommunityId());
+        loginOwnerResDto.setOwnerTel(ownerDto.getLink());
+        loginOwnerResDto.setCommunityId(ownerDto.getCommunityId());
         loginOwnerResDto.setCommunityName(communityDtos.get(0).getName());
         loginOwnerResDto.setToken(token);
         loginOwnerResDto.setKey(newKey);
