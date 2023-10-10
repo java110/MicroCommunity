@@ -151,7 +151,7 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
                 //先做扣款
                 AccountDetailPo accountDetailPo = new AccountDetailPo();
                 accountDetailPo.setAcctId(tmpAccountDto.getAcctId());
-                accountDetailPo.setAmount(tmpFeeDto.getFeePrice() + "");
+                accountDetailPo.setAmount(tmpFeeDto.getFeeTotalPrice() + "");
                 accountDetailPo.setObjId(tmpAccountDto.getObjId());
                 accountDetailPo.setObjType(tmpAccountDto.getObjType());
                 accountDetailPo.setRemark("缴费扣款,费用对象："
@@ -170,7 +170,7 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
                 fee.put("feeId", tmpFeeDto.getFeeId());
                 fee.put("startTime", DateUtil.getFormatTimeString(tmpFeeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
                 fee.put("endTime", DateUtil.getFormatTimeString(tmpFeeDto.getDeadlineTime(), DateUtil.DATE_FORMATE_STRING_A));
-                fee.put("receivedAmount", tmpFeeDto.getFeePrice());
+                fee.put("receivedAmount", tmpFeeDto.getFeeTotalPrice());
                 fee.put("primeRate", "1");
                 fee.put("remark", "定时账户扣款缴费");
                 fees.add(fee);
@@ -182,7 +182,7 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
                     logger.error("缴费失败", e);
                     accountDetailPo = new AccountDetailPo();
                     accountDetailPo.setAcctId(tmpAccountDto.getAcctId());
-                    accountDetailPo.setAmount(tmpFeeDto.getFeePrice() + "");
+                    accountDetailPo.setAmount(tmpFeeDto.getFeeTotalPrice() + "");
                     accountDetailPo.setObjId(tmpAccountDto.getObjId());
                     accountDetailPo.setObjType(tmpAccountDto.getObjType());
                     accountDetailPo.setRemark("缴费失败，费用预存");
