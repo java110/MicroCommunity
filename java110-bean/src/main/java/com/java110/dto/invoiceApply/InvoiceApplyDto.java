@@ -16,6 +16,13 @@ import java.util.Date;
  **/
 public class InvoiceApplyDto extends OwnerInvoiceDto implements Serializable {
 
+    public static final String STATE_WAIT = "W";//W待审核 U 待上传 F 审核失败 G 带领用 C 已领用
+    public static final String STATE_UPLOAD = "U";//W待审核 U 待上传 F 审核失败 G 带领用 C 已领用
+    public static final String STATE_FAIL = "F";//W待审核 U 待上传 F 审核失败 G 带领用 C 已领用
+    public static final String STATE_GET = "G";//W待审核 U 待上传 F 审核失败 G 带领用 C 已领用
+    public static final String STATE_COMPLETE = "C";//W待审核 U 待上传 F 审核失败 G 带领用 C 已领用
+
+
     private String applyId;
     private String oiId;
     private String createUserId;

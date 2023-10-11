@@ -155,6 +155,12 @@
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
         </if>
+        <if test="detailIds !=null ">
+            and t.detail_id in
+            <foreach collection="detailIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="receivableAmount !=null and receivableAmount != ''">
             and t.receivable_amount= #{receivableAmount}
         </if>
@@ -280,6 +286,12 @@
         </if>
         <if test="detailId !=null and detailId != ''">
             and t.detail_id= #{detailId}
+        </if>
+        <if test="detailIds !=null ">
+            and t.detail_id in
+            <foreach collection="detailIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="receivableAmount !=null and receivableAmount != ''">
             and t.receivable_amount= #{receivableAmount}

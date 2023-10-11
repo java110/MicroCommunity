@@ -40,6 +40,13 @@ public interface IInvoiceApplyItemV1ServiceDao {
      */
     int saveInvoiceApplyItemInfo(Map info) throws DAOException;
 
+    /**
+     * 保存发票申请项
+     * @param info
+     * @return
+     */
+    int saveInvoiceApplyItems(Map info);
+
 
 
 
@@ -69,5 +76,6 @@ public interface IInvoiceApplyItemV1ServiceDao {
      * @return 发票申请项数量
      */
     int queryInvoiceApplyItemsCount(Map info);
+
 
 }

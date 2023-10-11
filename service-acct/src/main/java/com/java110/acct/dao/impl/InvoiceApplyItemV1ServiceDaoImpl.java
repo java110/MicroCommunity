@@ -60,6 +60,15 @@ public class InvoiceApplyItemV1ServiceDaoImpl extends BaseServiceDao implements 
         return saveFlag;
     }
 
+    @Override
+    public int saveInvoiceApplyItems(Map info) {
+        logger.debug("保存 saveInvoiceApplyItems 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("invoiceApplyItemV1ServiceDaoImpl.saveInvoiceApplyItems",info);
+
+        return saveFlag;
+    }
+
 
     /**
      * 查询发票申请项信息（instance）

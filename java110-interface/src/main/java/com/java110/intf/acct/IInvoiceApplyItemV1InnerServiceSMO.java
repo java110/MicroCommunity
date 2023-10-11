@@ -41,6 +41,9 @@ public interface IInvoiceApplyItemV1InnerServiceSMO {
     @RequestMapping(value = "/saveInvoiceApplyItem", method = RequestMethod.POST)
     public int saveInvoiceApplyItem(@RequestBody  InvoiceApplyItemPo invoiceApplyItemPo);
 
+    @RequestMapping(value = "/saveInvoiceApplyItems", method = RequestMethod.POST)
+    int saveInvoiceApplyItems(@RequestBody List<InvoiceApplyItemPo> invoiceApplyItemPos);
+
     @RequestMapping(value = "/updateInvoiceApplyItem", method = RequestMethod.POST)
     public int updateInvoiceApplyItem(@RequestBody  InvoiceApplyItemPo invoiceApplyItemPo);
 
@@ -65,4 +68,5 @@ public interface IInvoiceApplyItemV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryInvoiceApplyItemsCount", method = RequestMethod.POST)
     int queryInvoiceApplyItemsCount(@RequestBody InvoiceApplyItemDto invoiceApplyItemDto);
+
 }

@@ -17,6 +17,7 @@ package com.java110.po.invoiceApply;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-10-08 16:26:34 mail: 928255095@qq.com
@@ -28,90 +29,113 @@ import java.util.Date;
 public class InvoiceApplyPo implements Serializable {
 
     private String applyId;
-private String oiId;
-private String createUserId;
-private String ownerName;
-private String invoiceType;
-private String applyTel;
-private String invoiceAmount;
-private String createUserName;
-private String remark;
-private String statusCd = "0";
-private String state;
-private String communityId;
-public String getApplyId() {
+    private String oiId;
+    private String createUserId;
+    private String ownerName;
+    private String invoiceType;
+    private String applyTel;
+    private String invoiceAmount;
+    private String createUserName;
+    private String remark;
+    private String statusCd = "0";
+    private String state;
+    private String communityId;
+
+    public String getApplyId() {
         return applyId;
     }
-public void setApplyId(String applyId) {
+
+    public void setApplyId(String applyId) {
         this.applyId = applyId;
     }
-public String getOiId() {
+
+    public String getOiId() {
         return oiId;
     }
-public void setOiId(String oiId) {
+
+    public void setOiId(String oiId) {
         this.oiId = oiId;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getInvoiceType() {
+
+    public String getInvoiceType() {
         return invoiceType;
     }
-public void setInvoiceType(String invoiceType) {
+
+    public void setInvoiceType(String invoiceType) {
         this.invoiceType = invoiceType;
     }
-public String getApplyTel() {
+
+    public String getApplyTel() {
         return applyTel;
     }
-public void setApplyTel(String applyTel) {
+
+    public void setApplyTel(String applyTel) {
         this.applyTel = applyTel;
     }
-public String getInvoiceAmount() {
+
+    public String getInvoiceAmount() {
         return invoiceAmount;
     }
-public void setInvoiceAmount(String invoiceAmount) {
+
+    public void setInvoiceAmount(String invoiceAmount) {
         this.invoiceAmount = invoiceAmount;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }
