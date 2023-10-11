@@ -21,8 +21,10 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.intf.acct.IInvoiceApplyItemV1InnerServiceSMO;
 import com.java110.intf.acct.IInvoiceApplyV1InnerServiceSMO;
 import com.java110.po.invoiceApply.InvoiceApplyPo;
+import com.java110.po.invoiceApplyItem.InvoiceApplyItemPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +50,9 @@ public class DeleteInvoiceApplyCmd extends Cmd {
     @Autowired
     private IInvoiceApplyV1InnerServiceSMO invoiceApplyV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IInvoiceApplyItemV1InnerServiceSMO invoiceApplyItemV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
@@ -65,6 +70,11 @@ public class DeleteInvoiceApplyCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        //todo 删除 申请项
+        InvoiceApplyItemPo invoiceApplyItemPo = new InvoiceApplyItemPo();
+        invoiceApplyItemPo.setApplyId(invoiceApplyPo.getApplyId());
+        invoiceApplyItemV1InnerServiceSMOImpl.deleteInvoiceApplyItem(invoiceApplyItemPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
