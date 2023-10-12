@@ -37,8 +37,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：查询
- * 服务编码：invoiceApplyItem.listInvoiceApplyItem
- * 请求路劲：/app/invoiceApplyItem.ListInvoiceApplyItem
+ * 服务编码：invoice.listInvoiceApplyItem
+ * 请求路劲：/app/invoice.ListInvoiceApplyItem
  * add by 吴学文 at 2023-10-08 18:31:57 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn

@@ -17,6 +17,7 @@ package com.java110.po.invoiceApplyItem;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-10-08 18:31:57 mail: 928255095@qq.com
@@ -28,69 +29,94 @@ import java.util.Date;
 public class InvoiceApplyItemPo implements Serializable {
 
     private String itemId;
-private String applyId;
-private String itemType;
-private String itemName;
-private String itemAmount;
-private String itemObjId;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-public String getItemId() {
+    private String applyId;
+    private String itemType;
+    private String itemName;
+    private String itemAmount;
+    private String itemObjId;
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+
+    private String payTime;
+
+    public String getItemId() {
         return itemId;
     }
-public void setItemId(String itemId) {
+
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-public String getApplyId() {
+
+    public String getApplyId() {
         return applyId;
     }
-public void setApplyId(String applyId) {
+
+    public void setApplyId(String applyId) {
         this.applyId = applyId;
     }
-public String getItemType() {
+
+    public String getItemType() {
         return itemType;
     }
-public void setItemType(String itemType) {
+
+    public void setItemType(String itemType) {
         this.itemType = itemType;
     }
-public String getItemName() {
+
+    public String getItemName() {
         return itemName;
     }
-public void setItemName(String itemName) {
+
+    public void setItemName(String itemName) {
         this.itemName = itemName;
     }
-public String getItemAmount() {
+
+    public String getItemAmount() {
         return itemAmount;
     }
-public void setItemAmount(String itemAmount) {
+
+    public void setItemAmount(String itemAmount) {
         this.itemAmount = itemAmount;
     }
-public String getItemObjId() {
+
+    public String getItemObjId() {
         return itemObjId;
     }
-public void setItemObjId(String itemObjId) {
+
+    public void setItemObjId(String itemObjId) {
         this.itemObjId = itemObjId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
+    public String getPayTime() {
+        return payTime;
+    }
 
-
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
+    }
 }

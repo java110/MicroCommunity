@@ -221,6 +221,7 @@ public class SaveInvoiceApplyCmd extends Cmd {
                     + "~"
                     + DateUtil.getFormatTimeStringB(tmpFeeDetailDto.getEndTime())
                     + ")");
+            invoiceApplyItemPo.setPayTime(DateUtil.getFormatTimeStringA(tmpFeeDetailDto.getCreateTime()));
             invoiceApplyItemPo.setItemObjId(tmpFeeDetailDto.getDetailId());
             invoiceApplyItemPo.setItemType(InvoiceApplyItemDto.ITEM_TYPE_FEE);
             invoiceApplyItemPos.add(invoiceApplyItemPo);
@@ -268,7 +269,9 @@ public class SaveInvoiceApplyCmd extends Cmd {
             invoiceApplyItemPo.setItemId(GenerateCodeFactory.getGeneratorId("11"));
             invoiceApplyItemPo.setItemName(tmpAccountReceiptDto.getOwnerName());
             invoiceApplyItemPo.setItemObjId(tmpAccountReceiptDto.getArId());
-            invoiceApplyItemPo.setItemType(InvoiceApplyItemDto.ITEM_TYPE_FEE);
+            invoiceApplyItemPo.setItemType(InvoiceApplyItemDto.ITEM_TYPE_ACCT);
+            invoiceApplyItemPo.setPayTime(DateUtil.getFormatTimeStringA(tmpAccountReceiptDto.getCreateTime()));
+
             invoiceApplyItemPos.add(invoiceApplyItemPo);
         }
 

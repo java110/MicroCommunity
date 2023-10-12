@@ -27,6 +27,8 @@ public class InvoiceApplyItemDto extends PageDto implements Serializable {
     private String remark;
     private String communityId;
 
+    private String payTime;
+
 
     private Date createTime;
 
