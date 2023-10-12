@@ -85,7 +85,7 @@ public class ImportCustomFeeQueueDataAdapt extends DefaultImportData implements 
         ImportCustomCreateFeeDto importExportMeterWaterDto = BeanConvertUtil.covertBean(data, ImportCustomCreateFeeDto.class);
 
         String communityId = importExportMeterWaterDto.getCommunityId();
-        String batchId = importExportMeterWaterDto.getCommunityId();
+        String batchId = importExportMeterWaterDto.getBatchId();
 
         doImportRoomCreateFee(importExportMeterWaterDto, batchId);
         doImportCarCreateFee(importExportMeterWaterDto, batchId);

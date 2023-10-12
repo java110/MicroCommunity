@@ -63,10 +63,10 @@
             and t.app_id= #{appId}
         </if>
         <if test="startTime !=null and startTime != ''">
-            and t.createTime &gt;= #{startTime}
+            and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
-            and t.createTime &lt;= #{endTime}
+            and t.create_time &lt;= #{endTime}
         </if>
         <if test="staffNameLike !=null and staffNameLike != ''">
             and u.name like concat('%',#{staffNameLike},'%')
@@ -107,10 +107,10 @@
             and t.app_id= #{appId}
         </if>
         <if test="startTime !=null and startTime != ''">
-            and t.createTime &gt;= #{startTime}
+            and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
-            and t.createTime &lt;= #{endTime}
+            and t.create_time &lt;= #{endTime}
         </if>
         <if test="staffNameLike !=null and staffNameLike != ''">
             and u.name like concat('%',#{staffNameLike},'%')
