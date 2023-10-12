@@ -41,6 +41,8 @@ public class InvoiceApplyPo implements Serializable {
     private String state;
     private String communityId;
 
+    private String invoiceCode;
+
     public String getApplyId() {
         return applyId;
     }
@@ -137,5 +139,11 @@ public class InvoiceApplyPo implements Serializable {
         this.communityId = communityId;
     }
 
+    public String getInvoiceCode() {
+        return invoiceCode;
+    }
 
+    public void setInvoiceCode(String invoiceCode) {
+        this.invoiceCode = invoiceCode;
+    }
 }

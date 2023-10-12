@@ -37,6 +37,8 @@ public class InvoiceApplyDto extends OwnerInvoiceDto implements Serializable {
     private String stateName;
     private String communityId;
 
+    private String invoiceCode;
+
 
     private Date createTime;
 
@@ -164,5 +166,13 @@ public class InvoiceApplyDto extends OwnerInvoiceDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getInvoiceCode() {
+        return invoiceCode;
+    }
+
+    public void setInvoiceCode(String invoiceCode) {
+        this.invoiceCode = invoiceCode;
     }
 }

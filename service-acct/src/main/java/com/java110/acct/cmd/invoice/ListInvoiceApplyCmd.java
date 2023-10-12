@@ -103,12 +103,12 @@ public class ListInvoiceApplyCmd extends Cmd {
         fileRelDto.setObjId(invoiceApplyDtos.get(0).getApplyId());
         fileRelDto.setRelTypeCd(FileRelDto.REL_TYPE_CE_INVOICE); //业主照片
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+        //String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
 
-        if (fileRelDtos != null && fileRelDtos.size() > 0) {
+        if (fileRelDtos != null && !fileRelDtos.isEmpty()) {
             List<String> urls = new ArrayList<>();
             for (FileRelDto fileRel : fileRelDtos) {
-                urls.add(imgUrl + fileRel.getFileRealName());
+                urls.add(fileRel.getFileRealName());
             }
             invoiceApplyDtos.get(0).setUrls(urls);
         }

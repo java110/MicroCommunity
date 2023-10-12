@@ -22,13 +22,16 @@
         invoiceType,t.apply_tel,t.apply_tel applyTel,t.invoice_amount,t.invoice_amount
         invoiceAmount,t.create_user_name,t.create_user_name createUserName,t.remark,t.status_cd,t.status_cd
         statusCd,t.state,t.community_id,t.community_id communityId,oi.invoice_name invoiceName,oi.invoice_num invoiceNum,oi.invoice_address invoiceAddress,
-        td.`name` stateName
+        td.`name` stateName,t.invoice_code invoiceCode,t.create_time createTime
         from invoice_apply t
         left join owner_invoice oi on t.oi_id = oi.oi_id
         left join t_dict td on t.state = td.status_cd and td.table_name = 'invoice_apply' and td.table_columns = 'state'
         where 1 =1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
+        </if>
+        <if test="invoiceCode !=null and invoiceCode != ''">
+            and t.invoice_code= #{invoiceCode}
         </if>
         <if test="oiId !=null and oiId != ''">
             and t.oi_id= #{oiId}
@@ -104,12 +107,17 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
+        <if test="invoiceCode !=null and invoiceCode != ''">
+            , t.invoice_code= #{invoiceCode}
         </if>
+
+
         where 1=1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>
@@ -121,6 +129,9 @@
         where 1 =1
         <if test="applyId !=null and applyId != ''">
             and t.apply_id= #{applyId}
+        </if>
+        <if test="invoiceCode !=null and invoiceCode != ''">
+            and t.invoice_code= #{invoiceCode}
         </if>
         <if test="oiId !=null and oiId != ''">
             and t.oi_id= #{oiId}
