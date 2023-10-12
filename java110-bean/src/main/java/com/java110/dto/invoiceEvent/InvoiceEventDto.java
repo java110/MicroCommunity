@@ -1,6 +1,7 @@
 package com.java110.dto.invoiceEvent;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,12 +16,16 @@ import java.util.Date;
 public class InvoiceEventDto extends PageDto implements Serializable {
 
     private String eventId;
-private String applyId;
-private String createUserId;
-private String createUserName;
-private String remark;
-private String eventType;
-private String communityId;
+    private String applyId;
+    private String createUserId;
+    private String createUserName;
+    private String remark;
+    private String eventType;
+
+    private String eventTypeName;
+    private String communityId;
+
+
 
 
     private Date createTime;
@@ -31,43 +36,56 @@ private String communityId;
     public String getEventId() {
         return eventId;
     }
-public void setEventId(String eventId) {
+
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
-public String getApplyId() {
+
+    public String getApplyId() {
         return applyId;
     }
-public void setApplyId(String applyId) {
+
+    public void setApplyId(String applyId) {
         this.applyId = applyId;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getEventType() {
+
+    public String getEventType() {
         return eventType;
     }
-public void setEventType(String eventType) {
+
+    public void setEventType(String eventType) {
         this.eventType = eventType;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
@@ -86,5 +104,13 @@ public void setCommunityId(String communityId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getEventTypeName() {
+        return eventTypeName;
+    }
+
+    public void setEventTypeName(String eventTypeName) {
+        this.eventTypeName = eventTypeName;
     }
 }

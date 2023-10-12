@@ -115,4 +115,12 @@ public class InvoiceApplyItemDto extends PageDto implements Serializable {
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
+    }
 }
