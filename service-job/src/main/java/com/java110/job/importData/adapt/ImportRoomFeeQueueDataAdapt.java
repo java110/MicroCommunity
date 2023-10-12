@@ -86,7 +86,7 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
         ImportRoomFee importRoomFee = BeanConvertUtil.covertBean(data, ImportRoomFee.class);
 
         String communityId = importRoomFee.getCommunityId();
-        String batchId = importRoomFee.getCommunityId();
+        String batchId = importRoomFee.getBatchId();
 
         doImportRoomCreateFee(importRoomFee, batchId);
         doImportCarCreateFee(importRoomFee, batchId);

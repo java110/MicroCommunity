@@ -42,6 +42,7 @@ public class ImportRoomFeeDataCleaningAdapt extends DefaultImportDataAdapt imple
         } else {
             getCars(workbook, importRoomFees);
         }
+        //todo 生成批次号
         generatorBatch(paramIn);
         for (ImportRoomFee importRoomFee : importRoomFees) {
             importRoomFee.setBatchId(paramIn.getString("batchId"));
