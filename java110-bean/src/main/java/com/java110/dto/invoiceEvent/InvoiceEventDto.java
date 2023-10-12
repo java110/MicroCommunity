@@ -15,6 +15,13 @@ import java.util.Date;
  **/
 public class InvoiceEventDto extends PageDto implements Serializable {
 
+
+    public static final String STATE_COMPLETE = "1001";// 类型 1001 审核成功 2002 上传 3003 审核失败 4004 领用 5005 登记
+    public static final String STATE_UPLOAD = "2002";//类型 1001 审核成功 2002 上传 3003 审核失败 4004 领用 5005 登记
+    public static final String STATE_FAIL = "3003";//类型 1001 审核成功 2002 上传 3003 审核失败 4004 领用 5005 登记
+    public static final String STATE_GET = "4004";//类型 1001 审核成功 2002 上传 3003 审核失败 4004 领用 5005 登记
+    public static final String STATE_GET_FINISH = "5005";//类型 1001 审核成功 2002 上传 3003 审核失败 4004 领用 5005 登记
+
     private String eventId;
     private String applyId;
     private String createUserId;
