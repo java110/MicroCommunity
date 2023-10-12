@@ -5,6 +5,7 @@ import com.java110.dto.ownerInvoice.OwnerInvoiceDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -33,12 +34,15 @@ public class InvoiceApplyDto extends OwnerInvoiceDto implements Serializable {
     private String createUserName;
     private String remark;
     private String state;
+    private String stateName;
     private String communityId;
 
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    private List<String> urls;
 
 
     public String getApplyId() {
@@ -144,5 +148,21 @@ public class InvoiceApplyDto extends OwnerInvoiceDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

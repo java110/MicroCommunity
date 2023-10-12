@@ -20,15 +20,21 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.file.FileRelDto;
 import com.java110.intf.acct.IInvoiceApplyV1InnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.invoiceApply.InvoiceApplyDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,9 +54,12 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "invoice.listInvoiceApply")
 public class ListInvoiceApplyCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListInvoiceApplyCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListInvoiceApplyCmd.class);
     @Autowired
     private IInvoiceApplyV1InnerServiceSMO invoiceApplyV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -62,22 +71,46 @@ public class ListInvoiceApplyCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           InvoiceApplyDto invoiceApplyDto = BeanConvertUtil.covertBean(reqJson, InvoiceApplyDto.class);
+        InvoiceApplyDto invoiceApplyDto = BeanConvertUtil.covertBean(reqJson, InvoiceApplyDto.class);
 
-           int count = invoiceApplyV1InnerServiceSMOImpl.queryInvoiceApplysCount(invoiceApplyDto);
+        int count = invoiceApplyV1InnerServiceSMOImpl.queryInvoiceApplysCount(invoiceApplyDto);
 
-           List<InvoiceApplyDto> invoiceApplyDtos = null;
+        List<InvoiceApplyDto> invoiceApplyDtos = null;
 
-           if (count > 0) {
-               invoiceApplyDtos = invoiceApplyV1InnerServiceSMOImpl.queryInvoiceApplys(invoiceApplyDto);
-           } else {
-               invoiceApplyDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            invoiceApplyDtos = invoiceApplyV1InnerServiceSMOImpl.queryInvoiceApplys(invoiceApplyDto);
+        } else {
+            invoiceApplyDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, invoiceApplyDtos);
+        //todo 查询电子发票
+        queryInvoicePhoto(invoiceApplyDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, invoiceApplyDtos);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void queryInvoicePhoto(List<InvoiceApplyDto> invoiceApplyDtos) {
+
+        if (invoiceApplyDtos == null || invoiceApplyDtos.size() != 1) {
+            return;
+        }
+
+        FileRelDto fileRelDto = new FileRelDto();
+        fileRelDto.setObjId(invoiceApplyDtos.get(0).getApplyId());
+        fileRelDto.setRelTypeCd(FileRelDto.REL_TYPE_CE_INVOICE); //业主照片
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
+        if (fileRelDtos != null && fileRelDtos.size() > 0) {
+            List<String> urls = new ArrayList<>();
+            for (FileRelDto fileRel : fileRelDtos) {
+                urls.add(imgUrl + fileRel.getFileRealName());
+            }
+            invoiceApplyDtos.get(0).setUrls(urls);
+        }
     }
 }
