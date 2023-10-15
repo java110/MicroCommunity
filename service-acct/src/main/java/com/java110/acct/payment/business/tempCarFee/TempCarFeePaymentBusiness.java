@@ -7,6 +7,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.fee.TempCarPayOrderDto;
 import com.java110.dto.owner.OwnerCarOpenUserDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.intf.user.IOwnerCarOpenUserV1InnerServiceSMO;
@@ -89,7 +90,8 @@ public class TempCarFeePaymentBusiness implements IPaymentBusiness {
 
         JSONObject paramIn = new JSONObject();
         paramIn.put("oId", paymentOrderDto.getOrderId());
-        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), reqJson, "tempCarFee.notifyTempCarFeeOrder", JSONObject.class, "-1");
+        paramIn.put("payType", TempCarPayOrderDto.PAY_TYPE_WECHAT);
+        JSONObject paramOut = CallApiServiceFactory.postForApi(paymentOrderDto.getAppId(), paramIn, "tempCarFee.notifyTempCarFeeOrder", JSONObject.class, "-1");
 
 
     }
