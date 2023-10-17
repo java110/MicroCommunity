@@ -61,6 +61,13 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
         row.createCell(21).setCellValue("收银员");
         row.createCell(22).setCellValue("备注");
         JSONObject reqJson = exportDataDto.getReqJson();
+
+        String endTime = reqJson.getString("endTime");
+
+        if (!StringUtil.isEmpty(endTime)) {
+            endTime += " 23:59:59";
+            reqJson.put("endTime", endTime);
+        }
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson, ReportFeeMonthStatisticsDto.class);
         if (reqJson.containsKey("roomName") && !StringUtil.isEmpty(reqJson.getString("roomName"))) {
             String[] roomNameArray = reqJson.getString("roomName").split("-", 3);
