@@ -17,7 +17,7 @@
 
     <insert id="saveInvoiceApplyItems" parameterType="Map">
         insert into invoice_apply_item(
-        item_id,apply_id,item_type,item_name,item_amount,item_obj_id,remark,community_id
+        item_id,apply_id,item_type,item_name,item_amount,item_obj_id,remark,community_id,pay_time
         ) values
         <foreach collection="invoiceApplyItemPos" item="item" separator=",">
             (#{item.itemId},#{item.applyId},#{item.itemType},#{item.itemName},#{item.itemAmount},#{item.itemObjId},#{item.remark},
