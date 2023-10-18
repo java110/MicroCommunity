@@ -22,7 +22,7 @@ spring:
       enabled: true
       force: true
   application:
-    name: store-service
+    name: scm-service
   redis:
     database: 0
     host: dev.redis.java110.com
