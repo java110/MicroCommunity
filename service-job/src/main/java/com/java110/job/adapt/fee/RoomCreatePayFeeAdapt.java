@@ -200,7 +200,7 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
         businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", paramInJson.getString("userId"));
         paramInJson.put("feeId", businessUnit.getString("feeId"));
-        return BeanConvertUtil.covertBean(paramInJson, PayFeePo.class)
+        return BeanConvertUtil.covertBean(paramInJson, PayFeePo.class);
     }
 
     private FeeAttrPo addFeeAttr(JSONObject paramInJson, String specCd, String value) {
