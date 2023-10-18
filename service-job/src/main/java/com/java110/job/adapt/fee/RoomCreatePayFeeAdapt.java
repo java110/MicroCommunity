@@ -131,7 +131,7 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
             }
         }
 
-        // todo
+        // todo 封装 payFeePo 和 attrs
 
         List<PayFeePo> feePos = new ArrayList<>();
         List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
