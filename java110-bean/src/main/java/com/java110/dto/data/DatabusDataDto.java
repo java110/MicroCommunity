@@ -23,6 +23,8 @@ public class DatabusDataDto extends PageDto implements Serializable {
     // 欠费催缴
     public static final String BUSINESS_TYPE_OWE_FEE_CALLABLE = "oweFeeCallable";
 
+    //todo 房屋批量创建费用
+    public static final String BUSINESS_TYPE_ROOM_CREATE_PAY_FEE = "roomCreatePayFee";
 
     private String businessTypeCd;
 
