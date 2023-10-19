@@ -29,6 +29,8 @@ public class LoginOwnerResDto implements Serializable {
 
     private String appUserId;
 
+    private String ownerTypeCd;
+
     public String getUserId() {
         return userId;
     }
@@ -115,5 +117,13 @@ public class LoginOwnerResDto implements Serializable {
 
     public void setAppUserId(String appUserId) {
         this.appUserId = appUserId;
+    }
+
+    public String getOwnerTypeCd() {
+        return ownerTypeCd;
+    }
+
+    public void setOwnerTypeCd(String ownerTypeCd) {
+        this.ownerTypeCd = ownerTypeCd;
     }
 }

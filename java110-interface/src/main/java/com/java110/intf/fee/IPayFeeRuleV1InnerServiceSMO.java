@@ -41,6 +41,11 @@ public interface IPayFeeRuleV1InnerServiceSMO {
     @RequestMapping(value = "/savePayFeeRule", method = RequestMethod.POST)
      int savePayFeeRule(@RequestBody  PayFeeRulePo payFeeRulePo);
 
+
+    @RequestMapping(value = "/savePayFeeRules", method = RequestMethod.POST)
+    int savePayFeeRules(@RequestBody List<PayFeeRulePo> payFeeRulePos);
+
+
     @RequestMapping(value = "/updatePayFeeRule", method = RequestMethod.POST)
      int updatePayFeeRule(@RequestBody  PayFeeRulePo payFeeRulePo);
 
@@ -65,4 +70,6 @@ public interface IPayFeeRuleV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryPayFeeRulesCount", method = RequestMethod.POST)
     int queryPayFeeRulesCount(@RequestBody PayFeeRuleDto payFeeRuleDto);
+
+
 }

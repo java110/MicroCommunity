@@ -70,4 +70,11 @@ public interface IPayFeeRuleV1ServiceDao {
      */
     int queryPayFeeRulesCount(Map info);
 
+    /**
+     * 保存创建费用规则
+     *
+     * @param info
+     * @return
+     */
+    int savePayFeeRules(Map info);
 }

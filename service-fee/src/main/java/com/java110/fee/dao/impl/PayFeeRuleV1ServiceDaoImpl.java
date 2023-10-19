@@ -60,6 +60,16 @@ public class PayFeeRuleV1ServiceDaoImpl extends BaseServiceDao implements IPayFe
         return saveFlag;
     }
 
+    @Override
+    public int savePayFeeRules(Map info) {
+        logger.debug("保存 savePayFeeRules 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("payFeeRuleV1ServiceDaoImpl.savePayFeeRules",info);
+
+        return saveFlag;
+    }
+
+
 
     /**
      * 查询费用规则信息（instance）
@@ -107,6 +117,7 @@ public class PayFeeRuleV1ServiceDaoImpl extends BaseServiceDao implements IPayFe
 
         return Integer.parseInt(businessPayFeeRuleInfos.get(0).get("count").toString());
     }
+
 
 
 }

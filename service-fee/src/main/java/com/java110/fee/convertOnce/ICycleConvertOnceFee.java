@@ -1,6 +1,7 @@
 package com.java110.fee.convertOnce;
 
 import com.java110.po.fee.PayFeePo;
+import com.java110.po.payFeeRule.PayFeeRulePo;
 
 import java.util.List;
 
@@ -36,8 +37,25 @@ public interface ICycleConvertOnceFee {
 
     /**
      * 根据 费用规则转换
+     *
      * @param ruleIds 费用规则
      * @return 大于1 转换成功 0 转换失败
      */
     int covertRuleIdsPayFee(List<String> ruleIds);
+
+    /**
+     * 根据规则生成 一次性费用
+     *
+     * @param payFeeRulePos
+     * @return
+     */
+    int rulesGeneratePayFees(List<PayFeeRulePo> payFeeRulePos);
+
+    /**
+     * 根据规则生成 一次性费用
+     *
+     * @param payFeeRulePo
+     * @return
+     */
+    int ruleGeneratePayFee(PayFeeRulePo payFeeRulePo);
 }

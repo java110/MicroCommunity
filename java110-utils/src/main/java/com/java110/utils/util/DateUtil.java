@@ -889,4 +889,20 @@ public class DateUtil {
         return resMonth.doubleValue();
 
     }
+
+    public static Date getTargetEndTime(double month, Date startDate) {
+        Calendar endDate = Calendar.getInstance();
+        endDate.setTime(startDate);
+
+        Double intMonth = Math.floor(month);
+        endDate.add(Calendar.MONTH, intMonth.intValue());
+        double doubleMonth = month - intMonth;
+        if (doubleMonth <= 0) {
+            return endDate.getTime();
+        }
+        int futureDay = endDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+        Double hour = doubleMonth * futureDay * 24;
+        endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
+        return endDate.getTime();
+    }
 }

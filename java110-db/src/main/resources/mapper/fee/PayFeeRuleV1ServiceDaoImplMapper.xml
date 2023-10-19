@@ -14,6 +14,20 @@
         )
     </insert>
 
+    <insert id="savePayFeeRules" parameterType="Map">
+        insert into pay_fee_rule(
+        max_time,amount,fee_type_cd,cur_year_month,batch_id,user_id,income_obj_id,config_id,fee_flag,
+        start_time,end_time,state,rule_id,community_id,payer_obj_type,payer_obj_id
+        ) values
+        <foreach collection="payFeeRulePos" item="item" separator=",">
+            (
+            #{item.maxTime},#{item.amount},#{item.feeTypeCd},#{item.curYearMonth},#{item.batchId},#{item.userId},
+            #{item.incomeObjId},#{item.configId},#{item.feeFlag},#{item.startTime},#{item.endTime},#{item.state},#{item.ruleId},
+            #{item.communityId},#{item.payerObjType},#{item.payerObjId}
+            )
+        </foreach>
+    </insert>
+
 
     <!-- 查询费用规则信息 add by wuxw 2018-07-03 -->
     <select id="getPayFeeRuleInfo" parameterType="Map" resultType="Map">

@@ -29,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -52,7 +54,15 @@ public class PayFeeRuleV1InnerServiceSMOImpl extends BaseServiceSMO implements I
         return saveFlag;
     }
 
-     @Override
+    @Override
+    public int savePayFeeRules(@RequestBody List<PayFeeRulePo> payFeeRulePos) {
+        Map info = new HashMap();
+        info.put("payFeeRulePos",payFeeRulePos);
+        int saveFlag = payFeeRuleV1ServiceDaoImpl.savePayFeeRules(info);
+        return saveFlag;
+    }
+
+    @Override
     public int updatePayFeeRule(@RequestBody  PayFeeRulePo payFeeRulePo) {
         int saveFlag = payFeeRuleV1ServiceDaoImpl.updatePayFeeRuleInfo(BeanConvertUtil.beanCovertMap(payFeeRulePo));
         return saveFlag;

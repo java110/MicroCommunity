@@ -19,6 +19,8 @@ public class PayFeePo implements Serializable {
     private String incomeObjId;
     private String startTime;
     private String endTime;
+
+    private String maxTime;
     private String amount;
     private String userId;
     private String bId;
@@ -171,4 +173,12 @@ public class PayFeePo implements Serializable {
     public String getDeductFrom() { return deductFrom; }
 
     public void setDeductFrom(String deductFrom) { this.deductFrom = deductFrom; }
+
+    public String getMaxTime() {
+        return maxTime;
+    }
+
+    public void setMaxTime(String maxTime) {
+        this.maxTime = maxTime;
+    }
 }
