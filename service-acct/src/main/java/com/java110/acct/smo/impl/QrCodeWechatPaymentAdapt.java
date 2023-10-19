@@ -8,6 +8,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.PayUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -112,7 +113,11 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
-            return new ResultVo(ResultVo.CODE_ERROR, resMap.get("return_msg") + resMap.get("err_code_des"));
+            String msg = resMap.get("return_msg");
+            if (!StringUtil.isEmpty(resMap.get("err_code_des"))) {
+                msg = resMap.get("err_code_des");
+            }
+            return new ResultVo(ResultVo.CODE_ERROR, msg);
         }
     }
 
