@@ -52,7 +52,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
         //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
-        double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue(MappingConstant.ENV_DOMAIN,"HC_ENV"), money);
+        double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue(MappingConstant.ENV_DOMAIN, "HC_ENV"), money);
         //添加或更新支付记录(参数跟进自己业务需求添加)
 
         Map<String, String> resMap = null;
@@ -112,7 +112,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
-            return new ResultVo(ResultVo.CODE_ERROR, resMap.get("err_code_des"));
+            return new ResultVo(ResultVo.CODE_ERROR, resMap.get("return_msg") + resMap.get("err_code_des"));
         }
     }
 
