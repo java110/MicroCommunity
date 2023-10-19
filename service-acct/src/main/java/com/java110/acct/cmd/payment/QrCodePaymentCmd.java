@@ -60,10 +60,10 @@ public class QrCodePaymentCmd extends Cmd {
             int pre = Integer.parseInt(authCode.substring(0, 2));
             if (pre > 24 && pre < 31) { // 支付宝
                 qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeAliPaymentAdapt", IQrCodePaymentSMO.class);
-                reqJson.put("primeRate", FeeDetailDto.PRIME_REATE_WECHAT_QRCODE);
+                reqJson.put("primeRate", FeeDetailDto.PRIME_REATE_ALI_QRCODE);
             } else {
                 qrCodePaymentSMOImpl = ApplicationContextFactory.getBean("qrCodeWechatPaymentAdapt", IQrCodePaymentSMO.class);
-                reqJson.put("primeRate", FeeDetailDto.PRIME_REATE_ALI_QRCODE);
+                reqJson.put("primeRate", FeeDetailDto.PRIME_REATE_WECHAT_QRCODE);
             }
         } else {
             qrCodePaymentSMOImpl = ApplicationContextFactory.getBean(payQrAdapt, IQrCodePaymentSMO.class);

@@ -2,6 +2,7 @@ package com.java110.fee.convertOnce;
 
 import com.java110.dto.fee.FeeDto;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeRuleV1InnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeRuleV1InnerServiceSMO payFeeRuleV1InnerServiceSMOImpl;
 
     @Override
     public int convertPayFees(List<PayFeePo> payFeePos) {
