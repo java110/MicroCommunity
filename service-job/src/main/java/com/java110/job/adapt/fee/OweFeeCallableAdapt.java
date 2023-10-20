@@ -78,7 +78,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
             }
         }
 
-        if (oweFeeCallablePos.size() < 1) {
+        if (oweFeeCallablePos.isEmpty()) {
             return;
         }
 
@@ -95,11 +95,14 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
         String userId = "";
         List<JSONObject> contents = null;
 
+        List<OweFeeCallablePo> sendOweFeeCallablePos = null;
+
         //todo 按房屋发送
         for (int roomIndex = 0; roomIndex < roomIds.size(); roomIndex++) {
             contents = new ArrayList<>();
             String notifyWay = MsgNotifyFactory.NOTIFY_WAY_WECHAT;
             userId = "";
+            sendOweFeeCallablePos = new ArrayList<>();
             for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
                 if (!oweFeeCallablePo.getPayerObjId().equals(roomIds.getString(roomIndex))) {
                     continue;
@@ -115,6 +118,8 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
                     oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
                     continue;
                 }
+
+
                 ownerAppUserDto = new OwnerAppUserDto();
                 ownerAppUserDto.setMemberId(oweFeeCallablePo.getOwnerId());
                 ownerAppUserDto.setCommunityId(oweFeeCallablePo.getCommunityId());
@@ -136,6 +141,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
                     notifyWay = MsgNotifyFactory.NOTIFY_WAY_ALI;
                 }
                 contents.add(content);
+                sendOweFeeCallablePos.add(oweFeeCallablePo);
 
             }
 
@@ -146,7 +152,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
             //todo 催缴
             ResultVo resultVo = MsgNotifyFactory.sendOweFeeMsg(data.getString("communityId"), userId, oweFeeCallablePos.get(0).getOwnerId(), contents, notifyWay);
 
-            for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
+            for (OweFeeCallablePo oweFeeCallablePo : sendOweFeeCallablePos) {
                 if (StringUtil.isEmpty(oweFeeCallablePo.getOwnerId()) || oweFeeCallablePo.getOwnerId().startsWith("-")) {
                     continue;
                 }
