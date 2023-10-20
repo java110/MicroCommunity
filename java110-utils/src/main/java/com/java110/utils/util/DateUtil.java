@@ -407,8 +407,13 @@ public class DateUtil {
 
     public static Date getNextMonthFirstDate(String curDate) {
         Date date = DateUtil.getDateFromStringB(curDate);
+        return getNextMonthFirstDate(date);
+    }
+
+    public static Date getNextMonthFirstDate(Date curDate) {
+
         Calendar curDateCal = Calendar.getInstance();
-        curDateCal.setTime(date);
+        curDateCal.setTime(curDate);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -808,12 +813,12 @@ public class DateUtil {
         return calendar.getTime();
     }
 
-    public static boolean sameMonthDay(Date startDate,Date endDate){
+    public static boolean sameMonthDay(Date startDate, Date endDate) {
         Calendar startCalendar = Calendar.getInstance();
         startCalendar.setTime(startDate);
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endDate);
-        if(startCalendar.get(Calendar.DAY_OF_MONTH) == endCalender.get(Calendar.DAY_OF_MONTH)){
+        if (startCalendar.get(Calendar.DAY_OF_MONTH) == endCalender.get(Calendar.DAY_OF_MONTH)) {
             return true;
         }
 

@@ -2,13 +2,16 @@ package com.java110.fee.convertOnce;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.payFee.PayFeeDetailRefreshFeeMonthDto;
 import com.java110.fee.dao.IPayFeeConfigV1ServiceDao;
 import com.java110.fee.dao.impl.PayFeeV1ServiceDaoImpl;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeRuleV1InnerServiceSMO;
+import com.java110.intf.fee.*;
+import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeRule.PayFeeRulePo;
 import com.java110.utils.util.Assert;
@@ -42,6 +45,18 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
 
     @Autowired
     private IPayFeeRuleV1InnerServiceSMO payFeeRuleV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeMonthInnerServiceSMO payFeeMonthInnerServiceSMOImpl;
+
+    @Autowired
+    private IComputeFeeSMO computeFeeSMOImpl;
 
     @Override
     public int convertPayFees(List<PayFeePo> payFeePos) {
@@ -139,11 +154,118 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
 
         //todo 创建 pay_fee 和 attrs 数据
 
-        List<PayFeePo> payFeePos = new ArrayList<>();
-        //for()
+        List<PayFeePo> tmpPayFeePos = new ArrayList<>();
+        List<FeeAttrPo> tmpFeeAttrPos = new ArrayList<>();
+
+        FeeDto feeDto = new FeeDto();
+        feeDto.setPayerObjType(tmpPayFeeRulePo.getPayerObjType());
+        feeDto.setCommunityId(tmpPayFeeRulePo.getCommunityId());
+        feeDto.setPayerObjId(tmpPayFeeRulePo.getPayerObjId());
+        OwnerDto ownerDto = computeFeeSMOImpl.getFeeOwnerDto(feeDto);
+        String payerObjName = computeFeeSMOImpl.getFeeObjName(feeDto);
+
+        Date startTime = DateUtil.getDateFromStringB(tmpPayFeeRulePo.getCurYearMonth());
+        Date endTime = null;
+
+        //todo 没到时间
+        if (startTime.getTime() >= targetEndTime.getTime()) {
+            return 0;
+        }
+
+        do {
+            endTime = DateUtil.getNextMonthFirstDate(startTime);
+            if (endTime.getTime() >= targetEndTime.getTime()) {
+                endTime = targetEndTime;
+            }
+            //todo 生成 费用
+            doGeneratorPayFee(tmpPayFeeRulePo, startTime, endTime, feeConfigDtos.get(0), tmpPayFeePos, tmpFeeAttrPos, ownerDto, payerObjName);
+
+            startTime = endTime;
+
+        }
+        while (endTime.getTime() < targetEndTime.getTime());
+        int saveFlag = 0;
+        if (!tmpPayFeePos.isEmpty()) {
+            saveFlag = saveFeeAndAttrs(tmpPayFeePos, tmpFeeAttrPos);
+        }
+
+        //todo 修改pay_fee_rule 的CurYearMonth
+
+        PayFeeRulePo payFeeRulePo = new PayFeeRulePo();
+        payFeeRulePo.setRuleId(tmpPayFeeRulePo.getRuleId());
+        payFeeRulePo.setCurYearMonth(DateUtil.getFormatTimeStringB(endTime));
+        payFeeRulePo.setCommunityId(tmpPayFeeRulePo.getCommunityId());
+        payFeeRuleV1InnerServiceSMOImpl.updatePayFeeRule(payFeeRulePo);
+
+        return saveFlag;
+    }
 
 
-        return 0;
+    private void doGeneratorPayFee(PayFeeRulePo tmpPayFeeRulePo, Date startTime, Date endTime, FeeConfigDto feeConfigDto,
+                                   List<PayFeePo> tmpPayFeePos, List<FeeAttrPo> tmpFeeAttrPos,
+                                   OwnerDto ownerDto,
+                                   String payerObjName) {
+
+        PayFeePo payFeePo = BeanConvertUtil.covertBean(tmpPayFeeRulePo, PayFeePo.class);
+        payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+        payFeePo.setFeeFlag(FeeDto.FEE_FLAG_ONCE);
+        payFeePo.setStartTime(DateUtil.getFormatTimeStringB(startTime));
+        payFeePo.setEndTime(DateUtil.getFormatTimeStringB(startTime));
+        payFeePo.setRuleId(tmpPayFeeRulePo.getRuleId());
+
+        tmpPayFeePos.add(payFeePo);
+
+
+        tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, DateUtil.getFormatTimeStringB(endTime)));
+
+        if (ownerDto != null) {
+            tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_ID, ownerDto.getOwnerId()));
+            tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_LINK, ownerDto.getLink()));
+            tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_NAME, ownerDto.getName()));
+        }
+
+        //todo 付费对象名称
+        tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME, payerObjName));
+
+
+    }
+
+    private FeeAttrPo addFeeAttr(PayFeePo payFeePo, String specCd, String value) {
+        FeeAttrPo feeAttrPo = new FeeAttrPo();
+        feeAttrPo.setCommunityId(payFeePo.getCommunityId());
+        feeAttrPo.setSpecCd(specCd);
+        feeAttrPo.setValue(value);
+        feeAttrPo.setFeeId(payFeePo.getFeeId());
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
+        return feeAttrPo;
+    }
+
+
+    private int saveFeeAndAttrs(List<PayFeePo> feePos, List<FeeAttrPo> feeAttrsPos) {
+        if (feePos == null || feePos.isEmpty()) {
+            return 1;
+        }
+        int flag = feeInnerServiceSMOImpl.saveFee(feePos);
+        if (flag < 1) {
+            return flag;
+        }
+
+        flag = feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
+
+        // todo 这里异步的方式计算 月数据 和欠费数据
+        List<String> feeIds = new ArrayList<>();
+        for (PayFeePo feePo : feePos) {
+            feeIds.add(feePo.getFeeId());
+        }
+
+        PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto = new PayFeeDetailRefreshFeeMonthDto();
+        payFeeDetailRefreshFeeMonthDto.setCommunityId(feePos.get(0).getCommunityId());
+        payFeeDetailRefreshFeeMonthDto.setFeeIds(feeIds);
+
+        payFeeMonthInnerServiceSMOImpl.doGeneratorFeeMonths(payFeeDetailRefreshFeeMonthDto);
+
+        payFeeMonthInnerServiceSMOImpl.doGeneratorOweFees(payFeeDetailRefreshFeeMonthDto);
+        return flag;
     }
 
     /**

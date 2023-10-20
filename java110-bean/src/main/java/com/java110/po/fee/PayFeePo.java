@@ -34,6 +34,8 @@ public class PayFeePo implements Serializable {
     private String batchId;
     private String deductFrom;
 
+    private String ruleId;
+
     public String getFeeId() {
         return feeId;
     }
@@ -180,5 +182,13 @@ public class PayFeePo implements Serializable {
 
     public void setMaxTime(String maxTime) {
         this.maxTime = maxTime;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
     }
 }
