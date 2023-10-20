@@ -8,6 +8,7 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFee.PayFeeDetailRefreshFeeMonthDto;
+import com.java110.dto.payFeeRule.PayFeeRuleDto;
 import com.java110.fee.dao.IPayFeeConfigV1ServiceDao;
 import com.java110.fee.dao.impl.PayFeeV1ServiceDaoImpl;
 import com.java110.intf.fee.*;
@@ -20,6 +21,7 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -110,12 +112,28 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
 
     @Override
     public int covertCommunityPayFee(String communityId) {
-        return 0;
+        PayFeeRuleDto payFeeRuleDto = new PayFeeRuleDto();
+        payFeeRuleDto.setCommunityId(communityId);
+        List<PayFeeRuleDto> payFeeRuleDtos = payFeeRuleV1InnerServiceSMOImpl.queryPayFeeRules(payFeeRuleDto);
+        if (payFeeRuleDtos == null || payFeeRuleDtos.isEmpty()) {
+            return 0;
+        }
+
+        List<PayFeeRulePo> tmpPayFeeRulePos = BeanConvertUtil.covertBeanList(payFeeRuleDtos, PayFeeRulePo.class);
+        return rulesGeneratePayFees(tmpPayFeeRulePos);
     }
 
     @Override
     public int covertRuleIdsPayFee(List<String> ruleIds) {
-        return 0;
+        PayFeeRuleDto payFeeRuleDto = new PayFeeRuleDto();
+        payFeeRuleDto.setRuleIds(ruleIds.toArray(new String[ruleIds.size()]));
+        List<PayFeeRuleDto> payFeeRuleDtos = payFeeRuleV1InnerServiceSMOImpl.queryPayFeeRules(payFeeRuleDto);
+        if (payFeeRuleDtos == null || payFeeRuleDtos.isEmpty()) {
+            return 0;
+        }
+
+        List<PayFeeRulePo> tmpPayFeeRulePos = BeanConvertUtil.covertBeanList(payFeeRuleDtos, PayFeeRulePo.class);
+        return rulesGeneratePayFees(tmpPayFeeRulePos);
     }
 
     @Override
@@ -137,6 +155,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
     }
 
     /**
+     * 规则生成费用
      * @param tmpPayFeeRulePo
      */
     public int ruleGeneratePayFee(PayFeeRulePo tmpPayFeeRulePo) {

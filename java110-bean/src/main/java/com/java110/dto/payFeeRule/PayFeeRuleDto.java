@@ -1,6 +1,7 @@
 package com.java110.dto.payFeeRule;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,21 +16,22 @@ import java.util.Date;
 public class PayFeeRuleDto extends PageDto implements Serializable {
 
     private String maxTime;
-private String amount;
-private String feeTypeCd;
-private String curYearMonth;
-private String batchId;
-private String userId;
-private String incomeObjId;
-private String configId;
-private String feeFlag;
-private String startTime;
-private String endTime;
-private String state;
-private String ruleId;
-private String communityId;
-private String payerObjType;
-private String payerObjId;
+    private String amount;
+    private String feeTypeCd;
+    private String curYearMonth;
+    private String batchId;
+    private String userId;
+    private String incomeObjId;
+    private String configId;
+    private String feeFlag;
+    private String startTime;
+    private String endTime;
+    private String state;
+    private String ruleId;
+    private String[] ruleIds;
+    private String communityId;
+    private String payerObjType;
+    private String payerObjId;
 
 
     private Date createTime;
@@ -40,97 +42,128 @@ private String payerObjId;
     public String getMaxTime() {
         return maxTime;
     }
-public void setMaxTime(String maxTime) {
+
+    public void setMaxTime(String maxTime) {
         this.maxTime = maxTime;
     }
-public String getAmount() {
+
+    public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getFeeTypeCd() {
+
+    public String getFeeTypeCd() {
         return feeTypeCd;
     }
-public void setFeeTypeCd(String feeTypeCd) {
+
+    public void setFeeTypeCd(String feeTypeCd) {
         this.feeTypeCd = feeTypeCd;
     }
-public String getCurYearMonth() {
+
+    public String getCurYearMonth() {
         return curYearMonth;
     }
-public void setCurYearMonth(String curYearMonth) {
+
+    public void setCurYearMonth(String curYearMonth) {
         this.curYearMonth = curYearMonth;
     }
-public String getBatchId() {
+
+    public String getBatchId() {
         return batchId;
     }
-public void setBatchId(String batchId) {
+
+    public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
-public String getUserId() {
+
+    public String getUserId() {
         return userId;
     }
-public void setUserId(String userId) {
+
+    public void setUserId(String userId) {
         this.userId = userId;
     }
-public String getIncomeObjId() {
+
+    public String getIncomeObjId() {
         return incomeObjId;
     }
-public void setIncomeObjId(String incomeObjId) {
+
+    public void setIncomeObjId(String incomeObjId) {
         this.incomeObjId = incomeObjId;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getFeeFlag() {
+
+    public String getFeeFlag() {
         return feeFlag;
     }
-public void setFeeFlag(String feeFlag) {
+
+    public void setFeeFlag(String feeFlag) {
         this.feeFlag = feeFlag;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getPayerObjType() {
+
+    public String getPayerObjType() {
         return payerObjType;
     }
-public void setPayerObjType(String payerObjType) {
+
+    public void setPayerObjType(String payerObjType) {
         this.payerObjType = payerObjType;
     }
-public String getPayerObjId() {
+
+    public String getPayerObjId() {
         return payerObjId;
     }
-public void setPayerObjId(String payerObjId) {
+
+    public void setPayerObjId(String payerObjId) {
         this.payerObjId = payerObjId;
     }
 
@@ -149,5 +182,13 @@ public void setPayerObjId(String payerObjId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getRuleIds() {
+        return ruleIds;
+    }
+
+    public void setRuleIds(String[] ruleIds) {
+        this.ruleIds = ruleIds;
     }
 }

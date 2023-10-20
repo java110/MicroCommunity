@@ -81,6 +81,12 @@
         <if test="ruleId !=null and ruleId != ''">
             and t.rule_id= #{ruleId}
         </if>
+        <if test="ruleIds !=null ">
+            and t.rule_id in
+            <foreach collection="ruleIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
