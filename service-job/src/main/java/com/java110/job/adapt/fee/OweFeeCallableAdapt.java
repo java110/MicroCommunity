@@ -94,10 +94,18 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
         OwnerAppUserDto ownerAppUserDto = null;
         String userId = "";
         List<JSONObject> contents = null;
+
+        //todo 按房屋发送
         for (int roomIndex = 0; roomIndex < roomIds.size(); roomIndex++) {
             contents = new ArrayList<>();
             String notifyWay = MsgNotifyFactory.NOTIFY_WAY_WECHAT;
+            userId = "";
             for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
+                if (!oweFeeCallablePo.getPayerObjId().equals(roomIds.getString(roomIndex))) {
+                    continue;
+                }
+
+                //todo 业主不存在
                 if (StringUtil.isEmpty(oweFeeCallablePo.getOwnerId()) || oweFeeCallablePo.getOwnerId().startsWith("-")) {
                     updateOweFeeCallablePo = new OweFeeCallablePo();
                     updateOweFeeCallablePo.setOfcId(oweFeeCallablePo.getOfcId());
@@ -131,12 +139,13 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
 
             }
 
-            if (contents.size() < 1) {
-                continue;
+            if (contents.isEmpty()) {
+                return;
             }
 
             //todo 催缴
             ResultVo resultVo = MsgNotifyFactory.sendOweFeeMsg(data.getString("communityId"), userId, oweFeeCallablePos.get(0).getOwnerId(), contents, notifyWay);
+
             for (OweFeeCallablePo oweFeeCallablePo : oweFeeCallablePos) {
                 if (StringUtil.isEmpty(oweFeeCallablePo.getOwnerId()) || oweFeeCallablePo.getOwnerId().startsWith("-")) {
                     continue;
@@ -152,6 +161,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
                 }
                 oweFeeCallableV1InnerServiceSMOImpl.updateOweFeeCallable(updateOweFeeCallablePo);
             }
+
         }
     }
 
@@ -282,9 +292,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
             return true;
         }
 
-        if (DateUtil.getDateFromStringB(tempFeeDto.getEndTime()).before(DateUtil.getDateFromStringB(startTime))
-                && DateUtil.getDateFromStringB(tempFeeDto.getDeadlineTime()).after(DateUtil.getDateFromStringB(endTime))
-        ) {
+        if (DateUtil.getDateFromStringB(tempFeeDto.getEndTime()).before(DateUtil.getDateFromStringB(startTime)) && DateUtil.getDateFromStringB(tempFeeDto.getDeadlineTime()).after(DateUtil.getDateFromStringB(endTime))) {
             return true;
         }
 

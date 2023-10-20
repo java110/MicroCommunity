@@ -158,11 +158,15 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
         ownerAppUserDto.setUserId(userId);
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+        if (ownerAppUserDtos == null || ownerAppUserDtos.isEmpty()) {
             throw new IllegalArgumentException("业主未绑定，没有获取到微信openId");
         }
 
         String openId = ownerAppUserDtos.get(0).getOpenId();
+
+        if (StringUtil.isEmpty(openId) || openId.startsWith("-")) {
+            throw new IllegalArgumentException("没有获取到微信openId");
+        }
         Mapping mapping = MappingCache.getMapping(MappingConstant.WECHAT_DOMAIN, SPEC_CD_OWE_FEE_TEMPLATE);
 
         if (mapping == null) {
