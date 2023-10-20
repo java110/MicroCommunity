@@ -1,4 +1,4 @@
-package com.java110.fee.convertOnce;
+package com.java110.fee.bill;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
@@ -9,7 +9,6 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payFee.PayFeeDetailRefreshFeeMonthDto;
 import com.java110.dto.payFeeRule.PayFeeRuleDto;
-import com.java110.fee.dao.IPayFeeConfigV1ServiceDao;
 import com.java110.fee.dao.impl.PayFeeV1ServiceDaoImpl;
 import com.java110.intf.fee.*;
 import com.java110.po.fee.FeeAttrPo;
@@ -21,7 +20,6 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
