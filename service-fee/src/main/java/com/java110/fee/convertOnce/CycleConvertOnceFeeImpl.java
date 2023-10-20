@@ -140,7 +140,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
         //todo 创建 pay_fee 和 attrs 数据
 
         List<PayFeePo> payFeePos = new ArrayList<>();
-        for()
+        //for()
 
 
         return 0;
