@@ -27,7 +27,7 @@
         costTime,t.request_url,t.request_url requestUrl,t.request_method,t.request_method
         requestMethod,t.response_header,t.response_header responseHeader,t.log_id,t.log_id
         logId,t.request_header,t.request_header requestHeader,t.state,t.response_message,t.response_message
-        responseMessage,t.log_type logType
+        responseMessage,t.log_type logType,t.create_time createTime
         from transaction_out_log t
         where 1 =1
         <if test="requestMessage !=null and requestMessage != ''">
