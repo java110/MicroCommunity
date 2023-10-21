@@ -55,17 +55,19 @@ public class ListOwnerRepairsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         hasOwnerId(reqJson);
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
+        //todo 处理时间
+        ifHasTime(ownerRepairDto);
         if (!StringUtil.isEmpty(ownerRepairDto.getRoomId()) && ownerRepairDto.getRoomId().contains(",")) {
             String[] roomIds = ownerRepairDto.getRoomId().split(",");
             ownerRepairDto.setRoomIds(roomIds);
             ownerRepairDto.setRoomId("");
         }
-        //PC电话报修、PC工单池、H5工单池
-        //手机端员工单工单池 只返回未处理状态的数据
+        //todo PC电话报修、PC工单池、H5工单池
+        //todo 手机端员工单工单池 只返回未处理状态的数据
         if (!StringUtil.isEmpty(ownerRepairDto.getReqSource()) && ownerRepairDto.getReqSource().equals("mobile")) {
             ownerRepairDto.setState(RepairDto.STATE_WAIT);
         }
-        //pc电话报修模块 只返回PC员工登记和手机端员工登记的数据
+        //todo pc电话报修模块 只返回PC员工登记和手机端员工登记的数据
         if (!StringUtil.isEmpty(ownerRepairDto.getReqSource()) && ownerRepairDto.getReqSource().equals("pc_mobile")) {
             String[] repair_channel = {RepairDto.REPAIR_CHANNEL_STAFF, RepairDto.REPAIR_CHANNEL_TEL};
             ownerRepairDto.setRepairChannels(Arrays.asList(repair_channel));
@@ -112,6 +114,21 @@ public class ListOwnerRepairsCmd extends Cmd {
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerRepairs);
         context.setResponseEntity(responseEntity);
+    }
+
+    private void ifHasTime(RepairDto ownerRepairDto) {
+
+        if (StringUtil.isEmpty(ownerRepairDto.getEndTime())) {
+            return;
+        }
+
+        String endTime = ownerRepairDto.getEndTime();
+        if (endTime.contains(":")) {
+            return;
+        }
+
+        endTime += " 23:59:59";
+        ownerRepairDto.setEndTime(endTime);
     }
 
     private void hasOwnerId(JSONObject reqJson) {
