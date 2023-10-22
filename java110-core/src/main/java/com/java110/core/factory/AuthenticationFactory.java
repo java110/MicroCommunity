@@ -13,6 +13,7 @@ import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.dto.reportData.ReportDataHeaderDto;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.JWTCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
@@ -64,6 +65,8 @@ public class AuthenticationFactory {
      * 默认编码
      */
     private static final String CHARSET = "utf-8";
+
+    private static final String USER_ERROR_COUNT = "USER_ERROR_COUNT_";// 用户登录错误次数，防止暴力破解
 
 
     // 加密
@@ -603,6 +606,42 @@ public class AuthenticationFactory {
         return paramOut;
     }
 
+
+    /**
+     * 登陆密码错误时 记录，连续输入错误7次后账号锁定 2小时
+     *
+     * @param userName
+     */
+    public static void userLoginError(String userName) {
+        String count = CommonCache.getValue(USER_ERROR_COUNT + userName);
+        int countNum = 0;
+        if (!StringUtil.isEmpty(count)) {
+            countNum = Integer.parseInt(count);
+        }
+
+        countNum += 1;
+
+        CommonCache.setValue(USER_ERROR_COUNT + userName, countNum + "", CommonCache.TOKEN_EXPIRE_TIME);
+
+    }
+
+    /**
+     * 校验 登录次数
+     *
+     * @param userName 登录账号
+     */
+    public static void checkLoginErrorCount(String userName) {
+        String count = CommonCache.getValue(USER_ERROR_COUNT + userName);
+        int countNum = 0;
+        if (!StringUtil.isEmpty(count)) {
+            countNum = Integer.parseInt(count);
+        }
+
+        if (countNum >= 7) {
+            throw new IllegalArgumentException("登陆错误次数过多，请休息一会再试");
+        }
+
+    }
 
     /***********************************JWT start***************************************/
 

@@ -2,12 +2,14 @@ package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.core.smo.IOwnerGetDataCheck;
 import com.java110.dto.floor.FloorDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.unit.UnitDto;
@@ -82,6 +84,9 @@ public class ListFeeCmd extends Cmd {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerGetDataCheck ownerGetDataCheckImpl;
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -98,6 +103,9 @@ public class ListFeeCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
+
+        // todo 业主查询合法性校验
+        ownerGetDataCheckImpl.checkOwnerFee(CmdContextUtils.getAppId(cmdDataFlowContext), CmdContextUtils.getLoginUserId(cmdDataFlowContext), reqJson);
     }
 
     @Override
