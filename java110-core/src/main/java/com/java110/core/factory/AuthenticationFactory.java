@@ -637,7 +637,7 @@ public class AuthenticationFactory {
             countNum = Integer.parseInt(count);
         }
 
-        if (countNum >= 7) {
+        if (countNum >= 5) {
             throw new IllegalArgumentException("登陆错误次数过多，请休息一会再试");
         }
 
