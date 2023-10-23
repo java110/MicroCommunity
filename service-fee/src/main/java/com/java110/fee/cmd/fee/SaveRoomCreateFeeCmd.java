@@ -192,8 +192,8 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         int saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
 
         JSONObject paramOut = new JSONObject();
-        paramOut.put("totalRoom", saveFlag);
-        paramOut.put("successRoom", saveFlag);
+        paramOut.put("totalRoom", 1);
+        paramOut.put("successRoom", 1);
         paramOut.put("errorRoom", 0);
         responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
