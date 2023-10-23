@@ -16,10 +16,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.fee.IFeeBMO;
 import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -75,12 +72,14 @@ public class SaveRoomCreateFeeCmd extends Cmd {
     @Autowired
     private IPayFeeMonth payFeeMonthImpl;
 
+    @Autowired
+    private IRuleGeneratorPayFeeBillV1InnerServiceSMO ruleGeneratorPayFeeBillV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         // super.validatePageInfo(pd);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
-        Assert.hasKeyAndValue(reqJson, "locationTypeCd", "未包含收费范围");
         Assert.hasKeyAndValue(reqJson, "locationObjId", "未包含收费对象");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
@@ -98,14 +97,11 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
             Date endTime = null;
             Date configEndTime = null;
-            try {
-                endTime = DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
-                configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-                if (endTime.getTime() > configEndTime.getTime()) {
-                    throw new IllegalArgumentException("结束时间不能超过费用项时间");
-                }
-            } catch (ParseException e) {
-                throw new IllegalArgumentException("结束时间错误" + reqJson.getString("endTime"));
+
+            endTime = DateUtil.getDateFromStringB(reqJson.getString("endTime"));
+            configEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
+            if (endTime.getTime() > configEndTime.getTime()) {
+                throw new IllegalArgumentException("结束时间不能超过费用项时间");
             }
         }
 
@@ -125,52 +121,106 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         reqJson.put("userId", userId);
         List<RoomDto> roomDtos = null;
 
-
-        //生成批次号
+        //todo 生成批次号
         generatorBatch(reqJson);
-        //判断收费范围
+
         RoomDto roomDto = new RoomDto();
-        /*if (reqJson.containsKey("roomState") && RoomDto.STATE_SELL.equals(reqJson.getString("roomState"))) {
-            roomDto.setState(RoomDto.STATE_SELL);
-        }*/
-        if (reqJson.containsKey("roomState") && (reqJson.getString("roomState").contains(",") || !StringUtil.isEmpty(reqJson.getString("roomState")))) {
-            String states = reqJson.getString("roomState");
-            roomDto.setStates(states.split(","));
-        }
-        //如果区分了 房屋类型则设置
-        if (reqJson.containsKey("roomType")) {
-            roomDto.setRoomType(reqJson.getString("roomType"));
-        }
-        if (reqJson.containsKey("feeLayer") && !"全部".equals(reqJson.getString("feeLayer"))) {
-            String[] layers = reqJson.getString("feeLayer").split("#");
-            roomDto.setLayers(layers);
-        }
-        if ("1000".equals(reqJson.getString("locationTypeCd"))) {//小区
-            roomDto.setCommunityId(reqJson.getString("communityId"));
-            roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-        } else if ("4000".equals(reqJson.getString("locationTypeCd"))) {//楼栋
-            //RoomDto roomDto = new RoomDto();
-            roomDto.setCommunityId(reqJson.getString("communityId"));
-            roomDto.setFloorId(reqJson.getString("locationObjId"));
-            roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-        } else if ("2000".equals(reqJson.getString("locationTypeCd"))) {//单元
-            //RoomDto roomDto = new RoomDto();
-            roomDto.setCommunityId(reqJson.getString("communityId"));
-            roomDto.setUnitId(reqJson.getString("locationObjId"));
-            roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-        } else if ("3000".equals(reqJson.getString("locationTypeCd"))) {//房屋
-            //RoomDto roomDto = new RoomDto();
-            roomDto.setCommunityId(reqJson.getString("communityId"));
-            roomDto.setRoomId(reqJson.getString("locationObjId"));
-            roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-        } else {
-            throw new IllegalArgumentException("收费范围错误");
-        }
-        if (roomDtos == null || roomDtos.size() < 1) {
+        roomDto.setRoomType(reqJson.getString("roomType"));
+        roomDto.setCommunityId(reqJson.getString("communityId"));
+        roomDto.setRoomId(reqJson.getString("locationObjId"));
+        roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+
+        if (roomDtos == null || roomDtos.isEmpty()) {
             throw new IllegalArgumentException("未查到需要付费的房屋或未绑定业主");
         }
-        dealRoomFee(roomDtos, cmdDataFlowContext, reqJson, event);
+        dealRoomFee(roomDtos.get(0), cmdDataFlowContext, reqJson, event);
     }
+
+    private void dealRoomFee(RoomDto roomDto, ICmdDataFlowContext context, JSONObject reqJson, CmdEvent event) {
+
+        //todo 房屋刷入业主信息
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setCommunityId(roomDto.getCommunityId());
+        ownerDto.setRoomId(roomDto.getRoomId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
+
+        if (ownerDtos != null && !ownerDtos.isEmpty()) {
+            roomDto.setOwnerId(ownerDtos.get(0).getOwnerId());
+            roomDto.setOwnerName(ownerDtos.get(0).getName());
+            roomDto.setLink(ownerDtos.get(0).getLink());
+        }
+
+        List<PayFeePo> feePos = new ArrayList<>();
+        List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
+        ResponseEntity<String> responseEntity = null;
+
+        //todo 加入 房屋费用
+        feePos.add(BeanConvertUtil.covertBean(feeBMOImpl.addRoomFee(roomDto, reqJson, context), PayFeePo.class));
+
+        //todo 走账单模式
+        String billModal = ruleGeneratorPayFeeBillV1InnerServiceSMOImpl.needGeneratorBillData(feePos);
+        if ("Y".equals(billModal)) {
+            JSONObject paramOut = new JSONObject();
+            paramOut.put("totalRoom", 1);
+            paramOut.put("successRoom", 1);
+            paramOut.put("errorRoom", 0);
+            responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
+            context.setResponseEntity(responseEntity);
+            return;
+        }
+
+        if (!StringUtil.isEmpty(roomDto.getOwnerId())) {
+            if (!FeeDto.FEE_FLAG_CYCLE.equals(reqJson.getString("feeFlag"))) {
+                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
+            }
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDto.getOwnerId()));
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDto.getLink()));
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDto.getOwnerName()));
+        }
+
+        //todo 定制开发 加入
+        //1、对合同约定的租金递增比例、递增年限各不相同的问题，支持按合同到期日期设租金递增比例。
+        //2、能自动设置递增的租金实行自动计算当月的租金。
+        if (reqJson.containsKey("configComputingFormula") && FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(reqJson.getString("configComputingFormula"))) {
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE_CYCLE, reqJson.getString("rateCycle")));
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE, reqJson.getString("rate")));
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE_START_TIME, reqJson.getString("rateStartTime")));
+        }
+        //付费对象名称
+        feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME, roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum()));
+
+        int saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
+
+        JSONObject paramOut = new JSONObject();
+        paramOut.put("totalRoom", saveFlag);
+        paramOut.put("successRoom", saveFlag);
+        paramOut.put("errorRoom", 0);
+        responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
+        context.setResponseEntity(responseEntity);
+    }
+
+    private int saveFeeAndAttrs(List<PayFeePo> feePos, List<FeeAttrPo> feeAttrsPos) {
+        if (feePos == null || feePos.size() < 1) {
+            return 1;
+        }
+        int flag = feeInnerServiceSMOImpl.saveFee(feePos);
+        if (flag < 1) {
+            return flag;
+        }
+
+        flag = feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
+
+        // todo 这里异步的方式计算 月数据 和欠费数据
+        List<String> feeIds = new ArrayList<>();
+        for (PayFeePo feePo : feePos) {
+            feeIds.add(feePo.getFeeId());
+        }
+        payFeeMonthImpl.doGeneratorFeeMonths(feeIds, feePos.get(0).getCommunityId());
+
+        payFeeMonthImpl.doGeneratorOweFees(feeIds, feePos.get(0).getCommunityId());
+        return flag;
+    }
+
 
     /**
      * 生成批次号
@@ -197,104 +247,6 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         }
 
         reqJson.put("batchId", payFeeBatchPo.getBatchId());
-    }
-
-    private void dealRoomFee(List<RoomDto> roomDtos, ICmdDataFlowContext context, JSONObject reqJson, CmdEvent event) {
-        List<String> roomIds = new ArrayList<>();
-        for (RoomDto roomDto : roomDtos) {
-            roomIds.add(roomDto.getRoomId());
-        }
-        //房屋刷入业主信息
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setCommunityId(roomDtos.get(0).getCommunityId());
-        ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
-        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
-        for (RoomDto roomDto : roomDtos) {
-            for (OwnerDto tmpOwnerDto : ownerDtos) {
-                if (roomDto.getRoomId().equals(tmpOwnerDto.getRoomId())) {
-                    roomDto.setOwnerId(tmpOwnerDto.getOwnerId());
-                    roomDto.setOwnerName(tmpOwnerDto.getName());
-                    roomDto.setLink(tmpOwnerDto.getLink());
-                }
-            }
-        }
-        List<PayFeePo> feePos = new ArrayList<>();
-        List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
-        ResponseEntity<String> responseEntity = null;
-        int failRooms = 0;
-        //添加单元信息
-        int curFailRoomCount = 0;
-        int saveFlag = 0;
-        for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
-            curFailRoomCount++;
-            //加入 房屋费用
-            feePos.add(BeanConvertUtil.covertBean(feeBMOImpl.addRoomFee(roomDtos.get(roomIndex), reqJson, context), PayFeePo.class));
-            if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
-                if (!FeeDto.FEE_FLAG_CYCLE.equals(reqJson.getString("feeFlag"))) {
-                    feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
-                }
-                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDtos.get(roomIndex).getOwnerId()));
-                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDtos.get(roomIndex).getLink()));
-                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDtos.get(roomIndex).getOwnerName()));
-            }
-
-            //todo 定制开发 加入
-            //1、对合同约定的租金递增比例、递增年限各不相同的问题，支持按合同到期日期设租金递增比例。
-            //2、能自动设置递增的租金实行自动计算当月的租金。
-            if (reqJson.containsKey("configComputingFormula") && FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(reqJson.getString("configComputingFormula"))) {
-                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE_CYCLE, reqJson.getString("rateCycle")));
-                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE, reqJson.getString("rate")));
-                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_RATE_START_TIME, reqJson.getString("rateStartTime")));
-            }
-
-            //付费对象名称
-            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME, roomDtos.get(roomIndex).getFloorNum() + "-" + roomDtos.get(roomIndex).getUnitNum() + "-" + roomDtos.get(roomIndex).getRoomNum()));
-
-            if (roomIndex % DEFAULT_ADD_FEE_COUNT == 0 && roomIndex != 0) {
-                saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
-                feePos = new ArrayList<>();
-                feeAttrsPos = new ArrayList<>();
-                if (saveFlag < 1) {
-                    failRooms += curFailRoomCount;
-                } else {
-                    curFailRoomCount = 0;
-                }
-            }
-        }
-        if (feePos != null && feePos.size() > 0) {
-            saveFlag = saveFeeAndAttrs(feePos, feeAttrsPos);
-            if (saveFlag < 1) {
-                failRooms += curFailRoomCount;
-            }
-        }
-        JSONObject paramOut = new JSONObject();
-        paramOut.put("totalRoom", roomDtos.size());
-        paramOut.put("successRoom", roomDtos.size() - failRooms);
-        paramOut.put("errorRoom", failRooms);
-        responseEntity = new ResponseEntity<>(paramOut.toJSONString(), HttpStatus.OK);
-        context.setResponseEntity(responseEntity);
-    }
-
-    private int saveFeeAndAttrs(List<PayFeePo> feePos, List<FeeAttrPo> feeAttrsPos) {
-        if (feePos == null || feePos.size() < 1) {
-            return 1;
-        }
-        int flag = feeInnerServiceSMOImpl.saveFee(feePos);
-        if (flag < 1) {
-            return flag;
-        }
-
-        flag = feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
-
-        // todo 这里异步的方式计算 月数据 和欠费数据
-        List<String> feeIds = new ArrayList<>();
-        for (PayFeePo feePo : feePos) {
-            feeIds.add(feePo.getFeeId());
-        }
-        payFeeMonthImpl.doGeneratorFeeMonths(feeIds, feePos.get(0).getCommunityId());
-
-        payFeeMonthImpl.doGeneratorOweFees(feeIds,feePos.get(0).getCommunityId());
-        return flag;
     }
 
 

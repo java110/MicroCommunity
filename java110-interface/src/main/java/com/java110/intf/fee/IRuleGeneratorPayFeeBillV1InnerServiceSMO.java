@@ -17,6 +17,7 @@ package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.payFeeRule.PayFeeRuleDto;
+import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeRule.PayFeeRulePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,4 +48,21 @@ public interface IRuleGeneratorPayFeeBillV1InnerServiceSMO {
     int covertCommunityPayFee(@RequestBody String communityId);
 
 
+    /**
+     * 生成费用账单（周期性费用和间接性费用）
+     *
+     * @param feePos
+     * @return Y表示生成 N 表示条件不具备不需要生成
+     */
+    @RequestMapping(value = "/needGeneratorBillData", method = RequestMethod.POST)
+    String needGeneratorBillData(@RequestBody List<PayFeePo> feePos);
+
+    /**
+     * 生成费用账单（周期性费用和间接性费用）
+     *
+     * @param feePo
+     * @return Y表示生成 N 表示条件不具备不需要生成
+     */
+    @RequestMapping(value = "/needGeneratorBillDataOnlyFee", method = RequestMethod.POST)
+    String needGeneratorBillDataOnlyFee(@RequestBody PayFeePo feePo);
 }

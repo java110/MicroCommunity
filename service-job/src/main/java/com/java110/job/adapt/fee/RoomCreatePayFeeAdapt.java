@@ -18,10 +18,7 @@ import com.java110.dto.system.Business;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IOweFeeCallableV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeMonthInnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
@@ -81,6 +78,10 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IPayFeeMonthInnerServiceSMO payFeeMonthInnerServiceSMOImpl;
+
+
+    @Autowired
+    private IRuleGeneratorPayFeeBillV1InnerServiceSMO ruleGeneratorPayFeeBillV1InnerServiceSMOImpl;
 
     @Override
     public void execute(Business business, List<Business> businesses) throws ParseException {
@@ -218,6 +219,15 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
         if (feePos == null || feePos.isEmpty()) {
             return 1;
         }
+
+        //todo 账单模式
+        String billModal = ruleGeneratorPayFeeBillV1InnerServiceSMOImpl.needGeneratorBillData(feePos);
+
+        if ("Y".equals(billModal)) {
+            return 1;
+        }
+
+
         int flag = feeInnerServiceSMOImpl.saveFee(feePos);
         if (flag < 1) {
             return flag;

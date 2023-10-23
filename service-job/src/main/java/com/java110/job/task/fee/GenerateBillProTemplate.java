@@ -57,6 +57,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
     private IRuleGeneratorPayFeeBillV1InnerServiceSMO ruleGeneratorPayFeeBillV1InnerServiceSMOImpl;
 
 
+
     @Override
     protected void process(TaskDto taskDto) throws Exception {
 
@@ -87,12 +88,7 @@ public class GenerateBillProTemplate extends TaskSystemQuartz {
      */
     private void doRuleCreatePayFeeBill(TaskDto taskDto, CommunityDto communityDto) {
 
-        String value = CommunitySettingFactory.getValue(communityDto.getCommunityId(), "PAY_FEE_MONTH");
 
-        //todo 小区没有按月缴费 skip
-        if (!"ON".equals(value)) {
-            return;
-        }
 
         ruleGeneratorPayFeeBillV1InnerServiceSMOImpl.covertCommunityPayFee(communityDto.getCommunityId());
     }
