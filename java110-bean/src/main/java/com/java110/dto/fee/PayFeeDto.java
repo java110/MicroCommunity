@@ -32,6 +32,7 @@ public class PayFeeDto extends PageDto implements Serializable {
     private String createTime;
     private String batchId;
 
+    private String ruleId;
 
     public String getFeeId() {
         return feeId;
