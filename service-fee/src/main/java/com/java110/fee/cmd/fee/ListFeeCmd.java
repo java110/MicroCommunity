@@ -141,7 +141,7 @@ public class ListFeeCmd extends Cmd {
             for (ApiFeeDataVo apiFeeDataVo : apiFeeDataVos) {
                 //获取付费对象类型
                 String payerObjType = apiFeeDataVo.getPayerObjType();
-                if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) {
+                if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(payerObjType)) {
                     apiFeeDataVo.setCarTypeCd("1001");
                 }
                 fees.add(apiFeeDataVo);
@@ -278,7 +278,7 @@ public class ListFeeCmd extends Cmd {
     }
 
     private void computeFeePrice(List<FeeDto> feeDtos) {
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (feeDtos == null || feeDtos.isEmpty()) {
             return;
         }
         String val = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), TOTAL_FEE_PRICE);
