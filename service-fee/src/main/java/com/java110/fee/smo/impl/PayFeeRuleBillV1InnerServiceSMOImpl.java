@@ -28,8 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -49,6 +48,14 @@ public class PayFeeRuleBillV1InnerServiceSMOImpl extends BaseServiceSMO implemen
     @Override
     public int savePayFeeRuleBill(@RequestBody  PayFeeRuleBillPo payFeeRuleBillPo) {
         int saveFlag = payFeeRuleBillV1ServiceDaoImpl.savePayFeeRuleBillInfo(BeanConvertUtil.beanCovertMap(payFeeRuleBillPo));
+        return saveFlag;
+    }
+
+    @Override
+    public int savePayFeeRuleBills(@RequestBody  List<PayFeeRuleBillPo> payFeeRuleBillPos) {
+        Map<String, Object> info = new HashMap<>();
+        info.put("payFeeRuleBillPos",payFeeRuleBillPos);
+        int saveFlag = payFeeRuleBillV1ServiceDaoImpl.savePayFeeRuleBills(info);
         return saveFlag;
     }
 

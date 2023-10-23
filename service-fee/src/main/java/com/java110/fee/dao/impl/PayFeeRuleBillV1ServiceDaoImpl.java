@@ -60,6 +60,15 @@ public class PayFeeRuleBillV1ServiceDaoImpl extends BaseServiceDao implements IP
         return saveFlag;
     }
 
+    @Override
+    public int savePayFeeRuleBills(Map info) {
+        logger.debug("保存 savePayFeeRuleBills 入参 info : {}",info);
+
+        int saveFlag = sqlSessionTemplate.insert("payFeeRuleBillV1ServiceDaoImpl.savePayFeeRuleBills",info);
+
+        return saveFlag;
+    }
+
 
     /**
      * 查询费用账单信息（instance）

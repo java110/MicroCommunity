@@ -14,6 +14,17 @@
         )
     </insert>
 
+    <insert id="savePayFeeRuleBills" parameterType="Map">
+        insert into pay_fee_rule_bill(
+        bill_name,config_id,bill_id,cur_year_month,remark,rule_id,community_id,batch_id,fee_id
+        ) values
+        <foreach collection="payFeeRuleBillPos" item="item" separator=",">
+            (#{item.billName},#{item.configId},#{item.billId},#{item.curYearMonth},#{item.remark},#{item.ruleId},#{item.communityId},#{item.batchId},#{item.feeId})
+        </foreach>
+
+    </insert>
+
+
 
     <!-- 查询费用账单信息 add by wuxw 2018-07-03 -->
     <select id="getPayFeeRuleBillInfo" parameterType="Map" resultType="Map">

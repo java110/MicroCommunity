@@ -41,7 +41,7 @@ public interface IPayFeeRuleBillV1ServiceDao {
     int savePayFeeRuleBillInfo(Map info) throws DAOException;
 
 
-
+    int savePayFeeRuleBills(Map info);
 
     /**
      * 查询费用账单信息（instance过程）
@@ -69,5 +69,6 @@ public interface IPayFeeRuleBillV1ServiceDao {
      * @return 费用账单数量
      */
     int queryPayFeeRuleBillsCount(Map info);
+
 
 }

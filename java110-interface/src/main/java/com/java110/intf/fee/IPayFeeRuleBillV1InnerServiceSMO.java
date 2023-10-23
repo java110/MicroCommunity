@@ -41,6 +41,9 @@ public interface IPayFeeRuleBillV1InnerServiceSMO {
     @RequestMapping(value = "/savePayFeeRuleBill", method = RequestMethod.POST)
     int savePayFeeRuleBill(@RequestBody PayFeeRuleBillPo payFeeRuleBillPo);
 
+    @RequestMapping(value = "/savePayFeeRuleBills", method = RequestMethod.POST)
+    int savePayFeeRuleBills(@RequestBody  List<PayFeeRuleBillPo> payFeeRuleBillPos);
+
     @RequestMapping(value = "/updatePayFeeRuleBill", method = RequestMethod.POST)
     int updatePayFeeRuleBill(@RequestBody PayFeeRuleBillPo payFeeRuleBillPo);
 
