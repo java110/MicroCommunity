@@ -17,6 +17,7 @@ package com.java110.po.payFeeRuleBill;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-10-23 16:59:08 mail: 928255095@qq.com
@@ -28,76 +29,95 @@ import java.util.Date;
 public class PayFeeRuleBillPo implements Serializable {
 
     private String billName;
-private String configId;
-private String billId;
-private String curYearMonth;
-private String statusCd = "0";
-private String remark;
-private String ruleId;
-private String communityId;
-private String batchId;
-private String feeId;
-public String getBillName() {
+    private String configId;
+    private String billId;
+    private String curYearMonth;
+    private String statusCd = "0";
+    private String remark;
+    private String ruleId;
+    private String communityId;
+    private String batchId;
+    private String feeId;
+
+    public String getBillName() {
         return billName;
     }
-public void setBillName(String billName) {
+
+    public void setBillName(String billName) {
         this.billName = billName;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getBillId() {
+
+    public String getBillId() {
         return billId;
     }
-public void setBillId(String billId) {
+
+    public void setBillId(String billId) {
         this.billId = billId;
     }
-public String getCurYearMonth() {
+
+    public String getCurYearMonth() {
         return curYearMonth;
     }
-public void setCurYearMonth(String curYearMonth) {
+
+    public void setCurYearMonth(String curYearMonth) {
         this.curYearMonth = curYearMonth;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getBatchId() {
+
+    public String getBatchId() {
         return batchId;
     }
-public void setBatchId(String batchId) {
+
+    public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-
 
 
 }

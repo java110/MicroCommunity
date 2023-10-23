@@ -14,6 +14,7 @@ import com.java110.intf.fee.*;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeRule.PayFeeRulePo;
+import com.java110.po.payFeeRuleBill.PayFeeRuleBillPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
@@ -57,6 +58,9 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
+
+    @Autowired
+    private IPayFeeRuleBillV1InnerServiceSMO payFeeRuleBillV1InnerServiceSMOImpl;
 
     @Override
     public int convertPayFees(List<PayFeePo> payFeePos) {
@@ -154,6 +158,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
 
     /**
      * 规则生成费用
+     *
      * @param tmpPayFeeRulePo
      */
     public int ruleGeneratePayFee(PayFeeRulePo tmpPayFeeRulePo) {
@@ -170,7 +175,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
         Date targetEndTime = computeTargetEndTime(tmpPayFeeRulePo, feeConfigDtos.get(0));
 
         //todo 创建 pay_fee 和 attrs 数据
-
+        List<PayFeeRuleBillPo> payFeeRuleBillPos = new ArrayList<>();
         List<PayFeePo> tmpPayFeePos = new ArrayList<>();
         List<FeeAttrPo> tmpFeeAttrPos = new ArrayList<>();
 
@@ -195,7 +200,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
                 endTime = targetEndTime;
             }
             //todo 生成 费用
-            doGeneratorPayFee(tmpPayFeeRulePo, startTime, endTime, feeConfigDtos.get(0), tmpPayFeePos, tmpFeeAttrPos, ownerDto, payerObjName);
+            doGeneratorPayFee(tmpPayFeeRulePo, startTime, endTime, feeConfigDtos.get(0), tmpPayFeePos, tmpFeeAttrPos, payFeeRuleBillPos, ownerDto, payerObjName);
 
             startTime = endTime;
 
@@ -203,7 +208,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
         while (endTime.getTime() < targetEndTime.getTime());
         int saveFlag = 0;
         if (!tmpPayFeePos.isEmpty()) {
-            saveFlag = saveFeeAndAttrs(tmpPayFeePos, tmpFeeAttrPos);
+            saveFlag = saveFeeAndAttrs(tmpPayFeePos, tmpFeeAttrPos, payFeeRuleBillPos);
         }
 
         //todo 修改pay_fee_rule 的CurYearMonth
@@ -220,6 +225,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
 
     private void doGeneratorPayFee(PayFeeRulePo tmpPayFeeRulePo, Date startTime, Date endTime, FeeConfigDto feeConfigDto,
                                    List<PayFeePo> tmpPayFeePos, List<FeeAttrPo> tmpFeeAttrPos,
+                                   List<PayFeeRuleBillPo> payFeeRuleBillPos,
                                    OwnerDto ownerDto,
                                    String payerObjName) {
 
@@ -232,6 +238,17 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
 
         tmpPayFeePos.add(payFeePo);
 
+        //todo 生成ruleBill 数据
+        PayFeeRuleBillPo payFeeRuleBillPo = new PayFeeRuleBillPo();
+        payFeeRuleBillPo.setFeeId(payFeePo.getFeeId());
+        payFeeRuleBillPo.setBillId(GenerateCodeFactory.getGeneratorId("13"));
+        payFeeRuleBillPo.setBillName(feeConfigDto.getFeeName());
+        payFeeRuleBillPo.setRuleId(tmpPayFeeRulePo.getRuleId());
+        payFeeRuleBillPo.setConfigId(tmpPayFeeRulePo.getConfigId());
+        payFeeRuleBillPo.setBatchId(payFeePo.getBatchId());
+        payFeeRuleBillPo.setCurYearMonth(DateUtil.getFormatTimeStringB(startTime));
+        payFeeRuleBillPo.setCommunityId(payFeePo.getCommunityId());
+        payFeeRuleBillPos.add(payFeeRuleBillPo);
 
         tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, DateUtil.getFormatTimeStringB(endTime)));
 
@@ -258,13 +275,17 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
     }
 
 
-    private int saveFeeAndAttrs(List<PayFeePo> feePos, List<FeeAttrPo> feeAttrsPos) {
+    private int saveFeeAndAttrs(List<PayFeePo> feePos, List<FeeAttrPo> feeAttrsPos, List<PayFeeRuleBillPo> payFeeRuleBillPos) {
         if (feePos == null || feePos.isEmpty()) {
             return 1;
         }
         int flag = feeInnerServiceSMOImpl.saveFee(feePos);
         if (flag < 1) {
             return flag;
+        }
+
+        if (!payFeeRuleBillPos.isEmpty()) {
+            payFeeRuleBillV1InnerServiceSMOImpl.savePayFeeRuleBills(payFeeRuleBillPos);
         }
 
         flag = feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
