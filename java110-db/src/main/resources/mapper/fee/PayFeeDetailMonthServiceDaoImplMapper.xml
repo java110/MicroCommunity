@@ -358,7 +358,7 @@
         t.community_id communityId,t.fee_id feeId,t.month_id monthId,
         t.obj_name objName,t.obj_id objId,t.owner_name ownerName,t.owner_id ownerId,t.link,t.state,t.pay_fee_time
         payFeeTime,t.cur_month_time curMonthTime,pfc.square_price squarePrice,pfc.additional_amount
-        additionalAmount,pfc.fee_flag,pfc.fee_flag feeFlag,
+        additionalAmount,pf.fee_flag,pf.fee_flag feeFlag,
         pfc.fee_name feeName,td1.name feeTypeCdName,td3.name feeFlagName,pfc.computing_formula
         computingFormula,pfc.computing_formula_text computingFormulaText,
         pfc.bill_type billType,pf.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time

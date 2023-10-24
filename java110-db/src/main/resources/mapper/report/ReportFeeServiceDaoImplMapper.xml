@@ -53,7 +53,7 @@
         pfc.additional_amount additionalAmount,pfc.bill_type billType,pfc.computing_formula
         computingFormula,pfc.computing_formula_text computingFormulaText,
         pfc.payment_cd paymentCd,
-        pfc.payment_cycle paymentCycle,pfc.square_price squarePrice,pfc.fee_flag feeFlag,t.payer_obj_id
+        pfc.payment_cycle paymentCycle,pfc.square_price squarePrice,t.fee_flag feeFlag,t.payer_obj_id
         payerObjId,t.payer_obj_type payerObjType,
         t.amount,t.create_time createTime,t.end_time endTime,t.fee_id feeId,t.income_obj_id incomeObjId,t.start_time
         startTime,t.state,
