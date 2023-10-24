@@ -250,7 +250,11 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
         payFeeRuleBillPo.setCommunityId(payFeePo.getCommunityId());
         payFeeRuleBillPos.add(payFeeRuleBillPo);
 
-        tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, DateUtil.getFormatTimeStringB(endTime)));
+        //todo 这里时间少一天，显示，因为是周期性转一次性 所以 这里为了显示合理 结束时间少一天处理
+        Calendar endTimeCal = Calendar.getInstance();
+        endTimeCal.setTime(endTime);
+        endTimeCal.add(Calendar.DAY_OF_MONTH, -1);
+        tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, DateUtil.getFormatTimeStringB(endTimeCal.getTime())));
 
         if (ownerDto != null) {
             tmpFeeAttrPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_OWNER_ID, ownerDto.getOwnerId()));
