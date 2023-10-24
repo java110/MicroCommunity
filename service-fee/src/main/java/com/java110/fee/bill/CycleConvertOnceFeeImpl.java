@@ -1,5 +1,6 @@
 package com.java110.fee.bill;
 
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
@@ -162,6 +163,11 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
      * @param tmpPayFeeRulePo
      */
     public int ruleGeneratePayFee(PayFeeRulePo tmpPayFeeRulePo) {
+        int ruleCycle = 1;
+        String value = CommunitySettingFactory.getValue(tmpPayFeeRulePo.getCommunityId(), "PAY_FEE_MONTH_CYCLE");
+        if (StringUtil.isNumber(value)) {
+            ruleCycle = Integer.parseInt(value);
+        }
 
         //todo 查询费用项信息
         FeeConfigDto feeConfigDto = new FeeConfigDto();
@@ -195,7 +201,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
         }
 
         do {
-            endTime = DateUtil.getNextMonthFirstDate(startTime);
+            endTime = DateUtil.getNextMonthFirstDate(startTime, ruleCycle);
             if (endTime.getTime() >= targetEndTime.getTime()) {
                 endTime = targetEndTime;
             }

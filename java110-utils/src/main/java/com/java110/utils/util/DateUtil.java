@@ -412,13 +412,18 @@ public class DateUtil {
 
     public static Date getNextMonthFirstDate(Date curDate) {
 
+        return getNextMonthFirstDate(curDate,1);
+    }
+
+    public static Date getNextMonthFirstDate(Date curDate,int monthCount) {
+
         Calendar curDateCal = Calendar.getInstance();
         curDateCal.setTime(curDate);
         curDateCal.set(Calendar.DAY_OF_MONTH, 1);
         curDateCal.set(Calendar.HOUR_OF_DAY, 0);
         curDateCal.set(Calendar.MINUTE, 0);
         curDateCal.set(Calendar.SECOND, 0);
-        curDateCal.add(Calendar.MONTH, 1);
+        curDateCal.add(Calendar.MONTH, monthCount);
         return curDateCal.getTime();
     }
 
