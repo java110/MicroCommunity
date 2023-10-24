@@ -22,16 +22,21 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.payFeeRuleBill.PayFeeRuleBillDto;
+import com.java110.intf.fee.IPayFeeRuleBillV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeRuleV1InnerServiceSMO;
 import com.java110.po.payFeeRule.PayFeeRulePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.payFeeRule.PayFeeRuleDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,35 +56,71 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "payFeeRule.listPayFeeRule")
 public class ListPayFeeRuleCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListPayFeeRuleCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListPayFeeRuleCmd.class);
     @Autowired
     private IPayFeeRuleV1InnerServiceSMO payFeeRuleV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeRuleBillV1InnerServiceSMO payFeeRuleBillV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           PayFeeRuleDto payFeeRuleDto = BeanConvertUtil.covertBean(reqJson, PayFeeRuleDto.class);
+        PayFeeRuleDto payFeeRuleDto = BeanConvertUtil.covertBean(reqJson, PayFeeRuleDto.class);
 
-           int count = payFeeRuleV1InnerServiceSMOImpl.queryPayFeeRulesCount(payFeeRuleDto);
+        //todo 如果根据费用ID查询账单规则
+        ifHasFeeId(reqJson, payFeeRuleDto);
 
-           List<PayFeeRuleDto> payFeeRuleDtos = null;
+        int count = payFeeRuleV1InnerServiceSMOImpl.queryPayFeeRulesCount(payFeeRuleDto);
 
-           if (count > 0) {
-               payFeeRuleDtos = payFeeRuleV1InnerServiceSMOImpl.queryPayFeeRules(payFeeRuleDto);
-           } else {
-               payFeeRuleDtos = new ArrayList<>();
-           }
+        List<PayFeeRuleDto> payFeeRuleDtos = null;
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, payFeeRuleDtos);
+        if (count > 0) {
+            payFeeRuleDtos = payFeeRuleV1InnerServiceSMOImpl.queryPayFeeRules(payFeeRuleDto);
+        } else {
+            payFeeRuleDtos = new ArrayList<>();
+        }
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, payFeeRuleDtos);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 查询ruleId
+     * @param reqJson
+     * @param payFeeRuleDto
+     */
+    private void ifHasFeeId(JSONObject reqJson, PayFeeRuleDto payFeeRuleDto) {
+
+        if (!reqJson.containsKey("feeId")) {
+            return;
+        }
+
+        String feeId = reqJson.getString("feeId");
+
+        if (StringUtil.isEmpty(feeId)) {
+            return;
+        }
+
+        PayFeeRuleBillDto payFeeRuleBillDto = new PayFeeRuleBillDto();
+        payFeeRuleBillDto.setFeeId(feeId);
+        payFeeRuleBillDto.setCommunityId(payFeeRuleDto.getCommunityId());
+        List<PayFeeRuleBillDto> payFeeRuleBillDtos = payFeeRuleBillV1InnerServiceSMOImpl.queryPayFeeRuleBills(payFeeRuleBillDto);
+
+        if (payFeeRuleBillDtos == null || payFeeRuleBillDtos.isEmpty()) {
+            return;
+        }
+
+        payFeeRuleDto.setRuleId(payFeeRuleBillDtos.get(0).getRuleId());
     }
 }

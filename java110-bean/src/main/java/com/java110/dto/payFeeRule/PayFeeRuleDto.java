@@ -1,6 +1,7 @@
 package com.java110.dto.payFeeRule;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.fee.FeeConfigDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,10 +14,10 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class PayFeeRuleDto extends PageDto implements Serializable {
+public class PayFeeRuleDto extends FeeConfigDto implements Serializable {
 
     private String maxTime;
-    private String amount;
+
     private String feeTypeCd;
     private String curYearMonth;
     private String batchId;
@@ -45,14 +46,6 @@ public class PayFeeRuleDto extends PageDto implements Serializable {
 
     public void setMaxTime(String maxTime) {
         this.maxTime = maxTime;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
     }
 
     public String getFeeTypeCd() {

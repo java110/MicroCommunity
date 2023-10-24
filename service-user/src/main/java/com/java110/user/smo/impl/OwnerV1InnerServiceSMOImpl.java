@@ -99,7 +99,7 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
             accountPo.setLink(ownerDtos.get(0).getLink());
             accountInnerServiceSMOImpl.saveAccount(accountPo);
         } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
+            DistributedLock.releaseDistributedLock(key, requestId);
         }
     }
 
