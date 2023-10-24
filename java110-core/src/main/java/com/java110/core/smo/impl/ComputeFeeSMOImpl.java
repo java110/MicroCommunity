@@ -1647,7 +1647,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             }
 
             //todo 这里考虑 账单模式的场景
-            if (!StringUtil.isNumber(feeDto.getMonthCycle())) {
+            if (StringUtil.isNumber(feeDto.getMonthCycle())) {
                 oweMonth = Integer.parseInt(feeDto.getMonthCycle());
             }
 
