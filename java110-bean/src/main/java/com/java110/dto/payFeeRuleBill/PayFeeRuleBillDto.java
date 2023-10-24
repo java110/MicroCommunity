@@ -1,6 +1,8 @@
 package com.java110.dto.payFeeRuleBill;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.fee.FeeDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,17 +14,17 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class PayFeeRuleBillDto extends PageDto implements Serializable {
+public class PayFeeRuleBillDto extends FeeDto implements Serializable {
 
     private String billName;
-private String configId;
-private String billId;
-private String curYearMonth;
-private String remark;
-private String ruleId;
-private String communityId;
-private String batchId;
-private String feeId;
+    private String configId;
+    private String billId;
+    private String curYearMonth;
+    private String remark;
+    private String ruleId;
+    private String communityId;
+    private String batchId;
+    private String feeId;
 
 
     private Date createTime;
@@ -33,55 +35,72 @@ private String feeId;
     public String getBillName() {
         return billName;
     }
-public void setBillName(String billName) {
+
+    public void setBillName(String billName) {
         this.billName = billName;
     }
-public String getConfigId() {
+
+    public String getConfigId() {
         return configId;
     }
-public void setConfigId(String configId) {
+
+    public void setConfigId(String configId) {
         this.configId = configId;
     }
-public String getBillId() {
+
+    public String getBillId() {
         return billId;
     }
-public void setBillId(String billId) {
+
+    public void setBillId(String billId) {
         this.billId = billId;
     }
-public String getCurYearMonth() {
+
+    public String getCurYearMonth() {
         return curYearMonth;
     }
-public void setCurYearMonth(String curYearMonth) {
+
+    public void setCurYearMonth(String curYearMonth) {
         this.curYearMonth = curYearMonth;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getRuleId() {
+
+    public String getRuleId() {
         return ruleId;
     }
-public void setRuleId(String ruleId) {
+
+    public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getBatchId() {
+
+    public String getBatchId() {
         return batchId;
     }
-public void setBatchId(String batchId) {
+
+    public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
 
