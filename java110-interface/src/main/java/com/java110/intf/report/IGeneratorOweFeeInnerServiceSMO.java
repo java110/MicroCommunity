@@ -23,7 +23,7 @@ public interface IGeneratorOweFeeInnerServiceSMO {
 
 
     @RequestMapping(value = "/generatorOweData", method = RequestMethod.POST)
-    public int generatorOweData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
+    int generatorOweData(@RequestBody ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo);
 
     /**
      * 计算单个费用欠费

@@ -1,8 +1,8 @@
-package com.java110.job.task.report;
+package com.java110.job.task.fee;
 
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.task.TaskDto;
-import com.java110.intf.report.IGeneratorFeeYearStatisticsInnerServiceSMO;
+import com.java110.intf.report.IGeneratorFeeMonthStatisticsInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.reportFee.ReportFeeMonthStatisticsPo;
 import org.slf4j.Logger;
@@ -21,34 +21,29 @@ import java.util.List;
  * add by wuxw 2020/6/4
  **/
 @Component
-public class GenerateFeeYearStatisticsTemplate extends TaskSystemQuartz {
-    private static final Logger logger = LoggerFactory.getLogger(GenerateFeeYearStatisticsTemplate.class);
+public class GenerateFeeMonthStatisticsTemplate extends TaskSystemQuartz {
+
+    private static final Logger logger = LoggerFactory.getLogger(GenerateFeeMonthStatisticsTemplate.class);
 
     @Autowired
-    private IGeneratorFeeYearStatisticsInnerServiceSMO generatorFeeYearStatisticsInnerServiceSMOImpl;
-
+    private IGeneratorFeeMonthStatisticsInnerServiceSMO generatorFeeMonthStatisticsInnerServiceSMOImpl;
 
     @Override
     protected void process(TaskDto taskDto) throws Exception {
-
         // 获取小区
         List<CommunityDto> communityDtos = getAllCommunity();
-
         for (CommunityDto communityDto : communityDtos) {
             try {
-                GenerateFeeYearStatistic(taskDto, communityDto);
+                GenerateFeeMonthStatistic(taskDto, communityDto);
             } catch (Exception e) {
                 logger.error("生成月报表 失败", e);
             }
         }
-
     }
 
-    private void GenerateFeeYearStatistic(TaskDto taskDto, CommunityDto communityDto) {
+    private void GenerateFeeMonthStatistic(TaskDto taskDto, CommunityDto communityDto) {
         ReportFeeMonthStatisticsPo reportFeeMonthStatisticsPo = new ReportFeeMonthStatisticsPo();
         reportFeeMonthStatisticsPo.setCommunityId(communityDto.getCommunityId());
-        generatorFeeYearStatisticsInnerServiceSMOImpl.generatorData(reportFeeMonthStatisticsPo);
+        generatorFeeMonthStatisticsInnerServiceSMOImpl.generatorData(reportFeeMonthStatisticsPo);
     }
-
-
 }

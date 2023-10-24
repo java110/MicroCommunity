@@ -112,9 +112,7 @@
         </if>
 
 
-        <if test="batchId !=null and batchId != ''">
-            , t.batch_id= #{batchId}
-        </if>
+
 
         where 1=1
         <if test="billId !=null and billId != ''">
@@ -128,6 +126,9 @@
         </if>
         <if test="ruleId !=null and ruleId != ''">
             and t.rule_id= #{ruleId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
         </if>
 
     </update>

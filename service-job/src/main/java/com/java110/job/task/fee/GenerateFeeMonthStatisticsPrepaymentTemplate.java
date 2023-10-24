@@ -1,4 +1,4 @@
-package com.java110.job.task.report;
+package com.java110.job.task.fee;
 
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.community.CommunityDto;

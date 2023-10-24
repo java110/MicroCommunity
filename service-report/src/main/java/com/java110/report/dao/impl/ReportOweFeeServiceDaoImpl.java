@@ -82,7 +82,7 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
      */
     @Override
     public int deleteReportOweFeeInfo(Map info) throws DAOException {
-        logger.debug("修改欠费统计信息Instance 入参 info : {}", info);
+        logger.debug("deleteReportOweFeeInfo : {}", info);
 
         int saveFlag = sqlSessionTemplate.update("reportOweFeeServiceDaoImpl.deleteReportOweFeeInfo", info);
 
