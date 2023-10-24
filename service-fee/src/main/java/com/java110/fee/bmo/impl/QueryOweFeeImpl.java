@@ -152,6 +152,10 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         customStartTime = feeDto.getCustomStartTime();
         customEndTime = feeDto.getCustomEndTime();
         feeDto = feeDtos.get(0);
+        //todo 考虑账单模式
+        if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag()) && StringUtil.isNumber(feeDto.getMonthCycle())) {
+            cycel = feeDto.getMonthCycle();
+        }
         if (!StringUtil.isEmpty(cycel)) {
             feeDto.setCycle(cycel);
         }
@@ -656,8 +660,6 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         }
 
     }
-
-
 
 
     private Date getTargetEndTime(double v, Date startDate) {

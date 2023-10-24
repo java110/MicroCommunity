@@ -1644,10 +1644,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             if (preEndTime.getTime() <= DateUtil.getCurrentDate().getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
                 oweMonth = 1.0;
-                //todo 这里考虑 账单模式的场景
-                if (!StringUtil.isNumber(feeDto.getMonthCycle())) {
-                    oweMonth = Integer.parseInt(feeDto.getMonthCycle());
-                }
+            }
+
+            //todo 这里考虑 账单模式的场景
+            if (!StringUtil.isNumber(feeDto.getMonthCycle())) {
+                oweMonth = Integer.parseInt(feeDto.getMonthCycle());
             }
 
         } else if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeDto.getFeeFlag())) {

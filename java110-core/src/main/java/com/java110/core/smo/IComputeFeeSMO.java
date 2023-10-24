@@ -126,7 +126,7 @@ public interface IComputeFeeSMO {
      * oweMonth:1.0
      * }
      */
-    public Map getTargetEndDateAndOweMonth(FeeDto feeDto);
+     Map getTargetEndDateAndOweMonth(FeeDto feeDto);
 
 
     /**
@@ -134,10 +134,10 @@ public interface IComputeFeeSMO {
      *
      * @return
      */
-    public Map getFeePrice(FeeDto feeDto);
+     Map getFeePrice(FeeDto feeDto);
 
 
-    public Map getFeePrice(FeeDto feeDto, RoomDto roomDto);
+     Map getFeePrice(FeeDto feeDto, RoomDto roomDto);
 
     /**
      * 时间差 按天折算
