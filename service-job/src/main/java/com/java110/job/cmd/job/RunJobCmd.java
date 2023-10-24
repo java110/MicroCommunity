@@ -5,7 +5,9 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.task.TaskAttrDto;
 import com.java110.dto.task.TaskDto;
+import com.java110.intf.dev.ITaskAttrV1InnerServiceSMO;
 import com.java110.intf.dev.ITaskV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.exception.CmdException;
@@ -25,7 +27,8 @@ public class RunJobCmd extends Cmd {
     @Autowired
     private ITaskV1InnerServiceSMO taskV1InnerServiceSMOImpl;
 
-
+    @Autowired
+    private ITaskAttrV1InnerServiceSMO taskAttrV1InnerServiceSMO;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -41,7 +44,10 @@ public class RunJobCmd extends Cmd {
         List<TaskDto> taskDtos = taskV1InnerServiceSMOImpl.queryTasks(taskDto);
 
         Assert.listOnlyOne(taskDtos,"任务不存在");
-
+        TaskAttrDto taskAttrDto = new TaskAttrDto();
+        taskAttrDto.setTaskId(taskDtos.get(0).getTaskId());
+        List<TaskAttrDto> taskAttrDtos = taskAttrV1InnerServiceSMO.queryTaskAttrs(taskAttrDto);
+        taskDto.setTaskAttr(taskAttrDtos);
 
 
         TaskSystemQuartz taskSystemQuartz = (TaskSystemQuartz) ApplicationContextFactory.getBean(taskDtos.get(0).getClassBean());

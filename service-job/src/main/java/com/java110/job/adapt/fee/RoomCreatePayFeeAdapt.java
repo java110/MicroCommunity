@@ -82,6 +82,8 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IRuleGeneratorPayFeeBillV1InnerServiceSMO ruleGeneratorPayFeeBillV1InnerServiceSMOImpl;
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Override
     public void execute(Business business, List<Business> businesses) throws ParseException {
@@ -137,10 +139,18 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
         List<PayFeePo> feePos = new ArrayList<>();
         List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
 
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(data.getString("communityId"));
+        feeConfigDto.setConfigId(data.getString("configId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        Assert.listOnlyOne(feeConfigDtos, "当前费用项ID不存在或存在多条" + data.getString("configId"));
+
+
         int saveFlag = 0;
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
             //todo 加入 房屋费用
-            feePos.add(addRoomFee(roomDtos.get(roomIndex), data));
+            feePos.add(addRoomFee(roomDtos.get(roomIndex), data, feeConfigDtos.get(0)));
             if (!StringUtil.isEmpty(roomDtos.get(roomIndex).getOwnerId())) {
                 if (!FeeDto.FEE_FLAG_CYCLE.equals(data.getString("feeFlag"))) {
                     feeAttrsPos.add(addFeeAttr(data, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, data.containsKey("endTime") ? data.getString("endTime") : data.getString("configEndTime")));
@@ -174,7 +184,8 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
 
     }
 
-    private PayFeePo addRoomFee(RoomDto roomDto, JSONObject paramInJson) {
+    private PayFeePo addRoomFee(RoomDto roomDto, JSONObject paramInJson, FeeConfigDto feeConfigDto) {
+
         String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A);
         if (paramInJson.containsKey("feeEndDate")) {
             time = paramInJson.getString("feeEndDate");
@@ -201,6 +212,12 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
         businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", paramInJson.getString("userId"));
         paramInJson.put("feeId", businessUnit.getString("feeId"));
+        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDto.getFeeFlag())
+                && !StringUtil.isEmpty(paramInJson.getString("endTime"))) {
+            paramInJson.put("maxTime", paramInJson.getString("endTime"));
+        } else {
+            paramInJson.put("maxTime", feeConfigDto.getEndTime());
+        }
         return BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
     }
 

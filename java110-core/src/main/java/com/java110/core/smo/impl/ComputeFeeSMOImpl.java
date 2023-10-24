@@ -1717,7 +1717,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 targetEndDate = feeDto.getImportFeeEndTime();
             }
             //说明欠费
-            if (preEndTime.getTime() < DateUtil.getCurrentDate().getTime()) {
+            if (preEndTime.getTime() <= DateUtil.getCurrentDate().getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
                 oweMonth = 1.0;
             }

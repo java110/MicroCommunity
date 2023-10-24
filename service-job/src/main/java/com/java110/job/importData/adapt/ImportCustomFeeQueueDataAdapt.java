@@ -199,6 +199,12 @@ public class ImportCustomFeeQueueDataAdapt extends DefaultImportData implements 
         payFeePo.setBatchId(batchId);
         payFeePo.setEndTime(importCustomCreateFeeDto.getStartTime());
         payFeePo.setStartTime(importCustomCreateFeeDto.getCreateTime());
+        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())
+                && !StringUtil.isEmpty(importCustomCreateFeeDto.getEndTime())) {
+            payFeePo.setMaxTime(importCustomCreateFeeDto.getEndTime());
+        } else {
+            payFeePo.setMaxTime(feeConfigDtos.get(0).getEndTime());
+        }
 
         payFeePos.add(payFeePo);
 
@@ -219,8 +225,8 @@ public class ImportCustomFeeQueueDataAdapt extends DefaultImportData implements 
         feeAttrPos.add(feeAttrPo);
 
         //todo 不是周期性费用的场景需要写入结束时间
-        if(!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())
-                && !StringUtil.isEmpty(importCustomCreateFeeDto.getEndTime())){
+        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())
+                && !StringUtil.isEmpty(importCustomCreateFeeDto.getEndTime())) {
             feeAttrPo = new FeeAttrPo();
             feeAttrPo.setCommunityId(importCustomCreateFeeDto.getCommunityId());
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
@@ -271,5 +277,6 @@ public class ImportCustomFeeQueueDataAdapt extends DefaultImportData implements 
         PayFeeDetailRefreshFeeMonthDto payFeeDetailRefreshFeeMonthDto = new PayFeeDetailRefreshFeeMonthDto();
         payFeeDetailRefreshFeeMonthDto.setCommunityId(importCustomCreateFeeDto.getCommunityId());
         payFeeDetailRefreshFeeMonthDto.setFeeId(payFeePos.get(0).getFeeId());
-        payFeeMonthInnerServiceSMOImpl.doGeneratorOrRefreshFeeMonth(payFeeDetailRefreshFeeMonthDto);    }
+        payFeeMonthInnerServiceSMOImpl.doGeneratorOrRefreshFeeMonth(payFeeDetailRefreshFeeMonthDto);
+    }
 }
