@@ -790,7 +790,11 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", dataFlowContext.getReqHeaders().get(CommonConstant.HTTP_USER_ID));
 
-        businessUnit.put("maxTime", paramInJson.containsKey("endTime") ? paramInJson.getString("endTime") : feeConfigDtos.get(0).getEndTime());
+        if(FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            businessUnit.put("maxTime",  feeConfigDtos.get(0).getEndTime());
+        }else {
+            businessUnit.put("maxTime",  paramInJson.getString("endTime"));
+        }
 
         paramInJson.put("feeId", businessUnit.getString("feeId"));
         return businessUnit;
