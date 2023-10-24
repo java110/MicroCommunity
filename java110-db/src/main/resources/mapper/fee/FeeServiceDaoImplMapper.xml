@@ -139,7 +139,8 @@
         mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,pfa1.`value` maxEndTime,mw.price
         mwPrice,
         pfa2.`value` ownerName,t.batch_id,t.batch_id batchId,
-        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,pfc.prepayment_period prepaymentPeriod
+        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,pfc.prepayment_period prepaymentPeriod,
+        pfrb.rule_id ruleId,pfrb.month_cycle monthCycle
         from pay_fee t
         INNER join pay_fee_config pfc on t.config_id = pfc.config_id and
         pfc.status_cd = '0'
@@ -155,6 +156,7 @@
         LEFT JOIN pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.spec_cd = '390008' and pfa2.status_cd = '0'
         left join import_fee_detail ifd on t.fee_id = ifd.fee_id and ifd.status_cd = '0' and t.fee_flag = '2006012'
         LEFT JOIN meter_water mw on t.fee_id = mw.fee_id and mw.status_cd = '0' and mw.community_id = t.community_id
+        LEFT JOIN pay_fee_rule_bill pfrb on t.fee_id = pfrb.fee_id and pfrb.status_cd = '0' and pfrb.community_id = t.community_id
         <if test="ownerId != null and ownerId != ''">
             LEFT JOIN pay_fee_attrs pfao on t.fee_id = pfao.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
         </if>

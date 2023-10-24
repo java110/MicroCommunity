@@ -26,6 +26,8 @@ public class PayFeeRuleBillDto extends FeeDto implements Serializable {
     private String batchId;
     private String feeId;
 
+    private String monthCycle;
+
 
     private Date createTime;
 
@@ -119,5 +121,13 @@ public class PayFeeRuleBillDto extends FeeDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getMonthCycle() {
+        return monthCycle;
+    }
+
+    public void setMonthCycle(String monthCycle) {
+        this.monthCycle = monthCycle;
     }
 }

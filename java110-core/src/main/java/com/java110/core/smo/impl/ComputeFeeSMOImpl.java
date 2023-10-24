@@ -158,54 +158,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
     private void computeFeePrice(FeeDto feeDto, RoomDto roomDto) {
-
-        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
-            computeFeePriceByRoom(feeDto, roomDto);
-        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
-            computeFeePriceByParkingSpace(feeDto);
-        } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) { //房屋相关
-            computeFeePriceByContract(feeDto, roomDto);
-        }
-    }
-
-    private void computeFeePriceByParkingSpace(FeeDto feeDto) {
-        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
-        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
-        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCommunityId(feeDto.getCommunityId());
-        ownerCarDto.setCarId(feeDto.getPayerObjId());
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) { //数据有问题
-            return;
-        }
-
-        String computingFormula = feeDto.getComputingFormula();
-        Map feePriceAll = getFeePrice(feeDto);
-
-        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
-        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
-        price = price.multiply(new BigDecimal(oweMonth));
-        feeDto.setFeeTotalPrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-        feeDto.setDeadlineTime(targetEndDate);
-
-        //动态费用
-        if ("4004".equals(computingFormula)
-                && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
-                && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(feeDto.getFeeTotalPrice() + "");
-            //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
-        }
-
-    }
-
-    /**
-     * 根据房屋来算单价
-     *
-     * @param feeDto
-     */
-    private void computeFeePriceByRoom(FeeDto feeDto, RoomDto roomDto) {
         Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
         Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
         double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
@@ -213,7 +165,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         String computingFormula = feeDto.getComputingFormula();
         Map feePriceAll = getFeePrice(feeDto, roomDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
-        //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
+
         BigDecimal price = new BigDecimal(feeDto.getFeePrice());
         price = price.multiply(new BigDecimal(oweMonth));
         feeDto.setFeeTotalPrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
@@ -227,36 +179,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
         }
 
-        //考虑租金递增
+        //todo 考虑租金递增
         dealRentRate(feeDto);
-    }
-
-    /**
-     * 根据房屋来算单价
-     *
-     * @param feeDto
-     */
-    private void computeFeePriceByContract(FeeDto feeDto, RoomDto roomDto) {
-        Map<String, Object> targetEndDateAndOweMonth = getTargetEndDateAndOweMonth(feeDto);
-        Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
-        double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
-
-        String computingFormula = feeDto.getComputingFormula();
-        Map feePriceAll = getFeePrice(feeDto, roomDto);
-        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
-        //double month = dayCompare(feeDto.getEndTime(), DateUtil.getCurrentDate());
-        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
-        price = price.multiply(new BigDecimal(oweMonth));
-        feeDto.setFeeTotalPrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-        feeDto.setDeadlineTime(targetEndDate);
-
-        //动态费用
-        if ("4004".equals(computingFormula)
-                && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
-                && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(feeDto.getFeeTotalPrice() + "");
-            //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
-        }
     }
 
 
@@ -1720,6 +1644,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             if (preEndTime.getTime() <= DateUtil.getCurrentDate().getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
                 oweMonth = 1.0;
+                //todo 这里考虑 账单模式的场景
+                if (!StringUtil.isNumber(feeDto.getMonthCycle())) {
+                    oweMonth = Integer.parseInt(feeDto.getMonthCycle());
+                }
             }
 
         } else if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeDto.getFeeFlag())) {

@@ -172,6 +172,8 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String ruleId;
 
+    private String monthCycle;
+
     public String getAmount() {
         return amount;
     }
@@ -845,5 +847,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setRuleId(String ruleId) {
         this.ruleId = ruleId;
+    }
+
+    public String getMonthCycle() {
+        return monthCycle;
+    }
+
+    public void setMonthCycle(String monthCycle) {
+        this.monthCycle = monthCycle;
     }
 }

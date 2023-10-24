@@ -39,6 +39,8 @@ public class PayFeeRuleBillPo implements Serializable {
     private String batchId;
     private String feeId;
 
+    private String monthCycle;
+
     public String getBillName() {
         return billName;
     }
@@ -119,5 +121,11 @@ public class PayFeeRuleBillPo implements Serializable {
         this.feeId = feeId;
     }
 
+    public String getMonthCycle() {
+        return monthCycle;
+    }
 
+    public void setMonthCycle(String monthCycle) {
+        this.monthCycle = monthCycle;
+    }
 }
