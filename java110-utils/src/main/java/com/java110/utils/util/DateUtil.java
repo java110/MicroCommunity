@@ -414,13 +414,12 @@ public class DateUtil {
 
         Calendar curDateCal = Calendar.getInstance();
         curDateCal.setTime(curDate);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.add(Calendar.MONTH, 1);
-        return calendar.getTime();
+        curDateCal.set(Calendar.DAY_OF_MONTH, 1);
+        curDateCal.set(Calendar.HOUR_OF_DAY, 0);
+        curDateCal.set(Calendar.MINUTE, 0);
+        curDateCal.set(Calendar.SECOND, 0);
+        curDateCal.add(Calendar.MONTH, 1);
+        return curDateCal.getTime();
     }
 
     public static Date getFirstDate() {
