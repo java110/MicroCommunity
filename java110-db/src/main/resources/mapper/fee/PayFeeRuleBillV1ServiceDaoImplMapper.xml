@@ -110,21 +110,24 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="ruleId !=null and ruleId != ''">
-            , t.rule_id= #{ruleId}
-        </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
+
         <if test="batchId !=null and batchId != ''">
             , t.batch_id= #{batchId}
         </if>
-        <if test="feeId !=null and feeId != ''">
-            , t.fee_id= #{feeId}
-        </if>
+
         where 1=1
         <if test="billId !=null and billId != ''">
             and t.bill_id= #{billId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
         </if>
 
     </update>
