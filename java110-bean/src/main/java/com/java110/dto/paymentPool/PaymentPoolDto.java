@@ -1,9 +1,12 @@
 package com.java110.dto.paymentPool;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.paymentPoolConfig.PaymentPoolConfigDto;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -30,6 +33,10 @@ public class PaymentPoolDto extends PageDto implements Serializable {
     private String paymentTypeName;
 
     private String payType;
+
+    private List<PaymentPoolValueDto> values;
+
+    private List<PaymentPoolConfigDto> configs;
 
 
     private Date createTime;
@@ -124,5 +131,21 @@ public class PaymentPoolDto extends PageDto implements Serializable {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    public List<PaymentPoolValueDto> getValues() {
+        return values;
+    }
+
+    public void setValues(List<PaymentPoolValueDto> values) {
+        this.values = values;
+    }
+
+    public List<PaymentPoolConfigDto> getConfigs() {
+        return configs;
+    }
+
+    public void setConfigs(List<PaymentPoolConfigDto> configs) {
+        this.configs = configs;
     }
 }

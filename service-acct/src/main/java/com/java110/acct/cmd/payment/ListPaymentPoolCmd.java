@@ -16,11 +16,16 @@
 package com.java110.acct.cmd.payment;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.acct.dao.IPaymentPoolValueV1ServiceDao;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.paymentPoolConfig.PaymentPoolConfigDto;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.intf.acct.IPaymentPoolConfigV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolV1InnerServiceSMO;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -54,6 +59,12 @@ public class ListPaymentPoolCmd extends Cmd {
     @Autowired
     private IPaymentPoolV1InnerServiceSMO paymentPoolV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPaymentPoolConfigV1InnerServiceSMO paymentPoolConfigV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -76,10 +87,32 @@ public class ListPaymentPoolCmd extends Cmd {
             paymentPoolDtos = new ArrayList<>();
         }
 
+        //todo 补充config 和value
+        computeConfigAndValues(paymentPoolDtos);
+
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, paymentPoolDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void computeConfigAndValues(List<PaymentPoolDto> paymentPoolDtos) {
+
+        if(paymentPoolDtos == null || paymentPoolDtos.isEmpty()){
+            return;
+        }
+
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolDtos.get(0).getPpId());
+        paymentPoolValueDto.setCommunityId(paymentPoolDtos.get(0).getCommunityId());
+       List<PaymentPoolValueDto> values =  paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+       paymentPoolDtos.get(0).setValues(values);
+
+        PaymentPoolConfigDto paymentPoolConfigDto = new PaymentPoolConfigDto();
+        paymentPoolConfigDto.setPpId(paymentPoolDtos.get(0).getPpId());
+        paymentPoolConfigDto.setCommunityId(paymentPoolDtos.get(0).getCommunityId());
+        List<PaymentPoolConfigDto> configs =  paymentPoolConfigV1InnerServiceSMOImpl.queryPaymentPoolConfigs(paymentPoolConfigDto);
+        paymentPoolDtos.get(0).setConfigs(configs);
     }
 }

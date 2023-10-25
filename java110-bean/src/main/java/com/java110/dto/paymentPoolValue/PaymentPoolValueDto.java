@@ -1,6 +1,7 @@
 package com.java110.dto.paymentPoolValue;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,13 @@ import java.util.Date;
 public class PaymentPoolValueDto extends PageDto implements Serializable {
 
     private String valueId;
-private String columnValue;
-private String communityId;
-private String columnKey;
-private String ppId;
+    private String columnValue;
+    private String communityId;
+    private String columnKey;
+    private String ppId;
+
+    private String name;
+    private String remark;
 
 
     private Date createTime;
@@ -29,31 +33,40 @@ private String ppId;
     public String getValueId() {
         return valueId;
     }
-public void setValueId(String valueId) {
+
+    public void setValueId(String valueId) {
         this.valueId = valueId;
     }
-public String getColumnValue() {
+
+    public String getColumnValue() {
         return columnValue;
     }
-public void setColumnValue(String columnValue) {
+
+    public void setColumnValue(String columnValue) {
         this.columnValue = columnValue;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getColumnKey() {
+
+    public String getColumnKey() {
         return columnKey;
     }
-public void setColumnKey(String columnKey) {
+
+    public void setColumnKey(String columnKey) {
         this.columnKey = columnKey;
     }
-public String getPpId() {
+
+    public String getPpId() {
         return ppId;
     }
-public void setPpId(String ppId) {
+
+    public void setPpId(String ppId) {
         this.ppId = ppId;
     }
 
@@ -72,5 +85,21 @@ public void setPpId(String ppId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
