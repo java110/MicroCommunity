@@ -1,6 +1,7 @@
 package com.java110.dto.paymentPool;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,13 +15,21 @@ import java.util.Date;
  **/
 public class PaymentPoolDto extends PageDto implements Serializable {
 
+    public static final String PAY_TYPE_COMMUNITY = "1001";
+    public static final String PAY_TYPE_TEMP_CAT = "2002";
+    public static final String PAY_TYPE_FEE_CONFIG = "3003";
+
     private String certPath;
-private String remark;
-private String state;
-private String communityId;
-private String paymentName;
-private String ppId;
-private String paymentType;
+    private String remark;
+    private String state;
+    private String communityId;
+    private String paymentName;
+    private String ppId;
+    private String paymentType;
+
+    private String paymentTypeName;
+
+    private String payType;
 
 
     private Date createTime;
@@ -31,43 +40,56 @@ private String paymentType;
     public String getCertPath() {
         return certPath;
     }
-public void setCertPath(String certPath) {
+
+    public void setCertPath(String certPath) {
         this.certPath = certPath;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getPaymentName() {
+
+    public String getPaymentName() {
         return paymentName;
     }
-public void setPaymentName(String paymentName) {
+
+    public void setPaymentName(String paymentName) {
         this.paymentName = paymentName;
     }
-public String getPpId() {
+
+    public String getPpId() {
         return ppId;
     }
-public void setPpId(String ppId) {
+
+    public void setPpId(String ppId) {
         this.ppId = ppId;
     }
-public String getPaymentType() {
+
+    public String getPaymentType() {
         return paymentType;
     }
-public void setPaymentType(String paymentType) {
+
+    public void setPaymentType(String paymentType) {
         this.paymentType = paymentType;
     }
 
@@ -86,5 +108,21 @@ public void setPaymentType(String paymentType) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPaymentTypeName() {
+        return paymentTypeName;
+    }
+
+    public void setPaymentTypeName(String paymentTypeName) {
+        this.paymentTypeName = paymentTypeName;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

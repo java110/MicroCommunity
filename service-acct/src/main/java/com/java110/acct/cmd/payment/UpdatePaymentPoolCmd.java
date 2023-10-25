@@ -15,14 +15,23 @@
  */
 package com.java110.acct.cmd.payment;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.paymentPool.PaymentPoolDto;
+import com.java110.intf.acct.IPaymentPoolConfigV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolV1InnerServiceSMO;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
 import com.java110.po.paymentPool.PaymentPoolPo;
+import com.java110.po.paymentPoolConfig.PaymentPoolConfigPo;
+import com.java110.po.paymentPoolValue.PaymentPoolValuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -30,6 +39,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 /**
@@ -51,11 +62,43 @@ public class UpdatePaymentPoolCmd extends Cmd {
     @Autowired
     private IPaymentPoolV1InnerServiceSMO paymentPoolV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPaymentPoolConfigV1InnerServiceSMO paymentPoolConfigV1InnerServiceSMOImpl;
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "ppId", "ppId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
+        Assert.hasKey(reqJson, "paymentKeys", "未包含动态字段");
+
+        JSONArray paymentKeys = reqJson.getJSONArray("paymentKeys");
+
+        if (paymentKeys == null || paymentKeys.isEmpty()) {
+            throw new CmdException("未包含字段");
+        }
+        JSONObject columns = null;
+        // {"columnKey":"WECHAT_KEY","keyId":"2","name":"支付密码","page":-1,"paymentType":"WECHAT",
+        // "records":0,"remark":"请输入微信v2支付秘钥","row":0,"statusCd":"0","total":0,"columnValue":"1"}
+        for (int keyIndex = 0; keyIndex < paymentKeys.size(); keyIndex++) {
+            columns = paymentKeys.getJSONObject(keyIndex);
+            Assert.hasKeyAndValue(columns, "columnKey", "未包含key");
+            Assert.hasKeyAndValue(columns, "columnValue", reqJson.getString("name") + "未填写值");
+        }
+
+        if (!PaymentPoolDto.PAY_TYPE_FEE_CONFIG.equals(reqJson.getString("payType"))) {
+            return;
+        }
+
+        JSONArray configIds = reqJson.getJSONArray("configIds");
+        if (configIds == null || configIds.isEmpty()) {
+            throw new CmdException("未包含费用项");
+        }
     }
 
     @Override
@@ -67,6 +110,58 @@ public class UpdatePaymentPoolCmd extends Cmd {
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");
+        }
+        PaymentPoolValuePo paymentPoolValuePo = new PaymentPoolValuePo();
+        paymentPoolValuePo.setPpId(paymentPoolPo.getPpId());
+        paymentPoolValuePo.setCommunityId(paymentPoolPo.getCommunityId());
+        paymentPoolValueV1InnerServiceSMOImpl.deletePaymentPoolValue(paymentPoolValuePo);
+
+        //todo 动态字段
+        JSONArray paymentKeys = reqJson.getJSONArray("paymentKeys");
+
+        JSONObject columns = null;
+
+        for (int keyIndex = 0; keyIndex < paymentKeys.size(); keyIndex++) {
+            columns = paymentKeys.getJSONObject(keyIndex);
+            paymentPoolValuePo = new PaymentPoolValuePo();
+            paymentPoolValuePo.setColumnValue(columns.getString("columnValue"));
+            paymentPoolValuePo.setColumnKey(columns.getString("columnKey"));
+            paymentPoolValuePo.setCommunityId(paymentPoolPo.getCommunityId());
+            paymentPoolValuePo.setPpId(paymentPoolPo.getPpId());
+            paymentPoolValuePo.setValueId(GenerateCodeFactory.getGeneratorId("11"));
+            paymentPoolValueV1InnerServiceSMOImpl.savePaymentPoolValue(paymentPoolValuePo);
+        }
+
+        // todo 保存关联关系
+
+        if (!PaymentPoolDto.PAY_TYPE_FEE_CONFIG.equals(reqJson.getString("payType"))) {
+            return;
+        }
+        JSONArray configIds = reqJson.getJSONArray("configIds");
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigIds(configIds.toArray(new String[configIds.size()]));
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
+
+        if (feeConfigDtos == null || feeConfigDtos.isEmpty()) {
+            return;
+        }
+
+
+        PaymentPoolConfigPo paymentPoolConfigPo = new PaymentPoolConfigPo();
+        paymentPoolConfigPo.setPpId(paymentPoolPo.getPpId());
+        paymentPoolConfigPo.setCommunityId(paymentPoolPo.getCommunityId());
+        paymentPoolConfigV1InnerServiceSMOImpl.deletePaymentPoolConfig(paymentPoolConfigPo);
+
+        for (FeeConfigDto tmpFeeConfigDto : feeConfigDtos) {
+
+            paymentPoolConfigPo = new PaymentPoolConfigPo();
+            paymentPoolConfigPo.setConfigId(tmpFeeConfigDto.getConfigId());
+            paymentPoolConfigPo.setFeeName(tmpFeeConfigDto.getFeeName());
+            paymentPoolConfigPo.setCommunityId(paymentPoolPo.getCommunityId());
+            paymentPoolConfigPo.setPpId(paymentPoolPo.getPpId());
+            paymentPoolConfigPo.setPpcId(GenerateCodeFactory.getGeneratorId("11"));
+            paymentPoolConfigV1InnerServiceSMOImpl.savePaymentPoolConfig(paymentPoolConfigPo);
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());

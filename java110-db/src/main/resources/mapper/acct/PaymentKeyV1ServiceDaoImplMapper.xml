@@ -38,7 +38,7 @@
         <if test="paymentType !=null and paymentType != ''">
             and t.payment_type= #{paymentType}
         </if>
-        order by t.create_time desc
+        order by t.key_id
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

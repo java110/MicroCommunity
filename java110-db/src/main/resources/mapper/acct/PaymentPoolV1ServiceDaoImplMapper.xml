@@ -8,9 +8,9 @@
     <!-- 保存支付厂家信息 add by wuxw 2018-07-03 -->
     <insert id="savePaymentPoolInfo" parameterType="Map">
         insert into payment_pool(
-        cert_path,remark,state,community_id,payment_name,pp_id,payment_type
+        cert_path,remark,state,community_id,payment_name,pp_id,payment_type,pay_type
         ) values (
-        #{certPath},#{remark},#{state},#{communityId},#{paymentName},#{ppId},#{paymentType}
+        #{certPath},#{remark},#{state},#{communityId},#{paymentName},#{ppId},#{paymentType},#{payType}
         )
     </insert>
 
@@ -19,8 +19,10 @@
     <select id="getPaymentPoolInfo" parameterType="Map" resultType="Map">
         select t.cert_path,t.cert_path certPath,t.status_cd,t.status_cd
         statusCd,t.remark,t.state,t.community_id,t.community_id communityId,t.payment_name,t.payment_name
-        paymentName,t.pp_id,t.pp_id ppId,t.payment_type,t.payment_type paymentType
+        paymentName,t.pp_id,t.pp_id ppId,t.payment_type,t.payment_type paymentType,t.create_time createTime,
+        td.name paymentTypeName,t.pay_type payType
         from payment_pool t
+        left join t_dict td on t.payment_type = td.status_cd and td.table_name = 'payment_key' and td.table_columns = 'payment_type'
         where 1 =1
         <if test="certPath !=null and certPath != ''">
             and t.cert_path= #{certPath}
@@ -39,6 +41,9 @@
         </if>
         <if test="paymentName !=null and paymentName != ''">
             and t.payment_name= #{paymentName}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
         </if>
         <if test="ppId !=null and ppId != ''">
             and t.pp_id= #{ppId}
@@ -75,6 +80,9 @@
         <if test="paymentType !=null and paymentType != ''">
             , t.payment_type= #{paymentType}
         </if>
+        <if test="payType !=null and payType != ''">
+            , t.pay_type= #{payType}
+        </if>
         where 1=1
         <if test="ppId !=null and ppId != ''">
             and t.pp_id= #{ppId}
@@ -107,6 +115,9 @@
         </if>
         <if test="paymentName !=null and paymentName != ''">
             and t.payment_name= #{paymentName}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
         </if>
         <if test="ppId !=null and ppId != ''">
             and t.pp_id= #{ppId}

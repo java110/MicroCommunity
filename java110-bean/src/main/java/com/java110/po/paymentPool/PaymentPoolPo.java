@@ -17,6 +17,7 @@ package com.java110.po.paymentPool;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-10-25 11:52:42 mail: 928255095@qq.com
@@ -28,62 +29,86 @@ import java.util.Date;
 public class PaymentPoolPo implements Serializable {
 
     private String certPath;
-private String statusCd = "0";
-private String remark;
-private String state;
-private String communityId;
-private String paymentName;
-private String ppId;
-private String paymentType;
-public String getCertPath() {
+    private String statusCd = "0";
+    private String remark;
+    private String state;
+    private String communityId;
+    private String paymentName;
+    private String ppId;
+    private String paymentType;
+
+    private String payType;
+
+
+    public String getCertPath() {
         return certPath;
     }
-public void setCertPath(String certPath) {
+
+    public void setCertPath(String certPath) {
         this.certPath = certPath;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getPaymentName() {
+
+    public String getPaymentName() {
         return paymentName;
     }
-public void setPaymentName(String paymentName) {
+
+    public void setPaymentName(String paymentName) {
         this.paymentName = paymentName;
     }
-public String getPpId() {
+
+    public String getPpId() {
         return ppId;
     }
-public void setPpId(String ppId) {
+
+    public void setPpId(String ppId) {
         this.ppId = ppId;
     }
-public String getPaymentType() {
+
+    public String getPaymentType() {
         return paymentType;
     }
-public void setPaymentType(String paymentType) {
+
+    public void setPaymentType(String paymentType) {
         this.paymentType = paymentType;
     }
 
+    public String getPayType() {
+        return payType;
+    }
 
-
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
 }
