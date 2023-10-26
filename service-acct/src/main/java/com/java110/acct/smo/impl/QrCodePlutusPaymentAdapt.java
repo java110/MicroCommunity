@@ -6,7 +6,9 @@ import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 import com.java110.dto.wechat.SmallWeChatDto;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -55,6 +57,9 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
     @Override
     public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName,String paymentPoolId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
@@ -75,22 +80,32 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
             shopSmallWeChatDto.setObjId(communityId);
             shopSmallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
             shopSmallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
-            shopSmallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
-            shopSmallWeChatDto.setPayPassword(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "payPassword"));
         } else {
             shopSmallWeChatDto = smallWeChatDtos.get(0);
         }
 
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_MCHID");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_KEY");
+        String privateKey = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_PRIVATE_KEY");
+        String devId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_DEV_ID");
+        String publicKey = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_PUBLIC_KEY");
+
         JSONObject paramMap = new JSONObject();
-        paramMap.put("sn", shopSmallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
+        paramMap.put("sn", mchId); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
         paramMap.put("authCode", authCode);
         paramMap.put("tradeAmount", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("payTypeId", "0");
-        String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
-        String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
 
-        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDtos.get(0).getPayPassword(),devId);
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey,key,devId);
         System.out.println(param);
 
         String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
@@ -102,14 +117,13 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         String content = json.getString("content");
 
         //验签
-        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PUBLIC_KEY");
         Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
         }
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDtos.get(0).getPayPassword());
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), key);
         //服务器返回内容
         String paramOut = new String(bb);
 
@@ -134,19 +148,31 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
             shopSmallWeChatDto.setObjId(communityId);
             shopSmallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
             shopSmallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
-            shopSmallWeChatDto.setMchId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId"));
-            shopSmallWeChatDto.setPayPassword(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "payPassword"));
         } else {
             shopSmallWeChatDto = smallWeChatDtos.get(0);
         }
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        paymentPoolValueDto.setCommunityId(communityId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_MCHID");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_KEY");
+        String privateKey = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_PRIVATE_KEY");
+        String devId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_DEV_ID");
+        String publicKey = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_PUBLIC_KEY");
+
 
         JSONObject paramMap = new JSONObject();
-        paramMap.put("sn", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
+        paramMap.put("sn", mchId); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
-        String privateKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PRIVATE_KEY");
-        String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
 
-        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDtos.get(0).getPayPassword(),devId);
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, key,devId);
         System.out.println(param);
 
         String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
@@ -158,14 +184,13 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         String content = json.getString("content");
 
         //验签
-        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDtos.get(0).getObjId(), "PLUTUS_PUBLIC_KEY");
         Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
         }
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDtos.get(0).getPayPassword());
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), key);
         //服务器返回内容
         String paramOut = new String(bb);
 
