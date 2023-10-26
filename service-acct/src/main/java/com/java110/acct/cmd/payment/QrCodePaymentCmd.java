@@ -149,6 +149,7 @@ public class QrCodePaymentCmd extends Cmd {
         paymentPoolDto = new PaymentPoolDto();
         paymentPoolDto.setCommunityId(communityId);
         paymentPoolDto.setPayType(PaymentPoolDto.PAY_TYPE_COMMUNITY);
+        paymentPoolDto.setState("Y");
         List<PaymentPoolDto> paymentPoolDtos = paymentPoolV1InnerServiceSMOImpl.queryPaymentPools(paymentPoolDto);
         if (paymentPoolDtos == null || paymentPoolDtos.isEmpty()) {
             throw new IllegalArgumentException("小区未配置支付信息");
@@ -190,6 +191,7 @@ public class QrCodePaymentCmd extends Cmd {
         paymentPoolDto.setPpId(paymentPoolConfigDtos.get(0).getPpId());
         paymentPoolDto.setCommunityId(paymentPoolConfigDtos.get(0).getCommunityId());
         paymentPoolDto.setPayType(PaymentPoolDto.PAY_TYPE_FEE_CONFIG);
+        paymentPoolDto.setState("Y");
         List<PaymentPoolDto> paymentPoolDtos = paymentPoolV1InnerServiceSMOImpl.queryPaymentPools(paymentPoolDto);
         if (paymentPoolDtos == null || paymentPoolDtos.isEmpty()) {
             return null;

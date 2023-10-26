@@ -165,6 +165,7 @@ public class NativeQrcodePaymentCmd extends Cmd {
         PaymentPoolDto paymentPoolDto = new PaymentPoolDto();
         paymentPoolDto.setCommunityId(communityId);
         paymentPoolDto.setPayType(PaymentPoolDto.PAY_TYPE_TEMP_CAT);
+        paymentPoolDto.setState("Y");
         List<PaymentPoolDto> paymentPoolDtos = paymentPoolV1InnerServiceSMOImpl.queryPaymentPools(paymentPoolDto);
         if (paymentPoolDtos == null || paymentPoolDtos.isEmpty()) {
             return null;
@@ -205,6 +206,7 @@ public class NativeQrcodePaymentCmd extends Cmd {
         paymentPoolDto.setPpId(paymentPoolConfigDtos.get(0).getPpId());
         paymentPoolDto.setCommunityId(paymentPoolConfigDtos.get(0).getCommunityId());
         paymentPoolDto.setPayType(PaymentPoolDto.PAY_TYPE_FEE_CONFIG);
+        paymentPoolDto.setState("Y");
         List<PaymentPoolDto> paymentPoolDtos = paymentPoolV1InnerServiceSMOImpl.queryPaymentPools(paymentPoolDto);
         if (paymentPoolDtos == null || paymentPoolDtos.isEmpty()) {
             return null;
