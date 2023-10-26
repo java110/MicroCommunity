@@ -6,6 +6,8 @@ import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -52,8 +54,11 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
     @Override
-    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName,String paymentPoolId) throws Exception {
+    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName, String paymentPoolId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
         //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -64,9 +69,18 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         logger.debug("resMap=" + resMap);
         String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
 
-        String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
-        String productNo_SM4 = CommunitySettingFactory.getValue(communityId, "productNo_SM4");
-        String publicKey_SM4 = CommunitySettingFactory.getValue(communityId, "publicKey_SM4");
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String mchtNo_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "mchtNo_SM4");
+        String productNo_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "productNo_SM4");
+        String publicKey_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "publicKey_SM4");
+
 
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
@@ -79,7 +93,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         params.put("device_ip", "172.0.0.1");// 商户数据包
         params.put("recog_no", "123123");// 交易终端编号
 
-        String decryParams = EncryptDecryptFactory.execute(communityId, gzhPayUrl, params);
+        String decryParams = EncryptDecryptFactory.execute(paymentPoolValueDtos, gzhPayUrl, params);
 
         JSONObject paramOut = JSONObject.parseObject(decryParams);
         if (!"0000".equals(paramOut.getString("return_code"))
@@ -100,11 +114,18 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         }
     }
 
-    public ResultVo checkPayFinish(String communityId, String orderNum,String paymentPoolId) {
+    public ResultVo checkPayFinish(String communityId, String orderNum, String paymentPoolId) {
         Map<String, String> result = null;
-        String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
-        String productNo_SM4 = CommunitySettingFactory.getValue(communityId, "productNo_SM4");
-        String publicKey_SM4 = CommunitySettingFactory.getValue(communityId, "publicKey_SM4");
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        paymentPoolValueDto.setCommunityId(communityId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+        String mchtNo_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "mchtNo_SM4");
         Map<String, Object> params = new HashMap<>();
         params.put("version", VERSION);// 版本号 1.0
         params.put("mcht_no", mchtNo_SM4);// 收款商户编号
@@ -112,7 +133,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         params.put("txn_no", "");// 支付流水
 
         // 对准备加签参数排序
-        String decryParams = EncryptDecryptFactory.execute(communityId, queryUrl, params);
+        String decryParams = EncryptDecryptFactory.execute(paymentPoolValueDtos, queryUrl, params);
 
         /**
          * {"amt":"0.01","deal_status":"PROCESSING","jump_url":"","mcht_name":"广西蓉慧科技有限公司","mcht_no":"MCT2023060100029734",
@@ -122,7 +143,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
          */
         JSONObject paramOut = JSONObject.parseObject(decryParams);
 
-        if("PROCESSING".equals(paramOut.getString("deal_status")) && "5019".equals(paramOut.getString("return_code"))){
+        if ("PROCESSING".equals(paramOut.getString("deal_status")) && "5019".equals(paramOut.getString("return_code"))) {
             return new ResultVo(ResultVo.CODE_WAIT_PAY, "等待支付完成");
         }
 
