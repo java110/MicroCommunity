@@ -23,7 +23,9 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
+import com.java110.dto.paymentPool.PaymentPoolDto;
 import com.java110.intf.acct.INotifyPaymentV1InnerServiceSMO;
+import com.java110.intf.acct.IPaymentPoolV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
@@ -31,9 +33,12 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -51,6 +56,8 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
     private static final String DEFAULT_PAYMENT_NOTIFY_ADAPT = "wechatPaymentFactory";// 默认微信通用支付
 
     protected static final String DEFAULT_NATIVE_QRCODE_PAYMENT_ADAPT = "wechatNativeQrcodePaymentFactory";// 默认微信通用支付
+    @Autowired
+    private IPaymentPoolV1InnerServiceSMO paymentPoolV1InnerServiceSMOImpl;
 
     /**
      * 通知类
@@ -62,7 +69,8 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
     public ResponseEntity<String> notifyPayment(@RequestBody NotifyPaymentOrderDto notifyPaymentOrderDto) {
 
         try {
-            String payNotifyAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAYMENT_ADAPT);
+            String payNotifyAdapt = computeNotifyAdapt(notifyPaymentOrderDto);
+            //MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAYMENT_ADAPT);
             payNotifyAdapt = StringUtil.isEmpty(payNotifyAdapt) ? DEFAULT_PAYMENT_NOTIFY_ADAPT : payNotifyAdapt;
 //支付适配器IPayNotifyAdapt
             logger.debug("适配器：" + payNotifyAdapt);
@@ -99,6 +107,18 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
             logger.error("通知是配置异常", e);
             throw e;
         }
+    }
+
+    private String computeNotifyAdapt(NotifyPaymentOrderDto notifyPaymentOrderDto) {
+
+        PaymentPoolDto paymentPoolDto = new PaymentPoolDto();
+        paymentPoolDto.setPpId(notifyPaymentOrderDto.getPaymentPoolId());
+        paymentPoolDto.setCommunityId(notifyPaymentOrderDto.getCommunityId());
+        List<PaymentPoolDto> paymentPoolDtos = paymentPoolV1InnerServiceSMOImpl.queryPaymentPools(paymentPoolDto);
+        if (paymentPoolDtos == null || paymentPoolDtos.isEmpty()) {
+            throw new IllegalArgumentException(notifyPaymentOrderDto.getPaymentPoolId() + "支付信息不存在");
+        }
+        return paymentPoolDtos.get(0).getBeanJsapi();
     }
 
     @Override

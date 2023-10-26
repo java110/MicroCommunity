@@ -10,10 +10,17 @@ public class NotifyPaymentOrderDto implements Serializable{
 
     private String communityId;
 
+    private String paymentPoolId;
     public NotifyPaymentOrderDto(String appId, String param,String communityId) {
         this.appId = appId;
         this.param = param;
         this.communityId = communityId;
+    }
+    public NotifyPaymentOrderDto(String appId, String param,String communityId,String paymentPoolId) {
+        this.appId = appId;
+        this.param = param;
+        this.communityId = communityId;
+        this.paymentPoolId = paymentPoolId;
     }
 
     public NotifyPaymentOrderDto() {
@@ -41,5 +48,13 @@ public class NotifyPaymentOrderDto implements Serializable{
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getPaymentPoolId() {
+        return paymentPoolId;
+    }
+
+    public void setPaymentPoolId(String paymentPoolId) {
+        this.paymentPoolId = paymentPoolId;
     }
 }

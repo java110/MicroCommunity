@@ -20,9 +20,9 @@
         select t.cert_path,t.cert_path certPath,t.status_cd,t.status_cd
         statusCd,t.remark,t.state,t.community_id,t.community_id communityId,t.payment_name,t.payment_name
         paymentName,t.pp_id,t.pp_id ppId,t.payment_type,t.payment_type paymentType,t.create_time createTime,
-        td.name paymentTypeName,t.pay_type payType
+        t.pay_type payType, pa.name paymentTypeName,pa.bean_jsapi beanJsapi,pa.bean_qrcode beanQrcode,pa.bean_native beanNative
         from payment_pool t
-        left join t_dict td on t.payment_type = td.status_cd and td.table_name = 'payment_key' and td.table_columns = 'payment_type'
+        left join payment_adapt pa on t.payment_type = pa.payment_type and pa.status_cd = '0'
         where 1 =1
         <if test="certPath !=null and certPath != ''">
             and t.cert_path= #{certPath}

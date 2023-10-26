@@ -8,12 +8,14 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.po.wechat.OnlinePayPo;
@@ -21,6 +23,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
@@ -79,6 +82,9 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
 
     @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
+    @Autowired
     private RestTemplate outRestTemplate;
 
 
@@ -87,11 +93,13 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         SmallWeChatDto smallWeChatDto = getSmallWechat(reqJson);
 
+        String paymentPoolId = reqJson.getString("paymentPoolId");
+
 
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String tradeType = reqJson.getString("tradeType");
-        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/wechat/992020011134400001/" + smallWeChatDto.getObjId();
+        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/wechat/992020011134400001/"+paymentPoolId;
 
         String openId = reqJson.getString("openId");
 
@@ -130,6 +138,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 payAmount,
                 openId,
                 smallWeChatDto,
+                paymentPoolId,
                 notifyUrl
         );
 
@@ -169,9 +178,22 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
     private Map<String, String> java110UnifieldOrder(String feeName, String orderNum,
                                                      String tradeType, double payAmount, String openid,
-                                                     SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
+                                                     SmallWeChatDto smallWeChatDto,
+                                                     String paymentPoolId,
+                                                     String notifyUrl) throws Exception {
 
         //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
 
         if (feeName.length() > 127) {
             feeName = feeName.substring(0, 126);
@@ -179,7 +201,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         paramMap.put("appid", smallWeChatDto.getAppId());
-        paramMap.put("mch_id", smallWeChatDto.getMchId());
+        paramMap.put("mch_id", mchId);
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
         paramMap.put("body", feeName);
         paramMap.put("out_trade_no", orderNum);
@@ -198,7 +220,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             paramMap.put("sub_openid", openid);
             paramMap.remove("openid");
         }
-        paramMap.put("sign", PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword()));
+        paramMap.put("sign", PayUtil.createSign(paramMap, key));
 //转换为xml
         String xmlData = PayUtil.mapToXml(paramMap);
 
@@ -273,13 +295,20 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             }
             paramMap.put(key, map.get(key).toString());
         }
-        //String appId = WechatFactory.getAppId(wId);
-        JSONObject paramIn = new JSONObject();
-        paramIn.put("appId", appId);
-        paramIn.put("communityId", notifyPaymentOrderDto.getCommunityId());
-        SmallWeChatDto smallWeChatDto = getSmallWechat(paramIn);
 
-        String sign = PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword());
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(notifyPaymentOrderDto.getPaymentPoolId());
+        paymentPoolValueDto.setCommunityId(notifyPaymentOrderDto.getCommunityId());
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+       // String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
+
+        String sign = PayUtil.createSign(paramMap, key);
 
         if (!sign.equals(map.get("sign"))) {
             throw new IllegalArgumentException("鉴权失败");

@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -28,6 +29,16 @@ public class PaymentPoolValueDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    public static String getValue(List<PaymentPoolValueDto> paymentPoolValueDtos, String columnKey) {
+
+        for (PaymentPoolValueDto paymentPoolValueDto : paymentPoolValueDtos) {
+            if (paymentPoolValueDto.getColumnKey().equals(columnKey)) {
+                return paymentPoolValueDto.getColumnValue();
+            }
+        }
+        return "";
+    }
 
 
     public String getValueId() {
