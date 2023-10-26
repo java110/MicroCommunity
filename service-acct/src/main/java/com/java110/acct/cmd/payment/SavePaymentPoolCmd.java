@@ -77,6 +77,7 @@ public class SavePaymentPoolCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "paymentType", "请求报文中未包含paymentType");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
+        Assert.hasKeyAndValue(reqJson, "payType", "请求报文中未包含payType");
 
         Assert.hasKey(reqJson, "paymentKeys", "未包含动态字段");
 
@@ -95,6 +96,14 @@ public class SavePaymentPoolCmd extends Cmd {
         }
 
         if (!PaymentPoolDto.PAY_TYPE_FEE_CONFIG.equals(reqJson.getString("payType"))) {
+
+            PaymentPoolDto paymentPoolDto = new PaymentPoolDto();
+            paymentPoolDto.setCommunityId(reqJson.getString("communityId"));
+            paymentPoolDto.setPayType(reqJson.getString("payType"));
+            int count = paymentPoolV1InnerServiceSMOImpl.queryPaymentPoolsCount(paymentPoolDto);
+            if (count > 0) {
+                throw new CmdException("已经存在，请勿重复添加，只有支付范围为费用项的可以添加多个支付");
+            }
             return;
         }
 

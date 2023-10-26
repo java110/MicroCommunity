@@ -53,7 +53,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
     private RestTemplate outRestTemplate;
 
     @Override
-    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName) throws Exception {
+    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName,String paymentPoolId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
         //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -100,7 +100,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         }
     }
 
-    public ResultVo checkPayFinish(String communityId, String orderNum) {
+    public ResultVo checkPayFinish(String communityId, String orderNum,String paymentPoolId) {
         Map<String, String> result = null;
         String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
         String productNo_SM4 = CommunitySettingFactory.getValue(communityId, "productNo_SM4");

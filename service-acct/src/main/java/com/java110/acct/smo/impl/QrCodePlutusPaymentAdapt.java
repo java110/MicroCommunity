@@ -56,7 +56,7 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
     private RestTemplate outRestTemplate;
 
     @Override
-    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName) throws Exception {
+    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName,String paymentPoolId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
         //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -122,7 +122,7 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
 
     }
 
-    public ResultVo checkPayFinish(String communityId, String orderNum) {
+    public ResultVo checkPayFinish(String communityId, String orderNum,String paymentPoolId) {
         SmallWeChatDto shopSmallWeChatDto = null;
         Map<String, String> result = null;
 

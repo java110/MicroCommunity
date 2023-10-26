@@ -2,7 +2,9 @@ package com.java110.acct.smo.impl;
 
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 import com.java110.dto.wechat.SmallWeChatDto;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -46,10 +48,13 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
 
     @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
+    @Autowired
     private RestTemplate outRestTemplate;
 
     @Override
-    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName) throws Exception {
+    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName, String paymentPoolId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
         //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
@@ -70,15 +75,24 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
             shopSmallWeChatDto.setObjId(communityId);
             shopSmallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
             shopSmallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
-            shopSmallWeChatDto.setMchId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId"));
-            shopSmallWeChatDto.setPayPassword(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "payPassword"));
         } else {
             shopSmallWeChatDto = smallWeChatDtos.get(0);
         }
 
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
+
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         paramMap.put("appid", shopSmallWeChatDto.getAppId());
-        paramMap.put("mch_id", shopSmallWeChatDto.getMchId());
+        paramMap.put("mch_id", mchId);
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
         paramMap.put("body", feeName);
         paramMap.put("out_trade_no", orderNum);
@@ -94,7 +108,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
             paramMap.put("sub_mch_id", shopSmallWeChatDto.getMchId());//起调小程序的商户号
             paramMap.remove("openid");
         }
-        paramMap.put("sign", PayUtil.createSign(paramMap, shopSmallWeChatDto.getPayPassword()));
+        paramMap.put("sign", PayUtil.createSign(paramMap, key));
 //转换为xml
         String xmlData = PayUtil.mapToXml(paramMap);
 
@@ -121,7 +135,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         }
     }
 
-    public ResultVo checkPayFinish(String communityId, String orderNum) {
+    public ResultVo checkPayFinish(String communityId, String orderNum,String paymentPoolId) {
         SmallWeChatDto shopSmallWeChatDto = null;
         Map<String, String> result = null;
         try {
@@ -133,15 +147,24 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
                 shopSmallWeChatDto.setObjId(communityId);
                 shopSmallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
                 shopSmallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
-                shopSmallWeChatDto.setMchId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId"));
-                shopSmallWeChatDto.setPayPassword(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "payPassword"));
             } else {
                 shopSmallWeChatDto = smallWeChatDtos.get(0);
             }
 
+            PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+            paymentPoolValueDto.setPpId(paymentPoolId);
+            List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+            if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+                throw new IllegalArgumentException("配置错误,未配置参数");
+            }
+
+            String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
+            String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
+
             SortedMap<String, String> paramMap = new TreeMap<String, String>();
             paramMap.put("appid", shopSmallWeChatDto.getAppId());
-            paramMap.put("mch_id", shopSmallWeChatDto.getMchId());
+            paramMap.put("mch_id", mchId);
             paramMap.put("nonce_str", PayUtil.makeUUID(32));
             paramMap.put("out_trade_no", orderNum);
             String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
@@ -150,7 +173,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
                 paramMap.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));  //服务商商户
                 paramMap.put("sub_mch_id", shopSmallWeChatDto.getMchId());
             }
-            paramMap.put("sign", PayUtil.createSign(paramMap, shopSmallWeChatDto.getPayPassword()));
+            paramMap.put("sign", PayUtil.createSign(paramMap, key));
 //转换为xml
             String xmlData = PayUtil.mapToXml(paramMap);
 

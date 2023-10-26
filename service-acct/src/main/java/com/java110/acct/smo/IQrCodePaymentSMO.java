@@ -12,7 +12,7 @@ public interface IQrCodePaymentSMO {
      *
      * @return
      */
-    ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName) throws Exception;
+    ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName,String paymentPoolId) throws Exception;
 
     /**
      * 检查是否支付完成
@@ -21,6 +21,6 @@ public interface IQrCodePaymentSMO {
      * @param orderNum
      * @return
      */
-    ResultVo checkPayFinish(String communityId, String orderNum);
+    ResultVo checkPayFinish(String communityId, String orderNum,String paymentPoolId);
 
 }
