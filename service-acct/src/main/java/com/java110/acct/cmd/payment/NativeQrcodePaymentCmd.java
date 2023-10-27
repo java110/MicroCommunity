@@ -5,6 +5,7 @@ import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -69,6 +70,7 @@ public class NativeQrcodePaymentCmd extends Cmd {
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         reqJson.put("createUserId", userId);
+        reqJson.put("storeId", CmdContextUtils.getStoreId(context));
 
         //1.0 查询当前支付的业务
 
