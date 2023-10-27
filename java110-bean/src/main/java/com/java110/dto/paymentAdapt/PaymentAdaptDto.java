@@ -22,6 +22,8 @@ public class PaymentAdaptDto extends PageDto implements Serializable {
     private String name;
     private String paymentType;
 
+    private String beanRefund;
+
 
     private Date createTime;
 
@@ -91,5 +93,13 @@ public class PaymentAdaptDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getBeanRefund() {
+        return beanRefund;
+    }
+
+    public void setBeanRefund(String beanRefund) {
+        this.beanRefund = beanRefund;
     }
 }

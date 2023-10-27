@@ -37,6 +37,8 @@ public class PaymentPoolDto extends PageDto implements Serializable {
     private String beanJsapi;
     private String beanQrcode;
     private String beanNative;
+
+    private String beanRefund;
     private List<PaymentPoolValueDto> values;
 
     private List<PaymentPoolConfigDto> configs;
@@ -174,5 +176,13 @@ public class PaymentPoolDto extends PageDto implements Serializable {
 
     public void setBeanNative(String beanNative) {
         this.beanNative = beanNative;
+    }
+
+    public String getBeanRefund() {
+        return beanRefund;
+    }
+
+    public void setBeanRefund(String beanRefund) {
+        this.beanRefund = beanRefund;
     }
 }

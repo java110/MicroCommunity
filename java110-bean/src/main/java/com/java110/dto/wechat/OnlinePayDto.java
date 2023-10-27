@@ -36,6 +36,8 @@ public class OnlinePayDto extends PageDto implements Serializable {
     private String payName;
     private String transactionId;
 
+    private String paymentPoolId;
+
 
     private Date createTime;
 
@@ -145,5 +147,13 @@ public class OnlinePayDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPaymentPoolId() {
+        return paymentPoolId;
+    }
+
+    public void setPaymentPoolId(String paymentPoolId) {
+        this.paymentPoolId = paymentPoolId;
     }
 }
