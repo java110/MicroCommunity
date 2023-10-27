@@ -1,4 +1,4 @@
-package com.java110.acct.smo.impl;
+package com.java110.acct.payment.adapt.wechat;
 
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;

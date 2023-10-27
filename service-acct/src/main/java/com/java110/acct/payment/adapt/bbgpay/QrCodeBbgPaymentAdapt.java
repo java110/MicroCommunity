@@ -1,10 +1,8 @@
-package com.java110.acct.smo.impl;
+package com.java110.acct.payment.adapt.bbgpay;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.acct.payment.adapt.bbgpay.EncryptDecryptFactory;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
-import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;

@@ -1,8 +1,6 @@
-package com.java110.acct.smo.impl;
+package com.java110.acct.payment.adapt.easypay;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.acct.payment.adapt.bbgpay.EncryptDecryptFactory;
-import com.java110.acct.payment.adapt.easypay.BasePay;
 import com.java110.acct.payment.adapt.easypay.utils.HttpConnectUtils;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
