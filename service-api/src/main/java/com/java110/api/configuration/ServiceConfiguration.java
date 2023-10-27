@@ -119,6 +119,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/wechat.getCommunityWechatAppId,");// 查询小区微信appID
         exclusions.append("/app/payment.cashier,");// 收银接口
         exclusions.append("/app/fee.queryFeeDetail,");// 缴费明细
+        exclusions.append("/app/payment.getNativeQrcodePayment,");// 获取二维码信息
 
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");
 
