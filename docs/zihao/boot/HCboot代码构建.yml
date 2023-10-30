@@ -14,7 +14,7 @@ job:
           package_name: hc_service-boot
           path: 62078ba6-d431-4626-a13a-e4ab30820b6b/MicroCommunityBoot.jar
           dockerfile_name: springboot
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 62078ba6-d431-4626-a13a-e4ab30820b6b/MicroCommunityBoot.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df26/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"report\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 62078ba6-d431-4626-a13a-e4ab30820b6b/MicroCommunityBoot.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df26/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n RUN cd /usr/local/jdk1.8.0_144/jre/lib/fonts && wget https://homecommunity.oss-cn-beijing.aliyuncs.com/hc/simsun.ttc\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"report\"]"
           start_shell: |-
             #!/bin/bash
 
