@@ -229,8 +229,10 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
        return baseDataStatisticsInnerServiceSMOImpl.getCommunityFeeDetailCount(info);
     }
 
-
-
+    @Override
+    public List<Map> getCommunityRepairCount(Map info) {
+        return baseDataStatisticsInnerServiceSMOImpl.getCommunityRepairCount(info);
+    }
 
 
     /**

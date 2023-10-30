@@ -1,5 +1,6 @@
 package com.java110.report.statistics;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -97,4 +98,6 @@ public interface IBaseDataStatistics {
      * @return
      */
     List<Map> getCommunityFeeDetailCount(Map info);
+
+    List<Map> getCommunityRepairCount(Map info);
 }

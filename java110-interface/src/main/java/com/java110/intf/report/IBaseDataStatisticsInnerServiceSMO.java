@@ -65,4 +65,6 @@ public interface IBaseDataStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getCommunityFeeDetailCount", method = RequestMethod.POST)
     List<Map> getCommunityFeeDetailCount(@RequestBody  Map info);
+
+    List<Map> getCommunityRepairCount(@RequestBody Map info);
 }

@@ -354,5 +354,21 @@
         group by t.community_id
         ) a order by a.count desc limit 10
     </select>
+    <select id="getCommunityRepairCount" parameterType="Map" resultType="Map">
+        select * from (
+        select t.community_id communityId,count(1) count from r_repair_pool t
+        where t.status_cd = '0'
+        <if test="communityIds !=null ">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        and t.create_time &gt;= #{startTime}
+        and t.create_time &lt;= #{endTime}
+        group by t.community_id
+        ) a order by a.count desc limit 10
+    </select>
+
 
 </mapper>

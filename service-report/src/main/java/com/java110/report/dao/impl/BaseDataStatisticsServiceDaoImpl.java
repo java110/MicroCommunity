@@ -80,4 +80,10 @@ public class BaseDataStatisticsServiceDaoImpl extends BaseServiceDao implements 
         List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getCommunityFeeDetailCount", info);
         return infos;
     }
+
+    @Override
+    public List<Map> getCommunityRepairCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getCommunityRepairCount", info);
+        return infos;
+    }
 }

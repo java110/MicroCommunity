@@ -98,8 +98,14 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
     }
 
     @Override
-    public List<Map> getCommunityFeeDetailCount(Map info) {
+    public List<Map> getCommunityFeeDetailCount(@RequestBody Map info) {
         List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityFeeDetailCount(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityRepairCount(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityRepairCount(info);
         return infos;
     }
 }
