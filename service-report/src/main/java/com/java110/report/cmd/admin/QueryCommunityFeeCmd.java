@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Java110Cmd(serviceCode = "admin.queryCommunityFeeAndRepair")
-public class QueryCommunityFeeAndRepairCmd extends Cmd {
+@Java110Cmd(serviceCode = "admin.queryCommunityFee")
+public class QueryCommunityFeeCmd extends Cmd {
 
     @Autowired
     private IStoreInnerServiceSMO storeInnerServiceSMOImpl;
