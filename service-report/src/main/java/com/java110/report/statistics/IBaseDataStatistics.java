@@ -7,6 +7,7 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.report.QueryStatisticsDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基础数据统计
@@ -89,4 +90,11 @@ public interface IBaseDataStatistics {
     long getOweRoomCount(QueryStatisticsDto queryStatisticsDto);
 
     List<RoomDto> getOweRoomInfo(QueryStatisticsDto queryStatisticsDto);
+
+    /**
+     * 查询小区缴费订单数
+     * @param info
+     * @return
+     */
+    List<Map> getCommunityFeeDetailCount(Map info);
 }

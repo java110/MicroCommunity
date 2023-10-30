@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName IReportFeeStatisticsInnerServiceSMO
@@ -61,4 +62,7 @@ public interface IBaseDataStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getOweRoomInfo", method = RequestMethod.POST)
     List<RoomDto> getOweRoomInfo(@RequestBody RoomDto roomDto);
+
+    @RequestMapping(value = "/getCommunityFeeDetailCount", method = RequestMethod.POST)
+    List<Map> getCommunityFeeDetailCount(@RequestBody  Map info);
 }

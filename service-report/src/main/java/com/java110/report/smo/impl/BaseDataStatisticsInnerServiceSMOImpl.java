@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,5 +95,11 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
 
         List<Map> info = baseDataStatisticsServiceDaoImpl.getOweRoomInfo(BeanConvertUtil.beanCovertMap(roomDto));
         return BeanConvertUtil.covertBeanList(info, RoomDto.class);
+    }
+
+    @Override
+    public List<Map> getCommunityFeeDetailCount(Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityFeeDetailCount(info);
+        return infos;
     }
 }

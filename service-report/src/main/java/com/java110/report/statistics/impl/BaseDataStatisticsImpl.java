@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基础数据统计类
@@ -221,6 +222,13 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         ownerCarDto.setCarTypeCd(OwnerCarDto.CAR_TYPE_PRIMARY);
         return ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
     }
+
+    @Override
+    public List<Map> getCommunityFeeDetailCount(Map info) {
+
+       return baseDataStatisticsInnerServiceSMOImpl.getCommunityFeeDetailCount(info);
+    }
+
 
 
 
