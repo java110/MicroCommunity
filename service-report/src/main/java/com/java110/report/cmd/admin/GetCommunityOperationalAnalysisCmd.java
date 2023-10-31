@@ -69,13 +69,51 @@ public class GetCommunityOperationalAnalysisCmd extends Cmd {
 
         //todo 查询小区缴费订单数
         List<Map> feeDetailData = baseDataStatisticsInnerServiceSMOImpl.getCommunityFeeDetailCountAnalysis(reqJson);
+        feeDetailData = fillDate(feeDetailData, startTime, endTime);
         data.put("feeDetailData", feeDetailData);
 
         //todo 查询小区报修单订单数
         List<Map> repairData = baseDataStatisticsInnerServiceSMOImpl.getCommunityRepairCountAnalysis(reqJson);
+        repairData = fillDate(repairData, startTime, endTime);
         data.put("repairData", repairData);
 
         context.setResponseEntity(ResultVo.createResponseEntity(data));
 
+    }
+
+    private List<Map> fillDate(List<Map> datas, String startTime, String endTime) {
+        Date sTime = DateUtil.getDateFromStringB(startTime);
+        Date eTime = DateUtil.getDateFromStringB(startTime);
+        List<Map> tempDatas = new ArrayList<>();
+        while (sTime.getTime() <= eTime.getTime()) {
+
+            Map data = hasInDatas(sTime, datas);
+            if (data == null) {
+                data = new HashMap();
+                data.put("createTime", DateUtil.getFormatTimeStringB(sTime));
+                data.put("countValue", "0");
+            }
+
+            tempDatas.add(data);
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(sTime);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            sTime = calendar.getTime();
+        }
+
+        return tempDatas;
+    }
+
+    private Map hasInDatas(Date sTime, List<Map> datas) {
+
+        String curTime = DateUtil.getFormatTimeStringB(sTime);
+        for (Map data : datas) {
+            if (curTime.equals(data.get("createTime"))) {
+                return data;
+            }
+        }
+
+        return null;
     }
 }
