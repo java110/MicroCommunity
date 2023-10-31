@@ -1,5 +1,6 @@
 package com.java110.intf.report;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.room.RoomDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -66,5 +67,12 @@ public interface IBaseDataStatisticsInnerServiceSMO {
     @RequestMapping(value = "/getCommunityFeeDetailCount", method = RequestMethod.POST)
     List<Map> getCommunityFeeDetailCount(@RequestBody  Map info);
 
+    @RequestMapping(value = "/getCommunityRepairCount", method = RequestMethod.POST)
     List<Map> getCommunityRepairCount(@RequestBody Map info);
+
+    @RequestMapping(value = "/getCommunityFeeDetailCountAnalysis", method = RequestMethod.POST)
+    List<Map> getCommunityFeeDetailCountAnalysis(@RequestBody Map info);
+
+    @RequestMapping(value = "/getCommunityRepairCountAnalysis", method = RequestMethod.POST)
+    List<Map> getCommunityRepairCountAnalysis(@RequestBody Map info);
 }

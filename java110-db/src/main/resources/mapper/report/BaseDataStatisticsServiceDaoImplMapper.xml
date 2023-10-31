@@ -370,5 +370,28 @@
         ) a order by a.count desc limit 10
     </select>
 
+    <select id="getCommunityFeeDetailCountAnalysis" parameterType="Map" resultType="Map">
+        select DATE_FORMAT(t.create_time,'%Y-%m-%d') createTime,count(1) countValue
+        from pay_fee_detail t
+        where 1=1
+        and t.state in ('1000','1400','1200')
+        and t.create_time &gt; #{startTime}
+        and t.create_time &lt; #{endTime}
+        and t.community_id = #{communityId}
+        group by DATE_FORMAT(t.create_time,'%Y-%m-%d')
+    </select>
+
+    <select id="getCommunityRepairCountAnalysis" parameterType="Map" resultType="Map">
+        select DATE_FORMAT(t.create_time,'%Y-%m-%d') createTime,count(1) countValue
+        from r_repair_pool t
+        where 1=1
+        and t.status_cd = '0'
+        and t.create_time &gt; #{startTime}
+        and t.create_time &lt; #{endTime}
+        and t.community_id = #{communityId}
+        group by DATE_FORMAT(t.create_time,'%Y-%m-%d')
+    </select>
+
+
 
 </mapper>
