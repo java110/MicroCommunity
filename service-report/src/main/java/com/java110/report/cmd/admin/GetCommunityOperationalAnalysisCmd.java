@@ -87,6 +87,16 @@ public class GetCommunityOperationalAnalysisCmd extends Cmd {
         maintainanceData = fillDate(maintainanceData, startTime, endTime);
         data.put("maintainanceData", maintainanceData);
 
+        //todo 查询采购订单数
+        List<Map> itemInData = baseDataStatisticsInnerServiceSMOImpl.getCommunityItemInAnalysis(reqJson);
+        itemInData = fillDate(itemInData, startTime, endTime);
+        data.put("itemInData", itemInData);
+
+        //todo 查询领用订单数
+        List<Map> itemOutData = baseDataStatisticsInnerServiceSMOImpl.getCommunityItemOutAnalysis(reqJson);
+        itemOutData = fillDate(itemOutData, startTime, endTime);
+        data.put("itemOutData", itemOutData);
+
         context.setResponseEntity(ResultVo.createResponseEntity(data));
 
     }
