@@ -65,4 +65,8 @@ public interface IBaseDataStatisticsServiceDao {
     List<Map> getCommunityItemInAnalysis(Map info);
 
     List<Map> getCommunityItemOutAnalysis(Map info);
+
+    List<Map> getCommunityCarInAnalysis(Map info);
+
+    List<Map> getCommunityPersonInAnalysis(Map info);
 }
