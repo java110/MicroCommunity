@@ -83,7 +83,7 @@ public class GetCommunityOperationalAnalysisCmd extends Cmd {
 
     private List<Map> fillDate(List<Map> datas, String startTime, String endTime) {
         Date sTime = DateUtil.getDateFromStringB(startTime);
-        Date eTime = DateUtil.getDateFromStringB(startTime);
+        Date eTime = DateUtil.getDateFromStringB(endTime);
         List<Map> tempDatas = new ArrayList<>();
         while (sTime.getTime() <= eTime.getTime()) {
 
