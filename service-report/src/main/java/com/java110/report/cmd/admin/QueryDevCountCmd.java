@@ -1,4 +1,4 @@
-package com.java110.report.cmd.dev;
+package com.java110.report.cmd.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -16,6 +16,7 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.room.RoomDto;
+import com.java110.dto.service.RouteDto;
 import com.java110.dto.service.ServiceDto;
 import com.java110.dto.shop.ShopDto;
 import com.java110.dto.store.StoreDto;
@@ -49,6 +50,9 @@ public class QueryDevCountCmd extends Cmd {
 
     @Autowired
     private IAppInnerServiceSMO appInnerServiceSMOImpl;
+
+    @Autowired
+    private IRouteInnerServiceSMO routeInnerServiceSMOImpl;
 
     @Autowired
     private IServiceInnerServiceSMO serviceInnerServiceSMOImpl;
@@ -87,6 +91,11 @@ public class QueryDevCountCmd extends Cmd {
         ServiceDto serviceDto = new ServiceDto();
         int storeCount = serviceInnerServiceSMOImpl.queryServicesCount(serviceDto);
         setDatas(datas, "接口数", storeCount);
+
+        //todo 服务注册
+        RouteDto routeDto = new RouteDto();
+        int routeCount =  routeInnerServiceSMOImpl.queryRoutesCount(routeDto);
+        setDatas(datas, "服务注册数", routeCount);
 
         //todo 定时任务
         TaskDto taskDto = new TaskDto();

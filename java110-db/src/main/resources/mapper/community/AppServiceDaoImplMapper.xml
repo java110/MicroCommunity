@@ -156,4 +156,11 @@
             and t.while_list_ip= #{whileListIp}
         </if>
     </select>
+    <select id="queryAppsServiceData" parameterType="Map" resultType="Map">
+        select a.app_id appId,a.`name`,count(1) count from c_service t
+        inner join c_route r on t.service_id = r.service_id and r.status_cd = '0'
+        inner join c_app a on r.app_id = a.app_id and a.status_cd = '0'
+        group by a.app_id,a.`name`
+    </select>
+
 </mapper>

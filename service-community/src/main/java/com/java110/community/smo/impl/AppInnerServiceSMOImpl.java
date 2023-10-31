@@ -99,6 +99,14 @@ public class AppInnerServiceSMOImpl extends BaseServiceSMO implements IAppInnerS
         return appServiceDaoImpl.updateAppInfo(BeanConvertUtil.beanCovertMap(appDto));
     }
 
+    @Override
+    public List<AppDto> queryAppsServiceData(@RequestBody AppDto appDto) {
+        List<AppDto> apps = BeanConvertUtil.covertBeanList(appServiceDaoImpl.queryAppsServiceData(BeanConvertUtil.beanCovertMap(appDto)), AppDto.class);
+
+
+        return apps;
+    }
+
     public IAppServiceDao getAppServiceDaoImpl() {
         return appServiceDaoImpl;
     }

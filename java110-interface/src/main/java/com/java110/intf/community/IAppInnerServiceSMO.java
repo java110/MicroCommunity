@@ -71,4 +71,7 @@ public interface IAppInnerServiceSMO {
      */
     @RequestMapping(value = "/deleteApp", method = RequestMethod.POST)
     int deleteApp(@RequestBody AppDto appDto);
+
+    @RequestMapping(value = "/queryAppsServiceData", method = RequestMethod.POST)
+    List<AppDto> queryAppsServiceData(@RequestBody AppDto appDto);
 }

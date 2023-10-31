@@ -34,6 +34,8 @@ public class AppDto extends PageDto implements Serializable {
     private String userId;
     private String whileListIp;
 
+    private long serviceCount;
+
 
     private Date createTime;
 
@@ -119,5 +121,13 @@ public class AppDto extends PageDto implements Serializable {
 
     public void setAppIds(String[] appIds) {
         this.appIds = appIds;
+    }
+
+    public long getServiceCount() {
+        return serviceCount;
+    }
+
+    public void setServiceCount(long serviceCount) {
+        this.serviceCount = serviceCount;
     }
 }
