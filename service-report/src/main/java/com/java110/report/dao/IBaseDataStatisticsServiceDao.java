@@ -57,4 +57,8 @@ public interface IBaseDataStatisticsServiceDao {
     List<Map> getCommunityFeeDetailCountAnalysis(Map info);
 
     List<Map> getCommunityRepairCountAnalysis(Map info);
+
+    List<Map> getCommunityInspectionAnalysis(Map info);
+
+    List<Map> getCommunityMaintainanceAnalysis(Map info);
 }

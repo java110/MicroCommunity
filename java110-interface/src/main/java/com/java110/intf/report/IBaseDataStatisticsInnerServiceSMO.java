@@ -75,4 +75,10 @@ public interface IBaseDataStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getCommunityRepairCountAnalysis", method = RequestMethod.POST)
     List<Map> getCommunityRepairCountAnalysis(@RequestBody Map info);
+
+    @RequestMapping(value = "/getCommunityInspectionAnalysis", method = RequestMethod.POST)
+    List<Map> getCommunityInspectionAnalysis(@RequestBody Map info);
+
+    @RequestMapping(value = "/getCommunityMaintainanceAnalysis", method = RequestMethod.POST)
+    List<Map> getCommunityMaintainanceAnalysis(@RequestBody Map info);
 }
