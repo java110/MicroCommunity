@@ -31,7 +31,7 @@
         </if>
 
         <if test="hasQuantity !=null and hasQuantity != ''">
-            and t.quantity &gt;>0
+            and t.quantity &gt; 0
         </if>
         <if test="paName !=null and paName != ''">
             and t.pa_name= #{paName}
