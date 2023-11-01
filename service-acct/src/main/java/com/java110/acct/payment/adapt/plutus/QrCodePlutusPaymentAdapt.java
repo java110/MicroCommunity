@@ -4,11 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.wechat.SmallWeChatDto;
+import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.po.wechat.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
@@ -59,6 +63,9 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
     @Autowired
     private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
+
     @Override
     public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName,String paymentPoolId) throws Exception {
         logger.info("【小程序支付】 统一下单开始, 订单编号=" + orderNum);
@@ -106,6 +113,7 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
 
         String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey,key,devId);
         System.out.println(param);
+        doSaveOnlinePay(shopSmallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
 
         String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
         System.out.println(str);
@@ -128,6 +136,8 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
 
         JSONObject paramObj = JSONObject.parseObject(paramOut);
         if ("1".equals(paramObj.getString("status"))) {
+            doUpdateOnlinePay(orderNum, OnlinePayDto.STATE_COMPILE, "支付成功");
+
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
             return new ResultVo(ResultVo.CODE_ERROR, paramObj.getString("remark"));
@@ -196,11 +206,36 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         JSONObject paramObj = JSONObject.parseObject(paramOut);
 
         if ("1".equals(paramObj.getString("status"))) {
+            doUpdateOnlinePay(orderNum, OnlinePayDto.STATE_COMPILE, "支付成功");
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else if ("0".equals(paramObj.getString("status"))) {
             return new ResultVo(ResultVo.CODE_WAIT_PAY, "等待支付完成");
         } else {
             return new ResultVo(ResultVo.CODE_ERROR, paramObj.getString("remark"));
         }
+    }
+
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money, String state, String message) {
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setAppId(smallWeChatDto.getAppId());
+        onlinePayPo.setMchId(smallWeChatDto.getMchId());
+        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setOpenId(openId);
+        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setPayId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        onlinePayPo.setPayName(feeName);
+        onlinePayPo.setRefundFee("0");
+        onlinePayPo.setState(state);
+        onlinePayPo.setTotalFee(money + "");
+        onlinePayPo.setTransactionId(orderId);
+        onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
+    }
+
+    private void doUpdateOnlinePay(String orderId, String state, String message) {
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setState(state);
+        onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
     }
 }

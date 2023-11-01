@@ -1,11 +1,17 @@
 package com.java110.acct.payment.adapt.wechat;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.wechat.SmallWeChatDto;
+import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
+import com.java110.po.wechat.OnlinePayPo;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
@@ -51,6 +57,9 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
     private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
 
     @Autowired
+    private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
+
+    @Autowired
     private RestTemplate outRestTemplate;
 
     @Override
@@ -70,7 +79,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setObjId(communityId);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        if (smallWeChatDtos == null && smallWeChatDtos.size() < 1) {
+        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
             shopSmallWeChatDto = new SmallWeChatDto();
             shopSmallWeChatDto.setObjId(communityId);
             shopSmallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
@@ -114,6 +123,9 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
 
         logger.debug("调用支付统一下单接口" + xmlData);
 
+        doSaveOnlinePay(smallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
+
+
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(
                 WechatConstant.wxMicropayUnifiedOrder, xmlData, String.class);
 
@@ -125,6 +137,8 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         resMap = PayUtil.xmlStrToMap(responseEntity.getBody());
 
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
+            doUpdateOnlinePay(orderNum, OnlinePayDto.STATE_COMPILE, "支付成功");
+
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
             String msg = resMap.get("return_msg");
@@ -196,6 +210,34 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
         if (!"SUCCESS".equals(result.get("trade_state"))) {
             return new ResultVo(ResultVo.CODE_WAIT_PAY, "等待支付完成");
         }
+
+        doUpdateOnlinePay(orderNum, OnlinePayDto.STATE_COMPILE, "支付成功");
+
         return new ResultVo(ResultVo.CODE_OK, "支付成功");
+    }
+
+
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money, String state, String message) {
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setAppId(smallWeChatDto.getAppId());
+        onlinePayPo.setMchId(smallWeChatDto.getMchId());
+        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setOpenId(openId);
+        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setPayId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        onlinePayPo.setPayName(feeName);
+        onlinePayPo.setRefundFee("0");
+        onlinePayPo.setState(state);
+        onlinePayPo.setTotalFee(money + "");
+        onlinePayPo.setTransactionId(orderId);
+        onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
+    }
+
+    private void doUpdateOnlinePay(String orderId, String state, String message) {
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setState(state);
+        onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
     }
 }
