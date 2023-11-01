@@ -134,4 +134,10 @@ public class BaseDataStatisticsServiceDaoImpl extends BaseServiceDao implements 
         List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getCommunityPersonInAnalysis", info);
         return infos;
     }
+
+    @Override
+    public List<Map> getCommunityContractAnalysis(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getCommunityContractAnalysis", info);
+        return infos;
+    }
 }

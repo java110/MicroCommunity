@@ -156,4 +156,10 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
         List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityPersonInAnalysis(info);
         return infos;
     }
+
+    @Override
+    public List<Map> getCommunityContractAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityContractAnalysis(info);
+        return infos;
+    }
 }

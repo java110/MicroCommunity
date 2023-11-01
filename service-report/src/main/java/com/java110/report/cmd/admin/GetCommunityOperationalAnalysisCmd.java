@@ -107,6 +107,10 @@ public class GetCommunityOperationalAnalysisCmd extends Cmd {
         personInData = fillDate(personInData, startTime, endTime);
         data.put("personInData", personInData);
 
+        //todo 查询起草合同数
+        List<Map> contractData = baseDataStatisticsInnerServiceSMOImpl.getCommunityContractAnalysis(reqJson);
+        contractData = fillDate(contractData, startTime, endTime);
+        data.put("contractData", contractData);
         context.setResponseEntity(ResultVo.createResponseEntity(data));
 
     }
