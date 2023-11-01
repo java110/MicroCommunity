@@ -182,7 +182,11 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
             templateMessage.setTemplate_id(templateId);
             templateMessage.setTouser(openId);
             data.put("thing2", new Content(content.getString("feeTypeName")));
-            data.put("thing12", new Content(content.getString("payerObjName")));
+            String payerObjName = content.getString("payerObjName");
+            if (!StringUtil.isEmpty(payerObjName) && payerObjName.length() > 20) {
+                payerObjName = payerObjName.substring(0, 20);
+            }
+            data.put("thing12", new Content(payerObjName));
             data.put("amount3", new Content(content.getString("billAmountOwed")));
             data.put("time19", new Content(content.getString("date")));
             templateMessage.setData(data);
@@ -292,8 +296,8 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         data.put("thing8", new Content(content.getString("repairTypeName")));
         data.put("thing11", new Content(content.getString("repairObjName")));
         String context = content.getString("context");
-        if (!StringUtil.isEmpty(context) && context.length() > 100) {
-            context = context.substring(0, 100);
+        if (!StringUtil.isEmpty(context) && context.length() > 20) {
+            context = context.substring(0, 20);
         }
         data.put("thing10", new Content(context));
         templateMessage.setData(data);
