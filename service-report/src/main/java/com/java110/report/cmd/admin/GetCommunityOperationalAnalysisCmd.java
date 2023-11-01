@@ -52,6 +52,7 @@ public class GetCommunityOperationalAnalysisCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String startTime = reqJson.getString("startTime");
         String endTime = reqJson.getString("endTime");
+        String storeId = CmdContextUtils.getStoreId(context);
         if (StringUtil.isEmpty(startTime)) {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_MONTH, -7);
@@ -108,6 +109,7 @@ public class GetCommunityOperationalAnalysisCmd extends Cmd {
         data.put("personInData", personInData);
 
         //todo 查询起草合同数
+        reqJson.put("storeId",storeId);
         List<Map> contractData = baseDataStatisticsInnerServiceSMOImpl.getCommunityContractAnalysis(reqJson);
         contractData = fillDate(contractData, startTime, endTime);
         data.put("contractData", contractData);
