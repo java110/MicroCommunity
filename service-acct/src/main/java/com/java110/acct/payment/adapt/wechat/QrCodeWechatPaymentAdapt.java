@@ -123,7 +123,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
 
         logger.debug("调用支付统一下单接口" + xmlData);
 
-        doSaveOnlinePay(smallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
+        doSaveOnlinePay(shopSmallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
 
 
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(
