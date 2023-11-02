@@ -136,7 +136,7 @@ public class GetPropertyFeeSummaryCmd extends Cmd {
         info.put("startTime", reqJson.getString("startTime"));
         info.put("endTime", reqJson.getString("endTime"));
 
-        List<Map> monthDatas = baseDataStatisticsInnerServiceSMOImpl.computeEveryMonthFee(reqJson);
+        List<Map> monthDatas = baseDataStatisticsInnerServiceSMOImpl.computeEveryMonthFee(info);
 
         List<Map> months = null;
         for (Map roomInfo : infos) {
