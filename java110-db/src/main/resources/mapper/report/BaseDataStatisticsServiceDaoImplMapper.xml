@@ -480,7 +480,7 @@
 
     <select id="getPropertyFeeSummaryData" parameterType="Map" resultType="Map">
         select br.community_id communityId,bo.name ownerName,bo.sex,bo.link,concat(f.floor_num,'-',bu.unit_num,'-',br.room_num) roomName,br.room_id,
-        borr.start_time bingTime,br.state,br.built_up_area builtUpArea,pfc.square_price squarePrice,pfc.config_id configId,pfc.fee_name feeName
+        borr.start_time bingTime,br.state,br.built_up_area builtUpArea,pfc.square_price squarePrice,pfc.config_id configId,pfc.fee_name feeName,
         (
         select max(pay_fee_time) from pay_fee_detail_month pfdm
         where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.room_id
