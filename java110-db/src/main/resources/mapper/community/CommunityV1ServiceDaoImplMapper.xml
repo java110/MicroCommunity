@@ -173,7 +173,7 @@
         select t.fee_price,t.fee_price feePrice,t.address,t.city_code,t.city_code cityCode,t.status_cd,t.status_cd
         statusCd,t.map_y,t.map_y mapY,t.pay_fee_month,t.pay_fee_month payFeeMonth,t.map_x,t.map_x
         mapX,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,t.name,t.tel,t.state,t.community_id,t.community_id
-        communityId,t.community_area,t.community_area communityArea,t.qr_code qrCode,t.member_id storeId
+        communityId,t.community_area,t.community_area communityArea,t.qr_code qrCode,cm.member_id storeId
         from s_community t
         left join s_community_member cm on t.community_id = cm.community_id and cm.member_type_cd = '390001200002'
         where 1 =1
