@@ -132,7 +132,7 @@ public class GetPropertyFeeSummaryCmd extends Cmd {
         }
 
         Map info = new HashMap();
-        info.put("roomIds", roomIds);
+        info.put("roomIds", roomIds.toArray(new String[roomIds.size()]));
         info.put("startTime", reqJson.getString("startTime"));
         info.put("endTime", reqJson.getString("endTime"));
 
