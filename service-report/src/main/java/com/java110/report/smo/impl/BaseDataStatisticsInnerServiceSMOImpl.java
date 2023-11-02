@@ -170,6 +170,7 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
 
         if (page != PageDto.DEFAULT_PAGE) {
             info.put("page",(page - 1) * row);
+            info.put("row", row);
         }
         List<Map> infos = baseDataStatisticsServiceDaoImpl.getPropertyFeeSummaryData(info);
         return infos;

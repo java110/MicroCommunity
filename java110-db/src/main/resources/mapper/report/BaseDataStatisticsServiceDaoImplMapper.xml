@@ -485,23 +485,23 @@
         select max(pay_fee_time) from pay_fee_detail_month pfdm
         where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.room_id
         and pfdm.status_cd = '0' and pfdm.detail_id != '-1'
-        and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTIme}
+        and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTime}
         ) payFeeTime,
         (
         select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm
         where pfdm.config_id = pfc.config_id
         and pfdm.obj_id = br.room_id
-        and pfdm.status_cd = '0' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTIme}
+        and pfdm.status_cd = '0' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTime}
         ) receivableAmount,
         (
         select sum(pfdm.received_amount) from pay_fee_detail_month pfdm
         where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.room_id
-        and pfdm.status_cd = '0' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTIme}
+        and pfdm.status_cd = '0' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTime}
         ) receivedAmount,
         (
         select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm
         where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.room_id
-        and pfdm.status_cd = '0' and pfdm.detail_id = '-1' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTIme}
+        and pfdm.status_cd = '0' and pfdm.detail_id = '-1' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTime}
         ) oweAmount
         from building_room br
         left join building_unit bu on br.unit_id = br.unit_id and bu.status_cd = '0'
