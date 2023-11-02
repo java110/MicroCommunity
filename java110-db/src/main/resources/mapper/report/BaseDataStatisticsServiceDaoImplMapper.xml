@@ -542,7 +542,7 @@
         and t.cur_month_time &gt;=#{startTime}
         and t.cur_month_time &lt; #{endTIme}
         ) a
-        group by a.obj_id,a.cur_month_time
+        group by a.obj_id,a.cur_month_time,a.config_id
     </select>
 
 </mapper>
