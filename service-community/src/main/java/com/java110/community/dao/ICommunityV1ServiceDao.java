@@ -70,4 +70,5 @@ public interface ICommunityV1ServiceDao {
      */
     int queryCommunitysCount(Map info);
 
+    List<Map> queryCommunityAndPropertys(Map info);
 }

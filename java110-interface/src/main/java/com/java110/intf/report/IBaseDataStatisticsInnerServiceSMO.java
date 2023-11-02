@@ -96,4 +96,14 @@ public interface IBaseDataStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/getCommunityContractAnalysis", method = RequestMethod.POST)
     List<Map> getCommunityContractAnalysis(@RequestBody Map info);
+
+    @RequestMapping(value = "/getPropertyFeeSummaryData", method = RequestMethod.POST)
+    List<Map> getPropertyFeeSummaryData(@RequestBody Map info);
+
+
+    @RequestMapping(value = "/getPropertyFeeSummaryDataCount", method = RequestMethod.POST)
+    int getPropertyFeeSummaryDataCount(@RequestBody Map info);
+
+    @RequestMapping(value = "/computeEveryMonthFee", method = RequestMethod.POST)
+    List<Map> computeEveryMonthFee(@RequestBody Map info);
 }

@@ -162,4 +162,28 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
         List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityContractAnalysis(info);
         return infos;
     }
+
+    @Override
+    public List<Map> getPropertyFeeSummaryData(@RequestBody Map info) {
+        int page = Integer.parseInt(info.get("page").toString());
+        int row = Integer.parseInt(info.get("row").toString());
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            info.put("page",(page - 1) * row);
+        }
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getPropertyFeeSummaryData(info);
+        return infos;
+    }
+
+    @Override
+    public int getPropertyFeeSummaryDataCount(@RequestBody Map info) {
+        int count = baseDataStatisticsServiceDaoImpl.getPropertyFeeSummaryDataCount(info);
+        return count;
+    }
+
+    @Override
+    public List<Map> computeEveryMonthFee(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.computeEveryMonthFee(info);
+        return infos;
+    }
 }

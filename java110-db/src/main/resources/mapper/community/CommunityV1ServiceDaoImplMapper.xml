@@ -169,5 +169,58 @@
 
 
     </select>
+    <select id="queryCommunityAndPropertys" parameterType="Map" resultType="Map">
+        select t.fee_price,t.fee_price feePrice,t.address,t.city_code,t.city_code cityCode,t.status_cd,t.status_cd
+        statusCd,t.map_y,t.map_y mapY,t.pay_fee_month,t.pay_fee_month payFeeMonth,t.map_x,t.map_x
+        mapX,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,t.name,t.tel,t.state,t.community_id,t.community_id
+        communityId,t.community_area,t.community_area communityArea,t.qr_code qrCode,t.member_id storeId
+        from s_community t
+        left join s_community_member cm on t.community_id = cm.community_id and cm.member_type_cd = '390001200002'
+        where 1 =1
+        <if test="feePrice !=null and feePrice != ''">
+            and t.fee_price= #{feePrice}
+        </if>
+        <if test="address !=null and address != ''">
+            and t.address= #{address}
+        </if>
+        <if test="cityCode !=null and cityCode != ''">
+            and t.city_code= #{cityCode}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="mapY !=null and mapY != ''">
+            and t.map_y= #{mapY}
+        </if>
+        <if test="payFeeMonth !=null and payFeeMonth != ''">
+            and t.pay_fee_month= #{payFeeMonth}
+        </if>
+        <if test="mapX !=null and mapX != ''">
+            and t.map_x= #{mapX}
+        </if>
+        <if test="nearbyLandmarks !=null and nearbyLandmarks != ''">
+            and t.nearby_landmarks= #{nearbyLandmarks}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="communityArea !=null and communityArea != ''">
+            and t.community_area= #{communityArea}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
 
 </mapper>

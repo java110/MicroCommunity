@@ -305,6 +305,7 @@ public class PurchaseApplyCmd extends Cmd {
             resourceStoreTimesPo.setStoreId(resourceStoreDtos.get(0).getStoreId());
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
             resourceStoreTimesPo.setShId(tmpPurchaseApplyDetailDto.getShId());
+            resourceStoreTimesPo.setCommunityId(resourceStoreDtos.get(0).getCommunityId());
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         }
         //获取订单号

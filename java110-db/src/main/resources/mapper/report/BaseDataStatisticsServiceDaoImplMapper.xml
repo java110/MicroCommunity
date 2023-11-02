@@ -468,6 +468,81 @@
         and t.store_id = #{storeId}
         group by DATE_FORMAT(t.create_time,'%Y-%m-%d')
     </select>
+    <select id="getPropertyFeeSummaryDataCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from building_room br
+        left join building_unit bu on br.unit_id = br.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join building_owner_room_rel borr on br.room_id = borr.room_id and borr.status_cd = '0'
+        left join building_owner bo on borr.owner_id = bo.owner_id and bo.status_cd = '0' and bo.owner_type_cd = '1001'
+        where br.status_cd = '0'
+    </select>
 
+    <select id="getPropertyFeeSummaryData" parameterType="Map" resultType="Map">
+        select br.community_id communityId,bo.name ownerName,bo.sex,bo.link,concat(f.floor_num,'-',bu.unit_num,'-',br.room_num) roomName,br.room_id,
+        borr.start_time bingTime,br.state,br.built_up_area builtUpArea,pfc.square_price squarePrice,pfc.config_id configId,pfc.fee_name feeName
+        (
+        select max(pay_fee_time) from pay_fee_detail_month pfdm
+        where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.room_id
+        and pfdm.status_cd = '0' and pfdm.detail_id != '-1'
+        and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTIme}
+        ) payFeeTime,
+        (
+        select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm
+        where pfdm.config_id = pfc.config_id
+        and pfdm.obj_id = br.room_id
+        and pfdm.status_cd = '0' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTIme}
+        ) receivableAmount,
+        (
+        select sum(pfdm.received_amount) from pay_fee_detail_month pfdm
+        where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.room_id
+        and pfdm.status_cd = '0' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTIme}
+        ) receivedAmount,
+        (
+        select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm
+        where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.room_id
+        and pfdm.status_cd = '0' and pfdm.detail_id = '-1' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTIme}
+        ) oweAmount
+        from building_room br
+        left join building_unit bu on br.unit_id = br.unit_id and bu.status_cd = '0'
+        left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
+        left join building_owner_room_rel borr on br.room_id = borr.room_id and borr.status_cd = '0'
+        left join building_owner bo on borr.owner_id = bo.owner_id and bo.status_cd = '0' and bo.owner_type_cd = '1001'
+        left join pay_fee pf on br.room_id = pf.payer_obj_id and pf.payer_obj_type = '3333' and pf.status_cd = '0' and pf.fee_type_cd = '888800010001'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0' and pfc.fee_type_cd = '888800010001'
+        where br.status_cd = '0'
+        group by br.community_id, bo.name,bo.sex,bo.link,f.floor_num,bu.unit_num,br.room_num,br.room_id,borr.start_time,br.state,br.built_up_area,pfc.square_price,pfc.config_id,pfc.fee_name
+        order by br.community_id,f.floor_num,bu.unit_num,br.room_num
+        <if test="page != -1 and page != null">
+            limit #{page},#{row}
+        </if>
+    </select>
+    <select id="computeEveryMonthFee" parameterType="Map" resultType="Map">
+        select a.obj_id roomId,a.cur_month_time curMonthTime,a.config_id configId,sum(receivableAmount) receivableAmount,
+        sum(receivedAmount) receivedAmount,sum(oweAmount) oweAmount
+        from (
+        select t.obj_id,t.cur_month_time,pfc.config_id,
+        (
+        select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm where pfdm.month_id = t.month_id and pfdm.status_cd = '0'
+        ) receivableAmount,
+        (
+        select sum(pfdm.received_amount) from pay_fee_detail_month pfdm where pfdm.month_id = t.month_id and pfdm.status_cd = '0'
+        ) receivedAmount,
+        (
+        select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm where pfdm.month_id = t.month_id and pfdm.status_cd = '0'
+        ) oweAmount
+
+        from pay_fee_detail_month t
+        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0' and pfc.fee_type_cd = '888800010001'
+        where 1=1
+        and t.obj_id in
+        <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and t.cur_month_time &gt;=#{startTime}
+        and t.cur_month_time &lt; #{endTIme}
+        ) a
+        group by a.obj_id,a.cur_month_time
+    </select>
 
 </mapper>

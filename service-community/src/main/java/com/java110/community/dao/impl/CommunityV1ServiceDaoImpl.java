@@ -108,5 +108,14 @@ public class CommunityV1ServiceDaoImpl extends BaseServiceDao implements ICommun
         return Integer.parseInt(businessCommunityInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryCommunityAndPropertys(Map info) {
+        logger.debug("查询 getCommunityInfo 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("communityV1ServiceDaoImpl.queryCommunityAndPropertys",info);
+
+        return infos;
+    }
+
 
 }

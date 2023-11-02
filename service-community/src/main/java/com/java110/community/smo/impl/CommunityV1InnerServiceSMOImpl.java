@@ -86,4 +86,11 @@ public class CommunityV1InnerServiceSMOImpl extends BaseServiceSMO implements IC
     public int queryCommunitysCount(@RequestBody CommunityDto communityDto) {
         return communityV1ServiceDaoImpl.queryCommunitysCount(BeanConvertUtil.beanCovertMap(communityDto));    }
 
+    @Override
+    public List<CommunityDto> queryCommunityAndPropertys(@RequestBody CommunityDto communityDto) {
+        List<CommunityDto> communitys = BeanConvertUtil.covertBeanList(communityV1ServiceDaoImpl.queryCommunityAndPropertys(BeanConvertUtil.beanCovertMap(communityDto)), CommunityDto.class);
+
+        return communitys;
+    }
+
 }

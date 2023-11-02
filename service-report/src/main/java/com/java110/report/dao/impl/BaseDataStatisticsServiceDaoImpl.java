@@ -40,12 +40,12 @@ public class BaseDataStatisticsServiceDaoImpl extends BaseServiceDao implements 
      */
     @Override
     public int getReceivedRoomCount(Map info) {
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getReceivedRoomCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getReceivedRoomCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     /**
@@ -138,6 +138,28 @@ public class BaseDataStatisticsServiceDaoImpl extends BaseServiceDao implements 
     @Override
     public List<Map> getCommunityContractAnalysis(Map info) {
         List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getCommunityContractAnalysis", info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getPropertyFeeSummaryData(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getPropertyFeeSummaryData", info);
+        return infos;
+    }
+
+    @Override
+    public int getPropertyFeeSummaryDataCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.getPropertyFeeSummaryDataCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> computeEveryMonthFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("baseDataStatisticsServiceDaoImpl.computeEveryMonthFee", info);
         return infos;
     }
 }

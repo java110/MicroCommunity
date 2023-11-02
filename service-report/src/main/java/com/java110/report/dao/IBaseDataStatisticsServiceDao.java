@@ -71,4 +71,10 @@ public interface IBaseDataStatisticsServiceDao {
     List<Map> getCommunityPersonInAnalysis(Map info);
 
     List<Map> getCommunityContractAnalysis(Map info);
+
+    List<Map> getPropertyFeeSummaryData(Map info);
+
+    int getPropertyFeeSummaryDataCount(Map info);
+
+    List<Map> computeEveryMonthFee(Map info);
 }
