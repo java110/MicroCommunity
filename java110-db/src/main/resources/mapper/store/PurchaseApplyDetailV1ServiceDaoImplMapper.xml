@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="purchaseApplyDetailV1ServiceDaoImpl">
 
-
     <!-- 保存采购申请明细信息 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApplyDetailInfo" parameterType="Map">
-        insert into purchase_apply_detail(
-        original_stock,quantity,operate,price,purchase_remark,purchase_quantity,rs_id,apply_order_id,remark,id,res_id,
-        times_id,consult_price
-        ) values (
-        #{originalStock},#{quantity},'ADD',#{price},#{purchaseRemark},#{purchaseQuantity},#{rsId},#{applyOrderId},#{remark},#{id},
-        #{resId},#{timesId},#{consultPrice}
-        )
+        insert into purchase_apply_detail(original_stock, quantity, operate, price, purchase_remark, purchase_quantity,
+                                          rs_id, apply_order_id, remark, id, res_id,
+                                          times_id, consult_price, b_id)
+        values (#{originalStock}, #{quantity}, 'ADD', #{price}, #{purchaseRemark}, #{purchaseQuantity}, #{rsId},
+                #{applyOrderId}, #{remark}, #{id},
+                #{resId}, #{timesId}, #{consultPrice}, #{bId})
     </insert>
-
 
     <!-- 查询采购申请明细信息 add by wuxw 2018-07-03 -->
     <select id="getPurchaseApplyDetailInfo" parameterType="Map" resultType="Map">
@@ -62,9 +58,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改采购申请明细信息 add by wuxw 2018-07-03 -->
     <update id="updatePurchaseApplyDetailInfo" parameterType="Map">
@@ -90,7 +84,6 @@
         <if test="rsId !=null and rsId != ''">
             , t.rs_id= #{rsId}
         </if>
-
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
@@ -104,7 +97,6 @@
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id= #{applyOrderId}
         </if>
-
     </update>
 
     <!-- 查询采购申请明细数量 add by wuxw 2018-07-03 -->
@@ -145,8 +137,5 @@
         <if test="resId !=null and resId != ''">
             and t.res_id= #{resId}
         </if>
-
-
     </select>
-
 </mapper>

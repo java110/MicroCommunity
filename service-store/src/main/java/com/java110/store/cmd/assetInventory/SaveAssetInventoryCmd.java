@@ -132,6 +132,7 @@ public class SaveAssetInventoryCmd extends Cmd {
                 throw new CmdException("保存数据盘点明细失败");
             }
         }
+        //assetInventoryPo.setState("4488"); //4488 盘点中，4477 盘点结束，4466 盘点入库
         int flag = assetInventoryV1InnerServiceSMOImpl.saveAssetInventory(assetInventoryPo);
         if (flag < 1) {
             throw new CmdException("保存数据失败");

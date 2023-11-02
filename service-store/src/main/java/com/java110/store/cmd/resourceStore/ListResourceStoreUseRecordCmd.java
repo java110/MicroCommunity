@@ -27,13 +27,14 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.resource.ResourceStoreUseRecordDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -48,13 +49,13 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "resourceStore.listResourceStoreUseRecords")
 public class ListResourceStoreUseRecordCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListResourceStoreUseRecordCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListResourceStoreUseRecordCmd.class);
+
     @Autowired
     private IResourceStoreUseRecordV1InnerServiceSMO resourceStoreUseRecordV1InnerServiceSMOImpl;
 
     @Autowired
     private IResourceStoreUseRecordInnerServiceSMO resourceStoreUseRecordInnerServiceSMOImpl;
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {

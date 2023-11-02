@@ -41,8 +41,8 @@ public class QueryHisRoomCmd extends Cmd {
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
         String roomName = reqJson.getString("roomName");
-        if(StringUtil.isEmpty(roomName)){
-            String[] roomNames = roomName.split(roomName,3);
+        if(!StringUtil.isEmpty(roomName)){
+            String[] roomNames = roomName.split("-");
             if(roomNames.length == 3) {
                 roomDto.setFloorNum(roomNames[0]);
                 roomDto.setUnitNum(roomNames[1]);

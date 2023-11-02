@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="resourceResourceStoreServiceDaoImpl">
 
@@ -23,12 +22,12 @@
         insert into resource_store(res_id, b_id, store_id, res_name, res_code, unit_code, remark, out_low_price,
                                    out_high_price, show_mobile, description,
                                    price, stock, create_time, sh_id, warning_stock, average_price, rss_id, rst_id,
-                                   mini_unit_code, mini_unit_stock, mini_stock, parent_rst_id, is_fixed,community_id)
+                                   mini_unit_code, mini_unit_stock, mini_stock, parent_rst_id, is_fixed, community_id)
         values (#{resId}, #{bId}, #{storeId}, #{resName}, #{resCode}, #{unitCode}, #{remark}, #{outLowPrice},
                 #{outHighPrice},
                 #{showMobile}, #{description}, #{price}, #{stock}, #{createTime}, #{shId}, #{warningStock},
                 #{averagePrice}, #{rssId}, #{rstId}, #{miniUnitCode}, #{miniUnitStock}, #{miniStock}, #{parentRstId},
-                #{isFixed},#{communityId})
+                #{isFixed}, #{communityId})
     </insert>
 
     <!-- 查询资源信息（Business） add by wuxw 2018-07-03 -->
@@ -211,13 +210,14 @@
         averagePrice,rss.spec_name rssName,t.mini_unit_code,t.mini_unit_code miniUnitCode,t.mini_stock,t.mini_stock
         miniStock,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name
         miniUnitCodeName,t.parent_rst_id parentRstId,t.rst_id rstId,rst1.name parentRstName,rst.name
-        rstName,
+        rstName,rstm.times_id timesId,
         t.is_fixed,t.is_fixed isFixed,td2.name isFixedName,t.community_id communityId
         from resource_store t
         left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
         left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
+        left join resource_store_times rstm on t.res_code = rstm.res_code and rstm.status_cd = '0'
         left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
         'unit_code'
         left join t_dict td1 on t.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
@@ -288,7 +288,6 @@
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
-
         <if test="shObjId !=null and shObjId != ''">
             and sh.sh_obj_id= #{shObjId}
         </if>
@@ -370,7 +369,6 @@
         <if test="description !=null and description != ''">
             , t.description= #{description}
         </if>
-
         , t.stock= #{stock}
         <if test="warningStock !=null and warningStock != ''">
             , t.warning_stock= #{warningStock}
@@ -412,7 +410,17 @@
     <select id="queryResourceStoresCount" parameterType="Map" resultType="Map">
         select count(1) count
         from resource_store t
+        left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
+        left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
+        left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
+        left join resource_store_times rstm on t.res_code = rstm.res_code and rstm.status_cd = '0'
+        left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
+        'unit_code'
+        left join t_dict td1 on t.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
+        td1.table_columns = 'unit_code'
+        left join t_dict td2 on t.is_fixed = td2.status_cd and td2.table_name='resource_store' and td2.table_columns =
+        'is_fixed'
         where 1 =1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
@@ -508,6 +516,7 @@
             and t.stock > 0
         </if>
     </select>
+
     <!-- 查询资源信息 add by wuxw 2018-07-03 -->
     <select id="queryResourceStoresTotalPrice" parameterType="Map" resultType="Map">
         select IFNULL(sum(total_price),0) as totalPrice from(

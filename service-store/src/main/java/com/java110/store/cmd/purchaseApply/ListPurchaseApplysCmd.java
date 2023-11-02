@@ -110,6 +110,9 @@ public class ListPurchaseApplysCmd extends Cmd {
         if (privileges.size() != 0 || (!StringUtil.isEmpty(reqJson.getString("applyOrderId")))) {
             purchaseApplyDto.setUserId("");
         }
+        if (!StringUtil.isEmpty(reqJson.getString("applyUserName"))) {
+            purchaseApplyDto.setUserName(reqJson.getString("applyUserName"));
+        }
         int count = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplysCount(purchaseApplyDto);
         List<ApiPurchaseApplyDataVo> purchaseApplys = null;
         if (count > 0) {

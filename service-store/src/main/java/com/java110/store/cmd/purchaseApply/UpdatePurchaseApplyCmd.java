@@ -36,10 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 /**
  * 类表述：更新
  * 服务编码：purchaseApply.updatePurchaseApply
@@ -55,7 +51,6 @@ public class UpdatePurchaseApplyCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(UpdatePurchaseApplyCmd.class);
 
-
     @Autowired
     private IPurchaseApplyV1InnerServiceSMO purchaseApplyV1InnerServiceSMOImpl;
 
@@ -70,9 +65,7 @@ public class UpdatePurchaseApplyCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "endUserTel", "必填，请填写采购联系电话");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
         Assert.hasKey(reqJson, "resourceStores", "必填，请填写申请采购的物资");
-
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
-
         if (resourceStores == null || resourceStores.size() < 1) {
             throw new CmdException("未包含采购物品");
         }
@@ -85,17 +78,13 @@ public class UpdatePurchaseApplyCmd extends Cmd {
         reqJson.remove("resourceStores");
         PurchaseApplyPo purchaseApplyPo = BeanConvertUtil.covertBean(reqJson, PurchaseApplyPo.class);
         int flag = purchaseApplyV1InnerServiceSMOImpl.updatePurchaseApply(purchaseApplyPo);
-
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
         //todo 删除
         PurchaseApplyDetailPo purchaseApplyDetailPo = new PurchaseApplyDetailPo();
         purchaseApplyDetailPo.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
         purchaseApplyDetailV1InnerServiceSMOImpl.deletePurchaseApplyDetail(purchaseApplyDetailPo);
-
-
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             resourceStore.put("originalStock", resourceStore.getString("stock"));
@@ -115,9 +104,9 @@ public class UpdatePurchaseApplyCmd extends Cmd {
                 }
             }
             purchaseApplyDetailPo.setConsultPrice(consultPrice);
+            purchaseApplyDetailPo.setbId("-1");
             purchaseApplyDetailV1InnerServiceSMOImpl.savePurchaseApplyDetail(purchaseApplyDetailPo);
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

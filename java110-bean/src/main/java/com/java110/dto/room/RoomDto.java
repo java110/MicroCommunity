@@ -105,8 +105,10 @@ public class RoomDto extends PageDto implements Serializable {
 
     private String operate;
 
+    private String staffNameLike;
 
-
+    private String logStartTime;
+    private String logEndTime;
 
     public String getFeeCoefficient() {
         return feeCoefficient;
@@ -562,5 +564,29 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setOperate(String operate) {
         this.operate = operate;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
+    }
+
+    public String getLogStartTime() {
+        return logStartTime;
+    }
+
+    public void setLogStartTime(String logStartTime) {
+        this.logStartTime = logStartTime;
+    }
+
+    public String getLogEndTime() {
+        return logEndTime;
+    }
+
+    public void setLogEndTime(String logEndTime) {
+        this.logEndTime = logEndTime;
     }
 }

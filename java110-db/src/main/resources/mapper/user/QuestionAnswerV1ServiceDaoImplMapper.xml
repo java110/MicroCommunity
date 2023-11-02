@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="questionAnswerV1ServiceDaoImpl">
 
-
     <!-- 保存问卷投票信息 add by wuxw 2018-07-03 -->
     <insert id="saveQuestionAnswerInfo" parameterType="Map">
-        insert into question_answer(
-        qa_name,qa_type,start_time,remark,end_time,community_id,content,qa_id,state
-        ) values (
-        #{qaName},#{qaType},#{startTime},#{remark},#{endTime},#{communityId},#{content},#{qaId},#{state}
-        )
+        insert into question_answer(qa_name, qa_type, start_time, remark, end_time, community_id, content, qa_id, state,
+                                    obj_type, obj_id)
+        values (#{qaName}, #{qaType}, #{startTime}, #{remark}, #{endTime}, #{communityId}, #{content}, #{qaId},
+                #{state}, #{objType}, #{objId})
     </insert>
-
 
     <!-- 查询问卷投票信息 add by wuxw 2018-07-03 -->
     <select id="getQuestionAnswerInfo" parameterType="Map" resultType="Map">
         select t.qa_name,t.qa_name qaName,t.qa_type,t.qa_type qaType,t.start_time,t.start_time
         startTime,t.remark,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.content,t.qa_id,t.qa_id qaId,t.create_time createTime,t.state,count(uqa1.user_qa_id) voteCount
+        communityId,t.content,t.qa_id,t.qa_id qaId,t.create_time createTime,t.state,t.obj_type,t.obj_type objType,
+        t.obj_id,t.obj_id objId, count(uqa1.user_qa_id) voteCount,td.name qaTypeName
         from question_answer t
         left join user_question_answer uqa1 on t.qa_id = uqa1.qa_id and uqa1.status_cd = '0'
+        left join t_dict td on t.qa_type = td.status_cd and td.table_name = 'question_answer' and td.table_columns =
+        'qa_type'
         where 1 =1
         <if test="qaName !=null and qaName != ''">
             and t.qa_name= #{qaName}
@@ -53,14 +52,19 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-        group by t.qa_name,t.qa_type,t.start_time,t.remark,t.status_cd,t.end_time,t.community_id,t.content,t.qa_id,t.create_time,t.state
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
+        group by
+        t.qa_name,t.qa_type,t.start_time,t.remark,t.status_cd,t.end_time,t.community_id,t.content,t.qa_id,t.create_time,t.state
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改问卷投票信息 add by wuxw 2018-07-03 -->
     <update id="updateQuestionAnswerInfo" parameterType="Map">
@@ -89,6 +93,12 @@
         <if test="content !=null and content != ''">
             , t.content= #{content}
         </if>
+        <if test="objType !=null and objType != ''">
+            , t.obj_type= #{objType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            , t.obj_id= #{objId}
+        </if>
         where 1=1
         <if test="qaId !=null and qaId != ''">
             and t.qa_id= #{qaId}
@@ -96,7 +106,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </update>
 
     <!-- 查询问卷投票数量 add by wuxw 2018-07-03 -->
@@ -134,10 +143,13 @@
         <if test="state !=null and state != ''">
             and t.state= #{state}
         </if>
-
-
+        <if test="objType !=null and objType != ''">
+            and t.obj_type= #{objType}
+        </if>
+        <if test="objId !=null and objId != ''">
+            and t.obj_id= #{objId}
+        </if>
     </select>
-
 
     <select id="queryVotedCountAndScore" parameterType="Map" resultType="Map">
         select qa_id qaId, count(1) votedCount,SUM(t.score) score

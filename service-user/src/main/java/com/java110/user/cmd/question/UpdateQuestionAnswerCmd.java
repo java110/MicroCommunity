@@ -74,7 +74,7 @@ public class UpdateQuestionAnswerCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "qaId", "请求报文中未包含题目");
         Assert.hasKeyAndValue(reqJson, "startTime", "未包含开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "未包含结束时间");
-        Assert.hasKeyAndValue(reqJson, "content", "未包含说明");
+        Assert.hasKeyAndValue(reqJson, "content", "未包含调研说明");
         Assert.hasKey(reqJson, "questionTitles", "请求报文中未包含题目");
 
         JSONArray questionTitles = reqJson.getJSONArray("questionTitles");

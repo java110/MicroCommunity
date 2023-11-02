@@ -1,7 +1,6 @@
 package com.java110.vo.api.auditAppUserBindingOwner;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class ApiAuditAppUserBindingOwnerDataVo implements Serializable {
 
@@ -24,6 +23,8 @@ public class ApiAuditAppUserBindingOwnerDataVo implements Serializable {
     private String parentAreaName;
 
     private String userId;
+    private String ownerId;
+    private String ownerName;
 
     public String getAppUserId() {
         return appUserId;
@@ -159,5 +160,21 @@ public class ApiAuditAppUserBindingOwnerDataVo implements Serializable {
 
     public void setAppTypeName(String appTypeName) {
         this.appTypeName = appTypeName;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }

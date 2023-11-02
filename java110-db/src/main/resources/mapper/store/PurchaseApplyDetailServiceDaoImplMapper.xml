@@ -108,7 +108,7 @@
         left join t_dict td6 on rs.is_fixed = td6.status_cd and td6.table_name = 'resource_store' and td6.table_columns = 'is_fixed'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
-            and t.apply_order_id= #{applyOrderId}
+            and t.apply_order_id like concat('%',#{applyOrderId},'%')
         </if>
         <if test="resName !=null and resName != ''">
             and rs.res_name like '%${resName}%'
@@ -257,7 +257,7 @@
         LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
-            and t.apply_order_id= #{applyOrderId}
+            and t.apply_order_id like concat('%',#{applyOrderId},'%')
         </if>
         <if test="resName !=null and resName != ''">
             and rs.res_name like '%${resName}%'

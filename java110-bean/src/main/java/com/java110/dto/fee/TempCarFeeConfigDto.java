@@ -22,6 +22,7 @@ public class TempCarFeeConfigDto extends PageDto implements Serializable {
     private String feeName;
     private String paId;
     private String areaNum;
+    private String areaNumLike;
     private String startTime;
     private String endTime;
     private String ruleId;
@@ -31,11 +32,9 @@ public class TempCarFeeConfigDto extends PageDto implements Serializable {
 
     private List<TempCarFeeConfigAttrDto> tempCarFeeConfigAttrs;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getCarType() {
         return carType;
@@ -109,7 +108,6 @@ public class TempCarFeeConfigDto extends PageDto implements Serializable {
         this.communityId = communityId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -156,5 +154,13 @@ public class TempCarFeeConfigDto extends PageDto implements Serializable {
 
     public void setFeeConfigId(String feeConfigId) {
         this.feeConfigId = feeConfigId;
+    }
+
+    public String getAreaNumLike() {
+        return areaNumLike;
+    }
+
+    public void setAreaNumLike(String areaNumLike) {
+        this.areaNumLike = areaNumLike;
     }
 }

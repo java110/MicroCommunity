@@ -106,6 +106,9 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String staffNameLike;
 
+    private String logStartTime;
+    private String logEndTime;
+
     private List<OwnerCarAttrDto> ownerCarAttrDto;
 
     public String getCarColor() {
@@ -546,5 +549,21 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setStaffNameLike(String staffNameLike) {
         this.staffNameLike = staffNameLike;
+    }
+
+    public String getLogStartTime() {
+        return logStartTime;
+    }
+
+    public void setLogStartTime(String logStartTime) {
+        this.logStartTime = logStartTime;
+    }
+
+    public String getLogEndTime() {
+        return logEndTime;
+    }
+
+    public void setLogEndTime(String logEndTime) {
+        this.logEndTime = logEndTime;
     }
 }

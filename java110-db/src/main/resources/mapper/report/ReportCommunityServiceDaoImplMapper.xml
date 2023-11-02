@@ -249,21 +249,33 @@
 
     <!-- 查询无效费用 add by wuxw 2018-07-03 -->
     <select id="queryRoomsTree" parameterType="Map" resultType="Map">
-        SELECT t.room_id,t.room_id roomId,t.layer,t.room_num,
-        t.room_num roomNum,t.unit_id,u.`unit_num` unitNum,
-        u.unit_id unitId,f.floor_id floorId,f.floor_num floorNum,t.`community_id` communityId,bo.owner_id ownerId
-        ,bo.`name` ownerName ,bo.link link
+        SELECT t.room_id,
+               t.room_id        roomId,
+               t.layer,
+               t.room_num,
+               t.room_num       roomNum,
+               t.unit_id,
+               u.`unit_num`     unitNum,
+               u.unit_id        unitId,
+               f.floor_id       floorId,
+               f.floor_num      floorNum,
+               t.`community_id` communityId,
+               bo.owner_id      ownerId
+                ,
+               bo.`name`        ownerName,
+               bo.link          link
         FROM building_room t
-        inner join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-        inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` =
-        '0'
-        left join building_owner_room_rel borr on t.room_id =  borr.room_id and borr.status_cd = '0'
-        left join building_owner bo on borr.owner_id =  bo.member_id and bo.status_cd = '0'
-        WHERE 1 =1
-        and t.status_cd = '0'
-        and u.unit_id = #{unitId}
-        and t.community_id= #{communityId}
-        order by CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED)
+                 inner join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
+                 inner JOIN f_floor f
+                            on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` =
+                                                                                                       '0'
+                 left join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
+                 left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
+        WHERE 1 = 1
+          and t.status_cd = '0'
+          and u.unit_id = #{unitId}
+          and t.community_id = #{communityId}
+        order by CONVERT(t.layer, SIGNED), CONVERT(t.room_num, SIGNED)
     </select>
 
     <select id="queryHisOwnerCarCount" parameterType="Map" resultType="Map">
@@ -274,8 +286,10 @@
         left join u_user uu on co.user_id = uu.user_id
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
-        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns = 'lease_type'
-        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns = 'car_type_cd'
+        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns =
+        'lease_type'
+        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns =
+        'car_type_cd'
         left join building_owner bo on t.owner_id = bo.member_id and bo.status_cd = '0'
         where 1=1
         <if test="carNum != null and carNum != ''">
@@ -288,8 +302,10 @@
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and t.start_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and t.end_time &lt;= #{logEndTime}
         </if>
         and t.community_id= #{communityId}
     </select>
@@ -309,8 +325,10 @@
         left join u_user uu on co.user_id = uu.user_id
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
-        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns = 'lease_type'
-        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns = 'car_type_cd'
+        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns =
+        'lease_type'
+        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns =
+        'car_type_cd'
         left join building_owner bo on t.owner_id = bo.member_id and bo.status_cd = '0'
         where 1=1
         <if test="carNum != null and carNum != ''">
@@ -323,8 +341,10 @@
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and t.start_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and t.end_time &lt;= #{logEndTime}
         </if>
         and t.community_id= #{communityId}
         order by t.create_time desc,t.operate
@@ -350,8 +370,10 @@
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and co.create_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and co.create_time &lt;= #{logEndTime}
         </if>
         and t.community_id = #{communityId}
     </select>
@@ -376,8 +398,10 @@
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and co.create_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and co.create_time &lt;= #{logEndTime}
         </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
@@ -389,16 +413,19 @@
     <select id="queryHisFeeCount" parameterType="Map" resultType="Map">
         select count(1) count
         from business_pay_fee t
-        left join  pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
         left join u_user uu on co.user_id = uu.user_id
+        <if test="payerObjName != null and payerObjName != ''">
+            left join pay_fee_attrs pfa on pfa.fee_id = t.fee_id and pfa.spec_cd = '390012'
+        </if>
         <if test="deleteFlag != null and deleteFlag != ''">
             inner join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '1' and pf.b_id = t.b_id
         </if>
         where 1=1
         <if test="feeId != null and feeId != ''">
-        and t.fee_id = #{feeId}
+            and t.fee_id = #{feeId}
         </if>
         <if test="deleteFlag != null and deleteFlag != ''">
             and t.operate = 'DEL'
@@ -406,12 +433,17 @@
         <if test="staffNameLike != null and staffNameLike != ''">
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
-        <if test="feeNameLike != null and staffNameLike != ''">
+        <if test="feeNameLike != null and feeNameLike != ''">
             and pfc.fee_name like concat('%',#{feeNameLike},'%')
         </if>
+        <if test="payerObjName != null and payerObjName != ''">
+            and pfa.value = #{payerObjName}
+        </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and t.start_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and t.end_time &lt;= #{logEndTime}
         </if>
         and t.community_id = #{communityId}
     </select>
@@ -421,7 +453,7 @@
         t.amount,
         uu.`name` userName,pfa.`value` payerObjName,pfa1.value ownerName,t.b_id bId,co.create_time createTime
         from business_pay_fee t
-        left join  pay_fee_config pfc on t.config_id = pfc.config_id
+        left join pay_fee_config pfc on t.config_id = pfc.config_id
         left join c_business cb on t.b_id = cb.b_id
         left join c_orders co on cb.o_id = co.o_id
         left join u_user uu on co.user_id = uu.user_id
@@ -438,17 +470,19 @@
             and t.operate = 'DEL'
         </if>
         <if test="payerObjName != null and payerObjName != ''">
-            pfa.`value` = #{payerObjName}
+            and pfa.value = #{payerObjName}
         </if>
         <if test="staffNameLike != null and staffNameLike != ''">
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
-        <if test="feeNameLike != null and staffNameLike != ''">
+        <if test="feeNameLike != null and feeNameLike != ''">
             and pfc.fee_name like concat('%',#{feeNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and t.start_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and t.end_time &lt;= #{logEndTime}
         </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
@@ -476,12 +510,14 @@
         <if test="staffNameLike != null and staffNameLike != ''">
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
-        <if test="feeNameLike != null and staffNameLike != ''">
+        <if test="feeNameLike != null and feeNameLike != ''">
             and t.fee_name like concat('%',#{feeNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and t.start_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and t.end_time &lt;= #{logEndTime}
         </if>
         and t.community_id = #{communityId}
     </select>
@@ -489,7 +525,8 @@
     <select id="queryHisFeeConfigs" parameterType="Map" resultType="Map">
         select t.operate,t.fee_type_cd feeTypeCd,t.computing_formula
         computingFormula,t.additional_amount additionalAmount,t.bill_type
-        billType,t.computing_formula_text computingFormulaText,t.square_price squarePrice,t.payment_cd paymentCd,t.is_default
+        billType,t.computing_formula_text computingFormulaText,t.square_price squarePrice,t.payment_cd
+        paymentCd,t.is_default
         isDefault,t.config_id configId,t.fee_flag feeFlag,t.fee_name
         feeName,t.payment_cycle paymentCycle,t.start_time startTime,t.end_time
         endTime,t.community_id communityId,t.deduct_from deductFrom,
@@ -513,7 +550,7 @@
         </if>
         where 1=1
         <if test="configId != null and configId != ''">
-        and t.config_id = #{configId}
+            and t.config_id = #{configId}
         </if>
         <if test="deleteFlag != null and deleteFlag != ''">
             and t.operate = 'DEL'
@@ -525,8 +562,10 @@
             and t.fee_name like concat('%',#{feeNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and t.start_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and t.end_time &lt;= #{logEndTime}
         </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
@@ -561,8 +600,10 @@
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and co.create_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and co.create_time &lt;= #{logEndTime}
         </if>
         and t.community_id = #{communityId}
     </select>
@@ -572,7 +613,8 @@
         roomSubType,td1.name roomSubTypeName, t.room_area roomArea,t.room_id
         roomId,t.layer,t.fee_coefficient feeCoefficient,t.built_up_area
         builtUpArea,t.room_num roomNum,t.unit_id unitId,t.state,td.name stateName,t.community_id
-        communityId,t.apartment,t.room_type roomType,t.room_rent roomRent,f.floor_num floorNum,bu.unit_num unitNum,t.b_id bId
+        communityId,t.apartment,t.room_type roomType,t.room_rent roomRent,f.floor_num floorNum,bu.unit_num
+        unitNum,t.b_id bId
         from business_building_room t
         left join building_unit bu on t.unit_id = bu.unit_id
         left join f_floor f on f.floor_id = bu.floor_id
@@ -599,8 +641,10 @@
             and uu.name like concat('%',#{staffNameLike},'%')
         </if>
         <if test="logStartTime != null and logStartTime != ''">
-            and co.create_time &gt; #{logStartTime}
-            and co.create_time &lt; #{logEndTime}
+            and co.create_time &gt;= #{logStartTime}
+        </if>
+        <if test="logEndTime != null and logEndTime != ''">
+            and co.create_time &lt;= #{logEndTime}
         </if>
         and t.community_id = #{communityId}
         order by t.create_time desc,t.operate
@@ -608,5 +652,4 @@
             limit #{page}, #{row}
         </if>
     </select>
-
 </mapper>

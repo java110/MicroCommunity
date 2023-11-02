@@ -34,6 +34,8 @@ public class PurchaseApplyDetailPo implements Serializable {
     private String consultPrice;
     private String shId;
 
+    private String bId;
+
     public String getApplyOrderId() {
         return applyOrderId;
     }
@@ -152,5 +154,13 @@ public class PurchaseApplyDetailPo implements Serializable {
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

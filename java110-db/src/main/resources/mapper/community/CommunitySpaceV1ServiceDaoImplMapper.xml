@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="communitySpaceV1ServiceDaoImpl">
 
-
     <!-- 保存小区场地信息 add by wuxw 2018-07-03 -->
     <insert id="saveCommunitySpaceInfo" parameterType="Map">
-        insert into community_space(
-        admin_name,space_id,name,start_time,tel,end_time,state,community_id,fee_money,venue_id
-        ) values (
-        #{adminName},#{spaceId},#{name},#{startTime},#{tel},#{endTime},#{state},#{communityId},#{feeMoney},#{venueId}
-        )
+        insert into community_space(admin_name, space_id, name, start_time, tel, end_time, state, community_id,
+                                    fee_money, venue_id)
+        values (#{adminName}, #{spaceId}, #{name}, #{startTime}, #{tel}, #{endTime}, #{state}, #{communityId},
+                #{feeMoney}, #{venueId})
     </insert>
-
 
     <!-- 查询小区场地信息 add by wuxw 2018-07-03 -->
     <select id="getCommunitySpaceInfo" parameterType="Map" resultType="Map">
@@ -31,9 +27,8 @@
         <if test="venueId !=null and venueId != ''">
             and t.venue_id= #{venueId}
         </if>
-
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
@@ -60,9 +55,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改小区场地信息 add by wuxw 2018-07-03 -->
     <update id="updateCommunitySpaceInfo" parameterType="Map">
@@ -101,7 +94,6 @@
         <if test="venueId !=null and venueId != ''">
             and t.venue_id= #{venueId}
         </if>
-
     </update>
 
     <!-- 查询小区场地数量 add by wuxw 2018-07-03 -->
@@ -119,7 +111,7 @@
             and t.venue_id= #{venueId}
         </if>
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
@@ -142,8 +134,5 @@
         <if test="feeMoney !=null and feeMoney != ''">
             and t.fee_money= #{feeMoney}
         </if>
-
-
     </select>
-
 </mapper>

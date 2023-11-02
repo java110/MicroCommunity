@@ -57,39 +57,36 @@ public class SaveResourceSupplierCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "supplierName", "请求报文中未包含supplierName");
         Assert.hasKeyAndValue(reqJson, "address", "请求报文中未包含address");
         Assert.hasKeyAndValue(reqJson, "tel", "请求报文中未包含tel");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        String regex = "1[3-9]\\d{9}";
+        String regex2 = "0\\d{2,3}-?[1-9]\\d{4,9}";
+        String tel = reqJson.getString("tel"); //获取手机号
+        if (!tel.matches(regex) && !tel.matches(regex2)) {
+            throw new IllegalArgumentException("供应商联系方式格式不对！");
+        }
         if (!reqJson.containsKey("storeId")) {
-            String storeId =cmdDataFlowContext.getReqHeaders().get("store-id");
+            String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
             reqJson.put("storeId", storeId);
         }
-
         if (!reqJson.containsKey("userId")) {
             reqJson.put("userId", "-1");
         }
-
         if (!reqJson.containsKey("userName")) {
             reqJson.put("userName", "未知");
         }
-
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-
         reqJson.put("createUserId", reqJson.getString("userId"));
         reqJson.put("createUserName", reqJson.getString("userName"));
         ResourceSupplierPo resourceSupplierPo = BeanConvertUtil.covertBean(reqJson, ResourceSupplierPo.class);
-
         resourceSupplierPo.setRsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = resourceSupplierV1InnerServiceSMOImpl.saveResourceSupplier(resourceSupplierPo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

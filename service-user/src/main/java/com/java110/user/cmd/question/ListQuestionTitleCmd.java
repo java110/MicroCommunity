@@ -40,7 +40,6 @@ import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 类表述：查询
  * 服务编码：questionTitle.listQuestionTitle
@@ -55,6 +54,7 @@ import org.slf4j.LoggerFactory;
 public class ListQuestionTitleCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListQuestionTitleCmd.class);
+
     @Autowired
     private IQuestionTitleV1InnerServiceSMO questionTitleV1InnerServiceSMOImpl;
 
@@ -65,12 +65,10 @@ public class ListQuestionTitleCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         QuestionTitleDto questionTitleDto = BeanConvertUtil.covertBean(reqJson, QuestionTitleDto.class);
 
         int count = questionTitleV1InnerServiceSMOImpl.queryQuestionTitlesCount(questionTitleDto);
@@ -79,7 +77,6 @@ public class ListQuestionTitleCmd extends Cmd {
 
         if (count > 0) {
             questionTitleDtos = questionTitleV1InnerServiceSMOImpl.queryQuestionTitles(questionTitleDto);
-
             refreshTitileValues(questionTitleDtos);
         } else {
             questionTitleDtos = new ArrayList<>();
@@ -93,7 +90,6 @@ public class ListQuestionTitleCmd extends Cmd {
     }
 
     private void refreshTitileValues(List<QuestionTitleDto> questionTitleDtos) {
-
         if (questionTitleDtos == null || questionTitleDtos.size() < 1) {
             return;
         }
@@ -119,7 +115,5 @@ public class ListQuestionTitleCmd extends Cmd {
             }
             questionTitle.setTitleValues(tmpQuestionTitleValueDtos);
         }
-
-
     }
 }

@@ -363,7 +363,6 @@ public class ContractApi {
     }
 
 
-
     /**
      * 合同起草待办
      *
@@ -909,8 +908,8 @@ public class ContractApi {
                                                           @RequestParam(value = "contractType", required = false) String contractType,
                                                           @RequestParam(value = "logStartTime", required = false) String logStartTime,
                                                           @RequestParam(value = "logEndTime", required = false) String logEndTime,
-                                                          @RequestParam(value = "planId", required = false) String planId
-    ) {
+                                                          @RequestParam(value = "staffNameLike", required = false) String staffNameLike,
+                                                          @RequestParam(value = "planId", required = false) String planId) {
         ContractChangePlanDto contractChangePlanDto = new ContractChangePlanDto();
         contractChangePlanDto.setPage(page);
         contractChangePlanDto.setRow(row);
@@ -922,6 +921,7 @@ public class ContractApi {
         contractChangePlanDto.setContractType(contractType);
         contractChangePlanDto.setStartTime(logStartTime);
         contractChangePlanDto.setEndTime(logEndTime);
+        contractChangePlanDto.setStaffNameLike(staffNameLike);
         return getContractChangePlanBMOImpl.get(contractChangePlanDto);
     }
 

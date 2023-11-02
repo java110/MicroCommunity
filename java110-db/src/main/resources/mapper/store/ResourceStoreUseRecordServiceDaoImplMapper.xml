@@ -143,13 +143,13 @@
             and t.unit_price= #{unitPrice}
         </if>
         <if test="createUserId !=null and createUserId != ''">
-            and t.create_user_id= #{createUserId}
+            and t.create_user_id like '%${createUserId}%'
         </if>
         <if test="quantity !=null and quantity != ''">
             and t.quantity= #{quantity}
         </if>
         <if test="rsurId !=null and rsurId != ''">
-            and t.rsur_id= #{rsurId}
+            and t.rsur_id like '%${rsurId}%'
         </if>
         <if test="repairId !=null and repairId != ''">
             and t.repair_id= #{repairId}
@@ -276,13 +276,13 @@
             and t.unit_price= #{unitPrice}
         </if>
         <if test="createUserId !=null and createUserId != ''">
-            and t.create_user_id= #{createUserId}
+            and t.create_user_id like '%${createUserId}%'
         </if>
         <if test="quantity !=null and quantity != ''">
             and t.quantity= #{quantity}
         </if>
         <if test="rsurId !=null and rsurId != ''">
-            and t.rsur_id= #{rsurId}
+            and t.rsur_id like '%${rsurId}%'
         </if>
         <if test="repairId !=null and repairId != ''">
             and t.repair_id= #{repairId}

@@ -20,10 +20,7 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.smo.impl.FeeReceiptInnerServiceSMOImpl;
-import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
-import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
-import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
 import com.java110.intf.community.*;
 import com.java110.intf.fee.*;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
@@ -40,7 +37,6 @@ import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.utils.cache.CommonCache;
-import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.FeeFlagTypeConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
@@ -83,16 +79,10 @@ public class PayFeeCmd extends Cmd {
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Autowired
-    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
-
-    @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
-
-    @Autowired
-    private IFeeReceiptDetailInnerServiceSMO feeReceiptDetailInnerServiceSMOImpl;
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMO;
@@ -105,9 +95,6 @@ public class PayFeeCmd extends Cmd {
 
     @Autowired
     private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
-
-    @Autowired
-    private IAccountDetailInnerServiceSMO accountDetailInnerServiceSMOImpl;
 
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
@@ -125,12 +112,6 @@ public class PayFeeCmd extends Cmd {
     private IRepairUserV1InnerServiceSMO repairUserNewV1InnerServiceSMOImpl;
 
     @Autowired
-    private ICouponUserV1InnerServiceSMO couponUserV1InnerServiceSMOImpl;
-
-    @Autowired
-    private ICouponUserDetailV1InnerServiceSMO couponUserDetailV1InnerServiceSMOImpl;
-
-    @Autowired
     private IOwnerCarNewV1InnerServiceSMO ownerCarNewV1InnerServiceSMOImpl;
 
     @Autowired
@@ -142,19 +123,16 @@ public class PayFeeCmd extends Cmd {
     @Autowired
     private FeeReceiptInnerServiceSMOImpl feeReceiptInnerServiceSMOImpl;
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
         Assert.jsonObjectHaveKey(reqJson, "cycles", "请求报文中未包含cycles节点");
         Assert.jsonObjectHaveKey(reqJson, "receivedAmount", "请求报文中未包含receivedAmount节点");
         Assert.jsonObjectHaveKey(reqJson, "feeId", "请求报文中未包含feeId节点");
-
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
         Assert.hasLength(reqJson.getString("cycles"), "周期不能为空");
         Assert.hasLength(reqJson.getString("receivedAmount"), "实收金额不能为空");
         Assert.hasLength(reqJson.getString("feeId"), "费用ID不能为空");
-
         //判断是否 费用状态为缴费结束
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(reqJson.getString("feeId"));

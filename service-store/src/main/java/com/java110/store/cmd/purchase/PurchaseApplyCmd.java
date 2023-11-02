@@ -230,9 +230,13 @@ public class PurchaseApplyCmd extends Cmd {
         JSONObject audit = reqJson.getJSONObject("audit");
         String nextUserId = "-1";
         if (audit != null) {
-            nextUserId = reqJson.getJSONObject("audit").getString("staffId");
+            String staffId = reqJson.getJSONObject("audit").getString("staffId");
+            if(!StringUtil.isEmpty(staffId)) {
+                nextUserId = reqJson.getJSONObject("audit").getString("staffId");
+            } else {
+                nextUserId = reqJson.getJSONObject("audit").getString("assignee");
+            }
         }
-
         //提交者提交
         flowJson = new JSONObject();
         flowJson.put("processInstanceId", result.getString("processInstanceId"));

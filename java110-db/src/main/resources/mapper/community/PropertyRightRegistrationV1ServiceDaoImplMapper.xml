@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="propertyRightRegistrationV1ServiceDaoImpl">
     <!-- 保存房屋产权信息 add by wuxw 2018-07-03 -->
@@ -25,7 +24,7 @@
         table_columns = 'state'
         where 1 = 1
         <if test="address !=null and address != ''">
-            and t.address= #{address}
+            and t.address like concat('%',#{address},'%')
         </if>
         <if test="prrId !=null and prrId != ''">
             and t.prr_id= #{prrId}
@@ -34,7 +33,7 @@
             and t.id_card= #{idCard}
         </if>
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
@@ -77,7 +76,6 @@
             limit #{page}, #{row}
         </if>
     </select>
-
 
     <!-- 修改房屋产权信息 add by wuxw 2018-07-03 -->
     <update id="updatePropertyRightRegistrationInfo" parameterType="Map">
@@ -127,7 +125,7 @@
         left join f_floor fl on bu.floor_id = fl.floor_id and fl.status_cd = '0'
         where 1 = 1
         <if test="address !=null and address != ''">
-            and t.address= #{address}
+            and t.address like concat('%',#{address},'%')
         </if>
         <if test="prrId !=null and prrId != ''">
             and t.prr_id= #{prrId}
@@ -136,7 +134,7 @@
             and t.id_card= #{idCard}
         </if>
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like concat('%',#{name},'%')
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
@@ -175,5 +173,4 @@
             and t.community_id= #{communityId}
         </if>
     </select>
-
 </mapper>

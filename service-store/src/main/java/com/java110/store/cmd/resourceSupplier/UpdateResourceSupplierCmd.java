@@ -31,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 类表述：更新
  * 服务编码：resourceSupplier.updateResourceSupplier
@@ -47,7 +46,6 @@ public class UpdateResourceSupplierCmd extends Cmd {
 
   private static Logger logger = LoggerFactory.getLogger(UpdateResourceSupplierCmd.class);
 
-
     @Autowired
     private IResourceSupplierV1InnerServiceSMO resourceSupplierV1InnerServiceSMOImpl;
 
@@ -57,6 +55,13 @@ public class UpdateResourceSupplierCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "supplierName", "请求报文中未包含supplierName");
         Assert.hasKeyAndValue(reqJson, "address", "请求报文中未包含address");
         Assert.hasKeyAndValue(reqJson, "tel", "请求报文中未包含tel");
+        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
+        String regex = "1[3-9]\\d{9}";
+        String regex2 = "0\\d{2,3}-?[1-9]\\d{4,9}";
+        String tel = reqJson.getString("tel"); //获取手机号
+        if (!tel.matches(regex) && !tel.matches(regex2)) {
+            throw new IllegalArgumentException("供应商联系方式格式不对！");
+        }
         if (!reqJson.containsKey("storeId")) {
             String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
             reqJson.put("storeId", storeId);
@@ -64,26 +69,19 @@ public class UpdateResourceSupplierCmd extends Cmd {
         if (!reqJson.containsKey("userId")) {
             reqJson.put("userId", "-1");
         }
-
         if (!reqJson.containsKey("userName")) {
             reqJson.put("userName", "未知");
         }
-
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
        ResourceSupplierPo resourceSupplierPo = BeanConvertUtil.covertBean(reqJson, ResourceSupplierPo.class);
         int flag = resourceSupplierV1InnerServiceSMOImpl.updateResourceSupplier(resourceSupplierPo);
-
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

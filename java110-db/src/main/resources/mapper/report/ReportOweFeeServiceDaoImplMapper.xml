@@ -5,13 +5,13 @@
 
     <!-- 保存欠费统计信息 add by wuxw 2018-07-03 -->
     <insert id="saveReportOweFeeInfo" parameterType="Map">
-        insert into report_owe_fee(
-        config_name,deadline_time,owner_tel,update_time,owe_id,owner_id,fee_id,amount_owed,payer_obj_name,owner_name,config_id,fee_name,end_time,community_id,payer_obj_type,payer_obj_id
-        ) values (
-        #{configName},#{deadlineTime},#{ownerTel},#{updateTime},#{oweId},#{ownerId},#{feeId},#{amountOwed},#{payerObjName},#{ownerName},#{configId},#{feeName},#{endTime},#{communityId},#{payerObjType},#{payerObjId}
-        )
+        insert into report_owe_fee(config_name, deadline_time, owner_tel, update_time, owe_id, owner_id, fee_id,
+                                   amount_owed, payer_obj_name, owner_name, config_id, fee_name, end_time, community_id,
+                                   payer_obj_type, payer_obj_id)
+        values (#{configName}, #{deadlineTime}, #{ownerTel}, #{updateTime}, #{oweId}, #{ownerId}, #{feeId},
+                #{amountOwed}, #{payerObjName}, #{ownerName}, #{configId}, #{feeName}, #{endTime}, #{communityId},
+                #{payerObjType}, #{payerObjId})
     </insert>
-
 
     <!-- 查询欠费统计信息 add by wuxw 2018-07-03 -->
     <select id="getReportOweFeeInfo" parameterType="Map" resultType="Map">
@@ -65,7 +65,7 @@
             and t.payer_obj_name= #{payerObjName}
         </if>
         <if test="ownerName !=null and ownerName != ''">
-            and t.owner_name= #{ownerName}
+            and t.owner_name like '%${ownerName}%'
         </if>
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
@@ -96,7 +96,6 @@
             limit #{page}, #{row}
         </if>
     </select>
-
 
     <!-- 修改欠费统计信息 add by wuxw 2018-07-03 -->
     <update id="updateReportOweFeeInfo" parameterType="Map">
@@ -155,7 +154,6 @@
         </if>
     </update>
 
-
     <!-- 修改欠费统计信息 add by wuxw 2018-07-03 -->
     <delete id="deleteReportOweFeeInfo" parameterType="Map">
         delete from report_owe_fee
@@ -170,7 +168,6 @@
             and community_id= #{communityId}
         </if>
     </delete>
-
 
     <!-- 查询欠费统计数量 add by wuxw 2018-07-03 -->
     <select id="queryReportOweFeesCount" parameterType="Map" resultType="Map">
@@ -224,7 +221,7 @@
             and t.payer_obj_name= #{payerObjName}
         </if>
         <if test="ownerName !=null and ownerName != ''">
-            and t.owner_name= #{ownerName}
+            and t.owner_name like '%${ownerName}%'
         </if>
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
@@ -291,7 +288,6 @@
         <if test="updateTime !=null and updateTime != ''">
             and t.update_time= #{updateTime}
         </if>
-
         <if test="oweId !=null and oweId != ''">
             and t.owe_id= #{oweId}
         </if>
@@ -656,7 +652,7 @@
             and t.payer_obj_name= #{payerObjName}
         </if>
         <if test="ownerName !=null and ownerName != ''">
-            and t.owner_name= #{ownerName}
+            and t.owner_name like '%${ownerName}%'
         </if>
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
@@ -683,6 +679,7 @@
             and t.payer_obj_id= #{payerObjId}
         </if>
     </select>
+
     <select id="computeReportOweFeeItemAmount" parameterType="Map" resultType="Map">
         select t.config_name configName,sum(t.amount_owed) totalOweAmount
         from report_owe_fee t
@@ -734,7 +731,7 @@
             and t.payer_obj_name= #{payerObjName}
         </if>
         <if test="ownerName !=null and ownerName != ''">
-            and t.owner_name= #{ownerName}
+            and t.owner_name like '%${ownerName}%'
         </if>
         <if test="configId !=null and configId != ''">
             and t.config_id= #{configId}
@@ -763,16 +760,15 @@
         GROUP BY t.config_id,t.config_name
     </select>
 
-
     <!-- 查询无效费用 add by wuxw 2018-07-03 -->
     <select id="queryInvalidOweFee" parameterType="Map" resultType="Map">
-        select t.fee_id feeId from pay_fee t
-        inner join pay_fee_config pfc on t.config_id = pfc.config_id
-        inner join report_owe_fee rof on t.fee_id = rof.fee_id
+        select t.fee_id feeId
+        from pay_fee t
+                 inner join pay_fee_config pfc on t.config_id = pfc.config_id
+                 inner join report_owe_fee rof on t.fee_id = rof.fee_id
         where (t.status_cd = '1' or pfc.status_cd = '1')
-        and t.community_id= #{communityId}
+          and t.community_id = #{communityId}
     </select>
-
 
     <update id="deleteInvalidFee" parameterType="Map">
         delete from report_owe_fee where fee_id in
@@ -782,9 +778,8 @@
         and community_id = #{communityId}
     </update>
 
-
     <select id="queryOweFeesByOwnerIds" parameterType="Map" resultType="Map">
-        select  t.owner_id ownerId,SUM(t.amount_owed) oweFee
+        select t.owner_id ownerId,SUM(t.amount_owed) oweFee
         from report_owe_fee t
         where t.community_id = #{communityId}
         and t.owner_id in
@@ -793,10 +788,11 @@
         </foreach>
         group by t.owner_id
     </select>
+
     <select id="queryOweFeesByRoomIds" parameterType="Map" resultType="Map">
-        select  t.payer_obj_id roomId,SUM(t.amount_owed) oweFee
+        select t.payer_obj_id roomId,SUM(t.amount_owed) oweFee
         from report_owe_fee t
-        where t.community_id =  #{communityId}
+        where t.community_id = #{communityId}
         and t.payer_obj_type = '3333'
         and t.payer_obj_id in
         <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
@@ -804,5 +800,4 @@
         </foreach>
         group by t.payer_obj_id
     </select>
-
 </mapper>

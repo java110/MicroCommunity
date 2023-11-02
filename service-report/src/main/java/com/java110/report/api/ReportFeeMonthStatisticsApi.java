@@ -453,7 +453,6 @@ public class ReportFeeMonthStatisticsApi {
         return getReportFeeMonthStatisticsBMOImpl.queryDeadlineFee(reportFeeMonthStatisticsDto);
     }
 
-
     /**
      * 查询费用分项表
      *
@@ -539,7 +538,6 @@ public class ReportFeeMonthStatisticsApi {
         return getReportFeeMonthStatisticsBMOImpl.queryNoFeeRooms(roomDto);
     }
 
-
     /**
      * 查询华宁物业 欠费统计报表
      * 作者： 吴学文
@@ -598,8 +596,8 @@ public class ReportFeeMonthStatisticsApi {
         paramInfo.put("page", page);
         paramInfo.put("row", row);
         paramInfo.put("startTime", DateUtil.getYear() + "-01-01");
-        paramInfo.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_Q)+"-01");
-        paramInfo.put("nextMonthTime",DateUtil.getFormatTimeStringB(DateUtil.getNextMonthFirstDate()));
+        paramInfo.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_Q) + "-01");
+        paramInfo.put("nextMonthTime", DateUtil.getFormatTimeStringB(DateUtil.getNextMonthFirstDate()));
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningPayFee(paramInfo);
     }
 
@@ -643,6 +641,7 @@ public class ReportFeeMonthStatisticsApi {
                                                            @RequestParam(value = "year") int year,
                                                            @RequestParam(value = "month") int month,
                                                            @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
+                                                           @RequestParam(value = "floorNum", required = false) String floorNum,
                                                            @RequestParam(value = "page") int page,
                                                            @RequestParam(value = "row") int row) {
         Map paramInfo = new HashMap();
@@ -652,10 +651,9 @@ public class ReportFeeMonthStatisticsApi {
         paramInfo.put("page", page);
         paramInfo.put("row", row);
         paramInfo.put("feeTypeCd", feeTypeCd);
+        paramInfo.put("floorNum", floorNum);
         paramInfo.put("startTime", DateUtil.getYear() + "-01-01");
         paramInfo.put("endTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         return getReportFeeMonthStatisticsBMOImpl.queryHuaningOweFeeDetail(paramInfo);
     }
-
-
 }

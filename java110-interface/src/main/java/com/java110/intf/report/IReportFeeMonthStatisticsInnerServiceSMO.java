@@ -430,11 +430,17 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     @RequestMapping(value = "/queryHuaningOweFee", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryHuaningOweFee(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
+    @RequestMapping(value = "/queryHuaningOweFeeCounts", method = RequestMethod.POST)
+    int queryHuaningOweFeeCounts(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     @RequestMapping(value = "/queryHuaningPayFeeCount", method = RequestMethod.POST)
     int queryHuaningPayFeeCount(@RequestBody Map paramInfo);
 
     @RequestMapping(value = "/queryHuaningPayFee", method = RequestMethod.POST)
     List<Map> queryHuaningPayFee(@RequestBody Map paramInfo);
+
+    @RequestMapping(value = "/queryHuaningPayFeeCounts", method = RequestMethod.POST)
+    int queryHuaningPayFeeCounts(@RequestBody Map paramInfo);
 
     @RequestMapping(value = "/queryHuaningPayFeeTwoCount", method = RequestMethod.POST)
     int queryHuaningPayFeeTwoCount(@RequestBody Map paramInfo);

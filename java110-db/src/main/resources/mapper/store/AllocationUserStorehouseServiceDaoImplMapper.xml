@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="allocationUserStorehouseServiceDaoImpl">
 
     <!-- 保存物品供应商信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAllocationUserStorehouseInfo" parameterType="Map">
-           insert into business_allocation_user_storehouse(
-            accept_user_id,accept_user_name,remark,store_id,res_id,res_name,start_user_id,operate,start_user_name,aus_id,b_id,stock,give_quantity
-            ) values (
-            #{acceptUserId},#{acceptUserName},#{remark},#{storeId},#{resId},#{resName},#{startUserId},#{operate},#{startUserName},#{ausId},#{bId},
-            #{stock},#{giveQuantity}
-            )
+        insert into business_allocation_user_storehouse(accept_user_id, accept_user_name, remark, store_id, res_id,
+                                                        res_name, start_user_id, operate, start_user_name, aus_id, b_id,
+                                                        stock, give_quantity)
+        values (#{acceptUserId}, #{acceptUserName}, #{remark}, #{storeId}, #{resId}, #{resName}, #{startUserId},
+                #{operate}, #{startUserName}, #{ausId}, #{bId},
+                #{stock}, #{giveQuantity})
     </insert>
-
 
     <!-- 查询物品供应商信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAllocationUserStorehouseInfo" parameterType="Map" resultType="Map">
@@ -63,7 +61,6 @@
             and t.give_quantity= #{giveQuantity}
         </if>
     </select>
-
 
     <!-- 保存物品供应商信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveAllocationUserStorehouseInfoInstance" parameterType="Map">
@@ -119,18 +116,22 @@
         resId,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id startUserId,t.start_user_name,
         t.start_user_name startUserName,t.aus_id,t.aus_id ausId,t.b_id,t.b_id
         bId,t.stock,t.give_quantity,t.give_quantity giveQuantity,t.create_time createTime,rst.name rstName,rss.spec_name
-        specName,td1.name unitCodeName,td2.name miniUnitCodeName,rst1.name parentRstName,rs.is_fixed isFixed,rs.res_code resCode,td3.name isFixedName
+        specName,td1.name unitCodeName,td2.name miniUnitCodeName,rst1.name parentRstName,rs.is_fixed isFixed,rs.res_code
+        resCode,td3.name isFixedName
         from allocation_user_storehouse t
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
         left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_type rst1 on rs.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
         left join resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
-        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
-        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
-        left join t_dict td3 on rs.is_fixed = td3.status_cd and td3.table_name = 'resource_store' and td3.table_columns = 'is_fixed'
+        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns
+        = 'unit_code'
+        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and
+        td2.table_columns = 'unit_code'
+        left join t_dict td3 on rs.is_fixed = td3.status_cd and td3.table_name = 'resource_store' and td3.table_columns
+        = 'is_fixed'
         where 1 = 1
         <if test="acceptUserId !=null and acceptUserId != ''">
-            and t.accept_user_id= #{acceptUserId}
+            and t.accept_user_id like '%${acceptUserId}%'
         </if>
         <if test="acceptUserName !=null and acceptUserName != ''">
             and t.accept_user_name like '%${acceptUserName}%'
@@ -145,19 +146,19 @@
             and t.store_id= #{storeId}
         </if>
         <if test="resId !=null and resId != ''">
-            and t.res_id= #{resId}
+            and t.res_id like '%${resId}%'
         </if>
         <if test="resName !=null and resName != ''">
             and t.res_name like '%${resName}%'
         </if>
         <if test="startUserId !=null and startUserId != ''">
-            and t.start_user_id= #{startUserId}
+            and t.start_user_id like '%${startUserId}%'
         </if>
         <if test="startUserName !=null and startUserName != ''">
             and t.start_user_name like '%${startUserName}%'
         </if>
         <if test="ausId !=null and ausId != ''">
-            and t.aus_id= #{ausId}
+            and t.aus_id like '%${ausId}%'
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -229,7 +230,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询物品供应商数量 add by wuxw 2018-07-03 -->
@@ -239,11 +239,13 @@
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
         left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
-        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
-        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
+        left join t_dict td1 on rs.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns
+        = 'unit_code'
+        left join t_dict td2 on rs.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and
+        td2.table_columns = 'unit_code'
         where 1 =1
         <if test="acceptUserId !=null and acceptUserId != ''">
-            and t.accept_user_id= #{acceptUserId}
+            and t.accept_user_id like '%${acceptUserId}%'
         </if>
         <if test="acceptUserName !=null and acceptUserName != ''">
             and t.accept_user_name like '%${acceptUserName}%'
@@ -258,19 +260,19 @@
             and t.store_id= #{storeId}
         </if>
         <if test="resId !=null and resId != ''">
-            and t.res_id= #{resId}
+            and t.res_id like '%${resId}%'
         </if>
         <if test="resName !=null and resName != ''">
             and t.res_name like '%${resName}%'
         </if>
         <if test="startUserId !=null and startUserId != ''">
-            and t.start_user_id= #{startUserId}
+            and t.start_user_id like '%${startUserId}%'
         </if>
         <if test="startUserName !=null and startUserName != ''">
             and t.start_user_name like '%${startUserName}%'
         </if>
         <if test="ausId !=null and ausId != ''">
-            and t.aus_id= #{ausId}
+            and t.aus_id like '%${ausId}%'
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

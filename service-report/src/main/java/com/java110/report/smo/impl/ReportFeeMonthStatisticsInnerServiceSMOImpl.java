@@ -542,6 +542,11 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     }
 
     @Override
+    public int queryHuaningOweFeeCounts(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCounts(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+    }
+
+    @Override
     public int queryHuaningPayFeeCount(@RequestBody Map paramInfo) {
         return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCount(paramInfo);
     }
@@ -556,6 +561,12 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee(paramInfo);
         return deposits;
     }
+
+    @Override
+    public int queryHuaningPayFeeCounts(@RequestBody Map paramInfo) {
+        return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCounts(paramInfo);
+    }
+
     @Override
     public int queryHuaningPayFeeTwoCount(@RequestBody Map paramInfo) {
         return reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwoCount(paramInfo);

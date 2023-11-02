@@ -17,7 +17,6 @@ import com.java110.dto.resource.ResourceStoreTimesDto;
 import com.java110.dto.store.StorehouseDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.user.UserStorehouseDto;
-import com.java110.intf.common.IGoodCollectionUserInnerServiceSMO;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.store.*;
@@ -49,7 +48,6 @@ public class GoodsCollectionCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
-
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
@@ -63,9 +61,8 @@ public class GoodsCollectionCmd extends Cmd {
     private IOaWorkflowActivitiInnerServiceSMO oaWorkflowActivitiInnerServiceSMOImpl;
 
     @Autowired
-    private IGoodCollectionUserInnerServiceSMO goodCollectionUserInnerServiceSMOImpl;
-    @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
+
     @Autowired
     private IPurchaseApplyDetailInnerServiceSMO purchaseApplyDetailInnerServiceSMOImpl;
 
@@ -83,10 +80,8 @@ public class GoodsCollectionCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "endUserName", "必填，请填写采购联系人");
         Assert.hasKeyAndValue(reqJson, "endUserTel", "必填，请填写采购联系电话");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
-
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         String storeId = CmdContextUtils.getStoreId(context);
-
         if (resourceStores == null || resourceStores.size() < 1) {
             throw new CmdException("未包含领用物品");
         }
@@ -95,38 +90,29 @@ public class GoodsCollectionCmd extends Cmd {
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             Assert.hasKeyAndValue(resourceStore, "timesId", "必填，未选择价格");
-
             ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
             resourceStoreTimesDto.setTimesId(resourceStore.getString("timesId"));
             resourceStoreTimesDto.setStoreId(storeId);
             List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
-
             Assert.listOnlyOne(resourceStoreTimesDtos, "价格不存在");
-
             quanitity = resourceStore.getIntValue("quantity");
-
             if (quanitity < 1) {
                 throw new CmdException("申请数量不正确");
             }
             stock = Integer.parseInt(resourceStoreTimesDtos.get(0).getStock());
-
             if (quanitity > stock) {
                 throw new CmdException(resourceStoreTimesDtos.get(0).getResCode() + "出库不足,库存为=" + stock + ",申请数为=" + quanitity);
             }
-
             resourceStore.put("resourceStoreTimesDtos", resourceStoreTimesDtos);
         }
-
         //todo 查询仓库是否存在
         StorehouseDto storehouseDto = new StorehouseDto();
         storehouseDto.setShId(reqJson.getString("shId"));
         List<StorehouseDto> storehouseDtos = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
         Assert.listOnlyOne(storehouseDtos, "仓库不存在");
-
         if (!StorehouseDto.SWITCH_ON.equals(storehouseDtos.get(0).getUseSwitch())) {
             return;
         }
-
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setStoreId(storeId);
         oaWorkflowDto.setFlowId(storehouseDtos.get(0).getUseFlowId());
@@ -135,12 +121,9 @@ public class GoodsCollectionCmd extends Cmd {
         if (!OaWorkflowDto.STATE_COMPLAINT.equals(oaWorkflowDtos.get(0).getState())) {
             throw new IllegalArgumentException(oaWorkflowDtos.get(0).getFlowName() + "流程未部署");
         }
-
         if (StringUtil.isEmpty(oaWorkflowDtos.get(0).getProcessDefinitionKey())) {
             throw new IllegalArgumentException(oaWorkflowDtos.get(0).getFlowName() + "流程未部署");
         }
-
-
     }
 
     /**
@@ -157,21 +140,16 @@ public class GoodsCollectionCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String storeId = context.getReqHeaders().get("store-id");
         String userId = context.getReqHeaders().get("user-id");
-
         //todo 查询仓库是否存在
         StorehouseDto storehouseDto = new StorehouseDto();
         storehouseDto.setShId(reqJson.getString("shId"));
         List<StorehouseDto> storehouseDtos = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
         Assert.listOnlyOne(storehouseDtos, "仓库不存在");
-
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
         Assert.listOnlyOne(userDtos, "未包含用户");
-
         String userName = userDtos.get(0).getName();
-
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
         purchaseApplyPo.setDescription(reqJson.getString("description"));
@@ -201,7 +179,6 @@ public class GoodsCollectionCmd extends Cmd {
             purchaseApplyDetailPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
             purchaseApplyDetailPo.setOriginalStock(resourceStoreTimesDtos.get(0).getStock());
             purchaseApplyDetailPo.setPurchaseQuantity(resourceStore.getString("quantity"));
-
             //todo 获取批次采购参考价格
             String consultPrice = null;
             JSONArray timeList = resourceStore.getJSONArray("times");
@@ -217,9 +194,7 @@ public class GoodsCollectionCmd extends Cmd {
             purchaseApplyDetailPos.add(purchaseApplyDetailPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-
         int saveFlag = purchaseApplyInnerServiceSMOImpl.savePurchaseApply(purchaseApplyPo);
-
         if (saveFlag < 1) {
             throw new CmdException("物品领用申请失败");
         }
@@ -228,7 +203,6 @@ public class GoodsCollectionCmd extends Cmd {
         purchaseApplyDto.setNextStaffId(reqJson.getString("staffId"));
         //todo 启动审核流程
         toStartWorkflow(purchaseApplyDto, storehouseDtos.get(0), reqJson);
-
         context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, "物品领用成功"));
     }
 
@@ -238,18 +212,15 @@ public class GoodsCollectionCmd extends Cmd {
      * @param purchaseApplyDto
      */
     private void toStartWorkflow(PurchaseApplyDto purchaseApplyDto, StorehouseDto storehouseDto, JSONObject reqJson) {
-
         if (!StorehouseDto.SWITCH_ON.equals(storehouseDto.getUseSwitch())) {
             //todo 直接入库
             toPurchaseOutStorehouse(purchaseApplyDto, storehouseDto, reqJson);
             return;
         }
-
         OaWorkflowDto oaWorkflowDto = new OaWorkflowDto();
         oaWorkflowDto.setStoreId(purchaseApplyDto.getStoreId());
         oaWorkflowDto.setFlowId(storehouseDto.getUseFlowId());
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
-
         //todo 提交审核
         JSONObject flowJson = new JSONObject();
         flowJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
@@ -260,13 +231,16 @@ public class GoodsCollectionCmd extends Cmd {
         flowJson.put("storeId", purchaseApplyDto.getStoreId());
         reqJson.put("processDefinitionKey", oaWorkflowDtos.get(0).getProcessDefinitionKey());
         JSONObject result = oaWorkflowActivitiInnerServiceSMOImpl.startProcess(flowJson);
-
         JSONObject audit = reqJson.getJSONObject("audit");
         String nextUserId = "-1";
         if (audit != null) {
-            nextUserId = reqJson.getJSONObject("audit").getString("staffId");
+            String staffId = reqJson.getJSONObject("audit").getString("staffId");
+            if (!StringUtil.isEmpty(staffId)) {
+                nextUserId = reqJson.getJSONObject("audit").getString("staffId");
+            } else {
+                nextUserId = reqJson.getJSONObject("audit").getString("assignee");
+            }
         }
-
         //提交者提交
         flowJson = new JSONObject();
         flowJson.put("processInstanceId", result.getString("processInstanceId"));
@@ -275,7 +249,6 @@ public class GoodsCollectionCmd extends Cmd {
         flowJson.put("storeId", purchaseApplyDto.getStoreId());
         flowJson.put("id", purchaseApplyDto.getApplyOrderId());
         flowJson.put("flowId", oaWorkflowDtos.get(0).getFlowId());
-
         oaWorkflowActivitiInnerServiceSMOImpl.autoFinishFirstTask(flowJson);
     }
 
@@ -287,16 +260,13 @@ public class GoodsCollectionCmd extends Cmd {
      * @param reqJson
      */
     private void toPurchaseOutStorehouse(PurchaseApplyDto purchaseApplyDto, StorehouseDto storehouseDto, JSONObject reqJson) {
-
         PurchaseApplyDetailDto purchaseApplyDetailDto = new PurchaseApplyDetailDto();
         purchaseApplyDetailDto.setApplyOrderId(purchaseApplyDto.getApplyOrderId());
         purchaseApplyDetailDto.setStoreId(purchaseApplyDto.getStoreId());
         List<PurchaseApplyDetailDto> purchaseApplyDetailDtos = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetails(purchaseApplyDetailDto);
-
         if (purchaseApplyDetailDtos == null || purchaseApplyDetailDtos.size() < 1) {
             return;
         }
-
         int stock = 0;
         for (PurchaseApplyDetailDto tmpPurchaseApplyDetailDto : purchaseApplyDetailDtos) {
             ResourceStorePo resourceStorePo = new ResourceStorePo();
@@ -330,7 +300,6 @@ public class GoodsCollectionCmd extends Cmd {
 //            }
 //            resourceStorePo.setMiniStock(String.valueOf(nowMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
-
             // 保存至 物品 times表
             ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
             resourceStoreTimesPo.setApplyOrderId(tmpPurchaseApplyDetailDto.getApplyOrderId());
@@ -359,7 +328,6 @@ public class GoodsCollectionCmd extends Cmd {
      * @param resourceStoreDtos
      */
     private void addPersonStorehouse(PurchaseApplyDto purchaseApplyDto, List<ResourceStoreDto> resourceStoreDtos, PurchaseApplyDetailDto purchaseApplyDetailDto) {
-
         //获取物品单位
         String unitCode = resourceStoreDtos.get(0).getUnitCode();
         //获取物品最小计量单位
