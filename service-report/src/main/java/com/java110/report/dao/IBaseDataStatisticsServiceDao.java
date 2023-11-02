@@ -49,4 +49,26 @@ public interface IBaseDataStatisticsServiceDao {
      * @return
      */
     List<Map> getOweRoomInfo(Map info);
+
+    List<Map> getCommunityFeeDetailCount(Map info);
+
+    List<Map> getCommunityRepairCount(Map info);
+
+    List<Map> getCommunityFeeDetailCountAnalysis(Map info);
+
+    List<Map> getCommunityRepairCountAnalysis(Map info);
+
+    List<Map> getCommunityInspectionAnalysis(Map info);
+
+    List<Map> getCommunityMaintainanceAnalysis(Map info);
+
+    List<Map> getCommunityItemInAnalysis(Map info);
+
+    List<Map> getCommunityItemOutAnalysis(Map info);
+
+    List<Map> getCommunityCarInAnalysis(Map info);
+
+    List<Map> getCommunityPersonInAnalysis(Map info);
+
+    List<Map> getCommunityContractAnalysis(Map info);
 }

@@ -158,11 +158,15 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
         ownerAppUserDto.setUserId(userId);
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+        if (ownerAppUserDtos == null || ownerAppUserDtos.isEmpty()) {
             throw new IllegalArgumentException("业主未绑定，没有获取到微信openId");
         }
 
         String openId = ownerAppUserDtos.get(0).getOpenId();
+
+        if (StringUtil.isEmpty(openId) || openId.startsWith("-")) {
+            throw new IllegalArgumentException("没有获取到微信openId");
+        }
         Mapping mapping = MappingCache.getMapping(MappingConstant.WECHAT_DOMAIN, SPEC_CD_OWE_FEE_TEMPLATE);
 
         if (mapping == null) {
@@ -178,7 +182,11 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
             templateMessage.setTemplate_id(templateId);
             templateMessage.setTouser(openId);
             data.put("thing2", new Content(content.getString("feeTypeName")));
-            data.put("thing12", new Content(content.getString("payerObjName")));
+            String payerObjName = content.getString("payerObjName");
+            if (!StringUtil.isEmpty(payerObjName) && payerObjName.length() > 20) {
+                payerObjName = payerObjName.substring(0, 20);
+            }
+            data.put("thing12", new Content(payerObjName));
             data.put("amount3", new Content(content.getString("billAmountOwed")));
             data.put("time19", new Content(content.getString("date")));
             templateMessage.setData(data);
@@ -230,7 +238,8 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
         templateMessage.setTemplate_id(templateId);
         templateMessage.setTouser(openId);
-        data.put("thing2", new Content(content.getString("feeTypeCdName")));
+        // data.put("thing2", new Content(content.getString("feeTypeCdName")));
+        data.put("thing2", new Content(content.getString("feeName")));
         data.put("thing10", new Content(content.getString("payFeeRoom")));
         data.put("time18", new Content(content.getString("payFeeTime")));
         data.put("amount6", new Content(content.getString("receivedAmount")));
@@ -287,8 +296,8 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         data.put("thing8", new Content(content.getString("repairTypeName")));
         data.put("thing11", new Content(content.getString("repairObjName")));
         String context = content.getString("context");
-        if (!StringUtil.isEmpty(context) && context.length() > 100) {
-            context = context.substring(0, 100);
+        if (!StringUtil.isEmpty(context) && context.length() > 20) {
+            context = context.substring(0, 20);
         }
         data.put("thing10", new Content(context));
         templateMessage.setData(data);

@@ -71,6 +71,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
     @Override
     public ResponseEntity<String> importExcelData(IPageData pd, MultipartFile uploadFile) throws Exception {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
+        paramIn.put("userId", pd.getUserId());
         Assert.hasKeyAndValue(paramIn, "importAdapt", "未包含模板");
         String importAdapt = paramIn.getString("importAdapt") + "DataCleaning";
 
@@ -81,6 +82,7 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
         }
         try {
             ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+            paramIn.put("storeId", result.getStoreId());
 
             Workbook workbook = null;  //工作簿
             //工作表

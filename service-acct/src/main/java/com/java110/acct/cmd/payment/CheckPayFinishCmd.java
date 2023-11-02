@@ -29,6 +29,9 @@ public class CheckPayFinishCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "authCode", "未包含授权码");
         Assert.hasKeyAndValue(reqJson, "subServiceCode", "未包含支付接口");
+        Assert.hasKeyAndValue(reqJson, "paymentPoolId", "未包含支付参数");
+
+
     }
 
     @Override
@@ -53,7 +56,7 @@ public class CheckPayFinishCmd extends Cmd {
         }
         ResultVo resultVo = null;
         try {
-            resultVo = qrCodePaymentSMOImpl.checkPayFinish(reqJson.getString("communityId"), orderId);
+            resultVo = qrCodePaymentSMOImpl.checkPayFinish(reqJson.getString("communityId"), orderId,reqJson.getString("paymentPoolId"));
         } catch (Exception e) {
             cmdDataFlowContext.setResponseEntity(ResultVo.error(e.getLocalizedMessage()));
             return;

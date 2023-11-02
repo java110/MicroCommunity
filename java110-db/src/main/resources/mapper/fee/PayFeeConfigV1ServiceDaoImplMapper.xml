@@ -71,6 +71,9 @@
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
         </if>
+        <if test="feeNameEq !=null and feeNameEq != ''">
+            and t.fee_name = #{feeNameEq}
+        </if>
         <if test="paymentCycle !=null and paymentCycle != ''">
             and t.payment_cycle= #{paymentCycle}
         </if>
@@ -212,6 +215,9 @@
         </if>
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
+        </if>
+        <if test="feeNameEq !=null and feeNameEq != ''">
+            and t.fee_name = #{feeNameEq}
         </if>
         <if test="paymentCycle !=null and paymentCycle != ''">
             and t.payment_cycle= #{paymentCycle}

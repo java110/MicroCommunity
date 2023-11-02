@@ -19,12 +19,16 @@ package com.java110.user.smo.impl;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.account.AccountDto;
+import com.java110.dto.file.FileRelDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.po.account.AccountPo;
 import com.java110.user.dao.IOwnerV1ServiceDao;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.po.owner.OwnerPo;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -35,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +60,9 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
 
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
+    @Autowired
+    private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
 
     @Override
     public int saveOwner(@RequestBody OwnerPo ownerPo) {
@@ -91,7 +99,7 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
             accountPo.setLink(ownerDtos.get(0).getLink());
             accountInnerServiceSMOImpl.saveAccount(accountPo);
         } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
+            DistributedLock.releaseDistributedLock(key, requestId);
         }
     }
 
@@ -110,7 +118,7 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
 
     @Override
 
-    public List<OwnerDto>  queryOwners(@RequestBody OwnerDto ownerDto) {
+    public List<OwnerDto> queryOwners(@RequestBody OwnerDto ownerDto) {
 
         //校验是否传了 分页信息
 
@@ -122,6 +130,8 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
 
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerV1ServiceDaoImpl.getOwnerInfo(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
 
+        //todo 查询业主头像
+        getOwnerPhone(owners);
         return owners;
     }
 
@@ -145,4 +155,42 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
         return result;
     }
 
+    private boolean getOwnerPhone(List<OwnerDto> owners) {
+        if (owners == null || owners.size() == 0 || owners.size() > 50) {
+            return true;
+        }
+
+        List<String> memberIds = new ArrayList<>();
+
+        for (OwnerDto tmpOwnerDto : owners) {
+            memberIds.add(tmpOwnerDto.getMemberId());
+        }
+
+        FileRelDto fileRelDto = new FileRelDto();
+        //fileRelDto.setObjId(owners.get(0).getMemberId());
+        fileRelDto.setObjIds(memberIds.toArray(new String[memberIds.size()]));
+        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
+
+        if (fileRelDtos == null || fileRelDtos.size() < 1) {
+            return true;
+        }
+
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
+        for (OwnerDto tmpOwnerDto : owners) {
+            for (FileRelDto tmpFileRelDto : fileRelDtos) {
+                if (!tmpOwnerDto.getMemberId().equals(tmpFileRelDto.getObjId())) {
+                    continue;
+                }
+
+                if (tmpFileRelDto.getFileSaveName().startsWith("http")) {
+                    tmpOwnerDto.setUrl(tmpFileRelDto.getFileSaveName());
+                } else {
+                    tmpOwnerDto.setUrl(imgUrl + tmpFileRelDto.getFileSaveName());
+                }
+            }
+        }
+
+        return false;
+    }
 }

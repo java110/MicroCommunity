@@ -126,7 +126,7 @@ public interface IComputeFeeSMO {
      * oweMonth:1.0
      * }
      */
-    public Map getTargetEndDateAndOweMonth(FeeDto feeDto);
+     Map getTargetEndDateAndOweMonth(FeeDto feeDto);
 
 
     /**
@@ -134,10 +134,10 @@ public interface IComputeFeeSMO {
      *
      * @return
      */
-    public Map getFeePrice(FeeDto feeDto);
+     Map getFeePrice(FeeDto feeDto);
 
 
-    public Map getFeePrice(FeeDto feeDto, RoomDto roomDto);
+     Map getFeePrice(FeeDto feeDto, RoomDto roomDto);
 
     /**
      * 时间差 按天折算
@@ -146,7 +146,7 @@ public interface IComputeFeeSMO {
      * @param toDate   结束时间
      * @return 相差月数
      */
-    double dayCompare(Date fromDate, Date toDate);
+//    double dayCompare(Date fromDate, Date toDate);
 
     /**
      　　 *字符串的日期格式的计算

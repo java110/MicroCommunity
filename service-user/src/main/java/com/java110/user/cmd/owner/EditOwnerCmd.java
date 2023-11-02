@@ -348,7 +348,7 @@ public class EditOwnerCmd extends Cmd {
             if (ownerAppUser.getUserId().startsWith("-")) {
                 continue;
             }
-            // todo 删除用户信息
+            // todo 修改用户信息
             UserPo userPo = new UserPo();
             userPo.setUserId(ownerAppUserDtos.get(0).getUserId());
             userPo.setTel(reqJson.getString("link"));

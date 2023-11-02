@@ -220,6 +220,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         JSONObject paramIn = new JSONObject();
         paramIn.put("payFeeRoom", name + "-" + payerObjName);
         paramIn.put("feeTypeCdName", feeTypeCdName);
+        paramIn.put("feeName",feeDtos.get(0).getFeeName());
         paramIn.put("payFeeTime", startTime + "~" + endTime);
         paramIn.put("receivedAmount", receivedAmount);
         paramIn.put("startTime", startTime);
@@ -273,6 +274,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
                 JSONObject content = new JSONObject();
                 content.put("payFeeRoom", paramIn.getString("payFeeRoom"));
                 content.put("feeTypeCdName", paramIn.getString("feeTypeCdName"));
+                content.put("feeName", paramIn.getString("feeName"));
                 content.put("payFeeTime", paramIn.getString("payFeeTime"));
                 content.put("receivedAmount", paramIn.getString("receivedAmount") + "元");
                 content.put("url", wechatUrl);
@@ -302,6 +304,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         try {
             JSONObject content = new JSONObject();
             content.put("payFeeRoom", paramIn.getString("payFeeRoom"));
+            content.put("feeName",paramIn.getString("feeName"));
             content.put("feeTypeCdName", paramIn.getString("feeTypeCdName"));
             content.put("payFeeTime", paramIn.getString("payFeeTime"));
             content.put("receivedAmount", paramIn.getString("receivedAmount") + "元");
@@ -327,7 +330,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         smallWeChatDto.setObjId(communityDto.getCommunityId());
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
+        if (smallWeChatDto == null || smallWeChatDtos.isEmpty()) {
             logger.info("未配置微信公众号信息,定时任务执行结束");
             return;
         }
@@ -388,6 +391,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             content.put("feeTypeCdName", paramIn.getString("feeTypeCdName") + "-" + paramIn.getString("carNum"));
         }
         content.put("payFeeTime", paramIn.getString("payFeeTime"));
+        content.put("feeName",feeDtos.get(0).getFeeName());
 
         //todo 退费
         if (FeeDetailDto.STATE_RETURN_ORDER.equals(paramIn.getString("state"))) {

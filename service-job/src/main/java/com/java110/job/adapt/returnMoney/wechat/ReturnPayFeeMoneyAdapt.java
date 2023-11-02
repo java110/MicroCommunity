@@ -3,16 +3,21 @@ package com.java110.job.adapt.returnMoney.wechat;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.file.FileDto;
+import com.java110.dto.onlinePayRefund.OnlinePayRefundDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.dto.system.Business;
+import com.java110.intf.acct.IOnlinePayRefundV1InnerServiceSMO;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
+import com.java110.intf.acct.IReturnMoneyV1InnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.po.onlinePayRefund.OnlinePayRefundPo;
 import com.java110.po.wechat.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -20,6 +25,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.OSSUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -86,12 +92,18 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
     @Autowired
     private OssUploadTemplate ossUploadTemplate;
 
+    @Autowired
+    private IOnlinePayRefundV1InnerServiceSMO onlinePayRefundV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IReturnMoneyV1InnerServiceSMO returnMoneyV1InnerServiceSMOImpl;
+
     @Override
     public void execute(Business business, List<Business> businesses) {
         JSONObject data = business.getData();
-        OnlinePayPo oaWorkflowDataPo = BeanConvertUtil.covertBean(data, OnlinePayPo.class);
+        OnlinePayPo onlinePayPo = BeanConvertUtil.covertBean(data, OnlinePayPo.class);
         try {
-            doPayFeeMoney(oaWorkflowDataPo);
+            doPayFeeMoney(onlinePayPo);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -100,17 +112,29 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
     /**
      * 通知退款
      *
-     * @param oaWorkflowDataPo
+     * @param onlinePayPo
      */
-    public void doPayFeeMoney(OnlinePayPo oaWorkflowDataPo) throws Exception {
+    public void doPayFeeMoney(OnlinePayPo onlinePayPo) throws Exception {
         //查询小区信息
         OnlinePayDto onlinePayDto = new OnlinePayDto();
-        onlinePayDto.setPayId(oaWorkflowDataPo.getPayId());
+        onlinePayDto.setPayId(onlinePayPo.getPayId());
         onlinePayDto.setState(OnlinePayDto.STATE_WT);
         List<OnlinePayDto> onlinePayDtos = onlinePayV1InnerServiceSMOImpl.queryOnlinePays(onlinePayDto);
         if (onlinePayDtos == null || onlinePayDtos.size() < 1) {
             return;
         }
+        // todo 如果物业系统退款
+        if (!StringUtil.isEmpty(onlinePayDtos.get(0).getPaymentPoolId())) {
+            ResultVo resultVo = returnMoneyV1InnerServiceSMOImpl.returnMoney(onlinePayDtos.get(0));
+            if (resultVo.getCode() == ResultVo.CODE_OK) {
+                doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_CT, "退款完成");
+            } else {
+                doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_FT, resultVo.getMsg());
+            }
+            return;
+        }
+
+        //todo 商城还是走这里
         String payPassword = "";
         String certData = "";
         String mchPassword = "";
@@ -126,11 +150,12 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
             payPassword = smallWeChatDtos.get(0).getPayPassword();
             certData = smallWeChatDtos.get(0).getCertPath();
             mchPassword = smallWeChatDtos.get(0).getMchId();
-            if(StringUtil.isEmpty(certData)){
+            if (StringUtil.isEmpty(certData)) {
                 certData = MappingCache.getRemark(MappingConstant.WECHAT_STORE_DOMAIN, "cert");
             }
         }
 
+        System.out.println("------------------------------证书地址：" + certData);
 
         SortedMap<String, String> parameters = new TreeMap<String, String>();
         String paySwitch = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_PAY_SWITCH);
@@ -141,9 +166,21 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
             parameters.put("mch_id", mchPassword);//商户号
             parameters.put("sub_mch_id", onlinePayDtos.get(0).getMchId());//商户号
         }
+
+        // todo 查询退费明细
+        OnlinePayRefundDto onlinePayRefundDto = new OnlinePayRefundDto();
+        onlinePayRefundDto.setPayId(onlinePayDtos.get(0).getPayId());
+        onlinePayRefundDto.setState(OnlinePayDto.STATE_WT);
+        List<OnlinePayRefundDto> onlinePayRefundDtos = onlinePayRefundV1InnerServiceSMOImpl.queryOnlinePayRefunds(onlinePayRefundDto);
+        String tranNo = GenerateCodeFactory.getGeneratorId("11");
+        if (onlinePayRefundDtos != null && onlinePayRefundDtos.size() > 0) {
+            tranNo = onlinePayRefundDtos.get(0).getRefundId();
+        }
+
+
         parameters.put("nonce_str", PayUtil.makeUUID(32));//随机数
         parameters.put("out_trade_no", onlinePayDtos.get(0).getOrderId());//商户订单号
-        parameters.put("out_refund_no", onlinePayDtos.get(0).getPayId());//我们自己设定的退款申请号，约束为UK
+        parameters.put("out_refund_no", tranNo);//我们自己设定的退款申请号，约束为UK
         parameters.put("total_fee", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getTotalFee())));//订单金额 单位为分！！！这里稍微注意一下
         parameters.put("refund_fee", PayUtil.moneyToIntegerStr(Double.parseDouble(onlinePayDtos.get(0).getRefundFee())));//退款金额 单位为分！！！
         parameters.put("sign", PayUtil.createSign(parameters, payPassword));
@@ -184,18 +221,35 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
         }
         Map<String, String> resMap = PayUtil.xmlStrToMap(jsonStr);
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
-            doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_CT, "退款完成");
+            doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_CT, "退款完成");
         } else {
-            doUpdateOnlinePay(onlinePayDtos.get(0).getOrderId(), OnlinePayDto.STATE_FT, resMap.get("return_msg"));
+            doUpdateOnlinePay(onlinePayDtos.get(0).getPayId(), OnlinePayDto.STATE_FT, resMap.get("return_msg"));
         }
     }
 
-    private void doUpdateOnlinePay(String orderId, String state, String message) {
+
+    private void doUpdateOnlinePay(String payId, String state, String message) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
         onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
-        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setPayId(payId);
         onlinePayPo.setState(state);
         onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
+
+        // todo 查询退费明细
+        OnlinePayRefundDto onlinePayRefundDto = new OnlinePayRefundDto();
+        onlinePayRefundDto.setPayId(payId);
+        onlinePayRefundDto.setState(OnlinePayDto.STATE_WT);
+        List<OnlinePayRefundDto> onlinePayRefundDtos = onlinePayRefundV1InnerServiceSMOImpl.queryOnlinePayRefunds(onlinePayRefundDto);
+
+        if (onlinePayRefundDtos == null || onlinePayRefundDtos.size() < 1) {
+            return;
+        }
+
+        OnlinePayRefundPo onlinePayRefundPo = new OnlinePayRefundPo();
+        onlinePayRefundPo.setRefundId(onlinePayRefundDtos.get(0).getRefundId());
+        onlinePayRefundPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayRefundPo.setState(state);
+        onlinePayRefundV1InnerServiceSMOImpl.updateOnlinePayRefund(onlinePayRefundPo);
     }
 
     private byte[] getPkcs12(String fileName) {

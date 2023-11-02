@@ -6,12 +6,17 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.account.AccountDto;
+import com.java110.dto.account.AccountReceiptDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonTimeV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpacePersonV1InnerServiceSMO;
 import com.java110.intf.community.ICommunitySpaceV1InnerServiceSMO;
+import com.java110.intf.fee.IAccountReceiptV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.po.account.AccountDetailPo;
+import com.java110.po.account.AccountReceiptPo;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,6 +83,12 @@ public class PreStoreOnlinePaymentBusiness implements IPaymentBusiness {
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountReceiptV1InnerServiceSMO accountReceiptV1InnerServiceSMOImpl;
+
     /**
      * @param context
      * @param reqJson{ personName:"",
@@ -133,5 +144,25 @@ public class PreStoreOnlinePaymentBusiness implements IPaymentBusiness {
         accountDetailPo.setObjId(accountDtos.get(0).getObjId());
         accountDetailPo.setObjType(accountDtos.get(0).getObjType());
         accountInnerServiceSMOImpl.prestoreAccount(accountDetailPo);
+
+        // todo 记录账户收款单
+        OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(accountDtos.get(0).getObjId());
+        //ownerDto.setCommunityId(accountDtos.get(0).getPartId());
+        List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+        Assert.listOnlyOne(ownerDtos, "业主不存在");
+
+        AccountReceiptPo accountReceiptPo = new AccountReceiptPo();
+        accountReceiptPo.setOwnerId(accountDtos.get(0).getObjId());
+        accountReceiptPo.setOwnerName(ownerDtos.get(0).getName());
+        accountReceiptPo.setLink(ownerDtos.get(0).getLink());
+        accountReceiptPo.setArId(GenerateCodeFactory.getGeneratorId("11"));
+        accountReceiptPo.setAcctId(accountDto.getAcctId());
+        accountReceiptPo.setPrimeRate("5"); // 线上公众号
+        accountReceiptPo.setReceivableAmount(receivedAmount);
+        accountReceiptPo.setReceivedAmount(receivedAmount);
+        accountReceiptPo.setRemark("线上充值");
+        accountReceiptPo.setCommunityId(ownerDtos.get(0).getCommunityId());
+        accountReceiptV1InnerServiceSMOImpl.saveAccountReceipt(accountReceiptPo);
     }
 }

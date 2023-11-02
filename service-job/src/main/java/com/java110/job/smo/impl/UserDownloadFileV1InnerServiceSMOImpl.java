@@ -59,6 +59,7 @@ public class UserDownloadFileV1InnerServiceSMOImpl extends BaseServiceSMO implem
      @Override
     public int deleteUserDownloadFile(@RequestBody  UserDownloadFilePo userDownloadFilePo) {
        userDownloadFilePo.setStatusCd("1");
+       userDownloadFilePo.setRemark(null);
        int saveFlag = userDownloadFileV1ServiceDaoImpl.updateUserDownloadFileInfo(BeanConvertUtil.beanCovertMap(userDownloadFilePo));
        return saveFlag;
     }

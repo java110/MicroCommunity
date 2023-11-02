@@ -97,6 +97,7 @@ public class PcUserLoginCmd extends Cmd {
         Assert.jsonObjectHaveKey(paramIn, "passwd", "用户登录，未包含passwd节点，请检查" + paramIn);
 
 
+        AuthenticationFactory.checkLoginErrorCount(reqJson.getString("username"));
     }
 
     @Override
@@ -117,6 +118,7 @@ public class PcUserLoginCmd extends Cmd {
         }
         if (userDtos == null || userDtos.size() < 1) {
             responseEntity = new ResponseEntity<String>("用户或密码错误", HttpStatus.UNAUTHORIZED);
+            AuthenticationFactory.userLoginError(paramInJson.getString("username"));
             cmdDataFlowContext.setResponseEntity(responseEntity);
             return;
         }

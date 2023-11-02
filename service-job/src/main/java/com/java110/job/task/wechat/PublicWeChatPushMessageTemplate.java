@@ -112,26 +112,29 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         }
 
         for (ReportOweFeeDto fee : reportOweFeeDtos) {
+            if(StringUtil.isEmpty(fee.getOwnerId())){
+                continue;
+            }
             oweFeeCallablePo = new OweFeeCallablePo();
 
-            oweFeeCallablePo.setAmountdOwed(reportOweFeeDto.getAmountOwed());
+            oweFeeCallablePo.setAmountdOwed(fee.getAmountOwed());
             oweFeeCallablePo.setCallableWay(notifyWay);
             oweFeeCallablePo.setOfcId(GenerateCodeFactory.getGeneratorId("11"));
-            oweFeeCallablePo.setFeeId(reportOweFeeDto.getFeeId());
-            oweFeeCallablePo.setFeeName(reportOweFeeDto.getFeeName());
+            oweFeeCallablePo.setFeeId(fee.getFeeId());
+            oweFeeCallablePo.setFeeName(fee.getFeeName());
             oweFeeCallablePo.setCommunityId(communityDto.getCommunityId());
-            oweFeeCallablePo.setConfigId(reportOweFeeDto.getConfigId());
-            oweFeeCallablePo.setOwnerId(reportOweFeeDto.getOwnerId());
-            oweFeeCallablePo.setOwnerName(reportOweFeeDto.getOwnerName());
+            oweFeeCallablePo.setConfigId(fee.getConfigId());
+            oweFeeCallablePo.setOwnerId(fee.getOwnerId());
+            oweFeeCallablePo.setOwnerName(fee.getOwnerName());
             oweFeeCallablePo.setPayerObjId(fee.getPayerObjId());
-            oweFeeCallablePo.setPayerObjName(reportOweFeeDto.getPayerObjName());
-            oweFeeCallablePo.setPayerObjType(reportOweFeeDto.getPayerObjType());
+            oweFeeCallablePo.setPayerObjName(fee.getPayerObjName());
+            oweFeeCallablePo.setPayerObjType(fee.getPayerObjType());
             oweFeeCallablePo.setRemark("系统自动催缴");
             oweFeeCallablePo.setStaffId("-1");
             oweFeeCallablePo.setStaffName("系统自动催缴");
             oweFeeCallablePo.setState(OweFeeCallableDto.STATE_WAIT);
-            oweFeeCallablePo.setStartTime(reportOweFeeDto.getEndTime());
-            oweFeeCallablePo.setEndTime(reportOweFeeDto.getDeadlineTime());
+            oweFeeCallablePo.setStartTime(fee.getEndTime());
+            oweFeeCallablePo.setEndTime(fee.getDeadlineTime());
             oweFeeCallablePos.add(oweFeeCallablePo);
 
         }
@@ -159,6 +162,7 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
         Map<String, List<OweFeeCallablePo>> roomOweFeeCallables = computeRoomOweFeeCallable(oweFeeCallablePos);
         List<JSONObject> contents = null;
         for (String key : roomOweFeeCallables.keySet()) {
+            userId = "";
             contents = new ArrayList<>();
             for (OweFeeCallablePo tmpOweFeeCallablePo : roomOweFeeCallables.get(key)) {
                 if (StringUtil.isEmpty(tmpOweFeeCallablePo.getOwnerId()) || tmpOweFeeCallablePo.getOwnerId().startsWith("-")) {
@@ -184,13 +188,13 @@ public class PublicWeChatPushMessageTemplate extends TaskSystemQuartz {
                 ownerAppUserDto.setCommunityId(tmpOweFeeCallablePo.getCommunityId());
                 ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
                 List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-                if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+                if (ownerAppUserDtos != null && !ownerAppUserDtos.isEmpty()) {
                     userId = ownerAppUserDtos.get(0).getUserId();
                 }
                 contents.add(content);
 
             }
-            if (contents.size() < 1) {
+            if (contents.isEmpty()) {
                 continue;
             }
 

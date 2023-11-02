@@ -16,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * 受理订单查询
+ */
 @Java110Cmd(serviceCode = "corders.listCorders")
 public class ListCordersCmd extends Cmd {
 

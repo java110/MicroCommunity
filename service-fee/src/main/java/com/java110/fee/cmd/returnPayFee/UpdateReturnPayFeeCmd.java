@@ -41,6 +41,7 @@ import com.java110.dto.payFee.ReturnPayFeeDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.acct.IAccountDetailInnerServiceSMO;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
+import com.java110.intf.acct.IOnlinePayRefundV1InnerServiceSMO;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
@@ -54,6 +55,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.fee.FeeReceiptPo;
 import com.java110.po.fee.FeeReceiptDetailPo;
+import com.java110.po.onlinePayRefund.OnlinePayRefundPo;
 import com.java110.po.wechat.OnlinePayPo;
 import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.po.payFee.ReturnPayFeePo;
@@ -153,6 +155,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOnlinePayRefundV1InnerServiceSMO onlinePayRefundV1InnerServiceSMOImpl;
+
 
     private static final String SPEC_RATE = "89002020980015"; //赠送月份
 
@@ -241,7 +246,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             reqJson.put("payerObjType", feeDto1.getPayerObjType());
             reqJson.put("feeId", feeDto1.getFeeId());
             //1003006 周期性费用  2006012 一次性费用  4012024 间接性费用
-            if ("2006012".equals(feeDto1.getFeeFlag()) || "888800010006".equals(feeDto1.getFeeTypeCd())) { //888800010006 押金
+            //todo 这里一次性费用还是要恢复成 再用状态 不然会让 物业感觉懵逼，让他自己手工点击结束去
+            //if ("2006012".equals(feeDto1.getFeeFlag()) || "888800010006".equals(feeDto1.getFeeTypeCd())) { //888800010006 押金
+            if ("888800010006".equals(feeDto1.getFeeTypeCd())) { //888800010006 押金
                 reqJson.put("state", "2009001"); //2007001 收费未开始  2008001 有效  2009001 收费结束
             } else {
                 reqJson.put("state", "2008001");
@@ -356,14 +363,14 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             feeDiscountDto.setDiscountId(payFeeConfigDiscount.getDiscountId());
             List<FeeDiscountDto> feeDiscountDtos = feeDiscountInnerServiceSMOImpl.queryFeeDiscounts(feeDiscountDto);
             //Assert.listOnlyOne(feeDiscountDtos, "查询打折优惠表错误");
-            if(feeDiscountDtos == null || feeDiscountDtos.size() < 1){
+            if (feeDiscountDtos == null || feeDiscountDtos.size() < 1) {
                 continue;
             }
             FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
             feeDiscountRuleDto.setRuleId(feeDiscountDtos.get(0).getRuleId());
             List<FeeDiscountRuleDto> feeDiscountRuleDtos = feeDiscountRuleInnerServiceSMOImpl.queryFeeDiscountRules(feeDiscountRuleDto);
             //Assert.listOnlyOne(feeDiscountRuleDtos, "查询规则表错误");
-            if(feeDiscountRuleDtos == null || feeDiscountRuleDtos.size() < 1){
+            if (feeDiscountRuleDtos == null || feeDiscountRuleDtos.size() < 1) {
                 continue;
             }
             //获取实现方式
@@ -380,8 +387,8 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             feeDiscountSpecDto.setSpecId(SPEC_RATE); //赠送规则
             //查询打折规格
             List<FeeDiscountSpecDto> feeDiscountSpecDtos = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(feeDiscountSpecDto);
-           // Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
-            if(feeDiscountSpecDtos == null || feeDiscountSpecDtos.size() < 1){
+            // Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
+            if (feeDiscountSpecDtos == null || feeDiscountSpecDtos.size() < 1) {
                 continue;
             }
             //获取赠送月份
@@ -612,5 +619,17 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         onlinePayPo.setState(OnlinePayDto.STATE_WT);
         onlinePayPo.setRefundFee(feeDetailDto.getReceivedAmount());
         onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
+
+        //todo 保存 退费明细
+
+        OnlinePayRefundPo onlinePayRefundPo = new OnlinePayRefundPo();
+        onlinePayRefundPo.setPayId(onlinePayDtos.get(0).getPayId());
+        onlinePayRefundPo.setRefundId(GenerateCodeFactory.getGeneratorId("11"));
+        onlinePayRefundPo.setState(OnlinePayDto.STATE_WT);
+        onlinePayRefundPo.setMessage("待退费");
+        onlinePayRefundPo.setBusiId(feeDetailDto.getDetailId());
+        onlinePayRefundPo.setRefundFee(feeDetailDto.getReceivedAmount());
+        onlinePayRefundPo.setCommunityId(feeDetailDto.getCommunityId());
+        onlinePayRefundV1InnerServiceSMOImpl.saveOnlinePayRefund(onlinePayRefundPo);
     }
 }

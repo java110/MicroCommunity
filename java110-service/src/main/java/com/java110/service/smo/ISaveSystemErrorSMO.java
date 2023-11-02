@@ -12,7 +12,7 @@ import com.java110.po.log.LogSystemErrorPo;
  **/
 public interface ISaveSystemErrorSMO {
 
-    public void saveLog(LogSystemErrorPo logSystemErrorPo);
+     void saveLog(LogSystemErrorPo logSystemErrorPo);
 
 
 }

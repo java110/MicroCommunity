@@ -32,6 +32,10 @@ public class UserLoginDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String storeId;
+    private String startTime;
+    private String endTime;
+
 
     public String getPassword() {
         return password;
@@ -120,5 +124,29 @@ public class UserLoginDto extends PageDto implements Serializable {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

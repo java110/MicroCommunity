@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentPoolValueV1ServiceDaoImpl">
+
+
+    <!-- 保存支付参数信息 add by wuxw 2018-07-03 -->
+    <insert id="savePaymentPoolValueInfo" parameterType="Map">
+        insert into payment_pool_value(
+        value_id,column_value,community_id,column_key,pp_id
+        ) values (
+        #{valueId},#{columnValue},#{communityId},#{columnKey},#{ppId}
+        )
+    </insert>
+
+
+    <!-- 查询支付参数信息 add by wuxw 2018-07-03 -->
+    <select id="getPaymentPoolValueInfo" parameterType="Map" resultType="Map">
+        select t.value_id,t.value_id valueId,t.status_cd,t.status_cd statusCd,t.column_value,t.column_value
+        columnValue,t.community_id,t.community_id communityId,t.column_key,t.column_key columnKey,t.pp_id,t.pp_id ppId
+        from payment_pool_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="columnValue !=null and columnValue != ''">
+            and t.column_value= #{columnValue}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            and t.column_key= #{columnKey}
+        </if>
+        <if test="ppId !=null and ppId != ''">
+            and t.pp_id= #{ppId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改支付参数信息 add by wuxw 2018-07-03 -->
+    <update id="updatePaymentPoolValueInfo" parameterType="Map">
+        update payment_pool_value t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="columnValue !=null and columnValue != ''">
+            , t.column_value= #{columnValue}
+        </if>
+
+        <if test="columnKey !=null and columnKey != ''">
+            , t.column_key= #{columnKey}
+        </if>
+
+        where 1=1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ppId !=null and ppId != ''">
+            and t.pp_id= #{ppId}
+        </if>
+
+    </update>
+
+    <!-- 查询支付参数数量 add by wuxw 2018-07-03 -->
+    <select id="queryPaymentPoolValuesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from payment_pool_value t
+        where 1 =1
+        <if test="valueId !=null and valueId != ''">
+            and t.value_id= #{valueId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="columnValue !=null and columnValue != ''">
+            and t.column_value= #{columnValue}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="columnKey !=null and columnKey != ''">
+            and t.column_key= #{columnKey}
+        </if>
+        <if test="ppId !=null and ppId != ''">
+            and t.pp_id= #{ppId}
+        </if>
+
+
+    </select>
+
+</mapper>

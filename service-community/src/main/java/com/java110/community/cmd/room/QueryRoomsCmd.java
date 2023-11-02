@@ -32,6 +32,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 @Java110CmdDoc(title = "查询房屋",
         description = "查询房屋信息",
         httpMethod = "get",
@@ -43,8 +44,8 @@ import java.util.Map;
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "page", type = "int",length = 11, remark = "页数"),
-        @Java110ParamDoc(name = "row", type = "int",length = 11, remark = "行数"),
+        @Java110ParamDoc(name = "page", type = "int", length = 11, remark = "页数"),
+        @Java110ParamDoc(name = "row", type = "int", length = 11, remark = "行数"),
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
         @Java110ParamDoc(name = "roomId", length = 30, remark = "房屋ID"),
         @Java110ParamDoc(name = "floorId", length = 30, remark = "楼栋ID"),
@@ -53,17 +54,17 @@ import java.util.Map;
 
 @Java110ResponseDoc(
         params = {
-                @Java110ParamDoc(name = "records", type = "int", length = 11,  remark = "总页数"),
+                @Java110ParamDoc(name = "records", type = "int", length = 11, remark = "总页数"),
                 @Java110ParamDoc(name = "total", type = "int", length = 11, remark = "总数据"),
                 @Java110ParamDoc(name = "rooms", type = "Object", remark = "有效数据"),
-                @Java110ParamDoc(parentNodeName = "rooms",name = "roomName", type = "String", remark = "房屋名称"),
-                @Java110ParamDoc(parentNodeName = "rooms",name = "roomId", type = "String", remark = "房屋编号"),
+                @Java110ParamDoc(parentNodeName = "rooms", name = "roomName", type = "String", remark = "房屋名称"),
+                @Java110ParamDoc(parentNodeName = "rooms", name = "roomId", type = "String", remark = "房屋编号"),
         }
 )
 
 @Java110ExampleDoc(
-        reqBody="http://{ip}:{port}/app/room.queryRooms?floorId=&floorName=&unitId=&roomNum=&roomId=&state=&section=&roomType=1010301&roomSubType=&flag=0&page=1&row=10&communityId=2022081539020475",
-        resBody="{\"page\":0,\"records\":1,\"rooms\":[{\"apartment\":\"10101\",\"apartmentName\":\"一室一厅\",\"builtUpArea\":\"11.00\",\"endTime\":\"2037-01-01 00:00:00\",\"feeCoefficient\":\"1.00\",\"floorId\":\"732022081690440002\",\"floorNum\":\"D\",\"idCard\":\"\",\"layer\":\"1\",\"link\":\"18909711447\",\"ownerId\":\"772022082070860017\",\"ownerName\":\"张杰\",\"remark\":\"11\",\"roomArea\":\"11.00\",\"roomAttrDto\":[{\"attrId\":\"112022082081600012\",\"listShow\":\"Y\",\"page\":-1,\"records\":0,\"roomId\":\"752022082030880010\",\"row\":0,\"specCd\":\"9035007248\",\"specName\":\"精装修\",\"statusCd\":\"0\",\"total\":0,\"value\":\"20\",\"valueName\":\"20\"}],\"roomId\":\"752022082030880010\",\"roomName\":\"D-1-1001\",\"roomNum\":\"1001\",\"roomRent\":\"0.00\",\"roomSubType\":\"110\",\"roomSubTypeName\":\"住宅\",\"roomType\":\"1010301\",\"section\":\"1\",\"startTime\":\"2022-09-03 18:50:53\",\"state\":\"2001\",\"stateName\":\"已入住\",\"unitId\":\"742022082058950007\",\"unitNum\":\"1\"}],\"rows\":0,\"total\":2}"
+        reqBody = "http://{ip}:{port}/app/room.queryRooms?floorId=&floorName=&unitId=&roomNum=&roomId=&state=&section=&roomType=1010301&roomSubType=&flag=0&page=1&row=10&communityId=2022081539020475",
+        resBody = "{\"page\":0,\"records\":1,\"rooms\":[{\"apartment\":\"10101\",\"apartmentName\":\"一室一厅\",\"builtUpArea\":\"11.00\",\"endTime\":\"2037-01-01 00:00:00\",\"feeCoefficient\":\"1.00\",\"floorId\":\"732022081690440002\",\"floorNum\":\"D\",\"idCard\":\"\",\"layer\":\"1\",\"link\":\"18909711447\",\"ownerId\":\"772022082070860017\",\"ownerName\":\"张杰\",\"remark\":\"11\",\"roomArea\":\"11.00\",\"roomAttrDto\":[{\"attrId\":\"112022082081600012\",\"listShow\":\"Y\",\"page\":-1,\"records\":0,\"roomId\":\"752022082030880010\",\"row\":0,\"specCd\":\"9035007248\",\"specName\":\"精装修\",\"statusCd\":\"0\",\"total\":0,\"value\":\"20\",\"valueName\":\"20\"}],\"roomId\":\"752022082030880010\",\"roomName\":\"D-1-1001\",\"roomNum\":\"1001\",\"roomRent\":\"0.00\",\"roomSubType\":\"110\",\"roomSubTypeName\":\"住宅\",\"roomType\":\"1010301\",\"section\":\"1\",\"startTime\":\"2022-09-03 18:50:53\",\"state\":\"2001\",\"stateName\":\"已入住\",\"unitId\":\"742022082058950007\",\"unitNum\":\"1\"}],\"rows\":0,\"total\":2}"
 )
 @Java110Cmd(serviceCode = "room.queryRooms")
 public class QueryRoomsCmd extends Cmd {
@@ -123,92 +124,26 @@ public class QueryRoomsCmd extends Cmd {
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
 
-
-        //员工数据权限
+        //todo 员工数据权限
         String staffId = cmdDataFlowContext.getReqHeaders().get("user-id");
         DataPrivilegeStaffDto dataPrivilegeStaffDto = new DataPrivilegeStaffDto();
         dataPrivilegeStaffDto.setStaffId(staffId);
         String[] unitIds = dataPrivilegeUnitV1InnerServiceSMOImpl.queryDataPrivilegeUnitsByStaff(dataPrivilegeStaffDto);
 
 
+        //todo 计算房屋ID和单元ID
+        computeRoomIdAndUnitId(reqJson, unitIds, roomDto);
 
-        String roomId = "";
-        String unitId = "";
-        if (reqJson.containsKey("flag") && "0".equals(reqJson.getString("flag"))
-                && reqJson.containsKey("floorNum") && !StringUtil.isEmpty(reqJson.getString("floorNum"))
-                && reqJson.containsKey("unitNum") && !StringUtil.isEmpty(reqJson.getString("unitNum"))
-                && reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
-            FloorDto floorDto = new FloorDto();
-            floorDto.setFloorNum(reqJson.getString("floorNum"));
-            floorDto.setCommunityId(reqJson.getString("communityId"));
-            List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-            if (floorDtos != null && floorDtos.size() > 0) {
-                for (FloorDto floor : floorDtos) {
-                    UnitDto unitDto = new UnitDto();
-                    unitDto.setFloorId(floor.getFloorId());
-                    unitDto.setUnitNum(reqJson.getString("unitNum"));
-                    if(unitIds != null && unitIds.length>0){
-                        unitDto.setUnitIds(unitIds);
-                    }
-                    List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-                    if (unitDtos != null && unitDtos.size() > 0) {
-                        for (UnitDto unit : unitDtos) {
-                            RoomDto room = new RoomDto();
-                            room.setUnitId(unit.getUnitId());
-                            room.setRoomNum(reqJson.getString("roomNum"));
-                            room.setCommunityId(reqJson.getString("communityId"));
-                            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(room);
-                            if (roomDtos != null && roomDtos.size() == 1) {
-                                unitId = roomDtos.get(0).getUnitId();
-                                roomId = roomDtos.get(0).getRoomId();
-                            } else {
-                                continue;
-                            }
-                        }
-                    }
-                }
-            }
-            roomDto.setRoomId(roomId);
-            roomDto.setUnitId(unitId);
-        }
-        if (reqJson.containsKey("flag") && "1".equals(reqJson.getString("flag"))) {
-            if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
-                String[] roomNums = reqJson.getString("roomNum").split("-", 3);
-                if (roomNums != null && roomNums.length == 3) {
-                    roomDto.setFloorNum(roomNums[0]);
-                    roomDto.setUnitNum(roomNums[1]);
-                    roomDto.setRoomNum(roomNums[2]);
-                } else {
-                    roomDto.setRoomNum(reqJson.getString("roomNum"));
-                }
-            } else {
-                roomDto.setUnitNum("");
-                roomDto.setFloorNum("");
-                roomDto.setRoomNum("");
-            }
-        }
+        //todo 计算楼栋单元房屋编号
+        computeFloorUnitRoomNum(reqJson, roomDto);
 
-        //add by wuxw 商铺 两个短线方式处理
-        if(reqJson.containsKey("roomType") && "2020602".equals(reqJson.getString("roomType"))){
-            if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
-                String[] roomNums = reqJson.getString("roomNum").split("-", 2);
-                if (roomNums != null && roomNums.length == 2) {
-                    roomDto.setFloorNum(roomNums[0]);
-                    roomDto.setUnitNum("0");
-                    roomDto.setRoomNum(roomNums[1]);
-                } else {
-                    roomDto.setRoomNum(reqJson.getString("roomNum"));
-                }
-            } else {
-                roomDto.setUnitNum("");
-                roomDto.setFloorNum("");
-                roomDto.setRoomNum("");
-            }
-        }
+        //todo 商铺 两个短线方式处理 add by wuxw
+        computeRoomShopFloorUnitRoomNum(reqJson, roomDto);
+
         ApiRoomVo apiRoomVo = new ApiRoomVo();
 
         //员工是否 有权限查询
-        if(unitIds != null && unitIds.length>0){
+        if (unitIds != null && unitIds.length > 0) {
             roomDto.setUnitIds(unitIds);
         }
         //查询总记录数
@@ -218,8 +153,7 @@ public class QueryRoomsCmd extends Cmd {
         if (total > 0) {
             roomDtoList = roomInnerServiceSMOImpl.queryRooms(roomDto);
             refreshRoomOwners(reqJson.getString("loginUserId"), reqJson.getString("communityId"), roomDtoList);
-
-            // 查询房屋统计数据
+            // todo 查询房屋统计数据
             roomDtoList = queryRoomStatisticsBMOImpl.query(roomDtoList);
         } else {
             roomDtoList = new ArrayList<>();
@@ -230,6 +164,130 @@ public class QueryRoomsCmd extends Cmd {
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiRoomVo), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 商铺 两个短线方式处理
+     *
+     * @param reqJson
+     * @param roomDto
+     */
+    private static void computeRoomShopFloorUnitRoomNum(JSONObject reqJson, RoomDto roomDto) {
+        //todo 不是商铺返回
+        if (!reqJson.containsKey("roomType") || !RoomDto.ROOM_TYPE_SHOPS.equals(reqJson.getString("roomType"))) {
+            return;
+        }
+        if (!reqJson.containsKey("roomNum") || StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+            roomDto.setUnitNum("");
+            roomDto.setFloorNum("");
+            roomDto.setRoomNum("");
+            return;
+        }
+        String[] roomNums = reqJson.getString("roomNum").split("-", 2);
+        if (roomNums != null && roomNums.length == 2) {
+            roomDto.setFloorNum(roomNums[0]);
+            roomDto.setUnitNum("0");
+            roomDto.setRoomNum(roomNums[1]);
+        } else {
+            roomDto.setRoomNum(reqJson.getString("roomNum"));
+        }
+    }
+
+    /**
+     * 计算 楼栋单元房屋编号
+     *
+     * @param reqJson
+     * @param roomDto
+     */
+    private static void computeFloorUnitRoomNum(JSONObject reqJson, RoomDto roomDto) {
+
+        //todo 未包含flag 标识
+        if (!reqJson.containsKey("flag") || !"1".equals(reqJson.getString("flag"))) {
+            return;
+        }
+        if (!reqJson.containsKey("roomNum") || StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+            roomDto.setUnitNum("");
+            roomDto.setFloorNum("");
+            roomDto.setRoomNum("");
+            return;
+        }
+        String[] roomNums = reqJson.getString("roomNum").split("-", 3);
+        if (roomNums != null && roomNums.length == 3) {
+            roomDto.setFloorNum(roomNums[0]);
+            roomDto.setUnitNum(roomNums[1]);
+            roomDto.setRoomNum(roomNums[2]);
+            return;
+        }
+        roomDto.setRoomNum(reqJson.getString("roomNum"));
+    }
+
+    /**
+     * 计算房屋和单元ID
+     *
+     * @param reqJson
+     * @param unitIds
+     * @param roomDto
+     */
+    private void computeRoomIdAndUnitId(JSONObject reqJson, String[] unitIds, RoomDto roomDto) {
+
+        //todo 未包含flag 标识
+        if (!reqJson.containsKey("flag") || !"0".equals(reqJson.getString("flag"))) {
+            return;
+        }
+
+        //todo 未包含楼栋编号
+        if (!reqJson.containsKey("floorNum") || StringUtil.isEmpty(reqJson.getString("floorNum"))) {
+            return;
+        }
+
+        //todo 未包含单元编号
+        if (!reqJson.containsKey("unitNum") || StringUtil.isEmpty(reqJson.getString("unitNum"))) {
+            return;
+        }
+
+        //todo 未包含房屋编号
+        if (!reqJson.containsKey("roomNum") || StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+            return;
+        }
+
+        //todo 查询楼栋
+        FloorDto floorDto = new FloorDto();
+        floorDto.setFloorNum(reqJson.getString("floorNum"));
+        floorDto.setCommunityId(reqJson.getString("communityId"));
+        List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+        if (floorDtos == null || floorDtos.isEmpty()) {
+            return;
+        }
+
+        String roomId = "";
+        String unitId = "";
+        List<UnitDto> unitDtos = null;
+        for (FloorDto floor : floorDtos) {
+            UnitDto unitDto = new UnitDto();
+            unitDto.setFloorId(floor.getFloorId());
+            unitDto.setUnitNum(reqJson.getString("unitNum"));
+            if (unitIds != null && unitIds.length > 0) {
+                unitDto.setUnitIds(unitIds);
+            }
+            unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
+            if (unitDtos == null || unitDtos.isEmpty()) {
+                continue;
+            }
+            for (UnitDto unit : unitDtos) {
+                RoomDto room = new RoomDto();
+                room.setUnitId(unit.getUnitId());
+                room.setRoomNum(reqJson.getString("roomNum"));
+                room.setCommunityId(reqJson.getString("communityId"));
+                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(room);
+                if (roomDtos == null || roomDtos.isEmpty()) {
+                    continue;
+                }
+                unitId = roomDtos.get(0).getUnitId();
+                roomId = roomDtos.get(0).getRoomId();
+            }
+        }
+        roomDto.setRoomId(roomId);
+        roomDto.setUnitId(unitId);
     }
 
 

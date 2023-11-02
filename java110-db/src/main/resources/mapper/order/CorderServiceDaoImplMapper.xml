@@ -29,15 +29,29 @@
 
 
     <select id="getCorderInfo" parameterType="Map" resultType="Map">
-        select ca.`name` appName,t.create_time createTime,cbt.`name`,t.user_id,u.name userName,t.ext_transaction_id extTransactionId,t.status_cd statusCd,t.o_id oId
+        select ca.`name` appName,
+        t.create_time createTime,
+        cbt.`name`,
+        t.user_id,u.name userName,
+        t.ext_transaction_id extTransactionId,
+        t.status_cd statusCd,
+        t.o_id oId,
+        cb.business_type_cd businessTypeCd,
+        cb.b_id bId,
+        coi.action,
+        coi.action_obj actionObj
         from c_orders t
         left join c_business cb on t.o_id = cb.o_id
         left join c_business_type cbt on cb.business_type_cd = cbt.business_type_cd
+        left join c_order_item coi on cb.b_id = coi.b_id
         left join u_user u on t.user_id = u.user_id
         left join c_app ca on t.app_id = ca.app_id
         where 1 =1
         <if test="oId !=null and oId != ''">
             and t.o_id= #{oId}
+        </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
         </if>
         <if test="extTransactionId !=null and extTransactionId != ''">
             and t.ext_transaction_id= #{extTransactionId}
@@ -48,6 +62,20 @@
         <if test="appId !=null and appId != ''">
             and t.app_id= #{appId}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and u.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="businessTypeNameLike !=null and businessTypeNameLike != ''">
+            and cbt.name like concat('%',#{businessTypeNameLike},'%')
+        </if>
+
+        and u.name != 'dev'
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -58,14 +86,46 @@
     <select id="queryCordersCount" parameterType="Map" resultType="Map">
         select count(1) count
         from c_orders t
+        left join c_business cb on t.o_id = cb.o_id
+        left join c_business_type cbt on cb.business_type_cd = cbt.business_type_cd
+        left join u_user u on t.user_id = u.user_id
+        left join c_app ca on t.app_id = ca.app_id
         where 1 =1
         <if test="oId !=null and oId != ''">
             and t.o_id= #{oId}
         </if>
+        <if test="bId !=null and bId != ''">
+            and t.b_id= #{bId}
+        </if>
+        <if test="extTransactionId !=null and extTransactionId != ''">
+            and t.ext_transaction_id= #{extTransactionId}
+        </if>
+        <if test="orderTypeCd !=null and orderTypeCd != ''">
+            and t.order_type_cd= #{orderTypeCd}
+        </if>
         <if test="appId !=null and appId != ''">
             and t.app_id= #{appId}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and u.name like concat('%',#{staffNameLike},'%')
+        </if>
+        <if test="businessTypeNameLike !=null and businessTypeNameLike != ''">
+            and cbt.name like concat('%',#{businessTypeNameLike},'%')
+        </if>
+        and u.name != 'dev'
 
     </select>
+
+    <select id="queryUnitemLog" parameterType="Map" resultType="Map">
+        select t.service_name serviceName,t.log_text logText from unitem_log t
+        where t.b_id = #{bId}
+    </select>
+
 
 </mapper>

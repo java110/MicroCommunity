@@ -41,6 +41,8 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
 
     private String photoJpg;
 
+    private String feeName;
+
     public String getInoutId() {
         return inoutId;
     }
@@ -173,5 +175,15 @@ public class CarInoutDetailDto extends CarInoutDto implements Serializable {
 
     public void setPhotoJpg(String photoJpg) {
         this.photoJpg = photoJpg;
+    }
+
+    @Override
+    public String getFeeName() {
+        return feeName;
+    }
+
+    @Override
+    public void setFeeName(String feeName) {
+        this.feeName = feeName;
     }
 }

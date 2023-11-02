@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="invoiceApplyV1ServiceDaoImpl">
+
+
+    <!-- 保存发票申请信息 add by wuxw 2018-07-03 -->
+    <insert id="saveInvoiceApplyInfo" parameterType="Map">
+        insert into invoice_apply(
+        apply_id,oi_id,create_user_id,owner_name,invoice_type,apply_tel,invoice_amount,create_user_name,remark,state,community_id
+        ) values (
+        #{applyId},#{oiId},#{createUserId},#{ownerName},#{invoiceType},#{applyTel},#{invoiceAmount},#{createUserName},#{remark},#{state},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询发票申请信息 add by wuxw 2018-07-03 -->
+    <select id="getInvoiceApplyInfo" parameterType="Map" resultType="Map">
+        select t.apply_id,t.apply_id applyId,t.oi_id,t.oi_id oiId,t.create_user_id,t.create_user_id
+        createUserId,t.owner_name,t.owner_name ownerName,t.invoice_type,t.invoice_type
+        invoiceType,t.apply_tel,t.apply_tel applyTel,t.invoice_amount,t.invoice_amount
+        invoiceAmount,t.create_user_name,t.create_user_name createUserName,t.remark,t.status_cd,t.status_cd
+        statusCd,t.state,t.community_id,t.community_id communityId,oi.invoice_name invoiceName,oi.invoice_num invoiceNum,oi.invoice_address invoiceAddress,
+        td.`name` stateName,t.invoice_code invoiceCode,t.create_time createTime
+        from invoice_apply t
+        left join owner_invoice oi on t.oi_id = oi.oi_id
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'invoice_apply' and td.table_columns = 'state'
+        where 1 =1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="invoiceCode !=null and invoiceCode != ''">
+            and t.invoice_code= #{invoiceCode}
+        </if>
+        <if test="oiId !=null and oiId != ''">
+            and t.oi_id= #{oiId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="invoiceType !=null and invoiceType != ''">
+            and t.invoice_type= #{invoiceType}
+        </if>
+        <if test="applyTel !=null and applyTel != ''">
+            and t.apply_tel= #{applyTel}
+        </if>
+        <if test="invoiceAmount !=null and invoiceAmount != ''">
+            and t.invoice_amount= #{invoiceAmount}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改发票申请信息 add by wuxw 2018-07-03 -->
+    <update id="updateInvoiceApplyInfo" parameterType="Map">
+        update invoice_apply t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="oiId !=null and oiId != ''">
+            , t.oi_id= #{oiId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="invoiceType !=null and invoiceType != ''">
+            , t.invoice_type= #{invoiceType}
+        </if>
+        <if test="applyTel !=null and applyTel != ''">
+            , t.apply_tel= #{applyTel}
+        </if>
+        <if test="invoiceAmount !=null and invoiceAmount != ''">
+            , t.invoice_amount= #{invoiceAmount}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            , t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="invoiceCode !=null and invoiceCode != ''">
+            , t.invoice_code= #{invoiceCode}
+        </if>
+
+
+        where 1=1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询发票申请数量 add by wuxw 2018-07-03 -->
+    <select id="queryInvoiceApplysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from invoice_apply t
+        where 1 =1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="invoiceCode !=null and invoiceCode != ''">
+            and t.invoice_code= #{invoiceCode}
+        </if>
+        <if test="oiId !=null and oiId != ''">
+            and t.oi_id= #{oiId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="invoiceType !=null and invoiceType != ''">
+            and t.invoice_type= #{invoiceType}
+        </if>
+        <if test="applyTel !=null and applyTel != ''">
+            and t.apply_tel= #{applyTel}
+        </if>
+        <if test="invoiceAmount !=null and invoiceAmount != ''">
+            and t.invoice_amount= #{invoiceAmount}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -43,6 +44,11 @@ public class CorderInnerServiceSMOImpl extends BaseServiceSMO implements ICorder
             return corders;
         }
         return corders;
+    }
+
+    @Override
+    public Map queryUnitemLog(@RequestBody Map info) {
+        return corderServiceDaoImpl.queryUnitemLog(info);
     }
 
     /**

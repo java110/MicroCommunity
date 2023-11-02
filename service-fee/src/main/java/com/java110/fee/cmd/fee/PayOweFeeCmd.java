@@ -180,30 +180,17 @@ public class PayOweFeeCmd extends Cmd {
             getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos, userDtos.get(0), receiptCode);
         }
 
-        //这里只是写入 收据表，暂不考虑 事务一致性问题，就算写入失败 也只是影响 收据打印，如果 贵公司对 收据要求 比较高，不能有失败的情况 请加入事务管理
-//        feeReceiptDetailInnerServiceSMOImpl.saveFeeReceiptDetails(feeReceiptDetailPos);
-//
-//        feeReceiptInnerServiceSMOImpl.saveFeeReceipts(feeReceiptPos);
+
 
         //根据明细ID 查询收据信息
-        List<String> detailIds = new ArrayList<>();
+        JSONArray details = new JSONArray();
 
         for (FeeReceiptDetailPo feeReceiptDetailPo : feeReceiptDetailPos) {
-            detailIds.add(feeReceiptDetailPo.getDetailId());
+            details.add(feeReceiptDetailPo.getDetailId());
         }
-
-        FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
-        feeReceiptDetailDto.setDetailIds(detailIds.toArray(new String[detailIds.size()]));
-        feeReceiptDetailDto.setCommunityId(paramObj.getString("communityId"));
-        try {
-            Thread.currentThread().sleep(2000);
-        } catch (InterruptedException ie) {
-            ie.printStackTrace();
-        }
-        List<FeeReceiptDetailDto> feeReceiptDetailDtos = feeReceiptDetailInnerServiceSMOImpl.queryFeeReceiptDetails(feeReceiptDetailDto);
 
         JSONObject data = new JSONObject();
-        data.put("receipts", feeReceiptDetailDtos);
+        data.put("details",details);
 
         dataFlowContext.setResponseEntity(ResultVo.createResponseEntity(data));
     }

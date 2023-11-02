@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="payFeeRuleBillV1ServiceDaoImpl">
+
+
+    <!-- 保存费用账单信息 add by wuxw 2018-07-03 -->
+    <insert id="savePayFeeRuleBillInfo" parameterType="Map">
+        insert into pay_fee_rule_bill(
+        bill_name,config_id,bill_id,cur_year_month,remark,rule_id,community_id,batch_id,fee_id,month_cycle
+        ) values (
+        #{billName},#{configId},#{billId},#{curYearMonth},#{remark},#{ruleId},#{communityId},#{batchId},#{feeId},#{monthCycle}
+        )
+    </insert>
+
+    <insert id="savePayFeeRuleBills" parameterType="Map">
+        insert into pay_fee_rule_bill(
+        bill_name,config_id,bill_id,cur_year_month,remark,rule_id,community_id,batch_id,fee_id,month_cycle
+        ) values
+        <foreach collection="payFeeRuleBillPos" item="item" separator=",">
+            (#{item.billName},#{item.configId},#{item.billId},#{item.curYearMonth},#{item.remark},#{item.ruleId},#{item.communityId},#{item.batchId},#{item.feeId},#{item.monthCycle})
+        </foreach>
+
+    </insert>
+
+
+
+    <!-- 查询费用账单信息 add by wuxw 2018-07-03 -->
+    <select id="getPayFeeRuleBillInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.income_obj_id,t.income_obj_id incomeObjId,t.fee_type_cd,t.fee_type_cd
+        feeTypeCd,t.start_time,t.start_time startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time
+        endTime,t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.fee_id,t.fee_id feeId,t.user_id,t.user_id
+        userId,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.square_price squarePrice,pfc.additional_amount
+        additionalAmount,t.fee_flag,t.fee_flag feeFlag,t.state,t.config_id,t.config_id configId,
+        pfc.fee_name feeName,td1.name feeTypeCdName,td2.name stateName,td3.name feeFlagName,pfc.computing_formula
+        computingFormula,pfc.computing_formula_text computingFormulaText,
+        pfc.bill_type billType,t.payer_obj_type,t.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
+        configStartTime,pfc.end_time configEndTime,pfc.payment_cd paymentCd,pfc.payment_cycle paymentCycle,
+        pfa.value importFeeName,pfa1.`value` deadlineTime,pfa1.`value` maxEndTime,
+        pfa2.`value` ownerName,t.batch_id,t.batch_id batchId,
+        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,pfc.prepayment_period prepaymentPeriod,
+        pfrb.bill_name billName,pfrb.bill_id billId,pfrb.cur_year_month curYearMonth,pfrb.remark,pfrb.rule_id ruleId,pfrb.month_cycle monthCycle
+        from pay_fee t
+        inner join pay_fee_rule_bill pfrb on t.fee_id = pfrb.fee_id and pfrb.status_cd = '0'
+        INNER join pay_fee_config pfc on t.config_id = pfc.config_id and
+        pfc.status_cd = '0'
+        left join t_dict td1 on pfc.fee_type_cd = td1.status_cd and td1.table_name = 'pay_fee_config' and
+        td1.table_columns = 'fee_type_cd'
+        left join t_dict td2 on t.state = td2.status_cd and td2.table_name = 'pay_fee' and td2.table_columns = 'state'
+        left join t_dict td3 on t.fee_flag = td3.status_cd and td3.table_name = 'pay_fee' and td3.table_columns =
+        'fee_flag'
+        LEFT JOIN pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002' and pfa.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.spec_cd = '390010' and pfa1.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.spec_cd = '390008' and pfa2.status_cd = '0'
+        where 1 =1
+        <if test="billName !=null and billName != ''">
+            and pfrb.bill_name= #{billName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and pfrb.config_id= #{configId}
+        </if>
+        <if test="billId !=null and billId != ''">
+            and pfrb.bill_id= #{billId}
+        </if>
+        <if test="curYearMonth !=null and curYearMonth != ''">
+            and pfrb.cur_year_month= #{curYearMonth}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and pfrb.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and pfrb.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and pfrb.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and pfrb.community_id= #{communityId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and pfrb.batch_id= #{batchId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and pfrb.fee_id= #{feeId}
+        </if>
+        order by pfrb.cur_year_month
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改费用账单信息 add by wuxw 2018-07-03 -->
+    <update id="updatePayFeeRuleBillInfo" parameterType="Map">
+        update pay_fee_rule_bill t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="billName !=null and billName != ''">
+            , t.bill_name= #{billName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="curYearMonth !=null and curYearMonth != ''">
+            , t.cur_year_month= #{curYearMonth}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        where 1=1
+        <if test="billId !=null and billId != ''">
+            and t.bill_id= #{billId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+
+    </update>
+
+    <!-- 查询费用账单数量 add by wuxw 2018-07-03 -->
+    <select id="queryPayFeeRuleBillsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee_rule_bill t
+        where 1 =1
+        <if test="billName !=null and billName != ''">
+            and t.bill_name= #{billName}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="billId !=null and billId != ''">
+            and t.bill_id= #{billId}
+        </if>
+        <if test="curYearMonth !=null and curYearMonth != ''">
+            and t.cur_year_month= #{curYearMonth}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="ruleId !=null and ruleId != ''">
+            and t.rule_id= #{ruleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="batchId !=null and batchId != ''">
+            and t.batch_id= #{batchId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+
+
+    </select>
+
+</mapper>

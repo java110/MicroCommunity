@@ -24,8 +24,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-user/target/service-user.jar
           package_name: hc_service-user
@@ -42,8 +42,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-acct/target/service-acct.jar
           package_name: hc_acct
@@ -60,8 +60,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-api/target/service-api.jar
           package_name: hc_api1
@@ -78,8 +78,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-community/target/service-community.jar
           package_name: hc_service-community
@@ -96,8 +96,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-common/target/service-common.jar
           package_name: hc_service-common
@@ -114,8 +114,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-eureka/target/service-eureka.jar
           package_name: hc_eureka
@@ -132,8 +132,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-fee/target/service-fee.jar
           package_name: hc_service-fee
@@ -150,8 +150,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-dev/target/service-dev.jar
           package_name: hc_service-dev
@@ -168,8 +168,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-job/target/service-job.jar
           package_name: service-job
@@ -186,8 +186,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-oa/target/service-oa.jar
           package_name: hc_service-oa
@@ -204,8 +204,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-report/target/service-report.jar
           package_name: hc_service-report
@@ -222,8 +222,8 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-order/target/service-order.jar
           package_name: hc_service-order
@@ -240,6 +240,6 @@ job:
 
             active=$ACTIVE
 
-            # java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-            java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
+            # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
           shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh

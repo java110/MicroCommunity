@@ -5,23 +5,34 @@ import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.fee.PayFeeDto;
 import com.java110.dto.payment.PaymentOrderDto;
+import com.java110.dto.paymentPool.PaymentPoolDto;
+import com.java110.dto.paymentPoolConfig.PaymentPoolConfigDto;
+import com.java110.intf.acct.IPaymentPoolConfigV1InnerServiceSMO;
+import com.java110.intf.acct.IPaymentPoolV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,10 +47,19 @@ public class NativeQrcodePaymentCmd extends Cmd {
 
     protected static final String DEFAULT_PAYMENT_ADAPT = "wechatNativeQrcodePaymentFactory";// 默认微信通用支付
 
+    @Autowired
+    private IPaymentPoolConfigV1InnerServiceSMO paymentPoolConfigV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPaymentPoolV1InnerServiceSMO paymentPoolV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "business", "未包含业务");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
 
     }
 
@@ -49,7 +69,8 @@ public class NativeQrcodePaymentCmd extends Cmd {
         logger.debug(">>>>>>>>>>>>>>>>支付参数报文,{}", reqJson.toJSONString());
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
-
+        reqJson.put("createUserId", userId);
+        reqJson.put("storeId", CmdContextUtils.getStoreId(context));
 
         //1.0 查询当前支付的业务
 
@@ -63,35 +84,19 @@ public class NativeQrcodePaymentCmd extends Cmd {
         PaymentOrderDto paymentOrderDto = paymentBusiness.unified(context, reqJson);
         paymentOrderDto.setAppId(appId);
         paymentOrderDto.setUserId(userId);
+        reqJson.put("money", paymentOrderDto.getMoney());
 
+        String token = GenerateCodeFactory.getUUID();
 
-        logger.debug(">>>>>>>>>>>>>>>>支付业务下单返回,{}", JSONObject.toJSONString(paymentOrderDto));
-
-        // 3.0 寻找当前支付适配器
-        String payAdapt = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.NATIVE_QRCODE_PAYMENT_ADAPT);
-        payAdapt = StringUtil.isEmpty(payAdapt) ? DEFAULT_PAYMENT_ADAPT : payAdapt;
-
-        if (reqJson.containsKey("payAdapt") && !StringUtil.isEmpty(reqJson.getString("payAdapt"))) {
-            payAdapt = reqJson.getString("payAdapt");
-        }
-
-        IPaymentFactoryAdapt tPayAdapt = ApplicationContextFactory.getBean(payAdapt, IPaymentFactoryAdapt.class);
-
-        // 4.0 相应支付厂家下单
-        Map result = null;
-        try {
-            result = tPayAdapt.java110Payment(paymentOrderDto, reqJson, context);
-        } catch (Exception e) {
-            logger.error("支付异常", e);
-            throw new CmdException(e.getLocalizedMessage());
-        }
-        ResponseEntity<String> responseEntity = new ResponseEntity(JSONObject.toJSONString(result), HttpStatus.OK);
+        // redis 中 保存 请求参数
+        CommonCache.setValue("nativeQrcodePayment_" + token, reqJson.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
+        JSONObject result = new JSONObject();
+        result.put("codeUrl", UrlCache.getOwnerUrl() + "/#/pages/fee/qrCodeCashier?qrToken=" + token);
+        ResponseEntity<String> responseEntity = new ResponseEntity(reqJson.toJSONString(), HttpStatus.OK);
 
         logger.debug("调用支付厂家返回,{}", responseEntity);
         context.setResponseEntity(responseEntity);
 
-
-        // redis 中 保存 请求参数
-        CommonCache.setValue("nativeQrcodePayment_" + paymentOrderDto.getOrderId(), reqJson.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
     }
+
 }

@@ -24,7 +24,10 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
+import com.java110.dto.privilege.RoleCommunityDto;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
+import com.java110.intf.user.IRoleCommunityV1InnerServiceSMO;
+import com.java110.po.privilege.RoleCommunityPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
@@ -32,6 +35,8 @@ import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 @Java110CmdDoc(title = "修改小区",
@@ -48,12 +53,12 @@ import org.springframework.beans.factory.annotation.Autowired;
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区编码"),
         @Java110ParamDoc(name = "address", length = 30, remark = "小区地址"),
         @Java110ParamDoc(name = "cityCode", length = 12, remark = "地区编码"),
-        @Java110ParamDoc(name = "feePrice", type = "int",length = 11, remark = "小区收费价格"),
+        @Java110ParamDoc(name = "feePrice", type = "int", length = 11, remark = "小区收费价格"),
         @Java110ParamDoc(name = "mapX", length = 12, remark = "经度"),
         @Java110ParamDoc(name = "mapY", length = 12, remark = "纬度"),
         @Java110ParamDoc(name = "name", length = 64, remark = "名称"),
         @Java110ParamDoc(name = "nearbyLandmarks", length = 64, remark = "地标，如xx 公园旁"),
-        @Java110ParamDoc(name = "payFeeMonth", type = "int",length = 11, remark = "小区收费周期"),
+        @Java110ParamDoc(name = "payFeeMonth", type = "int", length = 11, remark = "小区收费周期"),
         @Java110ParamDoc(name = "tel", length = 11, remark = "小区客服电话"),
 })
 
@@ -65,8 +70,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\"communityId\":\"2022092293190329\",\"name\":\"api接口小区1\",\"address\":\"天津省天津市和平区api接口小区\",\"nearbyLandmarks\":\"23\",\"cityCode\":\"120101\",\"mapX\":\"101.33\",\"mapY\":\"101.33\",\"payFeeMonth\":12,\"feePrice\":0,\"tel\":\"18909711443\",\"attrs\":[{\"domain\":\"COMMON\",\"listShow\":\"Y\",\"page\":-1,\"records\":0,\"required\":\"Y\",\"row\":0,\"specCd\":\"9329000004\",\"specHoldplace\":\"必填，请填写社区编码\",\"specId\":\"9329000004\",\"specName\":\"社区编码\",\"specShow\":\"Y\",\"specType\":\"2233\",\"specValueType\":\"1001\",\"statusCd\":\"0\",\"tableName\":\"building_community_attr\",\"total\":0,\"value\":\"123123\",\"values\":[],\"attrId\":\"112022092280950341\"}]}",
-        resBody="{'code':0,'msg':'成功'}"
+        reqBody = "{\"communityId\":\"2022092293190329\",\"name\":\"api接口小区1\",\"address\":\"天津省天津市和平区api接口小区\",\"nearbyLandmarks\":\"23\",\"cityCode\":\"120101\",\"mapX\":\"101.33\",\"mapY\":\"101.33\",\"payFeeMonth\":12,\"feePrice\":0,\"tel\":\"18909711443\",\"attrs\":[{\"domain\":\"COMMON\",\"listShow\":\"Y\",\"page\":-1,\"records\":0,\"required\":\"Y\",\"row\":0,\"specCd\":\"9329000004\",\"specHoldplace\":\"必填，请填写社区编码\",\"specId\":\"9329000004\",\"specName\":\"社区编码\",\"specShow\":\"Y\",\"specType\":\"2233\",\"specValueType\":\"1001\",\"statusCd\":\"0\",\"tableName\":\"building_community_attr\",\"total\":0,\"value\":\"123123\",\"values\":[],\"attrId\":\"112022092280950341\"}]}",
+        resBody = "{'code':0,'msg':'成功'}"
 )
 /**
  * 类表述：更新
@@ -86,6 +91,9 @@ public class UpdateCommunityCmd extends Cmd {
 
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
 
 
     @Autowired
@@ -132,6 +140,27 @@ public class UpdateCommunityCmd extends Cmd {
             communityBMOImpl.updateAttr(attr, cmdDataFlowContext);
         }
 
+        //todo 如果没有修改名称直接返回
+        if (StringUtil.isEmpty(reqJson.getString("name"))) {
+            return;
+        }
+
+        //todo 修改角色小区
+
+        RoleCommunityDto roleCommunityDto = new RoleCommunityDto();
+        roleCommunityDto.setCommunityId(reqJson.getString("communityId"));
+        List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(roleCommunityDto);
+
+        if (roleCommunityDtos == null || roleCommunityDtos.size() < 1) {
+            return;
+        }
+        RoleCommunityPo roleCommunityPo = null;
+        for (RoleCommunityDto tmpRoleCommunityDto : roleCommunityDtos) {
+            roleCommunityPo = new RoleCommunityPo();
+            roleCommunityPo.setRcId(tmpRoleCommunityDto.getRcId());
+            roleCommunityPo.setCommunityName(reqJson.getString("name"));
+            roleCommunityV1InnerServiceSMOImpl.updateRoleCommunity(roleCommunityPo);
+        }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

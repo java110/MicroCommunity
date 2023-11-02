@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,5 +95,71 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
 
         List<Map> info = baseDataStatisticsServiceDaoImpl.getOweRoomInfo(BeanConvertUtil.beanCovertMap(roomDto));
         return BeanConvertUtil.covertBeanList(info, RoomDto.class);
+    }
+
+    @Override
+    public List<Map> getCommunityFeeDetailCount(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityFeeDetailCount(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityRepairCount(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityRepairCount(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityFeeDetailCountAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityFeeDetailCountAnalysis(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityRepairCountAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityRepairCountAnalysis(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityInspectionAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityInspectionAnalysis(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityMaintainanceAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityMaintainanceAnalysis(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityItemInAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityItemInAnalysis(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityItemOutAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityItemOutAnalysis(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityCarInAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityCarInAnalysis(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityPersonInAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityPersonInAnalysis(info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> getCommunityContractAnalysis(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getCommunityContractAnalysis(info);
+        return infos;
     }
 }

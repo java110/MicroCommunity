@@ -24,6 +24,9 @@
         left join u_org_staff_rel uosr on t.user_id = uosr.staff_id and uosr.status_cd = '0'
         left join u_org uo on uosr.org_id = uo.org_id  and uo.status_cd = '0'
         left join u_org puo on uo.parent_org_id = puo.org_id and puo.status_cd = '0'
+        <if test="storeId !=null and storeId != ''">
+            left join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
+        </if>
         where 1 =1
         <if test="parentOrgName !=null and parentOrgName != ''">
             and puo.org_name= #{parentOrgName}
@@ -40,6 +43,12 @@
         <if test="loginTime !=null and loginTime != ''">
             and t.login_time= #{loginTime}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.login_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.login_time &lt;= #{endTime}
+        </if>
         <if test="source !=null and source != ''">
             and t.source= #{source}
         </if>
@@ -51,6 +60,9 @@
         </if>
         <if test="token !=null and token != ''">
             and t.token= #{token}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and su.store_id= #{storeId}
         </if>
         order by t.login_time desc
         <if test="page != -1 and page != null ">
@@ -97,6 +109,9 @@
     <select id="queryUserLoginsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from u_user_login t
+        <if test="storeId !=null and storeId != ''">
+            left join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
+        </if>
         where 1 =1
         <if test="password !=null and password != ''">
             and t.password= #{password}
@@ -106,6 +121,12 @@
         </if>
         <if test="loginTime !=null and loginTime != ''">
             and t.login_time= #{loginTime}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.login_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.login_time &lt;= #{endTime}
         </if>
         <if test="source !=null and source != ''">
             and t.source= #{source}
@@ -118,6 +139,9 @@
         </if>
         <if test="token !=null and token != ''">
             and t.token= #{token}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and su.store_id= #{storeId}
         </if>
 
 

@@ -31,7 +31,11 @@ public class PayFeeQrcodeDto extends PageDto implements Serializable {
 
     private Date createTime;
 
+    private String state;
+
     private String statusCd = "0";
+
+    private String feeType;
 
 
     public String getCreateStaffName() {
@@ -137,5 +141,21 @@ public class PayFeeQrcodeDto extends PageDto implements Serializable {
 
     public void setQrCodeUrl(String qrCodeUrl) {
         this.qrCodeUrl = qrCodeUrl;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getFeeType() {
+        return feeType;
+    }
+
+    public void setFeeType(String feeType) {
+        this.feeType = feeType;
     }
 }

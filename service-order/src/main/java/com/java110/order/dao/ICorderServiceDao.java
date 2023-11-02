@@ -24,4 +24,5 @@ public interface ICorderServiceDao {
 
     int queryCordersCount(Map info);
 
+    Map queryUnitemLog(Map info);
 }

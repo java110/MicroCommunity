@@ -23,14 +23,23 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.org.OrgDto;
 import com.java110.dto.store.StoreAttrDto;
+import com.java110.dto.store.StoreUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IStoreAttrV1InnerServiceSMO;
+import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
+import com.java110.intf.user.IOrgV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
+import com.java110.po.org.OrgPo;
 import com.java110.po.store.StoreAttrPo;
 import com.java110.po.store.StorePo;
+import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,8 +76,8 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\"storeId\":\"102022083062960025\",\"name\":\"培训物业公司\",\"address\":\"培训物业公司\",\"tel\":\"18909715555\",\"corporation\":\"无\",\"foundingTime\":\"2022-08-01\",\"nearByLandmarks\":\"123\"}",
-        resBody="{'code':0,'msg':'成功'}"
+        reqBody = "{\"storeId\":\"102022083062960025\",\"name\":\"培训物业公司\",\"address\":\"培训物业公司\",\"tel\":\"18909715555\",\"corporation\":\"无\",\"foundingTime\":\"2022-08-01\",\"nearByLandmarks\":\"123\"}",
+        resBody = "{'code':0,'msg':'成功'}"
 )
 /**
  * 类表述：更新
@@ -92,6 +101,15 @@ public class UpdatePropertyCmd extends Cmd {
 
     @Autowired
     private IStoreAttrV1InnerServiceSMO storeAttrV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreUserV1InnerServiceSMO storeUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOrgV1InnerServiceSMO orgV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -158,6 +176,41 @@ public class UpdatePropertyCmd extends Cmd {
                 throw new CmdException("保存数据失败");
             }
         }
+
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+        if (StringUtil.isEmpty(storePo.getName())) {
+            return;
+        }
+
+        // todo 修改管理员的名称
+        StoreUserDto storeUserDto = new StoreUserDto();
+        storeUserDto.setStoreId(storePo.getStoreId());
+        storeUserDto.setRelCd(StoreUserDto.REL_CD_MANAGER);
+        List<StoreUserDto> storeUserDtos = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDto);
+        if (storeUserDtos == null || storeUserDtos.size() != 1) {
+            return;
+        }
+
+
+        UserPo userPo = new UserPo();
+        userPo.setUserId(storeUserDtos.get(0).getUserId());
+        userPo.setName(storePo.getName());
+        userV1InnerServiceSMOImpl.updateUser(userPo);
+
+
+        //todo 修改组织名称
+        OrgDto orgDto = new OrgDto();
+        orgDto.setStoreId(storePo.getStoreId());
+        orgDto.setOrgLevel(OrgDto.ORG_LEVEL_STORE);
+        List<OrgDto> orgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
+        if (orgDtos == null || orgDtos.size() < 1) {
+            return;
+        }
+
+        OrgPo orgPo = new OrgPo();
+        orgPo.setOrgId(orgDtos.get(0).getOrgId());
+        orgPo.setOrgName(storePo.getName());
+        orgV1InnerServiceSMOImpl.updateOrg(orgPo);
     }
 }

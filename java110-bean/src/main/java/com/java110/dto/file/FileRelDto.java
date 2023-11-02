@@ -24,6 +24,8 @@ public class FileRelDto extends PageDto implements Serializable {
     public static final String BEFORE_REPAIR_PHOTOS = "23000";  //维修前图片
     public static final String AFTER_REPAIR_PHOTOS = "24000";  //维修后图片
 
+    public static final String REL_TYPE_CE_INVOICE = "29000";//发票
+
     private String relTypeCd;
     private String[] relTypeCds;
     private String saveWay;

@@ -19,6 +19,8 @@ public class DatabusQueueDataDto implements Serializable {
         this.businesses = businesses;
     }
 
+    private String dataId;
+
     private String beanName;
 
     private Business business;
@@ -46,5 +48,13 @@ public class DatabusQueueDataDto implements Serializable {
 
     public void setBusinesses(List<Business> businesses) {
         this.businesses = businesses;
+    }
+
+    public String getDataId() {
+        return dataId;
+    }
+
+    public void setDataId(String dataId) {
+        this.dataId = dataId;
     }
 }

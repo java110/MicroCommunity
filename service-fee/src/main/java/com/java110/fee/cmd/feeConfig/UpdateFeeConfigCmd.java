@@ -7,9 +7,13 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.payFeeRule.PayFeeRuleDto;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeRuleV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeConfigPo;
+import com.java110.po.fee.PayFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -26,6 +30,12 @@ public class UpdateFeeConfigCmd extends Cmd {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeRuleV1InnerServiceSMO payFeeRuleV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeV1InnerServiceSMO payFeeV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -59,5 +69,29 @@ public class UpdateFeeConfigCmd extends Cmd {
             throw new CmdException("修改费用项失败");
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+        //todo 修改费用标识
+        if (!reqJson.containsKey("feeFlag")) {
+            return;
+        }
+        String feeFlag = reqJson.getString("feeFlag");
+        //todo 说明没有修改费用项标识
+        if (feeFlag.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            return;
+        }
+
+        // todo 检查是否为账单模式，也就是在 poy_fee_rule 中是否有数据，这里有数据不让修改
+        PayFeeRuleDto payFeeRuleDto = new PayFeeRuleDto();
+        payFeeRuleDto.setConfigId(feeConfigDtos.get(0).getConfigId());
+        payFeeRuleDto.setCommunityId(reqJson.getString("communityId"));
+        int count = payFeeRuleV1InnerServiceSMOImpl.queryPayFeeRulesCount(payFeeRuleDto);
+        if (count > 0) {
+            return;
+        }
+
+        PayFeePo payFeePo = new PayFeePo();
+        payFeePo.setConfigId(feeConfigDtos.get(0).getConfigId());
+        payFeePo.setFeeFlag(reqJson.getString("feeFlag"));
+
+        payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
     }
 }

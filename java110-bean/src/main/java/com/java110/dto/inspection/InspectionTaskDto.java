@@ -16,6 +16,8 @@ import java.util.Date;
 public class InspectionTaskDto extends PageDto implements Serializable {
 
     public static final String STATE_NO_START = "20200405";
+    public static final String STATE_DOING = "20200406"; // 20200406	巡检中
+    public static final String STATE_FINISH = "20200407";//20200407	巡检完成
 
     private String planUserId;
     private String actInsTime;

@@ -1527,9 +1527,9 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        and t.amount_owed > 0 and pf.end_time &lt; now()
+        and t.amount_owed != 0 and pf.end_time &lt; now()
         group by t.payer_obj_name ,t.fee_name ,pf.end_time ,t.create_time
-        HAVING oweAmount > 0
+        HAVING oweAmount != 0
         ) t
     </select>
 
@@ -1585,9 +1585,9 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        and t.amount_owed > 0 and pf.end_time &lt; now()
+        and t.amount_owed != 0 and pf.end_time &lt; now()
         group by t.payer_obj_name ,t.fee_name ,pf.end_time ,t.update_time,pfa.`value` ,br.built_up_area
-        HAVING oweAmount > 0
+        HAVING oweAmount != 0
         order by t.payer_obj_name
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -1742,8 +1742,7 @@
         oId,
         d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,t.state,d3.name stateName,t.fee_id feeId,pft.`value` repairId,
         t.detail_id,t.detail_id detailId,pf.payer_obj_id,pfb.value ownerId,concat(pa.num,'停车场',ps.num,'车位') psName,
-        fad.amount withholdAmount,t.cashier_id cashierId,t.cashier_name cashierName,t.payable_amount
-        payableAmount,pfc.fee_flag feeFlag
+        fad.amount withholdAmount,t.cashier_id cashierId,t.cashier_name cashierName,t.payable_amount payableAmount,pfc.fee_flag feeFlag,t.remark
         from pay_fee_detail t
         left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'

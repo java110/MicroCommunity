@@ -46,6 +46,7 @@ public class FeeDto extends PageDto implements Serializable {
     private String[] payerObjIds;
     private String[] feeTypeCds;
     private String configId;
+    private String[] configIds;
 
     //映射关系开关值
     private String val;
@@ -168,6 +169,10 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String logStartTime;
     private String logEndTime;
+
+    private String ruleId;
+
+    private String monthCycle;
 
     public String getAmount() {
         return amount;
@@ -826,5 +831,29 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setLogEndTime(String logEndTime) {
         this.logEndTime = logEndTime;
+    }
+
+    public String[] getConfigIds() {
+        return configIds;
+    }
+
+    public void setConfigIds(String[] configIds) {
+        this.configIds = configIds;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
+
+    public String getMonthCycle() {
+        return monthCycle;
+    }
+
+    public void setMonthCycle(String monthCycle) {
+        this.monthCycle = monthCycle;
     }
 }

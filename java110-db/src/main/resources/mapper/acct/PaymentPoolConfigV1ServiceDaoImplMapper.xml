@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentPoolConfigV1ServiceDaoImpl">
+
+
+    <!-- 保存支付费用项信息 add by wuxw 2018-07-03 -->
+    <insert id="savePaymentPoolConfigInfo" parameterType="Map">
+        insert into payment_pool_config(
+        ppc_id,config_id,fee_name,community_id,pp_id
+        ) values (
+        #{ppcId},#{configId},#{feeName},#{communityId},#{ppId}
+        )
+    </insert>
+
+
+    <!-- 查询支付费用项信息 add by wuxw 2018-07-03 -->
+    <select id="getPaymentPoolConfigInfo" parameterType="Map" resultType="Map">
+        select t.ppc_id,t.ppc_id ppcId,t.config_id,t.config_id configId,t.fee_name,t.fee_name
+        feeName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.pp_id,t.pp_id ppId
+        from payment_pool_config t
+        where 1 =1
+        <if test="ppcId !=null and ppcId != ''">
+            and t.ppc_id= #{ppcId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ppId !=null and ppId != ''">
+            and t.pp_id= #{ppId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改支付费用项信息 add by wuxw 2018-07-03 -->
+    <update id="updatePaymentPoolConfigInfo" parameterType="Map">
+        update payment_pool_config t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="ppId !=null and ppId != ''">
+            , t.pp_id= #{ppId}
+        </if>
+        where 1=1
+        <if test="ppcId !=null and ppcId != ''">
+            and t.ppc_id= #{ppcId}
+        </if>
+
+    </update>
+
+    <!-- 查询支付费用项数量 add by wuxw 2018-07-03 -->
+    <select id="queryPaymentPoolConfigsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from payment_pool_config t
+        where 1 =1
+        <if test="ppcId !=null and ppcId != ''">
+            and t.ppc_id= #{ppcId}
+        </if>
+        <if test="configId !=null and configId != ''">
+            and t.config_id= #{configId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="ppId !=null and ppId != ''">
+            and t.pp_id= #{ppId}
+        </if>
+
+
+    </select>
+
+</mapper>

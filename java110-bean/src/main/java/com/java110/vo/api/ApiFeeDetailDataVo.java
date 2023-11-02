@@ -53,6 +53,8 @@ public class ApiFeeDetailDataVo extends Vo {
 
     private String feeFlag;
 
+    private String receiptCode;
+
 
 
     public String getPrimeRate() {
@@ -277,5 +279,13 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setFeeFlag(String feeFlag) {
         this.feeFlag = feeFlag;
+    }
+
+    public String getReceiptCode() {
+        return receiptCode;
+    }
+
+    public void setReceiptCode(String receiptCode) {
+        this.receiptCode = receiptCode;
     }
 }

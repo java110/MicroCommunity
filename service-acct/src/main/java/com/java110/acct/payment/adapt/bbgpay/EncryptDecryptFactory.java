@@ -4,18 +4,20 @@ import com.java110.acct.payment.adapt.bbgpay.lib.GmUtil;
 import com.java110.acct.payment.adapt.bbgpay.lib.HttpRequestUtil;
 import com.java110.acct.payment.adapt.bbgpay.lib.JsonUtil;
 import com.java110.core.factory.CommunitySettingFactory;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EncryptDecryptFactory {
 
 
-    public static String execute(String communityId,String url, Map<String, Object> params){
+    public static String execute(List<PaymentPoolValueDto> paymentPoolValueDtos, String url, Map<String, Object> params){
         String decrypt = "";
         try {
-            String mchtNo_SM4 = CommunitySettingFactory.getValue(communityId, "mchtNo_SM4");
-            String publicKey_SM4 = CommunitySettingFactory.getValue(communityId, "publicKey_SM4");
+            String mchtNo_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "mchtNo_SM4");
+            String publicKey_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "publicKey_SM4");
             // 格式为json
             String json = JsonUtil.mapToJson(params);
             System.out.println("加密前：" + json);

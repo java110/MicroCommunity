@@ -116,7 +116,7 @@ public class TeldSendParkingCouponCarCmd extends Cmd {
         Assert.listOnlyOne(storeUserDtos, "商户不存在");
 
         StoreShopDto storeShopDto = new StoreShopDto();
-        storeUserDto.setStoreId(storeUserDtos.get(0).getStoreId());
+        storeShopDto.setStoreId(storeUserDtos.get(0).getStoreId());
         List<ShopDto> storeShops = storeShopV1InnerServiceSMOImpl.queryStoreShops(storeShopDto);
         if (storeShops == null || storeShops.size() < 1) {
             Assert.listOnlyOne(storeUserDtos, "商户店铺不存在");

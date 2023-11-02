@@ -676,4 +676,23 @@ public class StringUtil {
         return sb.toString();
     }
 
+    /**
+     * 对人名进行脱敏处理，只显示姓和名字的最后一个字
+     *
+     * @param name 原始人名
+     * @return 脱敏后人名的字符串
+     */
+    public static String maskName(String name) {
+        if (name == null || name.isEmpty()) {
+            return name;
+        }
+        String[] parts = name.split("");
+
+        if(parts.length <= 2){
+            return parts[0]+"*";
+        }
+
+        return parts[0]+"*" + parts[parts.length-1];
+    }
+
 }

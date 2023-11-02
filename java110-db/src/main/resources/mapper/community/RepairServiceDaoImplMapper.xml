@@ -212,6 +212,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{startTime}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -221,6 +227,10 @@
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
         </if>
+        <if test="repairObjName !=null and repairObjName != ''">
+            and t.repair_obj_name like concat('%',#{repairObjName},'%')
+        </if>
+
         <if test="repairChannel !=null and repairChannel != ''">
             and t.repair_channel= #{repairChannel}
         </if>
@@ -365,6 +375,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{startTime}
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -376,6 +392,9 @@
         </if>
         <if test="repairObjId !=null and repairObjId != ''">
             and t.repair_obj_id= #{repairObjId}
+        </if>
+        <if test="repairObjName !=null and repairObjName != ''">
+            and t.repair_obj_name like concat('%',#{repairObjName},'%')
         </if>
         <if test="maintenanceType !=null and maintenanceType != ''">
             and t.maintenance_type= #{maintenanceType}

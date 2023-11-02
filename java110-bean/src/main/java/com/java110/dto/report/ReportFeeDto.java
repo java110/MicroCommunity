@@ -103,6 +103,14 @@ public class ReportFeeDto extends PageDto implements Serializable {
     private Date newStartTime;
     private Date newEndTime;
 
+    private String rateCycle;
+
+    private String rate;
+
+    private String rateStartTime;
+
+    private String prepaymentPeriod;
+
     public String getAmount() {
         return amount;
     }
@@ -596,5 +604,37 @@ public class ReportFeeDto extends PageDto implements Serializable {
 
     public void setNewEndTime(Date newEndTime) {
         this.newEndTime = newEndTime;
+    }
+
+    public String getRateCycle() {
+        return rateCycle;
+    }
+
+    public void setRateCycle(String rateCycle) {
+        this.rateCycle = rateCycle;
+    }
+
+    public String getRate() {
+        return rate;
+    }
+
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
+
+    public String getRateStartTime() {
+        return rateStartTime;
+    }
+
+    public void setRateStartTime(String rateStartTime) {
+        this.rateStartTime = rateStartTime;
+    }
+
+    public String getPrepaymentPeriod() {
+        return prepaymentPeriod;
+    }
+
+    public void setPrepaymentPeriod(String prepaymentPeriod) {
+        this.prepaymentPeriod = prepaymentPeriod;
     }
 }

@@ -90,7 +90,15 @@ public class GetQrcodeOwnerCmd extends Cmd {
 
         OwnerDto ownerDto = computeOwner(reqJson);
 
-        context.setResponseEntity(ResultVo.createResponseEntity(ownerDto.getOwnerId()));
+        String ownerName = ownerDto.getName();
+
+
+        JSONObject data = new JSONObject();
+        data.put("ownerId",ownerDto.getOwnerId());
+        data.put("roomId",ownerDto.getRoomId());
+        data.put("ownerName",StringUtil.maskName(ownerName));
+
+        context.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 
     /**
@@ -136,7 +144,7 @@ public class GetQrcodeOwnerCmd extends Cmd {
         if (ownerDtos == null || ownerDtos.size() < 1) {
             throw new CmdException("业主不存在");
         }
-
+        ownerDtos.get(0).setRoomId(roomDtos.get(0).getRoomId());
         return ownerDtos.get(0);
     }
 }

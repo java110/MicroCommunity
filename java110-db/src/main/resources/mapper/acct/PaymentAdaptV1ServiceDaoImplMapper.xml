@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentAdaptV1ServiceDaoImpl">
+
+
+    <!-- 保存支付厂家信息 add by wuxw 2018-07-03 -->
+    <insert id="savePaymentAdaptInfo" parameterType="Map">
+        insert into payment_adapt(
+        adapt_id,bean_jsapi,bean_qrcode,bean_native,name,payment_type,bean_refund
+        ) values (
+        #{adaptId},#{beanJsapi},#{beanQrcode},#{beanNative},#{name},#{paymentType},#{beanRefund}
+        )
+    </insert>
+
+
+    <!-- 查询支付厂家信息 add by wuxw 2018-07-03 -->
+    <select id="getPaymentAdaptInfo" parameterType="Map" resultType="Map">
+        select t.adapt_id,t.adapt_id adaptId,t.bean_jsapi,t.bean_jsapi beanJsapi,t.bean_qrcode,t.bean_qrcode
+        beanQrcode,t.bean_native,t.bean_native beanNative,t.name,t.status_cd,t.status_cd
+        statusCd,t.payment_type,t.payment_type paymentType,t.bean_refund beanRefund
+        from payment_adapt t
+        where 1 =1
+        <if test="adaptId !=null and adaptId != ''">
+            and t.adapt_id= #{adaptId}
+        </if>
+        <if test="beanJsapi !=null and beanJsapi != ''">
+            and t.bean_jsapi= #{beanJsapi}
+        </if>
+        <if test="beanQrcode !=null and beanQrcode != ''">
+            and t.bean_qrcode= #{beanQrcode}
+        </if>
+        <if test="beanNative !=null and beanNative != ''">
+            and t.bean_native= #{beanNative}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            and t.payment_type= #{paymentType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改支付厂家信息 add by wuxw 2018-07-03 -->
+    <update id="updatePaymentAdaptInfo" parameterType="Map">
+        update payment_adapt t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="beanJsapi !=null and beanJsapi != ''">
+            , t.bean_jsapi= #{beanJsapi}
+        </if>
+        <if test="beanQrcode !=null and beanQrcode != ''">
+            , t.bean_qrcode= #{beanQrcode}
+        </if>
+        <if test="beanNative !=null and beanNative != ''">
+            , t.bean_native= #{beanNative}
+        </if>
+        <if test="beanNative !=null and beanNative != ''">
+            , t.bean_refund= #{beanRefund}
+        </if>
+        <if test="name !=null and name != ''">
+            , t.name= #{name}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            , t.payment_type= #{paymentType}
+        </if>
+        where 1=1
+        <if test="adaptId !=null and adaptId != ''">
+            and t.adapt_id= #{adaptId}
+        </if>
+
+    </update>
+
+    <!-- 查询支付厂家数量 add by wuxw 2018-07-03 -->
+    <select id="queryPaymentAdaptsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from payment_adapt t
+        where 1 =1
+        <if test="adaptId !=null and adaptId != ''">
+            and t.adapt_id= #{adaptId}
+        </if>
+        <if test="beanJsapi !=null and beanJsapi != ''">
+            and t.bean_jsapi= #{beanJsapi}
+        </if>
+        <if test="beanQrcode !=null and beanQrcode != ''">
+            and t.bean_qrcode= #{beanQrcode}
+        </if>
+        <if test="beanNative !=null and beanNative != ''">
+            and t.bean_native= #{beanNative}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            and t.payment_type= #{paymentType}
+        </if>
+
+
+    </select>
+
+</mapper>

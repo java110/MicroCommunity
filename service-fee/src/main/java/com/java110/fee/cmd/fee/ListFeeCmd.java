@@ -2,12 +2,14 @@ package com.java110.fee.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.core.smo.IOwnerGetDataCheck;
 import com.java110.dto.floor.FloorDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.unit.UnitDto;
@@ -82,6 +84,9 @@ public class ListFeeCmd extends Cmd {
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerGetDataCheck ownerGetDataCheckImpl;
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -98,6 +103,9 @@ public class ListFeeCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
+
+        // todo 业主查询合法性校验
+        ownerGetDataCheckImpl.checkOwnerFee(CmdContextUtils.getAppId(cmdDataFlowContext), CmdContextUtils.getLoginUserId(cmdDataFlowContext), reqJson);
     }
 
     @Override
@@ -133,7 +141,7 @@ public class ListFeeCmd extends Cmd {
             for (ApiFeeDataVo apiFeeDataVo : apiFeeDataVos) {
                 //获取付费对象类型
                 String payerObjType = apiFeeDataVo.getPayerObjType();
-                if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) {
+                if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(payerObjType)) {
                     apiFeeDataVo.setCarTypeCd("1001");
                 }
                 fees.add(apiFeeDataVo);
@@ -211,55 +219,6 @@ public class ListFeeCmd extends Cmd {
     }
 
     private void freshFeeAttrs(List<ApiFeeDataVo> fees, List<FeeDto> feeDtos) {
-        String link = "";
-        //todo 影响查询性能 注释 by wuxw
-//        for (FeeDto feeDto : feeDtos) {
-//            if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋
-//                OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-//                ownerRoomRelDto.setRoomId(feeDto.getPayerObjId());
-//                List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-//                if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
-//                    continue;
-//                }
-//                OwnerDto ownerDto = new OwnerDto();
-//                ownerDto.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
-//                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-//                Assert.listOnlyOne(ownerDtos, "查询业主错误！");
-//                link = ownerDtos.get(0).getLink();
-//            } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
-//                OwnerCarDto ownerCarDto = new OwnerCarDto();
-//                ownerCarDto.setMemberId(feeDto.getPayerObjId());
-//                List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-//                Assert.listOnlyOne(ownerCarDtos, "查询业主车辆表错误！");
-//                OwnerDto ownerDto = new OwnerDto();
-//                ownerDto.setMemberId(ownerCarDtos.get(0).getOwnerId());
-//                List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-//                Assert.listOnlyOne(ownerDtos, "查询业主错误！");
-//                link = ownerDtos.get(0).getLink();
-//            }
-//            FeeAttrDto feeAttrDto = new FeeAttrDto();
-//            feeAttrDto.setFeeId(feeDto.getFeeId());
-//            List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
-//            if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
-//                continue;
-//            }
-//            for (FeeAttrDto feeAttr : feeAttrDtos) {
-//                if (!FeeAttrDto.SPEC_CD_OWNER_LINK.equals(feeAttr.getSpecCd())) { //联系方式
-//                    continue;
-//                }
-//                if (feeAttr.getValue().equals(link)) {
-//                    continue;
-//                }
-//                FeeAttrPo feeAttrPo = new FeeAttrPo();
-//                feeAttrPo.setAttrId(feeAttr.getAttrId());
-//                feeAttrPo.setValue(link);
-//                int flag = feeAttrInnerServiceSMOImpl.updateFeeAttr(feeAttrPo);
-//                if (flag < 1) {
-//                    throw new CmdException("更新业主联系方式失败");
-//                }
-//
-//            }
-//        }
         for (ApiFeeDataVo apiFeeDataVo : fees) {
             for (FeeDto feeDto : feeDtos) {
                 if (apiFeeDataVo.getFeeId().equals(feeDto.getFeeId())) {
@@ -270,7 +229,7 @@ public class ListFeeCmd extends Cmd {
     }
 
     private void computeFeePrice(List<FeeDto> feeDtos) {
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (feeDtos == null || feeDtos.isEmpty()) {
             return;
         }
         String val = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), TOTAL_FEE_PRICE);
@@ -294,14 +253,14 @@ public class ListFeeCmd extends Cmd {
                 Date targetEndDate = (Date) targetEndDateAndOweMonth.get("targetEndDate");
                 double oweMonth = (double) targetEndDateAndOweMonth.get("oweMonth");
                 feeDto.setCycle(feeDto.getPaymentCycle());
-                feeDto.setDeadlineTime(targetEndDate);
-                if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) { //房屋相关
-                    computeFeePriceByRoom(feeDto, oweMonth);
-                } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
-                    computeFeePriceByCar(feeDto, oweMonth);
-                } else if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(feeDto.getPayerObjType())) {//车位相关
-                    computeFeePriceByContract(feeDto, oweMonth);
+                //todo 这里考虑 账单模式的场景
+                if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+                    feeDto.setCycle(oweMonth + "");
                 }
+                feeDto.setDeadlineTime(targetEndDate);
+                //todo 算费
+                doComputeFeePrice(feeDto, oweMonth);
+
                 feeDto.setVal(val);
                 //关闭 线下收银功能
                 if (StringUtil.isEmpty(received_amount_switch)) {
@@ -319,47 +278,12 @@ public class ListFeeCmd extends Cmd {
         }
     }
 
-    private void computeFeePriceByCar(FeeDto feeDto, double oweMonth) {
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCarTypeCd("1001"); //业主车辆
-        ownerCarDto.setCommunityId(feeDto.getCommunityId());
-        ownerCarDto.setCarId(feeDto.getPayerObjId());
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) { //数据有问题
-            return;
-        }
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
-        parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-        if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
-            return;
-        }
-        String computingFormula = feeDto.getComputingFormula();
-        DecimalFormat df = new DecimalFormat("0.00");
-        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
-        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
-        feeDto.setFeeTotalPrice(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()));
-        BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
-        curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
-        feeDto.setAmountOwed(df.format(curFeePrice));
-        //动态费用
-        if ("4004".equals(computingFormula)
-                && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
-                && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(df.format(curFeePrice));
-            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
-        }
-        //考虑租金递增
-        computeFeeSMOImpl.dealRentRate(feeDto);
-    }
-
     /**
      * 根据房屋来算单价
      *
      * @param feeDto
      */
-    private void computeFeePriceByRoom(FeeDto feeDto, double oweMonth) {
+    private void doComputeFeePrice(FeeDto feeDto, double oweMonth) {
         String computingFormula = feeDto.getComputingFormula();
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
@@ -383,29 +307,4 @@ public class ListFeeCmd extends Cmd {
     }
 
 
-    /**
-     * 根据合同来算单价
-     *
-     * @param feeDto
-     */
-    private void computeFeePriceByContract(FeeDto feeDto, double oweMonth) {
-        String computingFormula = feeDto.getComputingFormula();
-        Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
-        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
-        feeDto.setFeeTotalPrice(MoneyUtil.computePriceScale(Double.parseDouble(feePriceAll.get("feeTotalPrice").toString()),
-                feeDto.getScale(),
-                Integer.parseInt(feeDto.getDecimalPlace())));
-        BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
-        curFeePrice = curFeePrice.multiply(new BigDecimal(oweMonth));
-        feeDto.setAmountOwed(MoneyUtil.computePriceScale(curFeePrice.doubleValue(), feeDto.getScale(), Integer.parseInt(feeDto.getDecimalPlace())) + "");
-        //动态费用
-        if ("4004".equals(computingFormula)
-                && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
-                && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            feeDto.setAmountOwed(MoneyUtil.computePriceScale(curFeePrice.doubleValue(), feeDto.getScale(), Integer.parseInt(feeDto.getDecimalPlace())) + "");
-            feeDto.setDeadlineTime(DateUtil.getCurrentDate());
-        }
-        //考虑租金递增
-        computeFeeSMOImpl.dealRentRate(feeDto);
-    }
 }

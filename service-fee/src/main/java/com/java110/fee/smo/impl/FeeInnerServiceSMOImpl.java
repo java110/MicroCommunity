@@ -92,6 +92,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
         List<FeeAttrDto> tmpFeeAttrDtos = null;
         String payerObjName = "";
         for (FeeDto tmpFeeDto : fees) {
+            payerObjName = "";
             tmpFeeAttrDtos = new ArrayList<>();
             for (FeeAttrDto feeAttrDto : feeAttrDtos) {
                 if (!tmpFeeDto.getFeeId().equals(feeAttrDto.getFeeId())) {

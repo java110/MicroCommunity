@@ -428,7 +428,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         }
         payFeeDetail.setPayOrderId(paramInJson.getString("oId"));
         //todo 缓存收据编号
-        CommonCache.setValue(payFeeDetail.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
+        CommonCache.setValue(payFeeDetail.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
         // todo 刷入收银人员信息
         freshCashierInfo(payFeeDetail, paramInJson);
 
@@ -726,7 +726,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         feeAttrPo.setSpecCd(specCd);
         feeAttrPo.setValue(value);
         feeAttrPo.setFeeId(paramInJson.getString("feeId"));
-        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId,true));
+        feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
         return feeAttrPo;
 
     }
@@ -789,6 +789,12 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("state", "2008001");
         businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", dataFlowContext.getReqHeaders().get(CommonConstant.HTTP_USER_ID));
+
+        if(FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            businessUnit.put("maxTime",  feeConfigDtos.get(0).getEndTime());
+        }else {
+            businessUnit.put("maxTime",  paramInJson.getString("endTime"));
+        }
 
         paramInJson.put("feeId", businessUnit.getString("feeId"));
         return businessUnit;

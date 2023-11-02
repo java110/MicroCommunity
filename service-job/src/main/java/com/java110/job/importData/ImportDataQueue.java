@@ -22,7 +22,7 @@ public class ImportDataQueue {
     public static void addMsg(ImportDataDto importDataDto) {
         try {
 
-            msgs.offer(importDataDto, 3, TimeUnit.MILLISECONDS);
+            msgs.offer(importDataDto, 3, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error("写入队列失败", e);
             e.printStackTrace();

@@ -137,26 +137,28 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
 
         Map reportFeeDto = new HashMap();
         reportFeeDto.put("communityId", communityId);
-        List<Map> feeDtos = reportOweFeeServiceDaoImpl.queryInvalidOweFee(reportFeeDto);
 
-        List<String> feeIds = new ArrayList<>();
-        for (Map feeDto : feeDtos) {
-            if (!feeDto.containsKey("feeId") || StringUtil.isNullOrNone(feeDto.get("feeId"))) {
-                continue;
-            }
-
-            feeIds.add(feeDto.get("feeId").toString());
-
-            if (feeIds.size() >= 50) {
-                reportFeeDto.put("feeIds", feeIds);
-                reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
-                feeIds = new ArrayList<>();
-            }
-        }
-        reportFeeDto.put("feeIds", feeIds);
-        if (feeIds.size() > 0) {
-            reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
-        }
+        reportOweFeeServiceDaoImpl.deleteReportOweFeeInfo(reportFeeDto);
+//        List<Map> feeDtos = reportOweFeeServiceDaoImpl.queryInvalidOweFee(reportFeeDto);
+//
+//        List<String> feeIds = new ArrayList<>();
+//        for (Map feeDto : feeDtos) {
+//            if (!feeDto.containsKey("feeId") || StringUtil.isNullOrNone(feeDto.get("feeId"))) {
+//                continue;
+//            }
+//
+//            feeIds.add(feeDto.get("feeId").toString());
+//
+//            if (feeIds.size() >= 50) {
+//                reportFeeDto.put("feeIds", feeIds);
+//                reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+//                feeIds = new ArrayList<>();
+//            }
+//        }
+//        reportFeeDto.put("feeIds", feeIds);
+//        if (feeIds.size() > 0) {
+//            reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
+//        }
     }
 
 
@@ -210,9 +212,6 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         //刷入欠费金额
         computeFeeSMOImpl.computeEveryOweFee(feeDto);
 
-        //考虑租金递增
-        computeFeeSMOImpl.dealRentRate(feeDto);
-
         //保存数据
         ReportOweFeePo reportOweFeePo = new ReportOweFeePo();
         reportOweFeePo.setAmountOwed(feeDto.getFeeTotalPrice() + "");
@@ -235,6 +234,9 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         reportOweFeeDto.setPayerObjId(feeDto.getPayerObjId());
         List<Map> reportOweFeeDtos = reportOweFeeServiceDaoImpl.queryReportAllOweFees(BeanConvertUtil.beanCovertMap(reportOweFeeDto));
         if (reportOweFeeDtos == null || reportOweFeeDtos.size() < 1) {
+            if (feeDto.getFeeTotalPrice() == 0) { //todo 如果欠费金额为0 不写入，减轻 欠费表的压力
+                return;
+            }
             reportOweFeePo.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId));
             reportOweFeeServiceDaoImpl.saveReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
         } else {

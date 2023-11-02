@@ -1,14 +1,18 @@
 package com.java110.job.export.adapt;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.data.ExportDataDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.fee.FeePrintSpecDto;
+import com.java110.dto.reportFee.ReportOweFeeDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IFeePrintSpecInnerServiceSMO;
+import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.*;
 import com.java110.utils.util.DateUtil;
@@ -20,6 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.ImagingOpException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,6 +51,9 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
     @Autowired
     private IFeePrintSpecInnerServiceSMO feePrintSpecInnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
+
 
     private static final int MAX_ROW = 100;
 
@@ -54,6 +62,13 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
 
         JSONObject reqJson = exportDataDto.getReqJson();
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
+        Assert.hasKeyAndValue(reqJson, "configIds", "未包含费用");
+        Assert.hasKeyAndValue(reqJson, "roomIds", "未包含房屋");
+
+        String configIds = reqJson.getString("configIds");
+
+        String roomIds = reqJson.getString("roomIds");
+
 
         SXSSFWorkbook workbook = null;  //工作簿
         workbook = new SXSSFWorkbook();
@@ -61,15 +76,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
 
         Sheet sheet = workbook.createSheet("催缴单");
         Drawing patriarch = sheet.createDrawingPatriarch();
-        RoomDto roomDto = new RoomDto();
-        roomDto.setCommunityId(reqJson.getString("communityId"));
-        roomDto.setRoomId(reqJson.getString("roomId"));
-        roomDto.setFloorId(reqJson.getString("floorId"));
-        int count = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
 
-        if (count < 1) {
-            return workbook;
-        }
         FeePrintSpecDto feePrintSpecDto = new FeePrintSpecDto();
         feePrintSpecDto.setCommunityId(reqJson.getString("communityId"));
         feePrintSpecDto.setSpecCd("1010");
@@ -77,38 +84,43 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         feePrintSpecDto.setRow(1);
         List<FeePrintSpecDto> feePrintSpecDtos = feePrintSpecInnerServiceSMOImpl.queryFeePrintSpecs(feePrintSpecDto);
 
-        if (feePrintSpecDtos == null || feePrintSpecDtos.size() < 1) {
+        if (feePrintSpecDtos == null || feePrintSpecDtos.isEmpty()) {
             feePrintSpecDto = null;
         } else {
             feePrintSpecDto = feePrintSpecDtos.get(0);
         }
-        int maxPage = (int) Math.ceil((double) count / (double) MAX_ROW);
-        List<RoomDto> roomDtos = null;
         int line = 0;
         double totalPageHeight = 0;
-        for (int page = 1; page <= maxPage; page++) {
-            roomDto.setPage(page);
-            roomDto.setRow(MAX_ROW);
-            roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            for (RoomDto roomDto1 : roomDtos) {
-                getTmpRoomDtos(roomDto1);
-            }
-            for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
-                //todo 有可能房屋下没有欠费
-                if (roomDtos.get(roomIndex).getFees() == null) {
-                    continue;
-                }
-                Map<String, Object> info = generatorRoomOweFee(sheet, workbook, roomDtos.get(roomIndex), line, totalPageHeight, patriarch, feePrintSpecDto);
-                line = Integer.parseInt(info.get("line").toString()) + 1;
-                totalPageHeight = Double.parseDouble(info.get("totalPageHeight").toString());
-            }
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomIds(roomIds.split(","));
+        roomDto.setCommunityId(reqJson.getString("communityId"));
+        List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
+
+        if (roomDtos == null || roomDtos.isEmpty()) {
+            throw new IllegalArgumentException("未包含房屋");
         }
+
+        for (RoomDto roomDto1 : roomDtos) {
+            getTmpRoomDtos(roomDto1, configIds, reqJson);
+        }
+        for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
+            //todo 有可能房屋下没有欠费
+            if (roomDtos.get(roomIndex).getFees() == null) {
+                continue;
+            }
+            Map<String, Object> info = generatorRoomOweFee(sheet, workbook, roomDtos.get(roomIndex), line, totalPageHeight, patriarch, feePrintSpecDto);
+            line = Integer.parseInt(info.get("line").toString()) + 1;
+            totalPageHeight = Double.parseDouble(info.get("totalPageHeight").toString());
+        }
+
 
         return workbook;
     }
 
     private Map<String, Object> generatorRoomOweFee(Sheet sheet, SXSSFWorkbook workbook, RoomDto roomDto, int line,
-                                                    double totalPageHeight, Drawing patriarch, FeePrintSpecDto feePrintSpecDto) {
+                                                    double totalPageHeight, Drawing patriarch, FeePrintSpecDto feePrintSpecDto
+    ) {
         List<FeeDto> fees = roomDto.getFees();
         String[] feePrintRemarks = null;
         if (feePrintSpecDto != null) {
@@ -350,13 +362,14 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         return info;
     }
 
-    private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto) {
+    private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto, String configIds, JSONObject reqJson) {
         FeeDto tmpFeeDto = null;
         tmpFeeDto = new FeeDto();
         tmpFeeDto.setArrearsEndTime(DateUtil.getCurrentDate());
         tmpFeeDto.setState(FeeDto.STATE_DOING);
         tmpFeeDto.setPayerObjId(tmpRoomDto.getRoomId());
         tmpFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
+        tmpFeeDto.setConfigIds(configIds.split(","));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.querySimpleFees(tmpFeeDto);
 
         if (feeDtos == null || feeDtos.size() < 1) {
@@ -369,7 +382,11 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
             computeFeeSMOImpl.computeEveryOweFee(tempFeeDto, tmpRoomDto);//计算欠费金额
             //如果金额为0 就排除
             //if (tempFeeDto.getFeePrice() > 0 && tempFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
-            if (tempFeeDto.getFeePrice() > 0) {
+            // todo  校验 时间范围
+            if (!hasInTime(tempFeeDto, reqJson)) {
+                continue;
+            }
+            if (tempFeeDto.getFeePrice() != 0) {
                 tmpFeeDtos.add(tempFeeDto);
             }
         }
@@ -379,5 +396,29 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         }
         tmpRoomDto.setFees(tmpFeeDtos);
         return tmpRoomDto;
+    }
+
+    private boolean hasInTime(FeeDto tempFeeDto, JSONObject reqJson) {
+        if (!reqJson.containsKey("startTime") || !reqJson.containsKey("endTime")) {
+            return true;
+        }
+
+        String startTime = reqJson.getString("startTime");
+        String endTime = reqJson.getString("endTime");
+
+        if (StringUtil.isEmpty(startTime) || StringUtil.isEmpty(endTime)) {
+            return true;
+        }
+        if (tempFeeDto.getDeadlineTime() == null) {
+            return true;
+        }
+
+        if (tempFeeDto.getEndTime().before(DateUtil.getDateFromStringB(startTime))
+                && tempFeeDto.getDeadlineTime().after(DateUtil.getDateFromStringB(endTime))
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

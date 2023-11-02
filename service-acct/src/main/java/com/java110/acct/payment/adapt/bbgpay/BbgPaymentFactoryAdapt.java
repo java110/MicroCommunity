@@ -9,12 +9,14 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.po.wechat.OnlinePayPo;
@@ -102,17 +104,21 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
 
     @Override
     public Map java110Payment(PaymentOrderDto paymentOrderDto, JSONObject reqJson, ICmdDataFlowContext context) throws Exception {
 
         SmallWeChatDto smallWeChatDto = getSmallWechat(reqJson);
+        String paymentPoolId = reqJson.getString("paymentPoolId");
 
 
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String tradeType = reqJson.getString("tradeType");
-        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/wechat/992020011134400001/" + smallWeChatDto.getObjId();
+        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/wechat/992020011134400001/" + paymentPoolId;
 
         String openId = reqJson.getString("openId");
 
@@ -152,6 +158,7 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 payAmount,
                 openId,
                 smallWeChatDto,
+                paymentPoolId,
                 notifyUrl
         );
 
@@ -162,11 +169,21 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
     private Map<String, String> java110UnifieldOrder(String feeName, String orderNum,
                                                      String tradeType, double payAmount, String openid,
-                                                     SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
+                                                     SmallWeChatDto smallWeChatDto,
+                                                     String paymentPoolId,
+                                                     String notifyUrl) throws Exception {
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
 
-        String mchtNo_SM4 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "mchtNo_SM4");
-        String productNo_SM4 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "productNo_SM4");
-        String publicKey_SM4 = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "publicKey_SM4");
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String mchtNo_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "mchtNo_SM4");
+        String productNo_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "productNo_SM4");
+        String publicKey_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "publicKey_SM4");
+
 
         if (feeName.length() > 127) {
             feeName = feeName.substring(0, 126);
@@ -185,7 +202,7 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         params.put("ware_name", feeName);// 商品名称
         params.put("ware_describe", "");// 商户数据包
         params.put("asyn_url", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));// 通知地址
-        String decryParams = EncryptDecryptFactory.execute(smallWeChatDto.getObjId(), gzhPayUrl, params);
+        String decryParams = EncryptDecryptFactory.execute(paymentPoolValueDtos, gzhPayUrl, params);
         JSONObject paramOut = JSONObject.parseObject(decryParams);
         if (!"SUCCESS".equals(paramOut.getString("status"))
                         || !"SUCCESS".equals(paramOut.getString("deal_status"))) {
@@ -215,7 +232,17 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     @Override
     public PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto) {
 
-        String privateKey_SM4 = CommunitySettingFactory.getValue(notifyPaymentOrderDto.getCommunityId(), "privateKey_SM4");
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(notifyPaymentOrderDto.getPaymentPoolId());
+        paymentPoolValueDto.setCommunityId(notifyPaymentOrderDto.getCommunityId());
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+        String privateKey_SM4 = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "privateKey_SM4");
+
 
         String resXml = "";
         String param = notifyPaymentOrderDto.getParam();
@@ -265,8 +292,6 @@ public class BbgPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             smallWeChatDto = new SmallWeChatDto();
             smallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
             smallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
-            smallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
-            smallWeChatDto.setPayPassword(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key"));
             smallWeChatDto.setObjId(paramIn.getString("communityId"));
 
             return smallWeChatDto;

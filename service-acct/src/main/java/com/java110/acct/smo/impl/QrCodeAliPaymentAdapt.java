@@ -64,7 +64,7 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
     public final static String SIGN_TYPE = "RSA2";
 
     @Override
-    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName) throws Exception {
+    public ResultVo pay(String communityId, String orderNum, double money, String authCode, String feeName,String paymentPoolId) throws Exception {
         String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
 
         AlipayClient alipayClient = new DefaultAlipayClient(GETEWAY_URL,
@@ -98,7 +98,7 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
     }
 
     @Override
-    public ResultVo checkPayFinish(String communityId, String orderNum) {
+    public ResultVo checkPayFinish(String communityId, String orderNum,String paymentPoolId) {
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
                 CommunitySettingFactory.getValue(communityId, "APP_ID"),
                 CommunitySettingFactory.getRemark(communityId, "APP_PRIVATE_KEY"),

@@ -150,6 +150,9 @@ public abstract class TaskSystemQuartz {
      */
     protected TaskAttrDto getCurTaskAttr(TaskDto taskDto, String specCd) {
         List<TaskAttrDto> taskAttrDtos = taskDto.getTaskAttr();
+        if (taskAttrDtos == null) {
+            return null;
+        }
         for (TaskAttrDto taskAttrDto : taskAttrDtos) {
             if (specCd.equals(taskAttrDto.getSpecCd())) {
                 return taskAttrDto;

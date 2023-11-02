@@ -54,6 +54,7 @@ public class PhotoSMOImpl implements IPhotoSMO {
 
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setObjId(objId);
+
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
 
         if(fileRelDtos == null || fileRelDtos.size()< 1){

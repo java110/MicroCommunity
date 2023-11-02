@@ -92,10 +92,6 @@ public class FileRelServiceDaoImpl extends BaseServiceDao implements IFileRelSer
     public int deleteFileRel(Map info) {
         int deleteFlag = sqlSessionTemplate.insert("fileRelServiceDaoImpl.deleteFileRel", info);
 
-        if (deleteFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "删除文件存放信息Instance数据失败：" + JSONObject.toJSONString(info));
-        }
-
         return deleteFlag;
     }
 

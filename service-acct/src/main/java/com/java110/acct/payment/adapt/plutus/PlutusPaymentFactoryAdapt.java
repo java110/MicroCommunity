@@ -12,13 +12,16 @@ import com.java110.dto.app.AppDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 import com.java110.dto.wechat.SmallWeChatDto;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.PayUtil;
@@ -80,21 +83,24 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
 
     @Override
     public Map java110Payment(PaymentOrderDto paymentOrderDto, JSONObject reqJson, ICmdDataFlowContext context) throws Exception {
 
         SmallWeChatDto smallWeChatDto = getSmallWechat(reqJson);
-
+        String paymentPoolId = reqJson.getString("paymentPoolId");
 
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
         String tradeType = reqJson.getString("tradeType");
-        String notifyUrl = UrlCache.getOwnerUrl()+"/app/payment/notify/wechat/992020011134400001/"+smallWeChatDto.getObjId();
+        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/wechat/992020011134400001/" + paymentPoolId;
 
         String openId = reqJson.getString("openId");
 
-        if(StringUtil.isEmpty(openId)) {
+        if (StringUtil.isEmpty(openId)) {
             String appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
             if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) {
                 appType = OwnerAppUserDto.APP_TYPE_WECHAT;
@@ -109,15 +115,22 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             ownerAppUserDto.setAppType(appType);
             List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
-            Assert.listOnlyOne(ownerAppUserDtos, "未找到开放账号信息");
-            openId = ownerAppUserDtos.get(0).getOpenId();
+            if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+                throw new IllegalArgumentException("未找到开放账号信息");
+            }
+            for (OwnerAppUserDto tmpOwnerAppUserDto : ownerAppUserDtos) {
+                if (!StringUtil.isEmpty(tmpOwnerAppUserDto.getOpenId())) {
+                    openId = tmpOwnerAppUserDto.getOpenId();
+                }
+            }
+            //openId = ownerAppUserDtos.get(0).getOpenId();
         }
 
 
         logger.debug("【小程序支付】 统一下单开始, 订单编号=" + paymentOrderDto.getOrderId());
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
         //生成支付金额，开发环境处理支付金额数到0.01、0.02、0.03元
-        double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue(MappingConstant.ENV_DOMAIN,"HC_ENV"), paymentOrderDto.getMoney());
+        double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue(MappingConstant.ENV_DOMAIN, "HC_ENV"), paymentOrderDto.getMoney());
         //添加或更新支付记录(参数跟进自己业务需求添加)
 
         JSONObject resMap = null;
@@ -127,6 +140,7 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 payAmount,
                 openId,
                 smallWeChatDto,
+                paymentPoolId,
                 notifyUrl
         );
 
@@ -154,10 +168,25 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
 
     private JSONObject java110UnifieldOrder(String feeName, String orderNum,
-                                                     String tradeType, double payAmount, String openid,
-                                                     SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
+                                            String tradeType, double payAmount, String openid,
+                                            SmallWeChatDto smallWeChatDto,
+                                            String paymentPoolId,
+                                            String notifyUrl) throws Exception {
 
         //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_MCHID");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_KEY");
+        String privateKey = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_PRIVATE_KEY");
+        String devId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_DEV_ID");
+        String publicKey = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_PUBLIC_KEY");
 
         if (feeName.length() > 127) {
             feeName = feeName.substring(0, 126);
@@ -167,7 +196,7 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         paramMap.put("appId", smallWeChatDto.getAppId());
         paramMap.put("openId", openid);
-        paramMap.put("sn", smallWeChatDto.getMchId()); // 富友分配给二级商户的商户号
+        paramMap.put("sn", mchId); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
         if (OwnerAppUserDto.APP_TYPE_WECHAT_MINA.equals(tradeType)) {
             paramMap.put("isMiniProgram", true);
@@ -177,10 +206,9 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         paramMap.put("notifyUrl", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
 
         logger.debug("调用支付统一下单接口" + paramMap.toJSONString());
-        String privateKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "PLUTUS_PRIVATE_KEY");
-        String devId = CommunitySettingFactory.getValue(smallWeChatDto.getObjId(), "PLUTUS_DEV_ID");
 
-        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, smallWeChatDto.getPayPassword(), devId);
+
+        String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, key, devId);
         System.out.println(param);
         String str = "";
         if (TRADE_TYPE_NATIVE.equals(tradeType)) {
@@ -194,7 +222,6 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         String signature = json.getString("signature");
         String content = json.getString("content");
-        String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "PLUTUS_PUBLIC_KEY");
 
         //验签
         Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature), publicKey);
@@ -203,7 +230,7 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             throw new IllegalArgumentException("支付失败签名失败");
         }
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDto.getPayPassword());
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), key);
         //服务器返回内容
         String paramOut = new String(bb);
 
@@ -227,15 +254,28 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     public PaymentOrderDto java110NotifyPayment(NotifyPaymentOrderDto notifyPaymentOrderDto) {
         String param = notifyPaymentOrderDto.getParam();
 
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(notifyPaymentOrderDto.getPaymentPoolId());
+        paymentPoolValueDto.setCommunityId(notifyPaymentOrderDto.getCommunityId());
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String publicKey = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_PUBLIC_KEY");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_KEY");
+
+
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         JSONObject json = JSON.parseObject(param);
 
         String signature = json.getString("signature");
         String content = json.getString("content");
 
-        String publicKey = CommunitySettingFactory.getRemark(notifyPaymentOrderDto.getCommunityId(),"PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
+        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");
@@ -250,27 +290,17 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 //            appId = json.get("appid").toString();
 //        }
 
-        JSONObject paramIn = new JSONObject();
-        paramIn.put("appId", appId);
-        paramIn.put("communityId",notifyPaymentOrderDto.getCommunityId());
-        SmallWeChatDto smallWeChatDto = getSmallWechat(paramIn);
-        if (smallWeChatDto == null) {
-            throw new IllegalArgumentException("未配置公众号或者小程序信息");
-        }
-
         //解密
-        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), smallWeChatDto.getPayPassword());
+        byte[] bb = PlutusFactory.decrypt(Base64.decode(content), key);
         //服务器返回内容
         String paramOut = new String(bb);
-            JSONObject map = JSONObject.parseObject(paramOut);
-            logger.info("【银联支付回调】 回调数据： \n" + map);
-            //更新数据
-            paymentOrderDto.setOrderId(map.getString("outTransId"));
+        JSONObject map = JSONObject.parseObject(paramOut);
+        logger.info("【银联支付回调】 回调数据： \n" + map);
+        //更新数据
+        paymentOrderDto.setOrderId(map.getString("outTransId"));
         paymentOrderDto.setResponseEntity(new ResponseEntity<String>("SUCCESS", HttpStatus.OK));
         return paymentOrderDto;
     }
-
-
 
 
     private SmallWeChatDto getSmallWechat(JSONObject paramIn) {

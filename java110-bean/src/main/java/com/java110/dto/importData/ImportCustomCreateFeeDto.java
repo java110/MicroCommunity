@@ -19,10 +19,17 @@ public class ImportCustomCreateFeeDto implements Serializable {
     private String configName;
     private String createTime;
     private String startTime;
+    private String endTime;
     private String communityId;
     private String ownerId;
     private String ownerName;
     private String ownerLink;
+
+    private String batchId;
+
+    private String userId;
+
+    private String storeId;
 
     public String getPayObjId() {
         return payObjId;
@@ -142,5 +149,37 @@ public class ImportCustomCreateFeeDto implements Serializable {
 
     public void setCarNum(String carNum) {
         this.carNum = carNum;
+    }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

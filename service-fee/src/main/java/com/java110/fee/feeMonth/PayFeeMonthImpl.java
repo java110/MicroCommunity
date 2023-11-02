@@ -49,7 +49,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
     @Autowired
     private IGeneratorOweFeeInnerServiceSMO generatorOweFeeInnerServiceSMOImpl;
 
-    public static final int DEFAULT_DEAL_COUNT = 200;
+    public static final int DEFAULT_DEAL_COUNT = 1000;
 
     /**
      * 1.0 定时任务离散 小区数据 离散为 月数据

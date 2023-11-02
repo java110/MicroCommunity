@@ -85,7 +85,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
 
 
         //查询费用信息arrearsEndTime
-        feeDto.setArrearsEndTime(DateUtil.getCurrentDate());
+        //feeDto.setArrearsEndTime(DateUtil.getCurrentDate());
         feeDto.setState(FeeDto.STATE_DOING);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
@@ -103,11 +103,16 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
         BigDecimal feeTotalPrice = null;
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
+                //todo 前端是否选择了
+                if (!hasInSelectFees(tmpFeeDto, reqJson)) {
+                    continue;
+                }
                 computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
                 //如果金额为0 就排除
                 //if (tmpFeeDto.getFeePrice() > 0 && tmpFeeDto.getEndTime().getTime() <= DateUtil.getCurrentDate().getTime()) {
                 tmpFeeDto.setVal(val);
-                if (tmpFeeDto.getFeeTotalPrice() > 0 && "Y".equals(tmpFeeDto.getPayOnline())) {
+                //todo  考虑 负数金额 可能用于红冲
+                if (tmpFeeDto.getFeeTotalPrice() != 0 && "Y".equals(tmpFeeDto.getPayOnline())) {
                     tmpFeeDtos.add(tmpFeeDto);
                     feeTotalPrice = new BigDecimal(tmpFeeDto.getFeeTotalPrice());
                     tmpMoney = tmpMoney.add(feeTotalPrice);
@@ -137,6 +142,33 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
         saveFees.put("fees", tmpFeeDtos);
         CommonCache.setValue(FeeDto.REDIS_PAY_OWE_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         return paymentOrderDto;
+    }
+
+    /**
+     * 判断是否是 选择的费用交费
+     *
+     * @param tmpFeeDto
+     * @param reqJson
+     * @return
+     */
+    private boolean hasInSelectFees(FeeDto tmpFeeDto, JSONObject reqJson) {
+
+        if (!reqJson.containsKey("feeIds")) {
+            return true;
+        }
+
+        JSONArray feeIds = reqJson.getJSONArray("feeIds");
+        if (feeIds == null || feeIds.size() < 1) {
+            return true;
+        }
+        boolean hasIn = false;
+        for (int feeIndex = 0; feeIndex < feeIds.size(); feeIndex++) {
+            if (tmpFeeDto.getFeeId().equals(feeIds.getString(feeIndex))) {
+                hasIn = true;
+            }
+        }
+
+        return hasIn;
     }
 
     @Override

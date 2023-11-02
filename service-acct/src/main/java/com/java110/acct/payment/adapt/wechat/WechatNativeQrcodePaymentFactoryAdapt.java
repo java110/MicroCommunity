@@ -9,9 +9,11 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
+import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
+import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.po.wechat.OnlinePayPo;
@@ -69,18 +71,22 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
     @Autowired
     private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
     @Autowired
     private RestTemplate outRestTemplate;
 
     @Override
     public Map java110Payment(PaymentOrderDto paymentOrderDto, JSONObject reqJson, ICmdDataFlowContext context) throws Exception {
         SmallWeChatDto smallWeChatDto = getSmallWechat(reqJson);
-
+        String paymentPoolId = reqJson.getString("paymentPoolId");
 
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
 
-        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/nativeWechat/992020011134400001/" + smallWeChatDto.getObjId();
+        String notifyUrl = UrlCache.getOwnerUrl() + "/app/payment/notify/nativeWechat/992020011134400001/" + paymentPoolId;
 
         logger.debug("【小程序支付】 统一下单开始, 订单编号=" + paymentOrderDto.getOrderId());
         SortedMap<String, String> resultMap = new TreeMap<String, String>();
@@ -94,6 +100,7 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
                 TRADE_TYPE_NATIVE,
                 payAmount,
                 smallWeChatDto,
+                paymentPoolId,
                 notifyUrl
         );
 
@@ -113,9 +120,23 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
 
     private Map<String, String> java110UnifieldOrder(String feeName, String orderNum,
                                                      String tradeType, double payAmount,
-                                                     SmallWeChatDto smallWeChatDto, String notifyUrl) throws Exception {
+                                                     SmallWeChatDto smallWeChatDto,
+                                                     String paymentPoolId,
+                                                     String notifyUrl) throws Exception {
 
         //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
+
 
         if (feeName.length() > 127) {
             feeName = feeName.substring(0, 126);
@@ -123,7 +144,7 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
 
         SortedMap<String, String> paramMap = new TreeMap<String, String>();
         paramMap.put("appid", smallWeChatDto.getAppId());
-        paramMap.put("mch_id", smallWeChatDto.getMchId());
+        paramMap.put("mch_id", mchId);
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
         paramMap.put("body", feeName);
         paramMap.put("out_trade_no", orderNum);
@@ -138,7 +159,7 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
             paramMap.put("sub_appid", smallWeChatDto.getAppId());//起调小程序appid
             paramMap.put("sub_mch_id", smallWeChatDto.getMchId());//起调小程序的商户号
         }
-        paramMap.put("sign", PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword()));
+        paramMap.put("sign", PayUtil.createSign(paramMap, key));
 //转换为xml
         String xmlData = PayUtil.mapToXml(paramMap);
 
@@ -212,13 +233,27 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
             }
             paramMap.put(key, map.get(key).toString());
         }
-        //String appId = WechatFactory.getAppId(wId);
-        JSONObject paramIn = new JSONObject();
-        paramIn.put("appId", appId);
-        paramIn.put("communityId", notifyPaymentOrderDto.getCommunityId());
-        SmallWeChatDto smallWeChatDto = getSmallWechat(paramIn);
 
-        String sign = PayUtil.createSign(paramMap, smallWeChatDto.getPayPassword());
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(notifyPaymentOrderDto.getPaymentPoolId());
+        paymentPoolValueDto.setCommunityId(notifyPaymentOrderDto.getCommunityId());
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
+        // String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
+
+
+        //String appId = WechatFactory.getAppId(wId);
+//        JSONObject paramIn = new JSONObject();
+//        paramIn.put("appId", appId);
+//        paramIn.put("communityId", notifyPaymentOrderDto.getCommunityId());
+//        SmallWeChatDto smallWeChatDto = getSmallWechat(paramIn);
+
+        String sign = PayUtil.createSign(paramMap, key);
 
         if (!sign.equals(map.get("sign"))) {
             throw new IllegalArgumentException("鉴权失败");
@@ -246,8 +281,8 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
             smallWeChatDto = new SmallWeChatDto();
             smallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
             smallWeChatDto.setAppSecret(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret"));
-            smallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
-            smallWeChatDto.setPayPassword(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key"));
+//            smallWeChatDto.setMchId(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));
+//            smallWeChatDto.setPayPassword(MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "key"));
             smallWeChatDto.setObjId(paramIn.getString("communityId"));
 
             return smallWeChatDto;

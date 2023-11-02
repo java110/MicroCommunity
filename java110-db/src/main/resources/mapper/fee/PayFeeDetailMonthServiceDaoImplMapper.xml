@@ -358,7 +358,7 @@
         t.community_id communityId,t.fee_id feeId,t.month_id monthId,
         t.obj_name objName,t.obj_id objId,t.owner_name ownerName,t.owner_id ownerId,t.link,t.state,t.pay_fee_time
         payFeeTime,t.cur_month_time curMonthTime,pfc.square_price squarePrice,pfc.additional_amount
-        additionalAmount,pfc.fee_flag,pfc.fee_flag feeFlag,
+        additionalAmount,pf.fee_flag,pf.fee_flag feeFlag,
         pfc.fee_name feeName,td1.name feeTypeCdName,td3.name feeFlagName,pfc.computing_formula
         computingFormula,pfc.computing_formula_text computingFormulaText,
         pfc.bill_type billType,pf.payer_obj_type payerObjType,pfc.is_default isDefault,pfc.start_time
@@ -392,6 +392,9 @@
         </if>
         <if test="detailMonth !=null and detailMonth != ''">
             and t.detail_month= #{detailMonth}
+        </if>
+        <if test="feeState !=null and feeState != ''">
+            and pf.state= #{feeState}
         </if>
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and pf.fee_type_cd= #{feeTypeCd}
@@ -456,7 +459,7 @@
         <if test="payFeeTime !=null and payFeeTime != ''">
             and t.pay_fee_time= #{payFeeTime}
         </if>
-        order by t.detail_year,t.detail_month
+        order by pfc.fee_name, t.detail_year,t.detail_month
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -488,9 +491,13 @@
         <if test="detailMonth !=null and detailMonth != ''">
             and t.detail_month= #{detailMonth}
         </if>
+        <if test="feeState !=null and feeState != ''">
+            and pf.state= #{feeState}
+        </if>
         <if test="feeTypeCd !=null and feeTypeCd != ''">
             and pf.fee_type_cd= #{feeTypeCd}
         </if>
+
         <if test="feeTypeCds != null ">
             and pf.fee_type_cd in
             <foreach collection="feeTypeCds" item="item" open="(" close=")" separator=",">

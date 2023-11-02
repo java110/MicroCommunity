@@ -41,6 +41,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/loginProperty,");// 物业APP登录跳过
         exclusions.append("/app/loginOwner,");// 业主APP登录跳过
         exclusions.append("/app/loginOwnerByKey,");// 根据key登录业主
+        exclusions.append("/app/user.ownerUserLogin,");// 业主登录（新）
         exclusions.append("/app/area.listAreas,");// 加载地区
         exclusions.append("/app/community.listCommunitys,");// 加载小区
         exclusions.append("/app/user.userSendSms,");// 发送短信验证码
@@ -107,15 +108,19 @@ public class ServiceConfiguration {
         exclusions.append("/app/login.pcUserLogin,");// 放开接口登录
         exclusions.append("/app/login.accessTokenLogin,");// 放开接口登录
         exclusions.append("/app/login.getAccessToken,");// 放开接口登录
+        exclusions.append("/app/user.ownerUserLoginByOpenId,");// 放开接口登录
+
 
         // todo 静态二维码支付 相关接口放开
         exclusions.append("/app/payFeeQrcode.getQrcodeConfig,");// 放开接口登录
         exclusions.append("/app/user.ownerSendSms,");// 向业主发送验证码
         exclusions.append("/app/owner.getQrcodeOwner,");// 根据二维码查询业主信息
         exclusions.append("/app/payFeeQrcode.getQrcodeOweFees,");// 根据二维码查询业主欠费
-
-
-
+        exclusions.append("/app/wechat.getWechatMiniOpenId,");// 根据二维码查询业主欠费
+        exclusions.append("/app/wechat.getCommunityWechatAppId,");// 查询小区微信appID
+        exclusions.append("/app/payment.cashier,");// 收银接口
+        exclusions.append("/app/fee.queryFeeDetail,");// 缴费明细
+        exclusions.append("/app/payment.getNativeQrcodePayment,");// 获取二维码信息
 
 
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");

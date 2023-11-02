@@ -74,14 +74,14 @@ public class DeleteCommunitySpacePersonCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        // 是否线上支付
+        // todo 是否线上支付
         CommunitySpacePersonDto communitySpacePersonDto = new CommunitySpacePersonDto();
         communitySpacePersonDto.setCspId(reqJson.getString("cspId"));
         communitySpacePersonDto.setState(CommunitySpacePersonDto.STATE_S);
         List<CommunitySpacePersonDto> communitySpacePersonDtos = communitySpacePersonV1InnerServiceSMOImpl.queryCommunitySpacePersons(communitySpacePersonDto);
 
         Assert.listOnlyOne(communitySpacePersonDtos, "预约订单不存在");
-
+        //todo 线上支付 自动退款
         returnOnlinePayMoney(communitySpacePersonDtos);
 
         if(!StringUtil.isEmpty(communitySpacePersonDtos.get(0).getOrderId()) &&

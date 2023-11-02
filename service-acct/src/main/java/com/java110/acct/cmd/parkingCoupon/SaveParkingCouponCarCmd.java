@@ -160,7 +160,7 @@ public class SaveParkingCouponCarCmd extends Cmd {
                 throw new CmdException("优惠券递减失败");
             }
         } finally {
-            DistributedLock.releaseDistributedLock(requestId, key);
+            DistributedLock.releaseDistributedLock(key,requestId);
         }
 
         ParkingCouponCarPo parkingCouponCarPo = BeanConvertUtil.covertBean(reqJson, ParkingCouponCarPo.class);

@@ -117,6 +117,10 @@ public class TqDianBiaoRemoteDanFeiLvPreFactoryAdaptImpl implements ISmartMeterF
         if (meterMachineDetailPos.size() > 0) {
             meterMachineDetailV1InnerServiceSMOImpl.saveMeterMachineDetails(meterMachineDetailPos);
         }
+
+        //todo 下发查询余额
+        requestRead(meterMachineDto);
+
         return new ResultVo(ResultVo.CODE_OK, "请求已发送，等待电表反馈数据");
     }
 

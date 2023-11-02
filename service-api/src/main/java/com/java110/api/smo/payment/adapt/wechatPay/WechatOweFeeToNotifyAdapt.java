@@ -171,7 +171,7 @@ public class WechatOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
             if (fee.containsKey("deadlineTime")) {
                 fee.put("startTime", fee.getString("endTime"));
                 fee.put("endTime", fee.getString("deadlineTime"));
-                fee.put("receivedAmount", fee.getString("feePrice"));
+                fee.put("receivedAmount", fee.getString("feeTotalPrice"));
                 fee.put("state", "");
             }
         }

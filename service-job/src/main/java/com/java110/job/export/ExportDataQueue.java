@@ -21,7 +21,7 @@ public class ExportDataQueue {
     public static void addMsg(ExportDataDto exportDataDto) {
         try {
 
-            msgs.offer(exportDataDto,3, TimeUnit.MILLISECONDS);
+            msgs.offer(exportDataDto,3, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error("写入队列失败", e);
             e.printStackTrace();

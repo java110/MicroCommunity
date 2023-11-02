@@ -126,6 +126,9 @@ public class RepairDto extends PageDto implements Serializable {
     private String repairSettingType;
     private String repairSettingTypeName;
 
+    private String startTime;
+    private String endTime;
+
 
     public String getRepairName() {
         return repairName;
@@ -550,5 +553,21 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setRepairNameLike(String repairNameLike) {
         this.repairNameLike = repairNameLike;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

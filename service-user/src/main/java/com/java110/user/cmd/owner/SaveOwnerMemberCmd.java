@@ -11,6 +11,7 @@ import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.SendSmsFactory;
 import com.java110.core.smo.IPhotoSMO;
+import com.java110.doc.annotation.*;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerDto;
@@ -24,6 +25,7 @@ import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.po.owner.OwnerPo;
 import com.java110.po.user.UserPo;
+import com.java110.user.bmo.owner.IGeneratorOwnerUserBMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.UserLevelConstant;
@@ -36,6 +38,54 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.text.ParseException;
 import java.util.List;
 
+@Java110CmdDoc(title = "添加业主",
+        description = "第三方系统，比如招商系统同步业主信息",
+        httpMethod = "post",
+        url = "http://{ip}:{port}/app/owner.saveOwnerMember",
+        resource = "userDoc",
+        author = "吴学文",
+        serviceCode = "owner.saveOwnerMember",
+        seq = 10
+)
+
+@Java110ParamsDoc(params = {
+        @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
+        @Java110ParamDoc(name = "name", length = 64, remark = "业主名称"),
+        @Java110ParamDoc(name = "roomName", length = 64, remark = "房屋 楼栋-单元-房屋"),
+        @Java110ParamDoc(name = "link", length = 11, remark = "业主手机号"),
+        @Java110ParamDoc(name = "idCard", length = 30, remark = "业主身份证号"),
+        @Java110ParamDoc(name = "address", length = 512, remark = "地址"),
+        @Java110ParamDoc(name = "sex", length = 12, remark = "性别 男 1 女 0"),
+        @Java110ParamDoc(name = "ownerTypeCd", length = 12, remark = "业主类型 1001 业主 2002 家庭成员 家庭成员 需要传业主的ownerId"),
+        @Java110ParamDoc(name = "remark", length = 512, remark = "备注"),
+        @Java110ParamDoc(name = "ownerId", length = 30, remark = "业主 时 填写-1 家庭成员时填写业主ID"),
+        @Java110ParamDoc(name = "ownerPhoto", length = -1, remark = "业主人脸 用于同步门禁 人脸开门"),
+})
+
+@Java110ResponseDoc(
+        params = {
+                @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
+                @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
+        }
+)
+
+@Java110ExampleDoc(
+        reqBody = "{\n" +
+                "\t\"name\": \"王王\",\n" +
+                "\t\"roomName\": \"1-1-1001\",\n" +
+                "\t\"age\": \"\",\n" +
+                "\t\"link\": \"18909718888\",\n" +
+                "\t\"address\": \"张三\",\n" +
+                "\t\"sex\": \"0\",\n" +
+                "\t\"ownerTypeCd\": \"1001\",\n" +
+                "\t\"remark\": \"\",\n" +
+                "\t\"ownerId\": -1,\n" +
+                "\t\"ownerPhoto\": \"\",\n" +
+                "\t\"idCard\": \"\",\n" +
+                "\t\"communityId\": \"2022121921870161\"\n" +
+                "}",
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
+)
 /**
  * 添加家庭成员
  */
@@ -69,12 +119,7 @@ public class SaveOwnerMemberCmd extends Cmd {
     private IPhotoSMO photoSMOImpl;
 
     @Autowired
-    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
-
-    @Autowired
-    private ICommunityInnerServiceSMO communityInnerServiceSMOImpl;
-    @Autowired
-    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+    private IGeneratorOwnerUserBMO generatorOwnerUserBMOImpl;
 
 
     @Override
@@ -133,59 +178,17 @@ public class SaveOwnerMemberCmd extends Cmd {
             throw new CmdException("保存业主失败");
         }
 
-        //保存照片
+        //todo 保存照片
         photoSMOImpl.savePhoto(reqJson.getString("ownerPhoto"),
                 reqJson.getString("memberId"),
                 reqJson.getString("communityId"),
                 "10000");
 
+        //todo 保存属性
         dealOwnerAttr(reqJson, context);
 
-        String autoUser = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, "AUTO_GENERATOR_OWNER_USER");
-
-        if (!"ON".equals(autoUser)) {
-            return;
-        }
-
-        CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityId(ownerPo.getCommunityId());
-        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-        Assert.listNotNull(communityDtos, "未包含小区信息");
-        CommunityDto tmpCommunityDto = communityDtos.get(0);
-
-        UserPo userPo = new UserPo();
-        userPo.setUserId(GenerateCodeFactory.getUserId());
-        userPo.setName(ownerPo.getName());
-        userPo.setTel(ownerPo.getLink());
-        userPo.setPassword(AuthenticationFactory.passwdMd5(ownerPo.getLink()));
-        userPo.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
-        userPo.setAge(ownerPo.getAge());
-        userPo.setAddress(ownerPo.getAddress());
-        userPo.setSex(ownerPo.getSex());
-        flag = userV1InnerServiceSMOImpl.saveUser(userPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
-        }
-
-        OwnerAppUserPo ownerAppUserPo = new OwnerAppUserPo();
-        //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-        ownerAppUserPo.setState("12000");
-        ownerAppUserPo.setAppTypeCd("10010");
-        ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
-        ownerAppUserPo.setMemberId(ownerPo.getMemberId());
-        ownerAppUserPo.setCommunityName(tmpCommunityDto.getName());
-        ownerAppUserPo.setCommunityId(ownerPo.getCommunityId());
-        ownerAppUserPo.setAppUserName(ownerPo.getName());
-        ownerAppUserPo.setIdCard(ownerPo.getIdCard());
-        ownerAppUserPo.setAppType("WECHAT");
-        ownerAppUserPo.setLink(ownerPo.getLink());
-        ownerAppUserPo.setUserId(userPo.getUserId());
-        ownerAppUserPo.setOpenId("-1");
-
-        flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
-        if (flag < 1) {
-            throw new CmdException("添加用户业主关系失败");
-        }
+        //todo 生成登录账号
+        generatorOwnerUserBMOImpl.generator(ownerPo);
 
     }
 

@@ -216,6 +216,9 @@ public class ResultVo implements Serializable {
         return JSONObject.toJSONString(this, SerializerFeature.DisableCircularReferenceDetect, SerializerFeature.WriteDateUseDateFormat);
     }
 
+    public static ResultVo ok(){
+        return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+    }
 
     /**
      * 创建ResponseEntity对象

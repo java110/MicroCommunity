@@ -23,6 +23,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "fee.updateFee")
@@ -82,6 +83,11 @@ public class UpdateFeeCmd extends Cmd {
         // todo 重新计算离散月
         payFeeMonthImpl.deleteFeeMonth(payFeePo.getFeeId(),payFeePo.getCommunityId());
         payFeeMonthImpl.doGeneratorOrRefreshFeeMonth(payFeePo.getFeeId(),payFeePo.getCommunityId());
+
+        // todo 欠费重新生成
+        List<String> feeIds= new ArrayList<>();
+        feeIds.add(payFeePo.getFeeId());
+        payFeeMonthImpl.doGeneratorOweFees(feeIds,payFeePo.getCommunityId());
 
 
         if (reqJson.containsKey("maxEndTime") && !StringUtil.isEmpty(reqJson.getString("maxEndTime"))) {

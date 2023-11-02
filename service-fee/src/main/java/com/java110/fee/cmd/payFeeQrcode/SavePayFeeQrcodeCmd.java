@@ -68,6 +68,7 @@ public class SavePayFeeQrcodeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "smsValidate", "请求报文中未包含smsValidate");
         Assert.hasKeyAndValue(reqJson, "customFee", "请求报文中未包含customFee");
         Assert.hasKeyAndValue(reqJson, "preFee", "请求报文中未包含preFee");
+        Assert.hasKeyAndValue(reqJson, "feeType", "请求报文中未包含feeType");
         Assert.hasKeyAndValue(reqJson, "content", "请求报文中未包含content");
 
     }

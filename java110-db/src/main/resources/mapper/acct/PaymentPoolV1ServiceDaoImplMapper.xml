@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="paymentPoolV1ServiceDaoImpl">
+
+
+    <!-- 保存支付厂家信息 add by wuxw 2018-07-03 -->
+    <insert id="savePaymentPoolInfo" parameterType="Map">
+        insert into payment_pool(
+        cert_path,remark,state,community_id,payment_name,pp_id,payment_type,pay_type
+        ) values (
+        #{certPath},#{remark},#{state},#{communityId},#{paymentName},#{ppId},#{paymentType},#{payType}
+        )
+    </insert>
+
+
+    <!-- 查询支付厂家信息 add by wuxw 2018-07-03 -->
+    <select id="getPaymentPoolInfo" parameterType="Map" resultType="Map">
+        select t.cert_path,t.cert_path certPath,t.status_cd,t.status_cd
+        statusCd,t.remark,t.state,t.community_id,t.community_id communityId,t.payment_name,t.payment_name
+        paymentName,t.pp_id,t.pp_id ppId,t.payment_type,t.payment_type paymentType,t.create_time createTime,
+        t.pay_type payType, pa.name paymentTypeName,pa.bean_jsapi beanJsapi,pa.bean_qrcode beanQrcode,pa.bean_native beanNative,
+        pa.bean_refund beanRefund
+        from payment_pool t
+        left join payment_adapt pa on t.payment_type = pa.payment_type and pa.status_cd = '0'
+        where 1 =1
+        <if test="certPath !=null and certPath != ''">
+            and t.cert_path= #{certPath}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="paymentName !=null and paymentName != ''">
+            and t.payment_name= #{paymentName}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
+        <if test="ppId !=null and ppId != ''">
+            and t.pp_id= #{ppId}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            and t.payment_type= #{paymentType}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改支付厂家信息 add by wuxw 2018-07-03 -->
+    <update id="updatePaymentPoolInfo" parameterType="Map">
+        update payment_pool t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="certPath !=null and certPath != ''">
+            , t.cert_path= #{certPath}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="paymentName !=null and paymentName != ''">
+            , t.payment_name= #{paymentName}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            , t.payment_type= #{paymentType}
+        </if>
+        <if test="payType !=null and payType != ''">
+            , t.pay_type= #{payType}
+        </if>
+        where 1=1
+        <if test="ppId !=null and ppId != ''">
+            and t.pp_id= #{ppId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询支付厂家数量 add by wuxw 2018-07-03 -->
+    <select id="queryPaymentPoolsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from payment_pool t
+        where 1 =1
+        <if test="certPath !=null and certPath != ''">
+            and t.cert_path= #{certPath}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="paymentName !=null and paymentName != ''">
+            and t.payment_name= #{paymentName}
+        </if>
+        <if test="payType !=null and payType != ''">
+            and t.pay_type= #{payType}
+        </if>
+        <if test="ppId !=null and ppId != ''">
+            and t.pp_id= #{ppId}
+        </if>
+        <if test="paymentType !=null and paymentType != ''">
+            and t.payment_type= #{paymentType}
+        </if>
+    </select>
+
+</mapper>

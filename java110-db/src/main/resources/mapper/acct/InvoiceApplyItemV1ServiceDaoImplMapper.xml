@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="invoiceApplyItemV1ServiceDaoImpl">
+
+
+    <!-- 保存发票申请项信息 add by wuxw 2018-07-03 -->
+    <insert id="saveInvoiceApplyItemInfo" parameterType="Map">
+        insert into invoice_apply_item(
+        item_id,apply_id,item_type,item_name,item_amount,item_obj_id,remark,community_id,pay_time
+        ) values (
+        #{itemId},#{applyId},#{itemType},#{itemName},#{itemAmount},#{itemObjId},#{remark},#{communityId},#{payTime}
+        )
+    </insert>
+
+
+    <insert id="saveInvoiceApplyItems" parameterType="Map">
+        insert into invoice_apply_item(
+        item_id,apply_id,item_type,item_name,item_amount,item_obj_id,remark,community_id,pay_time
+        ) values
+        <foreach collection="invoiceApplyItemPos" item="item" separator=",">
+            (#{item.itemId},#{item.applyId},#{item.itemType},#{item.itemName},#{item.itemAmount},#{item.itemObjId},#{item.remark},
+            #{item.communityId}, #{item.payTime})
+        </foreach>
+    </insert>
+
+
+    <!-- 查询发票申请项信息 add by wuxw 2018-07-03 -->
+    <select id="getInvoiceApplyItemInfo" parameterType="Map" resultType="Map">
+        select t.item_id,t.item_id itemId,t.apply_id,t.apply_id applyId,t.item_type,t.item_type
+        itemType,t.item_name,t.item_name itemName,t.item_amount,t.item_amount itemAmount,t.item_obj_id,t.item_obj_id
+        itemObjId,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.pay_time payTime
+        from invoice_apply_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="itemType !=null and itemType != ''">
+            and t.item_type= #{itemType}
+        </if>
+        <if test="itemName !=null and itemName != ''">
+            and t.item_name= #{itemName}
+        </if>
+        <if test="itemAmount !=null and itemAmount != ''">
+            and t.item_amount= #{itemAmount}
+        </if>
+        <if test="itemObjId !=null and itemObjId != ''">
+            and t.item_obj_id= #{itemObjId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改发票申请项信息 add by wuxw 2018-07-03 -->
+    <update id="updateInvoiceApplyItemInfo" parameterType="Map">
+        update invoice_apply_item t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="itemType !=null and itemType != ''">
+            , t.item_type= #{itemType}
+        </if>
+        <if test="itemName !=null and itemName != ''">
+            , t.item_name= #{itemName}
+        </if>
+        <if test="itemAmount !=null and itemAmount != ''">
+            , t.item_amount= #{itemAmount}
+        </if>
+        <if test="itemObjId !=null and itemObjId != ''">
+            , t.item_obj_id= #{itemObjId}
+        </if>
+        <if test="payTime !=null and payTime != ''">
+            , t.pay_time= #{payTime}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        where 1=1
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询发票申请项数量 add by wuxw 2018-07-03 -->
+    <select id="queryInvoiceApplyItemsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from invoice_apply_item t
+        where 1 =1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="applyId !=null and applyId != ''">
+            and t.apply_id= #{applyId}
+        </if>
+        <if test="itemType !=null and itemType != ''">
+            and t.item_type= #{itemType}
+        </if>
+        <if test="itemName !=null and itemName != ''">
+            and t.item_name= #{itemName}
+        </if>
+        <if test="itemAmount !=null and itemAmount != ''">
+            and t.item_amount= #{itemAmount}
+        </if>
+        <if test="itemObjId !=null and itemObjId != ''">
+            and t.item_obj_id= #{itemObjId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

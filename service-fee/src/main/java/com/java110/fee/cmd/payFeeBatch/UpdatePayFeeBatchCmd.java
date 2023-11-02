@@ -22,11 +22,11 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.meter.MeterWaterDto;
 import com.java110.dto.payFee.PayFeeBatchDto;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IMeterWaterV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFee.PayFeeBatchPo;
+import com.java110.po.payFeeRule.PayFeeRulePo;
+import com.java110.po.payFeeRuleBill.PayFeeRuleBillPo;
 import com.java110.utils.constant.StateConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -61,6 +61,12 @@ public class UpdatePayFeeBatchCmd extends Cmd {
 
     @Autowired
     private IMeterWaterV1InnerServiceSMO meterWaterV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeRuleBillV1InnerServiceSMO payFeeRuleBillV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeRuleV1InnerServiceSMO payFeeRuleV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -103,6 +109,18 @@ public class UpdatePayFeeBatchCmd extends Cmd {
         meterWaterDto.setCommunityId(payFeeBatchPo.getCommunityId());
         meterWaterDto.setBatchId(payFeeBatchPo.getBatchId());
         meterWaterV1InnerServiceSMOImpl.deleteMeterWaterByBatch(meterWaterDto);
+
+        //todo 删除账单费用数据
+        PayFeeRuleBillPo payFeeRuleBillPo = new PayFeeRuleBillPo();
+        payFeeRuleBillPo.setCommunityId(payFeeBatchPo.getCommunityId());
+        payFeeRuleBillPo.setBatchId(payFeeBatchPo.getBatchId());
+        payFeeRuleBillV1InnerServiceSMOImpl.deletePayFeeRuleBill(payFeeRuleBillPo);
+
+        //todo 删除账单数据
+        PayFeeRulePo payFeeRulePo = new PayFeeRulePo();
+        payFeeRulePo.setCommunityId(payFeeBatchPo.getCommunityId());
+        payFeeRulePo.setBatchId(payFeeBatchPo.getBatchId());
+        payFeeRuleV1InnerServiceSMOImpl.deletePayFeeRule(payFeeRulePo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

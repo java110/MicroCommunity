@@ -428,7 +428,11 @@ public class OwnerAppLoginSMOImpl extends DefaultAbstractComponentSMO implements
         String urlCode = UUID.randomUUID().toString();
         JSONObject param = new JSONObject();
         if (redirectUrl.indexOf("appId") < 0) {
-            redirectUrl += ("&appId=" + smallWeChatDto.getAppId());
+            if(redirectUrl.indexOf("?")>0) {
+                redirectUrl += ("&appId=" + smallWeChatDto.getAppId());
+            }else{
+                redirectUrl += ("?appId=" + smallWeChatDto.getAppId());
+            }
         }
         param.put("redirectUrl", redirectUrl);
         CommonCache.setValue(urlCode, param.toJSONString(), expireTime);

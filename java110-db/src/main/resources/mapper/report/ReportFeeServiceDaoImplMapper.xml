@@ -53,7 +53,7 @@
         pfc.additional_amount additionalAmount,pfc.bill_type billType,pfc.computing_formula
         computingFormula,pfc.computing_formula_text computingFormulaText,
         pfc.payment_cd paymentCd,
-        pfc.payment_cycle paymentCycle,pfc.square_price squarePrice,pfc.fee_flag feeFlag,t.payer_obj_id
+        pfc.payment_cycle paymentCycle,pfc.square_price squarePrice,t.fee_flag feeFlag,t.payer_obj_id
         payerObjId,t.payer_obj_type payerObjType,
         t.amount,t.create_time createTime,t.end_time endTime,t.fee_id feeId,t.income_obj_id incomeObjId,t.start_time
         startTime,t.state,
@@ -64,7 +64,8 @@
         mw.pre_reading_time preReadingTime,mw.cur_reading_time curReadingTime,pfa1.`value` deadlineTime,mw.price
         mwPrice,
         pfa2.`value` ownerTel, pfa3.`value` ownerName,br.room_area roomArea,
-        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,br.room_rent roomRent,pfc.prepayment_period prepaymentPeriod
+        pfc.pay_online payOnline,pfc.scale,pfc.decimal_place decimalPlace,pfc.units,br.room_rent roomRent,pfc.prepayment_period prepaymentPeriod,
+        pfrb.rule_id ruleId,pfrb.month_cycle monthCycle
         from pay_fee t
         INNER JOIN pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
         left join building_room br on t.payer_obj_id = br.room_id and t.payer_obj_type = '3333' and br.status_cd = '0'
@@ -77,6 +78,7 @@
         LEFT JOIN pay_fee_attrs pfa3 on t.fee_id = pfa3.fee_id and pfa3.spec_cd = '390008' and pfa3.status_cd = '0'
         left join import_fee_detail ifd on t.fee_id = ifd.fee_id and ifd.status_cd = '0' and t.fee_flag = '2006012'
         LEFT JOIN meter_water mw on t.fee_id = mw.fee_id and mw.status_cd = '0' and mw.community_id = t.community_id
+        LEFT JOIN pay_fee_rule_bill pfrb on t.fee_id = pfrb.fee_id and pfrb.status_cd = '0' and pfrb.community_id = t.community_id
         where t.status_cd = '0'
         <if test="state !=null and state != ''">
             and t.state= #{state}
