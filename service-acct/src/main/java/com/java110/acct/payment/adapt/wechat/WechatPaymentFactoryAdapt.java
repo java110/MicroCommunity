@@ -237,7 +237,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("支付失败" + responseEntity.getBody());
         }
-        doSaveOnlinePay(smallWeChatDto, openid, orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
+        doSaveOnlinePay(smallWeChatDto, openid, orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付",paymentPoolValueDtos.get(0).getPpId());
         return PayUtil.xmlStrToMap(responseEntity.getBody());
     }
 
@@ -358,7 +358,8 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
     }
 
-    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money, String state, String message) {
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName,
+                                 double money, String state, String message,String ppId) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
         onlinePayPo.setAppId(smallWeChatDto.getAppId());
         onlinePayPo.setMchId(smallWeChatDto.getMchId());
@@ -371,6 +372,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         onlinePayPo.setState(state);
         onlinePayPo.setTotalFee(money + "");
         onlinePayPo.setTransactionId(orderId);
+        onlinePayPo.setPaymentPoolId(ppId);
         onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
     }
 

@@ -40,6 +40,8 @@ public class OnlinePayPo implements Serializable {
     private String payName;
     private String transactionId;
 
+    private String paymentPoolId;
+
     public String getRefundFee() {
         return refundFee;
     }
@@ -136,5 +138,11 @@ public class OnlinePayPo implements Serializable {
         this.transactionId = transactionId;
     }
 
+    public String getPaymentPoolId() {
+        return paymentPoolId;
+    }
 
+    public void setPaymentPoolId(String paymentPoolId) {
+        this.paymentPoolId = paymentPoolId;
+    }
 }

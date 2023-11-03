@@ -8,9 +8,9 @@
     <!-- 保存线上支付信息 add by wuxw 2018-07-03 -->
     <insert id="saveOnlinePayInfo" parameterType="Map">
         insert into online_pay(
-        refund_fee,mch_id,order_id,total_fee,open_id,app_id,pay_id,state,message,pay_name,transaction_id
+        refund_fee,mch_id,order_id,total_fee,open_id,app_id,pay_id,state,message,pay_name,transaction_id,payment_pool_id
         ) values (
-        #{refundFee},#{mchId},#{orderId},#{totalFee},#{openId},#{appId},#{payId},#{state},#{message},#{payName},#{transactionId}
+        #{refundFee},#{mchId},#{orderId},#{totalFee},#{openId},#{appId},#{payId},#{state},#{message},#{payName},#{transactionId},#{paymentPoolId}
         )
     </insert>
 
@@ -20,7 +20,7 @@
         select t.refund_fee,t.refund_fee refundFee,t.mch_id,t.mch_id mchId,t.order_id,t.order_id
         orderId,t.total_fee,t.total_fee totalFee,t.open_id,t.open_id openId,t.app_id,t.app_id
         appId,t.status_cd,t.status_cd statusCd,t.pay_id,t.pay_id payId,t.state,t.message,t.pay_name,t.pay_name
-        payName,t.transaction_id,t.transaction_id transactionId
+        payName,t.transaction_id,t.transaction_id transactionId,t.payment_pool_id paymentPoolId
         from online_pay t
         where 1 =1
         <if test="refundFee !=null and refundFee != ''">

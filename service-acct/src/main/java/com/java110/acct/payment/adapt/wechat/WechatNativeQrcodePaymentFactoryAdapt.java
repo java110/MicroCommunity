@@ -157,7 +157,7 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
             paramMap.put("appid", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_APP_ID));  //服务商appid，是服务商注册时公众号的id
             paramMap.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));  //服务商商户号
             paramMap.put("sub_appid", smallWeChatDto.getAppId());//起调小程序appid
-            paramMap.put("sub_mch_id", smallWeChatDto.getMchId());//起调小程序的商户号
+            paramMap.put("sub_mch_id", mchId);//起调小程序的商户号
         }
         paramMap.put("sign", PayUtil.createSign(paramMap, key));
 //转换为xml
@@ -173,7 +173,7 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("支付失败" + responseEntity.getBody());
         }
-        doSaveOnlinePay(smallWeChatDto, "无", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
+        doSaveOnlinePay(smallWeChatDto, "无", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付",paymentPoolValueDtos.get(0).getPpId());
         return PayUtil.xmlStrToMap(responseEntity.getBody());
     }
 
@@ -292,7 +292,9 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
     }
 
 
-    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money, String state, String message) {
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId,
+                                 String feeName, double money, String state, String message,
+                                 String ppId) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
         onlinePayPo.setAppId(smallWeChatDto.getAppId());
         onlinePayPo.setMchId(smallWeChatDto.getMchId());
@@ -305,6 +307,7 @@ public class WechatNativeQrcodePaymentFactoryAdapt implements IPaymentFactoryAda
         onlinePayPo.setState(state);
         onlinePayPo.setTotalFee(money + "");
         onlinePayPo.setTransactionId(orderId);
+        onlinePayPo.setPaymentPoolId(ppId);
         onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
     }
 

@@ -110,7 +110,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         params.put("ware_name", feeName);// 商品名称
         params.put("device_ip", "172.0.0.1");// 商户数据包
         params.put("recog_no", "123123");// 交易终端编号
-        doSaveOnlinePay(shopSmallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
+        doSaveOnlinePay(shopSmallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付",paymentPoolValueDtos.get(0).getPpId());
 
         String decryParams = EncryptDecryptFactory.execute(paymentPoolValueDtos, gzhPayUrl, params);
 
@@ -188,7 +188,9 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         }
     }
 
-    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money, String state, String message) {
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName,
+                                 double money, String state, String message,
+                                 String ppId) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
         onlinePayPo.setAppId(smallWeChatDto.getAppId());
         onlinePayPo.setMchId(smallWeChatDto.getMchId());
@@ -201,6 +203,7 @@ public class QrCodeBbgPaymentAdapt implements IQrCodePaymentSMO {
         onlinePayPo.setState(state);
         onlinePayPo.setTotalFee(money + "");
         onlinePayPo.setTransactionId(orderId);
+        onlinePayPo.setPaymentPoolId(ppId);
         onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
     }
 

@@ -113,7 +113,8 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
 
         String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey,key,devId);
         System.out.println(param);
-        doSaveOnlinePay(shopSmallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
+        doSaveOnlinePay(shopSmallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT,
+                "待支付",paymentPoolValueDtos.get(0).getPpId());
 
         String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
         System.out.println(str);
@@ -215,7 +216,9 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         }
     }
 
-    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money, String state, String message) {
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money,
+                                 String state, String message,
+                                 String ppId) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
         onlinePayPo.setAppId(smallWeChatDto.getAppId());
         onlinePayPo.setMchId(smallWeChatDto.getMchId());
@@ -228,6 +231,7 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         onlinePayPo.setState(state);
         onlinePayPo.setTotalFee(money + "");
         onlinePayPo.setTransactionId(orderId);
+        onlinePayPo.setPaymentPoolId(ppId);
         onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
     }
 
