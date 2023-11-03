@@ -13,6 +13,7 @@ import com.java110.intf.report.IBaseDataStatisticsInnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -60,9 +61,16 @@ public class GetPropertyFeeSummaryCmd extends Cmd {
         int row = reqJson.getIntValue("row");
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
+
+        if(!reqJson.containsKey("startTime") || StringUtil.isEmpty(reqJson.getString("startTime"))){
+            reqJson.put("startTime", year + "-01-01");
+        }
+        if(!reqJson.containsKey("endTime") || StringUtil.isEmpty(reqJson.getString("endTime"))){
+            reqJson.put("endTime", (year + 1) + "-01-01");
+        }
         //todo 查询房屋物业费信息
-        reqJson.put("startTime", year + "-01-01");
-        reqJson.put("endTime", (year + 1) + "-01-01");
+
+
 
         // todo 查询总数量
         int total = baseDataStatisticsInnerServiceSMOImpl.getPropertyFeeSummaryDataCount(reqJson);
