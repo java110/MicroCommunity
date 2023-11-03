@@ -519,7 +519,7 @@
     </select>
     <select id="computeEveryMonthFee" parameterType="Map" resultType="Map">
         select a.obj_id roomId,a.cur_month_time curMonthTime,a.config_id configId,sum(receivableAmount) receivableAmount,
-        sum(receivedAmount) receivedAmount,sum(oweAmount) oweAmount
+        sum(receivedAmount) receivedAmount,sum(oweAmount) oweAmount,max(a.receiptCode) receiptCode
         from (
         select t.obj_id,t.cur_month_time,pfc.config_id,
         (
@@ -530,8 +530,12 @@
         ) receivedAmount,
         (
         select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm where pfdm.month_id = t.month_id and pfdm.status_cd = '0'
-        ) oweAmount
-
+        ) oweAmount,
+        (
+        select max(fr.receipt_code) from fee_receipt_detail frd
+        left join fee_receipt fr on frd.receipt_id = fr.receipt_id and fr.status_cd = '0'
+        where frd.detail_id = t.detail_id and t.detail_id != '-1'
+        ) receiptCode
         from pay_fee_detail_month t
         left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0' and pfc.fee_type_cd = '888800010001'
         where 1=1
