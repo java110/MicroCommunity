@@ -641,7 +641,7 @@
         <if test="carNum != null and carNum != ''">
             and br.car_num = #{carNum}
         </if>
-        group by br.community_id ,bo.name ,bo.sex,bo.link,concat(pa.num,'-',ps.num) ,br.car_id ,br.car_num ,
+        group by br.community_id ,bo.name ,bo.sex,bo.link,pa.num,ps.num ,br.car_id ,br.car_num ,
         br.start_time ,br.state,pfc.additional_amount ,pfc.config_id ,pfc.fee_name
         order by br.community_id,pa.num,ps.num
         <if test="page != -1 and page != null">
