@@ -196,6 +196,13 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
 
     @Override
     public List<Map> getParkingFeeSummaryData(@RequestBody Map info) {
+        int page = Integer.parseInt(info.get("page").toString());
+        int row = Integer.parseInt(info.get("row").toString());
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            info.put("page",(page - 1) * row);
+            info.put("row", row);
+        }
         List<Map> infos = baseDataStatisticsServiceDaoImpl.getParkingFeeSummaryData(info);
         return infos;
     }
