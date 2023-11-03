@@ -69,6 +69,15 @@ public class GetPropertyFeeSummaryCmd extends Cmd {
             reqJson.put("endTime", (year + 1) + "-01-01");
         }
         //todo 查询房屋物业费信息
+        if(reqJson.containsKey("roomName") && !StringUtil.isEmpty(reqJson.getString("roomName"))){
+            String[] roomNames = reqJson.getString("roomName").split("-",3);
+            if(roomNames.length != 3){
+                throw new CmdException("房屋名称查询条件错误");
+            }
+            reqJson.put("floorNum",roomNames[0]);
+            reqJson.put("unitNum",roomNames[1]);
+            reqJson.put("roomNum",roomNames[2]);
+        }
 
 
 

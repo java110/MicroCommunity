@@ -517,6 +517,15 @@
         <if test="communityId != null and communityId != ''">
             and br.community_id = #{communityId}
         </if>
+        <if test="floorNum != null and floorNum != ''">
+            and f.floor_num = #{floorNum}
+        </if>
+        <if test="unitNum != null and unitNum != ''">
+            and bu.unit_num = #{unitNum}
+        </if>
+        <if test="roomNum != null and roomNum != ''">
+            and br.room_num = #{roomNum}
+        </if>
         group by br.community_id, bo.name,bo.sex,bo.link,f.floor_num,bu.unit_num,br.room_num,br.room_id,borr.start_time,br.state,br.built_up_area,pfc.square_price,pfc.config_id,pfc.fee_name
         order by br.community_id,f.floor_num,bu.unit_num,br.room_num
         <if test="page != -1 and page != null">
@@ -549,6 +558,15 @@
         <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
+        <if test="floorNum != null and floorNum != ''">
+            and f.floor_num = #{floorNum}
+        </if>
+        <if test="unitNum != null and unitNum != ''">
+            and bu.unit_num = #{unitNum}
+        </if>
+        <if test="roomNum != null and roomNum != ''">
+            and br.room_num = #{roomNum}
+        </if>
         and t.cur_month_time &gt;=#{startTime}
         and t.cur_month_time &lt; #{endTime}
         ) a
