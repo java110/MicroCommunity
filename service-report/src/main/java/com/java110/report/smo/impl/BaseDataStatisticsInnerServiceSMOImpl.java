@@ -187,4 +187,16 @@ public class BaseDataStatisticsInnerServiceSMOImpl extends BaseServiceSMO implem
         List<Map> infos = baseDataStatisticsServiceDaoImpl.computeEveryMonthFee(info);
         return infos;
     }
+
+    @Override
+    public int getParkingFeeSummaryDataCount(@RequestBody Map info) {
+        int count = baseDataStatisticsServiceDaoImpl.getParkingFeeSummaryDataCount(info);
+        return count;
+    }
+
+    @Override
+    public List<Map> getParkingFeeSummaryData(@RequestBody Map info) {
+        List<Map> infos = baseDataStatisticsServiceDaoImpl.getParkingFeeSummaryData(info);
+        return infos;
+    }
 }

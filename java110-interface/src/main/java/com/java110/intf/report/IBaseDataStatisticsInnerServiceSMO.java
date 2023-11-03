@@ -106,4 +106,10 @@ public interface IBaseDataStatisticsInnerServiceSMO {
 
     @RequestMapping(value = "/computeEveryMonthFee", method = RequestMethod.POST)
     List<Map> computeEveryMonthFee(@RequestBody Map info);
+
+    @RequestMapping(value = "/getParkingFeeSummaryDataCount", method = RequestMethod.POST)
+    int getParkingFeeSummaryDataCount(@RequestBody Map info);
+
+    @RequestMapping(value = "/getParkingFeeSummaryData", method = RequestMethod.POST)
+    List<Map> getParkingFeeSummaryData(@RequestBody Map info);
 }

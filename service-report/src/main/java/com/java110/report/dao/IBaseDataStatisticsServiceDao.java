@@ -77,4 +77,8 @@ public interface IBaseDataStatisticsServiceDao {
     int getPropertyFeeSummaryDataCount(Map info);
 
     List<Map> computeEveryMonthFee(Map info);
+
+    int getParkingFeeSummaryDataCount(Map info);
+
+    List<Map> getParkingFeeSummaryData(Map info);
 }

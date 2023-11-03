@@ -479,6 +479,15 @@
         <if test="communityId != null and communityId != ''">
             and br.community_id = #{communityId}
         </if>
+        <if test="floorNum != null and floorNum != ''">
+            and f.floor_num = #{floorNum}
+        </if>
+        <if test="unitNum != null and unitNum != ''">
+            and bu.unit_num = #{unitNum}
+        </if>
+        <if test="roomNum != null and roomNum != ''">
+            and br.room_num = #{roomNum}
+        </if>
     </select>
 
     <select id="getPropertyFeeSummaryData" parameterType="Map" resultType="Map">
@@ -558,19 +567,88 @@
         <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
-        <if test="floorNum != null and floorNum != ''">
-            and f.floor_num = #{floorNum}
-        </if>
-        <if test="unitNum != null and unitNum != ''">
-            and bu.unit_num = #{unitNum}
-        </if>
-        <if test="roomNum != null and roomNum != ''">
-            and br.room_num = #{roomNum}
-        </if>
+
         and t.cur_month_time &gt;=#{startTime}
         and t.cur_month_time &lt; #{endTime}
         ) a
         group by a.obj_id,a.cur_month_time,a.config_id
     </select>
+
+    <select id="getParkingFeeSummaryDataCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from owner_car br
+        left join parking_space ps on br.ps_id = ps.ps_id and ps.status_cd = '0'
+        left join parking_area pa on ps.pa_id = ps.pa_id and pa.status_cd = '0'
+        left join building_owner bo on br.owner_id = bo.owner_id and bo.status_cd = '0' and bo.owner_type_cd = '1001'
+        left join pay_fee pf on br.car_id = pf.payer_obj_id and pf.payer_obj_type = '6666' and pf.status_cd = '0' and pf.fee_type_cd = '888800010008'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0' and pfc.fee_type_cd = '888800010008'
+        where br.status_cd = '0'
+        <if test="communityId != null and communityId != ''">
+            and br.community_id = #{communityId}
+        </if>
+        <if test="paNum != null and paNum != ''">
+            and pa.num = #{paNum}
+        </if>
+        <if test="psNum != null and psNum != ''">
+            and ps.num = #{psNum}
+        </if>
+        <if test="carNum != null and carNum != ''">
+            and br.car_num = #{carNum}
+        </if>
+    </select>
+
+    <select id="getParkingFeeSummaryData" parameterType="Map" resultType="Map">
+        select br.community_id communityId,bo.name ownerName,bo.sex,bo.link,concat(pa.num,'-',ps.num) parkingName,br.car_id carId,br.car_num carNum,
+        br.start_time bingTime,br.state,pfc.additional_amount squarePrice,pfc.config_id configId,pfc.fee_name feeName,
+        (
+        select max(pay_fee_time) from pay_fee_detail_month pfdm
+        where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.car_id
+        and pfdm.status_cd = '0' and pfdm.detail_id != '-1'
+        and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTime}
+        ) payFeeTime,
+        (
+        select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm
+        where pfdm.config_id = pfc.config_id
+        and pfdm.obj_id = br.car_id
+        and pfdm.status_cd = '0' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTime}
+        ) receivableAmount,
+        (
+        select sum(pfdm.received_amount) from pay_fee_detail_month pfdm
+        where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.car_id
+        and pfdm.status_cd = '0' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTime}
+        ) receivedAmount,
+        (
+        select sum(pfdm.receivable_amount) from pay_fee_detail_month pfdm
+        where pfdm.config_id = pfc.config_id and pfdm.obj_id = br.car_id
+        and pfdm.status_cd = '0' and pfdm.detail_id = '-1' and pfdm.cur_month_time &gt;=#{startTime} and pfdm.cur_month_time &lt; #{endTime}
+        ) oweAmount
+        from owner_car br
+        left join parking_space ps on br.ps_id = ps.ps_id and ps.status_cd = '0'
+        left join parking_area pa on ps.pa_id = ps.pa_id and pa.status_cd = '0'
+        left join building_owner bo on br.owner_id = bo.owner_id and bo.status_cd = '0' and bo.owner_type_cd = '1001'
+        left join pay_fee pf on br.car_id = pf.payer_obj_id and pf.payer_obj_type = '6666' and pf.status_cd = '0' and pf.fee_type_cd = '888800010008'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0' and pfc.fee_type_cd = '888800010008'
+        where br.status_cd = '0'
+        <if test="communityId != null and communityId != ''">
+            and br.community_id = #{communityId}
+        </if>
+        <if test="paNum != null and paNum != ''">
+            and pa.num = #{paNum}
+        </if>
+        <if test="psNum != null and psNum != ''">
+            and ps.num = #{psNum}
+        </if>
+        <if test="carNum != null and carNum != ''">
+            and br.car_num = #{carNum}
+        </if>
+        group by br.community_id ,bo.name ,bo.sex,bo.link,concat(pa.num,'-',ps.num) ,br.car_id ,br.car_num ,
+        br.start_time ,br.state,pfc.additional_amount ,pfc.config_id ,pfc.fee_name
+        order by br.community_id,pa.num,ps.num
+        <if test="page != -1 and page != null">
+            limit #{page},#{row}
+        </if>
+    </select>
+
+
 
 </mapper>
