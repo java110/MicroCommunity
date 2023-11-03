@@ -540,7 +540,7 @@
             #{item}
         </foreach>
         and t.cur_month_time &gt;=#{startTime}
-        and t.cur_month_time &lt; #{endTIme}
+        and t.cur_month_time &lt; #{endTime}
         ) a
         group by a.obj_id,a.cur_month_time,a.config_id
     </select>
