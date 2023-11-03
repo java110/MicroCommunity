@@ -62,22 +62,21 @@ public class GetParkingFeeSummaryCmd extends Cmd {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
 
-        if(!reqJson.containsKey("startTime") || StringUtil.isEmpty(reqJson.getString("startTime"))){
+        if (!reqJson.containsKey("startTime") || StringUtil.isEmpty(reqJson.getString("startTime"))) {
             reqJson.put("startTime", year + "-01-01");
         }
-        if(!reqJson.containsKey("endTime") || StringUtil.isEmpty(reqJson.getString("endTime"))){
+        if (!reqJson.containsKey("endTime") || StringUtil.isEmpty(reqJson.getString("endTime"))) {
             reqJson.put("endTime", (year + 1) + "-01-01");
         }
         //todo 查询房屋物业费信息
-        if(reqJson.containsKey("psName") && !StringUtil.isEmpty(reqJson.getString("psName"))){
-            String[] psNames = reqJson.getString("psName").split("-",2);
-            if(psNames.length != 2){
+        if (reqJson.containsKey("psName") && !StringUtil.isEmpty(reqJson.getString("psName"))) {
+            String[] psNames = reqJson.getString("psName").split("-", 2);
+            if (psNames.length != 2) {
                 throw new CmdException("车位编号错误");
             }
-            reqJson.put("paNum",psNames[0]);
-            reqJson.put("psNum",psNames[1]);
+            reqJson.put("paNum", psNames[0]);
+            reqJson.put("psNum", psNames[1]);
         }
-
 
 
         // todo 查询总数量
@@ -116,20 +115,20 @@ public class GetParkingFeeSummaryCmd extends Cmd {
         storeDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
         List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
 
-        for(CommunityDto tmpCommunityDto : communityDtos){
-            for(StoreDto tmpStoreDto: storeDtos){
-                if(tmpStoreDto.getStoreId().equals(tmpCommunityDto.getStoreId())){
+        for (CommunityDto tmpCommunityDto : communityDtos) {
+            for (StoreDto tmpStoreDto : storeDtos) {
+                if (tmpStoreDto.getStoreId().equals(tmpCommunityDto.getStoreId())) {
                     tmpCommunityDto.setStoreName(tmpStoreDto.getName());
                 }
             }
         }
 
-        for(Map info: infos){
-            for(CommunityDto tmpCommunityDto : communityDtos){
-                if(info.get("communityId").equals(tmpCommunityDto.getCommunityId())){
-                    info.put("communityName",tmpCommunityDto.getName());
-                    info.put("storeId",tmpCommunityDto.getStoreId());
-                    info.put("storeName",tmpCommunityDto.getStoreName());
+        for (Map info : infos) {
+            for (CommunityDto tmpCommunityDto : communityDtos) {
+                if (info.get("communityId").equals(tmpCommunityDto.getCommunityId())) {
+                    info.put("communityName", tmpCommunityDto.getName());
+                    info.put("storeId", tmpCommunityDto.getStoreId());
+                    info.put("storeName", tmpCommunityDto.getStoreName());
                 }
             }
         }
@@ -156,6 +155,9 @@ public class GetParkingFeeSummaryCmd extends Cmd {
         for (Map roomInfo : infos) {
             months = new ArrayList<>();
             for (Map monthInfo : monthDatas) {
+                if (roomInfo.get("configId") == null || monthInfo.get("configId") == null) {
+                    continue;
+                }
                 if (roomInfo.get("carId").equals(monthInfo.get("roomId"))
                         && roomInfo.get("configId").equals(monthInfo.get("configId"))) {
                     months.add(monthInfo);

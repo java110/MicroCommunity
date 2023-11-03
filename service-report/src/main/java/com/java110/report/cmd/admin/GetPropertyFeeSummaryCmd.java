@@ -157,6 +157,9 @@ public class GetPropertyFeeSummaryCmd extends Cmd {
         for (Map roomInfo : infos) {
             months = new ArrayList<>();
             for (Map monthInfo : monthDatas) {
+                if (roomInfo.get("configId") == null || monthInfo.get("configId") == null) {
+                    continue;
+                }
                 if (roomInfo.get("roomId").equals(monthInfo.get("roomId"))
                         && roomInfo.get("configId").equals(monthInfo.get("configId"))) {
                     months.add(monthInfo);
