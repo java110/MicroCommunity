@@ -26,6 +26,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -92,7 +93,8 @@ public class NativeQrcodePaymentCmd extends Cmd {
         CommonCache.setValue("nativeQrcodePayment_" + token, reqJson.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         JSONObject result = new JSONObject();
         result.put("codeUrl", UrlCache.getOwnerUrl() + "/#/pages/fee/qrCodeCashier?qrToken=" + token);
-        ResponseEntity<String> responseEntity = new ResponseEntity(result.toJSONString(), HttpStatus.OK);
+
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(result);
 
         logger.debug("调用支付厂家返回,{}", responseEntity);
         context.setResponseEntity(responseEntity);
