@@ -92,7 +92,7 @@ public class NativeQrcodePaymentCmd extends Cmd {
         CommonCache.setValue("nativeQrcodePayment_" + token, reqJson.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         JSONObject result = new JSONObject();
         result.put("codeUrl", UrlCache.getOwnerUrl() + "/#/pages/fee/qrCodeCashier?qrToken=" + token);
-        ResponseEntity<String> responseEntity = new ResponseEntity(reqJson.toJSONString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity(result.toJSONString(), HttpStatus.OK);
 
         logger.debug("调用支付厂家返回,{}", responseEntity);
         context.setResponseEntity(responseEntity);
