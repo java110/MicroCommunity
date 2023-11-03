@@ -86,7 +86,7 @@ public class ReturnMoneyV1InnerServiceSMOImpl extends BaseServiceSMO implements 
 
         ResultVo resultVo = null;
         try {
-            resultVo = refundMoneyAdapt.refund(onlinePayDto, paymentPoolDto);
+            resultVo = refundMoneyAdapt.refund(onlinePayDto, paymentPoolDtos.get(0));
         } catch (Exception e) {
             e.printStackTrace();
             resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getLocalizedMessage());
