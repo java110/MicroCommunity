@@ -206,7 +206,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
                 endTime = targetEndTime;
             }
             //todo 生成 费用
-            doGeneratorPayFee(tmpPayFeeRulePo, startTime, endTime, feeConfigDtos.get(0), tmpPayFeePos, tmpFeeAttrPos, payFeeRuleBillPos, ownerDto, payerObjName);
+            doGeneratorPayFee(tmpPayFeeRulePo, startTime, endTime, feeConfigDtos.get(0), tmpPayFeePos, tmpFeeAttrPos, payFeeRuleBillPos, ownerDto, payerObjName,ruleCycle);
 
             startTime = endTime;
 
@@ -233,7 +233,8 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
                                    List<PayFeePo> tmpPayFeePos, List<FeeAttrPo> tmpFeeAttrPos,
                                    List<PayFeeRuleBillPo> payFeeRuleBillPos,
                                    OwnerDto ownerDto,
-                                   String payerObjName) {
+                                   String payerObjName,
+                                   int ruleCycle) {
 
         PayFeePo payFeePo = BeanConvertUtil.covertBean(tmpPayFeeRulePo, PayFeePo.class);
         payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
@@ -254,6 +255,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
         payFeeRuleBillPo.setBatchId(payFeePo.getBatchId());
         payFeeRuleBillPo.setCurYearMonth(DateUtil.getFormatTimeStringB(startTime));
         payFeeRuleBillPo.setCommunityId(payFeePo.getCommunityId());
+        payFeeRuleBillPo.setMonthCycle(ruleCycle+"");
         payFeeRuleBillPos.add(payFeeRuleBillPo);
 
         //todo 这里时间少一天，显示，因为是周期性转一次性 所以 这里为了显示合理 结束时间少一天处理
