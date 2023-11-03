@@ -148,7 +148,7 @@ public class GetPropertyFeeSummaryCmd extends Cmd {
                 }
             }
 
-            roomInfo.put("monthData", monthDatas);
+            roomInfo.put("monthData", months);
         }
     }
 }
