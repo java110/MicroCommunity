@@ -105,7 +105,7 @@ public class GetPropertyFeeSummaryCmd extends Cmd {
         for(CommunityDto tmpCommunityDto : communityDtos){
             for(StoreDto tmpStoreDto: storeDtos){
                 if(tmpStoreDto.getStoreId().equals(tmpCommunityDto.getStoreId())){
-                    tmpCommunityDto.setStoreName(tmpStoreDto.getStoreName());
+                    tmpCommunityDto.setStoreName(tmpStoreDto.getName());
                 }
             }
         }
