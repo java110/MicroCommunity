@@ -476,6 +476,9 @@
         left join building_owner_room_rel borr on br.room_id = borr.room_id and borr.status_cd = '0'
         left join building_owner bo on borr.owner_id = bo.owner_id and bo.status_cd = '0' and bo.owner_type_cd = '1001'
         where br.status_cd = '0'
+        <if test="communityId != null and communityId != ''">
+            and br.community_id = #{communityId}
+        </if>
     </select>
 
     <select id="getPropertyFeeSummaryData" parameterType="Map" resultType="Map">
@@ -511,6 +514,9 @@
         left join pay_fee pf on br.room_id = pf.payer_obj_id and pf.payer_obj_type = '3333' and pf.status_cd = '0' and pf.fee_type_cd = '888800010001'
         left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0' and pfc.fee_type_cd = '888800010001'
         where br.status_cd = '0'
+        <if test="communityId != null and communityId != ''">
+            and br.community_id = #{communityId}
+        </if>
         group by br.community_id, bo.name,bo.sex,bo.link,f.floor_num,bu.unit_num,br.room_num,br.room_id,borr.start_time,br.state,br.built_up_area,pfc.square_price,pfc.config_id,pfc.fee_name
         order by br.community_id,f.floor_num,bu.unit_num,br.room_num
         <if test="page != -1 and page != null">
