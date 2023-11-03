@@ -219,7 +219,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             paramMap.put("appid", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_APP_ID));  //服务商appid，是服务商注册时公众号的id
             paramMap.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));  //服务商商户号
             paramMap.put("sub_appid", smallWeChatDto.getAppId());//起调小程序appid
-            paramMap.put("sub_mch_id", smallWeChatDto.getMchId());//起调小程序的商户号
+            paramMap.put("sub_mch_id", mchId);//起调小程序的商户号
             paramMap.put("sub_openid", openid);
             paramMap.remove("openid");
         }

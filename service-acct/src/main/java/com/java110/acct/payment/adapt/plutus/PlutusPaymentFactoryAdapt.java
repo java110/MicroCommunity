@@ -133,6 +133,13 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue(MappingConstant.ENV_DOMAIN, "HC_ENV"), paymentOrderDto.getMoney());
         //添加或更新支付记录(参数跟进自己业务需求添加)
 
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
         JSONObject resMap = null;
         resMap = this.java110UnifieldOrder(paymentOrderDto.getName(),
                 paymentOrderDto.getOrderId(),
@@ -140,9 +147,10 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 payAmount,
                 openId,
                 smallWeChatDto,
-                paymentPoolId,
+                paymentPoolValueDtos,
                 notifyUrl
         );
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_KEY");
 
 
         if (TRADE_TYPE_JSAPI.equals(tradeType)) {
@@ -155,7 +163,7 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             resultMap.put("partnerid", smallWeChatDto.getMchId());
             resultMap.put("prepayid", resMap.getString("session_id"));
             //resultMap.put("signType", "MD5");
-            resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
+            resultMap.put("sign", PayUtil.createSign(resultMap, key));
         } else if (TRADE_TYPE_NATIVE.equals(tradeType)) {
             resultMap.put("prepayId", resMap.getString("session_id"));
             resultMap.put("codeUrl", resMap.getString("qr_code"));
@@ -170,17 +178,10 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     private JSONObject java110UnifieldOrder(String feeName, String orderNum,
                                             String tradeType, double payAmount, String openid,
                                             SmallWeChatDto smallWeChatDto,
-                                            String paymentPoolId,
+                                            List<PaymentPoolValueDto> paymentPoolValueDtos,
                                             String notifyUrl) throws Exception {
 
         //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
-        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
-        paymentPoolValueDto.setPpId(paymentPoolId);
-        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
-
-        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
-            throw new IllegalArgumentException("配置错误,未配置参数");
-        }
 
         String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_MCHID");
         String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "PLUTUS_KEY");

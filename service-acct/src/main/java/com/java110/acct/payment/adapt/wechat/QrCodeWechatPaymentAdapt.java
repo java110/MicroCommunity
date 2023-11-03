@@ -114,7 +114,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
             paramMap.put("appid", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_APP_ID));  //服务商appid，是服务商注册时公众号的id
             paramMap.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));  //服务商商户号
             paramMap.put("sub_appid", shopSmallWeChatDto.getAppId());//起调小程序appid
-            paramMap.put("sub_mch_id", shopSmallWeChatDto.getMchId());//起调小程序的商户号
+            paramMap.put("sub_mch_id", mchId);//起调小程序的商户号
             paramMap.remove("openid");
         }
         paramMap.put("sign", PayUtil.createSign(paramMap, key));
@@ -185,7 +185,7 @@ public class QrCodeWechatPaymentAdapt implements IQrCodePaymentSMO {
             if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
                 paramMap.put("appid", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_APP_ID));  //服务商appid，是服务商注册时公众号的id
                 paramMap.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));  //服务商商户
-                paramMap.put("sub_mch_id", shopSmallWeChatDto.getMchId());
+                paramMap.put("sub_mch_id", mchId);
             }
             paramMap.put("sign", PayUtil.createSign(paramMap, key));
 //转换为xml
