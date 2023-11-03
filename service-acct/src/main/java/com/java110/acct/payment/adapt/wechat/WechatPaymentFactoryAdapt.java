@@ -131,6 +131,14 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         double payAmount = PayUtil.getPayAmountByEnv(MappingCache.getValue(MappingConstant.ENV_DOMAIN, "HC_ENV"), paymentOrderDto.getMoney());
         //添加或更新支付记录(参数跟进自己业务需求添加)
 
+        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
+        paymentPoolValueDto.setPpId(paymentPoolId);
+        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
+
+        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+            throw new IllegalArgumentException("配置错误,未配置参数");
+        }
+
         Map<String, String> resMap = null;
         resMap = this.java110UnifieldOrder(paymentOrderDto.getName(),
                 paymentOrderDto.getOrderId(),
@@ -138,10 +146,11 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 payAmount,
                 openId,
                 smallWeChatDto,
-                paymentPoolId,
+                paymentPoolValueDtos,
                 notifyUrl
         );
 
+        String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
 
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
             if (TRADE_TYPE_JSAPI.equals(tradeType)) {
@@ -151,7 +160,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 resultMap.put("nonceStr", PayUtil.makeUUID(32));
                 resultMap.put("package", "prepay_id=" + resMap.get("prepay_id"));
                 resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
+                resultMap.put("sign", PayUtil.createSign(resultMap, key));
             } else if (TRADE_TYPE_APP.equals(tradeType)) {
                 resultMap.put("appId", smallWeChatDto.getAppId());
                 resultMap.put("timeStamp", PayUtil.getCurrentTimeStamp());
@@ -159,7 +168,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                 resultMap.put("partnerid", smallWeChatDto.getMchId());
                 resultMap.put("prepayid", resMap.get("prepay_id"));
                 //resultMap.put("signType", "MD5");
-                resultMap.put("sign", PayUtil.createSign(resultMap, smallWeChatDto.getPayPassword()));
+                resultMap.put("sign", PayUtil.createSign(resultMap, key));
             } else if (TRADE_TYPE_NATIVE.equals(tradeType)) {
                 resultMap.put("prepayId", resMap.get("prepay_id"));
                 resultMap.put("codeUrl", resMap.get("code_url"));
@@ -179,18 +188,12 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     private Map<String, String> java110UnifieldOrder(String feeName, String orderNum,
                                                      String tradeType, double payAmount, String openid,
                                                      SmallWeChatDto smallWeChatDto,
-                                                     String paymentPoolId,
+                                                     List<PaymentPoolValueDto> paymentPoolValueDtos,
                                                      String notifyUrl) throws Exception {
 
         //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
 
-        PaymentPoolValueDto paymentPoolValueDto = new PaymentPoolValueDto();
-        paymentPoolValueDto.setPpId(paymentPoolId);
-        List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
 
-        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
-            throw new IllegalArgumentException("配置错误,未配置参数");
-        }
 
         String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
         String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
