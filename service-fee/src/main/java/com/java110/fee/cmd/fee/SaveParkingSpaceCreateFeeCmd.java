@@ -17,10 +17,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.fee.bmo.fee.IFeeBMO;
 import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -71,6 +68,10 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
 
     @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IRuleGeneratorPayFeeBillV1InnerServiceSMO ruleGeneratorPayFeeBillV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -123,7 +124,6 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
             ownerCarDto.setCarId(reqJson.getString("locationObjId"));
             ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         } else if ("3000".equals(reqJson.getString("locationTypeCd"))) {//停车场
-            //ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
             ownerCarDtos = getOwnerCarByParkingArea(reqJson);
         } else {
             throw new IllegalArgumentException("收费范围错误");
@@ -281,6 +281,13 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
     }
 
     private int saveFeeAndAttrs(List<PayFeePo> feePos, List<FeeAttrPo> feeAttrsPos) {
+
+        //todo 走账单模式
+        String billModal = ruleGeneratorPayFeeBillV1InnerServiceSMOImpl.needGeneratorBillData(feePos);
+        if ("Y".equals(billModal)) {
+            return 1;
+        }
+
         int flag = feeInnerServiceSMOImpl.saveFee(feePos);
         if (flag < 1) {
             return flag;

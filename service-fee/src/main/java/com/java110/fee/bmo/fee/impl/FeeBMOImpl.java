@@ -697,6 +697,13 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         if (paramInJson.containsKey("startTime")) {
             time = paramInJson.getString("startTime");
         }
+
+        //查询费用项
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(paramInJson.getString("configId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        Assert.listOnlyOne(feeConfigDtos, "查询费用项错误！");
+
         JSONObject businessUnit = new JSONObject();
         businessUnit.put("feeId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
         businessUnit.put("configId", paramInJson.getString("configId"));
@@ -716,6 +723,12 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", context.getReqHeaders().get(CommonConstant.HTTP_USER_ID));
         paramInJson.put("feeId", businessUnit.getString("feeId"));
+
+        if(FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            businessUnit.put("maxTime",  feeConfigDtos.get(0).getEndTime());
+        }else {
+            businessUnit.put("maxTime",  paramInJson.getString("endTime"));
+        }
         return businessUnit;
     }
 
