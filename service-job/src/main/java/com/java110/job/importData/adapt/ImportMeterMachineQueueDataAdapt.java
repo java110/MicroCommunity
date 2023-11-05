@@ -114,7 +114,7 @@ public class ImportMeterMachineQueueDataAdapt extends DefaultImportData implemen
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-        if (!StringUtil.isEmpty(importMeterMachineDto.getValue1())) {
+        if (StringUtil.isEmpty(importMeterMachineDto.getValue1())) {
             return;
         }
 
