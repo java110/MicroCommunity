@@ -132,11 +132,11 @@ public class LateFeeByDayRule implements IComputeDiscount {
         return computeDiscountDto;
     }
 
-    private  double computeLateDiscountPrice(BigDecimal priceDec, FeeDto feeDto,Date curTime,double rate) {
+    private double computeLateDiscountPrice(BigDecimal priceDec, FeeDto feeDto,Date curTime,double rate) {
 
         //todo 欠费最大结束时间
         Date targetEndDate = computeFeeSMOImpl.getDeadlineTime(feeDto);
-        //Date targetEndDate = DateUtil.getDateFromStringB("2023-11-01");
+        //Date targetEndDate = DateUtil.getDateFromStringB("2023-11-30");
 
         //todo 周期开始时间
         Date targetStartDate = getTargetStartDate(feeDto);
@@ -152,7 +152,7 @@ public class LateFeeByDayRule implements IComputeDiscount {
         BigDecimal curCycleDiscountPriceDec = null;
         for (int cycleIndex = 0; cycleIndex < maxCycle; cycleIndex++) {
             //todo 计算 违约天数
-            lateDay = DateUtil.daysBetween(curTime, targetStartDate)-15;
+            lateDay = DateUtil.daysBetween(curTime, targetStartDate);
             curCycleDiscountPriceDec = priceDec.multiply(new BigDecimal(paymentCycle)).multiply(new BigDecimal(rate)).multiply(new BigDecimal(lateDay)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
             System.out.println(DateUtil.getFormatTimeStringB(targetStartDate)+">"+lateDay+":"+curCycleDiscountPriceDec.doubleValue());
             discountPriceDec = discountPriceDec.add(curCycleDiscountPriceDec);
@@ -177,12 +177,12 @@ public class LateFeeByDayRule implements IComputeDiscount {
     }
 
     public static void main(String[] args) throws Exception {
-        BigDecimal priceDec = new BigDecimal("195.78");
+        BigDecimal priceDec = new BigDecimal("89.43");
         FeeDto feeDto = new FeeDto();
-        feeDto.setStartTime(DateUtil.getDateFromStringB("2020-01-01"));
-        feeDto.setEndTime(DateUtil.getDateFromStringB("2020-01-01"));
+        feeDto.setStartTime(DateUtil.getDateFromStringB("2022-01-01"));
+        feeDto.setEndTime(DateUtil.getDateFromStringB("2022-01-01"));
         feeDto.setPaymentCycle("1");
-        //double discountPrice = computeLateDiscountPrice(priceDec, feeDto, DateUtil.getDateFromStringB("2023-11-01"),0.0005);
-        //System.out.println("discountPrice = "+discountPrice);
+//        double discountPrice = computeLateDiscountPrice(priceDec, feeDto, DateUtil.getDateFromStringB("2023-11-07"),0.0005);
+//        System.out.println("discountPrice = "+discountPrice);
     }
 }
