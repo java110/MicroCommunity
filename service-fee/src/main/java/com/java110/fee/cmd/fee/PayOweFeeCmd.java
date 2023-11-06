@@ -151,6 +151,10 @@ public class PayOweFeeCmd extends Cmd {
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
+
+        String payOrderId = paramObj.getString("payOrderId");
+
+
         //添加单元信息
         List<FeeReceiptPo> feeReceiptPos = new ArrayList<>();
         List<FeeReceiptDetailPo> feeReceiptDetailPos = new ArrayList<>();
@@ -177,7 +181,7 @@ public class PayOweFeeCmd extends Cmd {
             }
 
             //todo 去缴费
-            getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos, userDtos.get(0), receiptCode);
+            getFeeReceiptDetailPo(dataFlowContext, feeObj, feeReceiptDetailPos, feeReceiptPos, userDtos.get(0), receiptCode, payOrderId);
         }
 
 
@@ -199,7 +203,8 @@ public class PayOweFeeCmd extends Cmd {
                                        List<FeeReceiptDetailPo> feeReceiptDetailPos,
                                        List<FeeReceiptPo> feeReceiptPos,
                                        UserDto userDto,
-                                       String receiptCode) {
+                                       String receiptCode,
+                                       String payOrderId) {
         int flag = 0;
         if (!paramObj.containsKey("primeRate")) {
             paramObj.put("primeRate", "6");
@@ -215,7 +220,7 @@ public class PayOweFeeCmd extends Cmd {
         }
         paramObj.put("state", "1400");
         // todo 添加交费明细
-        addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos, userDto, receiptCode);
+        addOweFeeDetail(paramObj, dataFlowContext, feeReceiptDetailPos, feeReceiptPos, userDto, receiptCode,payOrderId);
         modifyOweFee(paramObj, dataFlowContext);
 
         //修改车辆
@@ -339,7 +344,8 @@ public class PayOweFeeCmd extends Cmd {
                                 List<FeeReceiptDetailPo> feeReceiptDetailPos,
                                 List<FeeReceiptPo> feeReceiptPos,
                                 UserDto userDto,
-                                String receiptCode) {
+                                String receiptCode,
+                                String payOrderId) {
 
         JSONObject businessFeeDetail = new JSONObject();
         businessFeeDetail.putAll(paramInJson);
@@ -382,6 +388,12 @@ public class PayOweFeeCmd extends Cmd {
             payFeeDetailPo.setPayOrderId(oId);
 
         }
+
+        // todo 如果 扫码枪支付 输入支付订单ID
+        if(!StringUtil.isEmpty(payOrderId)){
+            payFeeDetailPo.setPayOrderId(payOrderId);
+        }
+
         payFeeDetailPo.setCashierId(userDto.getUserId());
         payFeeDetailPo.setCashierName(userDto.getName());
         //todo 缓存收据编号

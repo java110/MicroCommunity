@@ -124,6 +124,8 @@ public class QrCodePaymentCmd extends Cmd {
         String appId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.APP_ID);
         String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
         //JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, "fee.payFee", JSONObject.class, userId);
+        reqJson.put("payOrderId",orderId);
+
         JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, reqJson.getString("subServiceCode"), JSONObject.class, userId);
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(paramOut));
     }

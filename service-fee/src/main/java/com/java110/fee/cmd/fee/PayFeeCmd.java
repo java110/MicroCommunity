@@ -193,6 +193,7 @@ public class PayFeeCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject paramObj) throws CmdException {
         logger.debug("paramObj : {}", paramObj);
+        String payOrderId = paramObj.getString("payOrderId");
 
         String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
         UserDto userDto = new UserDto();
@@ -236,6 +237,10 @@ public class PayFeeCmd extends Cmd {
             }
 
             payFeeDetailPo.setPayOrderId(oId);
+            // todo 如果 扫码枪支付 输入支付订单ID
+            if(!StringUtil.isEmpty(payOrderId)){
+                payFeeDetailPo.setPayOrderId(payOrderId);
+            }
             payFeeDetailPo.setCashierId(userDtos.get(0).getUserId());
             payFeeDetailPo.setCashierName(userDtos.get(0).getName());
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);

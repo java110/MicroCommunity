@@ -171,6 +171,8 @@ public class PayBatchFeeCmd extends Cmd {
         //todo 生成收据编号
         String receiptCode = feeReceiptInnerServiceSMOImpl.generatorReceiptCode(reqJson.getString("communityId"));
 
+        String payOrderId = reqJson.getString("payOrderId");
+
 
         JSONArray fees = reqJson.getJSONArray("fees");
         JSONObject paramInObj = null;
@@ -178,7 +180,7 @@ public class PayBatchFeeCmd extends Cmd {
         for (int feeIndex = 0; feeIndex < fees.size(); feeIndex++) {
             try {
                 paramInObj = fees.getJSONObject(feeIndex);
-                doDeal(paramInObj, reqJson.getString("communityId"),receiptCode, cmdDataFlowContext, userDtos.get(0));
+                doDeal(paramInObj, reqJson.getString("communityId"),receiptCode, cmdDataFlowContext, userDtos.get(0),payOrderId);
             } catch (Exception e) {
                 logger.error("处理异常", e);
                 throw new CmdException(e.getMessage());
@@ -192,7 +194,10 @@ public class PayBatchFeeCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 
-    private void doDeal(JSONObject paramObj, String communityId,String receiptCode, ICmdDataFlowContext cmdDataFlowContext, UserDto userDto) throws Exception {
+    private void doDeal(JSONObject paramObj, String communityId,String receiptCode,
+                        ICmdDataFlowContext cmdDataFlowContext,
+                        UserDto userDto,
+                        String payOrderId) throws Exception {
         paramObj.put("communityId", communityId);
         //获取订单ID
         String oId = Java110TransactionalFactory.getOId();
@@ -209,6 +214,10 @@ public class PayBatchFeeCmd extends Cmd {
                 oId = payFeeDetailPo.getDetailId();
             }
             payFeeDetailPo.setPayOrderId(oId);
+            // todo 如果 扫码枪支付 输入支付订单ID
+            if(!StringUtil.isEmpty(payOrderId)){
+                payFeeDetailPo.setPayOrderId(payOrderId);
+            }
             payFeeDetailPo.setCashierId(userDto.getUserId());
             payFeeDetailPo.setCashierName(userDto.getName());
             //todo 缓存收据编号
