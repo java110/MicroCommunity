@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class LateFeeZaoZhuangPropertyByDayRule implements IComputeDiscount {
      */
     private static final String SPEC_RATE = "89002020980005"; // 打折率
 
+    private static final String SPEC_DAY = "89002020980018"; // 延迟天数
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -59,9 +61,13 @@ public class LateFeeZaoZhuangPropertyByDayRule implements IComputeDiscount {
             return null;
         }
         double rate = 0.0;
+        int delayDay = 1;
         for (FeeDiscountSpecDto feeDiscountSpecDto : feeDiscountSpecDtos) {
             if (SPEC_RATE.equals(feeDiscountSpecDto.getSpecId())) {
                 rate = Double.parseDouble(feeDiscountSpecDto.getSpecValue());
+            }
+            if (SPEC_DAY.equals(feeDiscountSpecDto.getSpecId())) {
+                delayDay = Integer.parseInt(feeDiscountSpecDto.getSpecValue());
             }
         }
 
@@ -70,7 +76,11 @@ public class LateFeeZaoZhuangPropertyByDayRule implements IComputeDiscount {
         feeDto.setFeeId(feeDiscountDto.getFeeId());
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        Date curTime = DateUtil.getCurrentDate();
+        //Date curTime = DateUtil.getCurrentDate();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, delayDay * -1);
+        Date curTime = calendar.getTime();
 
         Date endTime = feeDtos.get(0).getEndTime();
 
@@ -138,14 +148,14 @@ public class LateFeeZaoZhuangPropertyByDayRule implements IComputeDiscount {
         BigDecimal yearFee = null;
         BigDecimal monthFee = null;
         BigDecimal dayMoney = null;
-        BigDecimal priceDec = new BigDecimal(118.24);
+        BigDecimal priceDec = new BigDecimal(300);
         for (int i = 1; i < day + 1; i++) {
             yearFee = priceDec.multiply(new BigDecimal(12));
             monthFee = yearFee.divide(new BigDecimal(365), 2, BigDecimal.ROUND_HALF_UP);
             dayMoney = monthFee.multiply(new BigDecimal(i - 1));
             dayMoney = dayMoney.multiply(new BigDecimal(0.003));
             money = money.add(dayMoney).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-            System.out.println("第" + i + "天 违约金 = " + money.doubleValue() + ",计算公式为：(124.51/30 * (" + i + "-1) + " + money.doubleValue() + ") * 0.003");
+            System.out.println("第" + i + "天 违约金 = " + money.doubleValue() + ",计算公式为：(300/30 * (" + i + "-1) + " + money.doubleValue() + ") * 0.003");
         }
 
         System.out.println(money);
