@@ -523,7 +523,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="state !=null and state != ''">
-            and t.state= #{state}
+            and ru.state= #{state}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}

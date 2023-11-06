@@ -1,11 +1,8 @@
 package com.java110.job.export.adapt;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
-import com.java110.dto.dict.DictDto;
 import com.java110.dto.report.QueryStatisticsDto;
-import com.java110.dto.room.RoomDto;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.Assert;
@@ -16,10 +13,8 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 月实收数据导出
@@ -36,7 +31,6 @@ public class DataMonthReceivedStatisticsAdapt implements IExportDataAdapt {
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) {
         JSONObject reqJson = exportDataDto.getReqJson();
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
-
         String startDate = reqJson.getString("feeStartDate");
         String endDate = reqJson.getString("feeEndDate");
         if (!StringUtil.isEmpty(startDate) && !startDate.contains(":")) {
@@ -47,11 +41,9 @@ public class DataMonthReceivedStatisticsAdapt implements IExportDataAdapt {
             endDate += " 23:59:59";
             reqJson.put("feeEndDate", endDate);
         }
-
         SXSSFWorkbook workbook = null;  //工作簿
         workbook = new SXSSFWorkbook();
         workbook.setCompressTempFiles(false);
-
         Sheet sheet = workbook.createSheet("实收明细");
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("房屋");
@@ -60,8 +52,7 @@ public class DataMonthReceivedStatisticsAdapt implements IExportDataAdapt {
         row.createCell(3).setCellValue("费用名称");
         row.createCell(4).setCellValue("实收时间段");
         row.createCell(5).setCellValue("收银员");
-        row.createCell(5).setCellValue("缴费时间");
-
+        row.createCell(6).setCellValue("缴费时间");
         QueryStatisticsDto queryStatisticsDto = new QueryStatisticsDto();
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
         queryStatisticsDto.setStartDate(reqJson.getString("feeStartDate"));
@@ -72,7 +63,6 @@ public class DataMonthReceivedStatisticsAdapt implements IExportDataAdapt {
         queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
         queryStatisticsDto.setLink(reqJson.getString("link"));
         long count = reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailCount(queryStatisticsDto);
-
         int maxPage = (int) Math.ceil((double) count / (double) MAX_ROW);
         List<Map> infos = null;
         for (int page = 1; page <= maxPage; page++) {
@@ -81,11 +71,9 @@ public class DataMonthReceivedStatisticsAdapt implements IExportDataAdapt {
             infos = reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailInfo(queryStatisticsDto);
             appendData(infos, sheet, (page - 1) * MAX_ROW);
         }
-
         //todo 实收金额
         double receivedAmount = reportFeeStatisticsInnerServiceSMOImpl.getMonthReceivedDetailAmount(queryStatisticsDto);
-
-        row = sheet.createRow((int)count+1);
+        row = sheet.createRow((int) count + 1);
         row.createCell(0).setCellValue("总收入");
         row.createCell(1).setCellValue(receivedAmount);
         return workbook;
@@ -110,9 +98,8 @@ public class DataMonthReceivedStatisticsAdapt implements IExportDataAdapt {
             //row.createCell(4).setCellValue(getValue(dataObj, "startTime") + "~" + getValue(dataObj, "endTime"));
             row.createCell(4).setCellValue(getValue(dataObj, "curYearMonth"));
             row.createCell(5).setCellValue(getValue(dataObj, "cashierName"));
-            row.createCell(5).setCellValue(getValue(dataObj, "createTime"));
+            row.createCell(6).setCellValue(getValue(dataObj, "createTime"));
         }
-
     }
 
     private String getValue(Map data, String key) {

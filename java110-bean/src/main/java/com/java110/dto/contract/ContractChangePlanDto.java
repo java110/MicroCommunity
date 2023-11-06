@@ -36,13 +36,18 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
     private String storeId;
     private String nextUserId;
 
-
     private Date createTime;
 
     private String statusCd = "0";
 
+    private String staffNameLike;
 
+    private String contractName;
+    private String contractCode;
+    private String contractType;
 
+    private String logStartTime;
+    private String logEndTime;
 
     public String getPlanType() {
         return planType;
@@ -100,7 +105,6 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
         this.storeId = storeId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -149,5 +153,59 @@ public class ContractChangePlanDto extends ContractDto implements Serializable {
     @Override
     public void setNextUserId(String nextUserId) {
         this.nextUserId = nextUserId;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
+    }
+
+    @Override
+    public String getContractName() {
+        return contractName;
+    }
+
+    @Override
+    public void setContractName(String contractName) {
+        this.contractName = contractName;
+    }
+
+    @Override
+    public String getContractCode() {
+        return contractCode;
+    }
+
+    @Override
+    public void setContractCode(String contractCode) {
+        this.contractCode = contractCode;
+    }
+
+    @Override
+    public String getContractType() {
+        return contractType;
+    }
+
+    @Override
+    public void setContractType(String contractType) {
+        this.contractType = contractType;
+    }
+
+    public String getLogStartTime() {
+        return logStartTime;
+    }
+
+    public void setLogStartTime(String logStartTime) {
+        this.logStartTime = logStartTime;
+    }
+
+    public String getLogEndTime() {
+        return logEndTime;
+    }
+
+    public void setLogEndTime(String logEndTime) {
+        this.logEndTime = logEndTime;
     }
 }

@@ -6,25 +6,24 @@
 
     <!-- 保存个人物品信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessUserStorehouseInfo" parameterType="Map">
-        insert into business_user_storehouse(
-        res_name,operate,b_id,store_id,stock,res_id,res_code,user_id,us_id,mini_stock,times_id
-        ) values (
-        #{resName},#{operate},#{bId},#{storeId},#{stock},#{resId},#{resCode},#{userId},#{usId},#{miniStock},#{timesId}
-        )
+        insert into business_user_storehouse(res_name, operate, b_id, store_id, stock, res_id, res_code, user_id, us_id,
+                                             mini_stock, times_id)
+        values (#{resName}, #{operate}, #{bId}, #{storeId}, #{stock}, #{resId}, #{resCode}, #{userId}, #{usId},
+                #{miniStock}, #{timesId})
     </insert>
 
     <insert id="saveUserStorehouses" parameterType="Map">
-        insert into user_storehouse(
-        res_name,b_id,store_id,stock,res_id,res_code,user_id,us_id,mini_stock,times_id
-        ) values (
-        #{resName},'-1',#{storeId},#{stock},#{resId},#{resCode},#{userId},#{usId},#{miniStock},#{timesId}
-        )
+        insert into user_storehouse(res_name, b_id, store_id, stock, res_id, res_code, user_id, us_id, mini_stock,
+                                    times_id)
+        values (#{resName}, '-1', #{storeId}, #{stock}, #{resId}, #{resCode}, #{userId}, #{usId}, #{miniStock},
+                #{timesId})
     </insert>
 
     <!-- 查询个人物品信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessUserStorehouseInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.operate,t.b_id,t.b_id bId,t.store_id,t.store_id
-        storeId,t.stock,t.res_id,t.res_id resId,t.res_code,t.res_code resCode,t.user_id,t.user_id userId,t.us_id,t.us_id usId,
+        storeId,t.stock,t.res_id,t.res_id resId,t.res_code,t.res_code resCode,t.user_id,t.user_id userId,t.us_id,t.us_id
+        usId,
         t.mini_stock,t.mini_stock miniStock,t.times_id,t.times_id timesId
         from business_user_storehouse t
         where 1 =1
@@ -67,7 +66,8 @@
     <insert id="saveUserStorehouseInfoInstance" parameterType="Map">
         insert into user_storehouse(
         res_name,status_cd,b_id,store_id,stock,res_id,res_code,user_id,us_id,mini_stock
-        ) select t.res_name,'0',t.b_id,t.store_id,t.stock,t.res_id,t.res_code,t.user_id,t.us_id,t.mini_stock from business_user_storehouse t
+        ) select t.res_name,'0',t.b_id,t.store_id,t.stock,t.res_id,t.res_code,t.user_id,t.us_id,t.mini_stock from
+        business_user_storehouse t
         where 1=1
         <if test="resName !=null and resName != ''">
             and t.res_name= #{resName}
@@ -103,17 +103,22 @@
     <select id="getUserStorehouseInfo" parameterType="Map" resultType="Map">
         select t.res_name,t.res_name resName,t.status_cd,t.status_cd statusCd,t.b_id,t.b_id bId,t.store_id,t.store_id
         storeId,t.stock,t.res_id,t.res_id resId,t.user_id,t.user_id userId,t.us_id,t.us_id usId,rs.res_code resCode,
-        rs.out_low_price outLowPrice,rs.out_high_price outHighPrice,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,t.mini_stock miniStock,
-        rs.unit_code unitCode,rs.mini_unit_code miniUnitCode,rs.mini_unit_stock miniUnitStock,t.times_id,t.times_id timesId,
+        rs.out_low_price outLowPrice,rs.out_high_price outHighPrice,rst.name rstName,rst1.name
+        parentRstName,rss.spec_name specName,t.mini_stock miniStock,
+        rs.unit_code unitCode,rs.mini_unit_code miniUnitCode,rs.mini_unit_stock miniUnitStock,t.times_id,t.times_id
+        timesId,
         td.name unitCodeName,td1.name miniUnitCodeName,u.name userName,rs.is_fixed isFixed,td2.name isFixedName
         from user_storehouse t
         left join resource_store rs on t.res_code = rs.res_code and rs.status_cd = '0' and t.res_id = rs.res_id
         left join resource_store_type rst on rs.rst_id = rst.rst_id
         left join resource_store_type rst1 on rs.parent_rst_id = rst1.rst_id
         left join resource_store_specification rss on rs.rss_id = rss.rss_id
-        left join t_dict td on rs.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns = 'unit_code'
-        left join t_dict td1 on rs.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
-        left join t_dict td2 on rs.is_fixed = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'is_fixed'
+        left join t_dict td on rs.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
+        'unit_code'
+        left join t_dict td1 on rs.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
+        td1.table_columns = 'unit_code'
+        left join t_dict td2 on rs.is_fixed = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns
+        = 'is_fixed'
         left join u_user u on t.user_id = u.user_id
         where 1 = 1
         <if test='lagerStockZero !=null and lagerStockZero == "1"'>
@@ -138,14 +143,14 @@
             and t.stock= #{stock}
         </if>
         <if test="resId !=null and resId != ''">
-            and t.res_id= #{resId}
+            and t.res_id like '%${resId}%'
         </if>
         <if test="resCode !=null and resCode != ''">
             and rs.res_code= #{resCode}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+        <!--<if test="userId !=null and userId != ''">
+            and t.user_id like '%${userId}%'
+        </if>-->
         <if test="rstId !=null and rstId != ''">
             and rs.rst_id= #{rstId}
         </if>
@@ -162,13 +167,13 @@
             and t.us_id= #{usId}
         </if>
         <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+            and t.user_id like '%${userId}%'
         </if>
         <if test="userName !=null and userName != ''">
             and u.name= #{userName}
         </if>
-<!--        这里先注释 因为 mysql 8.0  有问题 后面遇到问题 分析 为啥重复 优化 sql-->
-<!--        GROUP BY t.us_id-->
+        <!--        这里先注释 因为 mysql 8.0  有问题 后面遇到问题 分析 为啥重复 优化 sql-->
+        <!--        GROUP BY t.us_id-->
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -236,7 +241,7 @@
             and t.stock= #{stock}
         </if>
         <if test="resId !=null and resId != ''">
-            and t.res_id= #{resId}
+            and t.res_id like '%${resId}%'
         </if>
         <if test="resCode !=null and resCode != ''">
             and t.res_code= #{resCode}
@@ -245,7 +250,7 @@
             and rs.res_code= #{resCode}
         </if>
         <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
+            and t.user_id like '%${userId}%'
         </if>
         <if test="rstId !=null and rstId != ''">
             and rs.rst_id= #{rstId}
@@ -262,9 +267,9 @@
         <if test="usId !=null and usId != ''">
             and t.us_id= #{usId}
         </if>
-        <if test="userId !=null and userId != ''">
+        <!--<if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
-        </if>
+        </if>-->
         <if test="userName !=null and userName != ''">
             and u.name= #{userName}
         </if>

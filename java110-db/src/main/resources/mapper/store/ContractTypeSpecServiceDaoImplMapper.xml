@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="contractTypeSpecServiceDaoImpl">
 
-
     <!-- 保存合同类型规格信息 add by wuxw 2018-07-03 -->
     <insert id="saveContractTypeSpecInfo" parameterType="Map">
-        insert into contract_type_spec(
-        spec_type,spec_name,spec_holdplace,spec_value_type,spec_cd,store_id,spec_show,contract_type_id,required,list_show
-        ) values (
-        #{specType},#{specName},#{specHoldplace},#{specValueType},#{specCd},#{storeId},#{specShow},#{contractTypeId},#{required},#{listShow}
-        )
+        insert into contract_type_spec(spec_type, spec_name, spec_holdplace, spec_value_type, spec_cd, store_id,
+                                       spec_show, contract_type_id, required, list_show)
+        values (#{specType}, #{specName}, #{specHoldplace}, #{specValueType}, #{specCd}, #{storeId}, #{specShow},
+                #{contractTypeId}, #{required}, #{listShow})
     </insert>
-
 
     <!-- 查询合同类型规格信息 add by wuxw 2018-07-03 -->
     <select id="getContractTypeSpecInfo" parameterType="Map" resultType="Map">
@@ -27,7 +23,7 @@
             and t.spec_type= #{specType}
         </if>
         <if test="specName !=null and specName != ''">
-            and t.spec_name= #{specName}
+            and t.spec_name like concat('%',#{specName},'%')
         </if>
         <if test="specHoldplace !=null and specHoldplace != ''">
             and t.spec_holdplace= #{specHoldplace}
@@ -60,9 +56,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改合同类型规格信息 add by wuxw 2018-07-03 -->
     <update id="updateContractTypeSpecInfo" parameterType="Map">
@@ -101,7 +95,6 @@
         <if test="specCd !=null and specCd != ''">
             and t.spec_cd= #{specCd}
         </if>
-
     </update>
 
     <!-- 查询合同类型规格数量 add by wuxw 2018-07-03 -->
@@ -113,7 +106,7 @@
             and t.spec_type= #{specType}
         </if>
         <if test="specName !=null and specName != ''">
-            and t.spec_name= #{specName}
+            and t.spec_name like concat('%',#{specName},'%')
         </if>
         <if test="specHoldplace !=null and specHoldplace != ''">
             and t.spec_holdplace= #{specHoldplace}
@@ -142,8 +135,5 @@
         <if test="listShow !=null and listShow != ''">
             and t.list_show= #{listShow}
         </if>
-
-
     </select>
-
 </mapper>

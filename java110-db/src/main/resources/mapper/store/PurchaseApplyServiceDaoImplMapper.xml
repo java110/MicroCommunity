@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="purchaseApplyServiceDaoImpl">
     <resultMap type="com.java110.dto.purchase.PurchaseApplyDto" id="applyMap">
         <id column="applyOrderId" property="applyOrderId"/>
@@ -38,9 +38,10 @@
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessPurchaseApplyInfo" parameterType="Map">
         insert into business_purchase_apply
-        (operate,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel,community_id)
-        values
-        (#{operate},#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},#{bId},#{endUserName},#{endUserTel},#{communityId})
+        (operate, res_order_type, description, apply_order_id, state, store_id, user_id, user_name, b_id, end_user_name,
+         end_user_tel, community_id)
+        values (#{operate}, #{resOrderType}, #{description}, #{applyOrderId}, #{state}, #{storeId}, #{userId},
+                #{userName}, #{bId}, #{endUserName}, #{endUserTel}, #{communityId})
     </insert>
 
     <!-- 保存采购明细表备份表 -->
@@ -218,14 +219,14 @@
         t.warehousing_way warehousingWay,
         t.community_id communityId
         from purchase_apply t
-        <if test="resName != null and resName != ''" >
-        left join purchase_apply_detail pad on t.apply_order_id = pad.apply_order_id and pad.status_cd = '0'
-        left join resource_store rs on pad.res_id = rs.res_id and rs.status_cd = '0'
-       </if>
+        <if test="resName != null and resName != ''">
+            left join purchase_apply_detail pad on t.apply_order_id = pad.apply_order_id and pad.status_cd = '0'
+            left join resource_store rs on pad.res_id = rs.res_id and rs.status_cd = '0'
+        </if>
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 = 1
-        <if test="resName != null and resName != ''" >
-        and rs.res_name like concat('%','','%')
+        <if test="resName != null and resName != ''">
+            and rs.res_name like concat('%',#{resName},'%')
         </if>
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
@@ -234,7 +235,7 @@
             and t.description= #{description}
         </if>
         <if test="applyOrderId !=null and applyOrderId != ''">
-            and t.apply_order_id= #{applyOrderId}
+            and t.apply_order_id like concat('%',#{applyOrderId},'%')
         </if>
         <if test="applyOrderIds !=null ">
             and t.apply_order_id in
@@ -274,7 +275,7 @@
             and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
-            and t.create_time &lt;= #{startTime}
+            and t.create_time &lt;= #{endTime}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -341,14 +342,17 @@
         p.res_id resId,p.quantity,p.remark,p.purchase_quantity purchaseQuantity,p.purchase_remark purchaseRemark,p.price
         purchasePrice,p.original_stock originalStock,p.consult_price consultPrice,p.times_id timesId,
         r.res_name resName,r.res_code resCode,
-        r.price,r.price standardPrice,rstime.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,rs.supplier_name supplierName,
+        r.price,r.price standardPrice,rstime.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name
+        specName,rs.supplier_name supplierName,
         td1.name unitCodeName,
         td2.name miniUnitCodeName
         from
         purchase_apply_detail p
         inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
-        left join t_dict td1 on r.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns = 'unit_code'
-        left join t_dict td2 on r.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
+        left join t_dict td1 on r.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns
+        = 'unit_code'
+        left join t_dict td2 on r.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and
+        td2.table_columns = 'unit_code'
         LEFT JOIN resource_supplier rs on p.rs_id=rs.rs_id
         LEFT JOIN resource_store_type rst on r.rst_id=rst.rst_id
         LEFT JOIN resource_store_type rst1 on r.parent_rst_id=rst1.rst_id
@@ -419,13 +423,13 @@
     <select id="queryPurchaseApplysCount" parameterType="Map" resultType="Map">
         select count(1) count
         from purchase_apply t
-        <if test="resName != null and resName != ''" >
+        <if test="resName != null and resName != ''">
             left join purchase_apply_detail pad on t.apply_order_id = pad.apply_order_id and pad.status_cd = '0'
             left join resource_store rs on pad.res_id = rs.res_id and rs.status_cd = '0'
         </if>
         where 1 = 1
-        <if test="resName != null and resName != ''" >
-            and rs.res_name like concat('%','','%')
+        <if test="resName != null and resName != ''">
+            and rs.res_name like concat('%',#{resName},'%')
         </if>
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
@@ -434,7 +438,7 @@
             and t.description= #{description}
         </if>
         <if test="applyOrderId !=null and applyOrderId != ''">
-            and t.apply_order_id= #{applyOrderId}
+            and t.apply_order_id like concat('%',#{applyOrderId},'%')
         </if>
         <if test="applyOrderIds !=null ">
             and t.apply_order_id in
@@ -477,7 +481,7 @@
             and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
-            and t.create_time &lt;= #{startTime}
+            and t.create_time &lt;= #{endTime}
         </if>
         <if test='urgentFlag !=null and urgentFlag == "1"'>
             and date_format(t.create_time,'%Y-%m') = date_format(now(),'%Y-%m')
@@ -487,11 +491,12 @@
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
     <insert id="savePurchaseApply" parameterType="Map">
         insert into purchase_apply
-        (status_cd,res_order_type,description,apply_order_id,state,store_id,user_id,user_name,b_id,end_user_name,end_user_tel,
-        create_time,create_user_id,create_user_name,warehousing_way,community_id)
-        values
-        ('0',#{resOrderType},#{description},#{applyOrderId},#{state},#{storeId},#{userId},#{userName},'-1',#{endUserName},#{endUserTel},
-        #{createTime},#{createUserId},#{createUserName},#{warehousingWay},#{communityId})
+        (status_cd, res_order_type, description, apply_order_id, state, store_id, user_id, user_name, b_id,
+         end_user_name, end_user_tel,
+         create_time, create_user_id, create_user_name, warehousing_way, community_id)
+        values ('0', #{resOrderType}, #{description}, #{applyOrderId}, #{state}, #{storeId}, #{userId}, #{userName},
+                '-1', #{endUserName}, #{endUserTel},
+                #{createTime}, #{createUserId}, #{createUserName}, #{warehousingWay}, #{communityId})
     </insert>
 
     <!--查询下级用户id-->

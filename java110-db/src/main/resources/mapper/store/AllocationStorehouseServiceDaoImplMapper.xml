@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="allocationStorehouseServiceDaoImpl">
 
     <!-- 保存仓库调拨信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessAllocationStorehouseInfo" parameterType="Map">
-        insert into business_allocation_storehouse(
-        as_id,store_id,res_id,sh_id_z,res_name,start_user_id,operate,sh_id_a,start_user_name,b_id,stock,original_stock,remark,apply_id
-        ) values (
-        #{asId},#{storeId},#{resId},#{shIdz},#{resName},#{startUserId},#{operate},#{shIda},#{startUserName},#{bId},#{stock},#{originalStock},#{remark},#{applyId}
-        )
+        insert into business_allocation_storehouse(as_id, store_id, res_id, sh_id_z, res_name, start_user_id, operate,
+                                                   sh_id_a, start_user_name, b_id, stock, original_stock, remark,
+                                                   apply_id)
+        values (#{asId}, #{storeId}, #{resId}, #{shIdz}, #{resName}, #{startUserId}, #{operate}, #{shIda},
+                #{startUserName}, #{bId}, #{stock}, #{originalStock}, #{remark}, #{applyId})
     </insert>
 
     <!-- 保存仓库调拨信息 add by wuxw 2018-07-03 -->
     <insert id="saveAllocationStorehouseInfo" parameterType="Map">
-        insert into allocation_storehouse(
-        as_id,b_id,sh_id_a,sh_id_z,res_id,res_name,store_id,stock,start_user_id,start_user_name,create_time,remark,apply_id,original_stock
-        ) values (
-        #{asId},#{bId},#{shIda},#{shIdz},#{resId},#{resName},#{storeId},#{stock},#{startUserId},#{startUserName},#{createTime},#{remark},#{applyId},#{originalStock}
-        )
+        insert into allocation_storehouse(as_id, b_id, sh_id_a, sh_id_z, res_id, res_name, store_id, stock,
+                                          start_user_id, start_user_name, create_time, remark, apply_id, original_stock)
+        values (#{asId}, #{bId}, #{shIda}, #{shIdz}, #{resId}, #{resName}, #{storeId}, #{stock}, #{startUserId},
+                #{startUserName}, #{createTime}, #{remark}, #{applyId}, #{originalStock})
     </insert>
 
     <!-- 查询仓库调拨信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessAllocationStorehouseInfo" parameterType="Map" resultType="Map">
         select t.as_id,t.as_id asId,t.store_id,t.store_id storeId,t.res_id,t.res_id resId,t.sh_id_z,t.sh_id_z
         shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id startUserId,t.operate,t.sh_id_a,t.sh_id_a
-        shIda,t.start_user_name,t.start_user_name startUserName,t.b_id,t.b_id bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.apply_id,t.apply_id applyId
+        shIda,t.start_user_name,t.start_user_name startUserName,t.b_id,t.b_id
+        bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.apply_id,t.apply_id applyId
         from business_allocation_storehouse t
         where 1 =1
         <if test="asId !=null and asId != ''">
@@ -115,20 +114,28 @@
         select t.as_id,t.as_id asId,t.status_cd,t.status_cd statusCd,t.store_id,t.store_id storeId,t.res_id,t.res_id
         resId,t.sh_id_z,t.sh_id_z shIdz,t.res_name,t.res_name resName,t.start_user_id,t.start_user_id
         startUserId,t.sh_id_a,t.sh_id_a shIda,t.start_user_name,t.start_user_name startUserName,asa.state,t.b_id,t.b_id
-        bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.create_time createTime,td.name stateName,a.sh_name shaName,z.sh_name shzName,
-        rs.res_code,rs.res_code resCode,t.apply_id,t.apply_id applyId,rst.name rstName,rst1.name parentRstName,rss.spec_name specName,asa.apply_type,
-        asa.apply_type applyType,td1.name applyTypeName,td2.name unitCodeName,td3.name miniUnitCodeName,rs.is_fixed isFixed,td4.name isFixedName,
+        bId,t.stock,t.original_stock,t.original_stock originalStock,t.remark,t.create_time createTime,td.name
+        stateName,a.sh_name shaName,z.sh_name shzName,
+        rs.res_code,rs.res_code resCode,t.apply_id,t.apply_id applyId,rst.name rstName,rst1.name
+        parentRstName,rss.spec_name specName,asa.apply_type,
+        asa.apply_type applyType,td1.name applyTypeName,td2.name unitCodeName,td3.name miniUnitCodeName,rs.is_fixed
+        isFixed,td4.name isFixedName,
         t.times_id,t.times_id timesId
         from allocation_storehouse t
         left join allocation_storehouse_apply asa on asa.apply_id = t.apply_id and asa.status_cd = '0'
-        left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns = 'state'
-        left join t_dict td1 on asa.apply_type = td1.status_cd and td.table_name = 'allocation_storehouse_apply' and td1.table_columns = 'apply_type'
+        left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and
+        td.table_columns = 'state'
+        left join t_dict td1 on asa.apply_type = td1.status_cd and td.table_name = 'allocation_storehouse_apply' and
+        td1.table_columns = 'apply_type'
         left join storehouse a on t.sh_id_a = a.sh_id and a.store_id = t.store_id and a.status_cd = '0'
         left join storehouse z on t.sh_id_z = z.sh_id and z.store_id = t.store_id and z.status_cd = '0'
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
-        left join t_dict td2 on rs.unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns = 'unit_code'
-        left join t_dict td3 on rs.mini_unit_code = td3.status_cd and td3.table_name = 'resource_store' and td3.table_columns = 'unit_code'
-        left join t_dict td4 on rs.is_fixed = td4.status_cd and td4.table_name = 'resource_store' and td4.table_columns = 'is_fixed'
+        left join t_dict td2 on rs.unit_code = td2.status_cd and td2.table_name = 'resource_store' and td2.table_columns
+        = 'unit_code'
+        left join t_dict td3 on rs.mini_unit_code = td3.status_cd and td3.table_name = 'resource_store' and
+        td3.table_columns = 'unit_code'
+        left join t_dict td4 on rs.is_fixed = td4.status_cd and td4.table_name = 'resource_store' and td4.table_columns
+        = 'is_fixed'
         left join resource_store_type rst on rs.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_type rst1 on rs.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
         left join resource_store_specification rss on rs.rss_id = rss.rss_id and rss.status_cd = '0'
@@ -146,7 +153,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="applyId !=null and applyId != ''">
-            and t.apply_id= #{applyId}
+            and t.apply_id like '%${applyId}%'
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
@@ -155,7 +162,7 @@
             and asa.community_id= #{communityId}
         </if>
         <if test="resId !=null and resId != ''">
-            and t.res_id= #{resId}
+            and t.res_id like '%${resId}%'
         </if>
         <if test="shIdz !=null and shIdz != ''">
             and t.sh_id_z= #{shIdz}
@@ -252,8 +259,10 @@
         select count(1) count
         from allocation_storehouse t
         left join allocation_storehouse_apply asa on asa.apply_id = t.apply_id and asa.status_cd = '0'
-        left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns ='state'
-        left join t_dict td1 on asa.apply_type = td1.status_cd and td.table_name = 'allocation_storehouse_apply' and td.table_columns = 'apply_type'
+        left join t_dict td on asa.state = td.status_cd and td.table_name = 'allocation_storehouse_apply' and
+        td.table_columns ='state'
+        left join t_dict td1 on asa.apply_type = td1.status_cd and td.table_name = 'allocation_storehouse_apply' and
+        td.table_columns = 'apply_type'
         left join storehouse a on t.sh_id_a = a.sh_id and a.store_id = t.store_id and a.status_cd = '0'
         left join storehouse z on t.sh_id_z = z.sh_id and z.store_id = t.store_id and z.status_cd = '0'
         left join resource_store rs on t.res_id = rs.res_id and rs.status_cd = '0'
@@ -274,7 +283,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="applyId !=null and applyId != ''">
-            and t.apply_id= #{applyId}
+            and t.apply_id like '%${applyId}%'
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
@@ -282,9 +291,8 @@
         <if test="communityId !=null and communityId != ''">
             and asa.community_id= #{communityId}
         </if>
-
         <if test="resId !=null and resId != ''">
-            and t.res_id= #{resId}
+            and t.res_id like '%${resId}%'
         </if>
         <if test="shIdz !=null and shIdz != ''">
             and t.sh_id_z= #{shIdz}

@@ -380,12 +380,36 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     }
 
     @Override
+    public int queryHuaningOweFeeCounts(Map info) {
+        logger.debug("查询queryHuaningOweFeeCounts数据 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCounts", info);
+        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+    }
+
+    @Override
     public List<Map> queryHuaningPayFee(Map info) {
         logger.debug("查询queryHuaningPayFee 入参 info : {}", info);
 
         List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee", info);
 
         return businessReportFeeMonthStatisticsInfos;
+    }
+
+    @Override
+    public int queryHuaningPayFeeCounts(Map info) {
+        logger.debug("查询queryHuaningPayFeeCounts数据 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCounts", info);
+        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
     }
 
     @Override

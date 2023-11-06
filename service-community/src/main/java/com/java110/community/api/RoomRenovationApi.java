@@ -426,6 +426,7 @@ public class RoomRenovationApi {
         userDto.setUserId(userId);
         userDto.setStatusCd("0");
         List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+        Assert.listOnlyOne(users, "查询用户信息错误！");
         RoomRenovationRecordPo roomRenovationRecordPo = new RoomRenovationRecordPo();
         roomRenovationRecordPo.setrId(rId);
         roomRenovationRecordPo.setRemark(remark);
@@ -438,7 +439,7 @@ public class RoomRenovationApi {
         roomRenovationRecordPo.setIsTrue(isTrue);
         saveRoomRenovationRecordBMO.saveRecord(roomRenovationRecordPo);
         for (String photo : photos) {
-            photoSMOImpl.savePhoto(photo,roomRenovationRecordPo.getRecordId(),roomRenovationPo.getCommunityId(),"19000");
+            photoSMOImpl.savePhoto(photo, roomRenovationRecordPo.getRecordId(), roomRenovationPo.getCommunityId(), "19000");
         }
         FileRelPo fileRelPo = new FileRelPo();
         fileRelPo.setObjId(roomRenovationRecordPo.getRecordId());

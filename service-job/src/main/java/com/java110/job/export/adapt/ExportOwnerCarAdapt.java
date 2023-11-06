@@ -1,12 +1,10 @@
 package com.java110.job.export.adapt;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
-import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
@@ -23,8 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+/**
+ * 业主车辆导出
+ *
+ * @date 2023-09-08
+ */
 @Service("exportOwnerCar")
 public class ExportOwnerCarAdapt implements IExportDataAdapt {
 
@@ -49,20 +53,19 @@ public class ExportOwnerCarAdapt implements IExportDataAdapt {
         //工作表
         workbook = new SXSSFWorkbook();
         workbook.setCompressTempFiles(false);
-
-
         Sheet sheet = workbook.createSheet("业主车辆");
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("车牌号");
-        row.createCell(1).setCellValue("房屋");
-        row.createCell(2).setCellValue("车辆类型");
-        row.createCell(3).setCellValue("颜色");
-        row.createCell(4).setCellValue("业主");
-        row.createCell(5).setCellValue("手机号");
-        row.createCell(6).setCellValue("车位");
-        row.createCell(7).setCellValue("开始时间");
-        row.createCell(8).setCellValue("结束时间");
-
+        row.createCell(1).setCellValue("成员车辆");
+        row.createCell(2).setCellValue("房屋号");
+        row.createCell(3).setCellValue("车辆品牌");
+        row.createCell(4).setCellValue("车辆类型");
+        row.createCell(5).setCellValue("颜色");
+        row.createCell(6).setCellValue("业主");
+        row.createCell(7).setCellValue("车位");
+        row.createCell(8).setCellValue("有效期");
+        row.createCell(9).setCellValue("状态");
+        row.createCell(10).setCellValue("备注");
         JSONObject reqJson = exportDataDto.getReqJson();
         if (reqJson.containsKey("num") && !StringUtil.isEmpty(reqJson.getString("num"))) {
             ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
@@ -102,16 +105,38 @@ public class ExportOwnerCarAdapt implements IExportDataAdapt {
             row = sheet.createRow(roomIndex + step + 1);
             dataObj = ownerCarDtoList.get(roomIndex);
             row.createCell(0).setCellValue(dataObj.getCarNum());
-            row.createCell(1).setCellValue(dataObj.getRoomName());
-            row.createCell(2).setCellValue(dataObj.getCarTypeName());
-            row.createCell(3).setCellValue(dataObj.getCarColor());
-            row.createCell(4).setCellValue(dataObj.getOwnerName());
-            row.createCell(5).setCellValue(dataObj.getLink());
-            row.createCell(6).setCellValue(dataObj.getAreaNum()+"-"+dataObj.getNum());
-            row.createCell(7).setCellValue(DateUtil.getFormatTimeStringA(dataObj.getStartTime()));
-            row.createCell(8).setCellValue(DateUtil.getFormatTimeStringA(dataObj.getEndTime()));
+            if (!StringUtil.isEmpty(dataObj.getMemberCarCount())) {
+                row.createCell(1).setCellValue(dataObj.getMemberCarCount());
+            } else {
+                row.createCell(1).setCellValue("0");
+            }
+            row.createCell(2).setCellValue(dataObj.getRoomName());
+            row.createCell(3).setCellValue(dataObj.getCarBrand());
+            row.createCell(4).setCellValue(dataObj.getCarTypeName());
+            row.createCell(5).setCellValue(dataObj.getCarColor());
+            row.createCell(6).setCellValue(dataObj.getOwnerName() + "(" + dataObj.getLink() + ")");
+            if (!StringUtil.isEmpty(dataObj.getAreaNum()) && dataObj.getState().equals("1001")) {
+                row.createCell(7).setCellValue(dataObj.getAreaNum() + "-" + dataObj.getNum());
+            } else {
+                row.createCell(7).setCellValue("车位已释放");
+            }
+            if (!StringUtil.isEmpty(dataObj.getLeaseType()) && dataObj.getLeaseType().equals("H")) { //H 月租车；S出售车；I 内部车；NM 免费车；R 预约车
+                row.createCell(8).setCellValue(DateUtil.getFormatTimeStringA(dataObj.getStartTime()) + "~" + DateUtil.getFormatTimeStringA(dataObj.getEndTime()));
+            } else {
+                row.createCell(8).setCellValue("--");
+            }
+            //结束时间
+            Date endTime = dataObj.getEndTime();
+            Date date = new Date();
+            if (!StringUtil.isEmpty(dataObj.getState()) && dataObj.getState().equals("3003")) { //1001 正常；2002 欠费；3003 车位释放
+                row.createCell(9).setCellValue("到期");
+            } else if (endTime.getTime() > date.getTime()) {
+                row.createCell(9).setCellValue("正常");
+            } else {
+                row.createCell(9).setCellValue("到期");
+            }
+            row.createCell(10).setCellValue(dataObj.getRemark());
         }
-
     }
 
     private void freshPs(List<OwnerCarDto> ownerCarDtoList) {

@@ -22,6 +22,7 @@ import com.java110.user.bmo.question.IQuestionAnswerBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -116,6 +117,13 @@ public class SaveOwnerVoteCmd extends Cmd {
         questionAnswerPo.setCommunityId(reqJson.getString("communityId"));
         questionAnswerPo.setQaType(QuestionAnswerDto.QA_TYPE_VOTE);
         questionAnswerPo.setState(QuestionAnswerDto.STATE_WAIT);
+        if (!StringUtil.isEmpty(reqJson.getString("communityId"))) {
+            questionAnswerPo.setObjType("3306"); //3306 是小区，3307 是商户
+            questionAnswerPo.setObjId(reqJson.getString("communityId"));
+        } else if (!StringUtil.isEmpty(reqJson.getString("storeId"))) {
+            questionAnswerPo.setObjType("3307"); //3306 是小区，3307 是商户
+            questionAnswerPo.setObjId(reqJson.getString("storeId"));
+        }
         questionAnswerV1InnerServiceSMOImpl.saveQuestionAnswer(questionAnswerPo);
 
         QuestionAnswerTitleRelPo questionAnswerTitleRelPo = new QuestionAnswerTitleRelPo();
@@ -127,6 +135,6 @@ public class SaveOwnerVoteCmd extends Cmd {
         questionAnswerTitleRelPo.setQatrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         questionAnswerTitleRelV1InnerServiceSMOImpl.saveQuestionAnswerTitleRel(questionAnswerTitleRelPo);
 
-        questionAnswerBMOImpl.saveUserQuestionAnswer(questionAnswerPo,reqJson.getJSONArray("roomIds"));
+        questionAnswerBMOImpl.saveUserQuestionAnswer(questionAnswerPo, reqJson.getJSONArray("roomIds"));
     }
 }

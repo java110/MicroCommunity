@@ -75,6 +75,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
 
     @Autowired
     private IStorehouseV1InnerServiceSMO storehouseV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "resourceStores", "必填，请填写申请采购的物资");
@@ -82,17 +83,14 @@ public class UrgentPurchaseApplyCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写申请类型");
         Assert.hasKeyAndValue(reqJson, "shId", "必填，请填写仓库");
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
-
         if (resourceStores == null || resourceStores.size() < 1) {
             throw new CmdException("未包含采购物品");
         }
-
         //todo 查询仓库是否存在
         StorehouseDto storehouseDto = new StorehouseDto();
         storehouseDto.setShId(reqJson.getString("shId"));
         List<StorehouseDto> storehouseDtos = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
         Assert.listOnlyOne(storehouseDtos, "仓库不存在");
-
         //todo 不允许采购
         if (!"ON".equals(storehouseDtos.get(0).getAllowPurchase())) {
             throw new CmdException(storehouseDtos.get(0).getShName() + "不允许采购");
@@ -117,11 +115,8 @@ public class UrgentPurchaseApplyCmd extends Cmd {
         userDto.setRow(1);
         userDto.setPage(1);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
         Assert.listOnlyOne(userDtos, "用户不存在");
-
         userName = userDtos.get(0).getName();
-
         String storeId = context.getReqHeaders().get("store-id");
         PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
         purchaseApplyDto.setResOrderType(reqJson.getString("resOrderType"));
@@ -178,12 +173,10 @@ public class UrgentPurchaseApplyCmd extends Cmd {
             //查询当前小区仓库下该物品信息
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
             resourceStoreDto.setResCode(resourceStore.getString("resCode"));
-
             if (StringUtil.isEmpty(resourceStore.getString("shzId"))) {
                 resourceStore.put("shzId", resourceStore.getString("shId"));
             }
             resourceStoreDto.setShId(resourceStore.getString("shzId")); //小区目标仓库
-
             List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
             //调整集团仓库物品信息
             ResourceStorePo resourceStorePo = new ResourceStorePo();
@@ -201,10 +194,9 @@ public class UrgentPurchaseApplyCmd extends Cmd {
             resourceStoreTimesPo1.setStock("0");
             resourceStoreTimesPo1.setStoreId(storeId);
             resourceStoreTimesPo1.setShId(resourceStore.getString("shId"));
+            resourceStoreTimesPo1.setCommunityId(reqJson.getString("communityId"));
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo1);
-
             AllocationStorehouseDto allocationStorehouseDto = new AllocationStorehouseDto();
-
             if (resourceStoreDtos != null && resourceStoreDtos.size() == 1) {//目标仓库有此物品
                 //生成调拨详情记录
                 allocationStorehouseDto.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
@@ -237,15 +229,12 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 //调拨
                 allocationStorehouseApplyDto.setApplyType("30000");
                 allocationStorehouseApplyInnerServiceSMOImpl.saveAllocationStorehouseApplys(allocationStorehouseApplyDto);
-
                 //调整小区仓库物品均价、数量
-
                 //集团仓库商品信息
                 ResourceStoreDto resourceStoreDto2 = new ResourceStoreDto();
                 resourceStoreDto2.setResCode(resourceStore.getString("resCode"));
                 resourceStoreDto2.setResId(purchaseApplyDetailPo.getResId());
                 List<ResourceStoreDto> resourceStoreDtoList = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto2);
-
                 ResourceStorePo resourceStorePo1 = new ResourceStorePo();
                 resourceStorePo1.setPurchasePrice(resourceStore.getString("urgentPrice"));
                 resourceStorePo1.setResId(resourceStoreDtos.get(0).getResId());
@@ -270,8 +259,6 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 BigDecimal newMiniStock = purchaseQuantity.multiply(miniUnitStock).add(miniStock);
                 resourceStorePo1.setMiniStock(String.valueOf(newMiniStock));
                 resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo1);
-
-
             } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
                 throw new IllegalArgumentException("查询商品错误！");
             } else {

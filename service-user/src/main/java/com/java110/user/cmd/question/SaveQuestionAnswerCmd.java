@@ -31,7 +31,7 @@ import com.java110.po.questionAnswerTitleRel.QuestionAnswerTitleRelPo;
 import com.java110.user.bmo.question.IQuestionAnswerBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -70,20 +70,17 @@ public class SaveQuestionAnswerCmd extends Cmd {
         Assert.hasKey(reqJson, "roomIds", "请求报文中未包含投票房屋");
         Assert.hasKeyAndValue(reqJson, "startTime", "未包含开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "未包含结束时间");
-        Assert.hasKeyAndValue(reqJson, "content", "未包含说明");
+        Assert.hasKeyAndValue(reqJson, "content", "未包含调研说明");
         Assert.hasKey(reqJson, "questionTitles", "请求报文中未包含题目");
-
         JSONArray questionTitles = reqJson.getJSONArray("questionTitles");
         if (questionTitles == null || questionTitles.size() < 1) {
             throw new IllegalArgumentException("未包含题目");
         }
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         //todo 写入投票信息
         QuestionAnswerPo questionAnswerPo = new QuestionAnswerPo();
         questionAnswerPo.setContent(reqJson.getString("content"));
@@ -94,30 +91,34 @@ public class SaveQuestionAnswerCmd extends Cmd {
         questionAnswerPo.setCommunityId(reqJson.getString("communityId"));
         questionAnswerPo.setQaType(QuestionAnswerDto.QA_TYPE_QUESTION);
         questionAnswerPo.setState(QuestionAnswerDto.STATE_WAIT);
+        if (!StringUtil.isEmpty(reqJson.getString("communityId"))) {
+            questionAnswerPo.setObjType("3306"); //3306 是小区，3307 是商户
+            questionAnswerPo.setObjId(reqJson.getString("communityId"));
+        } else if (!StringUtil.isEmpty(reqJson.getString("storeId"))) {
+            questionAnswerPo.setObjType("3307"); //3306 是小区，3307 是商户
+            questionAnswerPo.setObjId(reqJson.getString("storeId"));
+        }
         int flag = questionAnswerV1InnerServiceSMOImpl.saveQuestionAnswer(questionAnswerPo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
         JSONArray questionTitles = reqJson.getJSONArray("questionTitles");
         JSONObject title = null;
         for (int titleIndex = 0; titleIndex < questionTitles.size(); titleIndex++) {
-            title= questionTitles.getJSONObject(titleIndex);
+            title = questionTitles.getJSONObject(titleIndex);
             QuestionAnswerTitleRelPo questionAnswerTitleRelPo = new QuestionAnswerTitleRelPo();
             questionAnswerTitleRelPo.setCommunityId(reqJson.getString("communityId"));
             questionAnswerTitleRelPo.setTitleId(title.getString("titleId"));
             questionAnswerTitleRelPo.setSeq((titleIndex + 1) + "");
             questionAnswerTitleRelPo.setScore("0");
-            if(title.containsKey("score")){
+            if (title.containsKey("score")) {
                 questionAnswerTitleRelPo.setScore(title.getString("score"));
             }
             questionAnswerTitleRelPo.setQaId(questionAnswerPo.getQaId());
             questionAnswerTitleRelPo.setQatrId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             questionAnswerTitleRelV1InnerServiceSMOImpl.saveQuestionAnswerTitleRel(questionAnswerTitleRelPo);
         }
-
         questionAnswerBMOImpl.saveUserQuestionAnswer(questionAnswerPo, reqJson.getJSONArray("roomIds"));
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

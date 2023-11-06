@@ -41,14 +41,12 @@ public class QueryOwnerMembersCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
         // Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求中未包含ownerTypeCd信息");
-
-        if(!reqJson.containsKey("page")){
-            reqJson.put("page",1);
+        if (!reqJson.containsKey("page")) {
+            reqJson.put("page", 1);
         }
-        if(!reqJson.containsKey("row")){
-            reqJson.put("row",10);
+        if (!reqJson.containsKey("row")) {
+            reqJson.put("row", 10);
         }
-
     }
 
     @Override
@@ -64,7 +62,7 @@ public class QueryOwnerMembersCmd extends Cmd {
         List<OwnerDto> ownerDtoList = null;
         if (total > 0) {
             ownerDtoList = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-        }else {
+        } else {
             ownerDtoList = new ArrayList<>();
         }
         //查询是否有脱敏权限
@@ -91,7 +89,7 @@ public class QueryOwnerMembersCmd extends Cmd {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(ownerdto.getMemberId());
             List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-            if(fileRelDtos != null && fileRelDtos.size() > 0){
+            if (fileRelDtos != null && fileRelDtos.size() > 0) {
                 ownerdto.setUrl(fileRelDtos.get(0).getFileSaveName());
             }
         }

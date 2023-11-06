@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="contractServiceDaoImpl">
 
-
     <!-- 保存合同管理信息 add by wuxw 2018-07-03 -->
     <insert id="saveContractInfo" parameterType="Map">
-        insert into contract(
-        a_link,a_contacts,amount,contract_type,store_id,operator,signing_time,b_contacts,party_a,b_link,party_b,
-        contract_id,obj_id,contract_name,start_time,end_time,state,contract_code,obj_type,operator_link,contract_parent_id,
-        obj_name, obj_person_name, obj_person_id,start_user_id
-        ) values (
-        #{aLink},#{aContacts},#{amount},#{contractType},#{storeId},#{operator},#{signingTime},#{bContacts},#{partyA},#{bLink},#{partyB},
-        #{contractId},#{objId},#{contractName},#{startTime},#{endTime},#{state},#{contractCode},#{objType},#{operatorLink},#{contractParentId},
-        #{objName}, #{objPersonName}, #{objPersonId},#{startUserId}
-        )
+        insert into contract(a_link, a_contacts, amount, contract_type, store_id, operator, signing_time, b_contacts,
+                             party_a, b_link, party_b,
+                             contract_id, obj_id, contract_name, start_time, end_time, state, contract_code, obj_type,
+                             operator_link, contract_parent_id,
+                             obj_name, obj_person_name, obj_person_id, start_user_id)
+        values (#{aLink}, #{aContacts}, #{amount}, #{contractType}, #{storeId}, #{operator}, #{signingTime},
+                #{bContacts}, #{partyA}, #{bLink}, #{partyB},
+                #{contractId}, #{objId}, #{contractName}, #{startTime}, #{endTime}, #{state}, #{contractCode},
+                #{objType}, #{operatorLink}, #{contractParentId},
+                #{objName}, #{objPersonName}, #{objPersonId}, #{startUserId})
     </insert>
-
 
     <!-- 查询合同管理信息 add by wuxw 2018-07-03 -->
     <select id="getContractInfo" parameterType="Map" resultType="Map">
@@ -30,13 +28,14 @@
         endTime,t.state,t.contract_code,t.contract_code contractCode,t.obj_type,t.obj_type
         objType,t.operator_link,t.operator_link operatorLink,ct.type_name contractTypeName,ct.audit,td.`name`
         stateName,t.state_desc stateDesc,t.contract_parent_id contractParentId,tt.contract_code parentContractCode,
-        tt.contract_name parentContractName,t.obj_name objName, t.obj_person_name objPersonName, t.obj_person_id objPersonId,
-        t.start_user_id startUserId,t.create_time createTime
+        tt.contract_name parentContractName,t.obj_name objName, t.obj_person_name objPersonName, t.obj_person_id
+        objPersonId,t.start_user_id startUserId,t.create_time createTime
         from contract t
         LEFT JOIN contract_type ct on t.contract_type = ct.contract_type_id and ct.status_cd = '0' and ct.store_id =
         t.store_id
         LEFT JOIN t_dict td on td.status_cd = t.state and td.table_name = 'contract' and td.table_columns = 'state'
-        left join contract tt on t.contract_parent_id = tt.contract_id and tt.status_cd = '0' and tt.store_id = t.store_id
+        left join contract tt on t.contract_parent_id = tt.contract_id and tt.status_cd = '0' and tt.store_id =
+        t.store_id
         where 1 =1
         <if test="aLink !=null and aLink != ''">
             and t.a_link= #{aLink}
@@ -75,7 +74,7 @@
             and t.party_b= #{partyB}
         </if>
         <if test="partyBLike !=null and partyBLike != ''">
-            and t.party_b like  concat('%',#{partyBLike},'%')
+            and t.party_b like concat('%',#{partyBLike},'%')
         </if>
         <if test="contractId !=null and contractId != ''">
             and t.contract_id= #{contractId}
@@ -96,7 +95,7 @@
             and t.contract_name= #{contractName}
         </if>
         <if test="contractNameLike !=null and contractNameLike != ''">
-            and t.contract_name like  concat('%',#{contractNameLike},'%')
+            and t.contract_name like concat('%',#{contractNameLike},'%')
         </if>
         <if test="startTime !=null">
             and t.start_time= #{startTime}
@@ -123,7 +122,7 @@
             and t.contract_code= #{contractCode}
         </if>
         <if test="contractCodeLike !=null and contractCodeLike != ''">
-            and t.contract_code like  concat('%',#{contractCodeLike},'%')
+            and t.contract_code like concat('%',#{contractCodeLike},'%')
         </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
@@ -135,15 +134,13 @@
             and t.contract_parent_id= #{contractParentId}
         </if>
         <if test="parentContractCodeLike !=null and parentContractCodeLike != ''">
-            and tt.contract_code like  concat('%',#{parentContractCodeLike},'%')
+            and tt.contract_code like concat('%',#{parentContractCodeLike},'%')
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改合同管理信息 add by wuxw 2018-07-03 -->
     <update id="updateContractInfo" parameterType="Map">
@@ -224,14 +221,14 @@
         <if test="contractId !=null and contractId != ''">
             and t.contract_id= #{contractId}
         </if>
-
     </update>
 
     <!-- 查询合同管理数量 add by wuxw 2018-07-03 -->
     <select id="queryContractsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from contract t
-        left join contract tt on t.contract_parent_id = tt.contract_id and tt.status_cd = '0' and tt.store_id = t.store_id
+        left join contract tt on t.contract_parent_id = tt.contract_id and tt.status_cd = '0' and tt.store_id =
+        t.store_id
         where 1 =1
         <if test="aLink !=null and aLink != ''">
             and t.a_link= #{aLink}
@@ -270,7 +267,7 @@
             and t.party_b= #{partyB}
         </if>
         <if test="partyBLike !=null and partyBLike != ''">
-            and t.party_b like  concat('%',#{partyBLike},'%')
+            and t.party_b like concat('%',#{partyBLike},'%')
         </if>
         <if test="contractId !=null and contractId != ''">
             and t.contract_id= #{contractId}
@@ -291,10 +288,8 @@
             and t.contract_name= #{contractName}
         </if>
         <if test="contractNameLike !=null and contractNameLike != ''">
-            and t.contract_name like  concat('%',#{contractNameLike},'%')
+            and t.contract_name like concat('%',#{contractNameLike},'%')
         </if>
-
-
         <if test="startTime !=null">
             and t.start_time= #{startTime}
         </if>
@@ -320,7 +315,7 @@
             and t.contract_code= #{contractCode}
         </if>
         <if test="contractCodeLike !=null and contractCodeLike != ''">
-            and t.contract_code like  concat('%',#{contractCodeLike},'%')
+            and t.contract_code like concat('%',#{contractCodeLike},'%')
         </if>
         <if test="objType !=null and objType != ''">
             and t.obj_type= #{objType}
@@ -332,11 +327,9 @@
             and t.contract_parent_id= #{contractParentId}
         </if>
         <if test="parentContractCodeLike !=null and parentContractCodeLike != ''">
-            and tt.contract_code like  concat('%',#{parentContractCodeLike},'%')
+            and tt.contract_code like concat('%',#{parentContractCodeLike},'%')
         </if>
-
     </select>
-
 
     <select id="queryContractsByOwnerIds" parameterType="Map" resultType="Map">
         select t.obj_id ownerId,count(t.contract_id) contractCount
@@ -348,5 +341,4 @@
         </foreach>
         group by t.obj_id
     </select>
-
 </mapper>

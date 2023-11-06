@@ -65,6 +65,7 @@ public class ResourceStoreTimesV1InnerServiceSMOImpl extends BaseServiceSMO impl
         resourceStoreTimesDto.setPrice(resourceStoreTimesPo.getPrice());
         resourceStoreTimesDto.setResCode(resourceStoreTimesPo.getResCode());
         resourceStoreTimesDto.setShId(resourceStoreTimesPo.getShId());
+        resourceStoreTimesDto.setCommunityId(resourceStoreTimesPo.getCommunityId());
         List<ResourceStoreTimesDto> resourceStoreTimesDtos = queryResourceStoreTimess(resourceStoreTimesDto);
         if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));

@@ -81,11 +81,13 @@ public interface IReportOweFeeInnerServiceSMO {
 
     /**
      * 计算总欠费
+     *
      * @param reportOweFeeDto
      * @return
      */
     @RequestMapping(value = "/computeReportOweFeeTotalAmount", method = RequestMethod.POST)
     double computeReportOweFeeTotalAmount(@RequestBody ReportOweFeeDto reportOweFeeDto);
+
     @RequestMapping(value = "/computeReportOweFeeItemAmount", method = RequestMethod.POST)
     List<ReportOweFeeItemDto> computeReportOweFeeItemAmount(@RequestBody ReportOweFeeDto reportOweFeeDto);
 

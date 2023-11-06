@@ -26,12 +26,15 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     private String qaName;
     private String qaType;
+    private String qaTypeName;
     private String startTime;
     private String remark;
     private String endTime;
     private String communityId;
     private String content;
     private String qaId;
+    private String objType;
+    private String objId;
 
     private String titleType;
 
@@ -122,7 +125,6 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
     public void setQaId(String qaId) {
         this.qaId = qaId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -226,5 +228,29 @@ public class QuestionAnswerDto extends PageDto implements Serializable {
 
     public void setScore(long score) {
         this.score = score;
+    }
+
+    public String getObjType() {
+        return objType;
+    }
+
+    public void setObjType(String objType) {
+        this.objType = objType;
+    }
+
+    public String getObjId() {
+        return objId;
+    }
+
+    public void setObjId(String objId) {
+        this.objId = objId;
+    }
+
+    public String getQaTypeName() {
+        return qaTypeName;
+    }
+
+    public void setQaTypeName(String qaTypeName) {
+        this.qaTypeName = qaTypeName;
     }
 }

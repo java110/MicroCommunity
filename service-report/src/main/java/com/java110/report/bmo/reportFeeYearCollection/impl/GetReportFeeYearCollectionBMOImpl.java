@@ -24,7 +24,6 @@ public class GetReportFeeYearCollectionBMOImpl implements IGetReportFeeYearColle
      */
     public ResponseEntity<String> get(ReportFeeYearCollectionDto reportFeeYearCollectionDto) {
 
-
         int count = reportFeeYearCollectionInnerServiceSMOImpl.queryReportFeeYearCollectionsCount(reportFeeYearCollectionDto);
 
         List<ReportFeeYearCollectionDto> reportFeeYearCollectionDtos = null;

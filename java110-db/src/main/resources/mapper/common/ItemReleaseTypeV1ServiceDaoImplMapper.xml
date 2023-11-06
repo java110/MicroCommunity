@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="itemReleaseTypeV1ServiceDaoImpl">
 
     <!-- 保存放行类型信息 add by wuxw 2018-07-03 -->
     <insert id="saveItemReleaseTypeInfo" parameterType="Map">
-        insert into item_release_type(
-        type_name,type_id,remark,community_id,flow_id,flow_name
-        ) values (
-        #{typeName},#{typeId},#{remark},#{communityId},#{flowId},#{flowName}
-        )
+        insert into item_release_type(type_name, type_id, remark, community_id, flow_id, flow_name)
+        values (#{typeName}, #{typeId}, #{remark}, #{communityId}, #{flowId}, #{flowName})
     </insert>
 
     <!-- 查询放行类型信息 add by wuxw 2018-07-03 -->
@@ -21,7 +17,7 @@
         from item_release_type t
         where 1 =1
         <if test="typeName !=null and typeName != ''">
-            and t.type_name= #{typeName}
+            and t.type_name like concat('%',#{typeName},'%')
         </if>
         <if test="typeId !=null and typeId != ''">
             and t.type_id= #{typeId}
@@ -45,9 +41,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改放行类型信息 add by wuxw 2018-07-03 -->
     <update id="updateItemReleaseTypeInfo" parameterType="Map">
@@ -74,7 +68,6 @@
         <if test="typeId !=null and typeId != ''">
             and t.type_id= #{typeId}
         </if>
-
     </update>
 
     <!-- 查询放行类型数量 add by wuxw 2018-07-03 -->
@@ -83,7 +76,7 @@
         from item_release_type t
         where 1 =1
         <if test="typeName !=null and typeName != ''">
-            and t.type_name= #{typeName}
+            and t.type_name like concat('%',#{typeName},'%')
         </if>
         <if test="typeId !=null and typeId != ''">
             and t.type_id= #{typeId}
@@ -103,8 +96,5 @@
         <if test="flowName !=null and flowName != ''">
             and t.flow_name= #{flowName}
         </if>
-
-
     </select>
-
 </mapper>

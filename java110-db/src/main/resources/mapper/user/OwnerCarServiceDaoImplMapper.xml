@@ -6,13 +6,12 @@
 
     <!-- 保存车辆管理信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessOwnerCarInfo" parameterType="Map">
-        insert into business_owner_car(
-        car_color,car_brand,car_type,operate,car_num,ps_id,remark,owner_id,b_id,user_id,car_id,community_id,start_time,
-        end_time,state,car_type_cd,member_id
-        ) values (
-        #{carColor},#{carBrand},#{carType},#{operate},#{carNum},#{psId},#{remark},#{ownerId},#{bId},#{userId},#{carId},#{communityId},
-        #{startTime},#{endTime},#{state},#{carTypeCd},#{memberId}
-        )
+        insert into business_owner_car(car_color, car_brand, car_type, operate, car_num, ps_id, remark, owner_id, b_id,
+                                       user_id, car_id, community_id, start_time,
+                                       end_time, state, car_type_cd, member_id)
+        values (#{carColor}, #{carBrand}, #{carType}, #{operate}, #{carNum}, #{psId}, #{remark}, #{ownerId}, #{bId},
+                #{userId}, #{carId}, #{communityId},
+                #{startTime}, #{endTime}, #{state}, #{carTypeCd}, #{memberId})
     </insert>
 
     <!-- 查询车辆管理信息（Business） add by wuxw 2018-07-03 -->
@@ -78,7 +77,7 @@
         start_time,end_time,state,car_type_cd,member_id
         ) select
         t.car_color,t.car_brand,t.car_type,t.car_num,t.ps_id,t.remark,'0',t.owner_id,t.b_id,t.user_id,t.car_id,t.community_id,
-        t.start_time,t.end_time,t.state,  t.car_type_cd,t.member_id
+        t.start_time,t.end_time,t.state, t.car_type_cd,t.member_id
         from business_owner_car t where 1=1
         <if test="carColor !=null and carColor != ''">
             and t.car_color= #{carColor}
@@ -131,22 +130,26 @@
         t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId ,t.create_time
         createTime,t.community_id communityId,bow.name ownerName,bow.id_card idCard,bow.link,t2.name stateName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state,
-        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,t.lease_type leaseType,
+        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,t.lease_type
+        leaseType,
         t3.name leaseTypeName,t4.name carTypeCdName
         <if test="carTypeCd != '1003'">
-        ,count(moc.member_id) memberCarCount
+            ,count(moc.member_id) memberCarCount
         </if>
         from owner_car t
         left join t_dict t1 on t.car_type=t1.status_cd and t1.table_name='owner_car' and t1.table_columns = 'car_type'
         left join t_dict t2 on t.state=t2.status_cd and t2.table_name='owner_car' and t2.table_columns = 'state'
-        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns = 'car_type_cd'
+        left join t_dict t4 on t.car_type_cd=t4.status_cd and t4.table_name='owner_car' and t4.table_columns =
+        'car_type_cd'
         left join building_owner bow on t.owner_id = bow.member_id and bow.status_cd = '0' and bow.community_id =
         t.community_id
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
         left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
-        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns = 'lease_type'
+        left join t_dict t3 on t.lease_type = t3.status_cd and t3.table_name = 'owner_car' and t3.table_columns =
+        'lease_type'
         <if test="carTypeCd != '1003'">
-        left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd = '1002' and moc.status_cd = '0'
+            left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd =
+            '1002' and moc.status_cd = '0'
         </if>
         where 1=1
         <if test="statusCd !=null and statusCd != ''">
@@ -180,13 +183,13 @@
             and t.car_num= #{carNum}
         </if>
         <if test="carNumLike !=null and carNumLike != ''">
-            and t.car_num like  concat('%',#{carNumLike},'%')
+            and t.car_num like concat('%',#{carNumLike},'%')
         </if>
         <if test="memberCarNum !=null and memberCarNum != '' and carTypeCd != '1003'">
             and moc.car_num= #{memberCarNum}
         </if>
         <if test="memberCarNumLike !=null and memberCarNumLike != '' and carTypeCd != '1003' ">
-            and moc.car_num like  concat('%',#{memberCarNumLike},'%')
+            and moc.car_num like concat('%',#{memberCarNumLike},'%')
         </if>
         <if test="carNums !=null">
             and t.car_num in
@@ -250,20 +253,21 @@
         </if>
         <if test="valid == 1">
             and t.end_time &gt; now()
+            and t.state != '3003'
         </if>
         <if test="valid == 3">
-            and t.end_time &lt; now()
+            and (t.end_time &lt; now() or t.state = '3003')
         </if>
         <if test="valid == 2">
             and t.ps_id= '-1'
         </if>
         <if test="carTypeCd != '1003'">
-        GROUP BY t.car_color,t.car_brand,t.car_type,t1.name,
-        t.car_num,t.ps_id,t.remark,t.status_cd,t.owner_id,
-        t.b_id,t.user_id,t.car_id,t.create_time
-        ,t.community_id ,bow.name,bow.id_card ,bow.link,t2.name,t.start_time,t.end_time,t.state,
-        t.car_type_cd,t.member_id,ps.num,t.lease_type ,
-        t3.name ,t4.name
+            GROUP BY t.car_color,t.car_brand,t.car_type,t1.name,
+            t.car_num,t.ps_id,t.remark,t.status_cd,t.owner_id,
+            t.b_id,t.user_id,t.car_id,t.create_time
+            ,t.community_id ,bow.name,bow.id_card ,bow.link,t2.name,t.start_time,t.end_time,t.state,
+            t.car_type_cd,t.member_id,ps.num,t.lease_type ,
+            t3.name ,t4.name
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -341,7 +345,8 @@
         left join parking_space ps on t.ps_id = ps.ps_id and ps.status_cd = '0'
         left join parking_area pa on ps.pa_id = pa.pa_id and pa.status_cd = '0'
         <if test="memberCarNumLike !=null and memberCarNumLike != ''">
-            left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd = '1002'
+            left join owner_car moc on t.car_id = moc.car_id and moc.car_type_cd != t.car_type_cd and moc.car_type_cd =
+            '1002'
         </if>
         where 1=1
         <if test="statusCd !=null and statusCd != ''">
@@ -369,13 +374,13 @@
             and t.car_num= #{carNum}
         </if>
         <if test="carNumLike !=null and carNumLike != ''">
-            and t.car_num like  concat('%',#{carNumLike},'%')
+            and t.car_num like concat('%',#{carNumLike},'%')
         </if>
         <if test="memberCarNum !=null and memberCarNum != ''">
             and moc.car_num= #{memberCarNum}
         </if>
         <if test="memberCarNumLike !=null and memberCarNumLike != ''">
-            and moc.car_num like  concat('%',#{memberCarNumLike},'%')
+            and moc.car_num like concat('%',#{memberCarNumLike},'%')
         </if>
         <if test="carNums !=null">
             and t.car_num in
@@ -439,14 +444,14 @@
         </if>
         <if test="valid == 1">
             and t.end_time &gt; now()
+            and t.state != '3003'
         </if>
         <if test="valid == 3">
-            and t.end_time &lt; now()
+            and (t.end_time &lt; now() or t.state = '3003')
         </if>
         <if test="valid == 2">
             and t.ps_id= '-1'
         </if>
-
     </select>
 
     <select id="queryOwnerParkingSpaceCount" parameterType="Map" resultType="Map">

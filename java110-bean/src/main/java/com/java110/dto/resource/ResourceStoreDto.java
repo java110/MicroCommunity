@@ -75,6 +75,7 @@ public class ResourceStoreDto extends PageDto implements Serializable {
     //是否是固定物品
     private String isFixed;
     private String isFixedName;
+    private String timesId;
 
     private String communityId;
 
@@ -232,8 +233,6 @@ public class ResourceStoreDto extends PageDto implements Serializable {
         this.shName = shName;
     }
 
-
-
     public String getWarningStock() {
         return warningStock;
     }
@@ -386,8 +385,6 @@ public class ResourceStoreDto extends PageDto implements Serializable {
         this.isFixedName = isFixedName;
     }
 
-
-
     public List<ResourceStoreTimesDto> getTimes() {
         return times;
     }
@@ -418,5 +415,13 @@ public class ResourceStoreDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }

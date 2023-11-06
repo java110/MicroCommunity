@@ -44,7 +44,6 @@ public class RepairApi {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
-
     /**
      * 报修评价
      *
@@ -57,7 +56,6 @@ public class RepairApi {
         return appraiseRepairBMOImpl.appraiseRepair(appraiseDto);
     }
 
-
     /**
      * 微信保存消息模板
      *
@@ -68,23 +66,16 @@ public class RepairApi {
      */
     @RequestMapping(value = "/saveRepairReturnVisit", method = RequestMethod.POST)
     public ResponseEntity<String> saveRepairReturnVisit(@RequestHeader(value = "user-id") String userId,
-
                                                         @RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "repairId", "请求报文中未包含repairId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "visitType", "请求报文中未包含满意度");
         Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
-
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
-        Assert.listOnlyOne(userDtos,"未包含用户");
-
-
-        String userName  = userDtos.get(0).getName();
-
+        Assert.listOnlyOne(userDtos, "未包含用户");
+        String userName = userDtos.get(0).getName();
         RepairReturnVisitPo repairReturnVisitPo = BeanConvertUtil.covertBean(reqJson, RepairReturnVisitPo.class);
         repairReturnVisitPo.setVisitPersonId(userId);
         repairReturnVisitPo.setVisitPersonName(userName);
@@ -101,14 +92,11 @@ public class RepairApi {
      */
     @RequestMapping(value = "/updateRepairReturnVisit", method = RequestMethod.POST)
     public ResponseEntity<String> updateRepairReturnVisit(@RequestBody JSONObject reqJson) {
-
         Assert.hasKeyAndValue(reqJson, "repairId", "请求报文中未包含repairId");
         Assert.hasKeyAndValue(reqJson, "visitPersonId", "请求报文中未包含visitPersonId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "context", "请求报文中未包含context");
         Assert.hasKeyAndValue(reqJson, "visitId", "visitId不能为空");
-
-
         RepairReturnVisitPo repairReturnVisitPo = BeanConvertUtil.covertBean(reqJson, RepairReturnVisitPo.class);
         return updateRepairReturnVisitBMOImpl.update(repairReturnVisitPo);
     }
@@ -124,10 +112,7 @@ public class RepairApi {
     @RequestMapping(value = "/deleteRepairReturnVisit", method = RequestMethod.POST)
     public ResponseEntity<String> deleteRepairReturnVisit(@RequestBody JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-
         Assert.hasKeyAndValue(reqJson, "visitId", "visitId不能为空");
-
-
         RepairReturnVisitPo repairReturnVisitPo = BeanConvertUtil.covertBean(reqJson, RepairReturnVisitPo.class);
         return deleteRepairReturnVisitBMOImpl.delete(repairReturnVisitPo);
     }
@@ -158,7 +143,6 @@ public class RepairApi {
         repairReturnVisitDto.setTel(tel);
         repairReturnVisitDto.setRepairType(repairType);
         repairReturnVisitDto.setState(state);
-
         return getRepairReturnVisitBMOImpl.get(repairReturnVisitDto);
     }
 }

@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="communityPublicityV1ServiceDaoImpl">
 
-
     <!-- 保存小区公示信息 add by wuxw 2018-07-03 -->
     <insert id="saveCommunityPublicityInfo" parameterType="Map">
-        insert into community_publicity(
-        create_user_id,pub_id,context,collect_count,pub_type,like_count,create_user_name,title,community_id,read_count,header_img
-        ) values (
-        #{createUserId},#{pubId},#{context},#{collectCount},#{pubType},#{likeCount},#{createUserName},#{title},#{communityId},#{readCount},#{headerImg}
-        )
+        insert into community_publicity(create_user_id, pub_id, context, collect_count, pub_type, like_count,
+                                        create_user_name, title, community_id, read_count, header_img)
+        values (#{createUserId}, #{pubId}, #{context}, #{collectCount}, #{pubType}, #{likeCount}, #{createUserName},
+                #{title}, #{communityId}, #{readCount}, #{headerImg})
     </insert>
-
 
     <!-- 查询小区公示信息 add by wuxw 2018-07-03 -->
     <select id="getCommunityPublicityInfo" parameterType="Map" resultType="Map">
@@ -24,7 +20,8 @@
         communityId,t.read_count,t.read_count readCount,t.header_img,t.header_img headerImg,
         t.create_time createTime,td.`name` pubTypeName
         from community_publicity t
-        left join t_dict td on t.pub_type = td.status_cd and td.table_name = 'community_publicity' and td.table_columns = 'pub_type'
+        left join t_dict td on t.pub_type = td.status_cd and td.table_name = 'community_publicity' and td.table_columns
+        = 'pub_type'
         where 1 =1
         <if test="createUserId !=null and createUserId != ''">
             and t.create_user_id= #{createUserId}
@@ -51,7 +48,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="title !=null and title != ''">
-            and t.title= #{title}
+            and t.title like concat('%',#{title},'%')
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -66,9 +63,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改小区公示信息 add by wuxw 2018-07-03 -->
     <update id="updateCommunityPublicityInfo" parameterType="Map">
@@ -110,7 +105,6 @@
         <if test="pubId !=null and pubId != ''">
             and t.pub_id= #{pubId}
         </if>
-
     </update>
 
     <!-- 查询小区公示数量 add by wuxw 2018-07-03 -->
@@ -143,7 +137,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="title !=null and title != ''">
-            and t.title= #{title}
+            and t.title like concat('%',#{title},'%')
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -154,8 +148,5 @@
         <if test="headerImg !=null and headerImg != ''">
             and t.header_img= #{headerImg}
         </if>
-
-
     </select>
-
 </mapper>

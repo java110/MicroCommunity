@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="contractPartyaServiceDaoImpl">
 
-
     <!-- 保存合同房屋信息 add by wuxw 2018-07-03 -->
     <insert id="saveContractPartyaInfo" parameterType="Map">
-        insert into contract_partya(
-        party_a,a_link,a_contacts,partya_id,store_id
-        ) values (
-        #{partyA},#{aLink},#{aContacts},#{partyaId},#{storeId}
-        )
+        insert into contract_partya(party_a, a_link, a_contacts, partya_id, store_id)
+        values (#{partyA}, #{aLink}, #{aContacts}, #{partyaId}, #{storeId})
     </insert>
-
 
     <!-- 查询合同房屋信息 add by wuxw 2018-07-03 -->
     <select id="getContractPartyaInfo" parameterType="Map" resultType="Map">
@@ -22,13 +16,13 @@
         from contract_partya t
         where 1 =1
         <if test="partyA !=null and partyA != ''">
-            and t.party_a= #{partyA}
+            and t.party_a like concat('%',#{partyA},'%')
         </if>
         <if test="aLink !=null and aLink != ''">
             and t.a_link= #{aLink}
         </if>
         <if test="aContacts !=null and aContacts != ''">
-            and t.a_contacts= #{aContacts}
+            and t.a_contacts like concat('%',#{aContacts},'%')
         </if>
         <if test="partyaId !=null and partyaId != ''">
             and t.partya_id= #{partyaId}
@@ -43,9 +37,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改合同房屋信息 add by wuxw 2018-07-03 -->
     <update id="updateContractPartyaInfo" parameterType="Map">
@@ -69,7 +61,6 @@
         <if test="partyaId !=null and partyaId != ''">
             and t.partya_id= #{partyaId}
         </if>
-
     </update>
 
     <!-- 查询合同房屋数量 add by wuxw 2018-07-03 -->
@@ -78,13 +69,13 @@
         from contract_partya t
         where 1 =1
         <if test="partyA !=null and partyA != ''">
-            and t.party_a= #{partyA}
+            and t.party_a like concat('%',#{partyA},'%')
         </if>
         <if test="aLink !=null and aLink != ''">
             and t.a_link= #{aLink}
         </if>
         <if test="aContacts !=null and aContacts != ''">
-            and t.a_contacts= #{aContacts}
+            and t.a_contacts like concat('%',#{aContacts},'%')
         </if>
         <if test="partyaId !=null and partyaId != ''">
             and t.partya_id= #{partyaId}
@@ -95,8 +86,5 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
-
     </select>
-
 </mapper>

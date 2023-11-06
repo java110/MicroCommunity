@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="contractTypeServiceDaoImpl">
 
-
     <!-- 保存合同类型信息 add by wuxw 2018-07-03 -->
     <insert id="saveContractTypeInfo" parameterType="Map">
-        insert into contract_type(
-        audit,type_name,remark,store_id,contract_type_id
-        ) values (
-        #{audit},#{typeName},#{remark},#{storeId},#{contractTypeId}
-        )
+        insert into contract_type(audit, type_name, remark, store_id, contract_type_id)
+        values (#{audit}, #{typeName}, #{remark}, #{storeId}, #{contractTypeId})
     </insert>
-
 
     <!-- 查询合同类型信息 add by wuxw 2018-07-03 -->
     <select id="getContractTypeInfo" parameterType="Map" resultType="Map">
@@ -26,7 +20,7 @@
             and t.audit= #{audit}
         </if>
         <if test="typeName !=null and typeName != ''">
-            and t.type_name= #{typeName}
+            and t.type_name like concat('%',#{typeName},'%')
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -44,9 +38,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改合同类型信息 add by wuxw 2018-07-03 -->
     <update id="updateContractTypeInfo" parameterType="Map">
@@ -70,7 +62,6 @@
         <if test="contractTypeId !=null and contractTypeId != ''">
             and t.contract_type_id= #{contractTypeId}
         </if>
-
     </update>
 
     <!-- 查询合同类型数量 add by wuxw 2018-07-03 -->
@@ -82,7 +73,7 @@
             and t.audit= #{audit}
         </if>
         <if test="typeName !=null and typeName != ''">
-            and t.type_name= #{typeName}
+            and t.type_name like concat('%',#{typeName},'%')
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -96,8 +87,5 @@
         <if test="contractTypeId !=null and contractTypeId != ''">
             and t.contract_type_id= #{contractTypeId}
         </if>
-
-
     </select>
-
 </mapper>

@@ -157,9 +157,8 @@
             and t.sex= #{sex}
         </if>
         <if test="name !=null and name != ''">
-            and t.name = #{name}
+            and t.name like concat('%',#{name},'%')
         </if>
-
         <if test="nameLike !=null and nameLike != ''">
             and t.name like concat('%',#{nameLike},'%')
         </if>
@@ -251,7 +250,7 @@
             and t.name like concat('%',#{name},'%')
         </if>
         <if test="nameLike !=null and nameLike != ''">
-            and t.name like concat('%',#{name},'%')
+            and t.name like concat('%',#{nameLike},'%')
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
@@ -297,6 +296,12 @@
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
             and t.owner_type_cd= #{ownerTypeCd}
+        </if>
+        <if test="ownerTypeCds != null">
+            and t.owner_type_cd in
+            <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
     </select>
 
@@ -535,19 +540,20 @@
     <select id="queryNoEnterRoomOwnerCount" parameterType="Map" resultType="Map">
         select COUNT(1) count
         from building_owner o
-        left join building_owner_room_rel orr
+            left join building_owner_room_rel orr
         on o.owner_id = orr.owner_id and orr.status_cd = '0'
         where o.status_cd = '0'
-        and o.owner_type_cd = '1001'
-        and o.community_id = #{communityId}
-        and orr.rel_id is null
+          and o.owner_type_cd = '1001'
+          and o.community_id = #{communityId}
+          and orr.rel_id is null
     </select>
 
     <!-- queryOwnersByRoom -->
     <!-- 根据房屋查询业主信息 -->
     <select id="queryOwnersByRoom" parameterType="Map" resultType="Map">
         SELECT t.sex,t.name,t.link,t.status_cd,t.status_cd statusCd,t.remark,t.owner_id,t.owner_id ownerId,t.b_id,t.b_id
-        bId,t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd ownerTypeCd,
+        bId,t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,t.owner_type_cd
+        ownerTypeCd,
         r.`room_id` roomId,r.`room_num` roomNum,t.community_id,t.community_id communityId,t.id_card, t.id_card
         idCard,orr.start_time startTime ,orr.end_time endTime,t.address
         FROM building_room r,building_owner_room_rel orr,building_owner t
@@ -621,10 +627,10 @@
     <select id="queryOwnerLogsCountByRoom" parameterType="Map" resultType="Map">
         select COUNT(1) count
         from building_owner_room_rel t
-        inner join building_owner bo
+            inner join building_owner bo
         on t.owner_id = bo.owner_id and bo.status_cd = '0' and bo.community_id = #{communityId}
         where bo.owner_type_cd = '1001'
-        and t.room_id = #{roomId}
+          and t.room_id = #{roomId}
     </select>
 
 </mapper>

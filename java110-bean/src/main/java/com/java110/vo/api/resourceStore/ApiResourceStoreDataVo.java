@@ -61,6 +61,8 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     private String totalPrice;
 
+    private String timesId;
+
     private List<ResourceStoreTimesDto> times;
     public String getResId() {
         return resId;
@@ -348,5 +350,13 @@ public class ApiResourceStoreDataVo implements Serializable {
 
     public void setTotalPrice(String totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getTimesId() {
+        return timesId;
+    }
+
+    public void setTimesId(String timesId) {
+        this.timesId = timesId;
     }
 }

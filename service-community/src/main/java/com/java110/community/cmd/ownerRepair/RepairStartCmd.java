@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.community.IRepairInnerServiceSMO;
@@ -16,6 +17,7 @@ import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,7 +61,7 @@ public class RepairStartCmd extends Cmd {
             repairPoolPo.setRepairId(reqJson.getString("repairId"));
             repairPoolPo.setState(RepairDto.STATE_TAKING); //状态变为接单状态
             flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
-            if(flag < 1){
+            if (flag < 1) {
                 throw new CmdException("修改工单失败");
             }
             RepairUserDto repairUserDto = new RepairUserDto();
@@ -69,17 +71,29 @@ public class RepairStartCmd extends Cmd {
             List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             if (repairUserDtos != null && repairUserDtos.size() > 0) {
+                RepairUserPo repairUserPo = new RepairUserPo();
+                repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
+                repairUserPo.setRepairId(reqJson.getString("repairId"));
+                repairUserPo.setbId("-1");
+                repairUserPo.setCommunityId(reqJson.getString("communityId"));
+                repairUserPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                repairUserPo.setState(RepairUserDto.STATE_START);
+                repairUserPo.setContext("启动报修流程");
+                repairUserPo.setStaffId(reqJson.getString("userId"));
+                repairUserPo.setStaffName(reqJson.getString("userName"));
                 for (RepairUserDto repairUser : repairUserDtos) {
                     if (repairUser.getEndTime() == null) {
-                        RepairUserPo repairUserPo = new RepairUserPo();
-                        repairUserPo.setRuId(repairUser.getRuId());
+                        repairUserPo.setPreStaffId(repairUser.getStaffId());
+                        repairUserPo.setPreStaffName(repairUser.getStaffName());
+                        repairUserPo.setStartTime(simpleDateFormat.format(repairUser.getStartTime()));
                         repairUserPo.setEndTime(simpleDateFormat.format(new Date()));
-                        //修改暂停报修状态
-                        flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
-                        if(flag < 1){
-                            throw new CmdException("修改工单失败");
-                        }
+                        repairUserPo.setPreRuId(repairUser.getRuId());
                     }
+                }
+                repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
+                flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
+                if (flag < 1) {
+                    throw new CmdException("添加报修工单信息失败！");
                 }
             } else {
                 throw new IllegalArgumentException("启动报修单错误！");

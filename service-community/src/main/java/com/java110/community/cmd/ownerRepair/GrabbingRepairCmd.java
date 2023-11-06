@@ -54,7 +54,6 @@ public class GrabbingRepairCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
-
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -74,7 +73,7 @@ public class GrabbingRepairCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = context.getReqHeaders().get("user-id");
 
-        if(userId.startsWith("-") || StringUtil.isEmpty(userId)){
+        if (userId.startsWith("-") || StringUtil.isEmpty(userId)) {
             userId = reqJson.getString("userId");
         }
 
@@ -127,7 +126,7 @@ public class GrabbingRepairCmd extends Cmd {
             repairTypeUser.setRepairType(repairType);
             //查询工单设置表
             List<RepairTypeUserDto> repairTypeUserDtos = repairTypeUserInnerServiceSMO.queryRepairTypeUsers(repairTypeUser);
-            if (repairTypeUserDtos != null && repairTypeUserDtos.size() != 1) { //报修类型设置未添加改操作的员工！
+            if (repairTypeUserDtos != null && repairTypeUserDtos.size() != 1) { //报修类型设置未添加该操作的员工！
                 ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "对不起，您还没权限进行此操作，请联系管理员处理！");
                 context.setResponseEntity(responseEntity);
                 return;

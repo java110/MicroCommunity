@@ -20,10 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.questionTitleValue.QuestionTitleValueDto;
 import com.java110.intf.user.IQuestionAnswerV1InnerServiceSMO;
-import com.java110.intf.user.IQuestionTitleV1InnerServiceSMO;
-import com.java110.intf.user.IQuestionTitleValueV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -39,7 +36,6 @@ import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 类表述：查询
  * 服务编码：questionAnswer.listQuestionAnswer
@@ -54,15 +50,9 @@ import org.slf4j.LoggerFactory;
 public class ListQuestionAnswerCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListQuestionAnswerCmd.class);
+
     @Autowired
     private IQuestionAnswerV1InnerServiceSMO questionAnswerV1InnerServiceSMOImpl;
-
-
-    @Autowired
-    private IQuestionTitleV1InnerServiceSMO questionTitleV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IQuestionTitleValueV1InnerServiceSMO questionTitleValueV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -88,7 +78,6 @@ public class ListQuestionAnswerCmd extends Cmd {
         //todo 查询已投票数据和 得分
         computeVotedCountAndScore(questionAnswerDtos);
 
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, questionAnswerDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
@@ -102,7 +91,6 @@ public class ListQuestionAnswerCmd extends Cmd {
      * @param questionAnswerDtos
      */
     private void computeVotedCountAndScore(List<QuestionAnswerDto> questionAnswerDtos) {
-
         if (questionAnswerDtos == null || questionAnswerDtos.size() < 1) {
             return;
         }
@@ -110,24 +98,19 @@ public class ListQuestionAnswerCmd extends Cmd {
         for (QuestionAnswerDto questionAnswerDto : questionAnswerDtos) {
             qaIds.add(questionAnswerDto.getQaId());
         }
-
         // todo 查询投票人数和得分
         List<QuestionAnswerDto> votedQAs = questionAnswerV1InnerServiceSMOImpl.queryVotedCountAndScore(qaIds.toArray(new String[qaIds.size()]));
-
         if (votedQAs == null || votedQAs.size() < 1) {
             return;
         }
-        for(QuestionAnswerDto questionAnswerDto:questionAnswerDtos){
-            for(QuestionAnswerDto votedQa : votedQAs){
-                if(!questionAnswerDto.getQaId().equals(votedQa.getQaId())){
+        for (QuestionAnswerDto questionAnswerDto : questionAnswerDtos) {
+            for (QuestionAnswerDto votedQa : votedQAs) {
+                if (!questionAnswerDto.getQaId().equals(votedQa.getQaId())) {
                     continue;
                 }
-
                 questionAnswerDto.setVotedCount(votedQa.getVotedCount());
                 questionAnswerDto.setScore(votedQa.getScore());
             }
         }
     }
-
-
 }

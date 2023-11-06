@@ -74,7 +74,6 @@ public class RepairDispatchCmd extends Cmd {
     @Autowired
     private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
 
-
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -102,13 +101,13 @@ public class RepairDispatchCmd extends Cmd {
 //        RepairUserPo repairUserPo = BeanConvertUtil.covertBean(reqJson, RepairUserPo.class);
         String action = reqJson.getString("action");
         switch (action) {
-            case ACTION_DISPATCH:
+            case ACTION_DISPATCH: //派单
                 dispacthRepair(context, reqJson);
                 break;
-            case ACTION_TRANSFER:
+            case ACTION_TRANSFER: //转单
                 transferRepair(context, reqJson);
                 break;
-            case ACTION_BACK:
+            case ACTION_BACK: //退单
                 backRepair(context, reqJson);
                 break;
         }
@@ -180,8 +179,8 @@ public class RepairDispatchCmd extends Cmd {
         repair.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE, RepairUserDto.STATE_STOP,RepairUserDto.STATE_EVALUATE});
         List<RepairUserDto> repairUsers = repairUserInnerServiceSMOImpl.queryRepairUsers(repair);
         if (repairUsers == null || repairUsers.size() < 1) { //指派的不能退单
-            if (RepairDto.REPAIR_WAY_GRABBING.equals(repairDtos.get(0).getRepairWay())
-                    || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())) {
+            if (RepairDto.REPAIR_WAY_GRABBING.equals(repairDtos.get(0).getRepairWay())  
+                    || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())) {  //抢单、轮训
                 modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_WAIT);//维修单变成未派单
                 //把自己改成退单
                 RepairUserPo repairUser = new RepairUserPo();
@@ -268,7 +267,7 @@ public class RepairDispatchCmd extends Cmd {
             context.setResponseEntity(responseEntity);
             return;
         }
-        //插入派单者的信息
+        //更改转单者的信息
         RepairUserPo repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(repairUserDtos.get(0).getRuId());
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -278,7 +277,8 @@ public class RepairDispatchCmd extends Cmd {
         flag = repairUserV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
         if (flag < 1) {
             throw new CmdException("修改用户失败");
-        }        //处理人信息
+        }
+        //处理人信息
         repairUserPo = new RepairUserPo();
         repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
         repairUserPo.setState(RepairUserDto.STATE_DOING);
@@ -315,7 +315,7 @@ public class RepairDispatchCmd extends Cmd {
         String staffId = reqJson.getString("staffId");
         RepairDto repair = new RepairDto();
         repair.setStaffId(staffId);
-        repair.setState("10001"); //处理中
+        repair.setState("1100"); //接单状态
         int i = repairInnerServiceSMOImpl.queryStaffRepairsCount(repair);
         //取出开关映射的值(维修师傅未处理最大单数)
         String repairNumber = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN, REPAIR_NUMBER);
@@ -335,7 +335,7 @@ public class RepairDispatchCmd extends Cmd {
         RepairDto repairDto = new RepairDto();
         repairDto.setRepairId(repairId);
         List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
-        if (repairDtos == null || repairDtos.size() < 1) {
+        if (repairDtos == null || repairDtos.size() != 1) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "数据错误！");
             context.setResponseEntity(responseEntity);
         } else {
@@ -346,7 +346,7 @@ public class RepairDispatchCmd extends Cmd {
                 String userName = reqJson.getString("userName");
 
                 String ruId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId);
-                // 自己的单子状态修改为转单
+                // 自己的单子状态修改为派单
                 RepairUserPo repairUserPo = new RepairUserPo();
                 repairUserPo.setRuId(ruId);
                 repairUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
@@ -431,7 +431,6 @@ public class RepairDispatchCmd extends Cmd {
         JSONObject businessOwnerRepair = new JSONObject();
         businessOwnerRepair.putAll(BeanConvertUtil.beanCovertMap(repairDtos.get(0)));
         businessOwnerRepair.put("state", state);
-        //计算 应收金额
         RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
         int flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
         if (flag < 1) {
