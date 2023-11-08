@@ -268,6 +268,9 @@
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}
         </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
@@ -324,6 +327,9 @@
         </if>
         <if test="endUserTel !=null and endUserTel != ''">
             and t.end_user_tel= #{endUserTel}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
@@ -470,6 +476,9 @@
         </if>
         <if test="endUserTel !=null and endUserTel != ''">
             and t.end_user_tel= #{endUserTel}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
         </if>
         <if test="userId !=null and userId != ''">
             and t.user_id= #{userId}

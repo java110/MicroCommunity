@@ -134,13 +134,10 @@
         <if test="resOrderType !=null and resOrderType != ''">
             and pa.res_order_type= #{resOrderType}
         </if>
-        <if test="userId !=null and userId != ''">
-            and pa.user_id= #{userId}
-        </if>
         <if test="createUserId !=null and createUserId != ''">
             and pa.create_user_id= #{createUserId}
         </if>
-        <if test="userName !=null and userName != ''">
+        <if test="createUserName !=null and createUserName != ''">
             and pa.user_name like '%${userName}%'
         </if>
         <if test="description !=null and description != ''">
@@ -283,13 +280,10 @@
         <if test="resOrderType !=null and resOrderType != ''">
             and pa.res_order_type= #{resOrderType}
         </if>
-        <if test="userId !=null and userId != ''">
-            and pa.user_id= #{userId}
-        </if>
         <if test="createUserId !=null and createUserId != ''">
             and pa.create_user_id= #{createUserId}
         </if>
-        <if test="userName !=null and userName != ''">
+        <if test="createUserName !=null and createUserName != ''">
             and pa.user_name like '%${userName}%'
         </if>
         <if test="description !=null and description != ''">
