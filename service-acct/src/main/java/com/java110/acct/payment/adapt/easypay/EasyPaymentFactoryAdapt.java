@@ -243,8 +243,10 @@ public class EasyPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         JSONObject data = paramOut.getJSONObject("data");
 
-        if (!"10000".equals(paramOut.getJSONObject("data").getString("appendRetcode"))) {
-            throw new IllegalArgumentException("支付失败" + paramOut.getJSONObject("data").getString("appendRetmsg"));
+        String finRetcode = paramOut.getJSONObject("data").getString("finRetcode");
+
+        if (!"00".equals(finRetcode) && !"99".equals(finRetcode)) {
+            throw new IllegalArgumentException("支付失败,相应finRetcode为：" + finRetcode);
         }
 
         //wxWcPayData
@@ -271,13 +273,17 @@ public class EasyPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         String param = notifyPaymentOrderDto.getParam();
         System.out.println("支付结果返回值:" + param);
 
-        JSONObject paramJson = JSONObject.parseObject(param);
-
-        String sign = BasePay.calSign(paramJson, EASYPAY_PUBLIC_KEY);
-
-        if (!sign.equals(paramJson.getString("sign"))) {
+        if(!BasePay.checkSign(param, EASYPAY_PUBLIC_KEY)){
             throw new IllegalArgumentException("签名错误");
         }
+
+        JSONObject paramJson = JSONObject.parseObject(param);
+
+//        String sign = BasePay.checkSign(paramJson, EASYPAY_PUBLIC_KEY);
+//
+//        if (!sign.equals(paramJson.getString("sign"))) {
+//            throw new IllegalArgumentException("签名错误");
+//        }
 
         JSONObject paramOut = paramJson.getJSONObject("data");
 

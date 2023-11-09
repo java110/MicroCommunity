@@ -137,10 +137,9 @@ public class QrCodeEasyPaymentAdapt implements IQrCodePaymentSMO {
 
         if ("00".equals(resData.getString("finRetcode"))) {
             doUpdateOnlinePay(orderNum, OnlinePayDto.STATE_COMPILE, "支付成功");
-
             return new ResultVo(ResultVo.CODE_OK, "成功");
         } else {
-            return new ResultVo(ResultVo.CODE_ERROR, "等待用户支付中");
+            return new ResultVo(ResultVo.CODE_WAIT_PAY, "等待用户支付中");
         }
     }
 
