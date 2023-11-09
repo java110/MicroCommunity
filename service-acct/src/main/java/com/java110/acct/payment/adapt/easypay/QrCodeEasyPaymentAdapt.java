@@ -122,7 +122,9 @@ public class QrCodeEasyPaymentAdapt implements IQrCodePaymentSMO {
         paramIn.put("sign", sign);
 
         String requestStr = paramIn.toJSONString();
-        doSaveOnlinePay(shopSmallWeChatDto, "-1", orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付");
+        doSaveOnlinePay(shopSmallWeChatDto, "-1", orderNum, feeName, payAmount,
+                OnlinePayDto.STATE_WAIT, "待支付",paymentPoolValueDtos.get(0).getPpId());
+
 
         String response = HttpConnectUtils.sendHttpSRequest(BasePay.BASE_URL + "/standard/scanPay", requestStr, "JSON", null);
         System.out.println("\n响应报文：" + response);
@@ -200,7 +202,8 @@ public class QrCodeEasyPaymentAdapt implements IQrCodePaymentSMO {
 
     }
 
-    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money, String state, String message) {
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName,
+                                 double money, String state, String message,String ppId) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
         onlinePayPo.setAppId(smallWeChatDto.getAppId());
         onlinePayPo.setMchId(smallWeChatDto.getMchId());
@@ -213,6 +216,7 @@ public class QrCodeEasyPaymentAdapt implements IQrCodePaymentSMO {
         onlinePayPo.setState(state);
         onlinePayPo.setTotalFee(money + "");
         onlinePayPo.setTransactionId(orderId);
+        onlinePayPo.setPaymentPoolId(ppId);
         onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
     }
 

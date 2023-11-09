@@ -226,6 +226,7 @@ public class EasyPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         // 使用商户私钥对data字段加签
         String sign = BasePay.sign(dataBean, MER_RSA_PRIVATE_KEY);
         request.setSign(sign);
+        doSaveOnlinePay(smallWeChatDto, openid, orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付",paymentPoolValueDtos.get(0).getPpId());
 
         String requestStr = JSONObject.toJSONString(request);
 
@@ -334,7 +335,8 @@ public class EasyPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
     }
 
-    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName, double money, String state, String message) {
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName,
+                                 double money, String state, String message,String ppId) {
         OnlinePayPo onlinePayPo = new OnlinePayPo();
         onlinePayPo.setAppId(smallWeChatDto.getAppId());
         onlinePayPo.setMchId(smallWeChatDto.getMchId());
@@ -347,6 +349,7 @@ public class EasyPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         onlinePayPo.setState(state);
         onlinePayPo.setTotalFee(money + "");
         onlinePayPo.setTransactionId(orderId);
+        onlinePayPo.setPaymentPoolId(ppId);
         onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
     }
 
