@@ -61,6 +61,7 @@ public class QueryDeadlineFeeCmd extends Cmd {
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        context.setResponseEntity(responseEntity);
 
     }
 
