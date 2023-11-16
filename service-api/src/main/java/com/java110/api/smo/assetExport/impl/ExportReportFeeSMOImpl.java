@@ -668,7 +668,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         for (int roomIndex = 0; roomIndex < deadlineFees.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = deadlineFees.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(dataObj.getString("objNameNum"));
+            row.createCell(0).setCellValue(dataObj.getString("objName"));
             row.createCell(1).setCellValue(dataObj.getString("feeName"));
             row.createCell(2).setCellValue(dataObj.getString("deadlineTime"));
             row.createCell(3).setCellValue(dataObj.getString("oweDay"));
