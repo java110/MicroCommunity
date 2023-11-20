@@ -22,6 +22,7 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.privilege.RoleCommunityDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.dto.wechat.SmallWechatAttrDto;
 import com.java110.dto.user.StaffAppAuthDto;
@@ -36,11 +37,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
-import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
+import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.po.fee.PayFeeDetailPo;
@@ -48,10 +45,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +109,9 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMO;
+
+    @Autowired
+    private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
 
     //模板信息推送地址
     private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
@@ -270,6 +267,16 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         }
         for (UserDto userDto : userDtos) {
             //根据 userId 查询到openId
+
+            //todo 判断给员工是否授权了该小区
+            RoleCommunityDto roleCommunityDto = new RoleCommunityDto();
+            roleCommunityDto.setStaffId(userDto.getUserId());
+            roleCommunityDto.setCommunityId(payFeeDetailPo.getCommunityId());
+           List<RoleCommunityDto> roleCommunityDtos =  roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(roleCommunityDto);
+           if(ListUtil.isNull(roleCommunityDtos)){
+               continue;
+           }
+
             try {
                 JSONObject content = new JSONObject();
                 content.put("payFeeRoom", paramIn.getString("payFeeRoom"));

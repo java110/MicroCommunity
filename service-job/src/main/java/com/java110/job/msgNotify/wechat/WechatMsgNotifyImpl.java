@@ -6,10 +6,12 @@ import com.java110.core.client.RestTemplate;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.mapping.Mapping;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.privilege.RoleCommunityDto;
 import com.java110.dto.user.StaffAppAuthDto;
 import com.java110.dto.wechat.Content;
 import com.java110.dto.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.intf.user.IRoleCommunityV1InnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.msgNotify.IMsgNotify;
 import com.java110.job.msgNotify.IWechatTemplate;
@@ -77,6 +79,8 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
 
     @Autowired
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMOImpl;
+
+
 
     @Autowired
     private RestTemplate outRestTemplate;
@@ -232,6 +236,10 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
             if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
                 throw new IllegalArgumentException("员工未认证，没有获取到微信openId");
             }
+
+
+
+
             openId = staffAppAuthDtos.get(0).getOpenId();
         }
         JSONObject data = new JSONObject();
