@@ -133,6 +133,10 @@ public class PayOweFeeCmd extends Cmd {
             }
             feeDto = feeDtos.get(0);
 
+            if(!FeeDto.FEE_FLAG_CYCLE.equals(feeDto.getFeeFlag())){
+                continue;
+            }
+
             pageEndTime = DateUtil.getDateFromStringB(feeObject.getString("endTime"));
             if (pageEndTime.getTime() <= feeDto.getEndTime().getTime()) {
                 throw new IllegalArgumentException("可能存在重复缴费，请刷新页面重新缴费");

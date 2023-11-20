@@ -223,6 +223,18 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
                 scheduleClassesStaffDto.setWork(true);
                 return;
             }
+            //todo 处理 排版为 22点-6点 当前时间为4点时情况 也就是 今日4点 永远不可能在当前日期的中 只能在昨日排版中
+            endTime = DateUtil.getDateFromStringA(today + " " + time.getEndTime() + ":00");
+            if (endTime.getTime() < startTime.getTime()) {
+                Calendar startTimeCal = Calendar.getInstance();
+                startTimeCal.setTime(startTime);
+                startTimeCal.add(Calendar.DAY_OF_MONTH, -1);
+                startTime = startTimeCal.getTime();
+                if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), startTime, endTime)) {
+                    scheduleClassesStaffDto.setWork(true);
+                    return;
+                }
+            }
         }
         scheduleClassesStaffDto.setWork(false);
     }
@@ -299,6 +311,19 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
                 scheduleClassesStaffDto.setWork(true);
                 return;
             }
+
+            //todo 处理 排版为 22点-6点 当前时间为4点时情况 也就是 今日4点 永远不可能在当前日期的中 只能在昨日排版中
+            endTime = DateUtil.getDateFromStringA(today + " " + time.getEndTime() + ":00");
+            if (endTime.getTime() < startTime.getTime()) {
+                Calendar startTimeCal = Calendar.getInstance();
+                startTimeCal.setTime(startTime);
+                startTimeCal.add(Calendar.DAY_OF_MONTH, -1);
+                startTime = startTimeCal.getTime();
+                if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), startTime, endTime)) {
+                    scheduleClassesStaffDto.setWork(true);
+                    return;
+                }
+            }
         }
         scheduleClassesStaffDto.setWork(false);
     }
@@ -366,10 +391,12 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
                 return;
             }
             //todo 处理 排版为 22点-6点 当前时间为4点时情况 也就是 今日4点 永远不可能在当前日期的中 只能在昨日排版中
+            endTime = DateUtil.getDateFromStringA(today + " " + time.getEndTime() + ":00");
             if (endTime.getTime() < startTime.getTime()) {
-                String yesterday = DateUtil.getAddDayStringB(new Date(),-1);
-                startTime = DateUtil.getDateFromStringA(yesterday + " " + time.getStartTime() + ":00");
-                endTime = DateUtil.getDateFromStringA(today + " " + time.getEndTime() + ":00");
+                Calendar startTimeCal = Calendar.getInstance();
+                startTimeCal.setTime(startTime);
+                startTimeCal.add(Calendar.DAY_OF_MONTH, -1);
+                startTime = startTimeCal.getTime();
                 if (DateUtil.belongCalendar(scheduleClassesStaffDto.getToday(), startTime, endTime)) {
                     scheduleClassesStaffDto.setWork(true);
                     return;
