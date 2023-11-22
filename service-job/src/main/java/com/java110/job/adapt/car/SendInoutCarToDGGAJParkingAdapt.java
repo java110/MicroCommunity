@@ -197,7 +197,14 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
      */
     public String initTrans(CarInoutDetailPo carInoutDetailPo,String gateId,String secure) {
 
-        String token = CommonCache.getValue("DGGAJ_Parking_token");
+        //进
+        String directType = "1";
+
+        if (CarInoutDetailDto.CAR_INOUT_OUT.equals(carInoutDetailPo.getCarInout())) {
+            directType = "2"; // todo 出
+        }
+
+        String token = CommonCache.getValue("DGGAJ_Parking_token_"+directType+carInoutDetailPo.getPaId());
 
         if(!StringUtil.isEmpty(token)){
             return token;
@@ -214,12 +221,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
 
        // String key = MappingCache.getValue("DOGUAN_PAKRING_KEY");
 
-        //进
-        String directType = "1";
 
-        if (CarInoutDetailDto.CAR_INOUT_OUT.equals(carInoutDetailPo.getCarInout())) {
-            directType = "2"; // todo 出
-        }
 
         String paramIn = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.conflux.sunshine.com\">\n" +
                 "   <soapenv:Header/>\n" +
@@ -248,7 +250,7 @@ public class SendInoutCarToDGGAJParkingAdapt extends DatabusAdaptImpl {
                 return token;
             }
             token = body.substring(body.indexOf("&lt;token&gt;")+13,body.indexOf("&lt;/token&gt;"));
-            CommonCache.setValue("DGGAJ_Parking_token",token,CommonCache.TOKEN_EXPIRE_TIME);
+            CommonCache.setValue("DGGAJ_Parking_token_"+directType+carInoutDetailPo.getPaId(),token,CommonCache.TOKEN_EXPIRE_TIME);
         }catch (HttpStatusCodeException e){
             logger.error("调用异常",e);
         }catch (Exception e){
