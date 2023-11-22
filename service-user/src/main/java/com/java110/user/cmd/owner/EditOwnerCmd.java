@@ -272,7 +272,7 @@ public class EditOwnerCmd extends Cmd {
         }
 
         AccountPo accountPo = new AccountPo();
-        accountPo.setLink(ownerDtos.get(0).getLink());
+        accountPo.setoLink(ownerDtos.get(0).getLink());
         accountPo.setAcctId(accountDtos.get(0).getAcctId());
         accountInnerServiceSMOImpl.updateAccount(accountPo);
     }

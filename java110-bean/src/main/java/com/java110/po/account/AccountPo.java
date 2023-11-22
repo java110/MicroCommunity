@@ -14,6 +14,8 @@ public class AccountPo implements Serializable {
 
     private String link;
 
+    private String oLink;
+
     private String phone;
 
     public String getAmount() {
@@ -86,5 +88,13 @@ public class AccountPo implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getoLink() {
+        return oLink;
+    }
+
+    public void setoLink(String oLink) {
+        this.oLink = oLink;
     }
 }

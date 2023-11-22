@@ -176,6 +176,9 @@
         <if test="partId !=null and partId != ''">
             , t.obj_type= #{partId}
         </if>
+        <if test="oLink !=null and oLink != ''">
+            , t.link= #{oLink}
+        </if>
         where 1=1
         <if test="acctId !=null and acctId != ''">
             and t.acct_id= #{acctId}
@@ -252,8 +255,8 @@
             <if test="acctName !=null and acctName != ''">
                 t.acct_name= #{acctName},
             </if>
-            <if test="link !=null and link != ''">
-                t.link= #{link},
+            <if test="oLink !=null and oLink != ''">
+                t.link= #{oLink},
             </if>
         </set>
         where 1=1
