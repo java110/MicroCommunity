@@ -132,7 +132,7 @@ public class PayOweFeeCmd extends Cmd {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
             }
             feeDto = feeDtos.get(0);
-
+            feeObject.put("feeDto", feeDto);
             if(!FeeDto.FEE_FLAG_CYCLE.equals(feeDto.getFeeFlag())){
                 continue;
             }
@@ -142,7 +142,7 @@ public class PayOweFeeCmd extends Cmd {
                 throw new IllegalArgumentException("可能存在重复缴费，请刷新页面重新缴费");
             }
 
-            feeObject.put("feeDto", feeDto);
+
         }
     }
 
