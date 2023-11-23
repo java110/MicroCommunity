@@ -77,6 +77,9 @@ public class FeeDetailDto extends PageDto implements Serializable {
     private String cashierId;
     private String cashierName;
 
+    private String openInvoice; // todo 默认 未开票
+
+
     private List<FeeAccountDetailDto> feeAccountDetailDtoList;
     private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
@@ -424,5 +427,13 @@ public class FeeDetailDto extends PageDto implements Serializable {
 
     public void setDetailIds(String[] detailIds) {
         this.detailIds = detailIds;
+    }
+
+    public String getOpenInvoice() {
+        return openInvoice;
+    }
+
+    public void setOpenInvoice(String openInvoice) {
+        this.openInvoice = openInvoice;
     }
 }

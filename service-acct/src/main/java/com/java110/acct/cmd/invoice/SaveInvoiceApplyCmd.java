@@ -41,6 +41,7 @@ import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.account.AccountReceiptPo;
+import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.invoiceApply.InvoiceApplyPo;
 import com.java110.po.invoiceApplyItem.InvoiceApplyItemPo;
 import com.java110.utils.exception.CmdException;
@@ -88,6 +89,9 @@ public class SaveInvoiceApplyCmd extends Cmd {
 
     @Autowired
     private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailV1InnerServiceSMOImpl;
 
     @Autowired
     private IAccountReceiptV1InnerServiceSMO accountReceiptV1InnerServiceSMOImpl;
@@ -225,6 +229,13 @@ public class SaveInvoiceApplyCmd extends Cmd {
             invoiceApplyItemPo.setItemObjId(tmpFeeDetailDto.getDetailId());
             invoiceApplyItemPo.setItemType(InvoiceApplyItemDto.ITEM_TYPE_FEE);
             invoiceApplyItemPos.add(invoiceApplyItemPo);
+
+            // todo 将缴费记录开票状态修改为D 开票中
+            PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
+            payFeeDetailPo.setDetailId(tmpFeeDetailDto.getDetailId());
+            payFeeDetailPo.setCommunityId(tmpFeeDetailDto.getCommunityId());
+            payFeeDetailPo.setOpenInvoice("D"); // todo 开票中
+            payFeeDetailV1InnerServiceSMOImpl.updatePayFeeDetailNew(payFeeDetailPo);
         }
 
         return invoiceAmount;

@@ -236,6 +236,8 @@ public class PayMonthFeeCmd extends Cmd {
             payFeeDetailPo.setEndTime(endTime);
             // todo 按月交费时 主要按时间顺序排序时 能够整齐
             payFeeDetailPo.setCreateTime(DateUtil.getFormatTimeStringA(createTime));
+            payFeeDetailPo.setOpenInvoice("N");
+
             //todo 缓存收据编号
             CommonCache.setValue(payFeeDetailPo.getDetailId()+CommonCache.RECEIPT_CODE,receiptCode,CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);

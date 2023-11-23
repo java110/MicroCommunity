@@ -431,7 +431,7 @@ public class FeeBMOImpl extends ApiBaseBMO implements IFeeBMO {
         CommonCache.setValue(payFeeDetail.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
         // todo 刷入收银人员信息
         freshCashierInfo(payFeeDetail, paramInJson);
-
+        payFeeDetail.setOpenInvoice("N");
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetail);
         if (flag < 1) {
             throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "保存费用明细失败");

@@ -243,6 +243,7 @@ public class PayFeeCmd extends Cmd {
             }
             payFeeDetailPo.setCashierId(userDtos.get(0).getUserId());
             payFeeDetailPo.setCashierName(userDtos.get(0).getName());
+            payFeeDetailPo.setOpenInvoice("N");
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
@@ -1076,6 +1077,8 @@ public class PayFeeCmd extends Cmd {
         tmpPayFeeDetailPo.setStartTime(DateUtil.getFormatTimeStringB(endTime));
         tmpPayFeeDetailPo.setEndTime(reqJson.getString("customStartTime"));
         tmpPayFeeDetailPo.setState(FeeDetailDto.STATE_OWE);
+        tmpPayFeeDetailPo.setOpenInvoice("N");
+
         tmpPayFeeDetailPo.setRemark("按缴费时间段缴费,这部分费用按欠费的方式重新生成，请在" + payObjNameRemark + "上查看");
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(tmpPayFeeDetailPo);
 

@@ -37,6 +37,8 @@ public class PayFeeDetailPo implements Serializable {
     private String cashierId;
     private String cashierName;
 
+    private String openInvoice; // todo 默认 未开票
+
 
 
     public String getDetailId() {
@@ -183,4 +185,11 @@ public class PayFeeDetailPo implements Serializable {
         this.cashierName = cashierName;
     }
 
+    public String getOpenInvoice() {
+        return openInvoice;
+    }
+
+    public void setOpenInvoice(String openInvoice) {
+        this.openInvoice = openInvoice;
+    }
 }

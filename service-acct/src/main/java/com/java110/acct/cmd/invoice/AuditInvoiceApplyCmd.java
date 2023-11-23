@@ -26,16 +26,21 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.invoiceApply.InvoiceApplyDto;
+import com.java110.dto.invoiceApplyItem.InvoiceApplyItemDto;
 import com.java110.dto.invoiceEvent.InvoiceEventDto;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.acct.IInvoiceApplyItemV1InnerServiceSMO;
 import com.java110.intf.acct.IInvoiceApplyV1InnerServiceSMO;
 import com.java110.intf.acct.IInvoiceEventV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
+import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.invoiceApply.InvoiceApplyPo;
 import com.java110.po.invoiceEvent.InvoiceEventPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -64,10 +69,16 @@ public class AuditInvoiceApplyCmd extends Cmd {
     private IInvoiceApplyV1InnerServiceSMO invoiceApplyV1InnerServiceSMOImpl;
 
     @Autowired
+    private IInvoiceApplyItemV1InnerServiceSMO invoiceApplyItemV1InnerServiceSMOImpl;
+
+    @Autowired
     private IInvoiceEventV1InnerServiceSMO invoiceEventV1InnerServiceSMOImpl;
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailV1InnerServiceSMOImpl;
 
 
     @Override
@@ -121,6 +132,29 @@ public class AuditInvoiceApplyCmd extends Cmd {
         invoiceEventPo.setCreateUserName(userDtos.get(0).getName());
         invoiceEventPo.setRemark(reqJson.getString("remark"));
         invoiceEventV1InnerServiceSMOImpl.saveInvoiceEvent(invoiceEventPo);
+
+        //todo 修改缴费明细开票状态为完成或者待开票
+        InvoiceApplyItemDto invoiceApplyItemDto = new InvoiceApplyItemDto();
+        invoiceApplyItemDto.setApplyId(invoiceApplyPo.getApplyId());
+        invoiceApplyItemDto.setItemType(InvoiceApplyItemDto.ITEM_TYPE_FEE);
+        List<InvoiceApplyItemDto> invoiceApplyItemDtos = invoiceApplyItemV1InnerServiceSMOImpl.queryInvoiceApplyItems(invoiceApplyItemDto);
+        if(ListUtil.isNull(invoiceApplyItemDtos)){
+            return;
+        }
+
+        for(InvoiceApplyItemDto tmpInvoiceApplyItemDto : invoiceApplyItemDtos){
+            // todo 将缴费记录开票状态修改为D 开票中
+            PayFeeDetailPo payFeeDetailPo = new PayFeeDetailPo();
+            payFeeDetailPo.setDetailId(tmpInvoiceApplyItemDto.getItemObjId());
+            payFeeDetailPo.setCommunityId(tmpInvoiceApplyItemDto.getCommunityId());
+            if ("1100".equals(reqJson.getString("state"))) {
+                payFeeDetailPo.setOpenInvoice("Y"); // todo 开票完成
+            }else{
+                payFeeDetailPo.setOpenInvoice("N"); // todo 带开票
+            }
+
+            payFeeDetailV1InnerServiceSMOImpl.updatePayFeeDetailNew(payFeeDetailPo);
+        }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

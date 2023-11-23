@@ -8,13 +8,13 @@
         business_pay_fee_detail(
         operate,prime_rate,detail_id,
         receivable_amount,cycles,remark,
-        received_amount,community_id,b_id,fee_id,state,start_time,end_time,payable_amount
+        received_amount,community_id,b_id,fee_id,state,start_time,end_time,payable_amount,open_invoice
         <if test="createTime != null">
             ,create_time
         </if>
         ) values (
         #{operate},#{primeRate},#{detailId},#{receivableAmount},
-        #{cycles},#{remark},#{receivedAmount},#{communityId},#{bId},#{feeId},#{state},#{startTime},#{endTime},#{payableAmount}
+        #{cycles},#{remark},#{receivedAmount},#{communityId},#{bId},#{feeId},#{state},#{startTime},#{endTime},#{payableAmount},#{openInvoice}
         <if test="createTime != null">
             ,#{createTime}
         </if>
@@ -122,7 +122,7 @@
         importFeeName,pfc.fee_name feeName,t.payable_amount,t.payable_amount payableAmount,
         mw.cur_degrees curDegrees,mw.pre_degrees preDegrees, mw.pre_reading_time preReadingTime,mw.cur_reading_time
         curReadingTime,t.pay_order_id payOrderId,pfc.config_id configId,td.`name` primeRateName,pfao1.`value` payerObjName,
-        t.cashier_id cashierId,t.cashier_name cashierName,pfc.fee_flag feeFlag,fr.receipt_code receiptCode
+        t.cashier_id cashierId,t.cashier_name cashierName,pfc.fee_flag feeFlag,fr.receipt_code receiptCode,t.open_invoice openInvoice
         from pay_fee_detail t
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -212,6 +212,9 @@
         <if test="cashierName !=null and cashierName != ''">
             and t.cashier_name= #{cashierName}
         </if>
+        <if test="openInvoice !=null and openInvoice != ''">
+            and t.open_invoice= #{openInvoice}
+        </if>
         order by pf.payer_obj_id,  t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -250,6 +253,9 @@
         </if>
         <if test="feeId !=null and feeId != ''">
             , t.fee_id= #{feeId}
+        </if>
+        <if test="openInvoice !=null and openInvoice != ''">
+            , t.open_invoice= #{openInvoice}
         </if>
         where 1=1
         <if test="detailId !=null and detailId != ''">
@@ -335,6 +341,9 @@
         <if test="cashierName !=null and cashierName != ''">
             and t.cashier_name= #{cashierName}
         </if>
+        <if test="openInvoice !=null and openInvoice != ''">
+            and t.open_invoice= #{openInvoice}
+        </if>
         <if test="curYear != null and curYear != ''">
             and DATE_FORMAT(DATE_SUB(t.end_time,INTERVAL 1 DAY),'%Y') = #{curYear}
         </if>
@@ -344,13 +353,13 @@
     <insert id="saveFeeDetail" parameterType="Map">
         insert into
         pay_fee_detail(
-        prime_rate,detail_id,receivable_amount,cycles,remark,received_amount,community_id,fee_id,state,start_time,end_time,payable_amount,cashier_name,cashier_id
+        prime_rate,detail_id,receivable_amount,cycles,remark,received_amount,community_id,fee_id,state,start_time,end_time,payable_amount,cashier_name,cashier_id,open_invoice
         <if test="createTime != null and createTime != ''">
             ,create_time
         </if>
         )
         values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},#{receivedAmount},#{communityId},#{feeId},#{state},
-        #{startTime},#{endTime},#{payableAmount},#{cashierName},#{cashierId}
+        #{startTime},#{endTime},#{payableAmount},#{cashierName},#{cashierId},#{openInvoice}
         <if test="createTime != null and createTime != ''">
             ,#{createTime}
         </if>

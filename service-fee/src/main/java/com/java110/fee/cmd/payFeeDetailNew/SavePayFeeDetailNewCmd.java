@@ -70,6 +70,7 @@ Assert.hasKeyAndValue(reqJson, "primeRate", "请求报文中未包含primeRate")
 
        PayFeeDetailPo payFeeDetailNewPo = BeanConvertUtil.covertBean(reqJson, PayFeeDetailPo.class);
         payFeeDetailNewPo.setDetailId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        payFeeDetailNewPo.setOpenInvoice("N");
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailNewPo);
 
         if (flag < 1) {
