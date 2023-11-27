@@ -210,7 +210,7 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
                 throw new IllegalArgumentException("余额不足");
             }
             AccountPo accountPo = new AccountPo();
-            accountPo.setObjId(accountDetailPo.getObjId());
+            accountPo.setObjId(accounts.get(0).getObjId());
             accountPo.setAcctId(accountDetailPo.getAcctId());
             accountPo.setAmount(amount + "");
             flag = accountServiceDaoImpl.updateAccount(BeanConvertUtil.beanCovertMap(accountPo));

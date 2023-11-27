@@ -9,16 +9,21 @@ import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.account.AccountDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.payment.PaymentOrderDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +65,12 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
 
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
 
 
     @Override
@@ -128,6 +139,9 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
 
         money = tmpMoney.setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
 
+        //todo 支持账户扣款
+        money = ifHasAccount(reqJson, money);
+
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(orderId);
         paymentOrderDto.setMoney(money);
@@ -140,9 +154,14 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
         saveFees.put("roomId", roomId);
         saveFees.put("communityId", reqJson.getString("communityId"));
         saveFees.put("fees", tmpFeeDtos);
+        if (reqJson.containsKey("acctId")) {
+            saveFees.put("accountAmount", reqJson.getDoubleValue("accountAmount"));
+            saveFees.put("acctId", reqJson.getString("acctId"));
+        }
         CommonCache.setValue(FeeDto.REDIS_PAY_OWE_FEE + orderId, saveFees.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         return paymentOrderDto;
     }
+
 
     /**
      * 判断是否是 选择的费用交费
@@ -223,4 +242,39 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
 
         return communityDtos.get(0).getName() + "-" + feeDto.getFeeName();
     }
+
+    private double ifHasAccount(JSONObject reqJson, double money) {
+
+        if (!reqJson.containsKey("acctId")) {
+            return money;
+        }
+
+        String acctId = reqJson.getString("acctId");
+
+        if (StringUtil.isEmpty(acctId)) {
+            return money;
+        }
+
+        AccountDto accountDto = new AccountDto();
+        accountDto.setAcctId(acctId);
+        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH);
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+
+        if (ListUtil.isNull(accountDtos)) {
+            return money;
+        }
+
+        Double acctAmount = Double.parseDouble(accountDtos.get(0).getAmount());
+        if (acctAmount >= money) {
+            reqJson.put("accountAmount", money);
+            return 0.00;
+        }
+
+        reqJson.put("accountAmount", acctAmount.doubleValue());
+
+        BigDecimal accountAmountDec = new BigDecimal(acctAmount);
+        accountAmountDec = new BigDecimal(money).subtract(accountAmountDec).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return accountAmountDec.doubleValue();
+    }
+
 }
