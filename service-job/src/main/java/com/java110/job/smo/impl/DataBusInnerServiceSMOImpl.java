@@ -203,16 +203,21 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
      * @param databusDtos databus
      */
     private void doExchange(Business business, List<Business> businesses, List<BusinessDatabusDto> databusDtos) {
-        // IDatabusAdapt databusAdaptImpl = null;
+         IDatabusAdapt databusAdaptImpl = null;
         for (BusinessDatabusDto databusDto : databusDtos) {
             try {
                 if (!business.getBusinessTypeCd().equals(databusDto.getBusinessTypeCd())) {
                     continue;
                 }
+                //todo 收据同步去打印处理，不然前台等不及
+                if(databusDto.getBeanName().equals("payFeeReceiptAdapt")){
+                    databusAdaptImpl = ApplicationContextFactory.getBean(databusDto.getBeanName(), IDatabusAdapt.class);
+                    databusAdaptImpl.execute(business, businesses);
+                    continue;
+                }
                 //todo 存放队列中
                 DatabusDataQueue.addMsg(new DatabusQueueDataDto(databusDto.getBeanName(), business, businesses));
-//                    databusAdaptImpl = ApplicationContextFactory.getBean(databusDto.getBeanName(), IDatabusAdapt.class);
-//                    databusAdaptImpl.execute(business, businesses);
+
             } catch (Exception e) {
                 logger.error("执行databus失败", e);
                 LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();

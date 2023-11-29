@@ -133,7 +133,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
             }
         }
 
-        String feeName = getFeeName(feeDtos.get(0));
+        String feeName = getFeeName(tmpFeeDtos.get(0));
 
         String orderId = GenerateCodeFactory.getOId();
 
