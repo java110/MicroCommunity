@@ -175,31 +175,31 @@ public class PayOweFeeCmd extends Cmd {
                 feeObj.put("primeRate", "5");
                 feeObj.put("remark", "线上公众号支付");
             }
-            if (!paramObj.containsKey("primeRate")) {
-                paramObj.put("primeRate", "6");
+            if (!feeObj.containsKey("primeRate")) {
+                feeObj.put("primeRate", "6");
             }
-            logger.info("======支付方式======：" + appId + "+======+" + paramObj.containsKey("primeRate") + "======:" + JSONArray.toJSONString(dataFlowContext));
+            logger.info("======支付方式======：" + appId + "+======+" + feeObj.containsKey("primeRate") + "======:" + JSONArray.toJSONString(dataFlowContext));
             if (AppDto.OWNER_WECHAT_PAY.equals(appId)
-                    && FeeDetailDto.PRIME_REATE_WECHAT.equals(paramObj.getString("primeRate"))) {  //微信支付（欠费缴费无法区分小程序还是微信公众号）
-                paramObj.put("remark", "线上公众号支付");
+                    && FeeDetailDto.PRIME_REATE_WECHAT.equals(feeObj.getString("primeRate"))) {  //微信支付（欠费缴费无法区分小程序还是微信公众号）
+                feeObj.put("remark", "线上公众号支付");
             } else if (AppDto.OWNER_WECHAT_PAY.equals(appId)
-                    && FeeDetailDto.PRIME_REATE_WECHAT_APP.equals(paramObj.getString("primeRate"))) {
-                paramObj.put("remark", "线上小程序支付");
+                    && FeeDetailDto.PRIME_REATE_WECHAT_APP.equals(feeObj.getString("primeRate"))) {
+                feeObj.put("remark", "线上小程序支付");
             }
-            paramObj.put("state", "1400");
+            feeObj.put("state", "1400");
             // todo 添加交费明细
-            addOweFeeDetail(paramObj, details, userDto, receiptCode, payOrderId);
-            modifyOweFee(paramObj, dataFlowContext);
+            addOweFeeDetail(feeObj, details, userDto, receiptCode, payOrderId);
+            modifyOweFee(feeObj, dataFlowContext);
 
             //todo 账户扣款
-            finishFeeNotifyImpl.withholdAccount(paramObj, paramObj.getString("feeId"), paramObj.getString("communityId"));
+            finishFeeNotifyImpl.withholdAccount(feeObj, feeObj.getString("feeId"), feeObj.getString("communityId"));
 
             //todo 修改车辆
-            finishFeeNotifyImpl.updateCarEndTime(paramObj.getString("feeId"), paramObj.getString("communityId"));
+            finishFeeNotifyImpl.updateCarEndTime(feeObj.getString("feeId"), feeObj.getString("communityId"));
 
 
             //todo 修改报修单
-            finishFeeNotifyImpl.updateRepair(paramObj.getString("feeId"), paramObj.getString("communityId"), paramObj.getString("receivedAmount"));
+            finishFeeNotifyImpl.updateRepair(feeObj.getString("feeId"), feeObj.getString("communityId"), feeObj.getString("receivedAmount"));
         }
 
 
