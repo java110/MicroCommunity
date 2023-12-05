@@ -84,9 +84,10 @@ public class WechatTemplateImpl implements IWechatTemplate {
 
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
 
-        String industryName = paramOut.getJSONObject("primary_industry").getString("second_class");
+       // String industryName = paramOut.getJSONObject("primary_industry").getString("second_class");
 
-        if ("物业".equals(industryName)) { //如果是物业 直接 返回 无需设置
+        JSONObject primaryIndustry = paramOut.getJSONObject("primary_industry");
+        if (primaryIndustry != null && "物业".equals(primaryIndustry.getString("second_class"))) { //如果是物业 直接 返回 无需设置
             return;
         }
 
