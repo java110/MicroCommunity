@@ -266,7 +266,7 @@
         <if test="lift !=null and lift != ''">
             and bu.lift= #{lift}
         </if>
-        order by t.floor_num * 1,bu.unit_num * 1 asc
+        order by t.seq,t.floor_num,bu.unit_num asc
         <!-- <if test="page != -1 and page != null ">
              limit #{page}, #{row}
          </if>limit 10;-->
