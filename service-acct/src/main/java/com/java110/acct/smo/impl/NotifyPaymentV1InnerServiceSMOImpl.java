@@ -20,17 +20,22 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.core.base.smo.BaseServiceSMO;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.log.LogSystemErrorDto;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.paymentPool.PaymentPoolDto;
 import com.java110.intf.acct.INotifyPaymentV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolV1InnerServiceSMO;
+import com.java110.po.log.LogSystemErrorPo;
+import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
+import com.java110.utils.util.ExceptionUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +63,8 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
     protected static final String DEFAULT_NATIVE_QRCODE_PAYMENT_ADAPT = "wechatNativeQrcodePaymentFactory";// 默认微信通用支付
     @Autowired
     private IPaymentPoolV1InnerServiceSMO paymentPoolV1InnerServiceSMOImpl;
-
+    @Autowired
+    private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
     /**
      * 通知类
      *
@@ -105,6 +111,12 @@ public class NotifyPaymentV1InnerServiceSMOImpl extends BaseServiceSMO implement
             return paymentOrderDto.getResponseEntity();
         } catch (Exception e) {
             logger.error("通知是配置异常", e);
+            LogSystemErrorPo logSystemErrorPo = new LogSystemErrorPo();
+            logSystemErrorPo.setErrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_errId));
+            logSystemErrorPo.setErrType(LogSystemErrorDto.ERR_TYPE_PAY_NOTICE);
+            logSystemErrorPo.setMsg(ExceptionUtil.getStackTrace(e));
+            saveSystemErrorSMOImpl.saveLog(logSystemErrorPo);
+
             throw e;
         }
     }

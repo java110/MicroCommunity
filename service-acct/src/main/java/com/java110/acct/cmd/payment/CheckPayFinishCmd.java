@@ -9,6 +9,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.dto.paymentPool.PaymentPoolDto;
 import com.java110.intf.acct.IPaymentPoolV1InnerServiceSMO;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.WechatConstant;
@@ -79,6 +80,12 @@ public class CheckPayFinishCmd extends Cmd {
         String userId = cmdDataFlowContext.getReqHeaders().get(CommonConstant.USER_ID);
         //JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, "fee.payFee", JSONObject.class, userId);
         reqJson.put("payOrderId",orderId);
+
+        orderId = CommonCache.getAndRemoveValue("qrCode_order"+orderId);
+
+        if(StringUtil.isEmpty(orderId)){
+            throw new CmdException("订单已经处理过");
+        }
 
         JSONObject paramOut = CallApiServiceFactory.postForApi(appId, reqJson, reqJson.getString("subServiceCode"), JSONObject.class, userId);
         cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(paramOut));
