@@ -101,7 +101,7 @@ public class ParkingBoxWebsocket {
      */
     @OnMessage
     public void onMessage(String message, Session session) throws Exception {
-        logger.info("用户消息:" + boxId + ",客户端：" + clientId + ",报文:" + message);
+        //logger.info("用户消息:" + boxId + ",客户端：" + clientId + ",报文:" + message);
         //可以群发消息
         //消息保存到数据库、redis
         if (StringUtil.isEmpty(message)) {
