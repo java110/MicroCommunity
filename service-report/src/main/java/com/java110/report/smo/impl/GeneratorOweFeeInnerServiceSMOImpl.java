@@ -237,7 +237,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
             if (feeDto.getFeeTotalPrice() == 0) { //todo 如果欠费金额为0 不写入，减轻 欠费表的压力
                 return;
             }
-            reportOweFeePo.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId));
+            reportOweFeePo.setOweId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oweId,true));
             reportOweFeeServiceDaoImpl.saveReportOweFeeInfo(BeanConvertUtil.beanCovertMap(reportOweFeePo));
         } else {
             reportOweFeePo.setOweId(reportOweFeeDtos.get(0).get("oweId").toString());
