@@ -21,17 +21,23 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.invoiceApplyItem.InvoiceApplyItemDto;
 import com.java110.intf.acct.IInvoiceApplyItemV1InnerServiceSMO;
 import com.java110.intf.acct.IInvoiceApplyV1InnerServiceSMO;
+import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
+import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.invoiceApply.InvoiceApplyPo;
 import com.java110.po.invoiceApplyItem.InvoiceApplyItemPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -53,6 +59,10 @@ public class DeleteInvoiceApplyCmd extends Cmd {
     @Autowired
     private IInvoiceApplyItemV1InnerServiceSMO invoiceApplyItemV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
@@ -71,11 +81,32 @@ public class DeleteInvoiceApplyCmd extends Cmd {
             throw new CmdException("删除数据失败");
         }
 
+        InvoiceApplyItemDto invoiceApplyItemDto = new InvoiceApplyItemDto();
+        invoiceApplyItemDto.setApplyId(invoiceApplyPo.getApplyId());
+
+        List<InvoiceApplyItemDto> invoiceApplyItemDtos = invoiceApplyItemV1InnerServiceSMOImpl.queryInvoiceApplyItems(invoiceApplyItemDto);
+
+        if(ListUtil.isNull(invoiceApplyItemDtos)){
+            cmdDataFlowContext.setResponseEntity(ResultVo.success());
+            return;
+        }
+
         //todo 删除 申请项
         InvoiceApplyItemPo invoiceApplyItemPo = new InvoiceApplyItemPo();
         invoiceApplyItemPo.setApplyId(invoiceApplyPo.getApplyId());
         invoiceApplyItemV1InnerServiceSMOImpl.deleteInvoiceApplyItem(invoiceApplyItemPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+        PayFeeDetailPo payFeeDetailPo = null;
+        for(InvoiceApplyItemDto tmpInvoiceApplyItemDto: invoiceApplyItemDtos){
+            if(InvoiceApplyItemDto.ITEM_TYPE_FEE.equals(tmpInvoiceApplyItemDto.getItemType())){
+                continue;
+            }
+            payFeeDetailPo = new PayFeeDetailPo();
+            payFeeDetailPo.setDetailId(tmpInvoiceApplyItemDto.getItemObjId());
+            payFeeDetailPo.setOpenInvoice("N");
+            payFeeDetailV1InnerServiceSMOImpl.updatePayFeeDetailNew(payFeeDetailPo);
+        }
     }
 }
