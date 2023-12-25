@@ -18,6 +18,7 @@ package com.java110.oa.cmd.workEvent;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -62,7 +63,8 @@ public class SaveWorkEventCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
         Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
         Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含remark");
-
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+        reqJson.put("storeId",storeId);
     }
 
     @Override

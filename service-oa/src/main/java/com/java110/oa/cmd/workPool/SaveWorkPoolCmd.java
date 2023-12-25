@@ -18,6 +18,7 @@ package com.java110.oa.cmd.workPool;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -60,7 +61,8 @@ public class SaveWorkPoolCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "workCycle", "请求报文中未包含workCycle");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
-
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+        reqJson.put("storeId",storeId);
     }
 
     @Override

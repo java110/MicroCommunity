@@ -18,6 +18,7 @@ package com.java110.oa.cmd.workEvent;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -58,6 +59,8 @@ public class ListWorkEventCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+        reqJson.put("storeId",storeId);
     }
 
     @Override

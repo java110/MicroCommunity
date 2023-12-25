@@ -18,6 +18,7 @@ package com.java110.oa.cmd.workCopy;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -49,15 +50,20 @@ public class DeleteWorkCopyCmd extends Cmd {
     @Autowired
     private IWorkCopyV1InnerServiceSMO workCopyV1InnerServiceSMOImpl;
 
+
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "copyId", "copyId不能为空");
-
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+        reqJson.put("storeId",storeId);
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
 
         WorkCopyPo workCopyPo = BeanConvertUtil.covertBean(reqJson, WorkCopyPo.class);
         int flag = workCopyV1InnerServiceSMOImpl.deleteWorkCopy(workCopyPo);

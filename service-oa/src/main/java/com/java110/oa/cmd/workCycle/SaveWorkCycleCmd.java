@@ -18,6 +18,7 @@ package com.java110.oa.cmd.workCycle;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -56,7 +57,6 @@ public class SaveWorkCycleCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "workId", "请求报文中未包含workId");
 Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
 Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
 Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
 Assert.hasKeyAndValue(reqJson, "workCycle", "请求报文中未包含workCycle");
@@ -64,7 +64,8 @@ Assert.hasKeyAndValue(reqJson, "cycleStartTime", "请求报文中未包含cycleS
 Assert.hasKeyAndValue(reqJson, "cycleEndTime", "请求报文中未包含cycleEndTime");
 Assert.hasKeyAndValue(reqJson, "beforeTime", "请求报文中未包含beforeTime");
 Assert.hasKeyAndValue(reqJson, "period", "请求报文中未包含period");
-
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+        reqJson.put("storeId",storeId);
     }
 
     @Override
