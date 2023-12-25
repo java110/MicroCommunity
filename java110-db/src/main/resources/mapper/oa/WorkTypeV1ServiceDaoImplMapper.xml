@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workTypeV1ServiceDaoImpl">
+
+
+    <!-- 保存工作类型信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkTypeInfo" parameterType="Map">
+        insert into work_type(
+        type_name,remark,community_id,store_id,timeout,wt_id
+        ) values (
+        #{typeName},#{remark},#{communityId},#{storeId},#{timeout},#{wtId}
+        )
+    </insert>
+
+
+    <!-- 查询工作类型信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkTypeInfo" parameterType="Map" resultType="Map">
+        select t.type_name,t.type_name typeName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.store_id,t.store_id storeId,t.timeout,t.wt_id,t.wt_id wtId,t.create_time createTime
+        from work_type t
+        where 1 =1
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="timeout !=null and timeout != ''">
+            and t.timeout= #{timeout}
+        </if>
+        <if test="wtId !=null and wtId != ''">
+            and t.wt_id= #{wtId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改工作类型信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkTypeInfo" parameterType="Map">
+        update work_type t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            , t.type_name= #{typeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        <if test="timeout !=null and timeout != ''">
+            , t.timeout= #{timeout}
+        </if>
+        where 1=1
+        <if test="wtId !=null and wtId != ''">
+            and t.wt_id= #{wtId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询工作类型数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkTypesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from work_type t
+        where 1 =1
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="timeout !=null and timeout != ''">
+            and t.timeout= #{timeout}
+        </if>
+        <if test="wtId !=null and wtId != ''">
+            and t.wt_id= #{wtId}
+        </if>
+    </select>
+
+</mapper>
