@@ -112,8 +112,8 @@ public class WechatRefundMoneyAdapt implements IRefundMoneyAdapt {
         parameters.put("appid", onlinePayDto.getAppId());//appid
         parameters.put("mch_id", mchId);//商户号
         if (WECHAT_SERVICE_PAY_SWITCH_ON.equals(paySwitch)) {
-            key = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID);
-            parameters.put("mch_id", MappingCache.getValue(MappingConstant.WECHAT_STORE_DOMAIN, "mchId"));//商户号
+           // mchId = MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID);
+            parameters.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));//商户号
             parameters.put("sub_mch_id", mchId);//商户号
         }
 
@@ -139,7 +139,7 @@ public class WechatRefundMoneyAdapt implements IRefundMoneyAdapt {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(getPkcs12(certData));
         try {
             //这里写密码..默认是你的MCHID
-            keyStore.load(inputStream, mchId.toCharArray());
+            keyStore.load(inputStream, parameters.get("mch_id").toCharArray());
         } finally {
             inputStream.close();
         }

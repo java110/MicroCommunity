@@ -38,7 +38,7 @@
         <if test="description !=null and description != ''">
             and t.description= #{description}
         </if>
-        order by t.seq desc
+        order by t.seq
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
