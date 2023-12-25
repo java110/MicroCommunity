@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workEventV1ServiceDaoImpl">
+
+
+    <!-- 保存工作单事件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkEventInfo" parameterType="Map">
+        insert into work_event(
+        event_id,pre_staff_name,pre_staff_id,staff_name,remark,community_id,store_id,task_id,work_id,staff_id
+        ) values (
+        #{eventId},#{preStaffName},#{preStaffId},#{staffName},#{remark},#{communityId},#{storeId},#{taskId},#{workId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询工作单事件信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkEventInfo" parameterType="Map" resultType="Map">
+        select t.event_id,t.event_id eventId,t.pre_staff_name,t.pre_staff_name
+        preStaffName,t.pre_staff_id,t.pre_staff_id preStaffId,t.staff_name,t.staff_name
+        staffName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.store_id,t.store_id storeId,t.task_id,t.task_id taskId,t.work_id,t.work_id
+        workId,t.staff_id,t.staff_id staffId
+        from work_event t
+        where 1 =1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="preStaffName !=null and preStaffName != ''">
+            and t.pre_staff_name= #{preStaffName}
+        </if>
+        <if test="preStaffId !=null and preStaffId != ''">
+            and t.pre_staff_id= #{preStaffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改工作单事件信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkEventInfo" parameterType="Map">
+        update work_event t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="preStaffName !=null and preStaffName != ''">
+            , t.pre_staff_name= #{preStaffName}
+        </if>
+        <if test="preStaffId !=null and preStaffId != ''">
+            , t.pre_staff_id= #{preStaffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        <if test="taskId !=null and taskId != ''">
+            , t.task_id= #{taskId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            , t.work_id= #{workId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询工作单事件数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkEventsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from work_event t
+        where 1 =1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="preStaffName !=null and preStaffName != ''">
+            and t.pre_staff_name= #{preStaffName}
+        </if>
+        <if test="preStaffId !=null and preStaffId != ''">
+            and t.pre_staff_id= #{preStaffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>

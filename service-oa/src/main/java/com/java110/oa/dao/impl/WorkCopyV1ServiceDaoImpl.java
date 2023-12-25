@@ -20,9 +20,9 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.oa.dao.IWorkflowDataFileV1ServiceDao;
+import com.java110.oa.dao.IWorkCopyV1ServiceDao;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,76 +31,76 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2021-12-02 16:25:47 mail: 928255095@qq.com
+ * add by 吴学文 at 2023-12-25 16:18:32 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Service("workflowDataFileV1ServiceDaoImpl")
-public class WorkflowDataFileV1ServiceDaoImpl extends BaseServiceDao implements IWorkflowDataFileV1ServiceDao {
+@Service("workCopyV1ServiceDaoImpl")
+public class WorkCopyV1ServiceDaoImpl extends BaseServiceDao implements IWorkCopyV1ServiceDao {
 
-    private static Logger logger = LoggerFactory.getLogger(WorkflowDataFileV1ServiceDaoImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(WorkCopyV1ServiceDaoImpl.class);
 
 
 
 
 
     /**
-     * 保存OA附件信息 到 instance
+     * 保存工作单抄送信息 到 instance
      * @param info   bId 信息
      * @throws DAOException DAO异常
      */
     @Override
-    public int saveWorkflowDataFileInfo(Map info) throws DAOException {
-        logger.debug("保存 saveWorkflowDataFileInfo 入参 info : {}",info);
+    public int saveWorkCopyInfo(Map info) throws DAOException {
+        logger.debug("保存 saveWorkCopyInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.insert("workflowDataFileV1ServiceDaoImpl.saveWorkflowDataFileInfo",info);
+        int saveFlag = sqlSessionTemplate.insert("workCopyV1ServiceDaoImpl.saveWorkCopyInfo",info);
 
         return saveFlag;
     }
 
 
     /**
-     * 查询OA附件信息（instance）
+     * 查询工作单抄送信息（instance）
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
-    public List<Map> getWorkflowDataFileInfo(Map info) throws DAOException {
-        logger.debug("查询 getWorkflowDataFileInfo 入参 info : {}",info);
+    public List<Map> getWorkCopyInfo(Map info) throws DAOException {
+        logger.debug("查询 getWorkCopyInfo 入参 info : {}",info);
 
-        List<Map> infos = sqlSessionTemplate.selectList("workflowDataFileV1ServiceDaoImpl.getWorkflowDataFileInfo",info);
+        List<Map> businessWorkCopyInfos = sqlSessionTemplate.selectList("workCopyV1ServiceDaoImpl.getWorkCopyInfo",info);
 
-        return infos;
+        return businessWorkCopyInfos;
     }
 
 
     /**
-     * 修改OA附件信息
+     * 修改工作单抄送信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
-    public int updateWorkflowDataFileInfo(Map info) throws DAOException {
-        logger.debug("修改 updateWorkflowDataFileInfo 入参 info : {}",info);
+    public int updateWorkCopyInfo(Map info) throws DAOException {
+        logger.debug("修改 updateWorkCopyInfo 入参 info : {}",info);
 
-        int saveFlag = sqlSessionTemplate.update("workflowDataFileV1ServiceDaoImpl.updateWorkflowDataFileInfo",info);
+        int saveFlag = sqlSessionTemplate.update("workCopyV1ServiceDaoImpl.updateWorkCopyInfo",info);
 
         return saveFlag;
     }
 
      /**
-     * 查询OA附件数量
-     * @param info OA附件信息
-     * @return OA附件数量
+     * 查询工作单抄送数量
+     * @param info 工作单抄送信息
+     * @return 工作单抄送数量
      */
     @Override
-    public int queryWorkflowDataFilesCount(Map info) {
-        logger.debug("查询 queryWorkflowDataFilesCount 入参 info : {}",info);
+    public int queryWorkCopysCount(Map info) {
+        logger.debug("查询 queryWorkCopysCount 入参 info : {}",info);
 
-        List<Map> infos = sqlSessionTemplate.selectList("workflowDataFileV1ServiceDaoImpl.queryWorkflowDataFilesCount", info);
+        List<Map> infos = sqlSessionTemplate.selectList("workCopyV1ServiceDaoImpl.queryWorkCopysCount", info);
         if (infos.size() < 1) {
             return 0;
         }
