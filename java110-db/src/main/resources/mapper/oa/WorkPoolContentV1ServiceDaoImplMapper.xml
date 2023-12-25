@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workPoolContentV1ServiceDaoImpl">
+
+
+    <!-- 保存工作单内容信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkPoolContentInfo" parameterType="Map">
+        insert into work_pool_content(
+        content_id,community_id,store_id,work_id,content
+        ) values (
+        #{contentId},#{communityId},#{storeId},#{workId},#{content}
+        )
+    </insert>
+
+
+    <!-- 查询工作单内容信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkPoolContentInfo" parameterType="Map" resultType="Map">
+        select t.content_id,t.content_id contentId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.content
+        from work_pool_content t
+        where 1 =1
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改工作单内容信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkPoolContentInfo" parameterType="Map">
+        update work_pool_content t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="content !=null and content != ''">
+            , t.content= #{content}
+        </if>
+        where 1=1
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+
+    </update>
+
+    <!-- 查询工作单内容数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkPoolContentsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from work_pool_content t
+        where 1 =1
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="content !=null and content != ''">
+            and t.content= #{content}
+        </if>
+
+
+    </select>
+
+</mapper>
