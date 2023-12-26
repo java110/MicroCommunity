@@ -28,10 +28,16 @@ public class WorkPoolDto extends PageDto implements Serializable {
     private String workName;
     private String workId;
     private String wtId;
+    private String typeName;
+
+
     private String createUserTel;
     private String startTime;
     private String endTime;
     private String state;
+
+    private String stateName;
+
     private String communityId;
 
     private String curStaffName;
@@ -42,6 +48,10 @@ public class WorkPoolDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String queryEndTime;
+
+    private String queryStartTime;
 
 
     public String getWorkCycle() {
@@ -171,5 +181,37 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setCurCopyName(String curCopyName) {
         this.curCopyName = curCopyName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getQueryEndTime() {
+        return queryEndTime;
+    }
+
+    public void setQueryEndTime(String queryEndTime) {
+        this.queryEndTime = queryEndTime;
+    }
+
+    public String getQueryStartTime() {
+        return queryStartTime;
+    }
+
+    public void setQueryStartTime(String queryStartTime) {
+        this.queryStartTime = queryStartTime;
     }
 }

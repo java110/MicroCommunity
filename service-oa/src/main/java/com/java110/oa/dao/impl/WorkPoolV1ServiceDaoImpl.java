@@ -71,9 +71,9 @@ public class WorkPoolV1ServiceDaoImpl extends BaseServiceDao implements IWorkPoo
     public List<Map> getWorkPoolInfo(Map info) throws DAOException {
         logger.debug("查询 getWorkPoolInfo 入参 info : {}",info);
 
-        List<Map> businessWorkPoolInfos = sqlSessionTemplate.selectList("workPoolV1ServiceDaoImpl.getWorkPoolInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("workPoolV1ServiceDaoImpl.getWorkPoolInfo",info);
 
-        return businessWorkPoolInfos;
+        return infos;
     }
 
 
@@ -100,12 +100,12 @@ public class WorkPoolV1ServiceDaoImpl extends BaseServiceDao implements IWorkPoo
     public int queryWorkPoolsCount(Map info) {
         logger.debug("查询 queryWorkPoolsCount 入参 info : {}",info);
 
-        List<Map> businessWorkPoolInfos = sqlSessionTemplate.selectList("workPoolV1ServiceDaoImpl.queryWorkPoolsCount", info);
-        if (businessWorkPoolInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("workPoolV1ServiceDaoImpl.queryWorkPoolsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessWorkPoolInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
