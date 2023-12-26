@@ -235,7 +235,7 @@ public class SaveWorkPoolCmd extends Cmd {
             workCyclePo.setWorkCycle(workPoolPo.getWorkCycle());
             workCyclePo.setWorkId(workPoolPo.getWorkId());
             workCyclePo.setCommunityId(workPoolPo.getCommunityId());
-            workCyclePo.setStoreId(workCyclePo.getStoreId());
+            workCyclePo.setStoreId(workPoolPo.getStoreId());
             workCyclePo.setBeforeTime("30");
             workCyclePo.setCycleId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             workCyclePo.setPeriod(reqJson.getString("period"));
