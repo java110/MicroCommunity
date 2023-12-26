@@ -39,13 +39,13 @@ public interface IWorkCycleV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveWorkCycle", method = RequestMethod.POST)
-    public int saveWorkCycle(@RequestBody  WorkCyclePo workCyclePo);
+     int saveWorkCycle(@RequestBody  WorkCyclePo workCyclePo);
 
     @RequestMapping(value = "/updateWorkCycle", method = RequestMethod.POST)
-    public int updateWorkCycle(@RequestBody  WorkCyclePo workCyclePo);
+     int updateWorkCycle(@RequestBody  WorkCyclePo workCyclePo);
 
     @RequestMapping(value = "/deleteWorkCycle", method = RequestMethod.POST)
-    public int deleteWorkCycle(@RequestBody  WorkCyclePo workCyclePo);
+     int deleteWorkCycle(@RequestBody  WorkCyclePo workCyclePo);
 
     /**
      * <p>查询小区楼信息</p>

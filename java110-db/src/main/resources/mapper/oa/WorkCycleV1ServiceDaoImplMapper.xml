@@ -96,9 +96,7 @@
         <if test="hours !=null and hours != ''">
             , t.hours= #{hours}
         </if>
-        <if test="workId !=null and workId != ''">
-            , t.work_id= #{workId}
-        </if>
+
         <if test="staffName !=null and staffName != ''">
             , t.staff_name= #{staffName}
         </if>
@@ -120,6 +118,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
         </if>
 
     </update>

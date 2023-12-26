@@ -64,9 +64,7 @@
             , t.path_url= #{pathUrl}
         </if>
 
-        <if test="workId !=null and workId != ''">
-            , t.work_id= #{workId}
-        </if>
+
 
         where 1=1
         <if test="fileId !=null and fileId != ''">
@@ -83,6 +81,9 @@
         </if>
         <if test="fileType !=null and fileType != ''">
             and t.file_type= #{fileType}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
         </if>
 
     </update>

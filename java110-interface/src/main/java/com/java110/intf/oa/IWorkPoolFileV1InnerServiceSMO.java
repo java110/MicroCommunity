@@ -39,13 +39,13 @@ public interface IWorkPoolFileV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveWorkPoolFile", method = RequestMethod.POST)
-    public int saveWorkPoolFile(@RequestBody  WorkPoolFilePo workPoolFilePo);
+     int saveWorkPoolFile(@RequestBody  WorkPoolFilePo workPoolFilePo);
 
     @RequestMapping(value = "/updateWorkPoolFile", method = RequestMethod.POST)
-    public int updateWorkPoolFile(@RequestBody  WorkPoolFilePo workPoolFilePo);
+     int updateWorkPoolFile(@RequestBody  WorkPoolFilePo workPoolFilePo);
 
     @RequestMapping(value = "/deleteWorkPoolFile", method = RequestMethod.POST)
-    public int deleteWorkPoolFile(@RequestBody  WorkPoolFilePo workPoolFilePo);
+     int deleteWorkPoolFile(@RequestBody  WorkPoolFilePo workPoolFilePo);
 
     /**
      * <p>查询小区楼信息</p>

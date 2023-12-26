@@ -21,9 +21,12 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.workPoolContent.WorkPoolContentDto;
+import com.java110.intf.oa.IWorkPoolContentV1InnerServiceSMO;
 import com.java110.intf.oa.IWorkPoolV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.workPool.WorkPoolDto;
@@ -52,6 +55,9 @@ public class ListWorkPoolCmd extends Cmd {
     @Autowired
     private IWorkPoolV1InnerServiceSMO workPoolV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkPoolContentV1InnerServiceSMO workPoolContentV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -74,10 +80,38 @@ public class ListWorkPoolCmd extends Cmd {
                workPoolDtos = new ArrayList<>();
            }
 
+        queryContent(workPoolDtos);
+
            ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolDtos);
 
            ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
            cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 查询内容
+     *
+     * @param workPoolDtos
+     */
+    private void queryContent(List<WorkPoolDto> workPoolDtos) {
+        if (ListUtil.isNull(workPoolDtos)) {
+            return;
+        }
+
+        if (workPoolDtos.size() != 1) {
+            return;
+        }
+
+        WorkPoolContentDto workPoolContentDto = new WorkPoolContentDto();
+        workPoolContentDto.setWorkId(workPoolDtos.get(0).getWorkId());
+
+        List<WorkPoolContentDto> workPoolContentDtos = workPoolContentV1InnerServiceSMOImpl.queryWorkPoolContents(workPoolContentDto);
+
+        if (ListUtil.isNull(workPoolContentDtos)) {
+            return;
+        }
+
+        workPoolDtos.get(0).setContent(workPoolContentDtos.get(0).getContent());
     }
 }
