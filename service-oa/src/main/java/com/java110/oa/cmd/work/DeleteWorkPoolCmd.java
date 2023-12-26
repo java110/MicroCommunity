@@ -22,8 +22,14 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.oa.IWorkPoolV1InnerServiceSMO;
+import com.java110.intf.oa.*;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
+import com.java110.po.workCopy.WorkCopyPo;
+import com.java110.po.workCycle.WorkCyclePo;
 import com.java110.po.workPool.WorkPoolPo;
+import com.java110.po.workPoolContent.WorkPoolContentPo;
+import com.java110.po.workPoolFile.WorkPoolFilePo;
+import com.java110.po.workTask.WorkTaskPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +54,23 @@ public class DeleteWorkPoolCmd extends Cmd {
     @Autowired
     private IWorkPoolV1InnerServiceSMO workPoolV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkPoolContentV1InnerServiceSMO workPoolContentV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkCycleV1InnerServiceSMO workCycleV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkTaskV1InnerServiceSMO workTaskV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkCopyV1InnerServiceSMO workCopyV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "workId", "workId不能为空");
@@ -65,6 +88,38 @@ public class DeleteWorkPoolCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+
+        WorkPoolContentPo workPoolContentPo = null;
+
+        workPoolContentPo = new WorkPoolContentPo();
+        workPoolContentPo.setWorkId(workPoolPo.getWorkId());
+        workPoolContentPo.setStoreId(workPoolPo.getStoreId());
+        workPoolContentV1InnerServiceSMOImpl.deleteWorkPoolContent(workPoolContentPo);
+
+
+        WorkTaskPo workTaskPo = new WorkTaskPo();
+        workTaskPo.setWorkId(workPoolPo.getWorkId());
+        workTaskPo.setStoreId(workPoolPo.getStoreId());
+        workTaskV1InnerServiceSMOImpl.deleteWorkTask(workTaskPo);
+
+        WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
+        workPoolFilePo.setWorkId(workPoolPo.getWorkId());
+        workPoolFilePo.setStoreId(workPoolPo.getStoreId());
+        workPoolFileV1InnerServiceSMOImpl.deleteWorkPoolFile(workPoolFilePo);
+
+        WorkCyclePo workCyclePo = new WorkCyclePo();
+        workCyclePo.setWorkId(workPoolPo.getWorkId());
+        workCyclePo.setCommunityId(workPoolPo.getCommunityId());
+        workCyclePo.setStoreId(workPoolPo.getStoreId());
+        workCycleV1InnerServiceSMOImpl.deleteWorkCycle(workCyclePo);
+
+        WorkCopyPo workCopyPo = null;
+        workCopyPo = new WorkCopyPo();
+        workCopyPo.setStoreId(reqJson.getString("storeId"));
+        workCopyPo.setWorkId(workPoolPo.getWorkId());
+
+        workCopyV1InnerServiceSMOImpl.deleteWorkCopy(workCopyPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

@@ -22,7 +22,9 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.workPoolContent.WorkPoolContentDto;
+import com.java110.dto.workPoolFile.WorkPoolFileDto;
 import com.java110.intf.oa.IWorkPoolContentV1InnerServiceSMO;
+import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
 import com.java110.intf.oa.IWorkPoolV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
@@ -30,8 +32,10 @@ import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.workPool.WorkPoolDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,42 +55,45 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "work.listWorkPool")
 public class ListWorkPoolCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListWorkPoolCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListWorkPoolCmd.class);
     @Autowired
     private IWorkPoolV1InnerServiceSMO workPoolV1InnerServiceSMOImpl;
 
     @Autowired
     private IWorkPoolContentV1InnerServiceSMO workPoolContentV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
-        reqJson.put("storeId",storeId);
+        reqJson.put("storeId", storeId);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           WorkPoolDto workPoolDto = BeanConvertUtil.covertBean(reqJson, WorkPoolDto.class);
+        WorkPoolDto workPoolDto = BeanConvertUtil.covertBean(reqJson, WorkPoolDto.class);
 
-           int count = workPoolV1InnerServiceSMOImpl.queryWorkPoolsCount(workPoolDto);
+        int count = workPoolV1InnerServiceSMOImpl.queryWorkPoolsCount(workPoolDto);
 
-           List<WorkPoolDto> workPoolDtos = null;
+        List<WorkPoolDto> workPoolDtos = null;
 
-           if (count > 0) {
-               workPoolDtos = workPoolV1InnerServiceSMOImpl.queryWorkPools(workPoolDto);
-           } else {
-               workPoolDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            workPoolDtos = workPoolV1InnerServiceSMOImpl.queryWorkPools(workPoolDto);
+        } else {
+            workPoolDtos = new ArrayList<>();
+        }
 
-        queryContent(workPoolDtos);
+        queryContentAndFile(workPoolDtos);
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     /**
@@ -94,7 +101,7 @@ public class ListWorkPoolCmd extends Cmd {
      *
      * @param workPoolDtos
      */
-    private void queryContent(List<WorkPoolDto> workPoolDtos) {
+    private void queryContentAndFile(List<WorkPoolDto> workPoolDtos) {
         if (ListUtil.isNull(workPoolDtos)) {
             return;
         }
@@ -113,5 +120,17 @@ public class ListWorkPoolCmd extends Cmd {
         }
 
         workPoolDtos.get(0).setContent(workPoolContentDtos.get(0).getContent());
+
+        WorkPoolFileDto workPoolFileDto = new WorkPoolFileDto();
+        workPoolFileDto.setWorkId(workPoolDtos.get(0).getWorkId());
+        workPoolFileDto.setFileType(WorkPoolFileDto.FILE_TYPE_START);
+        List<WorkPoolFileDto> workPoolFileDtos = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFiles(workPoolFileDto);
+
+        if (ListUtil.isNull(workPoolFileDtos)) {
+            return;
+        }
+
+        workPoolDtos.get(0).setPathUrl(workPoolFileDtos.get(0).getPathUrl());
     }
+
 }

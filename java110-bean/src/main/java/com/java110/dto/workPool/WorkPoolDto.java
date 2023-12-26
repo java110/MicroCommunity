@@ -55,6 +55,8 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     private String content;
 
+    private String pathUrl;
+
 
     public String getWorkCycle() {
         return workCycle;
@@ -223,5 +225,13 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getPathUrl() {
+        return pathUrl;
+    }
+
+    public void setPathUrl(String pathUrl) {
+        this.pathUrl = pathUrl;
     }
 }
