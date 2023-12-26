@@ -109,7 +109,7 @@ public class SaveWorkPoolCmd extends Cmd {
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
         reqJson.put("storeId", storeId);
 
-        if (reqJson.containsKey("staffs")) {
+        if (!reqJson.containsKey("staffs")) {
             throw new CmdException("未包含处理人");
         }
 
