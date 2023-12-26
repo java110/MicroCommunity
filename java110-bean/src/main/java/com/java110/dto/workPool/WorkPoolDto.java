@@ -57,6 +57,8 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     private String pathUrl;
 
+    private String taskId;
+
 
     public String getWorkCycle() {
         return workCycle;
@@ -233,5 +235,13 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setPathUrl(String pathUrl) {
         this.pathUrl = pathUrl;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 }

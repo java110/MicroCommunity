@@ -181,4 +181,108 @@
 
     </select>
 
+    <select id="queryTaskWorkPoolsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from work_pool t
+        left join work_type wt on t.wt_id = wt.wt_id
+        left join work_task wtk on t.work_id = wtk.work_id and wtk.status_cd = '0'
+        left join t_dict td on wtk.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
+        where 1 =1
+        <if test="workCycle !=null and workCycle != ''">
+            and t.work_cycle= #{workCycle}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and wtk.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and wtk.staff_name = #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="workName !=null and workName != ''">
+            and t.work_name= #{workName}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="wtId !=null and wtId != ''">
+            and t.wt_id= #{wtId}
+        </if>
+
+        <if test="queryStartTime !=null and queryStartTime !=''">
+            and wtk.create_time &gt;= #{queryStartTime}
+        </if>
+        <if test="queryEndTime !=null and queryEndTime !=''">
+            and wtk.create_time &lt;= #{queryEndTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and wtk.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+    <select id="queryTaskWorkPools" parameterType="Map" resultType="Map">
+        select t.work_cycle,t.work_cycle workCycle,t.create_user_id
+        createUserId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
+        statusCd,t.store_id storeId,t.work_name workName,t.work_id
+        workId,t.wt_id wtId,t.create_user_tel createUserTel,wtk.start_time
+        startTime,wtk.end_time endTime,wtk.state,t.community_id communityId,t.create_time createTime,
+        td.`name` stateName,wt.type_name typeName,wtk.staff_name curStaffName,t.task_id taskId
+        from work_pool t
+        left join work_type wt on t.wt_id = wt.wt_id
+        left join work_task wtk on t.work_id = wtk.work_id and wtk.status_cd = '0'
+        left join t_dict td on wtk.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
+        where 1 =1
+        <if test="workCycle !=null and workCycle != ''">
+            and t.work_cycle= #{workCycle}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and wtk.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and wtk.staff_name = #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="workName !=null and workName != ''">
+            and t.work_name= #{workName}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="wtId !=null and wtId != ''">
+            and t.wt_id= #{wtId}
+        </if>
+
+        <if test="queryStartTime !=null and queryStartTime !=''">
+            and wtk.create_time &gt;= #{queryStartTime}
+        </if>
+        <if test="queryEndTime !=null and queryEndTime !=''">
+            and wtk.create_time &lt;= #{queryEndTime}
+        </if>
+        <if test="state !=null and state != ''">
+            and wtk.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by wtk.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
 </mapper>

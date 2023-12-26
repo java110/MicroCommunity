@@ -86,4 +86,26 @@ public class WorkPoolV1InnerServiceSMOImpl extends BaseServiceSMO implements IWo
     public int queryWorkPoolsCount(@RequestBody WorkPoolDto workPoolDto) {
         return workPoolV1ServiceDaoImpl.queryWorkPoolsCount(BeanConvertUtil.beanCovertMap(workPoolDto));    }
 
+    @Override
+    public int queryTaskWorkPoolsCount(@RequestBody WorkPoolDto workPoolDto) {
+        return workPoolV1ServiceDaoImpl.queryTaskWorkPoolsCount(BeanConvertUtil.beanCovertMap(workPoolDto));    }
+
+
+    @Override
+    public List<WorkPoolDto> queryTaskWorkPools(@RequestBody WorkPoolDto workPoolDto) {
+        //校验是否传了 分页信息
+
+        int page = workPoolDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            workPoolDto.setPage((page - 1) * workPoolDto.getRow());
+        }
+
+        List<WorkPoolDto> workPools = BeanConvertUtil.covertBeanList(
+                workPoolV1ServiceDaoImpl.queryTaskWorkPools(BeanConvertUtil.beanCovertMap(workPoolDto)),
+                WorkPoolDto.class);
+
+        return workPools;
+    }
+
 }
