@@ -19,7 +19,7 @@
     <select id="getWorkCopyInfo" parameterType="Map" resultType="Map">
         select t.copy_id,t.copy_id copyId,t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd
         statusCd,t.state,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id
-        workId,t.staff_id,t.staff_id staffId
+        workId,t.staff_id,t.staff_id staffId,t.create_time createTime
         from work_copy t
         where 1 =1
         <if test="copyId !=null and copyId != ''">
@@ -43,9 +43,16 @@
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
         </if>
+        <if test="workIds !=null ">
+            and t.work_id in
+            <foreach collection="workIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
+
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -111,6 +118,12 @@
         </if>
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
+        </if>
+        <if test="workIds !=null ">
+            and t.work_id in
+            <foreach collection="workIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}

@@ -1,6 +1,7 @@
 package com.java110.dto.workTask;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,15 +15,19 @@ import java.util.Date;
  **/
 public class WorkTaskDto extends PageDto implements Serializable {
 
+    public static final String STATE_DOING = "D";// 处理中
+    public static final String STATE_COMPLETE = "C";// 处理完成
+
     private String staffName;
-private String startTime;
-private String state;
-private String endTime;
-private String communityId;
-private String storeId;
-private String taskId;
-private String workId;
-private String staffId;
+    private String startTime;
+    private String state;
+    private String endTime;
+    private String communityId;
+    private String storeId;
+    private String taskId;
+    private String workId;
+    private String[] workIds;
+    private String staffId;
 
 
     private Date createTime;
@@ -33,55 +38,72 @@ private String staffId;
     public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getTaskId() {
+
+    public String getTaskId() {
         return taskId;
     }
-public void setTaskId(String taskId) {
+
+    public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
-public String getWorkId() {
+
+    public String getWorkId() {
         return workId;
     }
-public void setWorkId(String workId) {
+
+    public void setWorkId(String workId) {
         this.workId = workId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -100,5 +122,13 @@ public void setStaffId(String staffId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getWorkIds() {
+        return workIds;
+    }
+
+    public void setWorkIds(String[] workIds) {
+        this.workIds = workIds;
     }
 }

@@ -19,7 +19,7 @@
     <select id="getWorkTaskInfo" parameterType="Map" resultType="Map">
         select t.staff_name,t.staff_name staffName,t.start_time,t.start_time startTime,t.status_cd,t.status_cd
         statusCd,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.store_id,t.store_id
-        storeId,t.task_id,t.task_id taskId,t.work_id,t.work_id workId,t.staff_id,t.staff_id staffId
+        storeId,t.task_id,t.task_id taskId,t.work_id,t.work_id workId,t.staff_id,t.staff_id staffId,t.create_time createTime
         from work_task t
         where 1 =1
         <if test="staffName !=null and staffName != ''">
@@ -48,6 +48,12 @@
         </if>
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
+        </if>
+        <if test="workIds !=null ">
+            and t.work_id in
+            <foreach collection="workIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
@@ -79,9 +85,6 @@
             , t.end_time= #{endTime}
         </if>
 
-        <if test="workId !=null and workId != ''">
-            , t.work_id= #{workId}
-        </if>
         <if test="staffId !=null and staffId != ''">
             , t.staff_id= #{staffId}
         </if>
@@ -94,6 +97,9 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
         </if>
 
     </update>
@@ -130,9 +136,16 @@
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
         </if>
+        <if test="workIds !=null ">
+            and t.work_id in
+            <foreach collection="workIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
+
 
 
     </select>
