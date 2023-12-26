@@ -197,7 +197,7 @@ public class SaveWorkPoolCmd extends Cmd {
         for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
             WorkTaskPo workTaskPo = new WorkTaskPo();
             workTaskPo.setWorkId(workPoolPo.getWorkId());
-            workTaskPo.setState(WorkTaskDto.STATE_DOING);
+            workTaskPo.setState(WorkTaskDto.STATE_WAIT);
             workTaskPo.setTaskId(GenerateCodeFactory.getGeneratorId("11"));
             workTaskPo.setStoreId(workPoolPo.getStoreId());
             workTaskPo.setCommunityId(workPoolPo.getCommunityId());

@@ -94,7 +94,7 @@ public class QueryTaskWorkCmd extends Cmd {
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curCopyName = "";
             for (WorkCopyDto tmpWorkCopyDto : workCopyDtos) {
-                if (!WorkTaskDto.STATE_DOING.equals(tmpWorkCopyDto.getState())) {
+                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkCopyDto.getState())) {
                     continue;
                 }
 

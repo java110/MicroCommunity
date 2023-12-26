@@ -138,7 +138,7 @@ public class QueryStartWorkCmd extends Cmd {
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curStaffName = "";
             for (WorkTaskDto tmpWorkTaskDto : workTaskDtos) {
-                if (!WorkTaskDto.STATE_DOING.equals(tmpWorkTaskDto.getState())) {
+                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkTaskDto.getState())) {
                     continue;
                 }
 
@@ -164,7 +164,7 @@ public class QueryStartWorkCmd extends Cmd {
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curCopyName = "";
             for (WorkCopyDto tmpWorkCopyDto : workCopyDtos) {
-                if (!WorkTaskDto.STATE_DOING.equals(tmpWorkCopyDto.getState())) {
+                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkCopyDto.getState())) {
                     continue;
                 }
 

@@ -235,7 +235,7 @@
         statusCd,t.store_id storeId,t.work_name workName,t.work_id
         workId,t.wt_id wtId,t.create_user_tel createUserTel,wtk.start_time
         startTime,wtk.end_time endTime,wtk.state,t.community_id communityId,t.create_time createTime,
-        td.`name` stateName,wt.type_name typeName,wtk.staff_name curStaffName,t.task_id taskId
+        td.`name` stateName,wt.type_name typeName,wtk.staff_name curStaffName,wtk.task_id taskId
         from work_pool t
         left join work_type wt on t.wt_id = wt.wt_id
         left join work_task wtk on t.work_id = wtk.work_id and wtk.status_cd = '0'
