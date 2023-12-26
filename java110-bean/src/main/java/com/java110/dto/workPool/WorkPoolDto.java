@@ -53,6 +53,8 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     private String queryStartTime;
 
+    private String content;
+
 
     public String getWorkCycle() {
         return workCycle;
@@ -213,5 +215,13 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setQueryStartTime(String queryStartTime) {
         this.queryStartTime = queryStartTime;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -8,8 +8,10 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.workCopy.WorkCopyDto;
 import com.java110.dto.workPool.WorkPoolDto;
+import com.java110.dto.workPoolContent.WorkPoolContentDto;
 import com.java110.dto.workTask.WorkTaskDto;
 import com.java110.intf.oa.IWorkCopyV1InnerServiceSMO;
+import com.java110.intf.oa.IWorkPoolContentV1InnerServiceSMO;
 import com.java110.intf.oa.IWorkPoolV1InnerServiceSMO;
 import com.java110.intf.oa.IWorkTaskV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -39,6 +41,9 @@ public class QueryStartWorkCmd extends Cmd {
     @Autowired
     private IWorkCopyV1InnerServiceSMO workCopyV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkPoolContentV1InnerServiceSMO workPoolContentV1InnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -67,11 +72,40 @@ public class QueryStartWorkCmd extends Cmd {
         //todo 查询 处理人 和抄送人
         queryTaskAndCopy(workPoolDtos);
 
+        //todo 查询内容
+        queryContent(workPoolDtos);
+
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 查询内容
+     *
+     * @param workPoolDtos
+     */
+    private void queryContent(List<WorkPoolDto> workPoolDtos) {
+        if (ListUtil.isNull(workPoolDtos)) {
+            return;
+        }
+
+        if (workPoolDtos.size() != 1) {
+            return;
+        }
+
+        WorkPoolContentDto workPoolContentDto = new WorkPoolContentDto();
+        workPoolContentDto.setWorkId(workPoolDtos.get(0).getWorkId());
+
+        List<WorkPoolContentDto> workPoolContentDtos = workPoolContentV1InnerServiceSMOImpl.queryWorkPoolContents(workPoolContentDto);
+
+        if (ListUtil.isNull(workPoolContentDtos)) {
+            return;
+        }
+
+        workPoolDtos.get(0).setContent(workPoolContentDtos.get(0).getContent());
     }
 
     private void queryTaskAndCopy(List<WorkPoolDto> workPoolDtos) {
