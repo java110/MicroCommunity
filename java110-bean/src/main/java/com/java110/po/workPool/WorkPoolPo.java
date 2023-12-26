@@ -17,6 +17,7 @@ package com.java110.po.workPool;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-12-25 15:31:02 mail: 928255095@qq.com
@@ -28,97 +29,122 @@ import java.util.Date;
 public class WorkPoolPo implements Serializable {
 
     private String workCycle;
-private String createUserId;
-private String createUserName;
-private String statusCd = "0";
-private String storeId;
-private String workName;
-private String workId;
-private String wtId;
-private String createUserTel;
-private String startTime;
-private String endTime;
-private String state;
-private String communityId;
-public String getWorkCycle() {
+    private String createUserId;
+    private String createUserName;
+    private String statusCd = "0";
+    private String storeId;
+    private String workName;
+    private String workId;
+    private String wtId;
+    private String createUserTel;
+    private String startTime;
+    private String endTime;
+    private String state;
+    private String communityId;
+
+    public String getWorkCycle() {
         return workCycle;
     }
-public void setWorkCycle(String workCycle) {
+
+    public void setWorkCycle(String workCycle) {
         this.workCycle = workCycle;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getWorkName() {
+
+    public String getWorkName() {
         return workName;
     }
-public void setWorkName(String workName) {
+
+    public void setWorkName(String workName) {
         this.workName = workName;
     }
-public String getWorkId() {
+
+    public String getWorkId() {
         return workId;
     }
-public void setWorkId(String workId) {
+
+    public void setWorkId(String workId) {
         this.workId = workId;
     }
-public String getWtId() {
+
+    public String getWtId() {
         return wtId;
     }
-public void setWtId(String wtId) {
+
+    public void setWtId(String wtId) {
         this.wtId = wtId;
     }
-public String getCreateUserTel() {
+
+    public String getCreateUserTel() {
         return createUserTel;
     }
-public void setCreateUserTel(String createUserTel) {
+
+    public void setCreateUserTel(String createUserTel) {
         this.createUserTel = createUserTel;
     }
-public String getStartTime() {
+
+    public String getStartTime() {
         return startTime;
     }
-public void setStartTime(String startTime) {
+
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-public String getEndTime() {
+
+    public String getEndTime() {
         return endTime;
     }
-public void setEndTime(String endTime) {
+
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }

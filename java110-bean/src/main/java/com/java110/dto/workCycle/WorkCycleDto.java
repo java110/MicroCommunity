@@ -15,6 +15,8 @@ import java.util.Date;
  **/
 public class WorkCycleDto extends PageDto implements Serializable {
 
+    public static final String PERIOD_MONTH_DAY = "2020022"; // 月天
+    public static final String PERIOD_MONTH_WORKDAY = "2020023"; // 按周
     private String workCycle;
     private String period;
     private String beforeTime;

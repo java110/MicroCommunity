@@ -17,6 +17,7 @@ package com.java110.po.workPoolFile;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-12-25 15:57:07 mail: 928255095@qq.com
@@ -28,48 +29,77 @@ import java.util.Date;
 public class WorkPoolFilePo implements Serializable {
 
     private String pathUrl;
-private String statusCd = "0";
-private String communityId;
-private String storeId;
-private String workId;
-private String fileId;
-public String getPathUrl() {
+    private String statusCd = "0";
+    private String communityId;
+    private String storeId;
+    private String workId;
+    private String fileId;
+
+    private String taskId;
+    private String fileType;
+
+
+    public String getPathUrl() {
         return pathUrl;
     }
-public void setPathUrl(String pathUrl) {
+
+    public void setPathUrl(String pathUrl) {
         this.pathUrl = pathUrl;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getWorkId() {
+
+    public String getWorkId() {
         return workId;
     }
-public void setWorkId(String workId) {
+
+    public void setWorkId(String workId) {
         this.workId = workId;
     }
-public String getFileId() {
+
+    public String getFileId() {
         return fileId;
     }
-public void setFileId(String fileId) {
+
+    public void setFileId(String fileId) {
         this.fileId = fileId;
     }
 
+    public String getTaskId() {
+        return taskId;
+    }
 
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
 
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
 }

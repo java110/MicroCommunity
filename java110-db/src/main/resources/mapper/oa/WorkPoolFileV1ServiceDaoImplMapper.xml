@@ -8,9 +8,9 @@
     <!-- 保存工作单文件信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkPoolFileInfo" parameterType="Map">
         insert into work_pool_file(
-        path_url,community_id,store_id,work_id,file_id
+        path_url,community_id,store_id,work_id,file_id,task_id,file_type
         ) values (
-        #{pathUrl},#{communityId},#{storeId},#{workId},#{fileId}
+        #{pathUrl},#{communityId},#{storeId},#{workId},#{fileId},#{taskId},#{fileType}
         )
     </insert>
 
@@ -18,7 +18,8 @@
     <!-- 查询工作单文件信息 add by wuxw 2018-07-03 -->
     <select id="getWorkPoolFileInfo" parameterType="Map" resultType="Map">
         select t.path_url,t.path_url pathUrl,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.file_id,t.file_id fileId
+        communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.file_id,t.file_id fileId,t.task_id taskId,
+        t.file_type fileType
         from work_pool_file t
         where 1 =1
         <if test="pathUrl !=null and pathUrl != ''">
@@ -38,6 +39,12 @@
         </if>
         <if test="fileId !=null and fileId != ''">
             and t.file_id= #{fileId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="fileType !=null and fileType != ''">
+            and t.file_type= #{fileType}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -60,6 +67,7 @@
         <if test="workId !=null and workId != ''">
             , t.work_id= #{workId}
         </if>
+
         where 1=1
         <if test="fileId !=null and fileId != ''">
             and t.file_id= #{fileId}
@@ -69,6 +77,12 @@
         </if>
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="fileType !=null and fileType != ''">
+            and t.file_type= #{fileType}
         </if>
 
     </update>
@@ -95,6 +109,12 @@
         </if>
         <if test="fileId !=null and fileId != ''">
             and t.file_id= #{fileId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        <if test="fileType !=null and fileType != ''">
+            and t.file_type= #{fileType}
         </if>
 
 

@@ -15,6 +15,12 @@ import java.util.Date;
  **/
 public class WorkCopyDto extends PageDto implements Serializable {
 
+
+    public static final String STATE_WAIT = "W"; //  W 待处理 D 处理中 C处理完成
+    public static final String STATE_DOING = "D"; //  W 待处理 D 处理中 C处理完成
+    public static final String STATE_COMPLETE = "W"; //  W 待处理 D 处理中 C处理完成
+
+
     private String copyId;
     private String staffName;
     private String state;

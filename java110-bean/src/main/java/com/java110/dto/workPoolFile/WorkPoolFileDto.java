@@ -1,6 +1,7 @@
 package com.java110.dto.workPoolFile;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,11 +15,18 @@ import java.util.Date;
  **/
 public class WorkPoolFileDto extends PageDto implements Serializable {
 
+    public static final String FILE_TYPE_START = "S"; //文件类型,S 工作单附件，J 任务图片 E 任务附件
+    public static final String FILE_TYPE_JPG = "J"; //文件类型,S 工作单附件，J 任务图片 E 任务附件
+    public static final String FILE_TYPE_END = "E"; //文件类型,S 工作单附件，J 任务图片 E 任务附件
+
     private String pathUrl;
-private String communityId;
-private String storeId;
-private String workId;
-private String fileId;
+    private String communityId;
+    private String storeId;
+    private String workId;
+    private String fileId;
+    private String taskId;
+    private String fileType;
+
 
 
     private Date createTime;
@@ -29,31 +37,40 @@ private String fileId;
     public String getPathUrl() {
         return pathUrl;
     }
-public void setPathUrl(String pathUrl) {
+
+    public void setPathUrl(String pathUrl) {
         this.pathUrl = pathUrl;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getWorkId() {
+
+    public String getWorkId() {
         return workId;
     }
-public void setWorkId(String workId) {
+
+    public void setWorkId(String workId) {
         this.workId = workId;
     }
-public String getFileId() {
+
+    public String getFileId() {
         return fileId;
     }
-public void setFileId(String fileId) {
+
+    public void setFileId(String fileId) {
         this.fileId = fileId;
     }
 
@@ -72,5 +89,21 @@ public void setFileId(String fileId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 }

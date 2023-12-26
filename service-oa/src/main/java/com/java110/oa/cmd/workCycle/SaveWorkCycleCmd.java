@@ -56,23 +56,21 @@ public class SaveWorkCycleCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "workId", "请求报文中未包含workId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
-Assert.hasKeyAndValue(reqJson, "workCycle", "请求报文中未包含workCycle");
-Assert.hasKeyAndValue(reqJson, "cycleStartTime", "请求报文中未包含cycleStartTime");
-Assert.hasKeyAndValue(reqJson, "cycleEndTime", "请求报文中未包含cycleEndTime");
-Assert.hasKeyAndValue(reqJson, "beforeTime", "请求报文中未包含beforeTime");
-Assert.hasKeyAndValue(reqJson, "period", "请求报文中未包含period");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
+        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
+        Assert.hasKeyAndValue(reqJson, "workCycle", "请求报文中未包含workCycle");
+        Assert.hasKeyAndValue(reqJson, "beforeTime", "请求报文中未包含beforeTime");
+        Assert.hasKeyAndValue(reqJson, "period", "请求报文中未包含period");
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
-        reqJson.put("storeId",storeId);
+        reqJson.put("storeId", storeId);
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       WorkCyclePo workCyclePo = BeanConvertUtil.covertBean(reqJson, WorkCyclePo.class);
+        WorkCyclePo workCyclePo = BeanConvertUtil.covertBean(reqJson, WorkCyclePo.class);
         workCyclePo.setCycleId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = workCycleV1InnerServiceSMOImpl.saveWorkCycle(workCyclePo);
 
