@@ -1,6 +1,7 @@
 package com.java110.dto.workCycle;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,19 +16,18 @@ import java.util.Date;
 public class WorkCycleDto extends PageDto implements Serializable {
 
     private String workCycle;
-private String period;
-private String beforeTime;
-private String cycleId;
-private String periodWorkday;
-private String cycleStartTime;
-private String storeId;
-private String workId;
-private String cycleEndTime;
-private String staffName;
-private String periodMonth;
-private String communityId;
-private String staffId;
-private String periodDay;
+    private String period;
+    private String beforeTime;
+    private String cycleId;
+    private String periodWorkday;
+    private String hours;
+    private String storeId;
+    private String workId;
+    private String staffName;
+    private String periodMonth;
+    private String communityId;
+    private String staffId;
+    private String periodDay;
 
 
     private Date createTime;
@@ -38,85 +38,96 @@ private String periodDay;
     public String getWorkCycle() {
         return workCycle;
     }
-public void setWorkCycle(String workCycle) {
+
+    public void setWorkCycle(String workCycle) {
         this.workCycle = workCycle;
     }
-public String getPeriod() {
+
+    public String getPeriod() {
         return period;
     }
-public void setPeriod(String period) {
+
+    public void setPeriod(String period) {
         this.period = period;
     }
-public String getBeforeTime() {
+
+    public String getBeforeTime() {
         return beforeTime;
     }
-public void setBeforeTime(String beforeTime) {
+
+    public void setBeforeTime(String beforeTime) {
         this.beforeTime = beforeTime;
     }
-public String getCycleId() {
+
+    public String getCycleId() {
         return cycleId;
     }
-public void setCycleId(String cycleId) {
+
+    public void setCycleId(String cycleId) {
         this.cycleId = cycleId;
     }
-public String getPeriodWorkday() {
+
+    public String getPeriodWorkday() {
         return periodWorkday;
     }
-public void setPeriodWorkday(String periodWorkday) {
+
+    public void setPeriodWorkday(String periodWorkday) {
         this.periodWorkday = periodWorkday;
     }
-public String getCycleStartTime() {
-        return cycleStartTime;
-    }
-public void setCycleStartTime(String cycleStartTime) {
-        this.cycleStartTime = cycleStartTime;
-    }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getWorkId() {
+
+    public String getWorkId() {
         return workId;
     }
-public void setWorkId(String workId) {
+
+    public void setWorkId(String workId) {
         this.workId = workId;
     }
-public String getCycleEndTime() {
-        return cycleEndTime;
-    }
-public void setCycleEndTime(String cycleEndTime) {
-        this.cycleEndTime = cycleEndTime;
-    }
-public String getStaffName() {
+
+    public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getPeriodMonth() {
+
+    public String getPeriodMonth() {
         return periodMonth;
     }
-public void setPeriodMonth(String periodMonth) {
+
+    public void setPeriodMonth(String periodMonth) {
         this.periodMonth = periodMonth;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-public String getPeriodDay() {
+
+    public String getPeriodDay() {
         return periodDay;
     }
-public void setPeriodDay(String periodDay) {
+
+    public void setPeriodDay(String periodDay) {
         this.periodDay = periodDay;
     }
 
@@ -135,5 +146,13 @@ public void setPeriodDay(String periodDay) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getHours() {
+        return hours;
+    }
+
+    public void setHours(String hours) {
+        this.hours = hours;
     }
 }

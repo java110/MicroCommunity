@@ -5,183 +5,174 @@
 <mapper namespace="workCycleV1ServiceDaoImpl">
 
 
-
-
-
     <!-- 保存工作单周期信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkCycleInfo" parameterType="Map">
         insert into work_cycle(
-work_cycle,period,before_time,cycle_id,period_workday,cycle_start_time,store_id,work_id,cycle_end_time,staff_name,period_month,community_id,staff_id,period_day
-) values (
-#{workCycle},#{period},#{beforeTime},#{cycleId},#{periodWorkday},#{cycleStartTime},#{storeId},#{workId},#{cycleEndTime},#{staffName},#{periodMonth},#{communityId},#{staffId},#{periodDay}
-)
+        work_cycle,period,before_time,cycle_id,period_workday,hours,store_id,work_id,staff_name,period_month,community_id,staff_id,period_day
+        ) values (
+        #{workCycle},#{period},#{beforeTime},#{cycleId},#{periodWorkday},#{hours},#{storeId},#{workId},#{staffName},#{periodMonth},#{communityId},#{staffId},#{periodDay}
+        )
     </insert>
-
 
 
     <!-- 查询工作单周期信息 add by wuxw 2018-07-03 -->
     <select id="getWorkCycleInfo" parameterType="Map" resultType="Map">
-        select  t.work_cycle,t.work_cycle workCycle,t.period,t.before_time,t.before_time beforeTime,t.cycle_id,t.cycle_id cycleId,t.period_workday,t.period_workday periodWorkday,t.status_cd,t.status_cd statusCd,t.cycle_start_time,t.cycle_start_time cycleStartTime,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.cycle_end_time,t.cycle_end_time cycleEndTime,t.staff_name,t.staff_name staffName,t.period_month,t.period_month periodMonth,t.community_id,t.community_id communityId,t.staff_id,t.staff_id staffId,t.period_day,t.period_day periodDay 
-from work_cycle t 
-where 1 =1 
-<if test="workCycle !=null and workCycle != ''">
-   and t.work_cycle= #{workCycle}
-</if> 
-<if test="period !=null and period != ''">
-   and t.period= #{period}
-</if> 
-<if test="beforeTime !=null and beforeTime != ''">
-   and t.before_time= #{beforeTime}
-</if> 
-<if test="cycleId !=null and cycleId != ''">
-   and t.cycle_id= #{cycleId}
-</if> 
-<if test="periodWorkday !=null and periodWorkday != ''">
-   and t.period_workday= #{periodWorkday}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="cycleStartTime !=null and cycleStartTime != ''">
-   and t.cycle_start_time= #{cycleStartTime}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="workId !=null and workId != ''">
-   and t.work_id= #{workId}
-</if> 
-<if test="cycleEndTime !=null and cycleEndTime != ''">
-   and t.cycle_end_time= #{cycleEndTime}
-</if> 
-<if test="staffName !=null and staffName != ''">
-   and t.staff_name= #{staffName}
-</if> 
-<if test="periodMonth !=null and periodMonth != ''">
-   and t.period_month= #{periodMonth}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="staffId !=null and staffId != ''">
-   and t.staff_id= #{staffId}
-</if> 
-<if test="periodDay !=null and periodDay != ''">
-   and t.period_day= #{periodDay}
-</if> 
-order by t.create_time desc
-<if test="page != -1 and page != null ">
-   limit #{page}, #{row}
-</if> 
+        select t.work_cycle,t.work_cycle workCycle,t.period,t.before_time,t.before_time beforeTime,t.cycle_id,t.cycle_id
+        cycleId,t.period_workday,t.period_workday periodWorkday,t.status_cd,t.status_cd
+        statusCd,t.hours,t.store_id,t.store_id storeId,t.work_id,t.work_id
+        workId,t.staff_name,t.staff_name
+        staffName,t.period_month,t.period_month periodMonth,t.community_id,t.community_id
+        communityId,t.staff_id,t.staff_id staffId,t.period_day,t.period_day periodDay,t.create_time createTime
+        from work_cycle t
+        where 1 =1
+        <if test="workCycle !=null and workCycle != ''">
+            and t.work_cycle= #{workCycle}
+        </if>
+        <if test="period !=null and period != ''">
+            and t.period= #{period}
+        </if>
+        <if test="beforeTime !=null and beforeTime != ''">
+            and t.before_time= #{beforeTime}
+        </if>
+        <if test="cycleId !=null and cycleId != ''">
+            and t.cycle_id= #{cycleId}
+        </if>
+        <if test="periodWorkday !=null and periodWorkday != ''">
+            and t.period_workday= #{periodWorkday}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="hours !=null and hours != ''">
+            and t.hours= #{hours}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="periodMonth !=null and periodMonth != ''">
+            and t.period_month= #{periodMonth}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="periodDay !=null and periodDay != ''">
+            and t.period_day= #{periodDay}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
 
     </select>
 
 
-
-
     <!-- 修改工作单周期信息 add by wuxw 2018-07-03 -->
     <update id="updateWorkCycleInfo" parameterType="Map">
-        update  work_cycle t set t.status_cd = #{statusCd}
-<if test="newBId != null and newBId != ''">
-,t.b_id = #{newBId}
-</if> 
-<if test="workCycle !=null and workCycle != ''">
-, t.work_cycle= #{workCycle}
-</if> 
-<if test="period !=null and period != ''">
-, t.period= #{period}
-</if> 
-<if test="beforeTime !=null and beforeTime != ''">
-, t.before_time= #{beforeTime}
-</if> 
-<if test="periodWorkday !=null and periodWorkday != ''">
-, t.period_workday= #{periodWorkday}
-</if> 
-<if test="cycleStartTime !=null and cycleStartTime != ''">
-, t.cycle_start_time= #{cycleStartTime}
-</if> 
-<if test="storeId !=null and storeId != ''">
-, t.store_id= #{storeId}
-</if> 
-<if test="workId !=null and workId != ''">
-, t.work_id= #{workId}
-</if> 
-<if test="cycleEndTime !=null and cycleEndTime != ''">
-, t.cycle_end_time= #{cycleEndTime}
-</if> 
-<if test="staffName !=null and staffName != ''">
-, t.staff_name= #{staffName}
-</if> 
-<if test="periodMonth !=null and periodMonth != ''">
-, t.period_month= #{periodMonth}
-</if> 
-<if test="communityId !=null and communityId != ''">
-, t.community_id= #{communityId}
-</if> 
-<if test="staffId !=null and staffId != ''">
-, t.staff_id= #{staffId}
-</if> 
-<if test="periodDay !=null and periodDay != ''">
-, t.period_day= #{periodDay}
-</if> 
- where 1=1 <if test="cycleId !=null and cycleId != ''">
-and t.cycle_id= #{cycleId}
-</if> 
+        update work_cycle t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="workCycle !=null and workCycle != ''">
+            , t.work_cycle= #{workCycle}
+        </if>
+        <if test="period !=null and period != ''">
+            , t.period= #{period}
+        </if>
+        <if test="beforeTime !=null and beforeTime != ''">
+            , t.before_time= #{beforeTime}
+        </if>
+        <if test="periodWorkday !=null and periodWorkday != ''">
+            , t.period_workday= #{periodWorkday}
+        </if>
+        <if test="hours !=null and hours != ''">
+            , t.hours= #{hours}
+        </if>
+        <if test="workId !=null and workId != ''">
+            , t.work_id= #{workId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="periodMonth !=null and periodMonth != ''">
+            , t.period_month= #{periodMonth}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        <if test="periodDay !=null and periodDay != ''">
+            , t.period_day= #{periodDay}
+        </if>
+        where 1=1
+        <if test="cycleId !=null and cycleId != ''">
+            and t.cycle_id= #{cycleId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
 
     </update>
 
     <!-- 查询工作单周期数量 add by wuxw 2018-07-03 -->
-     <select id="queryWorkCyclesCount" parameterType="Map" resultType="Map">
-        select  count(1) count 
-from work_cycle t 
-where 1 =1 
-<if test="workCycle !=null and workCycle != ''">
-   and t.work_cycle= #{workCycle}
-</if> 
-<if test="period !=null and period != ''">
-   and t.period= #{period}
-</if> 
-<if test="beforeTime !=null and beforeTime != ''">
-   and t.before_time= #{beforeTime}
-</if> 
-<if test="cycleId !=null and cycleId != ''">
-   and t.cycle_id= #{cycleId}
-</if> 
-<if test="periodWorkday !=null and periodWorkday != ''">
-   and t.period_workday= #{periodWorkday}
-</if> 
-<if test="statusCd !=null and statusCd != ''">
-   and t.status_cd= #{statusCd}
-</if> 
-<if test="cycleStartTime !=null and cycleStartTime != ''">
-   and t.cycle_start_time= #{cycleStartTime}
-</if> 
-<if test="storeId !=null and storeId != ''">
-   and t.store_id= #{storeId}
-</if> 
-<if test="workId !=null and workId != ''">
-   and t.work_id= #{workId}
-</if> 
-<if test="cycleEndTime !=null and cycleEndTime != ''">
-   and t.cycle_end_time= #{cycleEndTime}
-</if> 
-<if test="staffName !=null and staffName != ''">
-   and t.staff_name= #{staffName}
-</if> 
-<if test="periodMonth !=null and periodMonth != ''">
-   and t.period_month= #{periodMonth}
-</if> 
-<if test="communityId !=null and communityId != ''">
-   and t.community_id= #{communityId}
-</if> 
-<if test="staffId !=null and staffId != ''">
-   and t.staff_id= #{staffId}
-</if> 
-<if test="periodDay !=null and periodDay != ''">
-   and t.period_day= #{periodDay}
-</if> 
+    <select id="queryWorkCyclesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from work_cycle t
+        where 1 =1
+        <if test="workCycle !=null and workCycle != ''">
+            and t.work_cycle= #{workCycle}
+        </if>
+        <if test="period !=null and period != ''">
+            and t.period= #{period}
+        </if>
+        <if test="beforeTime !=null and beforeTime != ''">
+            and t.before_time= #{beforeTime}
+        </if>
+        <if test="cycleId !=null and cycleId != ''">
+            and t.cycle_id= #{cycleId}
+        </if>
+        <if test="periodWorkday !=null and periodWorkday != ''">
+            and t.period_workday= #{periodWorkday}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="hours !=null and hours != ''">
+            and t.hours= #{hours}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="periodMonth !=null and periodMonth != ''">
+            and t.period_month= #{periodMonth}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="periodDay !=null and periodDay != ''">
+            and t.period_day= #{periodDay}
+        </if>
 
 
-     </select>
+    </select>
 
 </mapper>

@@ -71,9 +71,9 @@ public class WorkCycleV1ServiceDaoImpl extends BaseServiceDao implements IWorkCy
     public List<Map> getWorkCycleInfo(Map info) throws DAOException {
         logger.debug("查询 getWorkCycleInfo 入参 info : {}",info);
 
-        List<Map> businessWorkCycleInfos = sqlSessionTemplate.selectList("workCycleV1ServiceDaoImpl.getWorkCycleInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("workCycleV1ServiceDaoImpl.getWorkCycleInfo",info);
 
-        return businessWorkCycleInfos;
+        return infos;
     }
 
 
@@ -100,12 +100,12 @@ public class WorkCycleV1ServiceDaoImpl extends BaseServiceDao implements IWorkCy
     public int queryWorkCyclesCount(Map info) {
         logger.debug("查询 queryWorkCyclesCount 入参 info : {}",info);
 
-        List<Map> businessWorkCycleInfos = sqlSessionTemplate.selectList("workCycleV1ServiceDaoImpl.queryWorkCyclesCount", info);
-        if (businessWorkCycleInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("workCycleV1ServiceDaoImpl.queryWorkCyclesCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessWorkCycleInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
