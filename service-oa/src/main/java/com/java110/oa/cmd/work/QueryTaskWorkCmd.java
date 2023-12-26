@@ -52,8 +52,9 @@ public class QueryTaskWorkCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         WorkPoolDto workPoolDto = BeanConvertUtil.covertBean(reqJson, WorkPoolDto.class);
 
+
         String userId = CmdContextUtils.getUserId(context);
-        workPoolDto.setCreateUserId(userId);
+        workPoolDto.setStaffId(userId);
 
         int count = workPoolV1InnerServiceSMOImpl.queryTaskWorkPoolsCount(workPoolDto);
 
