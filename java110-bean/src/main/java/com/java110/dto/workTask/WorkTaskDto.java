@@ -30,6 +30,8 @@ public class WorkTaskDto extends PageDto implements Serializable {
     private String[] workIds;
     private String staffId;
 
+    private String staffNameLike;
+
 
     private Date createTime;
 
@@ -139,5 +141,13 @@ public class WorkTaskDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
     }
 }

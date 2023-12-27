@@ -37,6 +37,9 @@
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
         </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
+        </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
@@ -123,6 +126,9 @@
         </if>
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}

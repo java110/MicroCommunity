@@ -19,13 +19,17 @@
     <select id="getWorkTaskInfo" parameterType="Map" resultType="Map">
         select t.staff_name,t.staff_name staffName,t.start_time,t.start_time startTime,t.status_cd,t.status_cd
         statusCd,t.state,t.end_time,t.end_time endTime,t.community_id,t.community_id communityId,t.store_id,t.store_id
-        storeId,t.task_id,t.task_id taskId,t.work_id,t.work_id workId,t.staff_id,t.staff_id staffId,t.create_time createTime,
+        storeId,t.task_id,t.task_id taskId,t.work_id,t.work_id workId,t.staff_id,t.staff_id staffId,t.create_time
+        createTime,
         td.`name` stateName
         from work_task t
         left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
         </if>
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
@@ -114,6 +118,9 @@
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
         </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and t.staff_name like concat('%', #{staffNameLike},'%')
+        </if>
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
         </if>
@@ -147,7 +154,6 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
-
 
 
     </select>

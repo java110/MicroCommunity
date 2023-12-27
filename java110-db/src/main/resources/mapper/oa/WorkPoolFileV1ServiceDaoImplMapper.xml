@@ -19,8 +19,9 @@
     <select id="getWorkPoolFileInfo" parameterType="Map" resultType="Map">
         select t.path_url,t.path_url pathUrl,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
         communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.file_id,t.file_id fileId,t.task_id taskId,
-        t.file_type fileType
+        t.file_type fileType,wt.staff_name staffName
         from work_pool_file t
+        left join work_task wt on t.task_id = wt.task_id
         where 1 =1
         <if test="pathUrl !=null and pathUrl != ''">
             and t.path_url= #{pathUrl}

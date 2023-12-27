@@ -19,6 +19,7 @@ public class WorkEventDto extends PageDto implements Serializable {
     private String preStaffName;
     private String preStaffId;
     private String staffName;
+    private String staffNameName;
     private String remark;
     private String communityId;
     private String storeId;
@@ -146,5 +147,13 @@ public class WorkEventDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getStaffNameName() {
+        return staffNameName;
+    }
+
+    public void setStaffNameName(String staffNameName) {
+        this.staffNameName = staffNameName;
     }
 }
