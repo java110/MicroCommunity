@@ -21,11 +21,11 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.workCopy.WorkCopyDto;
 import com.java110.dto.workPoolContent.WorkPoolContentDto;
 import com.java110.dto.workPoolFile.WorkPoolFileDto;
-import com.java110.intf.oa.IWorkPoolContentV1InnerServiceSMO;
-import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
-import com.java110.intf.oa.IWorkPoolV1InnerServiceSMO;
+import com.java110.dto.workTask.WorkTaskDto;
+import com.java110.intf.oa.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
@@ -65,6 +65,12 @@ public class ListWorkPoolCmd extends Cmd {
     @Autowired
     private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkTaskV1InnerServiceSMO workTaskV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkCopyV1InnerServiceSMO workCopyV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -88,6 +94,8 @@ public class ListWorkPoolCmd extends Cmd {
         }
 
         queryContentAndFile(workPoolDtos);
+
+        queryTaskAndCopy(workPoolDtos);
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolDtos);
 
@@ -131,6 +139,70 @@ public class ListWorkPoolCmd extends Cmd {
         }
 
         workPoolDtos.get(0).setPathUrl(workPoolFileDtos.get(0).getPathUrl());
+    }
+
+    private void queryTaskAndCopy(List<WorkPoolDto> workPoolDtos) {
+
+        if (ListUtil.isNull(workPoolDtos)) {
+            return;
+        }
+        List<String> workIds = new ArrayList<>();
+        for (WorkPoolDto workPoolDto : workPoolDtos) {
+            workIds.add(workPoolDto.getWorkId());
+        }
+
+        WorkTaskDto workTaskDto = new WorkTaskDto();
+        workTaskDto.setWorkIds(workIds.toArray(new String[workIds.size()]));
+        List<WorkTaskDto> workTaskDtos = workTaskV1InnerServiceSMOImpl.queryWorkTasks(workTaskDto);
+
+        String curStaffName = "";
+        for (WorkPoolDto workPoolDto : workPoolDtos) {
+            curStaffName = "";
+            for (WorkTaskDto tmpWorkTaskDto : workTaskDtos) {
+                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkTaskDto.getState())) {
+                    continue;
+                }
+
+                if (!workPoolDto.getWorkId().equals(tmpWorkTaskDto.getWorkId())) {
+                    continue;
+                }
+
+                if (curStaffName.split(",").length > 2) {
+                    continue;
+                }
+
+                curStaffName += (tmpWorkTaskDto.getStaffName() + ",");
+            }
+
+            workPoolDto.setCurStaffName(curStaffName);
+        }
+
+        WorkCopyDto workCopyDto = new WorkCopyDto();
+        workCopyDto.setWorkIds(workIds.toArray(new String[workIds.size()]));
+        List<WorkCopyDto> workCopyDtos = workCopyV1InnerServiceSMOImpl.queryWorkCopys(workCopyDto);
+
+        String curCopyName = "";
+        for (WorkPoolDto workPoolDto : workPoolDtos) {
+            curCopyName = "";
+            for (WorkCopyDto tmpWorkCopyDto : workCopyDtos) {
+                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkCopyDto.getState())) {
+                    continue;
+                }
+
+                if (!workPoolDto.getWorkId().equals(tmpWorkCopyDto.getWorkId())) {
+                    continue;
+                }
+
+                if (curCopyName.split(",").length > 2) {
+                    continue;
+                }
+
+                curCopyName += (tmpWorkCopyDto.getStaffName() + ",");
+            }
+
+            workPoolDto.setCurCopyName(curCopyName);
+        }
+
     }
 
 }

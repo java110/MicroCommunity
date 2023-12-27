@@ -21,6 +21,7 @@ public class WorkTaskDto extends PageDto implements Serializable {
     private String staffName;
     private String startTime;
     private String state;
+    private String stateName;
     private String endTime;
     private String communityId;
     private String storeId;
@@ -130,5 +131,13 @@ public class WorkTaskDto extends PageDto implements Serializable {
 
     public void setWorkIds(String[] workIds) {
         this.workIds = workIds;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }
