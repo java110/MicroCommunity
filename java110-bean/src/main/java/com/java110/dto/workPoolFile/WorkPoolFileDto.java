@@ -20,7 +20,6 @@ public class WorkPoolFileDto extends PageDto implements Serializable {
     public static final String FILE_TYPE_END = "E"; //文件类型,S 工作单附件，J 任务图片 E 任务附件
 
 
-
     private String pathUrl;
     private String communityId;
     private String storeId;
@@ -30,6 +29,7 @@ public class WorkPoolFileDto extends PageDto implements Serializable {
     private String fileType;
 
     private String staffName;
+    private String staffNameLike;
 
 
     private Date createTime;
@@ -116,5 +116,13 @@ public class WorkPoolFileDto extends PageDto implements Serializable {
 
     public void setStaffName(String staffName) {
         this.staffName = staffName;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
     }
 }

@@ -47,6 +47,9 @@
         <if test="fileType !=null and fileType != ''">
             and t.file_type= #{fileType}
         </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and wt.staff_name like concat('%', #{staffNameLike},'%')
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -117,6 +120,9 @@
         </if>
         <if test="fileType !=null and fileType != ''">
             and t.file_type= #{fileType}
+        </if>
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and wt.staff_name like concat('%', #{staffNameLike},'%')
         </if>
 
 
