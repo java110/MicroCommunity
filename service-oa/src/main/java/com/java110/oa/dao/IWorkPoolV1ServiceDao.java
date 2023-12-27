@@ -74,4 +74,8 @@ public interface IWorkPoolV1ServiceDao {
     int queryTaskWorkPoolsCount(Map info);
 
     List<Map> queryTaskWorkPools(Map info);
+
+    int queryCopyWorkPoolsCount(Map info);
+
+    List<Map> queryCopyWorkPools(Map info);
 }

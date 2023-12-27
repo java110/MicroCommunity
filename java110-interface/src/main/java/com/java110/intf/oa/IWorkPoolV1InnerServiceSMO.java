@@ -71,4 +71,10 @@ public interface IWorkPoolV1InnerServiceSMO {
 
     @RequestMapping(value = "/queryTaskWorkPools", method = RequestMethod.POST)
     List<WorkPoolDto> queryTaskWorkPools(@RequestBody WorkPoolDto workPoolDto);
+
+    @RequestMapping(value = "/queryCopyWorkPoolsCount", method = RequestMethod.POST)
+    int queryCopyWorkPoolsCount(@RequestBody WorkPoolDto workPoolDto);
+
+    @RequestMapping(value = "/queryCopyWorkPools", method = RequestMethod.POST)
+    List<WorkPoolDto> queryCopyWorkPools(@RequestBody WorkPoolDto workPoolDto);
 }

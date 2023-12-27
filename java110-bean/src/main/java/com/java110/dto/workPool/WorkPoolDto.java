@@ -61,6 +61,8 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     private String staffId;
 
+    private String copyId;
+
 
     public String getWorkCycle() {
         return workCycle;
@@ -253,5 +255,13 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public String getCopyId() {
+        return copyId;
+    }
+
+    public void setCopyId(String copyId) {
+        this.copyId = copyId;
     }
 }

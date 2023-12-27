@@ -129,5 +129,26 @@ public class WorkPoolV1ServiceDaoImpl extends BaseServiceDao implements IWorkPoo
         return infos;
     }
 
+    @Override
+    public int queryCopyWorkPoolsCount(Map info) {
+        logger.debug("查询 queryTaskWorkPoolsCount 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("workPoolV1ServiceDaoImpl.queryCopyWorkPoolsCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryCopyWorkPools(Map info) {
+        logger.debug("查询 queryTaskWorkPools 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("workPoolV1ServiceDaoImpl.queryCopyWorkPools",info);
+
+        return infos;
+    }
+
 
 }
