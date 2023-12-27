@@ -37,6 +37,8 @@ public class WorkEventDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String orderByDesc;
+
 
     public String getEventId() {
         return eventId;
@@ -173,5 +175,13 @@ public class WorkEventDto extends PageDto implements Serializable {
 
     public void setQueryEndTime(String queryEndTime) {
         this.queryEndTime = queryEndTime;
+    }
+
+    public String getOrderByDesc() {
+        return orderByDesc;
+    }
+
+    public void setOrderByDesc(String orderByDesc) {
+        this.orderByDesc = orderByDesc;
     }
 }

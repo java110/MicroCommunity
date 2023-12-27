@@ -67,7 +67,10 @@
         <if test="queryEndTime !=null and queryEndTime != ''">
             and t.create_time &lt; #{queryEndTime}
         </if>
-        order by t.create_time desc
+        order by t.create_time
+        <if test="orderByDesc !=null and orderByDesc != ''">
+            desc
+        </if>
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
