@@ -339,7 +339,7 @@
         statusCd,t.store_id storeId,t.work_name workName,t.work_id
         workId,t.wt_id wtId,t.create_user_tel createUserTel,t.start_time
         startTime,t.end_time endTime,wc.state,t.community_id communityId,t.create_time createTime,
-        td.`name` stateName,wt.type_name typeName,wc.staff_name curCopyName,wc.copy_id copyId
+        td.`name` stateName,wt.type_name typeName,wc.staff_name curCopyName,wc.copy_id copyId,wc.remark
         from work_pool t
         left join work_type wt on t.wt_id = wt.wt_id
         left join work_copy wc on t.work_id = wc.work_id and wc.status_cd = '0'

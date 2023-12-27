@@ -37,6 +37,8 @@ public class WorkCopyPo implements Serializable {
     private String workId;
     private String staffId;
 
+    private String remark;
+
     public String getCopyId() {
         return copyId;
     }
@@ -101,5 +103,11 @@ public class WorkCopyPo implements Serializable {
         this.staffId = staffId;
     }
 
+    public String getRemark() {
+        return remark;
+    }
 
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 }

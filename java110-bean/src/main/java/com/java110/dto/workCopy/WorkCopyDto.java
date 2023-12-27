@@ -33,6 +33,8 @@ public class WorkCopyDto extends PageDto implements Serializable {
     private String[] workIds;
     private String staffId;
 
+    private String remark;
+
 
     private Date createTime;
 
@@ -134,5 +136,13 @@ public class WorkCopyDto extends PageDto implements Serializable {
 
     public void setStaffNameLike(String staffNameLike) {
         this.staffNameLike = staffNameLike;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

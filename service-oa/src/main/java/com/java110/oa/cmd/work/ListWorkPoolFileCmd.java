@@ -21,14 +21,20 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.file.FileRelDto;
 import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
+import com.java110.vo.api.machineRecord.ApiMachineRecordDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.workPoolFile.WorkPoolFileDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,7 +54,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "work.listWorkPoolFile")
 public class ListWorkPoolFileCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListWorkPoolFileCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListWorkPoolFileCmd.class);
     @Autowired
     private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
 
@@ -56,28 +62,34 @@ public class ListWorkPoolFileCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
-        reqJson.put("storeId",storeId);
+        reqJson.put("storeId", storeId);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           WorkPoolFileDto workPoolFileDto = BeanConvertUtil.covertBean(reqJson, WorkPoolFileDto.class);
+        WorkPoolFileDto workPoolFileDto = BeanConvertUtil.covertBean(reqJson, WorkPoolFileDto.class);
 
-           int count = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFilesCount(workPoolFileDto);
+        int count = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFilesCount(workPoolFileDto);
 
-           List<WorkPoolFileDto> workPoolFileDtos = null;
+        List<WorkPoolFileDto> workPoolFileDtos = null;
 
-           if (count > 0) {
-               workPoolFileDtos = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFiles(workPoolFileDto);
-           } else {
-               workPoolFileDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            workPoolFileDtos = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFiles(workPoolFileDto);
+        } else {
+            workPoolFileDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolFileDtos);
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        for (WorkPoolFileDto tmpWorkPoolFileDto : workPoolFileDtos) {
+            tmpWorkPoolFileDto.setPathUrl(imgUrl + tmpWorkPoolFileDto.getPathUrl());
+        }
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolFileDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
