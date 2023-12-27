@@ -24,6 +24,7 @@ public class WorkCopyDto extends PageDto implements Serializable {
     private String copyId;
     private String staffName;
     private String state;
+    private String stateName;
     private String communityId;
     private String storeId;
     private String workId;
@@ -115,5 +116,13 @@ public class WorkCopyDto extends PageDto implements Serializable {
 
     public void setWorkIds(String[] workIds) {
         this.workIds = workIds;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

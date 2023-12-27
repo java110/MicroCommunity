@@ -19,8 +19,9 @@
     <select id="getWorkCopyInfo" parameterType="Map" resultType="Map">
         select t.copy_id,t.copy_id copyId,t.staff_name,t.staff_name staffName,t.status_cd,t.status_cd
         statusCd,t.state,t.community_id,t.community_id communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id
-        workId,t.staff_id,t.staff_id staffId,t.create_time createTime
+        workId,t.staff_id,t.staff_id staffId,t.create_time createTime,td.`name` stateName
         from work_copy t
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
         <if test="copyId !=null and copyId != ''">
             and t.copy_id= #{copyId}

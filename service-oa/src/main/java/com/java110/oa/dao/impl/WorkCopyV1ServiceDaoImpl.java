@@ -71,9 +71,9 @@ public class WorkCopyV1ServiceDaoImpl extends BaseServiceDao implements IWorkCop
     public List<Map> getWorkCopyInfo(Map info) throws DAOException {
         logger.debug("查询 getWorkCopyInfo 入参 info : {}",info);
 
-        List<Map> businessWorkCopyInfos = sqlSessionTemplate.selectList("workCopyV1ServiceDaoImpl.getWorkCopyInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("workCopyV1ServiceDaoImpl.getWorkCopyInfo",info);
 
-        return businessWorkCopyInfos;
+        return infos;
     }
 
 
