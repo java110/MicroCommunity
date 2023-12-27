@@ -71,9 +71,9 @@ public class WorkEventV1ServiceDaoImpl extends BaseServiceDao implements IWorkEv
     public List<Map> getWorkEventInfo(Map info) throws DAOException {
         logger.debug("查询 getWorkEventInfo 入参 info : {}",info);
 
-        List<Map> businessWorkEventInfos = sqlSessionTemplate.selectList("workEventV1ServiceDaoImpl.getWorkEventInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("workEventV1ServiceDaoImpl.getWorkEventInfo",info);
 
-        return businessWorkEventInfos;
+        return infos;
     }
 
 
@@ -100,12 +100,12 @@ public class WorkEventV1ServiceDaoImpl extends BaseServiceDao implements IWorkEv
     public int queryWorkEventsCount(Map info) {
         logger.debug("查询 queryWorkEventsCount 入参 info : {}",info);
 
-        List<Map> businessWorkEventInfos = sqlSessionTemplate.selectList("workEventV1ServiceDaoImpl.queryWorkEventsCount", info);
-        if (businessWorkEventInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("workEventV1ServiceDaoImpl.queryWorkEventsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessWorkEventInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 

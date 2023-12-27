@@ -21,8 +21,9 @@
         preStaffName,t.pre_staff_id,t.pre_staff_id preStaffId,t.staff_name,t.staff_name
         staffName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
         communityId,t.store_id,t.store_id storeId,t.task_id,t.task_id taskId,t.work_id,t.work_id
-        workId,t.staff_id,t.staff_id staffId
+        workId,t.staff_id,t.staff_id staffId,t.create_time createTime,wt.start_time startTime,wt.end_time endTime
         from work_event t
+        left join work_task wt on t.task_id = wt.task_id
         where 1 =1
         <if test="eventId !=null and eventId != ''">
             and t.event_id= #{eventId}
