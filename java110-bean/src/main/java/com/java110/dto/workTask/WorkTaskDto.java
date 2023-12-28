@@ -1,6 +1,7 @@
 package com.java110.dto.workTask;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.workPool.WorkPoolDto;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.Date;
  * @Version 1.0
  * add by wuxw 2019/4/24
  **/
-public class WorkTaskDto extends PageDto implements Serializable {
+public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
     public static final String STATE_WAIT = "W";// 待处理
     public static final String STATE_COMPLETE = "C";// 处理完成

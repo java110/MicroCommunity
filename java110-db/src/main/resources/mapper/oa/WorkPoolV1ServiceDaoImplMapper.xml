@@ -27,6 +27,12 @@
         left join work_type wt on t.wt_id = wt.wt_id
         left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
+        <if test="createUserNameLike !=null and createUserNameLike != ''">
+            and t.create_user_name like concat('%', #{createUserNameLike},'%')
+        </if>
+        <if test="workNameLike !=null and workNameLike != ''">
+            and t.work_name like concat('%', #{workNameLike},'%')
+        </if>
         <if test="workCycle !=null and workCycle != ''">
             and t.work_cycle= #{workCycle}
         </if>
@@ -131,6 +137,12 @@
         select count(1) count
         from work_pool t
         where 1 =1
+        <if test="createUserNameLike !=null and createUserNameLike != ''">
+            and t.create_user_name like concat('%', #{createUserNameLike},'%')
+        </if>
+        <if test="workNameLike !=null and workNameLike != ''">
+            and t.work_name like concat('%', #{workNameLike},'%')
+        </if>
         <if test="workCycle !=null and workCycle != ''">
             and t.work_cycle= #{workCycle}
         </if>
@@ -188,6 +200,12 @@
         left join work_task wtk on t.work_id = wtk.work_id and wtk.status_cd = '0'
         left join t_dict td on wtk.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
+        <if test="createUserNameLike !=null and createUserNameLike != ''">
+            and t.create_user_name like concat('%', #{createUserNameLike},'%')
+        </if>
+        <if test="workNameLike !=null and workNameLike != ''">
+            and t.work_name like concat('%', #{workNameLike},'%')
+        </if>
         <if test="workCycle !=null and workCycle != ''">
             and t.work_cycle= #{workCycle}
         </if>
@@ -241,6 +259,12 @@
         left join work_task wtk on t.work_id = wtk.work_id and wtk.status_cd = '0'
         left join t_dict td on wtk.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
+        <if test="createUserNameLike !=null and createUserNameLike != ''">
+            and t.create_user_name like concat('%', #{createUserNameLike},'%')
+        </if>
+        <if test="workNameLike !=null and workNameLike != ''">
+            and t.work_name like concat('%', #{workNameLike},'%')
+        </if>
         <if test="workCycle !=null and workCycle != ''">
             and t.work_cycle= #{workCycle}
         </if>
@@ -292,6 +316,12 @@
         left join work_copy wc on t.work_id = wc.work_id and wc.status_cd = '0'
         left join t_dict td on wc.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
+        <if test="createUserNameLike !=null and createUserNameLike != ''">
+            and t.create_user_name like concat('%', #{createUserNameLike},'%')
+        </if>
+        <if test="workNameLike !=null and workNameLike != ''">
+            and t.work_name like concat('%', #{workNameLike},'%')
+        </if>
         <if test="workCycle !=null and workCycle != ''">
             and t.work_cycle= #{workCycle}
         </if>
@@ -345,6 +375,12 @@
         left join work_copy wc on t.work_id = wc.work_id and wc.status_cd = '0'
         left join t_dict td on wc.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
+        <if test="createUserNameLike !=null and createUserNameLike != ''">
+            and t.create_user_name like concat('%', #{createUserNameLike},'%')
+        </if>
+        <if test="workNameLike !=null and workNameLike != ''">
+            and t.work_name like concat('%', #{workNameLike},'%')
+        </if>
         <if test="workCycle !=null and workCycle != ''">
             and t.work_cycle= #{workCycle}
         </if>

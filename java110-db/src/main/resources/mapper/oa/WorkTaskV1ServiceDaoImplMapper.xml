@@ -34,6 +34,9 @@
         <if test="createUserNameLike !=null and createUserNameLike != ''">
             and wp.create_user_name like concat('%', #{createUserNameLike},'%')
         </if>
+        <if test="workNameLike !=null and workNameLike != ''">
+            and wp.work_name like concat('%', #{workNameLike},'%')
+        </if>
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
         </if>
@@ -129,10 +132,21 @@
     <select id="queryWorkTasksCount" parameterType="Map" resultType="Map">
         select count(1) count
         from work_task t
-        where 1 =1
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
+        left join work_pool wp on t.work_id = wp.work_id and wp.status_cd = '0'
+        left join work_type wt on wp.wt_id = wt.wt_id
+        where 1=1
+        and wp.status_cd = '0'
+        <if test="createUserNameLike !=null and createUserNameLike != ''">
+            and wp.create_user_name like concat('%', #{createUserNameLike},'%')
+        </if>
+        <if test="workNameLike !=null and workNameLike != ''">
+            and wp.work_name like concat('%', #{workNameLike},'%')
+        </if>
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
         </if>
+
         <if test="staffNameLike !=null and staffNameLike != ''">
             and t.staff_name like concat('%', #{staffNameLike},'%')
         </if>

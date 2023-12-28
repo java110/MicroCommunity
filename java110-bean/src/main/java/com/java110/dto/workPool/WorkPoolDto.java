@@ -65,6 +65,10 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     private String remark ;
 
+    private String staffNameLike;
+
+    private String workNameLike;
+
 
     public String getWorkCycle() {
         return workCycle;
@@ -273,5 +277,21 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
+    }
+
+    public String getWorkNameLike() {
+        return workNameLike;
+    }
+
+    public void setWorkNameLike(String workNameLike) {
+        this.workNameLike = workNameLike;
     }
 }
