@@ -34,6 +34,8 @@ public class WorkTaskDto extends PageDto implements Serializable {
     private String queryStartTime;
     private String queryEndTime;
 
+    private String createUserNameLike;
+
 
     private Date createTime;
 
@@ -167,5 +169,13 @@ public class WorkTaskDto extends PageDto implements Serializable {
 
     public void setQueryEndTime(String queryEndTime) {
         this.queryEndTime = queryEndTime;
+    }
+
+    public String getCreateUserNameLike() {
+        return createUserNameLike;
+    }
+
+    public void setCreateUserNameLike(String createUserNameLike) {
+        this.createUserNameLike = createUserNameLike;
     }
 }
