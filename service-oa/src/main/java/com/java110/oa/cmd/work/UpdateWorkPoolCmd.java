@@ -96,8 +96,19 @@ public class UpdateWorkPoolCmd extends Cmd {
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
         reqJson.put("storeId", storeId);
 
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
         if (!reqJson.containsKey("staffs")) {
             throw new CmdException("未包含处理人");
+        }
+
+        WorkPoolDto workPoolDto = new WorkPoolDto();
+        workPoolDto.setWorkId(reqJson.getString("workId"));
+        workPoolDto.setStoreId(storeId);
+        workPoolDto.setCreateUserId(userId);
+        int count = workPoolV1InnerServiceSMOImpl.queryWorkPoolsCount(workPoolDto);
+        if(count < 1){
+            throw new CmdException("您没有权限修改");
         }
 
         JSONArray staffs = reqJson.getJSONArray("staffs");

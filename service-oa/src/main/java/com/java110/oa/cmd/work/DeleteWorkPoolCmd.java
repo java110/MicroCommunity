@@ -22,6 +22,7 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.workPool.WorkPoolDto;
 import com.java110.intf.oa.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.workCopy.WorkCopyPo;
@@ -76,6 +77,17 @@ public class DeleteWorkPoolCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "workId", "workId不能为空");
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
         reqJson.put("storeId",storeId);
+
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
+        WorkPoolDto workPoolDto = new WorkPoolDto();
+        workPoolDto.setWorkId(reqJson.getString("workId"));
+        workPoolDto.setStoreId(storeId);
+        workPoolDto.setCreateUserId(userId);
+        int count = workPoolV1InnerServiceSMOImpl.queryWorkPoolsCount(workPoolDto);
+        if(count < 1){
+            throw new CmdException("您没有权限删除");
+        }
     }
 
     @Override
