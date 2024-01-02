@@ -10,10 +10,14 @@ import com.java110.dto.oaWorkflow.OaWorkflowDto;
 import com.java110.dto.oaWorkflow.WorkflowDto;
 import com.java110.dto.audit.AuditUser;
 import com.java110.dto.system.ComponentValidateResult;
+import com.java110.dto.workCopy.WorkCopyDto;
+import com.java110.dto.workTask.WorkTaskDto;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.intf.community.IMaintainanceTaskV1InnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
+import com.java110.intf.oa.IWorkCopyV1InnerServiceSMO;
+import com.java110.intf.oa.IWorkTaskV1InnerServiceSMO;
 import com.java110.utils.exception.SMOException;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +52,12 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
 
     @Autowired
     private IMaintainanceTaskV1InnerServiceSMO maintainanceTaskV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkTaskV1InnerServiceSMO workTaskV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkCopyV1InnerServiceSMO workCopyV1InnerServiceSMOImpl;
 
     @Override
     public ResponseEntity<String> listUndos(IPageData pd) throws SMOException {
@@ -173,7 +183,31 @@ public class UndoSMOImpl extends DefaultAbstractComponentSMO implements IUndoSMO
         //todo 待保养
         getMaintainanceTaskCount(result, doing);
 
+        //todo 待 办理工作单
+        getUndoWorkCount(result,doing);
+
+        //todo 待 办理抄送工作单
+        getUndoWorkCopyCount(result,doing);
+
         return ResultVo.createResponseEntity(doing);
+    }
+
+    private void getUndoWorkCopyCount(ComponentValidateResult result, JSONObject doing) {
+        WorkCopyDto workCopyDto = new WorkCopyDto();
+        workCopyDto.setStaffId(result.getUserId());
+        workCopyDto.setStoreId(result.getStoreId());
+        workCopyDto.setState(WorkCopyDto.STATE_DOING);
+        int count = workCopyV1InnerServiceSMOImpl.queryWorkCopysCount(workCopyDto);
+        doing.put("workUndoCopyCount", count);
+    }
+
+    private void getUndoWorkCount(ComponentValidateResult result, JSONObject doing) {
+        WorkTaskDto workTaskDto = new WorkTaskDto();
+        workTaskDto.setStaffId(result.getUserId());
+        workTaskDto.setStoreId(result.getStoreId());
+        workTaskDto.setState(WorkTaskDto.STATE_WAIT);
+        int count = workTaskV1InnerServiceSMOImpl.queryWorkTasksCount(workTaskDto);
+        doing.put("workUndDoCount", count);
     }
 
     /**
