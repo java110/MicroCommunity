@@ -16,6 +16,9 @@
 package com.java110.oa.smo.impl;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.data.DatabusDataDto;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.oa.dao.IWorkTaskV1ServiceDao;
 import com.java110.intf.oa.IWorkTaskV1InnerServiceSMO;
 import com.java110.dto.workTask.WorkTaskDto;
@@ -45,17 +48,26 @@ public class WorkTaskV1InnerServiceSMOImpl extends BaseServiceSMO implements IWo
     @Autowired
     private IWorkTaskV1ServiceDao workTaskV1ServiceDaoImpl;
 
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
+
 
     @Override
     public int saveWorkTask(@RequestBody  WorkTaskPo workTaskPo) {
         int saveFlag = workTaskV1ServiceDaoImpl.saveWorkTaskInfo(BeanConvertUtil.beanCovertMap(workTaskPo));
+        JSONObject reqJson = BeanConvertUtil.beanCovertJson(workTaskPo);
+        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_OA_WORK_TASK, reqJson));
+
         return saveFlag;
     }
 
      @Override
     public int updateWorkTask(@RequestBody  WorkTaskPo workTaskPo) {
         int saveFlag = workTaskV1ServiceDaoImpl.updateWorkTaskInfo(BeanConvertUtil.beanCovertMap(workTaskPo));
-        return saveFlag;
+         JSONObject reqJson = BeanConvertUtil.beanCovertJson(workTaskPo);
+         dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_OA_WORK_TASK, reqJson));
+
+         return saveFlag;
     }
 
      @Override

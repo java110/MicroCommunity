@@ -331,7 +331,7 @@ public class MsgNotifyFactory {
      * @param notifyWay
      * @return
      */
-    private static IMsgNotify getMsgNotify(String notifyWay) {
+    public static IMsgNotify getMsgNotify(String notifyWay) {
         IMsgNotify notify = null;
         if (StringUtil.isEmpty(notifyWay)) {
             notifyWay = MappingCache.getValue(MappingConstant.ENV_DOMAIN, DEFAULT_MSG_NOTIFY_WAY);

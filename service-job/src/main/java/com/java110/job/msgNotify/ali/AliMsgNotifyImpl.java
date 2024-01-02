@@ -323,7 +323,6 @@ public class AliMsgNotifyImpl implements IMsgNotify {
             throw new IllegalArgumentException("员工不存在,userId = " + userId);
         }
 
-
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
@@ -372,13 +371,126 @@ public class AliMsgNotifyImpl implements IMsgNotify {
         return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
+    /**
+     * 待处理
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    flowName，
+     *                    create_user_name，
+     *                    create_time，
+     *                    url
+     *                    }
+     * @return
+     */
     @Override
     public ResultVo sendOaDistributeMsg(String communityId, String userId, JSONObject content) {
-        return null;
+        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
+            throw new IllegalArgumentException("员工不存在,userId = " + userId);
+        }
+
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos == null || userDtos.size() < 1) {
+            throw new IllegalArgumentException("员工不存在");
+        }
+
+
+        String accessKeyId = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_KEY_ID");
+        String accessSecret = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_SECRET");
+        String region = CommunitySettingFactory.getValue(communityId, "ALI_REGION");
+        String signName = CommunitySettingFactory.getValue(communityId, "ALI_SIGN_NAME");
+        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_OA_UNDO_TEMPLATE_CODE");
+        DefaultProfile profile = DefaultProfile.getProfile(region,
+                accessKeyId,
+                accessSecret);
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        CommonRequest request = new CommonRequest();
+        request.setSysMethod(MethodType.POST);
+        request.setSysDomain("dysmsapi.aliyuncs.com");
+        request.setSysVersion("2017-05-25");
+        request.setSysAction("SendSms");
+        request.putQueryParameter("RegionId", region);
+        request.putQueryParameter("PhoneNumbers", userDtos.get(0).getTel());
+        request.putQueryParameter("SignName", signName);
+        request.putQueryParameter("TemplateCode", templateCode);
+
+
+        JSONObject param = new JSONObject();
+        param.put("orderId", content.getString("orderId"));
+        request.putQueryParameter("TemplateParam", param.toString());
+
+        String resParam = "";
+        try {
+            CommonResponse response = client.getCommonResponse(request);
+            logger.debug("发送验证码信息：{}", response.getData());
+            resParam = response.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resParam = e.getMessage();
+            throw new IllegalArgumentException("短信工单失败" + e.getMessage());
+        } finally {
+            LogFactory.saveOutLog("SMS", param.toString(), new ResponseEntity(resParam, HttpStatus.OK));
+        }
+        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 
     @Override
     public ResultVo sendOaCreateStaffMsg(String communityId, String userId, JSONObject content) {
-        return null;
+
+        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
+            throw new IllegalArgumentException("员工不存在,userId = " + userId);
+        }
+
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (userDtos == null || userDtos.size() < 1) {
+            throw new IllegalArgumentException("员工不存在");
+        }
+
+
+        String accessKeyId = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_KEY_ID");
+        String accessSecret = CommunitySettingFactory.getValue(communityId, "ALI_ACCESS_SECRET");
+        String region = CommunitySettingFactory.getValue(communityId, "ALI_REGION");
+        String signName = CommunitySettingFactory.getValue(communityId, "ALI_SIGN_NAME");
+        String templateCode = CommunitySettingFactory.getValue(communityId, "ALI_OA_FINISH_TEMPLATE_CODE");
+        DefaultProfile profile = DefaultProfile.getProfile(region,
+                accessKeyId,
+                accessSecret);
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        CommonRequest request = new CommonRequest();
+        request.setSysMethod(MethodType.POST);
+        request.setSysDomain("dysmsapi.aliyuncs.com");
+        request.setSysVersion("2017-05-25");
+        request.setSysAction("SendSms");
+        request.putQueryParameter("RegionId", region);
+        request.putQueryParameter("PhoneNumbers", userDtos.get(0).getTel());
+        request.putQueryParameter("SignName", signName);
+        request.putQueryParameter("TemplateCode", templateCode);
+
+
+        JSONObject param = new JSONObject();
+        param.put("orderId", content.getString("orderId"));
+        request.putQueryParameter("TemplateParam", param.toString());
+
+        String resParam = "";
+        try {
+            CommonResponse response = client.getCommonResponse(request);
+            logger.debug("发送验证码信息：{}", response.getData());
+            resParam = response.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resParam = e.getMessage();
+            throw new IllegalArgumentException("短信工单失败" + e.getMessage());
+        } finally {
+            LogFactory.saveOutLog("SMS", param.toString(), new ResponseEntity(resParam, HttpStatus.OK));
+        }
+        return new ResultVo(ResultVo.CODE_OK, "成功");
     }
 }

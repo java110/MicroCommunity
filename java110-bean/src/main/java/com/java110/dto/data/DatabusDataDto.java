@@ -26,6 +26,10 @@ public class DatabusDataDto extends PageDto implements Serializable {
     //todo 房屋批量创建费用
     public static final String BUSINESS_TYPE_ROOM_CREATE_PAY_FEE = "roomCreatePayFee";
 
+    //todo 工作单通知适配器
+    public static final String BUSINESS_TYPE_OA_WORK_TASK = "oaWorkTaskToStaff";
+
+
     private String businessTypeCd;
 
     private JSONObject data;

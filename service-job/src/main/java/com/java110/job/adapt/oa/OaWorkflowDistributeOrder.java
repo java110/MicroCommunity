@@ -154,6 +154,8 @@ public class OaWorkflowDistributeOrder extends DatabusAdaptImpl {
         content.put("create_user_name", formDatas.get(0).get("create_user_name").toString());
         content.put("create_time", formDatas.get(0).get("create_time").toString());
         content.put("date", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        content.put("orderId", oaWorkflowDataPo.getBusinessKey());
+
         String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
         content.put("url", wechatUrl);
         MsgNotifyFactory.sendOaDistributeMsg(communityMemberDto.getCommunityId(), oaWorkflowDataPo.getStaffId(), content);
@@ -167,6 +169,7 @@ public class OaWorkflowDistributeOrder extends DatabusAdaptImpl {
         content = new JSONObject();
         content.put("flowName", oaWorkflowDtos.get(0).getFlowName());
         content.put("staffName", oaWorkflowDataPo.getStaffName());
+        content.put("orderId", oaWorkflowDataPo.getBusinessKey());
         wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
         content.put("url", wechatUrl);
         MsgNotifyFactory.sendOaCreateStaffMsg(communityMemberDto.getCommunityId(), createUserId, content);

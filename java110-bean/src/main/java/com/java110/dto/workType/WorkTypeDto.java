@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class WorkTypeDto extends PageDto implements Serializable {
 
+    public static final String SMS_WAY_WECHAT = "WECHAT";
+    public static final String SMS_WAY_ALI = "ALI_SMS";
+
     private String typeName;
     private String remark;
     private String communityId;
