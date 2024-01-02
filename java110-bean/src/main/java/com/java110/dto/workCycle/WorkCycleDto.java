@@ -31,6 +31,8 @@ public class WorkCycleDto extends PageDto implements Serializable {
     private String staffId;
     private String periodDay;
 
+    private String curTime;
+
 
     private Date createTime;
 
@@ -156,5 +158,13 @@ public class WorkCycleDto extends PageDto implements Serializable {
 
     public void setHours(String hours) {
         this.hours = hours;
+    }
+
+    public String getCurTime() {
+        return curTime;
+    }
+
+    public void setCurTime(String curTime) {
+        this.curTime = curTime;
     }
 }

@@ -43,6 +43,10 @@ public class WorkTaskPo implements Serializable {
 
     private String taskTimeout;
 
+    private String orgStaffId;
+    private String orgStaffName;
+
+
     public String getStaffName() {
         return staffName;
     }
@@ -137,5 +141,21 @@ public class WorkTaskPo implements Serializable {
 
     public void setTaskTimeout(String taskTimeout) {
         this.taskTimeout = taskTimeout;
+    }
+
+    public String getOrgStaffId() {
+        return orgStaffId;
+    }
+
+    public void setOrgStaffId(String orgStaffId) {
+        this.orgStaffId = orgStaffId;
+    }
+
+    public String getOrgStaffName() {
+        return orgStaffName;
+    }
+
+    public void setOrgStaffName(String orgStaffName) {
+        this.orgStaffName = orgStaffName;
     }
 }

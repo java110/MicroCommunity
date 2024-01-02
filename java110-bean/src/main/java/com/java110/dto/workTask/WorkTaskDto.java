@@ -41,6 +41,11 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
     private String taskTimeout;
 
+    private String taskInsTime;
+
+    private String orgStaffId;
+    private String orgStaffName;
+
 
 
 
@@ -202,5 +207,29 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
     public void setTaskTimeout(String taskTimeout) {
         this.taskTimeout = taskTimeout;
+    }
+
+    public String getTaskInsTime() {
+        return taskInsTime;
+    }
+
+    public void setTaskInsTime(String taskInsTime) {
+        this.taskInsTime = taskInsTime;
+    }
+
+    public String getOrgStaffId() {
+        return orgStaffId;
+    }
+
+    public void setOrgStaffId(String orgStaffId) {
+        this.orgStaffId = orgStaffId;
+    }
+
+    public String getOrgStaffName() {
+        return orgStaffName;
+    }
+
+    public void setOrgStaffName(String orgStaffName) {
+        this.orgStaffName = orgStaffName;
     }
 }

@@ -8,9 +8,9 @@
     <!-- 保存工作单任务信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkTaskInfo" parameterType="Map">
         insert into work_task(
-        staff_name,start_time,state,end_time,community_id,store_id,task_id,work_id,staff_id
+        staff_name,start_time,state,end_time,community_id,store_id,task_id,work_id,staff_id,org_staff_id,org_staff_name
         ) values (
-        #{staffName},#{startTime},#{state},#{endTime},#{communityId},#{storeId},#{taskId},#{workId},#{staffId}
+        #{staffName},#{startTime},#{state},#{endTime},#{communityId},#{storeId},#{taskId},#{workId},#{staffId},#{orgStaffId},#{orgStaffName}
         )
     </insert>
 
@@ -24,7 +24,7 @@
         td.`name` stateName,
         wp.work_cycle workCycle,wp.create_user_id
         createUserId,wp.create_user_name createUserName,wp.work_name workName,wp.wt_id wtId,wp.create_user_tel createUserTel,
-        wt.type_name typeName,t.finish_time finishTime,t.task_timeout taskTimeout
+        wt.type_name typeName,t.finish_time finishTime,t.task_timeout taskTimeout,t.org_staff_id orgStaffId,t.org_staff_name orgStaffName
         from work_task t
         left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         left join work_pool wp on t.work_id = wp.work_id and wp.status_cd = '0'
@@ -46,6 +46,10 @@
         <if test="startTime !=null and startTime != ''">
             and t.start_time= #{startTime}
         </if>
+        <if test="taskInsTime !=null and taskInsTime != ''">
+            and DATE_FORMAT(t.start_time,'%Y-%m-%d')= #{taskInsTime}
+        </if>
+
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -76,6 +80,10 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
+        <if test="orgStaffId !=null and orgStaffId != ''">
+            and t.org_staff_id= #{orgStaffId}
+        </if>
+
         <if test="taskTimeout !=null and taskTimeout != ''">
             and t.task_timeout= #{taskTimeout}
         </if>
@@ -191,6 +199,9 @@
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
+        </if>
+        <if test="orgStaffId !=null and orgStaffId != ''">
+            and t.org_staff_id= #{orgStaffId}
         </if>
         <if test="taskTimeout !=null and taskTimeout != ''">
             and t.task_timeout= #{taskTimeout}

@@ -24,7 +24,12 @@
         staffName,t.period_month,t.period_month periodMonth,t.community_id,t.community_id
         communityId,t.staff_id,t.staff_id staffId,t.period_day,t.period_day periodDay,t.create_time createTime
         from work_cycle t
-        where 1 =1
+        left join work_pool wp on t.work_id = wp.work_id and wp.status_cd = '0'
+        where 1=1
+        <if test="curTime != null and curTime != ''">
+        and wp.start_time &lt; #{curTime}
+        and wp.end_time &gt; #{curTime}
+        </if>
         <if test="workCycle !=null and workCycle != ''">
             and t.work_cycle= #{workCycle}
         </if>

@@ -210,6 +210,8 @@ public class SaveWorkPoolCmd extends Cmd {
             workTaskPo.setEndTime(endTime);
             workTaskPo.setStaffId(staffs.getJSONObject(staffIndex).getString("staffId"));
             workTaskPo.setStaffName(staffs.getJSONObject(staffIndex).getString("staffName"));
+            workTaskPo.setOrgStaffId(staffs.getJSONObject(staffIndex).getString("staffId"));
+            workTaskPo.setOrgStaffName(staffs.getJSONObject(staffIndex).getString("staffName"));
             int flag = workTaskV1InnerServiceSMOImpl.saveWorkTask(workTaskPo);
 
             if (flag < 1) {
