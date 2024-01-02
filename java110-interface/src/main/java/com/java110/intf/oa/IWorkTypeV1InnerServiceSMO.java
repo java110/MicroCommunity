@@ -39,17 +39,16 @@ public interface IWorkTypeV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveWorkType", method = RequestMethod.POST)
-    public int saveWorkType(@RequestBody  WorkTypePo workTypePo);
+    int saveWorkType(@RequestBody WorkTypePo workTypePo);
 
     @RequestMapping(value = "/updateWorkType", method = RequestMethod.POST)
-    public int updateWorkType(@RequestBody  WorkTypePo workTypePo);
+    int updateWorkType(@RequestBody WorkTypePo workTypePo);
 
     @RequestMapping(value = "/deleteWorkType", method = RequestMethod.POST)
-    public int deleteWorkType(@RequestBody  WorkTypePo workTypePo);
+    int deleteWorkType(@RequestBody WorkTypePo workTypePo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param workTypeDto 数据对象分享
      * @return WorkTypeDto 对象数据

@@ -56,7 +56,7 @@ public class SaveWorkTypeCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeName", "请求报文中未包含typeName");
-        Assert.hasKeyAndValue(reqJson, "timeout", "请求报文中未包含timeout");
+        Assert.hasKeyAndValue(reqJson, "smsWay", "请求报文中未包含smsWay");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
         reqJson.put("storeId",storeId);

@@ -1,6 +1,7 @@
 package com.java110.dto.workType;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,11 +16,11 @@ import java.util.Date;
 public class WorkTypeDto extends PageDto implements Serializable {
 
     private String typeName;
-private String remark;
-private String communityId;
-private String storeId;
-private String timeout;
-private String wtId;
+    private String remark;
+    private String communityId;
+    private String storeId;
+    private String smsWay;
+    private String wtId;
 
 
     private Date createTime;
@@ -30,37 +31,48 @@ private String wtId;
     public String getTypeName() {
         return typeName;
     }
-public void setTypeName(String typeName) {
+
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getTimeout() {
-        return timeout;
+
+    public String getSmsWay() {
+        return smsWay;
     }
-public void setTimeout(String timeout) {
-        this.timeout = timeout;
+
+    public void setSmsWay(String smsWay) {
+        this.smsWay = smsWay;
     }
-public String getWtId() {
+
+    public String getWtId() {
         return wtId;
     }
-public void setWtId(String wtId) {
+
+    public void setWtId(String wtId) {
         this.wtId = wtId;
     }
 

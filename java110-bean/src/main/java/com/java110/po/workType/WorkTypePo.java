@@ -17,6 +17,7 @@ package com.java110.po.workType;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2023-12-25 15:00:50 mail: 928255095@qq.com
@@ -28,55 +29,68 @@ import java.util.Date;
 public class WorkTypePo implements Serializable {
 
     private String typeName;
-private String remark;
-private String statusCd = "0";
-private String communityId;
-private String storeId;
-private String timeout;
-private String wtId;
-public String getTypeName() {
+    private String remark;
+    private String statusCd = "0";
+    private String communityId;
+    private String storeId;
+    private String smsWay ;
+    private String wtId;
+
+    public String getTypeName() {
         return typeName;
     }
-public void setTypeName(String typeName) {
+
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getTimeout() {
-        return timeout;
-    }
-public void setTimeout(String timeout) {
-        this.timeout = timeout;
-    }
-public String getWtId() {
-        return wtId;
-    }
-public void setWtId(String wtId) {
-        this.wtId = wtId;
+
+    public String getSmsWay() {
+        return smsWay;
     }
 
+    public void setSmsWay(String smsWay) {
+        this.smsWay = smsWay;
+    }
+
+    public String getWtId() {
+        return wtId;
+    }
+
+    public void setWtId(String wtId) {
+        this.wtId = wtId;
+    }
 
 
 }
