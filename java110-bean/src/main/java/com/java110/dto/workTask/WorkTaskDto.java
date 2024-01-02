@@ -24,6 +24,8 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
     private String state;
     private String stateName;
     private String endTime;
+
+    private String finishTime;
     private String communityId;
     private String storeId;
     private String taskId;
@@ -37,8 +39,14 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
     private String createUserNameLike;
 
+    private String taskTimeout;
+
+
+
 
     private Date createTime;
+
+
 
     private String statusCd = "0";
 
@@ -178,5 +186,21 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
     public void setCreateUserNameLike(String createUserNameLike) {
         this.createUserNameLike = createUserNameLike;
+    }
+
+    public String getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public String getTaskTimeout() {
+        return taskTimeout;
+    }
+
+    public void setTaskTimeout(String taskTimeout) {
+        this.taskTimeout = taskTimeout;
     }
 }

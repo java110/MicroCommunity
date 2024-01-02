@@ -24,7 +24,7 @@
         td.`name` stateName,
         wp.work_cycle workCycle,wp.create_user_id
         createUserId,wp.create_user_name createUserName,wp.work_name workName,wp.wt_id wtId,wp.create_user_tel createUserTel,
-        wt.type_name typeName
+        wt.type_name typeName,t.finish_time finishTime,t.task_timeout taskTimeout
         from work_task t
         left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         left join work_pool wp on t.work_id = wp.work_id and wp.status_cd = '0'
@@ -76,6 +76,9 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
+        <if test="taskTimeout !=null and taskTimeout != ''">
+            and t.task_timeout= #{taskTimeout}
+        </if>
         <if test="queryStartTime !=null and queryStartTime != ''">
             and t.create_time &gt; #{queryStartTime}
         </if>
@@ -107,6 +110,12 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             , t.end_time= #{endTime}
+        </if>
+        <if test="finishTime !=null and finishTime != ''">
+            , t.finish_time = #{finishTime}
+        </if>
+        <if test="taskTimeout !=null and taskTimeout != ''">
+            , t.task_timeout= #{taskTimeout}
         </if>
 
         <if test="staffId !=null and staffId != ''">
@@ -182,6 +191,9 @@
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
+        </if>
+        <if test="taskTimeout !=null and taskTimeout != ''">
+            and t.task_timeout= #{taskTimeout}
         </if>
         <if test="queryStartTime !=null and queryStartTime != ''">
             and t.create_time &gt; #{queryStartTime}

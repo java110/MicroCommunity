@@ -23,11 +23,13 @@ import com.java110.po.workPoolFile.WorkPoolFilePo;
 import com.java110.po.workTask.WorkTaskPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "work.finishWorkTask")
@@ -118,12 +120,22 @@ public class FinishWorkTaskCmd extends Cmd {
      */
     private void doFinish(JSONObject reqJson, WorkTaskDto workTaskDto) {
 
+        Date endTime = DateUtil.getDateFromStringA(workTaskDto.getEndTime());
+
+        String taskTimeout = "N";
+        //todo 工单已经超时
+        if(endTime.before(DateUtil.getCurrentDate())){
+            taskTimeout = "Y";
+        }
+
         //todo 完成任务
 
         WorkTaskPo workTaskPo = new WorkTaskPo();
         workTaskPo.setState(WorkPoolDto.STATE_COMPLETE);
         workTaskPo.setTaskId(workTaskDto.getTaskId());
         workTaskPo.setStoreId(workTaskDto.getStoreId());
+        workTaskPo.setFinishTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        workTaskPo.setTaskTimeout(taskTimeout);
         workTaskV1InnerServiceSMOImpl.updateWorkTask(workTaskPo);
 
 
@@ -143,12 +155,12 @@ public class FinishWorkTaskCmd extends Cmd {
         workEventDto.setTaskId(workTaskDto.getTaskId());
         workEventDto.setWorkId(workTaskDto.getWorkId());
         workEventDto.setOrderByDesc("desc");
-       List<WorkEventDto> workEventDtos = workEventV1InnerServiceSMOImpl.queryWorkEvents(workEventDto);
-       if(!ListUtil.isNull(workEventDtos)){
-           preStaffId = workEventDtos.get(0).getStaffId();
-           preStaffName = workEventDtos.get(0).getStaffName();
+        List<WorkEventDto> workEventDtos = workEventV1InnerServiceSMOImpl.queryWorkEvents(workEventDto);
+        if (!ListUtil.isNull(workEventDtos)) {
+            preStaffId = workEventDtos.get(0).getStaffId();
+            preStaffName = workEventDtos.get(0).getStaffName();
 
-       }
+        }
 
         //todo 保存事件
         WorkEventPo workEventPo = new WorkEventPo();
