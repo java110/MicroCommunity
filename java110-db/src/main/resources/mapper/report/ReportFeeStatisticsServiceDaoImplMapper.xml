@@ -427,6 +427,7 @@
             1=1
             and t.payer_obj_type = '3333'
             and t.community_id= #{communityId}
+            and pf.community_id=  #{communityId}
             and t.end_time &lt;= #{endDate}
             <if test="configIds !=null ">
                 and t.config_id in
@@ -629,6 +630,7 @@
         1=1
         and t.payer_obj_type = '3333'
         and t.community_id=  #{communityId}
+        and pf.community_id=  #{communityId}
         and t.end_time &lt;= #{endDate}
         <if test="configIds !=null ">
             and t.config_id in
@@ -817,6 +819,7 @@
             1=1
             and t.payer_obj_type = '3333'
             and t.community_id= #{communityId}
+            and pf.community_id=  #{communityId}
             group by a.payer_ob_id
         ) b
     </select>
@@ -1095,6 +1098,7 @@
             1=1
             and t.payer_obj_type = '3333'
             and t.community_id= #{communityId}
+        and pf.community_id=  #{communityId}
             and t.end_time &lt; #{endDate}
             group by bu.floor_id,br.room_id
         ) b
@@ -1180,6 +1184,7 @@
         1=1
         and bu.floor_id = #{floorId}
         and t.community_id = #{communityId}
+        and pf.community_id=  #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         <if test="feeTypeCd != null and feeTypeCd != ''">
@@ -1195,6 +1200,7 @@
         where
         bu.floor_id = #{floorId}
         and t.community_id = #{communityId}
+        and pf.community_id=  #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         <if test="feeTypeCd != null and feeTypeCd != ''">
@@ -1211,6 +1217,7 @@
         where 1=1
         and bu.floor_id = #{floorId}
         and t.community_id =  #{communityId}
+        and pf.community_id=  #{communityId}
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt;  #{endDate}
         and t.cur_month_time &lt; #{hisDate}
@@ -1230,6 +1237,7 @@
         where 1=1
        and bu.floor_id = #{floorId}
         and t.community_id =  #{communityId}
+        and pf.community_id=  #{communityId}
         and t.pay_fee_time &gt; #{startDate}
         and t.pay_fee_time &lt;  #{endDate}
         and t.cur_month_time &lt; #{hisDate}
@@ -1256,6 +1264,7 @@
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id != '-1'
         and t.community_id = #{communityId}
+        and pf.community_id=  #{communityId}
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
@@ -1292,6 +1301,7 @@
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id != '-1'
         and t.community_id = #{communityId}
+        and pf.community_id=  #{communityId}
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
@@ -1328,6 +1338,7 @@
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id != '-1'
         and t.community_id = #{communityId}
+        and pf.community_id=  #{communityId}
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
@@ -1360,6 +1371,7 @@
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id = '-1'
         and t.community_id = #{communityId}
+        and pf.community_id=  #{communityId}
         and t.receivable_amount &gt; 0
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
@@ -1395,6 +1407,7 @@
         and t.detail_id = '-1'
         and t.receivable_amount &gt; 0
         and t.community_id = #{communityId}
+        and pf.community_id=  #{communityId}
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
         </if>
@@ -1431,6 +1444,7 @@
         and t.cur_month_time &lt; #{endDate}
         and t.detail_id = '-1'
         and t.community_id = #{communityId}
+        and pf.community_id=  #{communityId}
         and t.receivable_amount &gt; 0
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and pf.fee_type_cd = #{feeTypeCd}
