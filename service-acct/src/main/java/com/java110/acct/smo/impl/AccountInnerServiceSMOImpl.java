@@ -217,6 +217,7 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
             if (flag < 1) {
                 throw new IllegalArgumentException("更新账户失败");
             }
+            accountDetailPo.setObjId(accounts.get(0).getObjId());
             accountDetailPo.setObjType(accounts.get(0).getObjType());
         } finally {
             DistributedLock.releaseDistributedLock(key, requestId);

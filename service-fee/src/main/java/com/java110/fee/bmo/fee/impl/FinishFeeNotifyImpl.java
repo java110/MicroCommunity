@@ -240,6 +240,8 @@ public class FinishFeeNotifyImpl implements IFinishFeeNotify {
             return;
         }
 
+
+
         AccountDetailPo accountDetailPo = new AccountDetailPo();
         accountDetailPo.setAcctId(payFeeDataDto.getAcctId());
         accountDetailPo.setAmount(accountAmount + "");
