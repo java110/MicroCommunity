@@ -709,9 +709,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endTime);
         endCalender.add(Calendar.MONTH, new Double(Math.floor(cycle)).intValue());
-//        Calendar futureDate = Calendar.getInstance();
-//        futureDate.setTime(endCalender.getTime());
-//        futureDate.add(Calendar.MONTH, 1);
         int futureDay = endCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
         int hours = new Double((cycle - Math.floor(cycle)) * futureDay * 24).intValue();
         endCalender.add(Calendar.HOUR, hours);

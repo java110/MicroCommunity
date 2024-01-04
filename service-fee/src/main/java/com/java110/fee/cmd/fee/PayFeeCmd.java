@@ -42,10 +42,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -693,14 +690,14 @@ public class PayFeeCmd extends Cmd {
         feeDto.setFeeId(paramInJson.getString("feeId"));
         feeDto.setCommunityId(paramInJson.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (feeDtos == null || feeDtos.size() != 1) {
-            throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "查询费用信息失败，未查到数据或查到多条数据");
+        if (ListUtil.isNull(feeDtos)) {
+            throw new CmdException("查询费用信息失败，未查到数据或查到多条数据");
         }
         if (!businessFeeDetail.containsKey("state") || StringUtil.isEmpty(businessFeeDetail.getString("state"))) {
             businessFeeDetail.put("state", "1400");
         }
         feeDto = feeDtos.get(0);
-        businessFeeDetail.put("startTime", DateUtil.getFormatTimeString(feeDto.getEndTime(), DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeDetail.put("startTime", DateUtil.getFormatTimeStringA(feeDto.getEndTime()));
         int hours = 0;
         Date targetEndTime = null;
         BigDecimal cycles = null;
@@ -788,7 +785,7 @@ public class PayFeeCmd extends Cmd {
             }
         }
 
-        businessFeeDetail.put("endTime", DateUtil.getFormatTimeString(targetEndTime, DateUtil.DATE_FORMATE_STRING_A));
+        businessFeeDetail.put("endTime", DateUtil.getFormatTimeStringA(targetEndTime));
         paramInJson.put("feeInfo", feeDto);
 
         return businessFeeDetail;

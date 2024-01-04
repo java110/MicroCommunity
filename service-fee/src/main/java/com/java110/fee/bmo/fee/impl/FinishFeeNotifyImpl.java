@@ -5,6 +5,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.fee.PayFeeDataDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
@@ -224,6 +225,26 @@ public class FinishFeeNotifyImpl implements IFinishFeeNotify {
         accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
 
+
+    }
+
+    @Override
+    public void withholdAccount(PayFeeDataDto payFeeDataDto, String feeId, String communityId) {
+        if (payFeeDataDto.getAccountAmount() <= 0) {
+            return;
+        }
+
+        double accountAmount = payFeeDataDto.getAccountAmount();
+
+        if (accountAmount <= 0) {
+            return;
+        }
+
+        AccountDetailPo accountDetailPo = new AccountDetailPo();
+        accountDetailPo.setAcctId(payFeeDataDto.getAcctId());
+        accountDetailPo.setAmount(accountAmount + "");
+        accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
 
     }
 }
