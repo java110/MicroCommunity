@@ -140,6 +140,12 @@ public class QueryRoomsCmd extends Cmd {
         //todo 商铺 两个短线方式处理 add by wuxw
         computeRoomShopFloorUnitRoomNum(reqJson, roomDto);
 
+        //todo 处理状态
+        String roomState = reqJson.getString("roomState");
+        if(!StringUtil.isEmpty(roomState)){
+            roomDto.setStates(roomState.split(","));
+        }
+
         ApiRoomVo apiRoomVo = new ApiRoomVo();
 
         //员工是否 有权限查询
