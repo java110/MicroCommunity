@@ -150,6 +150,7 @@ public class PayBatchFeeCmd extends Cmd {
             payFeeDataDto.setCashierId(userDtos.get(0).getUserId());
             payFeeDataDto.setCashierName(userDtos.get(0).getName());
             payFeeDataDto.setFeeId(paramInObj.getString("feeId"));
+            payFeeDataDto.setCycles(paramInObj.getString("cycles"));
             feeDataDtos.add(payFeeDataDto);
         }
 
@@ -279,7 +280,7 @@ public class PayBatchFeeCmd extends Cmd {
         String receivableAmount = "";
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(payFeeDataDto.getFeeDto());
         BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
-        if ("-101".equals(payFeeDataDto.getTempCycle())) { //todo  自定义金额交费
+        if (PayFeeDataDto.TEMP_CYCLE_CUSTOM_AMOUNT.equals(payFeeDataDto.getTempCycle())) { //todo  自定义金额交费
             Date endTime = payFeeDataDto.getFeeDto().getEndTime();
             Calendar endCalender = Calendar.getInstance();
             endCalender.setTime(endTime);
@@ -293,7 +294,7 @@ public class PayBatchFeeCmd extends Cmd {
             targetEndTime = endCalender.getTime();
             receivableAmount = payFeeDataDto.getReceivedAmount();
             //处理 可能还存在 实收手工减免的情况
-        } else if ("-103".equals(payFeeDataDto.getTempCycle())) { //todo 这里按缴费结束时间缴费
+        } else if (PayFeeDataDto.TEMP_CYCLE_CUSTOM_END_TIME.equals(payFeeDataDto.getTempCycle())) { //todo 这里按缴费结束时间缴费
             String custEndTime = payFeeDataDto.getCustEndTime();
             Date endDates = DateUtil.getDateFromStringB(custEndTime);
             Calendar c = Calendar.getInstance();

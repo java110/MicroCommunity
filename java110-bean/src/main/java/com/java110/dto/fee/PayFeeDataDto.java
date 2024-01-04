@@ -6,6 +6,12 @@ import java.io.Serializable;
 
 public class PayFeeDataDto extends PayFeeDetailPo implements Serializable {
 
+    public static final String TEMP_CYCLE_DEFAULT="-100";
+    public static final String TEMP_CYCLE_CUSTOM_AMOUNT="-101"; //自定义金额交费
+    public static final String TEMP_CYCLE_CUSTOM_CYCLE ="-102"; // 自定义周期
+    public static final String TEMP_CYCLE_CUSTOM_END_TIME="-103"; //自定义结束时间
+    public static final String TEMP_CYCLE_CUSTOM_START_END_TIME="-105"; //自定义缴费时间段
+
     private String tempCycle;
 
     private String custEndTime;
