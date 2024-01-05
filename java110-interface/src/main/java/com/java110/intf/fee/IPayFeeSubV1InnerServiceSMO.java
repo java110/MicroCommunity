@@ -16,8 +16,8 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.fee.PayFeeDto;
-import com.java110.po.fee.PayFeePo;
+import com.java110.dto.payFeeSub.PayFeeSubDto;
+import com.java110.po.payFeeSub.PayFeeSubPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,42 +27,41 @@ import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口类，不对外提供接口能力 只用于接口建调用
- * add by 吴学文 at 2021-12-06 21:31:24 mail: 928255095@qq.com
+ * add by 吴学文 at 2024-01-05 12:10:47 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @FeignClient(name = "fee-service", configuration = {FeignConfiguration.class})
-@RequestMapping("/payFeeV1Api")
-public interface IPayFeeV1InnerServiceSMO {
+@RequestMapping("/payFeeSubV1Api")
+public interface IPayFeeSubV1InnerServiceSMO {
 
 
-    @RequestMapping(value = "/savePayFee", method = RequestMethod.POST)
-     int savePayFee(@RequestBody PayFeePo PayFeePo);
+    @RequestMapping(value = "/savePayFeeSub", method = RequestMethod.POST)
+    int savePayFeeSub(@RequestBody PayFeeSubPo payFeeSubPo);
 
-    @RequestMapping(value = "/updatePayFee", method = RequestMethod.POST)
-     int updatePayFee(@RequestBody  PayFeePo PayFeePo);
+    @RequestMapping(value = "/updatePayFeeSub", method = RequestMethod.POST)
+    int updatePayFeeSub(@RequestBody PayFeeSubPo payFeeSubPo);
 
-    @RequestMapping(value = "/deletePayFee", method = RequestMethod.POST)
-     int deletePayFee(@RequestBody  PayFeePo PayFeePo);
+    @RequestMapping(value = "/deletePayFeeSub", method = RequestMethod.POST)
+    int deletePayFeeSub(@RequestBody PayFeeSubPo payFeeSubPo);
 
     /**
      * <p>查询小区楼信息</p>
      *
-     *
-     * @param payFeeDto 数据对象分享
-     * @return PayFeeDto 对象数据
+     * @param payFeeSubDto 数据对象分享
+     * @return PayFeeSubDto 对象数据
      */
-    @RequestMapping(value = "/queryPayFees", method = RequestMethod.POST)
-    List<PayFeeDto> queryPayFees(@RequestBody PayFeeDto payFeeDto);
+    @RequestMapping(value = "/queryPayFeeSubs", method = RequestMethod.POST)
+    List<PayFeeSubDto> queryPayFeeSubs(@RequestBody PayFeeSubDto payFeeSubDto);
 
     /**
      * 查询<p>小区楼</p>总记录数
      *
-     * @param payFeeDto 数据对象分享
+     * @param payFeeSubDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
-    @RequestMapping(value = "/queryPayFeesCount", method = RequestMethod.POST)
-    int queryPayFeesCount(@RequestBody PayFeeDto payFeeDto);
+    @RequestMapping(value = "/queryPayFeeSubsCount", method = RequestMethod.POST)
+    int queryPayFeeSubsCount(@RequestBody PayFeeSubDto payFeeSubDto);
 }

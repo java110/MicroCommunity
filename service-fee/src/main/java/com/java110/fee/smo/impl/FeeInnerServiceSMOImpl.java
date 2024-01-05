@@ -19,6 +19,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -65,13 +66,9 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
 
         List<FeeDto> fees = BeanConvertUtil.covertBeanList(feeServiceDaoImpl.getFeeInfo(BeanConvertUtil.beanCovertMap(feeDto)), FeeDto.class);
 
-        if (fees == null || fees.size() == 0) {
+        if (ListUtil.isNull(fees)) {
             return fees;
         }
-
-//        String[] userIds = getUserIds(fees);
-//        //根据 userId 查询用户信息
-//        List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(userIds);
 
         for (FeeDto fee : fees) {
             refreshFee(fee);
