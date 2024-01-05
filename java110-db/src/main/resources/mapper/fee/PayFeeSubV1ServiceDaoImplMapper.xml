@@ -22,7 +22,7 @@
         userId,t.pre_fee_id,t.pre_fee_id preFeeId,t.payer_obj_name,t.payer_obj_name
         payerObjName,t.income_obj_id,t.income_obj_id incomeObjId,t.config_id,t.config_id configId,t.fee_flag,t.fee_flag
         feeFlag,t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.fee_name feeName
+        communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId,pfc.fee_name feeName,t.create_time createTime
         from pay_fee_sub t
         left join pay_fee_config pfc on t.config_id = pfc.config_id
         where 1 =1
@@ -48,9 +48,7 @@
             and (t.fee_id = #{pcFeeId} or t.pre_fee_id = #{pcFeeId})
         </if>
 
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="preFeeId !=null and preFeeId != ''">
             and t.pre_fee_id= #{preFeeId}
         </if>
@@ -174,9 +172,7 @@
         <if test="pcFeeId !=null and pcFeeId != ''">
             and (t.fee_id = #{pcFeeId} or t.pre_fee_id = #{pcFeeId})
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
+
         <if test="preFeeId !=null and preFeeId != ''">
             and t.pre_fee_id= #{preFeeId}
         </if>

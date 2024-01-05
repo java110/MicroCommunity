@@ -176,7 +176,7 @@ public class SplitPayFeeCmd extends Cmd {
 
         PayFeePo payFeePo = BeanConvertUtil.covertBean(feeDto, PayFeePo.class);
         payFeePo.setEndTime(endTime);
-        payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
+        payFeePo.setFeeId(payFeeSubPo.getFeeId());
         payFeePo.setState(FeeDto.STATE_DOING);
         flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
         if (flag < 1) {
