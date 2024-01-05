@@ -56,7 +56,6 @@ public class ListPayFeeSubCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-        Assert.hasKeyAndValue(reqJson, "preFeeId", "preFeeId不能为空");
 
     }
 

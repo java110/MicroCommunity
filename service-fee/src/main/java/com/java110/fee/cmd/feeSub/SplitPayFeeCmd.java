@@ -110,7 +110,7 @@ public class SplitPayFeeCmd extends Cmd {
             throw new CmdException("费用错误未包含最大结束时间");
         }
 
-        Date splitTime = DateUtil.getDateFromStringA(reqJson.getString("splitTime"));
+        Date splitTime = DateUtil.getDateFromStringB(reqJson.getString("splitTime"));
         if (splitTime.before(endTime)) {
             throw new CmdException("拆分时间错误，应大于计费起始时间");
         }
