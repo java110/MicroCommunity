@@ -96,12 +96,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
 
         headers.put(CommonConstant.USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
 
-        if (!headers.containsKey(CommonConstant.HTTP_APP_ID)) {
-            headers.put(CommonConstant.HTTP_APP_ID, AppDto.WEB_APP_ID);
-        }
-        if (!headers.containsKey(CommonConstant.APP_ID)) {
-            headers.put(CommonConstant.APP_ID, AppDto.WEB_APP_ID);
-        }
+
+        headers.put(CommonConstant.HTTP_APP_ID, AppDto.WEB_APP_ID);
+        headers.put(CommonConstant.APP_ID, AppDto.WEB_APP_ID);
+
         if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
             headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());
         }
@@ -394,7 +392,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
      */
     protected void checkStoreEnterCommunity(IPageData pd, String storeId, String storeTypeCd, String communityId, RestTemplate restTemplate) {
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
-        ResultVo resultVo =  getCommunityStoreInfoSMOImpl.getStoreEnterCommunitys(pd, storeId, storeTypeCd, restTemplate);
+        ResultVo resultVo = getCommunityStoreInfoSMOImpl.getStoreEnterCommunitys(pd, storeId, storeTypeCd, restTemplate);
         if (resultVo.getCode() != ResultVo.CODE_OK) {
             throw new SMOException(ResponseConstant.RESULT_CODE_ERROR, "还未入驻小区，请先入驻小区");
         }
