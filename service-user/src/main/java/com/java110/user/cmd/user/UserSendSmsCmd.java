@@ -19,6 +19,7 @@ import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import com.java110.utils.util.ValidatorUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,8 +106,7 @@ public class UserSendSmsCmd extends Cmd {
                 smsDto.setMsg("您的验证码为" + msgCode);
             }
 
-            ResponseEntity<String> sendMessageResult = new ResponseEntity<String>(smsDto.getMsg(), smsDto.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
-            context.setResponseEntity(sendMessageResult);
+            context.setResponseEntity(ResultVo.createResponseEntity(smsDto.getMsg()));
         } finally {
             //清理事务信息
             DistributedLock.releaseDistributedLock(key, requestId);
