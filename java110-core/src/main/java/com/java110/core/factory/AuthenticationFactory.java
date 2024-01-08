@@ -11,6 +11,7 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.dto.reportData.ReportDataHeaderDto;
 import com.java110.utils.cache.CommonCache;
@@ -23,6 +24,7 @@ import com.java110.utils.exception.NoAuthorityException;
 import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
@@ -45,6 +47,7 @@ import java.util.UUID;
  * Created by wuxw on 2018/4/23.
  */
 public class AuthenticationFactory {
+    private static Logger logger = LoggerFactory.getLogger(AuthenticationFactory.class);
 
     public final static String PASSWD_SALT = "hc@java110";
 
@@ -234,6 +237,7 @@ public class AuthenticationFactory {
         reqInfo += ((dataFlow.getReqBusiness() == null || dataFlow.getReqBusiness().size() == 0)
                 ? dataFlow.getReqData() : dataFlow.getReqBusiness().toJSONString());
         reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
+        logger.debug("加密字符串={}",reqInfo);
         return md5(reqInfo);
     }
 
@@ -280,6 +284,7 @@ public class AuthenticationFactory {
         reqInfo += "GET".equals(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_METHOD)) ?
                 param : dataFlow.getReqData();
         reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
+
         return md5(reqInfo);
     }
 
