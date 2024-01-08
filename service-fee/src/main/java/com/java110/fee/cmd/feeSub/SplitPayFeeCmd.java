@@ -120,6 +120,15 @@ public class SplitPayFeeCmd extends Cmd {
 
         }
 
+        String startDate = DateUtil.getFormatTimeStringB(feeDto.getEndTime());
+        String deadlineTime =DateUtil.getFormatTimeStringB(feeDto.getDeadlineTime());
+
+
+        if(splitTime.getTime() == DateUtil.getDateFromStringB(startDate).getTime()
+                ||splitTime.getTime() == DateUtil.getDateFromStringB(deadlineTime).getTime()){
+            throw new CmdException("拆分时间不能为 开始时间或者结束时间");
+        }
+
 
         reqJson.put("feeDto", feeDtos.get(0));
     }
