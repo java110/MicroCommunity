@@ -318,7 +318,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         if (!StringUtil.isNullOrNone(dataFlow.getAppRoutes().get(0).getSecurityCode())) {
             String sign = AuthenticationFactory.apiDataFlowMd5(dataFlow);
-            if (!sign.equals(dataFlow.getReqSign().toLowerCase())) {
+            if (StringUtil.isEmpty(dataFlow.getReqSign()) || !sign.equals(dataFlow.getReqSign().toLowerCase())) {
                 throw new NoAuthorityException(ResponseConstant.RESULT_CODE_NO_AUTHORITY_ERROR, "签名失败");
             }
         }
