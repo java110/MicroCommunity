@@ -284,6 +284,7 @@ public class AuthenticationFactory {
         reqInfo += "GET".equals(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_METHOD)) ?
                 param : dataFlow.getReqData();
         reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
+        logger.debug("加密字符串={}",reqInfo);
 
         return md5(reqInfo);
     }
