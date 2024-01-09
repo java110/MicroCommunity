@@ -77,7 +77,7 @@ public class ListSmallWeChatsCmd extends Cmd {
         List<ApiSmallWeChatDataVo> smallWeChats = null;
         if (count > 0) {
             smallWeChats = BeanConvertUtil.covertBeanList(smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto), ApiSmallWeChatDataVo.class);
-            freshSecure(smallWeChats, appId);
+            //freshSecure(smallWeChats, appId);
         } else {
             smallWeChats = new ArrayList<>();
         }

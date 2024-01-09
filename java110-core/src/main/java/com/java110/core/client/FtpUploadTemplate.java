@@ -229,6 +229,8 @@ public class FtpUploadTemplate {
                 ftpClient.connect(server, port);
             }
             ftpClient.login(userName, userPassword);
+            ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+
             ftpClient.enterLocalPassiveMode();
             if (ftpClient != null) {
                 String f = new String(
