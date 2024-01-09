@@ -5,7 +5,6 @@ import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.app.AppDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.utils.cache.CommonCache;
@@ -31,7 +30,7 @@ public class PayFeePaymentBusiness implements IPaymentBusiness {
 
         String appId = context.getReqHeaders().get("app-id");
         String userId = context.getReqHeaders().get("user-id");
-        JSONObject orderInfo = CallApiServiceFactory.postForApi(AppDto.WEB_APP_ID, reqJson, "fee.payFeePre", JSONObject.class, userId);
+        JSONObject orderInfo = CallApiServiceFactory.postForApi(appId, reqJson, "fee.payFeePre", JSONObject.class, userId);
         String orderId = orderInfo.getString("oId");
         String feeName = orderInfo.getString("feeName");
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
