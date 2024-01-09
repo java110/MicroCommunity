@@ -103,7 +103,7 @@ public class SaveStoreInfoCmd extends Cmd {
         contractApply(reqJson);
         contractChange(reqJson);
         //物品调拨流程
-        allocationStorehouse(reqJson);
+        //allocationStorehouse(reqJson);
 
         //新建账户 目前只有商家创建账户
         JSONObject businessStoreObj = reqJson.getJSONObject(StorePo.class.getSimpleName());

@@ -261,34 +261,6 @@ public class SavePropertyCmd extends Cmd {
             throw new CmdException("注册失败");
         }
 
-        //保存分公司
-//        OrgPo orgHeadPo = new OrgPo();
-//        orgHeadPo.setOrgName("公司总部");
-//        orgHeadPo.setOrgLevel("2");
-//        orgHeadPo.setOrgId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId));
-//        orgHeadPo.setAllowOperation("F");
-//        orgHeadPo.setBelongCommunityId("9999");
-//        orgHeadPo.setParentOrgId(orgPo.getOrgId());
-//        orgHeadPo.setStoreId(storePo.getStoreId());
-//        flag = orgV1InnerServiceSMOImpl.saveOrg(orgHeadPo);
-//        if (flag < 1) {
-//            throw new CmdException("注册失败");
-//        }
-
-//        //保存部门
-//        OrgPo orgHeadPartPo = new OrgPo();
-//        orgHeadPartPo.setOrgName("总部办公室");
-//        orgHeadPartPo.setOrgLevel("3");
-//        orgHeadPartPo.setOrgId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orgId));
-//        orgHeadPartPo.setAllowOperation("F");
-//        orgHeadPartPo.setBelongCommunityId("9999");
-//        orgHeadPartPo.setParentOrgId(orgHeadPo.getOrgId());
-//        orgHeadPartPo.setStoreId(storePo.getStoreId());
-//        flag = orgV1InnerServiceSMOImpl.saveOrg(orgHeadPartPo);
-//        if (flag < 1) {
-//            throw new CmdException("注册失败");
-//        }
-
 
         //添加组织 员工关系
         OrgStaffRelPo orgStaffRelPo = new OrgStaffRelPo();
@@ -302,21 +274,8 @@ public class SavePropertyCmd extends Cmd {
             throw new CmdException("注册失败");
         }
 
-        //采购流程
-        WorkflowPo workflowPo = new WorkflowPo();
-        workflowPo.setCommunityId("9999"); //所有小区
-        workflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        workflowPo.setFlowName("采购流程");
-        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_PURCHASE);
-        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-        workflowPo.setStoreId(storePo.getStoreId());
-        flag = workflowV1InnerServiceSMOImpl.saveWorkflow(workflowPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
-        }
-
         //合同申请续签
-        workflowPo = new WorkflowPo();
+        WorkflowPo workflowPo = new WorkflowPo();
         workflowPo.setCommunityId("9999"); //所有小区
         workflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         workflowPo.setFlowName("合同申请续签");
@@ -340,20 +299,6 @@ public class SavePropertyCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("注册失败");
         }
-
-        //物品调拨
-        workflowPo = new WorkflowPo();
-        workflowPo.setCommunityId("9999"); //所有小区
-        workflowPo.setFlowId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        workflowPo.setFlowName("物品调拨");
-        workflowPo.setFlowType(WorkflowDto.FLOW_TYPE_ALLOCATION_STOREHOUSE);
-        workflowPo.setSkipLevel(WorkflowDto.DEFAULT_SKIP_LEVEL);
-        workflowPo.setStoreId(storePo.getStoreId());
-        flag = workflowV1InnerServiceSMOImpl.saveWorkflow(workflowPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
-        }
-
 
         String defaultPrivilege = MappingCache.getValue(MappingConstant.DOMAIN_DEFAULT_PRIVILEGE_ADMIN, StoreDto.STORE_TYPE_PROPERTY);
 
