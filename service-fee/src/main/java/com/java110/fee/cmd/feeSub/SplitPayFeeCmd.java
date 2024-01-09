@@ -120,8 +120,8 @@ public class SplitPayFeeCmd extends Cmd {
 
         }
 
-        String startDate = DateUtil.getFormatTimeStringB(feeDto.getEndTime());
-        String deadlineTime =DateUtil.getFormatTimeStringB(feeDto.getDeadlineTime());
+        String startDate = DateUtil.getFormatTimeStringB(endTime);
+        String deadlineTime =DateUtil.getFormatTimeStringB(maxTime);
 
 
         if(splitTime.getTime() == DateUtil.getDateFromStringB(startDate).getTime()
