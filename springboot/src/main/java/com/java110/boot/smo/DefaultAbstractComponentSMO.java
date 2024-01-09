@@ -39,6 +39,8 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
     protected static final String DEFAULT_PAY_ADAPT = "wechatPayAdapt";// 默认微信通用支付
     private static final String URL_API = "";
 
+    @Autowired
+    private IGetCommunityStoreInfoSMO getCommunityStoreInfoSMOImpl;
 
     @Autowired
     private WechatAuthProperties wechatAuthProperties;
@@ -52,9 +54,6 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
-    @Autowired
-    private IGetCommunityStoreInfoSMO getCommunityStoreInfoSMOImpl;
-
     //微信支付
     public static final String DOMAIN_WECHAT_PAY = "WECHAT_PAY";
     // 微信服务商支付开关
@@ -65,10 +64,6 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
     private static final String WECHAT_SERVICE_APP_ID = "SERVICE_APP_ID";
 
     private static final String WECHAT_SERVICE_MCH_ID = "SERVICE_MCH_ID";
-
-
-    @Autowired
-    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
 
     /**
@@ -96,9 +91,12 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
 
         headers.put(CommonConstant.USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
 
-
-        headers.put(CommonConstant.HTTP_APP_ID, AppDto.WEB_APP_ID);
-        headers.put(CommonConstant.APP_ID, AppDto.WEB_APP_ID);
+        if (!headers.containsKey(CommonConstant.HTTP_APP_ID)) {
+            headers.put(CommonConstant.HTTP_APP_ID, AppDto.WEB_APP_ID);
+        }
+        if (!headers.containsKey(CommonConstant.APP_ID)) {
+            headers.put(CommonConstant.APP_ID, AppDto.WEB_APP_ID);
+        }
 
         if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
             headers.put(CommonConstant.HTTP_TRANSACTION_ID, GenerateCodeFactory.getUUID());
@@ -106,22 +104,18 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         if (!headers.containsKey(CommonConstant.HTTP_REQ_TIME)) {
             headers.put(CommonConstant.HTTP_REQ_TIME, DateUtil.getNowDefault());
         }
-        if (!headers.containsKey(CommonConstant.HTTP_SIGN)) {
-            headers.put(CommonConstant.HTTP_SIGN, "");
-        }
 
         if (url.indexOf("?") > -1) {
             url = url.substring(0, url.indexOf("?"));
         }
         headers.put(CommonConstant.HTTP_SERVICE, url);
         headers.put(CommonConstant.HTTP_METHOD, CommonConstant.getHttpMethodStr(httpMethod));
-
         if (HttpMethod.GET == httpMethod) {
             initUrlParam(JSONObject.parseObject(param), headers);
-        }
-        if (HttpMethod.GET == httpMethod) {
             headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
         }
+        AuthenticationFactory.createSign(headers,httpMethod,headers.get("REQUEST_URL"),param);
+
         try {
             responseEntity = apiServiceSMOImpl.service(param, headers);
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
@@ -339,6 +333,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         if (basePrivilegeDtos == null || basePrivilegeDtos.size() < 1) {
             return;
         }
+        String tmpResource = null;
         boolean hasPrivilege = false;
         for (BasePrivilegeDto privilegeDto : basePrivilegeDtos) {
             if (resource.equals(privilegeDto.getResource())) {
@@ -349,18 +344,20 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
             return;
         }
 
-        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-        basePrivilegeDto.setResource(resource);
-        basePrivilegeDto.setUserId(pd.getUserId());
-        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        ResultVo resultVo = getCommunityStoreInfoSMOImpl.checkUserHasResourceListener(restTemplate, pd, paramIn, pd.getUserId());
+        if (resultVo == null ||
+                resultVo.getCode() != ResultVo.CODE_OK) {
+            throw new UnsupportedOperationException("用户没有权限操作");
+        }
+        JSONArray privileges = JSONArray.parseArray(resultVo.getMsg());
 
+        hasPrivilege = false;
         if (privileges == null || privileges.size() < 1) {
             throw new UnsupportedOperationException("用户没有权限操作");
         }
-
-        hasPrivilege = false;
         for (int privilegeIndex = 0; privilegeIndex < privileges.size(); privilegeIndex++) {
-            if (resource.equals(privileges.get(privilegeIndex).get("resource"))) {
+            tmpResource = privileges.getJSONObject(privilegeIndex).getString("resource");
+            if (resource.equals(tmpResource)) {
                 hasPrivilege = true;
                 break;
             }
@@ -380,7 +377,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         Assert.hasLength(pd.getUserId(), "用户未登录请先登录");
 
         ResultVo resultVo = getCommunityStoreInfoSMOImpl.getStoreInfo(pd, restTemplate, pd.getUserId());
-        logger.debug("查询商户信息 getStoreInfo ：{}", resultVo.toString());
+
         return new ResponseEntity<String>(resultVo.getMsg(), resultVo.getCode() == ResultVo.CODE_OK ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
@@ -410,6 +407,7 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         }
 
     }
+
 
     private JSONObject getCurrentCommunity(JSONArray communitys, String communityId) {
         for (int communityIndex = 0; communityIndex < communitys.size(); communityIndex++) {
