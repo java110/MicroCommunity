@@ -1,6 +1,7 @@
 package com.java110.api.smo.payment.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
@@ -168,7 +169,9 @@ public class GoodsToNotifySMOImpl implements IGoodsToNotifySMO {
         header.add(CommonConstant.HTTP_USER_ID.toLowerCase(), userId);
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
-        header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        //header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        AuthenticationFactory.createSign(header,httpMethod,url,param);
+
         header.add("content-type", "application/json");
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
         //logger.debug("请求中心服务信息，{}", httpEntity);

@@ -277,7 +277,8 @@ public class CallApiServiceFactory {
         header.add(CommonConstant.USER_ID.toLowerCase(), StringUtil.isEmpty(pd.getUserId()) ? CommonConstant.ORDER_DEFAULT_USER_ID : pd.getUserId());
         header.add(CommonConstant.HTTP_TRANSACTION_ID.toLowerCase(), StringUtil.isEmpty(pd.getTransactionId()) ? GenerateCodeFactory.getUUID() : pd.getTransactionId());
         header.add(CommonConstant.HTTP_REQ_TIME.toLowerCase(), StringUtil.isEmpty(pd.getRequestTime()) ? DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT) : pd.getRequestTime());
-        header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        //header.add(CommonConstant.HTTP_SIGN.toLowerCase(), "");
+        AuthenticationFactory.createSign(header,httpMethod,url,param);
 
         HttpEntity<String> httpEntity = new HttpEntity<String>(param, header);
         //logger.debug("请求中心服务信息，{}", httpEntity);

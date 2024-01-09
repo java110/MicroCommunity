@@ -14,6 +14,8 @@ import com.java110.core.context.DataFlow;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.reportData.ReportDataDto;
 import com.java110.dto.reportData.ReportDataHeaderDto;
+import com.java110.dto.system.AppRoute;
+import com.java110.utils.cache.AppRouteCache;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.JWTCache;
 import com.java110.utils.cache.MappingCache;
@@ -22,9 +24,12 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.NoAuthorityException;
 import com.java110.utils.util.Base64Convert;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
@@ -37,10 +42,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 鉴权工厂类
@@ -237,7 +239,7 @@ public class AuthenticationFactory {
         reqInfo += ((dataFlow.getReqBusiness() == null || dataFlow.getReqBusiness().size() == 0)
                 ? dataFlow.getReqData() : dataFlow.getReqBusiness().toJSONString());
         reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
-        logger.debug("加密字符串={}",reqInfo);
+        logger.debug("加密字符串={}", reqInfo);
         return md5(reqInfo);
     }
 
@@ -284,9 +286,90 @@ public class AuthenticationFactory {
         reqInfo += "GET".equals(dataFlow.getRequestHeaders().get(CommonConstant.HTTP_METHOD)) ?
                 param : dataFlow.getReqData();
         reqInfo += dataFlow.getAppRoutes().get(0).getSecurityCode();
-        logger.debug("加密字符串={}",reqInfo);
+        logger.debug("加密字符串={}", reqInfo);
 
         return md5(reqInfo);
+    }
+
+    /**
+     * 创建 签名
+     * @param headers
+     * @param httpMethod
+     * @param url
+     * @param param
+     */
+    public static void createSign(HttpHeaders headers, HttpMethod httpMethod, String url, String param) {
+
+
+
+        String appId = headers.getFirst(CommonConstant.HTTP_APP_ID);
+        if (StringUtil.isEmpty(appId)) {
+            appId = headers.getFirst(CommonConstant.APP_ID);
+        }
+        String transactionId = headers.getFirst(CommonConstant.HTTP_TRANSACTION_ID);
+        if (StringUtil.isEmpty(transactionId)) {
+            transactionId = headers.getFirst(CommonConstant.TRANSACTION_ID);
+        }
+        String requestTime = headers.getFirst(CommonConstant.HTTP_REQ_TIME);
+        if (StringUtil.isEmpty(transactionId)) {
+            requestTime = headers.getFirst(CommonConstant.REQUEST_TIME);
+        }
+
+        List<AppRoute> appRoutes = AppRouteCache.getAppRoute(appId);
+        if (ListUtil.isNull(appRoutes)) {
+            return;
+        }
+        if (StringUtil.isEmpty(appRoutes.get(0).getSecurityCode())) {
+            return;
+        }
+        String paramStr = "";
+        if (HttpMethod.GET == httpMethod) {
+            paramStr = url.substring(url.indexOf("?"));
+        } else {
+            paramStr = param;
+        }
+        String sign = transactionId + requestTime + appId + paramStr + appRoutes.get(0).getSecurityCode();
+        headers.remove("sign");
+        headers.add("sign", md5(sign));
+    }
+
+
+    /**
+     * 创建 签名
+     * @param headers
+     * @param httpMethod
+     * @param url
+     * @param param
+     */
+    public static void createSign(Map<String, String> headers, HttpMethod httpMethod, String url, String param) {
+        String appId = headers.get(CommonConstant.HTTP_APP_ID);
+        if (StringUtil.isEmpty(appId)) {
+            appId = headers.get(CommonConstant.APP_ID);
+        }
+        String transactionId = headers.get(CommonConstant.HTTP_TRANSACTION_ID);
+        if (StringUtil.isEmpty(transactionId)) {
+            transactionId = headers.get(CommonConstant.TRANSACTION_ID);
+        }
+        String requestTime = headers.get(CommonConstant.HTTP_REQ_TIME);
+        if (StringUtil.isEmpty(transactionId)) {
+            requestTime = headers.get(CommonConstant.REQUEST_TIME);
+        }
+
+        List<AppRoute> appRoutes = AppRouteCache.getAppRoute(appId);
+        if (ListUtil.isNull(appRoutes)) {
+            return;
+        }
+        if (StringUtil.isEmpty(appRoutes.get(0).getSecurityCode())) {
+            return;
+        }
+        String paramStr = "";
+        if (HttpMethod.GET == httpMethod) {
+            paramStr = url.substring(url.indexOf("?"));
+        } else {
+            paramStr = param;
+        }
+        String sign = transactionId + requestTime + appId + paramStr + appRoutes.get(0).getSecurityCode();
+        headers.put("sign", md5(sign));
     }
 
     /**
