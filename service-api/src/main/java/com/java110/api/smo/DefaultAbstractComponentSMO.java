@@ -152,9 +152,6 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         if (!headers.containsKey(CommonConstant.HTTP_REQ_TIME)) {
             headers.put(CommonConstant.HTTP_REQ_TIME, DateUtil.getNowDefault());
         }
-        if (!headers.containsKey(CommonConstant.HTTP_SIGN)) {
-            headers.put(CommonConstant.HTTP_SIGN, "");
-        }
 
         if (url.indexOf("?") > -1) {
             url = url.substring(0, url.indexOf("?"));
@@ -168,6 +165,8 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         if (HttpMethod.GET == httpMethod) {
             headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
         }
+        AuthenticationFactory.createSign(headers,httpMethod,headers.get("REQUEST_URL"),param);
+
         try {
             responseEntity = apiServiceSMOImpl.service(param, headers);
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下

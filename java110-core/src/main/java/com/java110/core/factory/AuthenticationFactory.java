@@ -342,17 +342,17 @@ public class AuthenticationFactory {
      * @param param
      */
     public static void createSign(Map<String, String> headers, HttpMethod httpMethod, String url, String param) {
-        String appId = headers.get(CommonConstant.HTTP_APP_ID);
+        String appId = headers.get(CommonConstant.APP_ID);
         if (StringUtil.isEmpty(appId)) {
-            appId = headers.get(CommonConstant.APP_ID);
+            appId = headers.get(CommonConstant.HTTP_APP_ID);
         }
-        String transactionId = headers.get(CommonConstant.HTTP_TRANSACTION_ID);
+        String transactionId = headers.get(CommonConstant.TRANSACTION_ID);
         if (StringUtil.isEmpty(transactionId)) {
-            transactionId = headers.get(CommonConstant.TRANSACTION_ID);
+            transactionId = headers.get(CommonConstant.HTTP_TRANSACTION_ID);
         }
-        String requestTime = headers.get(CommonConstant.HTTP_REQ_TIME);
+        String requestTime = headers.get(CommonConstant.REQUEST_TIME);
         if (StringUtil.isEmpty(transactionId)) {
-            requestTime = headers.get(CommonConstant.REQUEST_TIME);
+            requestTime = headers.get(CommonConstant.HTTP_REQ_TIME);
         }
 
         List<AppRoute> appRoutes = AppRouteCache.getAppRoute(appId);
