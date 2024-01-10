@@ -125,7 +125,7 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         generatorBatch(reqJson);
 
         RoomDto roomDto = new RoomDto();
-        roomDto.setRoomType(reqJson.getString("roomType"));
+        //roomDto.setRoomType(reqJson.getString("roomType"));
         roomDto.setCommunityId(reqJson.getString("communityId"));
         roomDto.setRoomId(reqJson.getString("locationObjId"));
         roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
