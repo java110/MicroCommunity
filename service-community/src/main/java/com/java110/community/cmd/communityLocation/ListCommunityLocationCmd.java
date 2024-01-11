@@ -27,6 +27,7 @@ import com.java110.intf.community.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,13 +87,17 @@ public class ListCommunityLocationCmd extends Cmd {
                     UnitDto unitDto = new UnitDto();
                     unitDto.setUnitId(communityLocation.getLocationObjId());
                     List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-                    Assert.listOnlyOne(unitDtos, "查询单元错误");
+                    if(ListUtil.isNull(unitDtos)){
+                        continue;
+                    }
                     communityLocation.setFloorId(unitDtos.get(0).getFloorId());
                     communityLocation.setUnitId(unitDtos.get(0).getUnitId());
                     FloorDto floorDto = new FloorDto();
                     floorDto.setFloorId(unitDtos.get(0).getFloorId());
                     List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-                    Assert.listOnlyOne(floorDtos, "查询楼栋错误");
+                    if(ListUtil.isNull(floorDtos)){
+                        continue;
+                    }
                 } else if (!StringUtil.isEmpty(communityLocation.getLocationType()) && communityLocation.getLocationType().equals("6000")
                         && !StringUtil.isEmpty(communityLocation.getLocationObjId()) && !communityLocation.getLocationObjId().equals("-1")) { //楼栋
                     communityLocation.setFloorId(communityLocation.getLocationObjId());
