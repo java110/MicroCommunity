@@ -147,11 +147,15 @@ public class RentingApi {
     public ResponseEntity<String> queryRentingConfig(
             @RequestParam(value = "page") int page,
             @RequestParam(value = "row") int row,
-            @RequestParam(value = "rentingConfigId", required = false) String rentingConfigId) {
+            @RequestParam(value = "rentingConfigId", required = false) String rentingConfigId,
+            @RequestParam(value = "rentingType",required = false) String rentingType,
+            @RequestParam(value = "rentingFormula",required = false) String rentingFormula) {
         RentingConfigDto rentingConfigDto = new RentingConfigDto();
         rentingConfigDto.setPage(page);
         rentingConfigDto.setRow(row);
         rentingConfigDto.setRentingConfigId(rentingConfigId);
+        rentingConfigDto.setRentingType(rentingType);
+        rentingConfigDto.setRentingFormula(rentingFormula);
         return getRentingConfigBMOImpl.get(rentingConfigDto);
     }
 
