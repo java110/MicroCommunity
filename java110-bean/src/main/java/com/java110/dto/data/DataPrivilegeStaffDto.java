@@ -28,11 +28,9 @@ public class DataPrivilegeStaffDto extends PageDto implements Serializable {
 
     private String storeId;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getDpsId() {
         return dpsId;
@@ -81,7 +79,6 @@ public class DataPrivilegeStaffDto extends PageDto implements Serializable {
     public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -138,4 +135,5 @@ public class DataPrivilegeStaffDto extends PageDto implements Serializable {
     public void setSex(String sex) {
         this.sex = sex;
     }
+
 }

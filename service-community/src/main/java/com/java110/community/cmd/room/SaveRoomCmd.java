@@ -1,5 +1,6 @@
 package com.java110.community.cmd.room;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -10,20 +11,22 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.unit.UnitDto;
+import com.java110.intf.community.IRoomAttrV1InnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.po.owner.OwnerRoomRelPo;
+import com.java110.po.room.RoomAttrPo;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-
 
 @Java110CmdDoc(title = "添加房屋",
         description = "对应后台 添加房屋功能",
@@ -91,6 +94,9 @@ public class SaveRoomCmd extends Cmd {
     @Autowired
     private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IRoomAttrV1InnerServiceSMO roomAttrV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
@@ -102,31 +108,24 @@ public class SaveRoomCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "state", "请求报文中未包含state节点");
         Assert.jsonObjectHaveKey(reqJson, "builtUpArea", "请求报文中未包含builtUpArea节点");
         Assert.jsonObjectHaveKey(reqJson, "feeCoefficient", "请求报文中未包含feeCoefficient节点");
-
         Assert.isInteger(reqJson.getString("section"), "房间数不是有效数字");
         Assert.isMoney(reqJson.getString("builtUpArea"), "建筑面积数据格式错误");
         Assert.isMoney(reqJson.getString("feeCoefficient"), "房屋单价数据格式错误");
-
         if (!reqJson.containsKey("roomSubType")) {
             reqJson.put("roomSubType", RoomDto.ROOM_SUB_TYPE_PERSON);
         }
-
         if (!reqJson.containsKey("roomRent")) {
             reqJson.put("roomRent", "0");
         }
-
         if (!reqJson.containsKey("roomArea")) {
             reqJson.put("roomRent", reqJson.getString("builtUpArea"));
         }
-
         if (!RoomDto.STATE_FREE.equals(reqJson.getString("state"))) {
             Assert.hasKeyAndValue(reqJson, "ownerId", "未包含业主信息");
         }
-
         /*if (!"1010".equals(reqJson.getString("apartment")) && !"2020".equals(reqJson.getString("apartment"))) {
             throw new IllegalArgumentException("不是有效房屋户型 传入数据错误");
         }*/
-
         if (!"2001".equals(reqJson.getString("state"))
                 && !"2002".equals(reqJson.getString("state"))
                 && !"2003".equals(reqJson.getString("state"))
@@ -135,17 +134,14 @@ public class SaveRoomCmd extends Cmd {
                 && !"2009".equals(reqJson.getString("state"))) {
             throw new IllegalArgumentException("不是有效房屋状态 传入数据错误");
         }
-
         UnitDto unitDto = new UnitDto();
         unitDto.setCommunityId(reqJson.getString("communityId"));
         unitDto.setUnitId(reqJson.getString("unitId"));
         //校验小区楼ID和小区是否有对应关系
         List<UnitDto> units = unitInnerServiceSMOImpl.queryUnitsByCommunityId(unitDto);
-
         if (units == null || units.size() < 1) {
             throw new IllegalArgumentException("传入单元ID不是该小区的单元");
         }
-
         reqJson.put("unitNum", units.get(0).getUnitNum());
     }
 
@@ -157,18 +153,13 @@ public class SaveRoomCmd extends Cmd {
         } else {
             reqJson.put("roomType", RoomDto.ROOM_TYPE_ROOM);
         }
-
-
         reqJson.put("roomId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_roomId));
         reqJson.put("userId", context.getReqHeaders().get(CommonConstant.HTTP_USER_ID));
         RoomPo roomPo = BeanConvertUtil.covertBean(reqJson, RoomPo.class);
         roomV1InnerServiceSMOImpl.saveRoom(roomPo);
-
         if (RoomDto.STATE_FREE.equals(roomPo.getState())) {
             return;
         }
-
-
         if (!reqJson.containsKey("startTime")) {
             reqJson.put("startTime", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         }
@@ -186,11 +177,39 @@ public class SaveRoomCmd extends Cmd {
         ownerRoomRelPo.setOperate("ADD");
         ownerRoomRelPo.setUserId("-1");
         int flag = ownerRoomRelV1InnerServiceSMOImpl.saveOwnerRoomRel(ownerRoomRelPo);
-
         if (flag < 1) {
             throw new CmdException("添加业主房屋关系");
         }
-
-
+        JSONArray attrs = reqJson.getJSONArray("attrs");
+        if (attrs == null || attrs.size() < 1) {
+            return;
+        }
+        JSONObject attr = null;
+        int count = 0;
+        for (int attrIndex = 0; attrIndex < attrs.size(); attrIndex++) {
+            attr = attrs.getJSONObject(attrIndex);
+            attr.put("roomId", reqJson.getString("roomId"));
+            if (!attr.containsKey("attrId") || attr.getString("attrId").startsWith("-") || StringUtil.isEmpty(attr.getString("attrId"))) {
+                RoomAttrPo roomAttrPo = new RoomAttrPo();
+                roomAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+                roomAttrPo.setRoomId(attr.getString("roomId"));
+                roomAttrPo.setSpecCd(attr.getString("specCd"));
+                roomAttrPo.setValue(attr.getString("value"));
+                count = roomAttrV1InnerServiceSMOImpl.saveRoomAttr(roomAttrPo);
+                if (count < 1) {
+                    throw new CmdException("保存单元失败");
+                }
+                continue;
+            }
+            RoomAttrPo roomAttrPo = new RoomAttrPo();
+            roomAttrPo.setAttrId(attr.getString("attrId"));
+            roomAttrPo.setRoomId(attr.getString("roomId"));
+            roomAttrPo.setSpecCd(attr.getString("specCd"));
+            roomAttrPo.setValue(attr.getString("value"));
+            count = roomAttrV1InnerServiceSMOImpl.updateRoomAttr(roomAttrPo);
+            if (count < 1) {
+                throw new CmdException("保存单元失败");
+            }
+        }
     }
 }

@@ -16,6 +16,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.fee.PayFeeDetailDto;
 import com.java110.po.fee.PayFeeDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,15 +37,23 @@ import java.util.List;
 @RequestMapping("/payFeeDetailNewV1Api")
 public interface IPayFeeDetailV1InnerServiceSMO {
 
-
     @RequestMapping(value = "/savePayFeeDetailNew", method = RequestMethod.POST)
     public int savePayFeeDetailNew(@RequestBody PayFeeDetailPo PayFeeDetailPo);
 
     @RequestMapping(value = "/updatePayFeeDetailNew", method = RequestMethod.POST)
-    public int updatePayFeeDetailNew(@RequestBody  PayFeeDetailPo PayFeeDetailPo);
+    public int updatePayFeeDetailNew(@RequestBody PayFeeDetailPo PayFeeDetailPo);
 
     @RequestMapping(value = "/deletePayFeeDetailNew", method = RequestMethod.POST)
-    public int deletePayFeeDetailNew(@RequestBody  PayFeeDetailPo PayFeeDetailPo);
+    public int deletePayFeeDetailNew(@RequestBody PayFeeDetailPo PayFeeDetailPo);
+
+    @RequestMapping(value = "/queryPayFeeDetailNew", method = RequestMethod.POST)
+    public List<PayFeeDetailDto> queryPayFeeDetailNew(@RequestBody PayFeeDetailDto payFeeDetailDto);
+
+    @RequestMapping(value = "/queryPayFeeDetailNewCount", method = RequestMethod.POST)
+    public int queryPayFeeDetailNewCount(@RequestBody PayFeeDetailDto payFeeDetailDto);
+
+    @RequestMapping(value = "/queryPayFeeDetailNewSum", method = RequestMethod.POST)
+    public List<PayFeeDetailDto> queryPayFeeDetailNewSum(@RequestBody PayFeeDetailDto payFeeDetailDto);
 
 //    /**
 //     * <p>查询小区楼信息</p>

@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="resourceStoreTimesV1ServiceDaoImpl">
 
-
     <!-- 保存物品次数信息 add by wuxw 2018-07-03 -->
     <insert id="saveResourceStoreTimesInfo" parameterType="Map">
-        insert into resource_store_times(
-        price,apply_order_id,store_id,stock,res_code,times_id,sh_id,community_id
-        ) values (
-        #{price},#{applyOrderId},#{storeId},#{stock},#{resCode},#{timesId},#{shId},#{communityId}
-        )
+        insert into resource_store_times(price, apply_order_id, store_id, stock, res_code, times_id, sh_id,
+                                         community_id)
+        values (#{price}, #{applyOrderId}, #{storeId}, #{stock}, #{resCode}, #{timesId}, #{shId}, #{communityId})
     </insert>
-
 
     <!-- 查询物品次数信息 add by wuxw 2018-07-03 -->
     <select id="getResourceStoreTimesInfo" parameterType="Map" resultType="Map">
         select t.price,t.apply_order_id,t.apply_order_id applyOrderId,t.status_cd,t.status_cd
         statusCd,t.store_id,t.store_id storeId,t.stock,t.res_code,t.res_code resCode,t.times_id,
-        t.times_id timesId,t.create_time createTime,(t.price * t.stock) totalPrice,
+        t.times_id timesId,t.create_time createTime,ROUND(t.price * t.stock,2) totalPrice,
         rs.res_name,rs.res_name resName,rs.description,rs.store_id,rs.store_id storeId,
-        rs.stock,rs.warning_stock,rs.warning_stock warningStock,rs.res_id,rs.res_id resId,rs.out_low_price,rs.rss_id,rs.rss_id rssId,
+        rs.stock,rs.warning_stock,rs.warning_stock warningStock,rs.res_id,rs.res_id
+        resId,rs.out_low_price,rs.rss_id,rs.rss_id rssId,
         rs.out_low_price outLowPrice,rs.out_high_price,rs.out_high_price outHighPrice,
         rs.unit_code,rs.unit_code unitCode,rs.remark,rs.show_mobile,rs.show_mobile showMobile,
         rs.sh_id,rs.sh_id shId,sh.sh_name shName,rs.average_price,rs.average_price
@@ -98,9 +94,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改物品次数信息 add by wuxw 2018-07-03 -->
     <update id="updateResourceStoreTimesInfo" parameterType="Map">
@@ -114,7 +108,6 @@
         <if test="applyOrderId !=null and applyOrderId != ''">
             , t.apply_order_id= #{applyOrderId}
         </if>
-
         <if test="stock !=null and stock != ''">
             , t.stock= #{stock}
         </if>
@@ -131,7 +124,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </update>
 
     <!-- 查询物品次数数量 add by wuxw 2018-07-03 -->
@@ -201,8 +193,6 @@
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
-
-
     </select>
 
     <!-- 查询物品次数数量 add by wuxw 2018-07-03 -->
@@ -246,8 +236,5 @@
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
-
-
     </select>
-
 </mapper>

@@ -9,5 +9,5 @@ public interface IAllocationBMO {
      * @param tmpAllocationStorehouseDto
      * @param allocationStock
      */
-    void doToAllocationStorehouse(AllocationStorehouseDto tmpAllocationStorehouseDto, int allocationStock);
+    void doToAllocationStorehouse(AllocationStorehouseDto tmpAllocationStorehouseDto, double allocationStock);
 }

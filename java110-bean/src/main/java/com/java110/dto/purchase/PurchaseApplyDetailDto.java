@@ -11,38 +11,39 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
     private String id;
     private String applyOrderId;
     private String statusCd;
-
-    private String resId;
-    private String rsId;
+    private String resId; //物品资源id
+    private String rsId; //供应商id
+    private String parentRstId; //一级分类
+    private String rstId; //类型id
+    private String rssId; //规格id
     private String resName;
     private String remark;
-    private String  quantity;
-    private String  purchaseQuantity;
-    private String  purchaseRemark;
+    private String quantity;
+    private String purchaseQuantity;
+    private String purchaseRemark;
     private String price;
-    private String  resOrderType;
-    private String  userId;
-    private String  userName;
+    private String resOrderType;
+    private String userId;
+    private String userName;
     private String description;
     private String state;
-    private String  endUserName;
-    private String  endUserTel;
-    private String  warehousingWay;
-    private String  createTime;
-    private String  supplierName;
-    private String  resOrderTypeName;
-    private String  stateName;
-    private String  warehousingWayName;
-    private String  rstName;
-    private String  parentRstName;
-    private String  specName;
-    private String  shId;
-    private String  unitCodeName;
-    private String  miniUnitCodeName;
-    private String  shName;
-    private String  isFixed;
-    private String  isFixedName;
-
+    private String endUserName;
+    private String endUserTel;
+    private String warehousingWay;
+    private String createTime;
+    private String supplierName;
+    private String resOrderTypeName;
+    private String stateName;
+    private String warehousingWayName;
+    private String rstName;
+    private String parentRstName;
+    private String specName;
+    private String shId;
+    private String unitCodeName;
+    private String miniUnitCodeName;
+    private String shName;
+    private String isFixed;
+    private String isFixedName;
 
     private List<String> applyOrderIds;
 
@@ -60,10 +61,13 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     private String createUserId;
 
-
-
     private String storeId;
     private String communityId;
+
+    private String name;
+
+    private String startTime;
+    private String endTime;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -415,6 +419,54 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getRstId() {
+        return rstId;
+    }
+
+    public void setRstId(String rstId) {
+        this.rstId = rstId;
+    }
+
+    public String getParentRstId() {
+        return parentRstId;
+    }
+
+    public void setParentRstId(String parentRstId) {
+        this.parentRstId = parentRstId;
     }
 }
 

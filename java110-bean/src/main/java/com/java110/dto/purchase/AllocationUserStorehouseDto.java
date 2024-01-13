@@ -45,6 +45,9 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
     private String isFixedName;
     private String resCode;
 
+    private String startTime;
+    private String endTime;
+
     public String getAcceptUserId() {
         return acceptUserId;
     }
@@ -251,5 +254,21 @@ public class AllocationUserStorehouseDto extends PageDto implements Serializable
 
     public void setResCode(String resCode) {
         this.resCode = resCode;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

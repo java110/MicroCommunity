@@ -71,7 +71,7 @@ public class ResourceStoreTimesV1InnerServiceSMOImpl extends BaseServiceSMO impl
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));
             return saveResourceStoreTimes(resourceStoreTimesPo);
         }
-        int stock = Integer.parseInt(resourceStoreTimesDtos.get(0).getStock()) + Integer.parseInt(resourceStoreTimesPo.getStock());
+        double stock = Double.parseDouble(resourceStoreTimesDtos.get(0).getStock()) + Double.parseDouble(resourceStoreTimesPo.getStock());
         resourceStoreTimesPo.setStock(stock + "");
         resourceStoreTimesPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
         return updateResourceStoreTimes(resourceStoreTimesPo);

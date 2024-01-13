@@ -1,6 +1,7 @@
 package com.java110.dto.privilege;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,8 @@ import java.util.Date;
 public class PrivilegeRelDto extends PageDto implements Serializable {
 
     private String relId;
-private String pgId;
-private String pId;
-
+    private String pgId;
+    private String pId;
 
     private Date createTime;
 

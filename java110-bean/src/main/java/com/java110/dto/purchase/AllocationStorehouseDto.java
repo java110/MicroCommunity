@@ -70,6 +70,9 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String timesId;
     private String communityId;
 
+    private String startTime;
+    private String endTime;
+
     private List<ResourceStoreTimesDto> times;
 
     public String getAsId() {
@@ -337,7 +340,6 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
         this.rssId = rssId;
     }
 
-
     public String getApplyType() {
         return applyType;
     }
@@ -432,5 +434,21 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

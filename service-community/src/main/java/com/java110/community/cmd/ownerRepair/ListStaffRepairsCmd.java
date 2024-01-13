@@ -65,13 +65,13 @@ public class ListStaffRepairsCmd extends Cmd {
             viewListStaffRepairs = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN, VIEW_LIST_STAFF_REPAIRS);
         }
         List<Map> privileges = null;
-        if ("ON".equals(viewListStaffRepairs)) {//是否让管理员看到所有工单
+        if ("ON".equals(viewListStaffRepairs)) { //是否让管理员看到所有工单
             //报修待办查看所有记录权限
             BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
             basePrivilegeDto.setResource("/viewListStaffRepairs");
             basePrivilegeDto.setUserId(userId);
             privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        }else{
+        } else {
             ownerRepairDto.setStaffId(userId);
         }
         if (privileges == null || privileges.size() == 0) {

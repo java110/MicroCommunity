@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="assetInventoryV1ServiceDaoImpl">
-
 
     <!-- 保存盘点管理信息 add by wuxw 2018-07-03 -->
     <insert id="saveAssetInventoryInfo" parameterType="Map">
@@ -63,6 +61,12 @@
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
         </if>
+        <if test="startTime != null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
         <if test="invTime !=null and invTime != ''">
             and t.inv_time= #{invTime}
         </if>
@@ -88,9 +92,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改盘点管理信息 add by wuxw 2018-07-03 -->
     <update id="updateAssetInventoryInfo" parameterType="Map">
@@ -193,6 +195,12 @@
         <if test="createTime !=null and createTime != ''">
             and t.create_time= #{createTime}
         </if>
+        <if test="startTime != null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
         <if test="invTime !=null and invTime != ''">
             and t.inv_time= #{invTime}
         </if>
@@ -214,8 +222,5 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
-
-
     </select>
-
 </mapper>

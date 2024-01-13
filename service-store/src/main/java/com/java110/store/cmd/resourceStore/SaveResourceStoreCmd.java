@@ -48,6 +48,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -117,6 +118,7 @@ public class SaveResourceStoreCmd extends Cmd {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
     @Autowired
     private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
@@ -134,7 +136,6 @@ public class SaveResourceStoreCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "price", "必填，请填写物品价格");
         Assert.hasKeyAndValue(reqJson, "shId", "必填，请填写仓库");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区");
-
         //获取最低收费标准
         double outLowPrice = Double.parseDouble(reqJson.getString("outLowPrice"));
         //获取最高收费标准
@@ -142,7 +143,6 @@ public class SaveResourceStoreCmd extends Cmd {
         if (outLowPrice > outHighPrice) {
             throw new IllegalArgumentException("最低收费标准不能大于最高收费标准！");
         }
-
         String resCode = reqJson.getString("resCode");
         String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
         //根据物品编码查询物品资源表
@@ -152,7 +152,6 @@ public class SaveResourceStoreCmd extends Cmd {
         List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
         //判断资源表里是否有该物品编码，避免物品编码重复
         Assert.listIsNull(resourceStoreDtos, "物品编码重复，请重新添加！");
-
     }
 
     @Override
@@ -164,7 +163,15 @@ public class SaveResourceStoreCmd extends Cmd {
         businessResourceStore.putAll(reqJson);
         businessResourceStore.put("resId", GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));
         // businessResourceStore.put("stock", "0");
-        businessResourceStore.put("miniStock", "0");
+        if (!StringUtil.isEmpty(reqJson.getString("stock")) && !StringUtil.isEmpty(reqJson.getString("miniUnitStock"))) {
+            double stock = Double.parseDouble(reqJson.getString("stock"));
+            double miniUnitStock = Double.parseDouble(reqJson.getString("miniUnitStock"));
+            double miniStock = stock * miniUnitStock;
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            businessResourceStore.put("miniStock", decimalFormat.format(miniStock));
+        } else {
+            businessResourceStore.put("miniStock", "0");
+        }
         businessResourceStore.put("createTime", new Date());
         ResourceStorePo resourceStorePo = BeanConvertUtil.covertBean(businessResourceStore, ResourceStorePo.class);
         if (StringUtil.isEmpty(resourceStorePo.getAveragePrice())) {
@@ -175,10 +182,8 @@ public class SaveResourceStoreCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         //todo 入库
         inStore(reqJson, userId, storeId, resourceStorePo);
-
         //将图片插入文件表里
         FileRelPo fileRelPo = new FileRelPo();
         fileRelPo.setObjId(resourceStorePo.getResId());
@@ -211,17 +216,14 @@ public class SaveResourceStoreCmd extends Cmd {
      * @param storeId
      */
     private void inStore(JSONObject reqJson, String userId, String storeId, ResourceStorePo resourceStorePo) {
-
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         userDto.setPage(1);
         userDto.setRow(1);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
         Assert.listOnlyOne(userDtos, "用户不存在");
-
         String applyOrderId = "-1";
-        int stock = Integer.parseInt(resourceStorePo.getStock());
+        double stock = Double.parseDouble(resourceStorePo.getStock());
         //todo 如果有库存才生成 采购流程
         if (stock > 0) {
             applyOrderId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId);
@@ -242,7 +244,6 @@ public class SaveResourceStoreCmd extends Cmd {
             purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
             //获取采购物品信息
             List<PurchaseApplyDetailPo> purchaseApplyDetailPos = new ArrayList<>();
-
             PurchaseApplyDetailPo purchaseApplyDetailPo = new PurchaseApplyDetailPo();
             purchaseApplyDetailPo.setApplyOrderId(applyOrderId);
             purchaseApplyDetailPo.setId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyOrderId));
@@ -260,7 +261,6 @@ public class SaveResourceStoreCmd extends Cmd {
                 throw new CmdException("采购申请失败");
             }
         }
-
         // 保存至 物品 times表
         ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
         resourceStoreTimesPo.setApplyOrderId(applyOrderId);
@@ -271,9 +271,6 @@ public class SaveResourceStoreCmd extends Cmd {
         resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
         resourceStoreTimesPo.setShId(resourceStorePo.getShId());
         resourceStoreTimesPo.setCommunityId(reqJson.getString("communityId"));
-
         resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
-
-
     }
 }

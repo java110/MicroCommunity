@@ -17,6 +17,7 @@ package com.java110.intf.order;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.privilege.BasePrivilegeDto;
+import com.java110.dto.privilege.PrivilegeUserDto;
 import com.java110.dto.user.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +40,7 @@ public interface IPrivilegeInnerServiceSMO {
 
     /**
      * <p>查询权限用户</p>
-     *
+     * <p>
      * query privilege of property staff
      *
      * @param privilegeDto 权限对象
@@ -47,5 +48,8 @@ public interface IPrivilegeInnerServiceSMO {
      */
     @RequestMapping(value = "/queryPrivilegeUsers", method = RequestMethod.POST)
     List<UserDto> queryPrivilegeUsers(@RequestBody BasePrivilegeDto privilegeDto);
+
+    @RequestMapping(value = "/queryPrivilegeUser", method = RequestMethod.POST)
+    List<PrivilegeUserDto> queryPrivilegeUser(@RequestBody PrivilegeUserDto privilegeUserDto);
 
 }

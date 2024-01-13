@@ -1,40 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="inspectionPlanServiceDaoImpl">
 
     <!-- 保存巡检计划信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessInspectionPlanInfo" parameterType="Map">
-        insert into
-            business_inspection_plan
-            (inspection_plan_name,
-            inspection_route_id,
-            inspection_plan_period,
-            remark,
-            end_time,
-            start_date,
-            end_date,
-            inspection_month,
-            inspection_day,
-            inspection_workday,
-            can_reexamine,
-            operate,
-            sign_type,
-            start_time,
-            inspection_plan_id,
-            state,
-            community_id,
-            b_id,
-            create_user_id,
-            create_user_name)
-        values (#{inspectionPlanName},#{inspectionRouteId},#{inspectionPlanPeriod},#{remark},
-                #{endTime},#{startDate},#{endDate},#{inspectionMonth},#{inspectionDay},#{inspectionWorkday},#{canReexamine},
-                #{operate},#{signType},#{startTime},
-                #{inspectionPlanId},#{state},#{communityId},#{bId},#{createUserId},
+        insert into business_inspection_plan
+        (inspection_plan_name,
+         inspection_route_id,
+         inspection_plan_period,
+         remark,
+         end_time,
+         start_date,
+         end_date,
+         inspection_month,
+         inspection_day,
+         inspection_workday,
+         can_reexamine,
+         operate,
+         sign_type,
+         start_time,
+         inspection_plan_id,
+         state,
+         community_id,
+         b_id,
+         create_user_id,
+         create_user_name)
+        values (#{inspectionPlanName}, #{inspectionRouteId}, #{inspectionPlanPeriod}, #{remark},
+                #{endTime}, #{startDate}, #{endDate}, #{inspectionMonth}, #{inspectionDay}, #{inspectionWorkday},
+                #{canReexamine}, #{operate}, #{signType}, #{startTime},
+                #{inspectionPlanId}, #{state}, #{communityId}, #{bId}, #{createUserId},
                 #{createUserName})
-       </insert>
-
+    </insert>
 
     <!-- 查询巡检计划信息（Business） add by wuxw 2018-07-03 -->
     <select id="getBusinessInspectionPlanInfo" parameterType="Map" resultType="Map">
@@ -67,7 +64,6 @@
         <if test="operate !=null and operate != ''">
             and t.operate= #{operate}
         </if>
-
         <if test="signType !=null and signType != ''">
             and t.sign_type= #{signType}
         </if>
@@ -89,10 +85,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
     </select>
-
 
     <!-- 保存巡检计划信息至 instance表中 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionPlanInfoInstance" parameterType="Map">
@@ -145,10 +138,7 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
-
     </insert>
-
 
     <!-- 查询巡检计划信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionPlanInfo" parameterType="Map" resultType="Map">
@@ -158,11 +148,11 @@
         t.inspection_plan_period inspectionPlanPeriod,
         t.remark,
         t.status_cd statusCd,
-        t.end_time endTime,
+        DATE_FORMAT(t.end_time,'%H:%i:%s') endTime,
         t.sign_type signType,
-        t.start_time startTime,
-        t.end_date endDate,
-        t.start_date startDate,
+        DATE_FORMAT(t.start_time,'%H:%i:%s') startTime,
+        DATE_FORMAT(t.end_date,'%Y-%m-%d') endDate,
+        DATE_FORMAT(t.start_date,'%Y-%m-%d') startDate,
         t.create_user_id createUserId,
         t.create_user_name createUserName,
         t.inspection_plan_id inspectionPlanId,
@@ -178,8 +168,7 @@
         d.name stateName,
         c.name inspectionPlanPeriodName,
         i.name signTypeName
-        from
-        inspection_plan t
+        from inspection_plan t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'inspection_plan' and d.table_columns = 'state'
         inner join t_dict c on t.inspection_plan_period = c.status_cd and c.table_name = 'inspection_plan' and
         c.table_columns = 'inspection_plan_period'
@@ -241,7 +230,6 @@
         </if>
     </select>
 
-
     <!-- 修改巡检计划信息 add by wuxw 2018-07-03 -->
     <update id="updateInspectionPlanInfoInstance" parameterType="Map">
         update inspection_plan t set t.status_cd = #{statusCd}
@@ -263,7 +251,6 @@
         <if test="endTime !=null">
             , t.end_time= #{endTime}
         </if>
-
         <if test="signType !=null and signType != ''">
             , t.sign_type= #{signType}
         </if>
@@ -286,7 +273,6 @@
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
-
     </update>
 
     <!-- 查询巡检计划数量 add by wuxw 2018-07-03 -->
@@ -334,5 +320,4 @@
             and t.b_id= #{bId}
         </if>
     </select>
-
 </mapper>

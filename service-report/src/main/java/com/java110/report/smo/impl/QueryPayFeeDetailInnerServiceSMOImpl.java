@@ -169,62 +169,62 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
                 }
 
                 //优惠金额
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("1")) {
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeOne()) && reportFeeMonthStatistics.getDiscountSmallTypeOne().equals("1")) {
                     //获取优惠金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPrice());
+                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceOne());
                     totalPreferentialAmount = totalPreferentialAmount + discountPrice;
                     //优惠金额
-                    reportFeeMonthStatistics.setPreferentialAmount(reportFeeMonthStatistics.getDiscountPrice());
+                    reportFeeMonthStatistics.setPreferentialAmount(reportFeeMonthStatistics.getDiscountPriceOne());
                 } else {
                     reportFeeMonthStatistics.setPreferentialAmount("0");
                 }
                 //减免金额
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("2")) {
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeTwo()) && reportFeeMonthStatistics.getDiscountSmallTypeTwo().equals("2")) {
                     //获取减免金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPrice());
+                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceTwo());
                     totalDeductionAmount = totalDeductionAmount + discountPrice;
                     //减免金额
-                    reportFeeMonthStatistics.setDeductionAmount(reportFeeMonthStatistics.getDiscountPrice());
+                    reportFeeMonthStatistics.setDeductionAmount(reportFeeMonthStatistics.getDiscountPriceTwo());
                 } else {
                     reportFeeMonthStatistics.setDeductionAmount("0");
                 }
                 //滞纳金
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("3")) {
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeThree()) && reportFeeMonthStatistics.getDiscountSmallTypeThree().equals("3")) {
                     //获取滞纳金金额
-                    Double discountPrice = (Double.valueOf(reportFeeMonthStatistics.getDiscountPrice()));
+                    Double discountPrice = (Double.valueOf(reportFeeMonthStatistics.getDiscountPriceThree()));
                     totalLateFee = totalLateFee + discountPrice;
                     //滞纳金
-                    reportFeeMonthStatistics.setLateFee(reportFeeMonthStatistics.getDiscountPrice());
+                    reportFeeMonthStatistics.setLateFee(reportFeeMonthStatistics.getDiscountPriceThree());
                 } else {
                     reportFeeMonthStatistics.setLateFee("0");
                 }
                 //空置房打折
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("4")) {
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeFour()) && reportFeeMonthStatistics.getDiscountSmallTypeFour().equals("4")) {
                     //空置房打折金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPrice());
+                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceFour());
                     totalVacantHousingDiscount = totalVacantHousingDiscount + discountPrice;
                     //空置房打折
-                    reportFeeMonthStatistics.setVacantHousingDiscount(reportFeeMonthStatistics.getDiscountPrice());
+                    reportFeeMonthStatistics.setVacantHousingDiscount(reportFeeMonthStatistics.getDiscountPriceFour());
                 } else {
                     reportFeeMonthStatistics.setVacantHousingDiscount("0");
                 }
                 //空置房减免
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("5")) {
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeFive()) && reportFeeMonthStatistics.getDiscountSmallTypeFive().equals("5")) {
                     //空置房减免金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPrice());
+                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceFive());
                     totalVacantHousingReduction = totalVacantHousingReduction + discountPrice;
                     //空置房减免
-                    reportFeeMonthStatistics.setVacantHousingReduction(reportFeeMonthStatistics.getDiscountPrice());
+                    reportFeeMonthStatistics.setVacantHousingReduction(reportFeeMonthStatistics.getDiscountPriceFive());
                 } else {
                     reportFeeMonthStatistics.setVacantHousingReduction("0");
                 }
                 //赠送金额
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallType()) && reportFeeMonthStatistics.getDiscountSmallType().equals("6")) {
+                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeSix()) && reportFeeMonthStatistics.getDiscountSmallTypeSix().equals("6")) {
                     //赠送金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPrice());
+                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceSix());
                     totalGiftAmount = totalGiftAmount + discountPrice;
                     //赠送金额
-                    reportFeeMonthStatistics.setGiftAmount(reportFeeMonthStatistics.getDiscountPrice());
+                    reportFeeMonthStatistics.setGiftAmount(reportFeeMonthStatistics.getDiscountPriceSix());
                 } else {
                     reportFeeMonthStatistics.setGiftAmount("0");
                 }

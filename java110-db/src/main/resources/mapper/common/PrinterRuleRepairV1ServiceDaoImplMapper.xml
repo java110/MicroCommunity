@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="printerRuleRepairV1ServiceDaoImpl">
 
-
     <!-- 保存云打印规则报修信息 add by wuxw 2018-07-03 -->
     <insert id="savePrinterRuleRepairInfo" parameterType="Map">
-        insert into printer_rule_repair(
-        prr_id,repair_type,rule_id,community_id,repair_type_name
-        ) values (
-        #{prrId},#{repairType},#{ruleId},#{communityId},#{repairTypeName}
-        )
+        insert into printer_rule_repair(prr_id, repair_type, rule_id, community_id, repair_type_name)
+        values (#{prrId}, #{repairType}, #{ruleId}, #{communityId}, #{repairTypeName})
     </insert>
-
 
     <!-- 查询云打印规则报修信息 add by wuxw 2018-07-03 -->
     <select id="getPrinterRuleRepairInfo" parameterType="Map" resultType="Map">
@@ -36,13 +30,14 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="repairTypeName !=null and repairTypeName != ''">
+            and t.repair_type_name like '%${repairTypeName}%'
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改云打印规则报修信息 add by wuxw 2018-07-03 -->
     <update id="updatePrinterRuleRepairInfo" parameterType="Map">
@@ -59,7 +54,6 @@
         <if test="ruleId !=null and ruleId != ''">
             , t.rule_id= #{ruleId}
         </if>
-
         where 1=1
         <if test="prrId !=null and prrId != ''">
             and t.prr_id= #{prrId}
@@ -67,7 +61,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </update>
 
     <!-- 查询云打印规则报修数量 add by wuxw 2018-07-03 -->
@@ -90,8 +83,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
-
+        <if test="repairTypeName !=null and repairTypeName != ''">
+            and t.repair_type_name like '%${repairTypeName}%'
+        </if>
     </select>
-
 </mapper>

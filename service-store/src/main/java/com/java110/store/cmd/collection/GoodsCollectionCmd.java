@@ -85,8 +85,8 @@ public class GoodsCollectionCmd extends Cmd {
         if (resourceStores == null || resourceStores.size() < 1) {
             throw new CmdException("未包含领用物品");
         }
-        int quanitity = 0;
-        int stock = 0;
+        double quanitity = 0;
+        double stock = 0;
         for (int resourceStoreIndex = 0; resourceStoreIndex < resourceStores.size(); resourceStoreIndex++) {
             JSONObject resourceStore = resourceStores.getJSONObject(resourceStoreIndex);
             Assert.hasKeyAndValue(resourceStore, "timesId", "必填，未选择价格");
@@ -95,11 +95,11 @@ public class GoodsCollectionCmd extends Cmd {
             resourceStoreTimesDto.setStoreId(storeId);
             List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
             Assert.listOnlyOne(resourceStoreTimesDtos, "价格不存在");
-            quanitity = resourceStore.getIntValue("quantity");
+            quanitity = Double.parseDouble(resourceStore.getString("quantity"));
             if (quanitity < 1) {
                 throw new CmdException("申请数量不正确");
             }
-            stock = Integer.parseInt(resourceStoreTimesDtos.get(0).getStock());
+            stock = Double.parseDouble(resourceStoreTimesDtos.get(0).getStock());
             if (quanitity > stock) {
                 throw new CmdException(resourceStoreTimesDtos.get(0).getResCode() + "出库不足,库存为=" + stock + ",申请数为=" + quanitity);
             }
@@ -267,7 +267,7 @@ public class GoodsCollectionCmd extends Cmd {
         if (purchaseApplyDetailDtos == null || purchaseApplyDetailDtos.size() < 1) {
             return;
         }
-        int stock = 0;
+        double stock = 0;
         for (PurchaseApplyDetailDto tmpPurchaseApplyDetailDto : purchaseApplyDetailDtos) {
             ResourceStorePo resourceStorePo = new ResourceStorePo();
             resourceStorePo.setResId(tmpPurchaseApplyDetailDto.getResId());

@@ -18,6 +18,8 @@ public class AccountPo implements Serializable {
 
     private String phone;
 
+    private String statusCd = "0";
+
     public String getAmount() {
         return amount;
     }
@@ -90,6 +92,14 @@ public class AccountPo implements Serializable {
         this.phone = phone;
     }
 
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
     public String getoLink() {
         return oLink;
     }

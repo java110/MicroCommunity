@@ -180,6 +180,9 @@
         <if test="resource != null and resource != ''">
             and p.resource = #{resource}
         </if>
+        <if test="userId != null and userId != ''">
+            and t.user_id = #{userId}
+        </if>
         <if test="storeId != null and storeId != ''">
             and t.store_id = #{storeId}
         </if>
@@ -199,6 +202,9 @@
         </if>
         <if test="storeId != null and storeId != ''">
             and t.store_id = #{storeId}
+        </if>
+        <if test="userId != null and userId != ''">
+            and t.user_id = #{userId}
         </if>
     </select>
 </mapper>

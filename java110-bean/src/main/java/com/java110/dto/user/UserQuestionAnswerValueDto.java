@@ -14,7 +14,6 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class UserQuestionAnswerValueDto extends PageDto implements Serializable {
-
     private String valueId;
     private String titleId;
     private String userQaId;
@@ -25,11 +24,14 @@ public class UserQuestionAnswerValueDto extends PageDto implements Serializable 
 
     private String qaValue;
 
-
     private Date createTime;
 
     private String statusCd = "0";
 
+    private String userName;
+    private String qaName;
+    private String qaTypeName;
+    private String qaTitle;
 
     public String getValueId() {
         return valueId;
@@ -87,7 +89,6 @@ public class UserQuestionAnswerValueDto extends PageDto implements Serializable 
         this.qaId = qaId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -110,5 +111,37 @@ public class UserQuestionAnswerValueDto extends PageDto implements Serializable 
 
     public void setQaValue(String qaValue) {
         this.qaValue = qaValue;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getQaName() {
+        return qaName;
+    }
+
+    public void setQaName(String qaName) {
+        this.qaName = qaName;
+    }
+
+    public String getQaTypeName() {
+        return qaTypeName;
+    }
+
+    public void setQaTypeName(String qaTypeName) {
+        this.qaTypeName = qaTypeName;
+    }
+
+    public String getQaTitle() {
+        return qaTitle;
+    }
+
+    public void setQaTitle(String qaTitle) {
+        this.qaTitle = qaTitle;
     }
 }

@@ -146,7 +146,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -565,7 +564,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -642,7 +640,6 @@
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
         </if>
-
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
         </if>
@@ -790,7 +787,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        order by f.seq ,u.unit_num,CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED) asc
+        <!--order by f.seq,u.unit_num,CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED) asc-->
+        order by t.create_time desc
         <if test="page != -1 and page != null">
             limit #{page},#{row}
         </if>

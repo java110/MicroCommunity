@@ -64,7 +64,7 @@ public class PrivilegeRelV1InnerServiceSMOImpl extends BaseServiceSMO implements
     }
 
     @Override
-    public List<PrivilegeRelDto> queryPrivilegeRels(@RequestBody  PrivilegeRelDto privilegeRelDto) {
+    public List<PrivilegeRelDto> queryPrivilegeRels(@RequestBody PrivilegeRelDto privilegeRelDto) {
 
         //校验是否传了 分页信息
 

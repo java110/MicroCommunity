@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="patrolBuildingV1ServiceDaoImpl">
+
+    <!-- 保存巡楼信息 -->
+    <insert id="savePatrolBuildingInfo" parameterType="Map">
+        insert into patrol_building(pb_id, staff_id, staff_name, state, community_id, floor_id, floor_num, title,
+                                    remark,
+                                    create_time)
+        values (#{pbId}, #{staffId}, #{staffName}, #{state}, #{communityId}, #{floorId}, #{floorNum}, #{title},
+                #{remark},
+                #{createTime})
+    </insert>
+
+    <!-- 查询巡楼信息 -->
+    <select id="getPatrolBuildingInfo" parameterType="Map" resultType="Map">
+        select t.pb_id,t.pb_id pbId,t.staff_id,t.staff_id staffId,t.staff_name,t.staff_name staffName,t.state,
+        t.community_id,t.community_id communityId,t.floor_id,t.floor_id floorId,t.floor_num,t.floor_num floorNum,
+        t.title,t.remark,t.status_cd statusCd,t.create_time createTime
+        from patrol_building t
+        where 1 =1
+        <if test="pbId !=null and pbId != ''">
+            and t.pb_id= #{pbId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name like '%${staffName}%'
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and t.floor_num= #{floorNum}
+        </if>
+        <if test="title !=null and title != ''">
+            and t.title= #{title}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
+
+    <!-- 修改巡楼信息 -->
+    <update id="updatePatrolBuildingInfo" parameterType="Map">
+        update patrol_building t set t.status_cd = #{statusCd}
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name = #{staffName}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            , t.floor_id= #{floorId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            , t.floor_num= #{floorNum}
+        </if>
+        <if test="title !=null and title != ''">
+            , t.title= #{title}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        where 1=1
+        <if test="pbId !=null and pbId != ''">
+            and t.pb_id= #{pbId}
+        </if>
+    </update>
+
+    <!-- 查询巡楼信息数量 -->
+    <select id="queryPatrolBuildingsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from patrol_building t
+        where 1 =1
+        <if test="pbId !=null and pbId != ''">
+            and t.pb_id= #{pbId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name like '%${staffName}%'
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and t.floor_num= #{floorNum}
+        </if>
+        <if test="title !=null and title != ''">
+            and t.title= #{title}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
+    </select>
+</mapper>

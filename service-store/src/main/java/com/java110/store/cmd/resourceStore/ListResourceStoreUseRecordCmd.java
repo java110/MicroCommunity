@@ -20,8 +20,9 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.privilege.BasePrivilegeDto;
+import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreUseRecordInnerServiceSMO;
-import com.java110.intf.store.IResourceStoreUseRecordV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
@@ -30,6 +31,7 @@ import com.java110.dto.resource.ResourceStoreUseRecordDto;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -52,10 +54,10 @@ public class ListResourceStoreUseRecordCmd extends Cmd {
     private static Logger logger = LoggerFactory.getLogger(ListResourceStoreUseRecordCmd.class);
 
     @Autowired
-    private IResourceStoreUseRecordV1InnerServiceSMO resourceStoreUseRecordV1InnerServiceSMOImpl;
+    private IResourceStoreUseRecordInnerServiceSMO resourceStoreUseRecordInnerServiceSMOImpl;
 
     @Autowired
-    private IResourceStoreUseRecordInnerServiceSMO resourceStoreUseRecordInnerServiceSMOImpl;
+    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -66,6 +68,19 @@ public class ListResourceStoreUseRecordCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         ResourceStoreUseRecordDto resourceStoreUseRecordDto = BeanConvertUtil.covertBean(reqJson, ResourceStoreUseRecordDto.class);
+
+        //查询物品所有使用记录权限
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/allResourceStoreUseRecord");
+        basePrivilegeDto.setUserId(reqJson.getString("userId"));
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges.size() == 0) {
+            resourceStoreUseRecordDto.setUserId(reqJson.getString("userId"));
+            resourceStoreUseRecordDto.setUserName(reqJson.getString("userName"));
+        } else {
+            resourceStoreUseRecordDto.setUserId("");
+            resourceStoreUseRecordDto.setUserName("");
+        }
 
         int count = resourceStoreUseRecordInnerServiceSMOImpl.queryResourceStoreUseRecordsCount(resourceStoreUseRecordDto);
 

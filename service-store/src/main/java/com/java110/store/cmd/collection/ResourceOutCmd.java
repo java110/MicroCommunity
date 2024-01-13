@@ -34,7 +34,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 采购人员入库 功能
  * 请求地址为/app/purchase/resourceEnter
@@ -53,7 +52,7 @@ import java.util.List;
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "applyOrderId", length = 30, remark = "采购申请单订单ID"),
         @Java110ParamDoc(name = "purchaseApplyDetailVo", type = "Array", length = 30, remark = "采购物品信息"),
-        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "purchaseQuantity", type = "Int", length = 30, remark = "数量"),
+        @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "purchaseQuantity", type = "Double", length = 30, remark = "数量"),
         @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "id", type = "String", length = 30, remark = "采购明细ID"),
         @Java110ParamDoc(parentNodeName = "purchaseApplyDetailVo", name = "resId", type = "String", length = 30, remark = "物品ID"),
 })
@@ -66,7 +65,7 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody = "{'applyOrderId':'123123','purchaseApplyDetailVo':[{'purchaseQuantity':'10','id':'123123','resId':'343434'}]}",
+        reqBody = "{'applyOrderId':'123123','purchaseApplyDetailVo':[{'purchaseQuantity':'10.00','id':'123123','resId':'343434'}]}",
         resBody = "{'code':0,'msg':'成功'}"
 )
 
@@ -80,7 +79,7 @@ public class ResourceOutCmd extends Cmd {
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
     @Autowired
-    private IPurchaseApplyDetailInnerServiceSMO purchaseApplyDetailInnerServiceSMOImpl;
+    private IPurchaseApplyDetailV1InnerServiceSMO purchaseApplyDetailV1InnerServiceSMOImpl;
 
     @Autowired
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
@@ -98,34 +97,27 @@ public class ResourceOutCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "applyOrderId", "订单ID为空");
         JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
-
-
         if (purchaseApplyDetails == null || purchaseApplyDetails.size() < 1) {
             throw new CmdException("未包含领用物品");
         }
-
         String storeId = CmdContextUtils.getStoreId(context);
-        int quanitity = 0;
-        int stock = 0;
+        double quanitity = 0;
+        double stock = 0;
         for (int detailIndex = 0; detailIndex < purchaseApplyDetails.size(); detailIndex++) {
             JSONObject purchaseApplyDetail = purchaseApplyDetails.getJSONObject(detailIndex);
             Assert.hasKeyAndValue(purchaseApplyDetail, "purchaseQuantity", "采购数量未填写");
             Assert.hasKeyAndValue(purchaseApplyDetail, "id", "明细ID为空");
             Assert.hasKeyAndValue(purchaseApplyDetail, "timesId", "价格为空");
-            quanitity = purchaseApplyDetail.getIntValue("quantity");
-
+            quanitity = Double.parseDouble(purchaseApplyDetail.getString("quantity"));
             ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
             resourceStoreTimesDto.setTimesId(purchaseApplyDetail.getString("timesId"));
             resourceStoreTimesDto.setStoreId(storeId);
             List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
-
             Assert.listOnlyOne(resourceStoreTimesDtos, "价格不存在");
-
             if (quanitity < 1) {
                 throw new CmdException("申请数量不正确");
             }
-            stock = Integer.parseInt(resourceStoreTimesDtos.get(0).getStock());
-
+            stock = Double.parseDouble(resourceStoreTimesDtos.get(0).getStock());
             if (quanitity > stock) {
                 throw new CmdException(resourceStoreTimesDtos.get(0).getResCode() + "出库不足,库存为=" + stock + ",申请数为=" + quanitity);
             }
@@ -134,16 +126,16 @@ public class ResourceOutCmd extends Cmd {
 
     /**
      * 物品领用-物品领用物品发放
-     * @param event              事件对象
+     *
+     * @param event   事件对象
      * @param context 数据上文对象
-     * @param reqJson            请求报文
+     * @param reqJson 请求报文
      * @throws CmdException
      * @throws ParseException
      */
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-
         JSONArray purchaseApplyDetails = reqJson.getJSONArray("purchaseApplyDetailVo");
         List<PurchaseApplyDetailDto> purchaseApplyDetailPos = new ArrayList<>();
         for (int detailIndex = 0; detailIndex < purchaseApplyDetails.size(); detailIndex++) {
@@ -153,13 +145,11 @@ public class ResourceOutCmd extends Cmd {
         }
         PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
         purchaseApplyPo.setApplyOrderId(reqJson.getString("applyOrderId"));
-       // purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
-
+        // purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);
         PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
         purchaseApplyDto.setApplyOrderId(purchaseApplyPo.getApplyOrderId());
         List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
         Assert.listOnlyOne(purchaseApplyDtos, "出库单不存在");
-
         for (PurchaseApplyDetailDto tmpPurchaseApplyDetailDto : purchaseApplyDetailPos) {
             ResourceStorePo resourceStorePo = new ResourceStorePo();
             resourceStorePo.setResId(tmpPurchaseApplyDetailDto.getResId());
@@ -180,6 +170,15 @@ public class ResourceOutCmd extends Cmd {
             if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())) {
                 throw new IllegalArgumentException("最小计量总数不能为空！");
             }
+            //获取领用拨放的数量
+            BigDecimal quantity = new BigDecimal(tmpPurchaseApplyDetailDto.getQuantity());
+            //原库存总数
+            BigDecimal stock = new BigDecimal(resourceStoreDtos.get(0).getStock());
+            //计算领用成功后剩余的库存总数
+            BigDecimal newStock = stock.subtract(quantity);
+            //计算领用成功后剩余的最小计量总数
+            BigDecimal nowMiniStock = newStock.multiply(miniUnitStock);
+            resourceStorePo.setMiniStock(String.valueOf(nowMiniStock));
 //            //获取采购前物品最小计量总数
 //            BigDecimal miniStock = new BigDecimal(resourceStoreDtos.get(0).getMiniStock());
 //            //计算采购的物品最小计量总数
@@ -190,9 +189,8 @@ public class ResourceOutCmd extends Cmd {
 //            if (nowMiniStock.compareTo(BigDecimal.ZERO) == -1) {
 //                throw new IllegalArgumentException("物品库存已经不足，请确认物品库存！");
 //            }
- //           resourceStorePo.setMiniStock(String.valueOf(nowMiniStock));
+            //           resourceStorePo.setMiniStock(String.valueOf(nowMiniStock));
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
-
             // 保存至 物品 times表
             ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
             resourceStoreTimesPo.setApplyOrderId(tmpPurchaseApplyDetailDto.getApplyOrderId());
@@ -205,31 +203,31 @@ public class ResourceOutCmd extends Cmd {
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
             //todo 个人仓库中添加
             addPersonStorehouse(purchaseApplyDtos.get(0), resourceStoreDtos, tmpPurchaseApplyDetailDto);
+            //领用明细表里的领用数量更新为实际领用数量
+            PurchaseApplyDetailPo purchaseApplyDetailPo = new PurchaseApplyDetailPo();
+            purchaseApplyDetailPo.setApplyOrderId(tmpPurchaseApplyDetailDto.getApplyOrderId());
+            purchaseApplyDetailPo.setPurchaseQuantity(tmpPurchaseApplyDetailDto.getPurchaseQuantity());
+            purchaseApplyDetailV1InnerServiceSMOImpl.updatePurchaseApplyDetail(purchaseApplyDetailPo);
         }
-
-        //
         //获取订单号
         String applyOrderId = purchaseApplyPo.getApplyOrderId();
         PurchaseApplyPo purchaseApply = new PurchaseApplyPo();
         purchaseApply.setApplyOrderId(applyOrderId);
-
-        if(reqJson.containsKey("taskId")) {
+        if (reqJson.containsKey("taskId")) {
             reqJson.put("auditCode", "1100");
             reqJson.put("auditMessage", "入库成功");
             reqJson.put("id", reqJson.getString("applyOrderId"));
             reqJson.put("storeId", CmdContextUtils.getStoreId(context));
             reqJson.put("nextUserId", reqJson.getString("staffId"));
             boolean isLastTask = oaWorkflowUserInnerServiceSMOImpl.completeTask(reqJson);
-
             if (isLastTask) {
                 purchaseApply.setState(PurchaseApplyDto.STATE_END);
             } else {
                 purchaseApply.setState(PurchaseApplyDto.STATE_DEALING);
             }
-        }else{
+        } else {
             purchaseApply.setState(PurchaseApplyDto.STATE_AUDITED);
         }
-
         purchaseApply.setStatusCd("0");
         purchaseApplyInnerServiceSMOImpl.updatePurchaseApply(purchaseApply);
         context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, "出库成功"));
@@ -241,7 +239,6 @@ public class ResourceOutCmd extends Cmd {
      * @param resourceStoreDtos
      */
     private void addPersonStorehouse(PurchaseApplyDto purchaseApplyDto, List<ResourceStoreDto> resourceStoreDtos, PurchaseApplyDetailDto purchaseApplyDetailDto) {
-
         //获取物品单位
         String unitCode = resourceStoreDtos.get(0).getUnitCode();
         //获取物品最小计量单位
@@ -281,7 +278,7 @@ public class ResourceOutCmd extends Cmd {
             BigDecimal purchaseQuantity3 = new BigDecimal(purchaseApplyDetailDto.getPurchaseQuantity());
             BigDecimal stock3 = new BigDecimal(userStorehouseDtos.get(0).getStock());
             BigDecimal total = purchaseQuantity3.add(stock3);
-            userStorehousePo.setStock(total.toString());
+            userStorehousePo.setStock(String.valueOf(total));
             userStorehousePo.setUsId(userStorehouseDtos.get(0).getUsId());
             if (!StringUtil.isEmpty(unitCode) && !StringUtil.isEmpty(miniUnitCode) && !StringUtil.isEmpty(miniUnitStock) && !unitCode.equals(miniUnitCode)) {
                 //获取本次领取数量

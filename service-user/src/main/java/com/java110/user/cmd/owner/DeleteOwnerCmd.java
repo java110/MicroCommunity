@@ -1,6 +1,5 @@
 package com.java110.user.cmd.owner;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
@@ -9,15 +8,19 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
+import com.java110.dto.account.AccountDto;
+import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.po.account.AccountPo;
 import com.java110.po.owner.OwnerAppUserPo;
+import com.java110.po.owner.OwnerAttrPo;
 import com.java110.po.owner.OwnerPo;
-import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -32,8 +35,7 @@ import java.util.List;
         resource = "userDoc",
         author = "吴学文",
         serviceCode = "owner.deleteOwner",
-        seq = 11
-)
+        seq = 11)
 
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
@@ -76,14 +78,16 @@ public class DeleteOwnerCmd extends Cmd {
     private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
 
     @Autowired
-    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+    private IOwnerAttrInnerServiceSMO ownerAttrInnerServiceSMOImpl;
+
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Environment.isDevEnv();
         Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
-
         //todo 如果是业主
         if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
             //ownerId 写为 memberId
@@ -104,42 +108,35 @@ public class DeleteOwnerCmd extends Cmd {
             //小区楼添加到小区中
             //ownerBMOImpl.exitCommunityMember(reqJson, context);
         }
-
         if (!OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) { //不是业主成员不管
             return;
         }
-
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(reqJson.getString("memberId"));
         ownerDto.setCommunityId(reqJson.getString("communityId"));
         ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING});
-
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-
         if (ownerDtos != null && ownerDtos.size() > 0) {
             throw new IllegalArgumentException("请先删除业主下的成员");
         }
-
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         JSONObject businessOwner = new JSONObject();
         businessOwner.put("memberId", reqJson.getString("memberId"));
         businessOwner.put("communityId", reqJson.getString("communityId"));
-
         OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
         int flag = ownerV1InnerServiceSMOImpl.deleteOwner(ownerPo);
-
         if (flag < 1) {
             throw new CmdException("删除失败");
         }
 //        if (!OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
 //            return;
 //        }
+
+        //删除绑定业主信息
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setMemberId(reqJson.getString("memberId"));
         ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
@@ -148,19 +145,48 @@ public class DeleteOwnerCmd extends Cmd {
         if (ownerAppUserDtos == null && ownerAppUserDtos.size() < 1) {
             return;
         }
-
         for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
             OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
             flag = ownerAppUserV1InnerServiceSMOImpl.deleteOwnerAppUser(ownerAppUserPo);
             if (flag < 1) {
                 throw new CmdException("删除失败");
             }
-
             //todo 应该删除用户
 //            UserPo userPo = new UserPo();
 //            userPo.setUserId(ownerAppUser.getUserId());
 //            userV1InnerServiceSMOImpl.deleteUser(userPo);
         }
 
+        //删除业主属性表信息
+        OwnerAttrDto ownerAttrDto = new OwnerAttrDto();
+        ownerAttrDto.setMemberId(reqJson.getString("memberId"));
+        List<OwnerAttrDto> ownerAttrDtos = ownerAttrInnerServiceSMOImpl.queryOwnerAttrs(ownerAttrDto);
+        if (ownerAttrDtos != null && ownerAttrDtos.size() > 0) {
+            for (OwnerAttrDto ownerAttr : ownerAttrDtos) {
+                OwnerAttrPo ownerAttrPo = new OwnerAttrPo();
+                ownerAttrPo.setAttrId(ownerAttr.getAttrId());
+                ownerAttrPo.setStatusCd("1"); //0 可用，1 不可用
+                int i = ownerAttrInnerServiceSMOImpl.updateOwnerAttrInfoInstance(ownerAttrPo);
+                if (i < 1) {
+                    throw new CmdException("删除业主属性表失败");
+                }
+            }
+        }
+
+        //删除业主账户信息
+        AccountDto accountDto = new AccountDto();
+        accountDto.setObjId(reqJson.getString("memberId"));
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+        if (accountDtos != null && accountDtos.size() > 0) {
+            for (AccountDto account : accountDtos) {
+                AccountPo accountPo = new AccountPo();
+                accountPo.setAcctId(account.getAcctId());
+                accountPo.setStatusCd("1"); //0 可用，1 不可用
+                int i = accountInnerServiceSMOImpl.updateAccount(accountPo);
+                if (i < 1) {
+                    throw new CmdException("删除业主账户信息失败");
+                }
+            }
+        }
     }
 }

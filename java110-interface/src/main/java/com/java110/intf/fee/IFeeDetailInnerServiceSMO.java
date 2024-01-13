@@ -25,7 +25,6 @@ public interface IFeeDetailInnerServiceSMO {
     /**
      * <p>查询小区楼信息</p>
      *
-     *
      * @param feeDetailDto 数据对象分享
      * @return FeeDetailDto 对象数据
      */
@@ -34,7 +33,6 @@ public interface IFeeDetailInnerServiceSMO {
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param feeDetailDto 数据对象分享
      * @return FeeDetailDto 对象数据
@@ -53,6 +51,7 @@ public interface IFeeDetailInnerServiceSMO {
 
     /**
      * 保存费用明细
+     *
      * @param payFeeDetailPo
      * @return
      */

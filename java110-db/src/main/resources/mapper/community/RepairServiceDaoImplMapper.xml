@@ -379,7 +379,7 @@
             and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
-            and t.create_time &lt;= #{startTime}
+            and t.create_time &lt;= #{endTime}
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}

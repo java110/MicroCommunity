@@ -6,9 +6,9 @@
     <!-- 保存业主信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfo" parameterType="Map">
         insert into building_owner(id_card, sex, link, owner_type_cd, remark, owner_id, user_id, name, state,
-        community_id, age, member_id, address)
+                                   community_id, age, member_id, address)
         values (#{idCard}, #{sex}, #{link}, #{ownerTypeCd}, #{remark}, #{ownerId}, #{userId}, #{name}, #{state},
-        #{communityId}, #{age}, #{memberId}, #{address})
+                #{communityId}, #{age}, #{memberId}, #{address})
     </insert>
 
     <!-- 查询业主信息信息 add by wuxw 2018-07-03 -->
@@ -87,39 +87,41 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        , t.id_card= #{idCard}
+        <if test="idCard != null and idCard != ''">
+            ,t.id_card= #{idCard}
+        </if>
         <if test="sex !=null and sex != ''">
-            , t.sex= #{sex}
+            ,t.sex= #{sex}
         </if>
         <if test="link !=null and link != ''">
-            , t.link= #{link}
+            ,t.link= #{link}
         </if>
         <if test="address !=null and address != ''">
-            , t.address= #{address}
+            ,t.address= #{address}
         </if>
         <if test="ownerTypeCd !=null and ownerTypeCd != ''">
-            , t.owner_type_cd= #{ownerTypeCd}
+            ,t.owner_type_cd= #{ownerTypeCd}
         </if>
         <if test="remark !=null and remark != ''">
-            , t.remark= #{remark}
+            ,t.remark= #{remark}
         </if>
         <if test="ownerId !=null and ownerId != ''">
-            , t.owner_id= #{ownerId}
+            ,t.owner_id= #{ownerId}
         </if>
         <if test="userId !=null and userId != ''">
-            , t.user_id= #{userId}
+            ,t.user_id= #{userId}
         </if>
         <if test="name !=null and name != ''">
-            , t.name= #{name}
+            ,t.name= #{name}
         </if>
         <if test="state !=null and state != ''">
-            , t.state= #{state}
+            ,t.state= #{state}
         </if>
         <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
+            ,t.community_id= #{communityId}
         </if>
         <if test="age != ''">
-            , t.age= #{age}
+            ,t.age= #{age}
         </if>
         where 1=1
         <if test="memberId !=null and memberId != ''">

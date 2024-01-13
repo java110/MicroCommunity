@@ -9,14 +9,17 @@ import com.java110.dto.PageDto;
 import com.java110.dto.audit.AuditMessageDto;
 import com.java110.dto.oaWorkflow.OaWorkflowDataDto;
 import com.java110.dto.oaWorkflow.OaWorkflowXmlDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.oaWorkflow.WorkflowDto;
 import com.java110.dto.audit.AuditUser;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.common.IWorkflowInnerServiceSMO;
 import com.java110.intf.oa.IOaWorkflowDataInnerServiceSMO;
+import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.oaWorkflow.OaWorkflowDataPo;
+import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -77,6 +80,8 @@ public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implem
     @Autowired
     private IOaWorkflowDataInnerServiceSMO oaWorkflowDataInnerServiceSMOImpl;
 
+    @Autowired
+    private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
 
     /**
      * 启动流程
@@ -134,6 +139,17 @@ public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implem
             if (tmp.getProcessInstanceId().equals(reqJson.getString("processInstanceId"))) {
                 task = tmp;//获取当前流程实例，当前申请人的待办任务
                 break;
+            }
+        }
+        if (task == null) {
+            PurchaseApplyDto purchaseApplyDto = new PurchaseApplyDto();
+            purchaseApplyDto.setApplyOrderId(reqJson.getString("id"));
+            List<PurchaseApplyDto> purchaseApplyList = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplys(purchaseApplyDto);
+            if (purchaseApplyList != null && purchaseApplyList.size() == 1) {
+                PurchaseApplyPo purchaseApplyPo = new PurchaseApplyPo();
+                purchaseApplyPo.setApplyOrderId(reqJson.getString("id"));
+                purchaseApplyPo.setStatusCd("1");
+                purchaseApplyInnerServiceSMOImpl.updatePurchaseApply(purchaseApplyPo);
             }
         }
         Assert.notNull(task, "未找到当前用户任务userId = " + reqJson.getString("createUserId"));
@@ -734,7 +750,7 @@ public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implem
         FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(task.getTaskDefinitionKey());
         flowNode.getName();
 
-        curNode.put("curTaskName",flowNode.getName());
+        curNode.put("curTaskName", flowNode.getName());
         return curNode;
     }
 

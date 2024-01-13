@@ -396,17 +396,21 @@
     </select>
 
     <select id="checkUserHasResource" parameterType="Map" resultType="Map">
-        SELECT pp.*,'-1' AS pg_id,'' AS pg_name FROM p_privilege_user ppu,p_privilege pp
+        SELECT pp.*,'-1' AS pg_id,'' AS pg_name,ppu.privilege_flag privilegeFlag
+        FROM p_privilege_user ppu,p_privilege pp
         WHERE ppu.`p_id` = pp.`p_id`
         <if test="resource != null and resource != ''">
             AND pp.`resource` = #{resource}
         </if>
+        <if test="userId != null and userId != ''">
+            AND ppu.`user_id` = #{userId}
+        </if>
         AND ppu.`privilege_flag` = '0'
-        AND ppu.`user_id` = #{userId}
         AND ppu.`status_cd` = '0'
         AND pp.`status_cd` = '0'
         UNION
-        SELECT pp.*,ppg.pg_id,ppg.name pg_name FROM p_privilege_user ppu,p_privilege_group ppg,p_privilege
+        SELECT pp.*,ppg.pg_id,ppg.name pg_name,ppu.privilege_flag privilegeFlag FROM p_privilege_user
+        ppu,p_privilege_group ppg,p_privilege
         pp,p_privilege_rel ppr
         WHERE ppu.`p_id` = ppr.pg_id
         AND ppr.pg_id = ppg.pg_id
@@ -414,8 +418,10 @@
         <if test="resource != null and resource != ''">
             AND pp.`resource` = #{resource}
         </if>
+        <if test="userId != null and userId != ''">
+            AND ppu.`user_id` = #{userId}
+        </if>
         AND ppu.`privilege_flag` = '1'
-        AND ppu.`user_id` = #{userId}
         AND ppu.`status_cd` = '0'
         AND pp.`status_cd` = '0'
         AND ppg.status_cd = '0'
@@ -423,26 +429,38 @@
     </select>
 
     <select id="hasPrivilege" parameterType="Map" resultType="Map">
-        SELECT  DISTINCT  tt.p_id `pId`,tt.name,tt.pg_id pgId,tt.pg_name pgName,tt.description,tt.create_time createTime FROM (
-        SELECT pp.*,'-1' AS pg_id,'' AS pg_name FROM p_privilege_user ppu,p_privilege pp
-        WHERE ppu.`p_id` = pp.`p_id`
-        AND pp.p_id = #{pId}
-        AND ppu.`privilege_flag` = '0'
-        AND ppu.`user_id` = #{userId}
-        AND ppu.`status_cd` = '0'
-        AND pp.`status_cd` = '0'
-        UNION
-        SELECT pp.*,ppg.pg_id,ppg.name pg_name FROM p_privilege_user ppu,p_privilege_group ppg,p_privilege pp,p_privilege_rel ppr
-        WHERE ppu.`p_id` = ppr.pg_id
-        AND ppr.pg_id = ppg.pg_id
-        AND ppr.p_id = pp.`p_id`
-        AND pp.p_id = #{pId}
-        AND ppu.`privilege_flag` = '1'
-        AND ppu.`user_id` = #{userId}
-        AND ppu.`status_cd` = '0'
-        AND pp.`status_cd` = '0'
-        AND ppg.status_cd = '0'
-        AND ppr.status_cd = '0'
-        ) tt
+        SELECT DISTINCT tt.p_id        `pId`,
+                        tt.name,
+                        tt.pg_id       pgId,
+                        tt.pg_name     pgName,
+                        tt.description,
+                        tt.create_time createTime
+        FROM (
+                 SELECT pp.*, '-1' AS pg_id, '' AS pg_name
+                 FROM p_privilege_user ppu,
+                      p_privilege pp
+                 WHERE ppu.`p_id` = pp.`p_id`
+                   AND pp.p_id = #{pId}
+                   AND ppu.`privilege_flag` = '0'
+                   AND ppu.`user_id` = #{userId}
+                   AND ppu.`status_cd` = '0'
+                   AND pp.`status_cd` = '0'
+                 UNION
+                 SELECT pp.*, ppg.pg_id, ppg.name pg_name
+                 FROM p_privilege_user ppu,
+                      p_privilege_group ppg,
+                      p_privilege pp,
+                      p_privilege_rel ppr
+                 WHERE ppu.`p_id` = ppr.pg_id
+                   AND ppr.pg_id = ppg.pg_id
+                   AND ppr.p_id = pp.`p_id`
+                   AND pp.p_id = #{pId}
+                   AND ppu.`privilege_flag` = '1'
+                   AND ppu.`user_id` = #{userId}
+                   AND ppu.`status_cd` = '0'
+                   AND pp.`status_cd` = '0'
+                   AND ppg.status_cd = '0'
+                   AND ppr.status_cd = '0'
+             ) tt
     </select>
 </mapper>

@@ -42,6 +42,18 @@ public class ListPurchaseApplyDetailsCmd extends Cmd {
         String storeId = CmdContextUtils.getStoreId(context);
         PurchaseApplyDetailDto purchaseApplyDetailDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDetailDto.class);
         purchaseApplyDetailDto.setStoreId(storeId);
+        //报修待办查看所有记录权限
+        BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
+        basePrivilegeDto.setResource("/viewAllPurchaseApplyDetail");
+        basePrivilegeDto.setUserId(reqJson.getString("userId"));
+        List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
+        if (privileges == null || privileges.size() == 0) {
+            purchaseApplyDetailDto.setUserId(reqJson.getString("userId"));
+            purchaseApplyDetailDto.setUserName(reqJson.getString("userName"));
+        } else {
+            purchaseApplyDetailDto.setUserId("");
+            purchaseApplyDetailDto.setUserName("");
+        }
         int count = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetailsCount(purchaseApplyDetailDto);
         List<ApiPurchaseApplyDetailDataVo> purchaseApplyDetails = null;
         if (count > 0) {

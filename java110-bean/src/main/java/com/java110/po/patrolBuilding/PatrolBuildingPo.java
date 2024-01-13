@@ -1,0 +1,163 @@
+package com.java110.po.patrolBuilding;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * 巡楼表实体类
+ *
+ * @author fqz
+ * @date 2023-12-26 16:32
+ */
+public class PatrolBuildingPo implements Serializable {
+
+    private String pbId;
+
+    private String staffId;
+
+    private String staffName;
+
+    private String state;
+
+    private String communityId;
+
+    private String communityName;
+
+    private String floorId;
+
+    private String floorNum;
+
+    private String title;
+
+    private String remark;
+
+    private String statusCd = "0";
+
+    private Date createTime;
+
+    private String fileRealName;
+
+    private String fileSaveName;
+
+    private String relTypeCd;
+
+    public String getPbId() {
+        return pbId;
+    }
+
+    public void setPbId(String pbId) {
+        this.pbId = pbId;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
+
+    public String getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(String floorId) {
+        this.floorId = floorId;
+    }
+
+    public String getFloorNum() {
+        return floorNum;
+    }
+
+    public void setFloorNum(String floorNum) {
+        this.floorNum = floorNum;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getFileRealName() {
+        return fileRealName;
+    }
+
+    public void setFileRealName(String fileRealName) {
+        this.fileRealName = fileRealName;
+    }
+
+    public String getFileSaveName() {
+        return fileSaveName;
+    }
+
+    public void setFileSaveName(String fileSaveName) {
+        this.fileSaveName = fileSaveName;
+    }
+
+    public String getRelTypeCd() {
+        return relTypeCd;
+    }
+
+    public void setRelTypeCd(String relTypeCd) {
+        this.relTypeCd = relTypeCd;
+    }
+}

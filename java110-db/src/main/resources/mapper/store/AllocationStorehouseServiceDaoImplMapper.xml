@@ -206,6 +206,12 @@
         <if test="applyType !=null and applyType != ''">
             and asa.apply_type= #{applyType}
         </if>
+        <if test="startTime != null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and t.create_time &lt; #{endTime}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -335,6 +341,12 @@
         </if>
         <if test="applyType !=null and applyType != ''">
             and asa.apply_type= #{applyType}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and t.create_time &gt; #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and t.create_time &lt; #{endTime}
         </if>
     </select>
 </mapper>

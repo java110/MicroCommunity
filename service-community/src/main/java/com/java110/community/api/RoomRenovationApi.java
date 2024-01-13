@@ -286,6 +286,12 @@ public class RoomRenovationApi {
         RoomRenovationPo roomRenovationPo = BeanConvertUtil.covertBean(reqJson, RoomRenovationPo.class);
         roomRenovationPo.setStartTime(roomRenovationPo.getStartTime() + " 00:00:00");
         roomRenovationPo.setEndTime(roomRenovationPo.getEndTime() + " 23:59:59");
+        if (!StringUtil.isEmpty(roomRenovationPo.getIsPostpone()) && roomRenovationPo.getIsPostpone().equals("N")) { //是否延期 Y延期 N正常
+            roomRenovationPo.setPostponeTime(null); //延期时间
+        }
+        if (!StringUtil.isEmpty(roomRenovationPo.getIsViolation()) && roomRenovationPo.getIsViolation().equals("N")) { //是否违规 Y违规 N正常
+            roomRenovationPo.setViolationDesc(null); //违规说明
+        }
         //如果状态为装修中、待验收，则房屋状态改为装修中；如果状态为验收成功，则房屋状态改为已装修；如果为待审核、审核失败、验收失败，则房屋状态改为已交房
         if (roomRenovationPo.getState().equals("3000") || roomRenovationPo.getState().equals("4000")) {
             RoomDto roomDto = new RoomDto();

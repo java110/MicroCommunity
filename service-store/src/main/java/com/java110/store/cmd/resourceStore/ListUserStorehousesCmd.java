@@ -104,7 +104,7 @@ public class ListUserStorehousesCmd extends Cmd {
         List<UserStorehouseDto> userStorehouseDtos = new ArrayList<>();
 
         if (count > 0) {
-            if (!StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")) {
+            if (!StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")) { //报修需要用个人物品时，固定的物品不可选
                 List<UserStorehouseDto> userStorehouses = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
                 for (UserStorehouseDto userStorehouse : userStorehouses) {
                     //获取物品是否是固定物品

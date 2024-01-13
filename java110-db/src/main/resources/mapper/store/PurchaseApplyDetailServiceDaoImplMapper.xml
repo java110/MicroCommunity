@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="purchaseApplyDetailServiceDaoImpl">
 
     <!-- 保存订单明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessPurchaseApplyDetailInfo" parameterType="Map">
         insert into business_purchase_apply_detail
-        (id,operate,apply_order_id,b_id,res_id,quantity,remark,status_cd) values
-        (#{id},#{operate},#{applyOrderId},#{bId},#{resId},#{quantity},#{remark},#{statusCd})
+        (id, operate, apply_order_id, b_id, res_id, quantity, remark, status_cd)
+        values (#{id}, #{operate}, #{applyOrderId}, #{bId}, #{resId}, #{quantity}, #{remark}, #{statusCd})
     </insert>
 
     <!-- 查询订单明细信息（Business） add by wuxw 2018-07-03 -->
@@ -92,8 +91,10 @@
         from purchase_apply_detail t
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.status_cd = '0'
         left join resource_store rs on rs.res_id = t.res_id and rs.status_cd = '0'
-        left join t_dict td4 on rs.unit_code = td4.status_cd and td4.table_name = 'resource_store' and td4.table_columns = 'unit_code'
-        left join t_dict td5 on rs.mini_unit_code = td5.status_cd and td5.table_name = 'resource_store' and td5.table_columns = 'unit_code'
+        left join t_dict td4 on rs.unit_code = td4.status_cd and td4.table_name = 'resource_store' and td4.table_columns
+        = 'unit_code'
+        left join t_dict td5 on rs.mini_unit_code = td5.status_cd and td5.table_name = 'resource_store' and
+        td5.table_columns = 'unit_code'
         left join storehouse sh on rs.sh_id = sh.sh_id and sh.status_cd = '0'
         left join resource_supplier rsp on rsp.rs_id = t.rs_id
         left join t_dict td1 on pa.res_order_type = td1.status_cd and td1.table_name = 'purchase_apply' and
@@ -105,7 +106,8 @@
         LEFT JOIN resource_store_type rst on rs.rst_id=rst.rst_id and rst.status_cd = '0'
         LEFT JOIN resource_store_type rst1 on rs.parent_rst_id=rst1.rst_id and rst1.status_cd = '0'
         LEFT JOIN resource_store_specification rss on rs.rss_id=rss.rss_id and rss.status_cd = '0'
-        left join t_dict td6 on rs.is_fixed = td6.status_cd and td6.table_name = 'resource_store' and td6.table_columns = 'is_fixed'
+        left join t_dict td6 on rs.is_fixed = td6.status_cd and td6.table_name = 'resource_store' and td6.table_columns
+        = 'is_fixed'
         where 1 = 1
         <if test="applyOrderId !=null and applyOrderId != ''">
             and t.apply_order_id like concat('%',#{applyOrderId},'%')

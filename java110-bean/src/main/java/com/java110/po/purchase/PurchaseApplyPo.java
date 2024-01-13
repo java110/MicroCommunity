@@ -29,6 +29,7 @@ public class PurchaseApplyPo implements Serializable {
     private String createUserId;
     private String createUserName;
     private String communityId;
+    private String bId;
 
     private String statusCd = "0";
 
@@ -170,5 +171,13 @@ public class PurchaseApplyPo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getbId() {
+        return bId;
+    }
+
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 }

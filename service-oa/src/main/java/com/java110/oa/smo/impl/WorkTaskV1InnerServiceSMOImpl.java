@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class WorkTaskV1InnerServiceSMOImpl extends BaseServiceSMO implements IWo
     @Autowired
     private IWorkTaskV1ServiceDao workTaskV1ServiceDaoImpl;
 
-    @Autowired
+    @Autowired(required = false)
     private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
 

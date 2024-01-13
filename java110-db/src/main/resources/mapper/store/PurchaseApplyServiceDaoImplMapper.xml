@@ -219,15 +219,8 @@
         t.warehousing_way warehousingWay,
         t.community_id communityId
         from purchase_apply t
-        <if test="resName != null and resName != ''">
-            left join purchase_apply_detail pad on t.apply_order_id = pad.apply_order_id and pad.status_cd = '0'
-            left join resource_store rs on pad.res_id = rs.res_id and rs.status_cd = '0'
-        </if>
-        inner join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
+        left join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 = 1
-        <if test="resName != null and resName != ''">
-            and rs.res_name like concat('%',#{resName},'%')
-        </if>
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
         </if>
@@ -244,8 +237,8 @@
                 #{item}
             </foreach>
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name like concat('%',#{userName},'%')
+        <if test="name !=null and name != ''">
+            and t.user_name like concat('%',#{name},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -429,14 +422,7 @@
     <select id="queryPurchaseApplysCount" parameterType="Map" resultType="Map">
         select count(1) count
         from purchase_apply t
-        <if test="resName != null and resName != ''">
-            left join purchase_apply_detail pad on t.apply_order_id = pad.apply_order_id and pad.status_cd = '0'
-            left join resource_store rs on pad.res_id = rs.res_id and rs.status_cd = '0'
-        </if>
         where 1 = 1
-        <if test="resName != null and resName != ''">
-            and rs.res_name like concat('%',#{resName},'%')
-        </if>
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
         </if>
@@ -453,8 +439,8 @@
                 #{item}
             </foreach>
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name like concat('%',#{userName},'%')
+        <if test="name !=null and name != ''">
+            and t.user_name like concat('%',#{name},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

@@ -358,7 +358,7 @@ public class RepairFinishCmd extends Cmd {
             repairUserDto.setRepairId(reqJson.getString("repairId"));
             repairUserDto.setCommunityId(reqJson.getString("communityId"));
             repairUserDto.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
-           List<RepairUserDto> startRepairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
+            List<RepairUserDto> startRepairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
             if (startRepairUserDtos.size() != 1) {
                 ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "数据错误 该订单没有发起人！");
                 context.setResponseEntity(responseEntity);
@@ -429,7 +429,7 @@ public class RepairFinishCmd extends Cmd {
             JSONArray beforeRepairPhotos = reqJson.getJSONArray("beforeRepairPhotos");
             for (int _photoIndex = 0; _photoIndex < beforeRepairPhotos.size(); _photoIndex++) {
                 String photo = beforeRepairPhotos.getJSONObject(_photoIndex).getString("photo");
-                if(photo.length()> 512){
+                if (photo.length() > 512) {
                     FileDto fileDto = new FileDto();
                     fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
                     fileDto.setFileName(fileDto.getFileId());
@@ -457,7 +457,7 @@ public class RepairFinishCmd extends Cmd {
             JSONArray afterRepairPhotos = reqJson.getJSONArray("afterRepairPhotos");
             for (int _photoIndex = 0; _photoIndex < afterRepairPhotos.size(); _photoIndex++) {
                 String photo = afterRepairPhotos.getJSONObject(_photoIndex).getString("photo");
-                if(photo.length()> 512){
+                if (photo.length() > 512) {
                     FileDto fileDto = new FileDto();
                     fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
                     fileDto.setFileName(fileDto.getFileId());

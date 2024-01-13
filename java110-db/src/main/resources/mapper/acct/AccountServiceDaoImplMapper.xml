@@ -98,7 +98,7 @@
         LEFT JOIN t_dict td on t.acct_type = td.status_cd and td.table_name = 'account' and td.table_columns =
         'acct_type'
         <if test="objType !=null and objType == 6006">
-            left join building_owner bo on t.obj_id = bo.owner_id and bo.status_cd = '0'
+            left join building_owner bo on t.obj_id = bo.member_id and bo.status_cd = '0'
         </if>
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -198,7 +198,7 @@
         LEFT JOIN t_dict td on t.acct_type = td.status_cd and td.table_name = 'account' and td.table_columns =
         'acct_type'
         <if test="objType !=null and objType == 6006">
-            left join building_owner bo on t.obj_id = bo.owner_id and bo.status_cd = '0'
+            left join building_owner bo on t.obj_id = bo.member_id and bo.status_cd = '0'
         </if>
         where 1 =1
         <if test="amount !=null and amount != ''">
@@ -266,8 +266,8 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id = #{objId}
         </if>
-        <if test="link !=null and link != ''">
+        <!--<if test="link !=null and link != ''">
             and t.link= #{link}
-        </if>
+        </if>-->
     </update>
 </mapper>

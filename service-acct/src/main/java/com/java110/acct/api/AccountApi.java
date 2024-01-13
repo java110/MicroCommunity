@@ -92,20 +92,18 @@ public class AccountApi {
      * @path /app/account/queryOwnerAccount
      */
     @RequestMapping(value = "/queryOwnerAccount", method = RequestMethod.GET)
-    public ResponseEntity<String> queryOwnerAccount(
-            @RequestParam(value = "communityId") String communityId,
-            @RequestParam(value = "ownerId", required = false) String ownerId,
-            @RequestParam(value = "ownerName", required = false) String ownerName,
-            @RequestParam(value = "feeId", required = false) String feeId,
-            @RequestParam(value = "link", required = false) String link,
-            @RequestParam(value = "idCard", required = false) String idCard,
-            @RequestParam(value = "acctType", required = false) String acctType,
-            @RequestParam(value = "acctId", required = false) String acctId,
-            @RequestParam(value = "page") int page,
-            @RequestParam(value = "row") int row,
-            @RequestHeader(value = "user-id") String userId,
-            @RequestHeader(value = "app-id") String appId
-    ) {
+    public ResponseEntity<String> queryOwnerAccount(@RequestParam(value = "communityId") String communityId,
+                                                    @RequestParam(value = "ownerId", required = false) String ownerId,
+                                                    @RequestParam(value = "ownerName", required = false) String ownerName,
+                                                    @RequestParam(value = "feeId", required = false) String feeId,
+                                                    @RequestParam(value = "link", required = false) String link,
+                                                    @RequestParam(value = "idCard", required = false) String idCard,
+                                                    @RequestParam(value = "acctType", required = false) String acctType,
+                                                    @RequestParam(value = "acctId", required = false) String acctId,
+                                                    @RequestParam(value = "page") int page,
+                                                    @RequestParam(value = "row") int row,
+                                                    @RequestHeader(value = "user-id") String userId,
+                                                    @RequestHeader(value = "app-id") String appId) {
         AccountDto accountDto = new AccountDto();
         accountDto.setPage(page);
         accountDto.setRow(row);

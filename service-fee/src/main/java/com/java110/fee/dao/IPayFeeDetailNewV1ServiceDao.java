@@ -15,9 +15,7 @@
  */
 package com.java110.fee.dao;
 
-
 import com.java110.utils.exception.DAOException;
-
 
 import java.util.List;
 import java.util.Map;
@@ -32,35 +30,31 @@ import java.util.Map;
  */
 public interface IPayFeeDetailNewV1ServiceDao {
 
-
     /**
      * 保存 费用明细信息
+     *
      * @param info
      * @throws DAOException DAO异常
      */
     int savePayFeeDetailNewInfo(Map info) throws DAOException;
 
-
-
-
     /**
      * 查询费用明细信息（instance过程）
      * 根据bId 查询费用明细信息
+     *
      * @param info bId 信息
      * @return 费用明细信息
      * @throws DAOException DAO异常
      */
     List<Map> getPayFeeDetailNewInfo(Map info) throws DAOException;
 
-
-
     /**
      * 修改费用明细信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     int updatePayFeeDetailNewInfo(Map info) throws DAOException;
-
 
     /**
      * 查询费用明细总数
@@ -70,4 +64,27 @@ public interface IPayFeeDetailNewV1ServiceDao {
      */
     int queryPayFeeDetailNewsCount(Map info);
 
+    /**
+     * 缴费清单查询
+     *
+     * @author fqz
+     * @date 2023-11-13
+     */
+    List<Map> queryPayFeeDetailNewInfo(Map info);
+
+    /**
+     * 缴费清单数量查询
+     *
+     * @author fqz
+     * @date 2023-11-13
+     */
+    int queryPayFeeDetailNewCount(Map info);
+
+    /**
+     * 查询缴费清单大小计
+     *
+     * @author fqz
+     * @date 2023-11-13
+     */
+    List<Map> queryPayFeeDetailNewSumInfo(Map info);
 }

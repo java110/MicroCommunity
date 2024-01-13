@@ -1,5 +1,6 @@
 package com.java110.job.export.adapt;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
 import com.java110.dto.fee.FeeDto;
@@ -16,6 +17,8 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +34,7 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
     private static final int MAX_ROW = 200;
 
     @Override
-    public SXSSFWorkbook exportData(ExportDataDto exportDataDto) {
+    public SXSSFWorkbook exportData(ExportDataDto exportDataDto) throws ParseException {
         SXSSFWorkbook workbook = null;  //工作簿
         String userId = "";
         //工作表
@@ -42,14 +45,14 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
         row.createCell(0).setCellValue("订单号");
         row.createCell(1).setCellValue("房号");
         row.createCell(2).setCellValue("业主");
-        row.createCell(3).setCellValue("费用项");
-        row.createCell(4).setCellValue("费用类型");
+        row.createCell(3).setCellValue("费用类型");
+        row.createCell(4).setCellValue("费用项");
         row.createCell(5).setCellValue("费用状态");
         row.createCell(6).setCellValue("支付方式");
         row.createCell(7).setCellValue("费用开始时间");
         row.createCell(8).setCellValue("费用结束时间");
         row.createCell(9).setCellValue("缴费时间");
-        row.createCell(10).setCellValue("应收金额");
+        row.createCell(10).setCellValue("应缴/应收金额");
         row.createCell(11).setCellValue("实收金额");
         row.createCell(12).setCellValue("优惠金额");
         row.createCell(13).setCellValue("减免金额");
@@ -82,7 +85,7 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
         return workbook;
     }
 
-    private void getRepairPayFeeDetail(Sheet sheet, ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+    private void getRepairPayFeeDetail(Sheet sheet, ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) throws ParseException {
         reportFeeMonthStatisticsDto.setPage(1);
         reportFeeMonthStatisticsDto.setRow(MAX_ROW);
         ResultVo resultVo = queryPayFeeDetailInnerServiceSMOImpl.query(reportFeeMonthStatisticsDto);
@@ -98,16 +101,18 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
         }
     }
 
-    private void appendData(ResultVo resultVo, Sheet sheet, int step) {
-        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = (List<ReportFeeMonthStatisticsDto>) resultVo.getData();
+    private void appendData(ResultVo resultVo, Sheet sheet, int step) throws ParseException {
+        Object data = resultVo.getData();
+        JSONArray reportFeeMonthStatisticsDtos = JSONArray.parseArray(JSONObject.toJSONString(data));
+//        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = (List<ReportFeeMonthStatisticsDto>) resultVo.getData();
         Row row = null;
         JSONObject dataObj = null;
-        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = null;
+//        JSONObject reportFeeMonthStatisticsDto = null;
         Date endDate = null;
         for (int roomIndex = 0; roomIndex < reportFeeMonthStatisticsDtos.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + step + 1);
-            reportFeeMonthStatisticsDto = reportFeeMonthStatisticsDtos.get(roomIndex);
-            dataObj = JSONObject.parseObject(JSONObject.toJSONString(reportFeeMonthStatisticsDtos.get(roomIndex)));
+            dataObj = reportFeeMonthStatisticsDtos.getJSONObject(roomIndex);
+//            dataObj = JSONObject.parseObject(JSONObject.toJSONString(reportFeeMonthStatisticsDtos.get(roomIndex)));
             row.createCell(0).setCellValue(dataObj.getString("oId"));
             if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
                 row.createCell(1).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
@@ -116,17 +121,18 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
             }
             endDate =  DateUtil.getDateFromStringB(dataObj.getString("endTime"));
             //todo 如果不是一次性费用结束时间建1
-            if(!StringUtil.isEmpty(reportFeeMonthStatisticsDto.getFeeFlag())
-                    && !FeeDto.FEE_FLAG_ONCE.equals(reportFeeMonthStatisticsDto.getFeeFlag())){
+            if(!StringUtil.isEmpty(dataObj.getString("feeFlag"))
+                    && !FeeDto.FEE_FLAG_ONCE.equals(dataObj.getString("feeFlag"))){
                 endDate = DateUtil.stepDay(endDate,-1);
             }
 
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
-            row.createCell(3).setCellValue(dataObj.getString("feeName"));
-            row.createCell(4).setCellValue(dataObj.getString("feeTypeCdName"));
+            row.createCell(3).setCellValue(dataObj.getString("feeTypeCdName"));
+            row.createCell(4).setCellValue(dataObj.getString("feeName"));
             row.createCell(5).setCellValue(dataObj.getString("stateName"));
             row.createCell(6).setCellValue(dataObj.getString("primeRate"));
-            row.createCell(7).setCellValue(dataObj.getString("startTime"));
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            row.createCell(7).setCellValue(DateUtil.getFormatTimeStringB(format.parse(dataObj.getString("startTime"))));
             row.createCell(8).setCellValue(DateUtil.getFormatTimeStringB(endDate));
             row.createCell(9).setCellValue(DateUtil.getFormatTimeStringA(dataObj.getDate("createTime")));
             row.createCell(10).setCellValue(dataObj.getDouble("receivableAmount"));

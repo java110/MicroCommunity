@@ -13,22 +13,13 @@ import com.java110.core.smo.IOwnerGetDataCheck;
 import com.java110.dto.floor.FloorDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.unit.UnitDto;
-import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerCarDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
-import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
-import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IUnitInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.user.IOwnerCarInnerServiceSMO;
-import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
-import com.java110.po.fee.FeeAttrPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.*;
@@ -40,7 +31,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,16 +45,7 @@ public class ListFeeCmd extends Cmd {
     private static Logger logger = LoggerFactory.getLogger(ListFeeCmd.class);
 
     @Autowired
-    private IParkingSpaceInnerServiceSMO parkingSpaceInnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
-
-    @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
-
-    @Autowired
-    private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
@@ -80,9 +61,6 @@ public class ListFeeCmd extends Cmd {
 
     @Autowired
     private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
     private IOwnerGetDataCheck ownerGetDataCheckImpl;
@@ -110,6 +88,19 @@ public class ListFeeCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
+            String[] roomNums = reqJson.getString("roomNum").split("-");
+            if (roomNums == null || roomNums.length != 3) {
+                throw new IllegalArgumentException("房屋编号格式不对！");
+            }
+            RoomDto roomDto = new RoomDto();
+            roomDto.setCommunityId(reqJson.getString("communityId"));
+            roomDto.setFloorNum(roomNums[0]);
+            roomDto.setUnitNum(roomNums[1]);
+            roomDto.setRoomNum(roomNums[2]);
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            Assert.listOnlyOne(roomDtos, "找不到房屋信息！");
+        }
         // todo 房屋名称 刷入 房屋ID
         freshPayerObjIdByRoomNum(reqJson);
 
@@ -168,7 +159,6 @@ public class ListFeeCmd extends Cmd {
         if (!reqJson.containsKey("payerObjIds") || StringUtil.isEmpty(reqJson.getString("payerObjIds"))) {
             return;
         }
-
         String payerObjIds = reqJson.getString("payerObjIds");
         feeDto.setPayerObjIds(payerObjIds.split(","));
     }
@@ -182,12 +172,10 @@ public class ListFeeCmd extends Cmd {
         if (!reqJson.containsKey("roomNum") || StringUtil.isEmpty(reqJson.getString("roomNum"))) {
             return;
         }
-
         String[] roomNums = reqJson.getString("roomNum").split("-", 3);
         if (roomNums == null || roomNums.length != 3) {
             throw new IllegalArgumentException("房屋编号格式错误！");
         }
-
         String floorNum = roomNums[0];
         String unitNum = roomNums[1];
         String roomNum = roomNums[2];
@@ -303,8 +291,5 @@ public class ListFeeCmd extends Cmd {
         }
         //考虑租金递增
         computeFeeSMOImpl.dealRentRate(feeDto);
-
     }
-
-
 }

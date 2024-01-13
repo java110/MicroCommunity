@@ -40,6 +40,8 @@ public class AssetInventoryDto extends PageDto implements Serializable {
 
     private String resId;
 
+    private String startTime;
+    private String endTime;
 
     public String getCode() {
         return code;
@@ -207,5 +209,21 @@ public class AssetInventoryDto extends PageDto implements Serializable {
 
     public void setResId(String resId) {
         this.resId = resId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

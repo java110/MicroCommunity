@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ownerCarServiceDaoImpl">
 
@@ -120,7 +119,6 @@
             and t.community_id= #{communityId}
         </if>
     </insert>
-
 
     <!-- 查询车辆管理信息 add by wuxw 2018-07-03 -->
     <select id="getOwnerCarInfo" parameterType="Map" resultType="Map">
@@ -333,7 +331,6 @@
         <if test="carTypeCd !=null and carTypeCd != ''">
             and t.car_type_cd= #{carTypeCd}
         </if>
-
     </update>
 
     <!-- 查询车辆管理数量 add by wuxw 2018-07-03 -->

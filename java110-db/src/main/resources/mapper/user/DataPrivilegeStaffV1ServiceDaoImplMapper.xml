@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dataPrivilegeStaffV1ServiceDaoImpl">
 
-
     <!-- 保存数据权限员工关系信息 add by wuxw 2018-07-03 -->
     <insert id="saveDataPrivilegeStaffInfo" parameterType="Map">
-        insert into data_privilege_staff(
-        dps_id,dp_id,staff_name,remark,community_id,staff_id
-        ) values (
-        #{dpsId},#{dpId},#{staffName},#{remark},#{communityId},#{staffId}
-        )
+        insert into data_privilege_staff(dps_id, dp_id, staff_name, remark, community_id, staff_id)
+        values (#{dpsId}, #{dpId}, #{staffName}, #{remark}, #{communityId}, #{staffId})
     </insert>
-
 
     <!-- 查询数据权限员工关系信息 add by wuxw 2018-07-03 -->
     <select id="getDataPrivilegeStaffInfo" parameterType="Map" resultType="Map">
@@ -30,7 +24,10 @@
             and t.dp_id= #{dpId}
         </if>
         <if test="staffName !=null and staffName != ''">
-            and t.staff_name= #{staffName}
+            and t.staff_name like '%${staffName}%'
+        </if>
+        <if test="tel !=null and tel != ''">
+            and u.tel= #{tel}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -48,9 +45,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改数据权限员工关系信息 add by wuxw 2018-07-03 -->
     <update id="updateDataPrivilegeStaffInfo" parameterType="Map">
@@ -58,7 +53,6 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-
         <if test="dpId !=null and dpId != ''">
             , t.dp_id= #{dpId}
         </if>
@@ -68,7 +62,6 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-
         <if test="staffId !=null and staffId != ''">
             , t.staff_id= #{staffId}
         </if>
@@ -85,6 +78,7 @@
     <select id="queryDataPrivilegeStaffsCount" parameterType="Map" resultType="Map">
         select count(1) count
         from data_privilege_staff t
+        left join u_user u on t.staff_id = u.user_id and u.status_cd = '0'
         where 1 =1
         <if test="dpsId !=null and dpsId != ''">
             and t.dps_id= #{dpsId}
@@ -93,7 +87,10 @@
             and t.dp_id= #{dpId}
         </if>
         <if test="staffName !=null and staffName != ''">
-            and t.staff_name= #{staffName}
+            and t.staff_name like '%${staffName}%'
+        </if>
+        <if test="tel !=null and tel != ''">
+            and u.tel= #{tel}
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -107,24 +104,23 @@
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
         </if>
-
-
     </select>
 
     <!-- 查询用户权限数量 add by wuxw 2018-07-03 -->
     <select id="queryStaffsNotInDataPrivilegeCount" parameterType="Map" resultType="Map">
-
         select count(1) count
         from u_user t
         inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
         left join data_privilege_staff pu on t.user_id = pu.staff_id and pu.status_cd = '0' and pu.dp_id = #{dpId}
         where t.status_cd = '0'
         and pu.dp_id is null
-        <if test="userName !=null and userName != ''">
-            and t.name like concat('%', #{userName},'%')
+        <if test="staffId !=null and staffId != ''">
+            and t.user_id = #{staffId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.name like concat('%', #{staffName},'%')
         </if>
         and su.store_id = #{storeId}
-
     </select>
 
     <!-- 查询用户权限信息 add by wuxw 2018-07-03 -->
@@ -138,6 +134,9 @@
         left join data_privilege_staff pu on t.user_id = pu.staff_id and pu.status_cd = '0' and pu.dp_id = #{dpId}
         where t.status_cd = '0'
         and pu.dp_id is null
+        <if test="staffId !=null and staffId != ''">
+            and t.user_id = #{staffId}
+        </if>
         <if test="staffName !=null and staffName != ''">
             and t.name like concat('%', #{staffName},'%')
         </if>
@@ -147,5 +146,4 @@
             limit #{page}, #{row}
         </if>
     </select>
-
 </mapper>

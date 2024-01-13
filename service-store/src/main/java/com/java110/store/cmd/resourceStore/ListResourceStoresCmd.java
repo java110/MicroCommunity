@@ -11,7 +11,6 @@ import com.java110.dto.PageDto;
 import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
-import com.java110.dto.store.StorehouseDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -46,8 +45,8 @@ import java.util.Map;
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "page", length = 11,type = "int",remark = "页数"),
-        @Java110ParamDoc(name = "row", length = 11,type = "int", remark = "行业数"),
+        @Java110ParamDoc(name = "page", length = 11, type = "int", remark = "页数"),
+        @Java110ParamDoc(name = "row", length = 11, type = "int", remark = "行业数"),
 })
 
 @Java110ResponseDoc(
@@ -55,14 +54,14 @@ import java.util.Map;
                 @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
                 @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
-                @Java110ParamDoc(parentNodeName = "data",name = "resCode", type = "String", remark = "物品编号"),
-                @Java110ParamDoc(parentNodeName = "data",name = "resName", type = "String", remark = "物品名称"),
+                @Java110ParamDoc(parentNodeName = "data", name = "resCode", type = "String", remark = "物品编号"),
+                @Java110ParamDoc(parentNodeName = "data", name = "resName", type = "String", remark = "物品名称"),
         }
 )
 
 @Java110ExampleDoc(
-        reqBody="http://localhost:3000/app/resourceStore.listResourceStores?resId=&resName=&resCode=&shId=&parentRstId=&rstId=&rssId=&isFixed=&page=1&row=10",
-        resBody="{\n" +
+        reqBody = "http://localhost:3000/app/resourceStore.listResourceStores?resId=&resName=&resCode=&shId=&parentRstId=&rstId=&rssId=&isFixed=&page=1&row=10",
+        resBody = "{\n" +
                 "    \"page\": 0,\n" +
                 "    \"records\": 1,\n" +
                 "    \"resourceStores\": [\n" +
@@ -157,9 +156,8 @@ public class ListResourceStoresCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含商户ID");
-        if(!reqJson.containsKey("shId") || StringUtil.isEmpty(reqJson.getString("shId"))) {
+        if (!reqJson.containsKey("shId") || StringUtil.isEmpty(reqJson.getString("shId"))) {
             Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区ID");
         }
     }
@@ -172,7 +170,6 @@ public class ListResourceStoresCmd extends Cmd {
         //采购2806集团仓库 物品领用2807小区仓库  默认查询当前小区所有商品
         //是否具有查看集团仓库物品权限
         String userId = reqJson.getString("userId");
-
         BasePrivilegeDto basePrivilegeDto1 = new BasePrivilegeDto();
         basePrivilegeDto1.setResource("/viewHiddenWarehouse");
         basePrivilegeDto1.setUserId(userId);
@@ -213,12 +210,9 @@ public class ListResourceStoresCmd extends Cmd {
      * @param resourceStores
      */
     private void queryResourceStoreAndResourceTotalPrice(List<ApiResourceStoreDataVo> resourceStores) {
-
         if (resourceStores == null || resourceStores.size() < 1) {
             return;
         }
-
-
         BigDecimal stock = null;
         BigDecimal totalPrice = null;
         for (ApiResourceStoreDataVo resourceStore : resourceStores) {
@@ -228,15 +222,12 @@ public class ListResourceStoresCmd extends Cmd {
             if (resourceStoreTimesDtos == null || resourceStoreTimesDtos.size() < 1) {
                 continue;
             }
-
             for (ResourceStoreTimesDto resourceStoreTimesDto : resourceStoreTimesDtos) {
-                stock = stock.add(new BigDecimal(resourceStoreTimesDto.getStock()));
-                totalPrice = totalPrice.add(new BigDecimal(resourceStoreTimesDto.getTotalPrice()));
+                stock = stock.add(new BigDecimal(resourceStoreTimesDto.getStock())).setScale(2,BigDecimal.ROUND_HALF_EVEN);
+                totalPrice = totalPrice.add(new BigDecimal(resourceStoreTimesDto.getTotalPrice())).setScale(2,BigDecimal.ROUND_HALF_EVEN);
             }
-
             resourceStore.setStock(stock.doubleValue() + "");
             resourceStore.setTotalPrice(totalPrice.doubleValue() + "");
         }
-
     }
 }

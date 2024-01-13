@@ -14,7 +14,8 @@
     <select id="getStoreInfo" parameterType="Map" resultType="Map">
         select t.address,t.store_type_cd,t.store_type_cd storeTypeCd,t.name,t.tel,t.status_cd,t.status_cd
         statusCd,t.state,t.store_id,t.store_id storeId,t.user_id,t.user_id userId,t.map_y,t.map_y mapY,t.map_x,t.map_x
-        mapX,t.create_time createTime,t.nearby_landmarks,t.nearby_landmarks nearByLandmarks,sa.value corporation,sa1.value foundingTime,
+        mapX,t.create_time createTime,t.nearby_landmarks,t.nearby_landmarks nearByLandmarks,sa.value
+        corporation,sa1.value foundingTime,
         CASE t.store_type_cd
         WHEN '800900000000' THEN '开发团队'
         WHEN '800900000001' THEN '运营团队'
@@ -33,7 +34,7 @@
             and t.store_type_cd= #{storeTypeCd}
         </if>
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like '%${name}%'
         </if>
         <if test="tel !=null and tel != ''">
             and t.tel= #{tel}
@@ -116,7 +117,7 @@
             and t.store_type_cd= #{storeTypeCd}
         </if>
         <if test="name !=null and name != ''">
-            and t.name= #{name}
+            and t.name like '%${name}%'
         </if>
         <if test="tel !=null and tel != ''">
             and t.tel= #{tel}

@@ -5,11 +5,9 @@ import java.util.List;
 
 public class ApiPurchaseApplyDetailDataVo implements Serializable {
 
-
     private String id;
     private String applyOrderId;
     private String statusCd;
-
     private String resId;
     private String rsId;
     private String resName;
@@ -55,10 +53,9 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
 
     private String createUserId;
 
-
-
     private String storeId;
 
+    private String name;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -84,8 +81,6 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
         this.id = id;
     }
 
-
-
     public String getResId() {
         return resId;
     }
@@ -93,7 +88,6 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
     public void setResId(String resId) {
         this.resId = resId;
     }
-
 
     public String getResName() {
         return resName;
@@ -238,8 +232,6 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-
 
     public String getRsId() {
         return rsId;
@@ -399,5 +391,13 @@ public class ApiPurchaseApplyDetailDataVo implements Serializable {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

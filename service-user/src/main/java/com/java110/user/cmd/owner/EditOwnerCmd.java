@@ -41,8 +41,7 @@ import java.util.List;
         resource = "userDoc",
         author = "吴学文",
         serviceCode = "owner.editOwner",
-        seq = 10
-)
+        seq = 10)
 
 @Java110ParamsDoc(params = {
         @Java110ParamDoc(name = "communityId", length = 30, remark = "小区ID"),
@@ -61,8 +60,7 @@ import java.util.List;
         params = {
                 @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
-        }
-)
+        })
 
 @Java110ExampleDoc(
         reqBody = "{\n" +
@@ -121,7 +119,6 @@ public class EditOwnerCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
         // Assert.jsonObjectHaveKey(paramIn, "idCard", "请求报文中未包含身份证号");
         Assert.judgeAttrValue(reqJson);
-
         //获取手机号(判断手机号是否重复)
         String link = reqJson.getString("link");
         if (!StringUtil.isEmpty(link) && link.contains("*")) {
@@ -136,7 +133,6 @@ public class EditOwnerCmd extends Cmd {
         }
         //获取身份证号(判断身份证号是否重复)
         String idCard = reqJson.getString("idCard");
-
         if (!StringUtil.isEmpty(idCard) && idCard.contains("*")) {
             OwnerDto owner = new OwnerDto();
             owner.setOwnerId(reqJson.getString("ownerId"));
@@ -147,13 +143,10 @@ public class EditOwnerCmd extends Cmd {
             idCard = owners.get(0).getIdCard();
             reqJson.put("idCard", idCard);
         }
-
         String userValidate = MappingCache.getValue("USER_VALIDATE");
-
         if (!"ON".equals(userValidate)) {
             return;
         }
-
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setLink(link);
         ownerDto.setCommunityId(reqJson.getString("communityId"));
@@ -190,7 +183,6 @@ public class EditOwnerCmd extends Cmd {
         if (!reqJson.containsKey("ownerId") || OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
             reqJson.put("ownerId", reqJson.getString("memberId"));
         }
-
         //这里注释 因为 有国外的手机号 不是11位
 //        if (link.length() != 11) {
 //            throw new IllegalArgumentException("手机号输入不正确！");
@@ -200,7 +192,6 @@ public class EditOwnerCmd extends Cmd {
         }
         //todo 修改 业主信息
         editOwner(reqJson);
-
         JSONArray attrs = reqJson.getJSONArray("attrs");
         if (attrs == null || attrs.size() < 1) {
             return;
@@ -226,26 +217,18 @@ public class EditOwnerCmd extends Cmd {
                 throw new CmdException("修改业主属性失败");
             }
         }
-
         //todo 如果 业主做了绑定则修改绑定的手机号
         updateOwnerAppUser(reqJson);
-
-
     }
 
-
     public void editOwner(JSONObject paramInJson) {
-
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setMemberId(paramInJson.getString("memberId"));
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-
         Assert.listOnlyOne(ownerDtos, "未查询到业主信息或查询到多条");
-
         JSONObject businessOwner = new JSONObject();
         businessOwner.putAll(BeanConvertUtil.beanCovertMap(ownerDtos.get(0)));
         businessOwner.putAll(paramInJson);
-
         if (paramInJson.containsKey("wxPhoto")) {
             businessOwner.put("link", paramInJson.getString("wxPhoto"));
         }
@@ -258,17 +241,28 @@ public class EditOwnerCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("修改业主失败");
         }
-
         //todo 判断业主手机号和账户手机号是否相同，不相同修改账户手机号
         AccountDto accountDto = new AccountDto();
         accountDto.setObjId(ownerDtos.get(0).getMemberId());
         accountDto.setPartId(ownerDtos.get(0).getCommunityId());
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-        if(accountDtos == null || accountDtos.size()< 1){
-            return ;
-        }
-        if(accountDtos.get(0).getLink().equals(ownerDtos.get(0).getLink())){
+        if (accountDtos == null || accountDtos.size() < 1) {
             return;
+        }
+        //查询更新后的业主信息
+        OwnerDto owner = new OwnerDto();
+        owner.setMemberId(paramInJson.getString("memberId"));
+        List<OwnerDto> owners = ownerInnerServiceSMOImpl.queryOwnerMembers(owner);
+        Assert.listOnlyOne(owners, "未查询到业主信息或查询到多条");
+        /*if (accountDtos.get(0).getLink().equals(ownerDtos.get(0).getLink())) {
+            return;
+        }*/
+        if (!accountDtos.get(0).getLink().equals(owners.get(0).getLink()) || !accountDtos.get(0).getAcctName().equals(owners.get(0).getName())) {
+            AccountPo accountPo = new AccountPo();
+            accountPo.setAcctName(owners.get(0).getName());
+            accountPo.setLink(owners.get(0).getLink());
+            accountPo.setAcctId(accountDtos.get(0).getAcctId());
+            accountInnerServiceSMOImpl.updateAccount(accountPo);
         }
 
         AccountPo accountPo = new AccountPo();
@@ -278,7 +272,6 @@ public class EditOwnerCmd extends Cmd {
     }
 
     public void editOwnerPhoto(JSONObject paramInJson) {
-
         String _photo = paramInJson.getString("ownerPhoto");
         if (_photo.length() > 512) {
             FileDto fileDto = new FileDto();
@@ -289,7 +282,6 @@ public class EditOwnerCmd extends Cmd {
             fileDto.setCommunityId(paramInJson.getString("communityId"));
             _photo = fileInnerServiceSMOImpl.saveFile(fileDto);
         }
-
         FileRelDto fileRelDto = new FileRelDto();
         fileRelDto.setRelTypeCd("10000");
         fileRelDto.setObjId(paramInJson.getString("memberId"));
@@ -310,7 +302,6 @@ public class EditOwnerCmd extends Cmd {
             }
             return;
         }
-
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
         businessUnit.put("fileRealName", _photo);
@@ -322,16 +313,14 @@ public class EditOwnerCmd extends Cmd {
         }
     }
 
-
     /**
      * 如果 业主做了绑定则修改绑定的手机号
+     *
      * @param reqJson
      */
     private void updateOwnerAppUser(JSONObject reqJson) {
-
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setMemberId(reqJson.getString("memberId"));
-
         //todo 查询app用户表
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
         if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
@@ -341,7 +330,6 @@ public class EditOwnerCmd extends Cmd {
             OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
             ownerAppUserPo.setLink(reqJson.getString("link"));
             ownerAppUserV1InnerServiceSMOImpl.updateOwnerAppUser(ownerAppUserPo);
-
             if (StringUtil.isEmpty(ownerAppUser.getUserId())) {
                 continue;
             }
@@ -354,7 +342,5 @@ public class EditOwnerCmd extends Cmd {
             userPo.setTel(reqJson.getString("link"));
             userV1InnerServiceSMOImpl.updateUser(userPo);
         }
-
-
     }
 }

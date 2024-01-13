@@ -96,7 +96,7 @@ public class FeeInnerServiceSMOImpl extends BaseServiceSMO implements IFeeInnerS
                     continue;
                 }
                 tmpFeeAttrDtos.add(feeAttrDto);
-                if(FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME.equals(feeAttrDto.getSpecCd())){
+                if (FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME.equals(feeAttrDto.getSpecCd())) {
                     payerObjName = feeAttrDto.getValue();
                 }
             }

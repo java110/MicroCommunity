@@ -108,9 +108,7 @@
         <if test="personName !=null and personName != ''">
             , t.person_name= #{personName}
         </if>
-        <if test="violationDesc !=null and violationDesc != ''">
-            , t.violation_desc= #{violationDesc}
-        </if>
+        , t.violation_desc= #{violationDesc}
         <if test="startTime !=null and startTime != ''">
             , t.start_time= #{startTime}
         </if>
@@ -132,9 +130,7 @@
         <if test="isPostpone != null and isPostpone != ''">
             , t.is_postpone = #{isPostpone}
         </if>
-        <if test="postponeTime != null and postponeTime != ''">
-            , t.postpone_time = #{postponeTime}
-        </if>
+        , t.postpone_time = #{postponeTime}
         <if test="renovationCompany != null and renovationCompany != ''">
             , t.renovation_company = #{renovationCompany}
         </if>

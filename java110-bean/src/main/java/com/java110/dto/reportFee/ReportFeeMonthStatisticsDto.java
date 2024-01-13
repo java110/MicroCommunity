@@ -158,6 +158,26 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String preOweAmount;
 
+    private String ruleNameOne;
+    private String ruleNameTwo;
+    private String ruleNameThree;
+    private String ruleNameFour;
+    private String ruleNameFive;
+    private String ruleNameSix;
+
+    private String discountPriceOne;
+    private String discountPriceTwo;
+    private String discountPriceThree;
+    private String discountPriceFour;
+    private String discountPriceFive;
+    private String discountPriceSix;
+
+    private String discountSmallTypeOne;
+    private String discountSmallTypeTwo;
+    private String discountSmallTypeThree;
+    private String discountSmallTypeFour;
+    private String discountSmallTypeFive;
+    private String discountSmallTypeSix;
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -813,5 +833,149 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setPreOweAmount(String preOweAmount) {
         this.preOweAmount = preOweAmount;
+    }
+
+    public String getRuleNameOne() {
+        return ruleNameOne;
+    }
+
+    public void setRuleNameOne(String ruleNameOne) {
+        this.ruleNameOne = ruleNameOne;
+    }
+
+    public String getRuleNameTwo() {
+        return ruleNameTwo;
+    }
+
+    public void setRuleNameTwo(String ruleNameTwo) {
+        this.ruleNameTwo = ruleNameTwo;
+    }
+
+    public String getRuleNameThree() {
+        return ruleNameThree;
+    }
+
+    public void setRuleNameThree(String ruleNameThree) {
+        this.ruleNameThree = ruleNameThree;
+    }
+
+    public String getRuleNameFour() {
+        return ruleNameFour;
+    }
+
+    public void setRuleNameFour(String ruleNameFour) {
+        this.ruleNameFour = ruleNameFour;
+    }
+
+    public String getRuleNameFive() {
+        return ruleNameFive;
+    }
+
+    public void setRuleNameFive(String ruleNameFive) {
+        this.ruleNameFive = ruleNameFive;
+    }
+
+    public String getRuleNameSix() {
+        return ruleNameSix;
+    }
+
+    public void setRuleNameSix(String ruleNameSix) {
+        this.ruleNameSix = ruleNameSix;
+    }
+
+    public String getDiscountPriceOne() {
+        return discountPriceOne;
+    }
+
+    public void setDiscountPriceOne(String discountPriceOne) {
+        this.discountPriceOne = discountPriceOne;
+    }
+
+    public String getDiscountPriceTwo() {
+        return discountPriceTwo;
+    }
+
+    public void setDiscountPriceTwo(String discountPriceTwo) {
+        this.discountPriceTwo = discountPriceTwo;
+    }
+
+    public String getDiscountPriceThree() {
+        return discountPriceThree;
+    }
+
+    public void setDiscountPriceThree(String discountPriceThree) {
+        this.discountPriceThree = discountPriceThree;
+    }
+
+    public String getDiscountPriceFour() {
+        return discountPriceFour;
+    }
+
+    public void setDiscountPriceFour(String discountPriceFour) {
+        this.discountPriceFour = discountPriceFour;
+    }
+
+    public String getDiscountPriceFive() {
+        return discountPriceFive;
+    }
+
+    public void setDiscountPriceFive(String discountPriceFive) {
+        this.discountPriceFive = discountPriceFive;
+    }
+
+    public String getDiscountPriceSix() {
+        return discountPriceSix;
+    }
+
+    public void setDiscountPriceSix(String discountPriceSix) {
+        this.discountPriceSix = discountPriceSix;
+    }
+
+    public String getDiscountSmallTypeOne() {
+        return discountSmallTypeOne;
+    }
+
+    public void setDiscountSmallTypeOne(String discountSmallTypeOne) {
+        this.discountSmallTypeOne = discountSmallTypeOne;
+    }
+
+    public String getDiscountSmallTypeTwo() {
+        return discountSmallTypeTwo;
+    }
+
+    public void setDiscountSmallTypeTwo(String discountSmallTypeTwo) {
+        this.discountSmallTypeTwo = discountSmallTypeTwo;
+    }
+
+    public String getDiscountSmallTypeThree() {
+        return discountSmallTypeThree;
+    }
+
+    public void setDiscountSmallTypeThree(String discountSmallTypeThree) {
+        this.discountSmallTypeThree = discountSmallTypeThree;
+    }
+
+    public String getDiscountSmallTypeFour() {
+        return discountSmallTypeFour;
+    }
+
+    public void setDiscountSmallTypeFour(String discountSmallTypeFour) {
+        this.discountSmallTypeFour = discountSmallTypeFour;
+    }
+
+    public String getDiscountSmallTypeFive() {
+        return discountSmallTypeFive;
+    }
+
+    public void setDiscountSmallTypeFive(String discountSmallTypeFive) {
+        this.discountSmallTypeFive = discountSmallTypeFive;
+    }
+
+    public String getDiscountSmallTypeSix() {
+        return discountSmallTypeSix;
+    }
+
+    public void setDiscountSmallTypeSix(String discountSmallTypeSix) {
+        this.discountSmallTypeSix = discountSmallTypeSix;
     }
 }

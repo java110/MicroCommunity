@@ -15,7 +15,8 @@
  */
 package com.java110.fee.smo.impl;
 
-
+import com.java110.dto.PageDto;
+import com.java110.dto.fee.PayFeeDetailDto;
 import com.java110.fee.dao.IPayFeeDetailNewV1ServiceDao;
 import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeDetailPo;
@@ -24,6 +25,8 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 类表述： 服务之前调用的接口实现类，不对外提供接口能力 只用于接口建调用
@@ -39,24 +42,50 @@ public class PayFeeDetailV1InnerServiceSMOImpl extends BaseServiceSMO implements
     @Autowired
     private IPayFeeDetailNewV1ServiceDao payFeeDetailNewV1ServiceDaoImpl;
 
-
     @Override
     public int savePayFeeDetailNew(@RequestBody PayFeeDetailPo PayFeeDetailPo) {
         int saveFlag = payFeeDetailNewV1ServiceDaoImpl.savePayFeeDetailNewInfo(BeanConvertUtil.beanCovertMap(PayFeeDetailPo));
         return saveFlag;
     }
 
-     @Override
-    public int updatePayFeeDetailNew(@RequestBody  PayFeeDetailPo PayFeeDetailPo) {
+    @Override
+    public int updatePayFeeDetailNew(@RequestBody PayFeeDetailPo PayFeeDetailPo) {
         int saveFlag = payFeeDetailNewV1ServiceDaoImpl.updatePayFeeDetailNewInfo(BeanConvertUtil.beanCovertMap(PayFeeDetailPo));
         return saveFlag;
     }
 
-     @Override
-    public int deletePayFeeDetailNew(@RequestBody  PayFeeDetailPo PayFeeDetailPo) {
-       PayFeeDetailPo.setStatusCd("1");
-       int saveFlag = payFeeDetailNewV1ServiceDaoImpl.updatePayFeeDetailNewInfo(BeanConvertUtil.beanCovertMap(PayFeeDetailPo));
-       return saveFlag;
+    @Override
+    public int deletePayFeeDetailNew(@RequestBody PayFeeDetailPo PayFeeDetailPo) {
+        PayFeeDetailPo.setStatusCd("1");
+        int saveFlag = payFeeDetailNewV1ServiceDaoImpl.updatePayFeeDetailNewInfo(BeanConvertUtil.beanCovertMap(PayFeeDetailPo));
+        return saveFlag;
+    }
+
+    @Override
+    public List<PayFeeDetailDto> queryPayFeeDetailNew(@RequestBody PayFeeDetailDto payFeeDetailDto) {
+        //校验是否传了 分页信息
+        int page = payFeeDetailDto.getPage();
+        if (page != PageDto.DEFAULT_PAGE) {
+            payFeeDetailDto.setPage((page - 1) * payFeeDetailDto.getRow());
+        }
+        List<PayFeeDetailDto> payFeeDetailNews = BeanConvertUtil.covertBeanList(payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewInfo(BeanConvertUtil.beanCovertMap(payFeeDetailDto)), PayFeeDetailDto.class);
+        return payFeeDetailNews;
+    }
+
+    @Override
+    public int queryPayFeeDetailNewCount(@RequestBody PayFeeDetailDto payFeeDetailDto) {
+        return payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewCount(BeanConvertUtil.beanCovertMap(payFeeDetailDto));
+    }
+
+    @Override
+    public List<PayFeeDetailDto> queryPayFeeDetailNewSum(@RequestBody PayFeeDetailDto payFeeDetailDto) {
+        //校验是否传了 分页信息
+        int page = payFeeDetailDto.getPage();
+        if (page != PageDto.DEFAULT_PAGE) {
+            payFeeDetailDto.setPage((page - 1) * payFeeDetailDto.getRow());
+        }
+        List<PayFeeDetailDto> payFeeDetailNews = BeanConvertUtil.covertBeanList(payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewSumInfo(BeanConvertUtil.beanCovertMap(payFeeDetailDto)), PayFeeDetailDto.class);
+        return payFeeDetailNews;
     }
 //
 //    @Override

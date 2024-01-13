@@ -1,29 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="printerRuleMachineV1ServiceDaoImpl">
 
-
     <!-- 保存云打印规则设备信息 add by wuxw 2018-07-03 -->
     <insert id="savePrinterRuleMachineInfo" parameterType="Map">
-        insert into printer_rule_machine(
-        machine_id,quantity,prm_id,rule_id,community_id
-        ) values (
-        #{machineId},#{quantity},#{prmId},#{ruleId},#{communityId}
-        )
+        insert into printer_rule_machine(machine_id, quantity, prm_id, rule_id, community_id)
+        values (#{machineId}, #{quantity}, #{prmId}, #{ruleId}, #{communityId})
     </insert>
-
 
     <!-- 查询云打印规则设备信息 add by wuxw 2018-07-03 -->
     <select id="getPrinterRuleMachineInfo" parameterType="Map" resultType="Map">
         select t.machine_id,t.machine_id machineId,t.quantity,t.prm_id,t.prm_id prmId,t.status_cd,t.status_cd
         statusCd,t.rule_id,t.rule_id ruleId,t.community_id,t.community_id communityId,mp.machine_name machineName
         from printer_rule_machine t
-        left join machine_printer mp on t.machine_id  = mp.machine_id and mp.status_cd = '0'
-        where 1 =1
+        left join machine_printer mp on t.machine_id = mp.machine_id and mp.status_cd = '0'
+        where 1 = 1
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and mp.machine_name like '%${machineName}%'
         </if>
         <if test="quantity !=null and quantity != ''">
             and t.quantity= #{quantity}
@@ -44,9 +41,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改云打印规则设备信息 add by wuxw 2018-07-03 -->
     <update id="updatePrinterRuleMachineInfo" parameterType="Map">
@@ -70,16 +65,19 @@
         <if test="prmId !=null and prmId != ''">
             and t.prm_id= #{prmId}
         </if>
-
     </update>
 
     <!-- 查询云打印规则设备数量 add by wuxw 2018-07-03 -->
     <select id="queryPrinterRuleMachinesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from printer_rule_machine t
-        where 1 =1
+        left join machine_printer mp on t.machine_id = mp.machine_id and mp.status_cd = '0'
+        where 1 = 1
         <if test="machineId !=null and machineId != ''">
             and t.machine_id= #{machineId}
+        </if>
+        <if test="machineName !=null and machineName != ''">
+            and mp.machine_name like '%${machineName}%'
         </if>
         <if test="quantity !=null and quantity != ''">
             and t.quantity= #{quantity}
@@ -96,8 +94,5 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
-
     </select>
-
 </mapper>

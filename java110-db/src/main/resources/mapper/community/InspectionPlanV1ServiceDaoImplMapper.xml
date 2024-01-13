@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="inspectionPlanV1ServiceDaoImpl">
 
-
     <!-- 保存巡检计划信息 add by wuxw 2018-07-03 -->
     <insert id="saveInspectionPlanInfo" parameterType="Map">
-        insert into inspection_plan(
-        inspection_plan_name,create_user_id,inspection_route_id,inspection_plan_period,remark,
-        create_user_name,sign_type,start_time,inspection_plan_id,end_time,state,community_id,
-        start_date,end_date,inspection_month,inspection_day,inspection_workday,before_time,can_reexamine
-        ) values (
-        #{inspectionPlanName},#{createUserId},#{inspectionRouteId},#{inspectionPlanPeriod},#{remark},
-        #{createUserName},#{signType},#{startTime},#{inspectionPlanId},#{endTime},#{state},#{communityId},
-        #{startDate},#{endDate},#{inspectionMonth},#{inspectionDay},#{inspectionWorkday},#{beforeTime},#{canReexamine}
-        )
+        insert into inspection_plan(inspection_plan_name, create_user_id, inspection_route_id, inspection_plan_period,
+                                    remark, create_user_name, sign_type, start_time, inspection_plan_id, end_time,
+                                    state, community_id, start_date, end_date, inspection_month, inspection_day,
+                                    inspection_workday, before_time, can_reexamine)
+        values (#{inspectionPlanName}, #{createUserId}, #{inspectionRouteId}, #{inspectionPlanPeriod}, #{remark},
+                #{createUserName}, #{signType}, #{startTime}, #{inspectionPlanId}, #{endTime}, #{state}, #{communityId},
+                #{startDate}, #{endDate}, #{inspectionMonth}, #{inspectionDay}, #{inspectionWorkday}, #{beforeTime},
+                #{canReexamine})
     </insert>
-
 
     <!-- 查询巡检计划信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionPlanInfo" parameterType="Map" resultType="Map">
-
         select t.inspection_plan_name,t.inspection_plan_name inspectionPlanName,t.create_user_id,t.create_user_id
         createUserId,t.inspection_route_id,t.inspection_route_id inspectionRouteId
         ,t.can_reexamine,t.can_reexamine canReexamine,t.inspection_plan_period,t.inspection_plan_period
         inspectionPlanPeriod,t.remark,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
-        statusCd,t.sign_type,t.sign_type signType,t.start_time,t.start_time
-        startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
+        statusCd,t.sign_type,t.sign_type signType,DATE_FORMAT(t.start_time,'%H:%i:%s')
+        startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,DATE_FORMAT(t.end_time,'%H:%i:%s')
         endTime,t.state,t.community_id,t.community_id communityId,
-        DATE_FORMAT(t.start_date,'%Y-%m-%d') startDate,DATE_FORMAT(t.end_date,'%Y-%m-%d') endDate,t.inspection_month inspectionMonth,t.inspection_day inspectionDay,
+        DATE_FORMAT(t.start_date,'%Y-%m-%d') startDate,DATE_FORMAT(t.end_date,'%Y-%m-%d') endDate,t.inspection_month
+        inspectionMonth,t.inspection_day inspectionDay,
         t.inspection_workday inspectionWorkday,t.before_time beforeTime,t.create_time createTime,
         d.name stateName,
         c.name inspectionPlanPeriodName,
@@ -96,9 +92,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改巡检计划信息 add by wuxw 2018-07-03 -->
     <update id="updateInspectionPlanInfo" parameterType="Map">
@@ -139,14 +133,12 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-
         <if test="startDate !=null and startDate != ''">
             , t.start_date= #{startDate}
         </if>
         <if test="endDate !=null and endDate != ''">
             , t.end_date= #{endDate}
         </if>
-
         <if test="inspectionMonth !=null and inspectionMonth != ''">
             , t.inspection_month = #{inspectionMonth}
         </if>
@@ -159,7 +151,6 @@
         <if test="beforeTime !=null and beforeTime != ''">
             , t.before_time = #{beforeTime}
         </if>
-
         where 1=1
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
@@ -167,7 +158,6 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
     </update>
 
     <!-- 查询巡检计划数量 add by wuxw 2018-07-03 -->
@@ -226,8 +216,5 @@
         <if test="beforeTime !=null and beforeTime != ''">
             and t.before_time = #{beforeTime}
         </if>
-
-
     </select>
-
 </mapper>

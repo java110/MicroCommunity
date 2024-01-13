@@ -15,16 +15,12 @@
  */
 package com.java110.fee.dao.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
-import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.fee.dao.IPayFeeDetailNewV1ServiceDao;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -42,71 +38,83 @@ public class PayFeeDetailNewV1ServiceDaoImpl extends BaseServiceDao implements I
 
     private static Logger logger = LoggerFactory.getLogger(PayFeeDetailNewV1ServiceDaoImpl.class);
 
-
-
-
-
     /**
      * 保存费用明细信息 到 instance
-     * @param info   bId 信息
+     *
+     * @param info bId 信息
      * @throws DAOException DAO异常
      */
     @Override
     public int savePayFeeDetailNewInfo(Map info) throws DAOException {
-        logger.debug("保存 savePayFeeDetailNewInfo 入参 info : {}",info);
-
-        int saveFlag = sqlSessionTemplate.insert("payFeeDetailNewV1ServiceDaoImpl.savePayFeeDetailNewInfo",info);
-
+        logger.debug("保存 savePayFeeDetailNewInfo 入参 info : {}", info);
+        int saveFlag = sqlSessionTemplate.insert("payFeeDetailNewV1ServiceDaoImpl.savePayFeeDetailNewInfo", info);
         return saveFlag;
     }
 
-
     /**
      * 查询费用明细信息（instance）
+     *
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
      */
     @Override
     public List<Map> getPayFeeDetailNewInfo(Map info) throws DAOException {
-        logger.debug("查询 getPayFeeDetailNewInfo 入参 info : {}",info);
-
-        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.getPayFeeDetailNewInfo",info);
-
+        logger.debug("查询 getPayFeeDetailNewInfo 入参 info : {}", info);
+        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.getPayFeeDetailNewInfo", info);
         return businessPayFeeDetailNewInfos;
     }
 
-
     /**
      * 修改费用明细信息
+     *
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
     @Override
     public int updatePayFeeDetailNewInfo(Map info) throws DAOException {
-        logger.debug("修改 updatePayFeeDetailNewInfo 入参 info : {}",info);
-
-        int saveFlag = sqlSessionTemplate.update("payFeeDetailNewV1ServiceDaoImpl.updatePayFeeDetailNewInfo",info);
-
+        logger.debug("修改 updatePayFeeDetailNewInfo 入参 info : {}", info);
+        int saveFlag = sqlSessionTemplate.update("payFeeDetailNewV1ServiceDaoImpl.updatePayFeeDetailNewInfo", info);
         return saveFlag;
     }
 
-     /**
+    /**
      * 查询费用明细数量
+     *
      * @param info 费用明细信息
      * @return 费用明细数量
      */
     @Override
     public int queryPayFeeDetailNewsCount(Map info) {
-        logger.debug("查询 queryPayFeeDetailNewsCount 入参 info : {}",info);
-
+        logger.debug("查询 queryPayFeeDetailNewsCount 入参 info : {}", info);
         List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewsCount", info);
         if (businessPayFeeDetailNewInfos.size() < 1) {
             return 0;
         }
-
         return Integer.parseInt(businessPayFeeDetailNewInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryPayFeeDetailNewInfo(Map info) {
+        logger.debug("查询 queryPayFeeDetailNewInfo 入参 info : {}", info);
+        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewInfo", info);
+        return businessPayFeeDetailNewInfos;
+    }
 
+    @Override
+    public int queryPayFeeDetailNewCount(Map info) {
+        logger.debug("查询 queryPayFeeDetailNewCount 入参 info : {}", info);
+        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewCount", info);
+        if (businessPayFeeDetailNewInfos.size() < 1) {
+            return 0;
+        }
+        return Integer.parseInt(businessPayFeeDetailNewInfos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryPayFeeDetailNewSumInfo(Map info) {
+        logger.debug("查询 queryPayFeeDetailNewSumInfo 入参 info : {}", info);
+        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewSumInfo", info);
+        return businessPayFeeDetailNewInfos;
+    }
 }

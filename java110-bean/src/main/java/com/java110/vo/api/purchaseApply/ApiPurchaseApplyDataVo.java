@@ -34,6 +34,9 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     private String shId;
 
+    private String rssId;
+
+    private String specName;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -225,5 +228,21 @@ public class ApiPurchaseApplyDataVo implements Serializable {
 
     public void setShId(String shId) {
         this.shId = shId;
+    }
+
+    public String getRssId() {
+        return rssId;
+    }
+
+    public void setRssId(String rssId) {
+        this.rssId = rssId;
+    }
+
+    public String getSpecName() {
+        return specName;
+    }
+
+    public void setSpecName(String specName) {
+        this.specName = specName;
     }
 }

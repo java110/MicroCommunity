@@ -25,7 +25,6 @@ import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
-import com.java110.intf.store.IPurchaseApplyV1InnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -47,7 +46,6 @@ import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 类表述：查询
  * 服务编码：purchaseApply.listPurchaseApply
@@ -62,8 +60,6 @@ import org.slf4j.LoggerFactory;
 public class ListPurchaseApplysCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListPurchaseApplysCmd.class);
-    @Autowired
-    private IPurchaseApplyV1InnerServiceSMO purchaseApplyV1InnerServiceSMOImpl;
 
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
@@ -85,7 +81,6 @@ public class ListPurchaseApplysCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDto.class);
         purchaseApplyDto.setUserName("");//解除与用户名相关问题
         //获取用户id
@@ -114,13 +109,13 @@ public class ListPurchaseApplysCmd extends Cmd {
             purchaseApplyDto.setUserName(reqJson.getString("applyUserName"));
         }
         int count = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplysCount(purchaseApplyDto);
-        List<ApiPurchaseApplyDataVo> purchaseApplys = null;
+        List<ApiPurchaseApplyDataVo> purchaseApplys = new ArrayList<>();
         if (count > 0) {
             List<PurchaseApplyDto> purchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
             purchaseApplyDtos = freshCurrentUser(purchaseApplyDtos);
             purchaseApplys = BeanConvertUtil.covertBeanList(purchaseApplyDtos, ApiPurchaseApplyDataVo.class);
             //todo 查询结果刷新
-            refreshApplys(purchaseApplys);
+            purchaseApplys = refreshApplys(purchaseApplys, reqJson);
         } else {
             purchaseApplys = new ArrayList<>();
         }
@@ -137,7 +132,8 @@ public class ListPurchaseApplysCmd extends Cmd {
      *
      * @param purchaseApplys
      */
-    private void refreshApplys(List<ApiPurchaseApplyDataVo> purchaseApplys) {
+    private List<ApiPurchaseApplyDataVo> refreshApplys(List<ApiPurchaseApplyDataVo> purchaseApplys, JSONObject reqJson) {
+        List<ApiPurchaseApplyDataVo> purchaseApplyDatas = new ArrayList<>();
         for (ApiPurchaseApplyDataVo apiPurchaseApplyDataVo : purchaseApplys) {
             List<PurchaseApplyDetailVo> applyDetailList = apiPurchaseApplyDataVo.getPurchaseApplyDetailVo();
             //todo 如果没有物品直接 跳过
@@ -156,9 +152,7 @@ public class ListPurchaseApplysCmd extends Cmd {
                 if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
                     continue;
                 }
-
                 purchaseApplyDetailVo.setTimes(resourceStoreDtos.get(0).getTimes());
-
                 //todo 是否是固定物品
                 apiPurchaseApplyDataVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
                 apiPurchaseApplyDataVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
@@ -171,9 +165,13 @@ public class ListPurchaseApplysCmd extends Cmd {
                 purchaseApplyDetailVo.setShId(shId);
                 apiPurchaseApplyDataVo.setShId(shId);
                 cursor++;
-                if (applyDetailList.size() > 1) {
-                    resNames.append(cursor + "：" + purchaseApplyDetailVo.getResName() + "      ");
-                } else {
+                if (applyDetailList.size() > 1 && !StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())) { //领用多种物品，且规格不为空的情况
+                    resNames.append(cursor + "：" + purchaseApplyDetailVo.getResName() + "(" + purchaseApplyDetailVo.getSpecName() + ")      ");
+                }
+                if (applyDetailList.size() == 1 && !StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())) { //领用一种物品，且规格不为空的情况
+                    resNames.append(purchaseApplyDetailVo.getResName() + "(" + purchaseApplyDetailVo.getSpecName() + ")");
+                }
+                if (applyDetailList.size() == 1 && StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())) { //领用一种物品，且规格为空的情况
                     resNames.append(purchaseApplyDetailVo.getResName());
                 }
                 BigDecimal price = new BigDecimal(purchaseApplyDetailVo.getPrice());
@@ -188,8 +186,17 @@ public class ListPurchaseApplysCmd extends Cmd {
             apiPurchaseApplyDataVo.setResourceNames(resNames.toString());
             apiPurchaseApplyDataVo.setTotalPrice(totalPrice.toString());
             apiPurchaseApplyDataVo.setPurchaseTotalPrice(purchaseTotalPrice.toString());
+            if (reqJson.containsKey("resName") && !StringUtil.isEmpty(reqJson.getString("resName"))) {
+                if (resNames.toString().contains(reqJson.getString("resName"))) {
+                    purchaseApplyDatas.add(apiPurchaseApplyDataVo);
+                } else {
+                    continue;
+                }
+            } else {
+                purchaseApplyDatas.add(apiPurchaseApplyDataVo);
+            }
         }
-
+        return purchaseApplyDatas;
     }
 
     private List<PurchaseApplyDto> freshCurrentUser(List<PurchaseApplyDto> purchaseApplyDtos) {
