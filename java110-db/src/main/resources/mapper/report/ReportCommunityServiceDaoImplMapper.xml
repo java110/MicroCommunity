@@ -249,7 +249,7 @@
 
     <!-- 查询无效费用 add by wuxw 2018-07-03 -->
     <select id="queryRoomsTree" parameterType="Map" resultType="Map">
-        SELECT t.room_id,
+        SELECT distinct t.room_id,
                t.room_id        roomId,
                t.layer,
                t.room_num,
