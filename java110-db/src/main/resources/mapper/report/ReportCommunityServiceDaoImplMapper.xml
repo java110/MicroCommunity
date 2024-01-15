@@ -249,7 +249,7 @@
 
     <!-- 查询无效费用 add by wuxw 2018-07-03 -->
     <select id="queryRoomsTree" parameterType="Map" resultType="Map">
-        SELECT t.room_id,
+        SELECT distinct t.room_id,
                t.room_id        roomId,
                t.layer,
                t.room_num,
@@ -260,15 +260,12 @@
                f.floor_id       floorId,
                f.floor_num      floorNum,
                t.`community_id` communityId,
-               bo.owner_id      ownerId
-                ,
+               bo.owner_id      ownerId ,
                bo.`name`        ownerName,
                bo.link          link
         FROM building_room t
                  inner join building_unit u on t.`unit_id` = u.`unit_id` and u.`status_cd` = '0'
-                 inner JOIN f_floor f
-                            on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` =
-                                                                                                       '0'
+                 inner JOIN f_floor f on u.`floor_id` = f.`floor_id` AND f.`community_id` = t.`community_id` AND f.`status_cd` = '0'
                  left join building_owner_room_rel borr on t.room_id = borr.room_id and borr.status_cd = '0'
                  left join building_owner bo on borr.owner_id = bo.member_id and bo.status_cd = '0'
         WHERE 1 = 1

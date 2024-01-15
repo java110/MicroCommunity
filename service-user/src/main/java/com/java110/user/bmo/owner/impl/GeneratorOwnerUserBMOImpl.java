@@ -3,6 +3,7 @@ package com.java110.user.bmo.owner.impl;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
@@ -15,6 +16,7 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,18 +50,29 @@ public class GeneratorOwnerUserBMOImpl implements IGeneratorOwnerUserBMO {
         Assert.listNotNull(communityDtos, "未包含小区信息");
         CommunityDto tmpCommunityDto = communityDtos.get(0);
 
-        UserPo userPo = new UserPo();
-        userPo.setUserId(GenerateCodeFactory.getUserId());
-        userPo.setName(ownerPo.getName());
-        userPo.setTel(ownerPo.getLink());
-        userPo.setPassword(AuthenticationFactory.passwdMd5(ownerPo.getLink()));
-        userPo.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
-        userPo.setAge(ownerPo.getAge());
-        userPo.setAddress(ownerPo.getAddress());
-        userPo.setSex(ownerPo.getSex());
-        flag = userV1InnerServiceSMOImpl.saveUser(userPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
+        UserDto userDto = new UserDto();
+        userDto.setTel(ownerPo.getLink());
+        userDto.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        String userId = "";
+        if (ListUtil.isNull(userDtos)) {
+            UserPo userPo = new UserPo();
+            userPo.setUserId(GenerateCodeFactory.getUserId());
+            userPo.setName(ownerPo.getName());
+            userPo.setTel(ownerPo.getLink());
+            userPo.setPassword(AuthenticationFactory.passwdMd5(ownerPo.getLink()));
+            userPo.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
+            userPo.setAge(ownerPo.getAge());
+            userPo.setAddress(ownerPo.getAddress());
+            userPo.setSex(ownerPo.getSex());
+            flag = userV1InnerServiceSMOImpl.saveUser(userPo);
+            if (flag < 1) {
+                throw new CmdException("注册失败");
+            }
+            userId = userPo.getUserId();
+        } else {
+            userId = userDtos.get(0).getUserId();
+
         }
 
         OwnerAppUserPo ownerAppUserPo = new OwnerAppUserPo();
@@ -74,7 +87,7 @@ public class GeneratorOwnerUserBMOImpl implements IGeneratorOwnerUserBMO {
         ownerAppUserPo.setIdCard(ownerPo.getIdCard());
         ownerAppUserPo.setAppType("WECHAT");
         ownerAppUserPo.setLink(ownerPo.getLink());
-        ownerAppUserPo.setUserId(userPo.getUserId());
+        ownerAppUserPo.setUserId(userId);
         ownerAppUserPo.setOpenId("-1");
 
         flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
