@@ -2145,6 +2145,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         // todo 最大周期
         double maxCycle = Math.ceil(rateMonth / rateCycle);
 
+
+
         // todo 增长前的欠费
         BigDecimal addTotalAmount = oweAmountDec;
         // todo 递增周期内的 未递增费用
@@ -2165,7 +2167,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             curEndTimeCalender.setTime(rateStartTime);
             curEndTimeCalender.add(Calendar.MONTH, new Double(curCycle).intValue());
             curEndTime = curEndTimeCalender.getTime();
-            if (curCycle >= rateMonth) {
+            if (curCycle > rateMonth) {
                 //不足增长周期增长率
                 rateDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(rateDec).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
                 lastRateAmountDec = new BigDecimal(curOweMonth / rateCycle - Math.floor(curOweMonth / rateCycle)).multiply(preCycleAmount).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
