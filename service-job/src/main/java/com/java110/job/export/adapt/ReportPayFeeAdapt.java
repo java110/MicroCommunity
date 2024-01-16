@@ -20,8 +20,8 @@ import java.util.List;
  * @author fqz
  * @date 2023-11-13
  */
-@Service("payFeeManage")
-public class ReportPayFeeManage implements IExportDataAdapt {
+@Service("reportPayFee")
+public class ReportPayFeeAdapt implements IExportDataAdapt {
 
     @Autowired
     private IPayFeeDetailV1InnerServiceSMO payFeeDetailV1InnerServiceSMOImpl;
