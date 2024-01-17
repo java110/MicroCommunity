@@ -355,6 +355,6 @@ public class LoggerFactory implements Logger {
 
     @Override
     public boolean isWarnEnabled() {
-        return this.isWarnEnabled();
+        return this.logger.isWarnEnabled();
     }
 }
