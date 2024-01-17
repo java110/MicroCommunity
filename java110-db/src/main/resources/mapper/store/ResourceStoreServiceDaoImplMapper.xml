@@ -210,14 +210,12 @@
         averagePrice,rss.spec_name rssName,t.mini_unit_code,t.mini_unit_code miniUnitCode,t.mini_stock,t.mini_stock
         miniStock,t.mini_unit_stock,t.mini_unit_stock miniUnitStock,td.name unitCodeName,td1.name
         miniUnitCodeName,t.parent_rst_id parentRstId,t.rst_id rstId,rst1.name parentRstName,rst.name
-        rstName,rstm.times_id timesId,
-        t.is_fixed,t.is_fixed isFixed,td2.name isFixedName,t.community_id communityId
+        rstName,t.is_fixed,t.is_fixed isFixed,td2.name isFixedName,t.community_id communityId
         from resource_store t
         left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
         left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
         left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
-        left join resource_store_times rstm on t.res_code = rstm.res_code and rstm.status_cd = '0'
         left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
         'unit_code'
         left join t_dict td1 on t.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
@@ -321,7 +319,7 @@
         <if test="resOrderType == '20000'">
             and t.stock > 0
         </if>
-        order by t.res_code
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -414,7 +412,6 @@
         left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
         left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
-        left join resource_store_times rstm on t.res_code = rstm.res_code and rstm.status_cd = '0'
         left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
         'unit_code'
         left join t_dict td1 on t.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
