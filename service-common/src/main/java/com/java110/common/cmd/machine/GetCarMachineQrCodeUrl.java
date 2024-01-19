@@ -109,6 +109,6 @@ public class GetCarMachineQrCodeUrl extends Cmd {
 
             return parkingBoxAreaDtos.get(0).getPaId();
         }
-        return "";
+        return reqJson.getString("paId");
     }
 }
