@@ -1,8 +1,10 @@
 package com.java110.job.adapt.hcIotNew;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.community.CommunityMemberDto;
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.system.Business;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
@@ -10,6 +12,8 @@ import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -87,6 +91,14 @@ public class SendCommunityDataToIotAdapt extends DatabusAdaptImpl {
          * “storeId”:”演示物业”,
          * }
          */
+
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(communityMemberDtos.get(0).getMemberId());
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+        Assert.listOnlyOne(storeDtos, "物业不存在");
+
+//        HttpEntity httpEntity = new HttpEntity(JSONArray.toJSONString(staffs), getHeaders());
+//        responseEntity = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
 
     }

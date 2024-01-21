@@ -1,0 +1,158 @@
+package com.java110.job.adapt.hcIotNew.http;
+
+import com.alibaba.fastjson.JSONObject;
+import com.java110.core.client.RestTemplate;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.dto.system.AppRoute;
+import com.java110.job.adapt.hcIot.GetToken;
+import com.java110.job.adapt.hcIot.IotConstant;
+import com.java110.utils.cache.AppRouteCache;
+import com.java110.utils.cache.CommonCache;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class SendIotImpl implements ISendIot {
+
+    public static final String GET_TOKEN_URL = "/iot/api/login.pcUserLogin";
+    private static final String DEFAULT_IOT_URL = "https://things.homecommunity.cn";
+    public static final String IOT_DOMAIN = "IOT"; // 物联网域
+
+
+    @Autowired
+    private RestTemplate outRestTemplate;
+
+    @Override
+    public ResultVo get(String url) {
+        HttpHeaders header = getHeaders(url, "", HttpMethod.POST);
+        HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
+        ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+        String body = tokenRes.getBody();
+        JSONObject paramOut = JSONObject.parseObject(body);
+
+
+        return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
+    }
+
+    @Override
+    public ResultVo post(String url, JSONObject paramIn) {
+        HttpHeaders header = getHeaders(url, paramIn.toJSONString(), HttpMethod.POST);
+        HttpEntity<String> httpEntity = new HttpEntity<String>(paramIn.toJSONString(), header);
+        ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+        String body = tokenRes.getBody();
+        JSONObject paramOut = JSONObject.parseObject(body);
+
+
+        return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
+    }
+
+
+    /**
+     * 封装头信息
+     *
+     * @return
+     */
+    private HttpHeaders getHeaders(String url, String param, HttpMethod method) {
+        HttpHeaders header = new HttpHeaders();
+        header.add(CommonConstant.APP_ID.toLowerCase(), CommonConstant.HC_HARDWARE_APP_ID);
+        header.add(CommonConstant.USER_ID.toLowerCase(), CommonConstant.ORDER_DEFAULT_USER_ID);
+        header.add(CommonConstant.TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
+        header.add(CommonConstant.REQUEST_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
+        createSign(header, method, url, param);
+        header.add("Authorization", "Bearer " + getToken(false));
+        return header;
+    }
+
+    public String getToken(boolean refreshAccessToken) {
+        String token = CommonCache.getValue(IotConstant.HC_TOKEN);
+        if (!StringUtil.isEmpty(token) && !refreshAccessToken) {
+            return token;
+        }
+
+        String url = getUrl(GET_TOKEN_URL);
+
+        String userName = MappingCache.getValue(IOT_DOMAIN, "IOT_USERNAME");
+        String password = MappingCache.getValue(IOT_DOMAIN, "IOT_PASSWORD");
+        JSONObject param = new JSONObject();
+        param.put("username", userName);
+        param.put("password", password);
+
+        HttpHeaders header = new HttpHeaders();
+        header.add(CommonConstant.APP_ID.toLowerCase(), MappingCache.getValue(IOT_DOMAIN, "APP_ID"));
+        header.add(CommonConstant.USER_ID.toLowerCase(), CommonConstant.ORDER_DEFAULT_USER_ID);
+        header.add(CommonConstant.TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
+        header.add(CommonConstant.REQUEST_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
+        createSign(header, HttpMethod.POST, url, param.toJSONString());
+        HttpEntity<String> httpEntity = new HttpEntity<String>(param.toJSONString(), header);
+
+        ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
+        if (tokenRes.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("获取token失败" + tokenRes.getBody());
+        }
+        JSONObject tokenObj = JSONObject.parseObject(tokenRes.getBody());
+
+        if (!tokenObj.containsKey("token")) {
+            throw new IllegalArgumentException("获取token失败" + tokenRes.getBody());
+        }
+
+        token = tokenObj.getString("token");
+        int expiresIn = 30 * 60; //todo 30分钟
+
+        CommonCache.setValue(IotConstant.HC_TOKEN, token, expiresIn - 200);
+
+        return token;
+    }
+
+    private static String getUrl(String param) {
+        String url = MappingCache.getValue(IOT_DOMAIN, IotConstant.IOT_URL);
+
+        if (StringUtil.isEmpty(url)) {
+            return DEFAULT_IOT_URL + param;
+        }
+
+        return url + url;
+    }
+
+    /**
+     * 创建鉴权
+     *
+     * @param headers
+     * @param httpMethod
+     * @param url
+     * @param param
+     */
+    public static void createSign(HttpHeaders headers, HttpMethod httpMethod, String url, String param) {
+        String appId = headers.getFirst(CommonConstant.APP_ID);
+        String transactionId = headers.getFirst(CommonConstant.TRANSACTION_ID);
+        String requestTime = headers.getFirst(CommonConstant.REQUEST_TIME);
+        String securityCode = MappingCache.getValue(IOT_DOMAIN, "APP_SECRET");
+
+        if (StringUtil.isEmpty(securityCode)) {
+            return;
+        }
+        String paramStr = "";
+        if (HttpMethod.GET == httpMethod) {
+            paramStr = url.substring(url.indexOf("?"));
+        } else {
+            paramStr = param;
+        }
+        String sign = transactionId + requestTime + appId + paramStr + securityCode;
+        headers.remove("sign");
+        headers.add("sign", AuthenticationFactory.md5(sign));
+    }
+
+}
