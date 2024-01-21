@@ -12,6 +12,7 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.store.StoreDto;
+import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.system.Business;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
@@ -19,6 +20,7 @@ import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
+import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
@@ -74,6 +76,12 @@ public class SendCommunityDataToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerDataToIot ownerDataToIotImpl;
+
+    @Autowired
+    private IStoreUserV1InnerServiceSMO storeUserV1InnerServiceSMOImpl;
 
     public static final int DEFAULT_DEAL_COUNT = 200;
 
@@ -153,6 +161,37 @@ public class SendCommunityDataToIotAdapt extends DatabusAdaptImpl {
             throw new IllegalArgumentException("同步小区物业失败：" + resultVo.getMsg());
         }
 
+
+        //todo 同步员工
+        sendStaff(storeDtos.get(0));
+
+    }
+
+    private void sendStaff(StoreDto storeDto) {
+
+
+        StoreUserDto storeUserDto = new StoreUserDto();
+        storeUserDto.setStoreId(storeDto.getStoreId());
+        List<StoreUserDto> storeUserDtos = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDto);
+        if (ListUtil.isNull(storeUserDtos)) {
+            return;
+        }
+
+        JSONObject staff = null;
+        for (StoreUserDto tmpStoreUserDto : storeUserDtos) {
+            try {
+                staff = new JSONObject();
+                staff.put("propertyId", storeDto.getStoreId());
+                staff.put("staffId", tmpStoreUserDto.getUserId());
+                staff.put("name", tmpStoreUserDto.getName());
+                staff.put("tel", tmpStoreUserDto.getTel());
+                staff.put("relCd", tmpStoreUserDto.getRelCd());
+
+                sendIotImpl.post("/iot/api/staff.addStaffApi", staff);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void sendOwner(String communityId) {
@@ -196,149 +235,11 @@ public class SendCommunityDataToIotAdapt extends DatabusAdaptImpl {
 
         for (OwnerDto ownerDto : ownerDtos) {
             try {
-                doSendSimple(ownerDto);
+                ownerDataToIotImpl.sendOwnerData(ownerDto);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-
-    private void doSendSimple(OwnerDto ownerDto) {
-
-        JSONObject paramIn = new JSONObject();
-        paramIn.put("communityId", ownerDto.getCommunityId());
-        paramIn.put("memberId", ownerDto.getMemberId());
-        paramIn.put("ownerId", ownerDto.getOwnerId());
-        paramIn.put("name", ownerDto.getName());
-        paramIn.put("ownerTypeCd", ownerDto.getOwnerTypeCd());
-        paramIn.put("idCard", ownerDto.getIdCard());
-        paramIn.put("ownerPhoto", getOwnerPhoto(ownerDto));
-
-
-        //todo 查询业主房屋
-        getOwnerRoom(paramIn, ownerDto);
-
-        //todo 查询业主车辆
-        getOwnerCars(paramIn, ownerDto);
-
-    }
-
-    /**
-     * 查询业主车辆
-     *
-     * @param paramIn
-     * @param ownerDto
-     */
-    private void getOwnerCars(JSONObject paramIn, OwnerDto ownerDto) {
-
-        /**
-         * carMemberId
-         * carId
-         * carNum
-         * paId
-         * psId
-         * paNum
-         * psNum
-         * carTypeCd
-         * startTime
-         * endTime
-         * leaseType
-         */
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setOwnerId(ownerDto.getOwnerId());
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-        if (ListUtil.isNull(ownerCarDtos)) {
-            return;
-        }
-        JSONArray cars = new JSONArray();
-
-        JSONObject car = null;
-        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
-            car = new JSONObject();
-            car.put("carMemberId", tmpOwnerCarDto.getMemberId());
-            car.put("carId", tmpOwnerCarDto.getCarId());
-            car.put("carNum", tmpOwnerCarDto.getCarNum());
-            car.put("paId", tmpOwnerCarDto.getPaId());
-            car.put("psId", tmpOwnerCarDto.getPsId());
-            car.put("paNum", tmpOwnerCarDto.getAreaNum());
-            car.put("psNum", tmpOwnerCarDto.getNum());
-            car.put("carTypeCd", tmpOwnerCarDto.getCarTypeCd());
-            car.put("startTime", tmpOwnerCarDto.getStartTime());
-            car.put("endTime", tmpOwnerCarDto.getEndTime());
-            car.put("leaseType", tmpOwnerCarDto.getLeaseType());
-            cars.add(car);
-        }
-
-        paramIn.put("cars", cars);
-
-    }
-
-    /**
-     * 查询业主房屋
-     *
-     * @param paramIn
-     * @param ownerDto
-     */
-    private void getOwnerRoom(JSONObject paramIn, OwnerDto ownerDto) {
-
-        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-        ownerRoomRelDto.setOwnerId(ownerDto.getOwnerId());
-        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-
-        if (ListUtil.isNull(ownerRoomRelDtos)) {
-            return;
-        }
-
-        List<String> roomIds = new ArrayList<>();
-
-        for (OwnerRoomRelDto tmpOwnerRoomRelDto : ownerRoomRelDtos) {
-            roomIds.add(tmpOwnerRoomRelDto.getRoomId());
-        }
-
-        RoomDto roomDto = new RoomDto();
-        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
-        roomDto.setCommunityId(ownerDto.getCommunityId());
-        List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
-
-        JSONArray rooms = new JSONArray();
-
-        JSONObject room = null;
-        for (RoomDto tmpRoomDto : roomDtos) {
-            room = new JSONObject();
-            room.put("roomId", tmpRoomDto.getRoomId());
-            room.put("floorId", tmpRoomDto.getFloorId());
-            room.put("unitId", tmpRoomDto.getUnitId());
-            room.put("floorNum", tmpRoomDto.getFloorNum());
-            room.put("unitNum", tmpRoomDto.getUnitNum());
-            room.put("roomNum", tmpRoomDto.getRoomNum());
-            rooms.add(room);
-        }
-        paramIn.put("rooms", rooms);
-
-    }
-
-    private String getOwnerPhoto(OwnerDto ownerDto) {
-
-
-        FileRelDto fileRelDto = new FileRelDto();
-        fileRelDto.setObjId(ownerDto.getMemberId());
-        fileRelDto.setRelTypeCd("10000");
-        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-        if (ListUtil.isNull(fileRelDtos)) {
-            return "";
-        }
-        FileDto fileDto = new FileDto();
-        fileDto.setFileId(fileRelDtos.get(0).getFileSaveName());
-        fileDto.setFileSaveName(fileRelDtos.get(0).getFileSaveName());
-        fileDto.setCommunityId(ownerDto.getCommunityId());
-        List<FileDto> fileDtos = fileInnerServiceSMOImpl.queryFiles(fileDto);
-        if (ListUtil.isNull(fileDtos)) {
-            return "";
-        }
-
-        return fileDtos.get(0).getFileName();
-    }
-
 
 }
