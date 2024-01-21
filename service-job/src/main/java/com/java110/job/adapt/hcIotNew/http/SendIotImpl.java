@@ -48,6 +48,7 @@ public class SendIotImpl implements ISendIot {
 
     @Override
     public ResultVo post(String url, JSONObject paramIn) {
+        url = getUrl(url);
         HttpHeaders header = getHeaders(url, paramIn.toJSONString(), HttpMethod.POST);
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramIn.toJSONString(), header);
         ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
@@ -124,7 +125,7 @@ public class SendIotImpl implements ISendIot {
             return DEFAULT_IOT_URL + param;
         }
 
-        return url + url;
+        return url + param;
     }
 
     /**

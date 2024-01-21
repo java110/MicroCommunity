@@ -128,7 +128,7 @@
         t.owner_id ownerId,t.b_id,t.b_id bId,t.user_id,t.user_id userId,t.car_id,t.car_id carId ,t.create_time
         createTime,t.community_id communityId,bow.name ownerName,bow.id_card idCard,bow.link,t2.name stateName,
         t.start_time,t.start_time startTime,t.end_time,t.end_time endTime,t.state,
-        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,t.lease_type
+        t.car_type_cd,t.car_type_cd carTypeCd,t.member_id,t.member_id memberId,ps.num,pa.num areaNum,pa.pa_id paId,t.lease_type
         leaseType,
         t3.name leaseTypeName,t4.name carTypeCdName
         <if test="carTypeCd != '1003'">

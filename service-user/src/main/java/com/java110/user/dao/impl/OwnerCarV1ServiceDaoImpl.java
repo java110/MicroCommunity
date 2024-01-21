@@ -65,9 +65,9 @@ public class OwnerCarV1ServiceDaoImpl extends BaseServiceDao implements IOwnerCa
     public List<Map> getOwnerCarInfo(Map info) throws DAOException {
         logger.debug("查询 getOwnerCarInfo 入参 info : {}", info);
 
-        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarV1ServiceDaoImpl.getOwnerCarInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerCarV1ServiceDaoImpl.getOwnerCarInfo", info);
 
-        return businessOwnerCarInfos;
+        return infos;
     }
 
 
@@ -96,12 +96,12 @@ public class OwnerCarV1ServiceDaoImpl extends BaseServiceDao implements IOwnerCa
     public int queryOwnerCarsCount(Map info) {
         logger.debug("查询 queryOwnerCarsCount 入参 info : {}", info);
 
-        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarV1ServiceDaoImpl.queryOwnerCarsCount", info);
-        if (businessOwnerCarInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerCarV1ServiceDaoImpl.queryOwnerCarsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerCarInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
