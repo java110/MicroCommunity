@@ -89,7 +89,7 @@ public class SendIotImpl implements ISendIot {
         String password = MappingCache.getValue(IOT_DOMAIN, "IOT_PASSWORD");
         JSONObject param = new JSONObject();
         param.put("username", userName);
-        param.put("password", password);
+        param.put("passwd", password);
 
         HttpHeaders header = new HttpHeaders();
         header.add(CommonConstant.APP_ID.toLowerCase(), MappingCache.getValue(IOT_DOMAIN, "APP_ID"));
@@ -101,11 +101,11 @@ public class SendIotImpl implements ISendIot {
 
         ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
-        if (tokenRes.getStatusCode() != HttpStatus.OK) {
+
+        JSONObject tokenObj = JSONObject.parseObject(tokenRes.getBody());
+        if (tokenObj.getIntValue("code") != 0) {
             throw new IllegalArgumentException("获取token失败" + tokenRes.getBody());
         }
-        JSONObject tokenObj = JSONObject.parseObject(tokenRes.getBody());
-
         if (!tokenObj.containsKey("token")) {
             throw new IllegalArgumentException("获取token失败" + tokenRes.getBody());
         }
