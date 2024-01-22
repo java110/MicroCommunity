@@ -179,6 +179,9 @@ public class SendCommunityDataToIotAdapt extends DatabusAdaptImpl {
 
         JSONObject staff = null;
         for (StoreUserDto tmpStoreUserDto : storeUserDtos) {
+            if(StoreUserDto.REL_CD_MANAGER.equals(tmpStoreUserDto.getRelCd())){
+                continue;
+            }
             try {
                 staff = new JSONObject();
                 staff.put("propertyId", storeDto.getStoreId());

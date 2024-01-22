@@ -13,6 +13,7 @@ import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.job.adapt.hcIotNew.http.ISendIot;
 import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,9 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private ISendIot sendIotImpl;
+
     @Override
     public void sendOwnerData(OwnerDto ownerDto) {
         JSONObject paramIn = new JSONObject();
@@ -55,6 +59,8 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
 
         //todo 查询业主车辆
         getOwnerCars(paramIn, ownerDto);
+
+        sendIotImpl.post("/iot/api/owner.addOwnerApi",paramIn);
     }
 
     /**
