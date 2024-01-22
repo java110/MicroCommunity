@@ -105,13 +105,13 @@ public class SendCarDataToIotAdapt extends DatabusAdaptImpl {
 
         ResultVo resultVo = sendIotImpl.post("/iot/api/car.addCarApi", car);
         if (resultVo.getCode() != ResultVo.CODE_OK) {
-            saveTranslateLog(ownerDto.getCommunityId(), MachineTranslateDto.CMD_ADD_OWNER_CAR,
+            saveTranslateLog(ownerDtos.get(0).getCommunityId(), MachineTranslateDto.CMD_ADD_OWNER_CAR,
                     car.getString("carMemberId"), car.getString("carNum"),
                     MachineTranslateDto.STATE_ERROR, resultVo.getMsg());
             return;
         }
 
-        saveTranslateLog(ownerDto.getCommunityId(), MachineTranslateDto.CMD_ADD_OWNER_CAR,
+        saveTranslateLog(ownerDtos.get(0).getCommunityId(), MachineTranslateDto.CMD_ADD_OWNER_CAR,
                 car.getString("carMemberId"), car.getString("carNum"),
                 MachineTranslateDto.STATE_SUCCESS, resultVo.getMsg());
     }
