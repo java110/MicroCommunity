@@ -51,6 +51,7 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
         paramIn.put("name", ownerDto.getName());
         paramIn.put("ownerTypeCd", ownerDto.getOwnerTypeCd());
         paramIn.put("idCard", ownerDto.getIdCard());
+        paramIn.put("link", ownerDto.getLink());
         paramIn.put("ownerPhoto", getOwnerPhoto(ownerDto));
 
 
