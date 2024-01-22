@@ -151,7 +151,9 @@
         <if test="communityId !=null and communityId != ''">
             , t.community_id= #{communityId}
         </if>
+        <if test="value !=null and value != ''">
             , t.value= #{value}
+        </if>
         <if test="memberId !=null and memberId != ''">
             , t.member_id= #{memberId}
         </if>
