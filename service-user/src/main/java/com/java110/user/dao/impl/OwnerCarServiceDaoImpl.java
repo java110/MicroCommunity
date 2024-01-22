@@ -89,9 +89,9 @@ public class OwnerCarServiceDaoImpl extends BaseServiceDao implements IOwnerCarS
     public List<Map> getOwnerCarInfo(Map info) throws DAOException {
         logger.debug("查询车辆管理信息 入参 info : {}", info);
 
-        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.getOwnerCarInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.getOwnerCarInfo", info);
 
-        return businessOwnerCarInfos;
+        return infos;
     }
 
 

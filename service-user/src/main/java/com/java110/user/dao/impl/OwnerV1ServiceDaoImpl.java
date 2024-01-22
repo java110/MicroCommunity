@@ -67,9 +67,9 @@ public class OwnerV1ServiceDaoImpl extends BaseServiceDao implements IOwnerV1Ser
     public List<Map> getOwnerInfo(Map info) throws DAOException {
         logger.debug("查询 getOwnerInfo 入参 info : {}",info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerV1ServiceDaoImpl.getOwnerInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerV1ServiceDaoImpl.getOwnerInfo",info);
 
-        return businessOwnerInfos;
+        return infos;
     }
 
 
