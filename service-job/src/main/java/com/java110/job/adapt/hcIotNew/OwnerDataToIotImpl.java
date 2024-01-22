@@ -14,6 +14,7 @@ import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,8 +106,8 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
             car.put("paNum", tmpOwnerCarDto.getAreaNum());
             car.put("psNum", tmpOwnerCarDto.getNum());
             car.put("carTypeCd", tmpOwnerCarDto.getCarTypeCd());
-            car.put("startTime", tmpOwnerCarDto.getStartTime());
-            car.put("endTime", tmpOwnerCarDto.getEndTime());
+            car.put("startTime", DateUtil.getFormatTimeStringA(tmpOwnerCarDto.getStartTime()));
+            car.put("endTime", DateUtil.getFormatTimeStringA(tmpOwnerCarDto.getEndTime()));
             car.put("leaseType", tmpOwnerCarDto.getLeaseType());
             cars.add(car);
         }
