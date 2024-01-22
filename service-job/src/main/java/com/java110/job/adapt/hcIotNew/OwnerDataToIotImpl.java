@@ -2,20 +2,28 @@ package com.java110.job.adapt.hcIotNew;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
+import com.java110.dto.machine.MachineTranslateDto;
+import com.java110.dto.machine.MachineTranslateErrorDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
+import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
+import com.java110.po.machine.MachineTranslateErrorPo;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +49,9 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
     @Autowired
+    private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
+
+    @Autowired
     private ISendIot sendIotImpl;
 
     @Override
@@ -62,8 +73,46 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
         //todo 查询业主车辆
         getOwnerCars(paramIn, ownerDto);
 
-        sendIotImpl.post("/iot/api/owner.addOwnerApi",paramIn);
+        ResultVo resultVo = sendIotImpl.post("/iot/api/owner.addOwnerApi",paramIn);
+
+        if(resultVo.getCode() != ResultVo.CODE_OK){
+            saveTranslateLog(ownerDto.getCommunityId(),MachineTranslateDto.CMD_ADD_OWNER_FACE,
+                    ownerDto.getMemberId(),ownerDto.getName(),
+                    MachineTranslateDto.STATE_ERROR,resultVo.getMsg());
+            return ;
+        }
+
+        saveTranslateLog(ownerDto.getCommunityId(),MachineTranslateDto.CMD_ADD_OWNER_FACE,
+                ownerDto.getMemberId(),ownerDto.getName(),
+                MachineTranslateDto.STATE_SUCCESS,resultVo.getMsg());
+
+
     }
+
+
+    /**
+     * 存储交互 记录
+     *
+     * @param communityId
+     */
+    public void saveTranslateLog(String communityId,String cmd,String objId,String objName,String state,String remark) {
+        MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
+        machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        machineTranslateDto.setCommunityId(communityId);
+        machineTranslateDto.setMachineCmd(cmd);
+        machineTranslateDto.setMachineCode("-1");
+        machineTranslateDto.setMachineId("-1");
+        machineTranslateDto.setObjId(objId);
+        machineTranslateDto.setObjName(objName);
+        machineTranslateDto.setTypeCd(MachineTranslateDto.TYPE_OWNER);
+        machineTranslateDto.setRemark(remark);
+        machineTranslateDto.setState(state);
+        machineTranslateDto.setbId("-1");
+        machineTranslateDto.setObjBId("-1");
+        machineTranslateDto.setUpdateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        machineTranslateInnerServiceSMOImpl.saveMachineTranslate(machineTranslateDto);
+    }
+
 
     /**
      * 查询业主车辆

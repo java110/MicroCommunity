@@ -3,9 +3,13 @@ package com.java110.job.adapt.hcIotNew.http;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.machine.MachineTranslateErrorDto;
 import com.java110.dto.system.AppRoute;
+import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
 import com.java110.job.adapt.hcIot.GetToken;
 import com.java110.job.adapt.hcIot.IotConstant;
+import com.java110.po.machine.MachineTranslateErrorPo;
 import com.java110.utils.cache.AppRouteCache;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
@@ -33,6 +37,10 @@ public class SendIotImpl implements ISendIot {
     @Autowired
     private RestTemplate outRestTemplate;
 
+    @Autowired
+    private IMachineTranslateErrorInnerServiceSMO machineTranslateErrorInnerServiceSMOImpl;
+
+
     @Override
     public ResultVo get(String url) {
         HttpHeaders header = getHeaders(url, "", HttpMethod.POST);
@@ -41,7 +49,6 @@ public class SendIotImpl implements ISendIot {
 
         String body = tokenRes.getBody();
         JSONObject paramOut = JSONObject.parseObject(body);
-
 
         return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
     }
@@ -56,8 +63,28 @@ public class SendIotImpl implements ISendIot {
         String body = tokenRes.getBody();
         JSONObject paramOut = JSONObject.parseObject(body);
 
+        if(paramOut.getIntValue("code") != ResultVo.CODE_OK){
+            saveTranslateError(paramIn.getString("communityId"),paramIn.toJSONString(),body,url);
+        }
+
 
         return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
+    }
+
+
+
+    public void saveTranslateError(String communityId,String reqJson, String resJson, String url) {
+        MachineTranslateErrorPo machineTranslateErrorPo = new MachineTranslateErrorPo();
+        machineTranslateErrorPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
+        machineTranslateErrorPo.setCommunityId(communityId);
+        machineTranslateErrorPo.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
+        machineTranslateErrorPo.setReqBody(reqJson);
+        machineTranslateErrorPo.setReqHeader("");
+        machineTranslateErrorPo.setResBody(resJson);
+        machineTranslateErrorPo.setReqPath(url);
+        machineTranslateErrorPo.setCommunityId("-1");
+        machineTranslateErrorPo.setReqType(MachineTranslateErrorDto.REQ_TYPE_URL);
+        machineTranslateErrorInnerServiceSMOImpl.saveMachineTranslateError(machineTranslateErrorPo);
     }
 
 

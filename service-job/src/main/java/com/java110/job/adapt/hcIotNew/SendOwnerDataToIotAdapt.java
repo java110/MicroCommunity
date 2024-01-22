@@ -5,7 +5,6 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.system.Business;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
