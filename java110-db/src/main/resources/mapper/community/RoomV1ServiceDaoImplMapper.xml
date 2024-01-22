@@ -21,7 +21,7 @@
         roomSubType,t.room_area,t.room_area roomArea,t.user_id,t.user_id userId,t.room_id,t.room_id
         roomId,t.layer,t.fee_coefficient,t.fee_coefficient feeCoefficient,t.built_up_area,t.built_up_area
         builtUpArea,t.room_num,t.room_num roomNum,t.unit_id,t.unit_id unitId,t.state,td.name stateName,t.community_id,t.community_id
-        communityId,t.apartment,t.room_type,t.room_type roomType,t.room_rent,t.room_rent roomRent,f.floor_num floorNum,f.floor_id f.floorId,bu.unit_num unitNum
+        communityId,t.apartment,t.room_type,t.room_type roomType,t.room_rent,t.room_rent roomRent,f.floor_num floorNum,f.floor_id floorId,bu.unit_num unitNum
         from building_room t
         left join  building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         left join f_floor f on bu.floor_id = f.floor_id and f.status_cd = '0'
