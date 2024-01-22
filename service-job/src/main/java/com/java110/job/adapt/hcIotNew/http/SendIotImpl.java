@@ -68,7 +68,7 @@ public class SendIotImpl implements ISendIot {
      */
     private HttpHeaders getHeaders(String url, String param, HttpMethod method) {
         HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.APP_ID.toLowerCase(), CommonConstant.HC_HARDWARE_APP_ID);
+        header.add(CommonConstant.APP_ID.toLowerCase(), MappingCache.getValue(IOT_DOMAIN, "APP_ID"));
         header.add(CommonConstant.USER_ID.toLowerCase(), CommonConstant.ORDER_DEFAULT_USER_ID);
         header.add(CommonConstant.TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
         header.add(CommonConstant.REQUEST_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
