@@ -200,6 +200,7 @@ public class UserStaffModifyCmd extends Cmd {
         StoreUserPo storeUserPo = new StoreUserPo();
         storeUserPo.setRelCd(paramObj.getString("relCd"));
         storeUserPo.setStoreUserId(storeUserDtos.get(0).getStoreUserId());
+        storeUserPo.setUserId(userPo.getUserId());
 
         flag = storeUserV1InnerServiceSMOImpl.updateStoreUser(storeUserPo);
         if (flag < 1) {
