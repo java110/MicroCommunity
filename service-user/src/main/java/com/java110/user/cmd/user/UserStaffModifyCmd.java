@@ -27,6 +27,7 @@ import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +65,8 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\"userId\":\"123123\",\"orgId\":\"102022091988250052\",\"orgName\":\"演示物业 / 件部\",\"username\":\"张三\",\"sex\":\"0\",\"email\":\"231@qq.com\",\"tel\":\"123\",\"address\":\"123\",\"relCd\":\"1000\",\"photo\":\"\",\"name\":\"张三\"}",
-        resBody="{'code':0,'msg':'成功'"
+        reqBody = "{\"userId\":\"123123\",\"orgId\":\"102022091988250052\",\"orgName\":\"演示物业 / 件部\",\"username\":\"张三\",\"sex\":\"0\",\"email\":\"231@qq.com\",\"tel\":\"123\",\"address\":\"123\",\"relCd\":\"1000\",\"photo\":\"\",\"name\":\"张三\"}",
+        resBody = "{'code':0,'msg':'成功'"
 )
 
 @Java110Cmd(serviceCode = "user.staff.modify")
@@ -105,7 +106,7 @@ public class UserStaffModifyCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
 
-            if(reqJson.getString("photo").length()> 200){
+            if (reqJson.getString("photo").length() > 200) {
                 FileDto fileDto = new FileDto();
                 fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
                 fileDto.setFileName(fileDto.getFileId());
@@ -114,7 +115,7 @@ public class UserStaffModifyCmd extends Cmd {
                 fileDto.setCommunityId(reqJson.getString("communityId"));
                 String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
 
-                reqJson.put("photo",fileName);
+                reqJson.put("photo", fileName);
             }
 
             FileRelDto fileRelDto = new FileRelDto();
@@ -173,30 +174,15 @@ public class UserStaffModifyCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存用户异常");
         }
-        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-        orgStaffRelDto.setStaffId(userPo.getUserId());
-        List<OrgStaffRelDto> orgStaffRelDtoList = orgStaffRelInnerServiceSMOImpl.queryOrgInfoByStaffIds(orgStaffRelDto);
-
-        if (orgStaffRelDtoList == null || orgStaffRelDtoList.size() < 1) {
-            return;
-        }
-        OrgStaffRelPo orgStaffRelPo = new OrgStaffRelPo();
-        orgStaffRelPo.setRelCd(paramObj.getString("relCd"));
-        orgStaffRelPo.setRelId(orgStaffRelDtoList.get(0).getRelId());
-        orgStaffRelPo.setOrgId(paramObj.getString("orgId"));
-
-        flag = orgStaffRelV1InnerServiceSMOImpl.updateOrgStaffRel(orgStaffRelPo);
-        if (flag < 1) {
-            throw new CmdException("保存员工 失败");
-        }
 
         StoreUserDto storeUserDto = new StoreUserDto();
         storeUserDto.setUserId(userPo.getUserId());
         List<StoreUserDto> storeUserDtos = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDto);
 
-        if (storeUserDtos == null || storeUserDtos.size() < 1) {
+        if (ListUtil.isNull(storeUserDtos)) {
             return;
         }
+
         StoreUserPo storeUserPo = new StoreUserPo();
         storeUserPo.setRelCd(paramObj.getString("relCd"));
         storeUserPo.setStoreUserId(storeUserDtos.get(0).getStoreUserId());
@@ -206,6 +192,26 @@ public class UserStaffModifyCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存员工 失败");
         }
+
+        OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
+        orgStaffRelDto.setStaffId(userPo.getUserId());
+        List<OrgStaffRelDto> orgStaffRelDtos = orgStaffRelInnerServiceSMOImpl.queryOrgInfoByStaffIds(orgStaffRelDto);
+
+        if (ListUtil.isNull(orgStaffRelDtos)) {
+            return;
+        }
+
+
+        OrgStaffRelPo orgStaffRelPo = new OrgStaffRelPo();
+        orgStaffRelPo.setRelCd(paramObj.getString("relCd"));
+        orgStaffRelPo.setRelId(orgStaffRelDtos.get(0).getRelId());
+        orgStaffRelPo.setOrgId(paramObj.getString("orgId"));
+
+        flag = orgStaffRelV1InnerServiceSMOImpl.updateOrgStaffRel(orgStaffRelPo);
+        if (flag < 1) {
+            throw new CmdException("保存员工 失败");
+        }
+
     }
 
 
