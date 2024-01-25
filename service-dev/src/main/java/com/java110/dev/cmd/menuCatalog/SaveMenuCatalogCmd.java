@@ -59,7 +59,6 @@ public class SaveMenuCatalogCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "seq", "请求报文中未包含seq");
         Assert.hasKeyAndValue(reqJson, "url", "请求报文中未包含url");
         Assert.hasKeyAndValue(reqJson, "isShow", "请求报文中未包含isShow");
-
     }
 
     @Override

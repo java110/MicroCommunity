@@ -8,9 +8,9 @@
     <!-- 保存菜单目录信息 add by wuxw 2018-07-03 -->
     <insert id="saveMenuCatalogInfo" parameterType="Map">
         insert into m_menu_catalog(
-        store_type,ca_id,name,icon,seq,url,is_show
+        store_type,ca_id,name,icon,seq,url,is_show,priv_id
         ) values (
-        #{storeType},#{caId},#{name},#{icon},#{seq},#{url},#{isShow}
+        #{storeType},#{caId},#{name},#{icon},#{seq},#{url},#{isShow},#{privId}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <!-- 查询菜单目录信息 add by wuxw 2018-07-03 -->
     <select id="getMenuCatalogInfo" parameterType="Map" resultType="Map">
         select t.store_type,t.store_type storeType,t.ca_id,t.ca_id caId,t.name,t.icon,t.status_cd,t.status_cd
-        statusCd,t.seq,t.url,t.is_show,t.is_show isShow
+        statusCd,t.seq,t.url,t.is_show,t.is_show isShow,t.priv_id privId
         from m_menu_catalog t
         where 1 =1
         <if test="storeType !=null and storeType != ''">
@@ -73,6 +73,9 @@
         </if>
         <if test="url !=null and url != ''">
             , t.url= #{url}
+        </if>
+        <if test="privId !=null and privId != ''">
+            , t.priv_id = #{privId}
         </if>
         <if test="isShow !=null and isShow != ''">
             , t.is_show= #{isShow}

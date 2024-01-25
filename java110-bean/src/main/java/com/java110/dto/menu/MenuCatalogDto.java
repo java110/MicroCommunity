@@ -28,6 +28,8 @@ public class MenuCatalogDto extends PageDto implements Serializable {
 
     private String statusCd = "0";
 
+    private String privId;
+
 
     public String getStoreType() {
         return storeType;
@@ -100,5 +102,13 @@ public class MenuCatalogDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getPrivId() {
+        return privId;
+    }
+
+    public void setPrivId(String privId) {
+        this.privId = privId;
     }
 }
