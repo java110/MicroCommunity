@@ -65,6 +65,10 @@ public class SendAttendanceStaffDataToIotAdapt extends DatabusAdaptImpl {
 
     @Override
     public void execute(Business business, List<Business> businesses) {
+        String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
+        if (!"ON".equals(iotSwitch)) {
+            return;
+        }
 
         JSONObject data = business.getData();
         String csId = data.getString("csId");

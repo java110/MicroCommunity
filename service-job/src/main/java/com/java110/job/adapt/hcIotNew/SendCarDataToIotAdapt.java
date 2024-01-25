@@ -12,6 +12,7 @@ import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
@@ -44,6 +45,10 @@ public class SendCarDataToIotAdapt extends DatabusAdaptImpl {
 
     @Override
     public void execute(Business business, List<Business> businesses) {
+        String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
+        if (!"ON".equals(iotSwitch)) {
+            return;
+        }
 
         JSONObject data = business.getData();
         String memberId = data.getString("memberId");
