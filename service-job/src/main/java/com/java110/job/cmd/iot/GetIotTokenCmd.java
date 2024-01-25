@@ -47,7 +47,7 @@ public class GetIotTokenCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-        Assert.hasKeyAndValue(reqJson, "targetUrl", "未包含小区");
+        Assert.hasKeyAndValue(reqJson, "targetUrl", "未包含targetUrl");
     }
 
     @Override
@@ -76,7 +76,7 @@ public class GetIotTokenCmd extends Cmd {
 
         JSONObject staff = new JSONObject();
         staff.put("tel", userDtos.get(0).getTel());
-        staff.put("storeName", storeDtos.get(0).getStoreName());
+        staff.put("storeName", storeDtos.get(0).getName());
 
         ResultVo resultVo = sendIotImpl.post("/iot/api/sso.getSsoToken", staff);
 
