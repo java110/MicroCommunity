@@ -38,7 +38,7 @@ public class GetIotTokenCmd extends Cmd {
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
-    public static final String IOT_DOMAIN = "IOT"; // 物联网域
+    public static final String URL_DOMAIN = "URL_DOMAIN"; // 物联网域
 
 
     @Autowired
@@ -86,7 +86,7 @@ public class GetIotTokenCmd extends Cmd {
 
         JSONObject paramOut = (JSONObject) resultVo.getData();
 
-        String iotUrl = MappingCache.getValue(IOT_DOMAIN, IotConstant.IOT_URL);
+        String iotUrl = MappingCache.getValue(URL_DOMAIN, IotConstant.IOT_URL);
         String targetUrl = iotUrl+reqJson.getString("targetUrl");
         String url = iotUrl+"/sso.html?token="+paramOut.getString("token")+"&targetUrl="+targetUrl;
         paramOut.put("url",url);
