@@ -50,7 +50,7 @@ public class SendIotImpl implements ISendIot {
         String body = tokenRes.getBody();
         JSONObject paramOut = JSONObject.parseObject(body);
 
-        return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
+        return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.get("data"));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SendIotImpl implements ISendIot {
         }
 
 
-        return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.getJSONObject("data"));
+        return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.get("data"));
     }
 
 
