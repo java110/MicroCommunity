@@ -2,12 +2,14 @@ package com.java110.job.cmd.iot;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.intf.user.IOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -24,13 +26,26 @@ public class OpenAccessControlDoorCmd extends Cmd {
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
     private ISendIot sendIotImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
         Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备信息");
-        Assert.hasKeyAndValue(reqJson, "memberId", "请求报文中未包含员工");
+        Assert.hasKeyAndValue(reqJson, "memberId", "请求报文中未包含业主");
+
+        String userId = CmdContextUtils.getUserId(context);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户未登录");
+
+        reqJson.put("propertyUserId", userDtos.get(0).getUserId());
     }
 
     @Override
