@@ -92,10 +92,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         headers.put(CommonConstant.USER_ID, StringUtil.isEmpty(pd.getUserId()) ? "-1" : pd.getUserId());
 
         if (!headers.containsKey(CommonConstant.HTTP_APP_ID)) {
-            headers.put(CommonConstant.HTTP_APP_ID, AppDto.WEB_APP_ID);
+            headers.put(CommonConstant.HTTP_APP_ID, pd.getAppId());
         }
         if (!headers.containsKey(CommonConstant.APP_ID)) {
-            headers.put(CommonConstant.APP_ID, AppDto.WEB_APP_ID);
+            headers.put(CommonConstant.APP_ID, pd.getAppId());
         }
 
         if (!headers.containsKey(CommonConstant.HTTP_TRANSACTION_ID)) {
@@ -113,8 +113,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         if (HttpMethod.GET == httpMethod) {
             initUrlParam(JSONObject.parseObject(param), headers);
             headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
+        } else {
+            headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url);
         }
-        AuthenticationFactory.createSign(headers,httpMethod,headers.get("REQUEST_URL"),param);
+        AuthenticationFactory.createSign(headers, httpMethod, headers.get("REQUEST_URL"), param);
 
         try {
             responseEntity = apiServiceSMOImpl.service(param, headers);
@@ -165,8 +167,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         }
         if (HttpMethod.GET == httpMethod) {
             headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
+        }else {
+            headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url);
         }
-        AuthenticationFactory.createSign(headers,httpMethod,headers.get("REQUEST_URL"),param);
+        AuthenticationFactory.createSign(headers, httpMethod, headers.get("REQUEST_URL"), param);
 
         try {
             responseEntity = apiServiceSMOImpl.service(param, headers);

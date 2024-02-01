@@ -311,7 +311,7 @@ public class AuthenticationFactory {
             transactionId = headers.getFirst(CommonConstant.TRANSACTION_ID);
         }
         String requestTime = headers.getFirst(CommonConstant.HTTP_REQ_TIME);
-        if (StringUtil.isEmpty(transactionId)) {
+        if (StringUtil.isEmpty(requestTime)) {
             requestTime = headers.getFirst(CommonConstant.REQUEST_TIME);
         }
 
@@ -351,7 +351,7 @@ public class AuthenticationFactory {
             transactionId = headers.get(CommonConstant.HTTP_TRANSACTION_ID);
         }
         String requestTime = headers.get(CommonConstant.REQUEST_TIME);
-        if (StringUtil.isEmpty(transactionId)) {
+        if (StringUtil.isEmpty(requestTime)) {
             requestTime = headers.get(CommonConstant.HTTP_REQ_TIME);
         }
 
@@ -369,6 +369,7 @@ public class AuthenticationFactory {
             paramStr = param;
         }
         String sign = transactionId + requestTime + appId + paramStr + appRoutes.get(0).getSecurityCode();
+        logger.debug("鉴权前createSign:{}",sign);
         headers.put("sign", md5(sign));
     }
 
