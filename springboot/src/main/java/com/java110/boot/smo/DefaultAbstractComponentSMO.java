@@ -113,8 +113,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         if (HttpMethod.GET == httpMethod) {
             initUrlParam(JSONObject.parseObject(param), headers);
             headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
+        } else {
+            headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url);
         }
-        AuthenticationFactory.createSign(headers,httpMethod,headers.get("REQUEST_URL"),param);
+        AuthenticationFactory.createSign(headers, httpMethod, headers.get("REQUEST_URL"), param);
 
         try {
             responseEntity = apiServiceSMOImpl.service(param, headers);
@@ -165,8 +167,10 @@ public class DefaultAbstractComponentSMO extends AbstractComponentSMO {
         }
         if (HttpMethod.GET == httpMethod) {
             headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url + mapToUrlParam(JSONObject.parseObject(param)));
+        }else {
+            headers.put("REQUEST_URL", "http://127.0.0.1:8008/" + url);
         }
-        AuthenticationFactory.createSign(headers,httpMethod,headers.get("REQUEST_URL"),param);
+        AuthenticationFactory.createSign(headers, httpMethod, headers.get("REQUEST_URL"), param);
 
         try {
             responseEntity = apiServiceSMOImpl.service(param, headers);
