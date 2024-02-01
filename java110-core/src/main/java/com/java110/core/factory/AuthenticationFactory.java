@@ -329,6 +329,8 @@ public class AuthenticationFactory {
             paramStr = param;
         }
         String sign = transactionId + requestTime + appId + paramStr + appRoutes.get(0).getSecurityCode();
+        logger.debug("鉴权前createSign:{}",sign);
+
         headers.remove("sign");
         headers.add("sign", md5(sign));
     }
@@ -369,6 +371,8 @@ public class AuthenticationFactory {
             paramStr = param;
         }
         String sign = transactionId + requestTime + appId + paramStr + appRoutes.get(0).getSecurityCode();
+        logger.debug("鉴权前createSign:{}",sign);
+
         headers.put("sign", md5(sign));
     }
 
