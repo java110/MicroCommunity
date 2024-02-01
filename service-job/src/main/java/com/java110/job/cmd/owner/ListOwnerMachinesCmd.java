@@ -48,6 +48,7 @@ public class ListOwnerMachinesCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "memberId", "请求报文中未包含业主信息");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
+        super.validatePageInfo(reqJson);
     }
 
     @Override
