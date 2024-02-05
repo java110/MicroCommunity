@@ -7,6 +7,7 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.machine.MachineTranslateDto;
 import com.java110.dto.machine.MachineTranslateErrorDto;
+import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
@@ -16,6 +17,7 @@ import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
 import com.java110.intf.common.IMachineTranslateInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
+import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class OwnerDataToIotImpl implements IOwnerDataToIot{
+public class OwnerDataToIotImpl implements IOwnerDataToIot {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -52,6 +54,9 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
 
     @Autowired
+    private IOwnerAttrInnerServiceSMO ownerAttrInnerServiceSMOImpl;
+
+    @Autowired
     private ISendIot sendIotImpl;
 
     @Override
@@ -65,6 +70,7 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
         paramIn.put("idCard", ownerDto.getIdCard());
         paramIn.put("link", ownerDto.getLink());
         paramIn.put("ownerPhoto", getOwnerPhoto(ownerDto));
+        paramIn.put("cardNumber", getCardNumber(ownerDto));
 
 
         //todo 查询业主房屋
@@ -73,19 +79,34 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
         //todo 查询业主车辆
         getOwnerCars(paramIn, ownerDto);
 
-        ResultVo resultVo = sendIotImpl.post("/iot/api/owner.addOwnerApi",paramIn);
+        ResultVo resultVo = sendIotImpl.post("/iot/api/owner.addOwnerApi", paramIn);
 
-        if(resultVo.getCode() != ResultVo.CODE_OK){
-            saveTranslateLog(ownerDto.getCommunityId(),MachineTranslateDto.CMD_ADD_OWNER_FACE,
-                    ownerDto.getMemberId(),ownerDto.getName(),
-                    MachineTranslateDto.STATE_ERROR,resultVo.getMsg());
-            return ;
+        if (resultVo.getCode() != ResultVo.CODE_OK) {
+            saveTranslateLog(ownerDto.getCommunityId(), MachineTranslateDto.CMD_ADD_OWNER_FACE,
+                    ownerDto.getMemberId(), ownerDto.getName(),
+                    MachineTranslateDto.STATE_ERROR, resultVo.getMsg());
+            return;
         }
 
-        saveTranslateLog(ownerDto.getCommunityId(),MachineTranslateDto.CMD_ADD_OWNER_FACE,
-                ownerDto.getMemberId(),ownerDto.getName(),
-                MachineTranslateDto.STATE_SUCCESS,resultVo.getMsg());
+        saveTranslateLog(ownerDto.getCommunityId(), MachineTranslateDto.CMD_ADD_OWNER_FACE,
+                ownerDto.getMemberId(), ownerDto.getName(),
+                MachineTranslateDto.STATE_SUCCESS, resultVo.getMsg());
 
+
+    }
+
+    private String getCardNumber(OwnerDto ownerDto) {
+
+        OwnerAttrDto ownerAttrDto = new OwnerAttrDto();
+        ownerAttrDto.setMemberId(ownerDto.getMemberId());
+        ownerAttrDto.setCommunityId(ownerDto.getCommunityId());
+        List<OwnerAttrDto> ownerAttrDtos = ownerAttrInnerServiceSMOImpl.queryOwnerAttrs(ownerAttrDto);
+
+        if (ListUtil.isNull(ownerAttrDtos)) {
+            return "";
+        }
+
+        return OwnerAttrDto.getValue(ownerAttrDtos, OwnerAttrDto.SPEC_CD_ACCESS_CONTROL_KEY);
 
     }
 
@@ -95,7 +116,7 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
      *
      * @param communityId
      */
-    public void saveTranslateLog(String communityId,String cmd,String objId,String objName,String state,String remark) {
+    public void saveTranslateLog(String communityId, String cmd, String objId, String objName, String state, String remark) {
         MachineTranslateDto machineTranslateDto = new MachineTranslateDto();
         machineTranslateDto.setMachineTranslateId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_machineTranslateId));
         machineTranslateDto.setCommunityId(communityId);
