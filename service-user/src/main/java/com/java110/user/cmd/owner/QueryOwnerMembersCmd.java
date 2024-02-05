@@ -11,9 +11,12 @@ import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiOwnerDataVo;
 import com.java110.vo.api.ApiOwnerVo;
@@ -85,12 +88,20 @@ public class QueryOwnerMembersCmd extends Cmd {
                 }
             }
         }
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
         for (OwnerDto ownerdto : ownerDtoList) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(ownerdto.getMemberId());
             List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-            if (fileRelDtos != null && fileRelDtos.size() > 0) {
+            if (ListUtil.isNull(fileRelDtos)) {
+                continue;
+            }
+            ownerdto.setUrl(fileRelDtos.get(0).getFileSaveName());
+            if (fileRelDtos.get(0).getFileSaveName().startsWith("http")) {
                 ownerdto.setUrl(fileRelDtos.get(0).getFileSaveName());
+            } else {
+                ownerdto.setUrl(imgUrl + fileRelDtos.get(0).getFileSaveName());
             }
         }
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();

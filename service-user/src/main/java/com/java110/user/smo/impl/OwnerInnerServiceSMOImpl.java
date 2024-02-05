@@ -19,6 +19,7 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.OwnerTypeConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -72,7 +73,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
 
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(ownerInfo), OwnerDto.class);
 
-        if (owners == null || owners.size() == 0) {
+        if (ListUtil.isNull(owners)) {
             return owners;
         }
 
