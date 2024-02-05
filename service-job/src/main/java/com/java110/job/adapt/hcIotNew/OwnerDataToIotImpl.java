@@ -228,7 +228,7 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot{
             return "";
         }
 
-        return fileDtos.get(0).getFileName();
+        return fileDtos.get(0).getContext();
     }
 
 
