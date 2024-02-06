@@ -11,6 +11,7 @@ import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -101,15 +102,15 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
 
         JSONObject data = new JSONObject();
-        data.put("hisOweFee", hisOweFee);
-        data.put("curOweFee", curOweFee);
-        data.put("hisReceivedFee", hisReceivedFee);
-        data.put("preReceivedFee", preReceivedFee);
-        data.put("receivedFee", receivedFee);
+        data.put("hisOweFee", MoneyUtil.computePriceScale(hisOweFee));
+        data.put("curOweFee", MoneyUtil.computePriceScale(curOweFee));
+        data.put("hisReceivedFee", MoneyUtil.computePriceScale(hisReceivedFee));
+        data.put("preReceivedFee", MoneyUtil.computePriceScale(preReceivedFee));
+        data.put("receivedFee", MoneyUtil.computePriceScale(receivedFee));
         data.put("roomCount", roomCount);
         data.put("feeRoomCount", feeRoomCount);
         data.put("oweRoomCount", oweRoomCount);
-        data.put("curReceivableFee", curReceivableFee);
+        data.put("curReceivableFee", MoneyUtil.computePriceScale(curReceivableFee));
 
         JSONArray datas = new JSONArray();
         datas.add(data);

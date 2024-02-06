@@ -9,6 +9,8 @@ import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +66,7 @@ public class QueryReceivedStatisticsCmd extends Cmd {
     }
 
     private List<Map> computeFloorReceivedFee(List<Map> datas) {
-        if (datas == null || datas.size() < 1) {
+        if (ListUtil.isNull(datas)) {
             return new ArrayList<>();
         }
 
@@ -75,22 +77,23 @@ public class QueryReceivedStatisticsCmd extends Cmd {
             }
         }
 
-        if (tmpDatas == null || tmpDatas.size() < 1) {
+        if (ListUtil.isNull(tmpDatas)) {
             return new ArrayList<>();
         }
 
         BigDecimal receivedFee = null;
+        double receivedFeeD = 0;
         for (Map tmpData : tmpDatas) {
             receivedFee = new BigDecimal(0.00);
             for (Map data : datas) {
                 if (!data.get("floorId").toString().equals(tmpData.get("floorId"))) {
                     continue;
                 }
-
-                receivedFee = receivedFee.add(new BigDecimal(data.get("receivedFee").toString()));
-                tmpData.put("receivedFee" + data.get("feeTypeCd").toString(), data.get("receivedFee"));
+                receivedFeeD = Double.parseDouble(data.get("receivedFee").toString());
+                receivedFee = receivedFee.add(new BigDecimal(receivedFeeD + ""));
+                tmpData.put("receivedFee" + data.get("feeTypeCd").toString(), MoneyUtil.computePriceScale(receivedFeeD));
             }
-            tmpData.put("receivedFee", receivedFee.doubleValue());
+            tmpData.put("receivedFee", MoneyUtil.computePriceScale(receivedFee.doubleValue()));
         }
 
         return tmpDatas;

@@ -53,6 +53,8 @@ public class PostOpenApiCmd extends Cmd {
         Assert.listOnlyOne(userDtos, "用户未登录");
 
         reqJson.put("propertyUserTel", userDtos.get(0).getTel());
+        reqJson.put("propertyUserId", userDtos.get(0).getUserId());
+
     }
 
     @Override

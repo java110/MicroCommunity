@@ -53,6 +53,8 @@ public class GetOpenApiCmd extends Cmd {
         Assert.listOnlyOne(userDtos, "用户未登录");
 
         reqJson.put("propertyUserId", userDtos.get(0).getUserId());
+        reqJson.put("propertyUserTel", userDtos.get(0).getTel());
+
     }
 
     @Override
