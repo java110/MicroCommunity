@@ -12,6 +12,7 @@ import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -117,6 +118,8 @@ public class QueryReportFeeDetailContractCmd extends Cmd {
 
         BigDecimal oweFee = null;
         BigDecimal receivedFee = null;
+        double oweFeeD = 0;
+        double receivedFeeD = 0;
         for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
             data = datas.getJSONObject(dataIndex);
             oweFee = new BigDecimal(0.00);
@@ -126,13 +129,16 @@ public class QueryReportFeeDetailContractCmd extends Cmd {
                     continue;
                 }
 
-                oweFee = oweFee.add(new BigDecimal(info.get("oweFee").toString()));
-                receivedFee = receivedFee.add(new BigDecimal(info.get("receivedFee").toString()));
-                data.put("oweFee" + info.get("feeTypeCd").toString(), info.get("oweFee"));
-                data.put("receivedFee" + info.get("feeTypeCd").toString(), info.get("receivedFee"));
+                oweFeeD = Double.parseDouble(info.get("oweFee").toString());
+                receivedFeeD = Double.parseDouble(info.get("receivedFee").toString());
+
+                oweFee = oweFee.add(new BigDecimal(oweFeeD + ""));
+                receivedFee = receivedFee.add(new BigDecimal(receivedFeeD + ""));
+                data.put("oweFee" + info.get("feeTypeCd").toString(), MoneyUtil.computePriceScale(oweFeeD));
+                data.put("receivedFee" + info.get("feeTypeCd").toString(), MoneyUtil.computePriceScale(receivedFeeD));
             }
-            data.put("oweFee", oweFee.doubleValue());
-            data.put("receivedFee", receivedFee.doubleValue());
+            data.put("oweFee", MoneyUtil.computePriceScale(oweFee.doubleValue()));
+            data.put("receivedFee", MoneyUtil.computePriceScale(receivedFee.doubleValue()));
         }
 
         return datas;

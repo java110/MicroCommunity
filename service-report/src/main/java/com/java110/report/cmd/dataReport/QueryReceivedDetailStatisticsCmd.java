@@ -14,6 +14,7 @@ import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +152,6 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
                     continue;
                 }
                 for (DictDto tDict : dictDtos) {
-                    //feeTypeCd = info.get("feeTypeCd").toString();
                     feeTypeCd = tDict.getStatusCd();
                     if (!info.containsKey(feeTypeCd)) {
                         continue;
@@ -160,7 +160,7 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
                     data.put("receivedFee" + feeTypeCd, info.get(feeTypeCd));
                 }
             }
-            data.put("receivedFee", receivedFee.doubleValue());
+            data.put("receivedFee", MoneyUtil.computePriceScale(receivedFee.doubleValue()));
         }
 
         return datas;

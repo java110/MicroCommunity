@@ -24,7 +24,12 @@ public class MoneyUtil {
     public static double computePriceScale(double price,String scale,int decimalPlace){
 
         //todo 解决 群里反馈 进度丢失问题
-        //todo 发现了个BUG   MoneyUtil.computePriceScale      计算金额四舍五入时，精度丢失问题，    new BigDecimal(String ）  就OK了，  double  会出问题。     例如444.195   四舍五入变成了 44.19
+        //todo 发现了个BUG
+        // MoneyUtil.computePriceScale
+        // 计算金额四舍五入时，精度丢失问题，
+        // new BigDecimal(String ）
+        // 就OK了，  double  会出问题。
+        // 例如444.195   四舍五入变成了 44.19
         BigDecimal feeTotalPrice = new BigDecimal(price+"");
 
         if(DOWN.equals(scale)) {
@@ -36,6 +41,15 @@ public class MoneyUtil {
         }
 
         return feeTotalPrice.doubleValue();
+    }
+
+    /**
+     * 四舍五入
+     * @param price
+     * @return
+     */
+    public static double computePriceScale(double price){
+        return computePriceScale(price,HALF_UP,2);
     }
 
 
