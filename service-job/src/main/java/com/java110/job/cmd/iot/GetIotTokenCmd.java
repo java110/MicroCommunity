@@ -48,6 +48,7 @@ public class GetIotTokenCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         Assert.hasKeyAndValue(reqJson, "targetUrl", "未包含targetUrl");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含communityId");
 
         String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
         if (!"ON".equals(iotSwitch)) {
@@ -93,7 +94,7 @@ public class GetIotTokenCmd extends Cmd {
 
         String iotUrl = MappingCache.getValue(URL_DOMAIN, IotConstant.IOT_URL);
         String targetUrl = iotUrl + reqJson.getString("targetUrl");
-        String url = iotUrl + "/sso.html?token=" + paramOut.getString("token") + "&targetUrl=" + targetUrl;
+        String url = iotUrl + "/sso.html?token=" + paramOut.getString("token") +"&communityId=" + reqJson.getString("communityId") + "&targetUrl=" + targetUrl;
         paramOut.put("url", url);
         context.setResponseEntity(ResultVo.createResponseEntity(paramOut));
 
