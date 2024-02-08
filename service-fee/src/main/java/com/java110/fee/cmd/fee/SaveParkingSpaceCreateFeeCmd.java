@@ -238,7 +238,7 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
             }
 
             parkingSpaceDto = new ParkingSpaceDto();
-            parkingSpaceDto.setCarNum(ownerCarDtos.get(ownerCarIndex).getCarNum());
+            parkingSpaceDto.setPsId(ownerCarDtos.get(ownerCarIndex).getPsId());
             parkingSpaceDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
             parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
 
