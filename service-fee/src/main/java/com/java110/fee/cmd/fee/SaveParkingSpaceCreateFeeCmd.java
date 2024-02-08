@@ -24,10 +24,7 @@ import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFee.PayFeeBatchPo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -238,11 +235,11 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
             }
 
             parkingSpaceDto = new ParkingSpaceDto();
-            parkingSpaceDto.setCarNum(ownerCarDtos.get(ownerCarIndex).getCarNum());
+            parkingSpaceDto.setPsId(ownerCarDtos.get(ownerCarIndex).getPsId());
             parkingSpaceDto.setCommunityId(ownerCarDtos.get(0).getCommunityId());
             parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
 
-            if (parkingSpaceDtos != null && parkingSpaceDtos.size() > 0) {
+            if (!ListUtil.isNull(parkingSpaceDtos)) {
                 carName = parkingSpaceDtos.get(0).getAreaNum() + parkingSpaceDtos.get(0).getNum() + "(" + ownerCarDtos.get(ownerCarIndex).getCarNum() + ")";
             } else {
                 carName = ownerCarDtos.get(ownerCarIndex).getCarNum();
