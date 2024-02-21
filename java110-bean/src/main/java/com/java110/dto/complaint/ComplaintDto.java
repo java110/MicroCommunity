@@ -27,11 +27,14 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String complaintId;
     private String[] complaintIds;
     private String typeCd;
+
+    private String typeName;
     private String ownerName;
     private String context;
     private String complaintName;
     private String tel;
     private String state;
+    private String stateName;
     private String communityId;
 
     private String taskId;
@@ -263,5 +266,21 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setPhotos(List<PhotoVo> photos) {
         this.photos = photos;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 }

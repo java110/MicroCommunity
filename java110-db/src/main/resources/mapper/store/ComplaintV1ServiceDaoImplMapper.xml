@@ -19,8 +19,9 @@
     <select id="getComplaintInfo" parameterType="Map" resultType="Map">
         select t.store_id storeId,t.owner_id ownerId,t.room_id roomId,t.room_name roomName,t.start_user_id
         startUserId,t.complaint_id complaintId,t.type_cd typeCd,t.owner_name ownerName,t.context,t.complaint_name complaintName,
-        t.tel,t.state,t.community_id communityId,td.`name` stateName
+        t.tel,t.state,t.community_id communityId,td.`name` stateName,ct.type_name typeName,t.create_time createTime
         from complaint t
+        left join complaint_type ct on t.type_cd = ct.type_cd and ct.status_cd = '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 'complaint' and td.table_columns = 'state'
         where 1 =1
         <if test="statusCd !=null and statusCd != ''">
@@ -61,6 +62,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
@@ -168,7 +175,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
 
     </select>
 
