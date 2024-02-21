@@ -108,5 +108,13 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
         return Integer.parseInt(businessComplaintInfos.get(0).get("count").toString());
     }
 
+    @Override
+    public List<Map> queryComplaintCountByOwnerTels(Map info) {
+        logger.debug("查询 queryComplaintCountByOwnerTels 入参 info : {}",info);
+
+        List<Map> result = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryComplaintCountByOwnerTels", info);
+        return result;
+    }
+
 
 }

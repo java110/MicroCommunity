@@ -7,7 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
-import com.java110.intf.community.IComplaintV1InnerServiceSMO;
+import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintInnerServiceSMO;
 import com.java110.po.complaint.ComplaintPo;
 import com.java110.utils.constant.BusinessTypeConstant;

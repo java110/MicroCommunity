@@ -70,4 +70,5 @@ public interface IComplaintV1ServiceDao {
      */
     int queryComplaintsCount(Map info);
 
+    List<Map> queryComplaintCountByOwnerTels(Map info);
 }

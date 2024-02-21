@@ -2,7 +2,7 @@ package com.java110.community.bmo.room.impl;
 
 import com.java110.community.bmo.room.IQueryRoomStatisticsBMO;
 import com.java110.dto.room.RoomDto;
-import com.java110.intf.community.IComplaintV1InnerServiceSMO;
+import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.intf.store.IContractRoomInnerServiceSMO;

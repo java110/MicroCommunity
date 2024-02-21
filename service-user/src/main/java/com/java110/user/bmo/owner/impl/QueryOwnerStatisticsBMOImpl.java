@@ -1,7 +1,7 @@
 package com.java110.user.bmo.owner.impl;
 
 import com.java110.dto.owner.OwnerDto;
-import com.java110.intf.community.IComplaintV1InnerServiceSMO;
+import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
