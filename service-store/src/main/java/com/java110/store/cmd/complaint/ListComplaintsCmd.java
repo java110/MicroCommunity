@@ -15,6 +15,7 @@ import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.complaint.ApiComplaintDataVo;
 import com.java110.vo.api.complaint.ApiComplaintVo;
 import com.java110.vo.api.junkRequirement.PhotoVo;
@@ -54,29 +55,28 @@ public class ListComplaintsCmd extends Cmd {
 
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
         int count = complaintV1InnerServiceSMOImpl.queryComplaintsCount(complaintDto);
-        List<ApiComplaintDataVo> complaints = null;
+        List<ComplaintDto> complaintDtos = null;
         if (count > 0) {
-            List<ComplaintDto> complaintDtos = complaintV1InnerServiceSMOImpl.queryComplaints(complaintDto);
-            complaints = BeanConvertUtil.covertBeanList(complaintDtos, ApiComplaintDataVo.class);
-            refreshPhotos(complaints);
+            complaintDtos = complaintV1InnerServiceSMOImpl.queryComplaints(complaintDto);
+            refreshPhotos(complaintDtos);
         } else {
-            complaints = new ArrayList<>();
+            complaintDtos = new ArrayList<>();
         }
-        ApiComplaintVo apiComplaintVo = new ApiComplaintVo();
-        apiComplaintVo.setTotal(count);
-        apiComplaintVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        apiComplaintVo.setComplaints(complaints);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiComplaintVo), HttpStatus.OK);
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, complaintDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
         context.setResponseEntity(responseEntity);
     }
 
 
 
 
-    private void refreshPhotos(List<ApiComplaintDataVo> complaints) {
+    private void refreshPhotos(List<ComplaintDto> complaints) {
         List<PhotoVo> photoVos = null;
         PhotoVo photoVo = null;
-        for (ApiComplaintDataVo complaintDataVo : complaints) {
+        for (ComplaintDto complaintDataVo : complaints) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(complaintDataVo.getComplaintId());
             fileRelDto.setRelTypeCd("13000");

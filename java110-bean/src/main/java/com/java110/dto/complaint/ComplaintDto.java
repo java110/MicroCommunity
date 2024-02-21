@@ -1,9 +1,11 @@
 package com.java110.dto.complaint;
 
 import com.java110.dto.PageDto;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -45,6 +47,8 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     private String startTime;
     private String endTime;
+
+    private List<PhotoVo> photos;
 
 
     private Date createTime;
@@ -251,5 +255,13 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public List<PhotoVo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoVo> photos) {
+        this.photos = photos;
     }
 }
