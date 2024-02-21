@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.store.cmd.complaint;
+package com.java110.store.cmd.complaintEvent;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -22,8 +22,8 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.intf.store.IComplaintV1InnerServiceSMO;
-import com.java110.po.complaint.ComplaintPo;
+import com.java110.intf.store.IComplaintEventV1InnerServiceSMO;
+import com.java110.po.complaintEvent.ComplaintEventPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -35,27 +35,27 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类表述：更新
- * 服务编码：complaint.updateComplaint
- * 请求路劲：/app/complaint.UpdateComplaint
- * add by 吴学文 at 2024-02-21 13:08:05 mail: 928255095@qq.com
+ * 服务编码：complaintEvent.updateComplaintEvent
+ * 请求路劲：/app/complaintEvent.UpdateComplaintEvent
+ * add by 吴学文 at 2024-02-21 13:01:48 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "complaint.updateComplaint")
-public class UpdateComplaintCmd extends Cmd {
+@Java110Cmd(serviceCode = "complaintEvent.updateComplaintEvent")
+public class UpdateComplaintEventCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(UpdateComplaintCmd.class);
+  private static Logger logger = LoggerFactory.getLogger(UpdateComplaintEventCmd.class);
 
 
     @Autowired
-    private IComplaintV1InnerServiceSMO complaintV1InnerServiceSMOImpl;
+    private IComplaintEventV1InnerServiceSMO complaintEventV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "complaintId", "complaintId不能为空");
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "eventId", "eventId不能为空");
+Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
@@ -63,8 +63,8 @@ public class UpdateComplaintCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        ComplaintPo complaintPo = BeanConvertUtil.covertBean(reqJson, ComplaintPo.class);
-        int flag = complaintV1InnerServiceSMOImpl.updateComplaint(complaintPo);
+       ComplaintEventPo complaintEventPo = BeanConvertUtil.covertBean(reqJson, ComplaintEventPo.class);
+        int flag = complaintEventV1InnerServiceSMOImpl.updateComplaintEvent(complaintEventPo);
 
         if (flag < 1) {
             throw new CmdException("更新数据失败");

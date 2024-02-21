@@ -55,12 +55,12 @@ public class AuditComplaintCmd extends Cmd {
         Assert.listOnlyOne(complaintDtos, "未存在或存在多条投诉单");
 
         complaintDto = complaintDtos.get(0);
-        complaintDto.setTaskId(reqJson.getString("taskId"));
-        complaintDto.setCommunityId(reqJson.getString("communityId"));
-        complaintDto.setStoreId(reqJson.getString("storeId"));
-        complaintDto.setAuditCode(reqJson.getString("state"));
-        complaintDto.setAuditMessage(reqJson.getString("remark"));
-        complaintDto.setCurrentUserId(reqJson.getString("userId"));
+//        complaintDto.setTaskId(reqJson.getString("taskId"));
+//        complaintDto.setCommunityId(reqJson.getString("communityId"));
+//        complaintDto.setStoreId(reqJson.getString("storeId"));
+//        complaintDto.setAuditCode(reqJson.getString("state"));
+//        complaintDto.setAuditMessage(reqJson.getString("remark"));
+//        complaintDto.setCurrentUserId(reqJson.getString("userId"));
 
         boolean isLastTask = complaintUserInnerServiceSMOImpl.completeTask(complaintDto);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);

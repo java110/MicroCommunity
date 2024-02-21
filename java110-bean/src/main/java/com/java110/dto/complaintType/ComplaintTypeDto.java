@@ -1,0 +1,83 @@
+package com.java110.dto.complaintType;
+
+import com.java110.dto.PageDto;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @ClassName FloorDto
+ * @Description 投诉类型数据层封装
+ * @Author wuxw
+ * @Date 2019/4/24 8:52
+ * @Version 1.0
+ * add by wuxw 2019/4/24
+ **/
+public class ComplaintTypeDto extends PageDto implements Serializable {
+
+    private String typeCd;
+private String typeName;
+private String notifyWay;
+private String remark;
+private String communityId;
+private String appraiseReply;
+
+
+    private Date createTime;
+
+    private String statusCd = "0";
+
+
+    public String getTypeCd() {
+        return typeCd;
+    }
+public void setTypeCd(String typeCd) {
+        this.typeCd = typeCd;
+    }
+public String getTypeName() {
+        return typeName;
+    }
+public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+public String getNotifyWay() {
+        return notifyWay;
+    }
+public void setNotifyWay(String notifyWay) {
+        this.notifyWay = notifyWay;
+    }
+public String getRemark() {
+        return remark;
+    }
+public void setRemark(String remark) {
+        this.remark = remark;
+    }
+public String getCommunityId() {
+        return communityId;
+    }
+public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+public String getAppraiseReply() {
+        return appraiseReply;
+    }
+public void setAppraiseReply(String appraiseReply) {
+        this.appraiseReply = appraiseReply;
+    }
+
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatusCd() {
+        return statusCd;
+    }
+
+    public void setStatusCd(String statusCd) {
+        this.statusCd = statusCd;
+    }
+}

@@ -29,47 +29,58 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.java110.dto.complaint.ComplaintDto;
+import java.util.List;
+import java.util.ArrayList;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
- * 类表述：更新
- * 服务编码：complaint.updateComplaint
- * 请求路劲：/app/complaint.UpdateComplaint
+ * 类表述：查询
+ * 服务编码：complaint.listComplaint
+ * 请求路劲：/app/complaint.ListComplaint
  * add by 吴学文 at 2024-02-21 13:08:05 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "complaint.updateComplaint")
-public class UpdateComplaintCmd extends Cmd {
+@Java110Cmd(serviceCode = "complaint.listComplaint")
+public class ListComplaintCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(UpdateComplaintCmd.class);
-
-
+  private static Logger logger = LoggerFactory.getLogger(ListComplaintCmd.class);
     @Autowired
     private IComplaintV1InnerServiceSMO complaintV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "complaintId", "complaintId不能为空");
+        super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 
     @Override
-    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        ComplaintPo complaintPo = BeanConvertUtil.covertBean(reqJson, ComplaintPo.class);
-        int flag = complaintV1InnerServiceSMOImpl.updateComplaint(complaintPo);
+           ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
 
-        if (flag < 1) {
-            throw new CmdException("更新数据失败");
-        }
+           int count = complaintV1InnerServiceSMOImpl.queryComplaintsCount(complaintDto);
 
-        cmdDataFlowContext.setResponseEntity(ResultVo.success());
+           List<ComplaintDto> complaintDtos = null;
+
+           if (count > 0) {
+               complaintDtos = complaintV1InnerServiceSMOImpl.queryComplaints(complaintDto);
+           } else {
+               complaintDtos = new ArrayList<>();
+           }
+
+           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, complaintDtos);
+
+           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+           cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

@@ -71,9 +71,9 @@ public class ComplaintBMOImpl extends ApiBaseBMO implements IComplaintBMO {
     public void deleteComplaint(JSONObject paramInJson, DataFlowContext dataFlowContext) {
         ComplaintPo complaintPo = BeanConvertUtil.covertBean(paramInJson, ComplaintPo.class);
         super.delete(dataFlowContext, complaintPo, BusinessTypeConstant.BUSINESS_TYPE_DELETE_COMPLAINT);
-        ComplaintDto complaintDto = new ComplaintDto();
-        complaintDto.setTaskId(complaintPo.getTaskId());
-        complaintUserInnerServiceSMOImpl.deleteTask(complaintDto);
+       // ComplaintDto complaintDto = new ComplaintDto();
+        //complaintDto.setTaskId(complaintPo.getTaskId());
+        //complaintUserInnerServiceSMOImpl.deleteTask(complaintDto);
     }
 
     /**

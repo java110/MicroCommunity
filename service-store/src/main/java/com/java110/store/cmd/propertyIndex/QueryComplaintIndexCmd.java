@@ -36,7 +36,7 @@ public class QueryComplaintIndexCmd extends Cmd {
         // 待处理
         complaintDto = new ComplaintDto();
         complaintDto.setCommunityId(reqJson.getString("communityId"));
-        complaintDto.setState(complaintDto.STATE_WAIT);
+        complaintDto.setState(ComplaintDto.STATE_WAIT);
         int waitCount = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);
         paramOut.put("waitComplaintCount", waitCount);
 
@@ -44,7 +44,7 @@ public class QueryComplaintIndexCmd extends Cmd {
         //已完成
         complaintDto = new ComplaintDto();
         complaintDto.setCommunityId(reqJson.getString("communityId"));
-        complaintDto.setState(complaintDto.STATE_FINISH);
+        complaintDto.setState(ComplaintDto.STATE_FINISH);
         int finishCount = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);
         paramOut.put("finishComplaintCount", finishCount);
         context.setResponseEntity(ResultVo.createResponseEntity(paramOut));
