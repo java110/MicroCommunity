@@ -67,6 +67,6 @@ public interface IComplaintV1InnerServiceSMO {
     @RequestMapping(value = "/queryComplaintsCount", method = RequestMethod.POST)
     int queryComplaintsCount(@RequestBody ComplaintDto complaintDto);
 
-    @RequestMapping(value = "/queryComplaintsCount", method = RequestMethod.POST)
+    @RequestMapping(value = "/queryComplaintCountByOwnerTels", method = RequestMethod.POST)
     List<Map> queryComplaintCountByOwnerTels(@RequestBody Map info);
 }
