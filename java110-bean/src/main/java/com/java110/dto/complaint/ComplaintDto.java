@@ -1,6 +1,7 @@
 package com.java110.dto.complaint;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.complaintTypeUser.ComplaintTypeUserDto;
 import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
@@ -54,6 +55,8 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String staffId;
 
     private List<PhotoVo> photos;
+
+    private List<ComplaintTypeUserDto> staffs;
 
 
     private Date createTime;
@@ -292,5 +295,13 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public List<ComplaintTypeUserDto> getStaffs() {
+        return staffs;
+    }
+
+    public void setStaffs(List<ComplaintTypeUserDto> staffs) {
+        this.staffs = staffs;
     }
 }
