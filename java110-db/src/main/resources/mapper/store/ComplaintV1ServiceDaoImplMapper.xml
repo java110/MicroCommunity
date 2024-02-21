@@ -197,4 +197,123 @@
         group by t.tel
     </select>
 
+    <select id="queryStaffComplaintCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from complaint t
+        left join complaint_type ct on t.type_cd = ct.type_cd and ct.status_cd = '0'
+        left join complaint_type_user ctu on ct.type_cd = ctu.type_cd and ctu.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'complaint' and td.table_columns = 'state'
+        where 1 =1
+        and ctu.staff_id = #{staffId}
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
+        </if>
+        <if test="complaintId !=null and complaintId != ''">
+            and t.complaint_id= #{complaintId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="context !=null and context != ''">
+            and t.context= #{context}
+        </if>
+        <if test="complaintName !=null and complaintName != ''">
+            and t.complaint_name= #{complaintName}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
+    </select>
+
+    <select id="queryStaffComplaints" parameterType="Map" resultType="Map">
+        select t.store_id storeId,t.owner_id ownerId,t.room_id roomId,t.room_name roomName,t.start_user_id
+        startUserId,t.complaint_id complaintId,t.type_cd typeCd,t.owner_name ownerName,t.context,t.complaint_name complaintName,
+        t.tel,t.state,t.community_id communityId,td.`name` stateName,ct.type_name typeName,t.create_time createTime
+        from complaint t
+        left join complaint_type ct on t.type_cd = ct.type_cd and ct.status_cd = '0'
+        left join complaint_type_user ctu on ct.type_cd = ctu.type_cd and ctu.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'complaint' and td.table_columns = 'state'
+        where 1 =1
+        and ctu.staff_id = #{staffId}
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and t.owner_id= #{ownerId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            and t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="startUserId !=null and startUserId != ''">
+            and t.start_user_id= #{startUserId}
+        </if>
+        <if test="complaintId !=null and complaintId != ''">
+            and t.complaint_id= #{complaintId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="complaintName !=null and complaintName != ''">
+            and t.complaint_name= #{complaintName}
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
 </mapper>

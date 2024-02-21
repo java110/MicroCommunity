@@ -51,6 +51,8 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
 
+    private String staffId;
+
     private List<PhotoVo> photos;
 
 
@@ -282,5 +284,13 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setStateName(String stateName) {
         this.stateName = stateName;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
     }
 }

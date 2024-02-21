@@ -92,4 +92,24 @@ public class ComplaintV1InnerServiceSMOImpl extends BaseServiceSMO implements IC
         return complaintV1ServiceDaoImpl.queryComplaintCountByOwnerTels(info);
     }
 
+    @Override
+    public int queryStaffComplaintCount(@RequestBody ComplaintDto complaintDto) {
+        return complaintV1ServiceDaoImpl.queryStaffComplaintCount(BeanConvertUtil.beanCovertMap(complaintDto));
+    }
+
+    @Override
+    public List<ComplaintDto> queryStaffComplaints(@RequestBody ComplaintDto complaintDto) {
+        //校验是否传了 分页信息
+
+        int page = complaintDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            complaintDto.setPage((page - 1) * complaintDto.getRow());
+        }
+
+        List<ComplaintDto> complaints = BeanConvertUtil.covertBeanList(complaintV1ServiceDaoImpl.queryStaffComplaints(BeanConvertUtil.beanCovertMap(complaintDto)), ComplaintDto.class);
+
+        return complaints;
+    }
+
 }

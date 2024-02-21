@@ -117,5 +117,25 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
         return result;
     }
 
+    @Override
+    public int queryStaffComplaintCount(Map info) {
+        logger.debug("查询 queryStaffComplaintCount 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryStaffComplaintCount", info);
+        if (ListUtil.isNull(infos)) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryStaffComplaints(Map info) {
+        logger.debug("查询 queryStaffComplaints 入参 info : {}",info);
+
+        List<Map> result = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryStaffComplaints", info);
+        return result;
+    }
+
 
 }
