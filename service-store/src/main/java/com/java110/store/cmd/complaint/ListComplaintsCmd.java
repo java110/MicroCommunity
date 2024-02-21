@@ -54,29 +54,12 @@ public class ListComplaintsCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        //如果根据业主ID查询转换为用手机号查询
-        hasOwnerId(reqJson);
 
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
-        String roomId = reqJson.getString("roomId");
-        if (!StringUtil.isEmpty(roomId) && roomId.contains("-")) {
-            String[] values = roomId.split("-", 3);
-            if (values.length == 3) {
-                RoomDto roomDto = new RoomDto();
-                roomDto.setFloorNum(values[0]);
-                roomDto.setUnitNum(values[1]);
-                roomDto.setRoomNum(values[2]);
-                roomDto.setCommunityId(reqJson.getString("communityId"));
-                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-                Assert.listOnlyOne(roomDtos, "未找到房屋信息");
-                complaintDto.setRoomId(roomDtos.get(0).getRoomId());
-            }
-        }
         int count = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);
         List<ApiComplaintDataVo> complaints = null;
         if (count > 0) {
             List<ComplaintDto> complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
-            complaintDtos = freshCurrentUser(complaintDtos);
             complaints = BeanConvertUtil.covertBeanList(complaintDtos, ApiComplaintDataVo.class);
             refreshPhotos(complaints);
         } else {
@@ -90,30 +73,8 @@ public class ListComplaintsCmd extends Cmd {
         context.setResponseEntity(responseEntity);
     }
 
-    /**
-     * //如果根据业主ID查询转换为用手机号查询
-     * @param reqJson
-     */
-    private void hasOwnerId(JSONObject reqJson) {
-        if(reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))){
-            OwnerDto ownerDto = new OwnerDto();
-            ownerDto.setMemberId(reqJson.getString("ownerId"));
-            ownerDto.setCommunityId(reqJson.getString("communityId"));
-            List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
-            if(ownerDtos != null && ownerDtos.size() > 0){
-                reqJson.put("tel",ownerDtos.get(0).getLink());
-            }
-        }
-    }
 
-    private List<ComplaintDto> freshCurrentUser(List<ComplaintDto> complaintDtos) {
-        List<ComplaintDto> tmpComplaintDtos = new ArrayList<>();
-        for (ComplaintDto complaintDto : complaintDtos) {
-            complaintDto = complaintUserInnerServiceSMOImpl.getTaskCurrentUser(complaintDto);
-            tmpComplaintDtos.add(complaintDto);
-        }
-        return tmpComplaintDtos;
-    }
+
 
     private void refreshPhotos(List<ApiComplaintDataVo> complaints) {
         List<PhotoVo> photoVos = null;

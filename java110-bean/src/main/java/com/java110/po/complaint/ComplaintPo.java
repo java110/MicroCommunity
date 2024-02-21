@@ -17,6 +17,7 @@ package com.java110.po.complaint;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2024-02-21 13:08:05 mail: 928255095@qq.com
@@ -28,104 +29,131 @@ import java.util.Date;
 public class ComplaintPo implements Serializable {
 
     private String statusCd = "0";
-private String storeId;
-private String ownerId;
-private String roomId;
-private String roomName;
-private String startUserId;
-private String complaintId;
-private String typeCd;
-private String ownerName;
-private String context;
-private String complaintName;
-private String tel;
-private String state;
-private String communityId;
-public String getStatusCd() {
+    private String storeId;
+    private String ownerId;
+    private String roomId;
+    private String roomName;
+    private String startUserId;
+    private String complaintId;
+    private String typeCd;
+    private String ownerName;
+    private String context;
+    private String complaintName;
+    private String tel;
+    private String state;
+    private String communityId;
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getRoomId() {
+
+    public String getRoomId() {
         return roomId;
     }
-public void setRoomId(String roomId) {
+
+    public void setRoomId(String roomId) {
         this.roomId = roomId;
     }
-public String getRoomName() {
+
+    public String getRoomName() {
         return roomName;
     }
-public void setRoomName(String roomName) {
+
+    public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
-public String getStartUserId() {
+
+    public String getStartUserId() {
         return startUserId;
     }
-public void setStartUserId(String startUserId) {
+
+    public void setStartUserId(String startUserId) {
         this.startUserId = startUserId;
     }
-public String getComplaintId() {
+
+    public String getComplaintId() {
         return complaintId;
     }
-public void setComplaintId(String complaintId) {
+
+    public void setComplaintId(String complaintId) {
         this.complaintId = complaintId;
     }
-public String getTypeCd() {
+
+    public String getTypeCd() {
         return typeCd;
     }
-public void setTypeCd(String typeCd) {
+
+    public void setTypeCd(String typeCd) {
         this.typeCd = typeCd;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getContext() {
+
+    public String getContext() {
         return context;
     }
-public void setContext(String context) {
+
+    public void setContext(String context) {
         this.context = context;
     }
-public String getComplaintName() {
+
+    public String getComplaintName() {
         return complaintName;
     }
-public void setComplaintName(String complaintName) {
+
+    public void setComplaintName(String complaintName) {
         this.complaintName = complaintName;
     }
-public String getTel() {
+
+    public String getTel() {
         return tel;
     }
-public void setTel(String tel) {
+
+    public void setTel(String tel) {
         this.tel = tel;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }

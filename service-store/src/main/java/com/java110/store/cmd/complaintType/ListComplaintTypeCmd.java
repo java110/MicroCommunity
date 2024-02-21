@@ -120,7 +120,7 @@ public class ListComplaintTypeCmd extends Cmd {
         for (ComplaintTypeDto complaintTypeDto : complaintTypeDtos) {
             staffs = new ArrayList<>();
             for(ComplaintTypeUserDto complaintTypeUserDto1 : complaintTypeUserDtos){
-                if(complaintTypeDto.getTypeCd().equals(complaintTypeUserDto1.getTypeCds())){
+                if(complaintTypeDto.getTypeCd().equals(complaintTypeUserDto1.getTypeCd())){
                     staffs.add(complaintTypeUserDto1);
                 }
             }

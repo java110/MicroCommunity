@@ -17,6 +17,7 @@ package com.java110.po.complaintEvent;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2024-02-21 13:01:48 mail: 928255095@qq.com
@@ -28,62 +29,77 @@ import java.util.Date;
 public class ComplaintEventPo implements Serializable {
 
     private String eventId;
-private String createUserId;
-private String complaintId;
-private String createUserName;
-private String remark;
-private String statusCd = "0";
-private String eventType;
-private String communityId;
-public String getEventId() {
+    private String createUserId;
+    private String complaintId;
+    private String createUserName;
+    private String remark;
+    private String statusCd = "0";
+    private String eventType;
+    private String communityId;
+
+    public String getEventId() {
         return eventId;
     }
-public void setEventId(String eventId) {
+
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getComplaintId() {
+
+    public String getComplaintId() {
         return complaintId;
     }
-public void setComplaintId(String complaintId) {
+
+    public void setComplaintId(String complaintId) {
         this.complaintId = complaintId;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getEventType() {
+
+    public String getEventType() {
         return eventType;
     }
-public void setEventType(String eventType) {
+
+    public void setEventType(String eventType) {
         this.eventType = eventType;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }
