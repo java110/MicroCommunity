@@ -1,6 +1,7 @@
 package com.java110.dto.complaintTypeUser;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,10 +16,11 @@ import java.util.Date;
 public class ComplaintTypeUserDto extends PageDto implements Serializable {
 
     private String typeCd;
-private String typeUserId;
-private String staffName;
-private String communityId;
-private String staffId;
+    private String[] typeCds;
+    private String typeUserId;
+    private String staffName;
+    private String communityId;
+    private String staffId;
 
 
     private Date createTime;
@@ -29,31 +31,40 @@ private String staffId;
     public String getTypeCd() {
         return typeCd;
     }
-public void setTypeCd(String typeCd) {
+
+    public void setTypeCd(String typeCd) {
         this.typeCd = typeCd;
     }
-public String getTypeUserId() {
+
+    public String getTypeUserId() {
         return typeUserId;
     }
-public void setTypeUserId(String typeUserId) {
+
+    public void setTypeUserId(String typeUserId) {
         this.typeUserId = typeUserId;
     }
-public String getStaffName() {
+
+    public String getStaffName() {
         return staffName;
     }
-public void setStaffName(String staffName) {
+
+    public void setStaffName(String staffName) {
         this.staffName = staffName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getStaffId() {
+
+    public String getStaffId() {
         return staffId;
     }
-public void setStaffId(String staffId) {
+
+    public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
 
@@ -72,5 +83,13 @@ public void setStaffId(String staffId) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getTypeCds() {
+        return typeCds;
+    }
+
+    public void setTypeCds(String[] typeCds) {
+        this.typeCds = typeCds;
     }
 }

@@ -1,8 +1,11 @@
 package com.java110.dto.complaintType;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.complaintTypeUser.ComplaintTypeUserDto;
+
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -15,11 +18,13 @@ import java.util.Date;
 public class ComplaintTypeDto extends PageDto implements Serializable {
 
     private String typeCd;
-private String typeName;
-private String notifyWay;
-private String remark;
-private String communityId;
-private String appraiseReply;
+    private String typeName;
+    private String notifyWay;
+    private String remark;
+    private String communityId;
+    private String appraiseReply;
+
+    private List<ComplaintTypeUserDto> staffs;
 
 
     private Date createTime;
@@ -30,37 +35,48 @@ private String appraiseReply;
     public String getTypeCd() {
         return typeCd;
     }
-public void setTypeCd(String typeCd) {
+
+    public void setTypeCd(String typeCd) {
         this.typeCd = typeCd;
     }
-public String getTypeName() {
+
+    public String getTypeName() {
         return typeName;
     }
-public void setTypeName(String typeName) {
+
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-public String getNotifyWay() {
+
+    public String getNotifyWay() {
         return notifyWay;
     }
-public void setNotifyWay(String notifyWay) {
+
+    public void setNotifyWay(String notifyWay) {
         this.notifyWay = notifyWay;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getAppraiseReply() {
+
+    public String getAppraiseReply() {
         return appraiseReply;
     }
-public void setAppraiseReply(String appraiseReply) {
+
+    public void setAppraiseReply(String appraiseReply) {
         this.appraiseReply = appraiseReply;
     }
 
@@ -79,5 +95,13 @@ public void setAppraiseReply(String appraiseReply) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public List<ComplaintTypeUserDto> getStaffs() {
+        return staffs;
+    }
+
+    public void setStaffs(List<ComplaintTypeUserDto> staffs) {
+        this.staffs = staffs;
     }
 }

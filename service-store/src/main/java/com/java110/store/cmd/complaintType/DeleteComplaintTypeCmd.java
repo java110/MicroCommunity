@@ -21,8 +21,10 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.intf.store.IComplaintTypeUserV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintTypeV1InnerServiceSMO;
 import com.java110.po.complaintType.ComplaintTypePo;
+import com.java110.po.complaintTypeUser.ComplaintTypeUserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +50,9 @@ public class DeleteComplaintTypeCmd extends Cmd {
     @Autowired
     private IComplaintTypeV1InnerServiceSMO complaintTypeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IComplaintTypeUserV1InnerServiceSMO complaintTypeUserV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeCd", "typeCd不能为空");
@@ -65,6 +70,11 @@ public class DeleteComplaintTypeCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        ComplaintTypeUserPo complaintTypeUserPo = new ComplaintTypeUserPo();
+        complaintTypeUserPo.setTypeCd(complaintTypePo.getTypeCd());
+        complaintTypeUserV1InnerServiceSMOImpl.deleteComplaintTypeUser(complaintTypeUserPo);
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

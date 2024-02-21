@@ -19,7 +19,7 @@
     <select id="getComplaintTypeInfo" parameterType="Map" resultType="Map">
         select t.type_cd,t.type_cd typeCd,t.type_name,t.type_name typeName,t.notify_way,t.notify_way
         notifyWay,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.appraise_reply,t.appraise_reply appraiseReply
+        communityId,t.appraise_reply,t.appraise_reply appraiseReply,t.create_time createTime
         from complaint_type t
         where 1 =1
         <if test="typeCd !=null and typeCd != ''">
@@ -66,15 +66,16 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="appraiseReply !=null and appraiseReply != ''">
             , t.appraise_reply= #{appraiseReply}
         </if>
         where 1=1
         <if test="typeCd !=null and typeCd != ''">
             and t.type_cd= #{typeCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

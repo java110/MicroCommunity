@@ -22,16 +22,22 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.complaintTypeUser.ComplaintTypeUserDto;
+import com.java110.intf.store.IComplaintTypeUserV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintTypeV1InnerServiceSMO;
 import com.java110.po.complaintType.ComplaintTypePo;
+import com.java110.po.complaintTypeUser.ComplaintTypeUserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.complaintType.ComplaintTypeDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,9 +57,13 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "complaintType.listComplaintType")
 public class ListComplaintTypeCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListComplaintTypeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListComplaintTypeCmd.class);
     @Autowired
     private IComplaintTypeV1InnerServiceSMO complaintTypeV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IComplaintTypeUserV1InnerServiceSMO complaintTypeUserV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -65,22 +75,57 @@ public class ListComplaintTypeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ComplaintTypeDto complaintTypeDto = BeanConvertUtil.covertBean(reqJson, ComplaintTypeDto.class);
+        ComplaintTypeDto complaintTypeDto = BeanConvertUtil.covertBean(reqJson, ComplaintTypeDto.class);
 
-           int count = complaintTypeV1InnerServiceSMOImpl.queryComplaintTypesCount(complaintTypeDto);
+        int count = complaintTypeV1InnerServiceSMOImpl.queryComplaintTypesCount(complaintTypeDto);
 
-           List<ComplaintTypeDto> complaintTypeDtos = null;
+        List<ComplaintTypeDto> complaintTypeDtos = null;
 
-           if (count > 0) {
-               complaintTypeDtos = complaintTypeV1InnerServiceSMOImpl.queryComplaintTypes(complaintTypeDto);
-           } else {
-               complaintTypeDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            complaintTypeDtos = complaintTypeV1InnerServiceSMOImpl.queryComplaintTypes(complaintTypeDto);
+        } else {
+            complaintTypeDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, complaintTypeDtos);
+        //todo 查询类型员工
+        toQueryStaff(complaintTypeDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, complaintTypeDtos);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void toQueryStaff(List<ComplaintTypeDto> complaintTypeDtos) {
+
+        if (ListUtil.isNull(complaintTypeDtos)) {
+            return;
+        }
+
+        List<String> typeCds = new ArrayList<>();
+        for (ComplaintTypeDto complaintTypeDto : complaintTypeDtos) {
+            typeCds.add(complaintTypeDto.getTypeCd());
+        }
+
+        ComplaintTypeUserDto complaintTypeUserDto = new ComplaintTypeUserDto();
+        complaintTypeUserDto.setTypeCds(typeCds.toArray(new String[typeCds.size()]));
+
+        List<ComplaintTypeUserDto> complaintTypeUserDtos = complaintTypeUserV1InnerServiceSMOImpl.queryComplaintTypeUsers(complaintTypeUserDto);
+
+        if (ListUtil.isNull(complaintTypeUserDtos)) {
+            return;
+        }
+        List<ComplaintTypeUserDto> staffs = null;
+        for (ComplaintTypeDto complaintTypeDto : complaintTypeDtos) {
+            staffs = new ArrayList<>();
+            for(ComplaintTypeUserDto complaintTypeUserDto1 : complaintTypeUserDtos){
+                if(complaintTypeDto.getTypeCd().equals(complaintTypeUserDto1.getTypeCds())){
+                    staffs.add(complaintTypeUserDto1);
+                }
+            }
+            complaintTypeDto.setStaffs(staffs);
+        }
+
     }
 }
