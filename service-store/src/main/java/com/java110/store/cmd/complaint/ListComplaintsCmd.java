@@ -5,19 +5,16 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.room.RoomDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.store.IComplaintInnerServiceSMO;
+import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.complaint.ApiComplaintDataVo;
 import com.java110.vo.api.complaint.ApiComplaintVo;
 import com.java110.vo.api.junkRequirement.PhotoVo;
@@ -32,7 +29,7 @@ import java.util.List;
 public class ListComplaintsCmd extends Cmd {
 
     @Autowired
-    private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
+    private IComplaintV1InnerServiceSMO complaintV1InnerServiceSMOImpl;
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -56,10 +53,10 @@ public class ListComplaintsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
-        int count = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);
+        int count = complaintV1InnerServiceSMOImpl.queryComplaintsCount(complaintDto);
         List<ApiComplaintDataVo> complaints = null;
         if (count > 0) {
-            List<ComplaintDto> complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
+            List<ComplaintDto> complaintDtos = complaintV1InnerServiceSMOImpl.queryComplaints(complaintDto);
             complaints = BeanConvertUtil.covertBeanList(complaintDtos, ApiComplaintDataVo.class);
             refreshPhotos(complaints);
         } else {

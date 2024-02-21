@@ -21,6 +21,7 @@ import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.store.dao.IComplaintV1ServiceDao;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -71,9 +72,9 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
     public List<Map> getComplaintInfo(Map info) throws DAOException {
         logger.debug("查询 getComplaintInfo 入参 info : {}",info);
 
-        List<Map> businessComplaintInfos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.getComplaintInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.getComplaintInfo",info);
 
-        return businessComplaintInfos;
+        return infos;
     }
 
 
@@ -100,12 +101,12 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
     public int queryComplaintsCount(Map info) {
         logger.debug("查询 queryComplaintsCount 入参 info : {}",info);
 
-        List<Map> businessComplaintInfos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryComplaintsCount", info);
-        if (businessComplaintInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryComplaintsCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
 
-        return Integer.parseInt(businessComplaintInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
