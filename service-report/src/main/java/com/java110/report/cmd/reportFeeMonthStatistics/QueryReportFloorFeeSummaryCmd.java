@@ -64,6 +64,10 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
         //todo 查询楼栋
         FloorDto floorDto = new FloorDto();
         floorDto.setCommunityId(reqJson.getString("communityId"));
+        if(reqJson.containsKey("page")) {
+            floorDto.setPage(reqJson.getIntValue("page"));
+            floorDto.setRow(reqJson.getIntValue("row"));
+        }
         List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
 
         if (ListUtil.isNull(floorDtos)) {
@@ -77,9 +81,10 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
             java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(5);
             for (FloorDto floorDto1 : floorDtos) {
                 queryStatisticsDto.setFloorId(floorDto1.getFloorId());
+                QueryStatisticsDto tmpQueryStatisticsDto = queryStatisticsDto;
                 java110ThreadPoolFactory.submit(() -> {
                     //todo 欠费户数
-                    List<Map> floorDatas = feeStatisticsImpl.getFloorFeeSummary(queryStatisticsDto);
+                    List<Map> floorDatas = feeStatisticsImpl.getFloorFeeSummary(tmpQueryStatisticsDto);
                     if (!ListUtil.isNull(floorDatas)) {
                         datas.add(floorDatas.get(0));
                     }
