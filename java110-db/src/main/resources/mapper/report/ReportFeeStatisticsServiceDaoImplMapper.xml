@@ -665,7 +665,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and t.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -688,7 +688,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and t.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -709,7 +709,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and t.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -730,7 +730,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and t.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -752,7 +752,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and t.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
