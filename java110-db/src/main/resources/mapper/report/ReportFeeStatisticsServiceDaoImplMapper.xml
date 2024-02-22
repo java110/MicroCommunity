@@ -446,9 +446,11 @@
         select ifnull(sum(t.received_amount),0.0) receivedFee
         from pay_fee_detail t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on pf.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
         where
         1=1
-        and t.obj_fpc_id = a.floor_id
+        and bu.floor_id = a.floor_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
         and t.create_time &gt; #{startDate}
@@ -460,7 +462,7 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and t.fee_type_cd = #{feeTypeCd}
+            and pf.fee_type_cd = #{feeTypeCd}
         </if>
         ) receivedFee,
         (
@@ -810,10 +812,11 @@
         select ifnull(sum(t.received_amount),0.0) receivedFee
         from pay_fee_detail t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        inner join pay_fee_config pfc1 on pfc1.config_id = pf.config_id and pfc1.status_cd = '0'
         where pf.payer_obj_id = a.obj_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
-        and t.fee_type_cd = a.fee_type_cd
+        and pfc1.fee_type_cd = pfc.fee_type_cd
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         ) receivedFee
