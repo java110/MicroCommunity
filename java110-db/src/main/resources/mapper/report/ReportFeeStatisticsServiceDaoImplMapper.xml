@@ -240,7 +240,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and t.obj_fpc_id = #{floorId}
+            and bu.floor_id = #{floorId}
         </if>
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
