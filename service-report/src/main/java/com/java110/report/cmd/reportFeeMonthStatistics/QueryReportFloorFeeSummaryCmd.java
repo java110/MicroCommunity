@@ -219,7 +219,7 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
             data.put("curReceivedFee","0");
             for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:curReceivedFees){
                 if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
-                    data.put("curReceivedFee",reportFloorFeeStatisticsDto.getReceivedFee());
+                    data.put("curReceivedFee",reportFloorFeeStatisticsDto.getCurReceivedFee());
                 }
             }
         }

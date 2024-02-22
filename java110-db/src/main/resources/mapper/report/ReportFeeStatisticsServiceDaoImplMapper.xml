@@ -793,7 +793,7 @@
     <!-- 查询业主费用明细表 -->
     <select id="getOwnerFeeSummary" parameterType="Map" resultType="Map">
         select
-        a.owner_id ownerId,GROUP_CONCAT(a.obj_name) objName,pfc.fee_type_cd feeTypeCd,
+        a.owner_id ownerId,GROUP_CONCAT(a.obj_name) objName,a.fee_type_cd feeTypeCd,
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
@@ -816,12 +816,11 @@
         and t.pay_fee_time &lt; #{endDate}
         ) receivedFee
         from pay_fee_detail_month a
-        inner join pay_fee_config pfc on a.config_id = pfc.config_id and pfc.status_cd = '0'
         where a.owner_id in
         <foreach collection="ownerIds" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>
-        group by a.owner_id,pfc.fee_type_cd,a.community_id
+        group by a.owner_id,a.fee_type_cd,a.community_id
     </select>
 
 
