@@ -9,11 +9,11 @@
         insert into pay_fee_detail_month(
         detail_month,detail_year,detail_id,receivable_amount,discount_amount,remark,received_amount,community_id,fee_id,month_id,
         obj_name,obj_id,owner_name,owner_id,link,state,pay_fee_time,cur_month_time,
-        fee_name,config_id
+        fee_name,config_id,obj_fpc_id,fee_type_cd
         ) values (
         #{detailMonth},#{detailYear},#{detailId},#{receivableAmount},#{discountAmount},#{remark},#{receivedAmount},#{communityId},#{feeId},#{monthId},
         #{objName},#{objId},#{ownerName},#{ownerId},#{link},#{state},#{payFeeTime},#{curMonthTime},
-        #{feeName},#{configId}
+        #{feeName},#{configId},#{objFpcId},#{feeTypeCd}
         )
     </insert>
 
@@ -22,14 +22,14 @@
         insert into pay_fee_detail_month(
         detail_month,detail_year,detail_id,receivable_amount,discount_amount,remark,received_amount,community_id,fee_id,month_id,
         obj_name,obj_id,owner_name,owner_id,link,state,pay_fee_time,cur_month_time,
-        fee_name,config_id,deadline_time
+        fee_name,config_id,deadline_time,obj_fpc_id,fee_type_cd
         ) values
         <foreach collection="payFeeDetailMonthPos" item="item" index="index" separator=",">
             (
             #{item.detailMonth},#{item.detailYear},#{item.detailId},#{item.receivableAmount},#{item.discountAmount},
             #{item.remark},#{item.receivedAmount},#{item.communityId},#{item.feeId},#{item.monthId},
             #{item.objName},#{item.objId},#{item.ownerName},#{item.ownerId},#{item.link},#{item.state},#{item.payFeeTime},#{item.curMonthTime},
-            #{item.feeName},#{item.configId},#{item.deadlineTime}
+            #{item.feeName},#{item.configId},#{item.deadlineTime},#{item.objFpcId},#{item.feeTypeCd}
             )
         </foreach>
     </insert>

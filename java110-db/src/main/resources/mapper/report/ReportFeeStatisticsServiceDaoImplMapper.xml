@@ -832,8 +832,7 @@
         from pay_fee_detail_month t
         INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         inner join pay_fee_config pfc1 on pfc1.config_id = t.config_id and pfc1.status_cd = '0'
-        where t.obj_id = a.obj_id
-        and t.status_cd = '0'
+        where  t.status_cd = '0'
         and t.detail_id = '-1'
         and t.community_id= a.community_id
         and t.obj_id = a.obj_id
