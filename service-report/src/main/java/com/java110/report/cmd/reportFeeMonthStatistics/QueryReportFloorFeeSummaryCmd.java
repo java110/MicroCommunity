@@ -5,6 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.Java110ThreadPoolFactory;
 import com.java110.dto.floor.FloorDto;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.dto.report.ReportFloorFeeStatisticsDto;
@@ -71,12 +72,24 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
         }
 
         List<Map> datas = new ArrayList<>();
-
-        for (FloorDto floorDto1 : floorDtos) {
-            queryStatisticsDto.setFloorId(floorDto1.getFloorId());
-            List<Map> floorDatas = feeStatisticsImpl.getFloorFeeSummary(queryStatisticsDto);
-            if (!ListUtil.isNull(floorDatas)) {
-                datas.add(floorDatas.get(0));
+        Java110ThreadPoolFactory java110ThreadPoolFactory = null;
+        try {
+            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(5);
+            for (FloorDto floorDto1 : floorDtos) {
+                queryStatisticsDto.setFloorId(floorDto1.getFloorId());
+                java110ThreadPoolFactory.submit(() -> {
+                    //todo 欠费户数
+                    List<Map> floorDatas = feeStatisticsImpl.getFloorFeeSummary(queryStatisticsDto);
+                    if (!ListUtil.isNull(floorDatas)) {
+                        datas.add(floorDatas.get(0));
+                    }
+                    return datas;
+                });
+            }
+            java110ThreadPoolFactory.get();
+        } finally {
+            if (java110ThreadPoolFactory != null) {
+                java110ThreadPoolFactory.stop();
             }
         }
 
