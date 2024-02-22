@@ -14,6 +14,7 @@ import com.java110.report.statistics.IFeeStatistics;
 import com.java110.report.statistics.IFloorFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
             java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(5);
             for (FloorDto floorDto1 : floorDtos) {
                 queryStatisticsDto.setFloorId(floorDto1.getFloorId());
-                QueryStatisticsDto tmpQueryStatisticsDto = queryStatisticsDto;
+                QueryStatisticsDto tmpQueryStatisticsDto = BeanConvertUtil.covertBean(queryStatisticsDto,QueryStatisticsDto.class);
                 java110ThreadPoolFactory.submit(() -> {
                     //todo 欠费户数
                     List<Map> floorDatas = feeStatisticsImpl.getFloorFeeSummary(tmpQueryStatisticsDto);
