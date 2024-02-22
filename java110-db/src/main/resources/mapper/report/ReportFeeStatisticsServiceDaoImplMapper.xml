@@ -759,7 +759,7 @@
     <!-- 查询房屋费用明细表-->
     <select id="getObjFeeSummary" parameterType="Map" resultType="Map">
         select
-        a.obj_id objId,pfc.fee_type_cd feeTypeCd,
+        a.obj_id objId,a.fee_type_cd feeTypeCd,
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
@@ -778,17 +778,16 @@
         where pf.payer_obj_id = a.obj_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
-        and pfc1.fee_type_cd = pfc.fee_type_cd
+        and pfc1.fee_type_cd = a.fee_type_cd
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         ) receivedFee
         from pay_fee_detail_month a
-        inner join pay_fee_config pfc on a.config_id = pfc.config_id and pfc.status_cd = '0'
         where a.obj_id in
         <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>
-        group by a.obj_id,pfc.fee_type_cd,a.community_id
+        group by a.obj_id,a.fee_type_cd,a.community_id
     </select>
 
     <!-- 查询业主费用明细表 -->

@@ -80,7 +80,7 @@ public class QueryReportFeeSummaryCmd extends Cmd {
 
         Java110ThreadPoolFactory java110ThreadPoolFactory = null;
         try {
-            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(9);
+            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(7);
             java110ThreadPoolFactory.submit(() -> {
                 //todo 查询历史欠费
                 double hisOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
@@ -127,15 +127,9 @@ public class QueryReportFeeSummaryCmd extends Cmd {
                 //todo 房屋数
                 long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
                 data.put("roomCount", roomCount);
-                return roomCount;
-            });
-            java110ThreadPoolFactory.submit(() -> {
                 //todo 收费房屋数
                 long feeRoomCount = feeStatisticsImpl.getFeeRoomCount(queryStatisticsDto);
                 data.put("feeRoomCount", feeRoomCount);
-                return feeRoomCount;
-            });
-            java110ThreadPoolFactory.submit(() -> {
                 //todo 欠费户数
                 int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
                 data.put("oweRoomCount", oweRoomCount);
