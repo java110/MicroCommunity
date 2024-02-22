@@ -17,6 +17,7 @@ public class QueryStatisticsDto extends PageDto implements Serializable {
     private String endDate;
 
     private String floorId;
+    private String[] floorIds;
 
     private String configId;
 
@@ -29,6 +30,7 @@ public class QueryStatisticsDto extends PageDto implements Serializable {
     private String link;
 
     private String feeTypeCd;
+    private String[] feeTypeCds;
 
     private String[] unitIds;
 
@@ -158,5 +160,21 @@ public class QueryStatisticsDto extends PageDto implements Serializable {
 
     public void setHisDate(String hisDate) {
         this.hisDate = hisDate;
+    }
+
+    public String[] getFloorIds() {
+        return floorIds;
+    }
+
+    public void setFloorIds(String[] floorIds) {
+        this.floorIds = floorIds;
+    }
+
+    public String[] getFeeTypeCds() {
+        return feeTypeCds;
+    }
+
+    public void setFeeTypeCds(String[] feeTypeCds) {
+        this.feeTypeCds = feeTypeCds;
     }
 }

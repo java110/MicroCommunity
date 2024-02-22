@@ -365,7 +365,7 @@
         select count(1) from (
             select bu.floor_id,t.payer_obj_id
             from report_owe_fee t
-        inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+            inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
             left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
             <if test="feeTypeCd != null and feeTypeCd != ''">
                 left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'

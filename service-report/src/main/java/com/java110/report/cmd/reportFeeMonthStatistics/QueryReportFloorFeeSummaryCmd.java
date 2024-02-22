@@ -5,15 +5,22 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.floor.FloorDto;
 import com.java110.dto.report.QueryStatisticsDto;
+import com.java110.dto.report.ReportFloorFeeStatisticsDto;
+import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.report.statistics.IFeeStatistics;
+import com.java110.report.statistics.IFloorFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +31,10 @@ import java.util.Map;
 public class QueryReportFloorFeeSummaryCmd extends Cmd {
 
     @Autowired
-    private IFeeStatistics feeStatisticsImpl;
+    private IFloorFeeStatistics floorFeeStatisticsImpl;
+
+    @Autowired
+    private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -39,17 +49,67 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
         queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
         queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
-        if(reqJson.containsKey("endDate") && !reqJson.getString("endDate").contains(":")) {
+        if (reqJson.containsKey("endDate") && !reqJson.getString("endDate").contains(":")) {
             queryStatisticsDto.setEndDate(reqJson.getString("endDate") + " 23:59:59");
         }
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
-        if(reqJson.containsKey("configIds")){
+        if (reqJson.containsKey("configIds")) {
             queryStatisticsDto.setConfigIds(reqJson.getString("configIds").split(","));
         }
 
-        List<Map> datas = feeStatisticsImpl.getFloorFeeSummary(queryStatisticsDto);
+        //todo 查询楼栋
+        FloorDto floorDto = new FloorDto();
+        floorDto.setCommunityId(reqJson.getString("communityId"));
+        List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
 
-        if(datas == null || datas.size() < 1){
+        if (ListUtil.isNull(floorDtos)) {
+            context.setResponseEntity(ResultVo.createResponseEntity(new ArrayList<>()));
+            return;
+        }
+
+        List<String> floorIds = new ArrayList<>();
+        List<Map> datas = new ArrayList<>();
+        Map<String,Object> dataInfo = null;
+        for(FloorDto floorDto1:floorDtos){
+            floorIds.add(floorDto1.getFloorId());
+            dataInfo = new HashMap<>();
+            dataInfo.put("floorId",floorDto1.getFloorId());
+            dataInfo.put("floorName",floorDto1.getFloorName());
+            dataInfo.put("floorNum",floorDto1.getFloorNum());
+            datas.add(dataInfo);
+        }
+        queryStatisticsDto.setFloorIds(floorIds.toArray(new String[floorIds.size()]));
+
+        //todo 欠费房屋数 oweRoomCount
+        List<ReportFloorFeeStatisticsDto> oweRoomCounts = floorFeeStatisticsImpl.getFloorOweRoomCount(queryStatisticsDto);
+
+        //todo 收费房屋数 feeRoomCount
+        List<ReportFloorFeeStatisticsDto> feeRoomCounts = floorFeeStatisticsImpl.getFloorFeeRoomCount(queryStatisticsDto);
+
+        //todo 实收金额 receivedFee
+        List<ReportFloorFeeStatisticsDto> receivedFees = floorFeeStatisticsImpl.getFloorReceivedFee(queryStatisticsDto);
+
+        //todo 预收金额 preReceivedFee
+        List<ReportFloorFeeStatisticsDto> preReceivedFees = floorFeeStatisticsImpl.getFloorPreReceivedFee(queryStatisticsDto);
+
+        //todo 历史欠费金额 hisOweFee
+        List<ReportFloorFeeStatisticsDto> hisOweFees = floorFeeStatisticsImpl.getFloorHisOweFee(queryStatisticsDto);
+
+        //todo 当期应收金额 curReceivableFee
+        List<ReportFloorFeeStatisticsDto> curReceivableFees = floorFeeStatisticsImpl.getFloorCurReceivableFee(queryStatisticsDto);
+
+        //todo 当期实收金额 curReceivedFee
+        List<ReportFloorFeeStatisticsDto> curReceivedFees = floorFeeStatisticsImpl.getFloorCurReceivedFee(queryStatisticsDto);
+
+        //todo 欠费追回 hisReceivedFee
+        List<ReportFloorFeeStatisticsDto> hisReceivedFees = floorFeeStatisticsImpl.getFloorHisOweFee(queryStatisticsDto);
+
+        //todo 拼接数据
+        computeData(datas,oweRoomCounts,feeRoomCounts,receivedFees,preReceivedFees,hisOweFees,curReceivableFees,curReceivedFees,hisReceivedFees);
+
+        //List<Map> datas = feeStatisticsImpl.getFloorFeeSummary(queryStatisticsDto);
+
+        if (datas == null || datas.size() < 1) {
             context.setResponseEntity(ResultVo.createResponseEntity(datas));
             return;
         }
@@ -58,29 +118,119 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
         BigDecimal feeRoomRate = null;
         BigDecimal curReceivedFee = null;
         BigDecimal curReceivableFee = null;
-        for(Map data:datas){
+        for (Map data : datas) {
             //todo 计算 户收费率
-            if(Double.parseDouble(data.get("feeRoomCount").toString())>0){
+            if (Double.parseDouble(data.get("feeRoomCount").toString()) > 0) {
                 feeRoomCountDec = new BigDecimal(Double.parseDouble(data.get("feeRoomCount").toString()));
                 oweRoomCountDec = new BigDecimal(Double.parseDouble(data.get("oweRoomCount").toString()));
-                feeRoomRate = feeRoomCountDec.subtract(oweRoomCountDec).divide(feeRoomCountDec,4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
-                data.put("feeRoomRate",feeRoomRate.doubleValue());
-            }else{
-                data.put("feeRoomRate",0.0);
+                feeRoomRate = feeRoomCountDec.subtract(oweRoomCountDec).divide(feeRoomCountDec, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+                data.put("feeRoomRate", feeRoomRate.doubleValue());
+            } else {
+                data.put("feeRoomRate", 0.0);
             }
 
             //todo 计算 收费率
             curReceivedFee = new BigDecimal(Double.parseDouble(data.get("curReceivedFee").toString()));
             curReceivableFee = new BigDecimal(Double.parseDouble(data.get("curReceivableFee").toString()));
 
-            if(curReceivableFee.doubleValue()> 0){
-                feeRoomRate = curReceivedFee.divide(curReceivableFee,4,BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2,BigDecimal.ROUND_HALF_UP);
-                data.put("feeRate",feeRoomRate.doubleValue());
-            }else{
-                data.put("feeRate",0.0);
+            if (curReceivableFee.doubleValue() > 0) {
+                feeRoomRate = curReceivedFee.divide(curReceivableFee, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP);
+                data.put("feeRate", feeRoomRate.doubleValue());
+            } else {
+                data.put("feeRate", 0.0);
             }
         }
 
         context.setResponseEntity(ResultVo.createResponseEntity(datas));
+    }
+
+    private void computeData(List<Map> datas, List<ReportFloorFeeStatisticsDto> oweRoomCounts,
+                             List<ReportFloorFeeStatisticsDto> feeRoomCounts,
+                             List<ReportFloorFeeStatisticsDto> receivedFees,
+                             List<ReportFloorFeeStatisticsDto> preReceivedFees,
+                             List<ReportFloorFeeStatisticsDto> hisOweFees,
+                             List<ReportFloorFeeStatisticsDto> curReceivableFees,
+                             List<ReportFloorFeeStatisticsDto> curReceivedFees,
+                             List<ReportFloorFeeStatisticsDto> hisReceivedFees) {
+        //todo 欠费房屋数 oweRoomCount
+        for(Map data :datas){
+            data.put("oweRoomCount","0");
+            for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:oweRoomCounts){
+                if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
+                    data.put("oweRoomCount",reportFloorFeeStatisticsDto.getOweRoomCount());
+                }
+            }
+        }
+
+        //todo 收费房屋数 feeRoomCount
+        for(Map data :datas){
+            data.put("feeRoomCount","0");
+            for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:feeRoomCounts){
+                if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
+                    data.put("feeRoomCount",reportFloorFeeStatisticsDto.getFeeRoomCount());
+                }
+            }
+        }
+
+        //todo 实收金额 receivedFee
+        for(Map data :datas){
+            data.put("receivedFee","0");
+            for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:receivedFees){
+                if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
+                    data.put("receivedFee",reportFloorFeeStatisticsDto.getReceivedFee());
+                }
+            }
+        }
+
+        //todo 预收金额 preReceivedFee
+        for(Map data :datas){
+            data.put("preReceivedFee","0");
+            for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:preReceivedFees){
+                if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
+                    data.put("preReceivedFee",reportFloorFeeStatisticsDto.getPreReceivedFee());
+                }
+            }
+        }
+
+
+        //todo 历史欠费金额 hisOweFee
+        for(Map data :datas){
+            data.put("hisOweFee","0");
+            for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:hisOweFees){
+                if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
+                    data.put("hisOweFee",reportFloorFeeStatisticsDto.getHisOweFee());
+                }
+            }
+        }
+
+        //todo 当期应收金额 curReceivableFee
+        for(Map data :datas){
+            data.put("curReceivableFee","0");
+            for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:curReceivableFees){
+                if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
+                    data.put("curReceivableFee",reportFloorFeeStatisticsDto.getCurReceivableFee());
+                }
+            }
+        }
+
+        //todo 当期实收金额 curReceivedFee
+
+        for(Map data :datas){
+            data.put("curReceivedFee","0");
+            for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:curReceivedFees){
+                if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
+                    data.put("curReceivedFee",reportFloorFeeStatisticsDto.getReceivedFee());
+                }
+            }
+        }
+        //todo 欠费追回 hisReceivedFee
+        for(Map data :datas){
+            data.put("hisReceivedFee","0");
+            for(ReportFloorFeeStatisticsDto reportFloorFeeStatisticsDto:hisReceivedFees){
+                if(reportFloorFeeStatisticsDto.getFloorId().equals(data.get("floorId"))){
+                    data.put("hisReceivedFee",reportFloorFeeStatisticsDto.getHisReceivedFee());
+                }
+            }
+        }
     }
 }
