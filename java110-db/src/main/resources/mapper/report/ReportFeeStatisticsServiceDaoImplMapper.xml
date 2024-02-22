@@ -8,15 +8,10 @@
     <select id="getHisMonthOweFee" parameterType="Map" resultType="Map">
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        <if test="floorId != null and floorId != ''">
-            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
-            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        </if>
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
@@ -37,7 +32,7 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and t.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.detail_id = '-1'
@@ -49,15 +44,10 @@
     <select id="getCurMonthOweFee" parameterType="Map" resultType="Map">
         select ifnull(sum(t.receivable_amount),0.0) curOweFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        <if test="floorId != null and floorId != ''">
-            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
-            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        </if>
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
@@ -78,7 +68,7 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and t.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.detail_id = '-1'
@@ -90,15 +80,10 @@
     <select id="getOweFee" parameterType="Map" resultType="Map">
         select ifnull(sum(t.receivable_amount),0.0) oweFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        <if test="floorId != null and floorId != ''">
-            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
-            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        </if>
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
@@ -119,7 +104,7 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and t.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.detail_id = '-1'
@@ -131,15 +116,11 @@
     <select id="getCurReceivableFee" parameterType="Map" resultType="Map">
         select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        <if test="floorId != null and floorId != ''">
-            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
-            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        </if>
+
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
@@ -160,7 +141,7 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and t.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -172,15 +153,11 @@
     <select id="getHisReceivedFee" parameterType="Map" resultType="Map">
         select ifnull(sum(t.received_amount),0.0) hisReceivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        <if test="floorId != null and floorId != ''">
-            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
-            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        </if>
+
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
@@ -201,7 +178,7 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and t.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -214,15 +191,11 @@
     <select id="getPreReceivedFee" parameterType="Map" resultType="Map">
         select ifnull(sum(t.received_amount),0.0) preReceivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        <if test="floorId != null and floorId != ''">
-            LEFT JOIN building_room br on t.obj_id = br.room_id and br.status_cd = '0'
-            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
-        </if>
+
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
@@ -243,7 +216,7 @@
             </foreach>
         </if>
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            and pf.fee_type_cd = #{feeTypeCd}
+            and t.fee_type_cd = #{feeTypeCd}
         </if>
         and t.status_cd = '0'
         and t.community_id= #{communityId}
@@ -267,7 +240,7 @@
         where
         1=1
         <if test="floorId != null and floorId != ''">
-            and bu.floor_id = #{floorId}
+            and t.obj_fpc_id = #{floorId}
         </if>
         <if test="configId != null and configId != ''">
             and t.config_id = #{configId}
@@ -468,7 +441,6 @@
         (
         select ifnull(sum(t.received_amount),0.0) preReceivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         and t.obj_fpc_id = a.floor_id
@@ -490,7 +462,6 @@
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         and t.obj_fpc_id = a.floor_id
@@ -511,7 +482,6 @@
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         and t.obj_fpc_id = a.floor_id
@@ -532,7 +502,6 @@
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         and t.obj_fpc_id = a.floor_id
@@ -554,7 +523,6 @@
         (
         select ifnull(sum(t.received_amount),0.0) hisReceivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         and t.obj_fpc_id = a.floor_id
@@ -663,7 +631,6 @@
         (
         select ifnull(sum(t.received_amount),0.0) preReceivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         <if test="floorId != null and floorId != ''">
@@ -686,7 +653,6 @@
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         <if test="floorId != null and floorId != ''">
@@ -707,7 +673,6 @@
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         <if test="floorId != null and floorId != ''">
@@ -728,7 +693,6 @@
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         <if test="floorId != null and floorId != ''">
@@ -750,7 +714,6 @@
         (
         select ifnull(sum(t.received_amount),0.0) hisReceivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where
         1=1
         <if test="floorId != null and floorId != ''">
@@ -800,7 +763,6 @@
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where  t.status_cd = '0'
         and t.detail_id = '-1'
         and t.community_id= a.community_id
@@ -836,7 +798,6 @@
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where 1=1
         and t.status_cd = '0'
         and t.detail_id = '-1'
@@ -848,7 +809,6 @@
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
         from pay_fee_detail_month t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         where t.owner_id = a.owner_id
         and t.status_cd = '0'
         and t.community_id= a.community_id
