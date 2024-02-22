@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reportFloorFeeStatisticsServiceDaoImpl">
+
+
+    <select id="getFloorOweRoomCount" parameterType="Map" resultType="Map">
+        select b.floor_id floorId,count(1) oweRoomCount
+        from (
+            select distinct bu.floor_id,t.payer_obj_id
+            from report_owe_fee t
+            inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+            <if test="feeTypeCd != null and feeTypeCd != ''">
+                left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+            </if>
+            where
+            1=1
+            and t.payer_obj_type = '3333'
+            and t.community_id= #{communityId}
+            and t.end_time &lt;= #{endDate}
+            and t.amount_owed != 0
+            and bu.floor_id in
+            <foreach collection="floorIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            <if test="configIds !=null ">
+                and t.config_id in
+                <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="feeTypeCd != null and feeTypeCd != ''">
+                and pfc.fee_type_cd = #{feeTypeCd}
+            </if>
+        ) b
+        group by b.floor_id
+    </select>
+
+    <select id="getFloorFeeRoomCount" parameterType="Map" resultType="Map">
+        select b.floor_id floorId,count(1) feeRoomCount
+        from (
+            select distinct bu.floor_id,t.payer_obj_id
+            from report_owe_fee t
+            inner join pay_fee pf on pf.fee_id = t.fee_id and pf.status_cd = '0' and pf.state = '2008001'
+            inner join building_room br on t.payer_obj_id = br.room_id and br.status_cd = '0'
+            left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+            where
+            1=1
+            and t.payer_obj_type = '3333'
+            and t.community_id= #{communityId}
+            and pf.community_id=  #{communityId}
+            and t.end_time &lt;= #{endDate}
+            and bu.floor_id in
+            <foreach collection="floorIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            <if test="configIds !=null ">
+                and t.config_id in
+                <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="feeTypeCd != null and feeTypeCd != ''">
+                and pf.fee_type_cd = #{feeTypeCd}
+            </if>
+        ) b
+        group by b.floor_id
+    </select>
+
+    <select id="getFloorReceivedFee" parameterType="Map" resultType="Map">
+        select bu.floor_id floorId,ifnull(sum(t.received_amount),0.0) receivedFee
+        from pay_fee_detail t
+        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        LEFT JOIN building_room br on pf.payer_obj_id = br.room_id and br.status_cd = '0'
+        left join building_unit bu on br.unit_id = bu.unit_id and bu.status_cd = '0'
+        where
+        1=1
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.create_time &gt; #{startDate}
+        and t.create_time &lt; #{endDate}
+        and bu.floor_id in
+        <foreach collection="floorIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        <if test="configIds !=null ">
+            and pf.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and pf.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by bu.floor_id
+    </select>
+
+    <select id="getFloorPreReceivedFee" parameterType="Map" resultType="Map">
+        select t.obj_fpc_id floorId,ifnull(sum(t.received_amount),0.0) preReceivedFee
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.obj_fpc_id in
+        <foreach collection="floorIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &gt;= #{endDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and t.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by t.obj_fpc_id
+    </select>
+
+    <select id="getFloorHisOweFee" parameterType="Map" resultType="Map">
+        select t.obj_fpc_id floorId,ifnull(sum(t.receivable_amount),0.0) hisOweFee
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.obj_fpc_id in
+        <foreach collection="floorIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.detail_id = '-1'
+        and t.cur_month_time &lt; #{startDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and t.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by t.obj_fpc_id
+    </select>
+
+    <select id="getFloorCurReceivableFee" parameterType="Map" resultType="Map">
+        select  t.obj_fpc_id floorId,ifnull(sum(t.receivable_amount),0.0) curReceivableFee
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.obj_fpc_id in
+        <foreach collection="floorIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.cur_month_time &gt;= #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and t.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by t.obj_fpc_id
+    </select>
+
+    <select id="getFloorCurReceivedFee" parameterType="Map" resultType="Map">
+        select t.obj_fpc_id floorId, ifnull(sum(t.receivable_amount),0.0) curReceivedFee
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.obj_fpc_id in
+        <foreach collection="floorIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.cur_month_time &gt;= #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        and t.detail_id != '-1'
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and t.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by t.obj_fpc_id
+    </select>
+
+    <select id="getFloorHisReceivedFee" parameterType="Map" resultType="Map">
+        select t.obj_fpc_id floorId,ifnull(sum(t.received_amount),0.0) hisReceivedFee
+        from pay_fee_detail_month t
+        where
+        1=1
+        and t.obj_fpc_id in
+        <foreach collection="floorIds" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.pay_fee_time &gt; #{startDate}
+        and t.pay_fee_time &lt; #{endDate}
+        and t.cur_month_time &lt; #{startDate}
+        and t.detail_id != '-1'
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="feeTypeCd != null and feeTypeCd != ''">
+            and t.fee_type_cd = #{feeTypeCd}
+        </if>
+        group by t.obj_fpc_id
+    </select>
+
+
+</mapper>
