@@ -25,17 +25,17 @@ public interface IPayFeeDetailMonthInnerServiceSMO {
 
 
     @RequestMapping(value = "/savePayFeeDetailMonth", method = RequestMethod.POST)
-    public int savePayFeeDetailMonth(@RequestBody PayFeeDetailMonthPo payFeeDetailMonthPo);
+    int savePayFeeDetailMonth(@RequestBody PayFeeDetailMonthPo payFeeDetailMonthPo);
 
     @RequestMapping(value = "/savePayFeeDetailMonths", method = RequestMethod.POST)
-    public int savePayFeeDetailMonths(@RequestBody List<PayFeeDetailMonthPo> payFeeDetailMonthPos);
+    int savePayFeeDetailMonths(@RequestBody List<PayFeeDetailMonthPo> payFeeDetailMonthPos);
 
 
     @RequestMapping(value = "/updatePayFeeDetailMonth", method = RequestMethod.POST)
-    public int updatePayFeeDetailMonth(@RequestBody  PayFeeDetailMonthPo payFeeDetailMonthPo);
+    int updatePayFeeDetailMonth(@RequestBody  PayFeeDetailMonthPo payFeeDetailMonthPo);
 
     @RequestMapping(value = "/deletePayFeeDetailMonth", method = RequestMethod.POST)
-    public int deletePayFeeDetailMonth(@RequestBody  PayFeeDetailMonthPo payFeeDetailMonthPo);
+    int deletePayFeeDetailMonth(@RequestBody  PayFeeDetailMonthPo payFeeDetailMonthPo);
 
     /**
      * <p>查询小区楼信息</p>

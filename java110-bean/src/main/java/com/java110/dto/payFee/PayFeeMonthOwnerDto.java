@@ -17,6 +17,8 @@ public class PayFeeMonthOwnerDto implements Serializable {
     private String link;
     private String payFeeTime;
 
+    private String objFpcId;
+
     public String getObjName() {
         return objName;
     }
@@ -63,5 +65,13 @@ public class PayFeeMonthOwnerDto implements Serializable {
 
     public void setPayFeeTime(String payFeeTime) {
         this.payFeeTime = payFeeTime;
+    }
+
+    public String getObjFpcId() {
+        return objFpcId;
+    }
+
+    public void setObjFpcId(String objFpcId) {
+        this.objFpcId = objFpcId;
     }
 }

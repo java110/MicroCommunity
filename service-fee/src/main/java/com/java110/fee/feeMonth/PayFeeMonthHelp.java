@@ -2,15 +2,22 @@ package com.java110.fee.feeMonth;
 
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.contract.ContractDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.payFee.PayFeeDetailMonthDto;
 import com.java110.dto.payFee.PayFeeMonthOwnerDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailMonthInnerServiceSMO;
+import com.java110.intf.store.IContractInnerServiceSMO;
+import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.po.payFee.PayFeeDetailMonthPo;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +29,12 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
+
+    @Autowired
+    private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
@@ -38,6 +51,39 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         payFeeMonthOwnerDto.setLink(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
         payFeeMonthOwnerDto.setObjName(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME));
         payFeeMonthOwnerDto.setObjId(feeDto.getPayerObjId());
+        payFeeMonthOwnerDto.setObjFpcId("-1");
+
+        if(StringUtil.isEmpty(feeDto.getPayerObjId())){
+            return payFeeMonthOwnerDto;
+        }
+
+        // 如果是房屋
+        if(FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())){
+
+            RoomDto roomDto = new RoomDto();
+            roomDto.setRoomId(feeDto.getPayerObjId());
+            roomDto.setCommunityId(feeDto.getCommunityId());
+            List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+            if(!ListUtil.isNull(roomDtos)){
+                payFeeMonthOwnerDto.setObjFpcId(roomDtos.get(0).getFloorId());
+            }
+        }else if(FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())){
+
+            OwnerCarDto ownerCarDto = new OwnerCarDto();
+            ownerCarDto.setMemberId(feeDto.getPayerObjId());
+            ownerCarDto.setCommunityId(feeDto.getCommunityId());
+            List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+            if(!ListUtil.isNull(ownerCarDtos)){
+                payFeeMonthOwnerDto.setObjFpcId(ownerCarDtos.get(0).getPaId());
+            }
+        }else {
+            ContractDto contractDto = new ContractDto();
+            contractDto.setContractId(feeDto.getPayerObjId());
+            List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
+            if(!ListUtil.isNull(contractDtos)){
+                payFeeMonthOwnerDto.setObjFpcId(contractDtos.get(0).getContractType());
+            }
+        }
         return payFeeMonthOwnerDto;
     }
 
@@ -168,12 +214,12 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
 
             // todo 如果不是整月，则转换为按天计算
 //            if (curDay != curMonthMaxDay) {
-                //todo 周期性费用 日应收重新算
-                if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-                    dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
-                }
-                // todo 计算 应收
-                curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+            //todo 周期性费用 日应收重新算
+            if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+                dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
+            }
+            // todo 计算 应收
+            curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
 //            } else { // todo 如果是整月 那就按月计算，以免 转换成天再 乘以天数后的误差
 //                curMonthReceivableAmount = receivableAmount;
 //            }
@@ -332,6 +378,11 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         tmpPayFeeDetailMonthPo.setState("W"); // todo 这里暂时写死，目前用不到，算是预留字段
         tmpPayFeeDetailMonthPo.setFeeName(feeDto.getFeeName());
         tmpPayFeeDetailMonthPo.setConfigId(feeDto.getConfigId());
+        tmpPayFeeDetailMonthPo.setFeeTypeCd(feeDto.getFeeTypeCd());
+
+        //todo 查询obj_fpc_id
+        tmpPayFeeDetailMonthPo.setObjFpcId(payFeeMonthOwnerDto.getObjFpcId());
+
         payFeeDetailMonthPos.add(tmpPayFeeDetailMonthPo);
 
     }

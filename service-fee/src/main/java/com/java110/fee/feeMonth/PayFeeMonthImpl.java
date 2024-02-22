@@ -176,9 +176,9 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             feeDto.setFeeId(feeId);
             List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-           if(tmpFeeDtos == null || tmpFeeDtos.size() < 1){
-               continue;
-           }
+            if(tmpFeeDtos == null || tmpFeeDtos.size() < 1){
+                continue;
+            }
             generatorOweFeeInnerServiceSMOImpl.computeOweFee(tmpFeeDtos.get(0));
         }
     }
