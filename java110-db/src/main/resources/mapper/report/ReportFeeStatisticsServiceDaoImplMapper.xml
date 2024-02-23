@@ -469,6 +469,47 @@
     <select id="getConfigFeeSummary" parameterType="Map" resultType="Map">
         select a.name,
         (
+        select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
+        from pay_fee_detail_month t force index(i_fc)
+        where
+        1=1
+        <if test="floorId != null and floorId != ''">
+            and t.obj_fpc_id = #{floorId}
+        </if>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.cur_month_time &gt;= #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        and t.fee_type_cd = a.status_cd
+        ) curReceivableFee,
+        (
+        select ifnull(sum(t.receivable_amount),0.0) curReceivedFee
+        from pay_fee_detail_month t force index(i_fc)
+        where
+        1=1
+        <if test="floorId != null and floorId != ''">
+            and t.obj_fpc_id = #{floorId}
+        </if>
+        and t.status_cd = '0'
+        and t.community_id= #{communityId}
+        and t.cur_month_time &gt;= #{startDate}
+        and t.cur_month_time &lt; #{endDate}
+        and t.detail_id != '-1'
+        <if test="configIds !=null ">
+            and t.config_id in
+            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        and t.fee_type_cd = a.status_cd
+        ) curReceivedFee,
+        (
         select count(1) from (
         select pfc.fee_type_cd,t.payer_obj_id
         from report_owe_fee t
@@ -519,49 +560,7 @@
         group by pf.fee_type_cd,t.payer_obj_id
         ) b
         where b.fee_type_cd = a.status_cd
-        ) feeRoomCount,
-
-        (
-        select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
-        from pay_fee_detail_month t force index(i_pay_fee_detail_fc)
-        where
-        1=1
-        <if test="floorId != null and floorId != ''">
-            and t.obj_fpc_id = #{floorId}
-        </if>
-        and t.status_cd = '0'
-        and t.community_id= #{communityId}
-        and t.cur_month_time &gt;= #{startDate}
-        and t.cur_month_time &lt; #{endDate}
-        <if test="configIds !=null ">
-            and t.config_id in
-            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        and t.fee_type_cd = a.status_cd
-        ) curReceivableFee,
-        (
-        select ifnull(sum(t.receivable_amount),0.0) curReceivedFee
-        from pay_fee_detail_month t force index(i_pay_fee_detail_fc)
-        where
-        1=1
-        <if test="floorId != null and floorId != ''">
-            and t.obj_fpc_id = #{floorId}
-        </if>
-        and t.status_cd = '0'
-        and t.community_id= #{communityId}
-        and t.cur_month_time &gt;= #{startDate}
-        and t.cur_month_time &lt; #{endDate}
-        and t.detail_id != '-1'
-        <if test="configIds !=null ">
-            and t.config_id in
-            <foreach collection="configIds" item="item" index="index" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
-        </if>
-        and t.fee_type_cd = a.status_cd
-        ) curReceivedFee
+        ) feeRoomCount
         from t_dict a
         where 1=1
         and a.table_name = 'pay_fee_config'
