@@ -80,7 +80,7 @@ public class QueryReportFeeSummaryCmd extends Cmd {
 
         Java110ThreadPoolFactory java110ThreadPoolFactory = null;
         try {
-            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(9);
+            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(5);
             java110ThreadPoolFactory.submit(() -> {
                 //todo 查询历史欠费
                 double hisOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
