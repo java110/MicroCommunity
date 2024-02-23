@@ -63,45 +63,45 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
         }
 
         //todo 查询楼栋
-        FloorDto floorDto = new FloorDto();
-        floorDto.setCommunityId(reqJson.getString("communityId"));
-        if(reqJson.containsKey("page")) {
-            floorDto.setPage(reqJson.getIntValue("page"));
-            floorDto.setRow(reqJson.getIntValue("row"));
-        }
-        List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+//        FloorDto floorDto = new FloorDto();
+//        floorDto.setCommunityId(reqJson.getString("communityId"));
+//        if(reqJson.containsKey("page")) {
+//            floorDto.setPage(reqJson.getIntValue("page"));
+//            floorDto.setRow(reqJson.getIntValue("row"));
+//        }
+//        List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
+//
+//        if (ListUtil.isNull(floorDtos)) {
+//            context.setResponseEntity(ResultVo.createResponseEntity(new ArrayList<>()));
+//            return;
+//        }
 
-        if (ListUtil.isNull(floorDtos)) {
-            context.setResponseEntity(ResultVo.createResponseEntity(new ArrayList<>()));
-            return;
-        }
-
-        List<Map> datas = new ArrayList<>();
-        Java110ThreadPoolFactory java110ThreadPoolFactory = null;
-        try {
-            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(5);
-            for (FloorDto floorDto1 : floorDtos) {
-                queryStatisticsDto.setFloorId(floorDto1.getFloorId());
-                QueryStatisticsDto tmpQueryStatisticsDto = BeanConvertUtil.covertBean(queryStatisticsDto,QueryStatisticsDto.class);
-                java110ThreadPoolFactory.submit(() -> {
-                    //todo 欠费户数
-                    List<Map> floorDatas = feeStatisticsImpl.getFloorFeeSummary(tmpQueryStatisticsDto);
-                    if (!ListUtil.isNull(floorDatas)) {
-                        datas.add(floorDatas.get(0));
-                    }
-                    return datas;
-                });
-            }
-            java110ThreadPoolFactory.get();
-        } finally {
-            if (java110ThreadPoolFactory != null) {
-                java110ThreadPoolFactory.stop();
-            }
-        }
+//        List<Map> datas = new ArrayList<>();
+//        Java110ThreadPoolFactory java110ThreadPoolFactory = null;
+//        try {
+//            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(5);
+//            for (FloorDto floorDto1 : floorDtos) {
+//                queryStatisticsDto.setFloorId(floorDto1.getFloorId());
+//                QueryStatisticsDto tmpQueryStatisticsDto = BeanConvertUtil.covertBean(queryStatisticsDto,QueryStatisticsDto.class);
+//                java110ThreadPoolFactory.submit(() -> {
+//                    //todo 欠费户数
+//                    List<Map> floorDatas = feeStatisticsImpl.getFloorFeeSummary(tmpQueryStatisticsDto);
+//                    if (!ListUtil.isNull(floorDatas)) {
+//                        datas.add(floorDatas.get(0));
+//                    }
+//                    return datas;
+//                });
+//            }
+//            java110ThreadPoolFactory.get();
+//        } finally {
+//            if (java110ThreadPoolFactory != null) {
+//                java110ThreadPoolFactory.stop();
+//            }
+//        }
 
         //todo 拼接数据
 
-        //List<Map> datas = feeStatisticsImpl.getFloorFeeSummary(queryStatisticsDto);
+        List<Map> datas = feeStatisticsImpl.getFloorFeeSummary(queryStatisticsDto);
 
         if (datas == null || datas.size() < 1) {
             context.setResponseEntity(ResultVo.createResponseEntity(datas));
