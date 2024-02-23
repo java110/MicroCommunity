@@ -417,7 +417,7 @@
         ) feeRoomCount,
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
-        from pay_fee_detail_month t
+        from pay_fee_detail_month t force index(i_pay_fee_detail_co)
         where
         1=1
         and t.obj_fpc_id = a.floor_id
@@ -437,7 +437,7 @@
         ) curReceivableFee,
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivedFee
-        from pay_fee_detail_month t
+        from pay_fee_detail_month t force index(i_pay_fee_detail_co)
         where
         1=1
         and t.obj_fpc_id = a.floor_id
