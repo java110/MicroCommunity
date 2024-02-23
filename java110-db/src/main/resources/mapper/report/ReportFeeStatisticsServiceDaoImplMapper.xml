@@ -523,7 +523,7 @@
 
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivableFee
-        from pay_fee_detail_month t
+        from pay_fee_detail_month t force index(i_pay_fee_detail_fc)
         where
         1=1
         <if test="floorId != null and floorId != ''">
@@ -543,7 +543,7 @@
         ) curReceivableFee,
         (
         select ifnull(sum(t.receivable_amount),0.0) curReceivedFee
-        from pay_fee_detail_month t
+        from pay_fee_detail_month t force index(i_pay_fee_detail_fc)
         where
         1=1
         <if test="floorId != null and floorId != ''">
