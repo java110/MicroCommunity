@@ -103,7 +103,7 @@ public class QueryReportFloorFeeSummaryCmd extends Cmd {
 
         //List<Map> datas = feeStatisticsImpl.getFloorFeeSummary(queryStatisticsDto);
 
-        if (datas == null || datas.size() < 1) {
+        if (ListUtil.isNull(datas)) {
             context.setResponseEntity(ResultVo.createResponseEntity(datas));
             return;
         }
