@@ -7,7 +7,7 @@
     <!-- 查询历史欠费 -->
     <select id="getHisMonthOweFee" parameterType="Map" resultType="Map">
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
-        from pay_fee_detail_month t force index(i_pfdm_cur_month_time)
+        from pay_fee_detail_month t
         where
         1=1
         <if test="floorId != null and floorId != ''">
