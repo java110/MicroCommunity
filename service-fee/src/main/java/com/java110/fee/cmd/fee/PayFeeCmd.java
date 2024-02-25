@@ -181,12 +181,23 @@ public class PayFeeCmd extends Cmd {
         for (int paramIndex = 0; paramIndex < selectUserAccount.size(); paramIndex++) {
             JSONObject param = selectUserAccount.getJSONObject(paramIndex);
             String maximumNumber = param.getString("maximumNumber");
-            Assert.hasKeyAndValue(param, "discountId", "未包含优惠ID");
-            Assert.hasKeyAndValue(param, "discountPrice", "未包含优惠金额");
+
         }
+
+
 
         //todo 是否按缴费时间段缴费
         validateIfPayFeeStartEndDate(reqJson, feeConfigDtos.get(0));
+
+        //todo 校验 优惠
+        JSONArray selectDiscounts = reqJson.getJSONArray("selectDiscount");
+        if(!ListUtil.isNull(selectDiscounts)) {
+            for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
+                JSONObject param = selectDiscounts.getJSONObject(discountIndex);
+                Assert.hasKeyAndValue(param, "discountId", "未包含优惠ID");
+                Assert.hasKeyAndValue(param, "discountPrice", "未包含优惠金额");
+            }
+        }
     }
 
 
