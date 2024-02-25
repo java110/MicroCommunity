@@ -50,6 +50,9 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String contractCode;
     private String payerObjType;
     private String payerObjId;
+    private String payerObjName;
+
+
     private String ownerName;
     private String ownerId;
     private String detailId;
@@ -1016,5 +1019,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setLateAmount(String lateAmount) {
         this.lateAmount = lateAmount;
+    }
+
+    public String getPayerObjName() {
+        return payerObjName;
+    }
+
+    public void setPayerObjName(String payerObjName) {
+        this.payerObjName = payerObjName;
     }
 }

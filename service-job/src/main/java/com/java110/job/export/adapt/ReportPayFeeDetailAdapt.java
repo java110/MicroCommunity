@@ -58,28 +58,20 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
         row.createCell(13).setCellValue("减免金额");
         row.createCell(14).setCellValue("赠送金额");
         row.createCell(15).setCellValue("滞纳金");
-        row.createCell(16).setCellValue("空置房打折金额");
-        row.createCell(17).setCellValue("空置房减免金额");
-        row.createCell(18).setCellValue("面积");
-        row.createCell(19).setCellValue("车位");
-        row.createCell(20).setCellValue("账户抵扣");
-        row.createCell(21).setCellValue("收银员");
-        row.createCell(22).setCellValue("备注");
+        row.createCell(16).setCellValue("面积");
+        row.createCell(17).setCellValue("车位");
+        row.createCell(18).setCellValue("账户抵扣");
+        row.createCell(19).setCellValue("收银员");
+        row.createCell(20).setCellValue("备注");
         JSONObject reqJson = exportDataDto.getReqJson();
 
         String endTime = reqJson.getString("endTime");
 
-        if (!StringUtil.isEmpty(endTime)) {
+        if (!StringUtil.isEmpty(endTime) && !endTime.contains(":")) {
             endTime += " 23:59:59";
             reqJson.put("endTime", endTime);
         }
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson, ReportFeeMonthStatisticsDto.class);
-        if (reqJson.containsKey("roomName") && !StringUtil.isEmpty(reqJson.getString("roomName"))) {
-            String[] roomNameArray = reqJson.getString("roomName").split("-", 3);
-            reportFeeMonthStatisticsDto.setFloorNum(roomNameArray[0]);
-            reportFeeMonthStatisticsDto.setUnitNum(roomNameArray[1]);
-            reportFeeMonthStatisticsDto.setRoomNum(roomNameArray[2]);
-        }
         //查询数据
         getRepairPayFeeDetail(sheet, reportFeeMonthStatisticsDto);
         return workbook;
@@ -114,16 +106,12 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
             dataObj = reportFeeMonthStatisticsDtos.getJSONObject(roomIndex);
 //            dataObj = JSONObject.parseObject(JSONObject.toJSONString(reportFeeMonthStatisticsDtos.get(roomIndex)));
             row.createCell(0).setCellValue(dataObj.getString("oId"));
-            if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
-                row.createCell(1).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
-            } else {
-                row.createCell(1).setCellValue(dataObj.getString("objName"));
-            }
-            endDate =  DateUtil.getDateFromStringB(dataObj.getString("endTime"));
+            row.createCell(1).setCellValue(dataObj.getString("payerObjName"));
+            endDate = DateUtil.getDateFromStringB(dataObj.getString("endTime"));
             //todo 如果不是一次性费用结束时间建1
-            if(!StringUtil.isEmpty(dataObj.getString("feeFlag"))
-                    && !FeeDto.FEE_FLAG_ONCE.equals(dataObj.getString("feeFlag"))){
-                endDate = DateUtil.stepDay(endDate,-1);
+            if (!StringUtil.isEmpty(dataObj.getString("feeFlag"))
+                    && !FeeDto.FEE_FLAG_ONCE.equals(dataObj.getString("feeFlag"))) {
+                endDate = DateUtil.stepDay(endDate, -1);
             }
 
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
@@ -141,13 +129,11 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
             row.createCell(13).setCellValue(dataObj.getDouble("deductionAmount"));
             row.createCell(14).setCellValue(dataObj.getDouble("giftAmount"));
             row.createCell(15).setCellValue(dataObj.getDouble("lateFee"));
-            row.createCell(16).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
-            row.createCell(17).setCellValue(dataObj.getDouble("vacantHousingReduction"));
-            row.createCell(18).setCellValue(dataObj.getString("builtUpArea"));
-            row.createCell(19).setCellValue(dataObj.getString("psName"));
-            row.createCell(20).setCellValue(dataObj.getString("withholdAmount"));
-            row.createCell(21).setCellValue(dataObj.getString("cashierName"));
-            row.createCell(22).setCellValue(dataObj.getString("remark"));
+            row.createCell(16).setCellValue(dataObj.getString("builtUpArea"));
+            row.createCell(17).setCellValue(dataObj.getString("psName"));
+            row.createCell(18).setCellValue(dataObj.getString("withholdAmount"));
+            row.createCell(19).setCellValue(dataObj.getString("cashierName"));
+            row.createCell(20).setCellValue(dataObj.getString("remark"));
         }
     }
 }

@@ -1709,11 +1709,11 @@
     <select id="queryPayFeeDetail" parameterType="Map" resultType="Map">
         select pfc.fee_name feeName,pf.payer_obj_type payerObjType,t.start_time startTime,t.end_time
         endTime,t.create_time createTime,t.receivable_amount receivableAmount,t.received_amount receivedAmount,
-        t.prime_rate,d.name primeRate,pfa2.`value` ownerName,t.pay_order_id oId,d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,
+        t.prime_rate,d.name primeRate,pfa2.`value` ownerName,pfa3.`value` payerObjName,t.pay_order_id oId,d2.name feeTypeCdName,pfc.fee_type_cd feeTypeCd,
         t.state,d3.name stateName,t.fee_id feeId,t.detail_id detailId,pf.payer_obj_id payerObjId,
         t.cashier_id cashierId,t.cashier_name cashierName,t.payable_amount payableAmount,pfc.fee_flag feeFlag,
         t.acct_amount acctAmount, t.discount_amount discountAmount, t.deduction_amount deductionAmount, t.late_amount lateAmount,
-        t.gift_amount giftAmount
+        t.gift_amount giftAmount,t.remark
         from pay_fee_detail t
         left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
