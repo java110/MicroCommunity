@@ -177,10 +177,9 @@ public class PayFeeCmd extends Cmd {
             }
         }
 
-        String selectUserAccount = reqJson.getString("selectUserAccount");
-        JSONArray params = JSONArray.parseArray(selectUserAccount);
-        for (int paramIndex = 0; paramIndex < params.size(); paramIndex++) {
-            JSONObject param = params.getJSONObject(paramIndex);
+        JSONArray selectUserAccount = reqJson.getJSONArray("selectUserAccount");
+        for (int paramIndex = 0; paramIndex < selectUserAccount.size(); paramIndex++) {
+            JSONObject param = selectUserAccount.getJSONObject(paramIndex);
             String maximumNumber = param.getString("maximumNumber");
             Assert.hasKeyAndValue(param, "discountId", "未包含优惠ID");
             Assert.hasKeyAndValue(param, "discountPrice", "未包含优惠金额");
