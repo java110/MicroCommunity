@@ -362,7 +362,7 @@
         )
         values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},#{receivedAmount},#{communityId},#{feeId},#{state},
         #{startTime},#{endTime},#{payableAmount},#{cashierName},#{cashierId},#{openInvoice},
-        #{acctAmount},#{discountAmount},#{deductionAmount},#{lateAmount}#{giftAmount}
+        #{acctAmount},#{discountAmount},#{deductionAmount},#{lateAmount},#{giftAmount}
         <if test="createTime != null and createTime != ''">
             ,#{createTime}
         </if>
