@@ -7,13 +7,15 @@
     <insert id="savePayFeeDetailNewInfo" parameterType="Map">
         insert into pay_fee_detail(
         prime_rate,detail_id,receivable_amount,cycles,remark,start_time,received_amount,state,end_time,community_id,
-        fee_id,b_id,payable_amount,pay_order_id,cashier_id,cashier_name,open_invoice
+        fee_id,b_id,payable_amount,pay_order_id,cashier_id,cashier_name,open_invoice,
+        acct_amount,discount_amount,deduction_amount,late_amount,gift_amount
         <if test="createTime != null">
             ,create_time
         </if>
         ) values (
         #{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},#{startTime},#{receivedAmount},#{state},#{endTime},#{communityId},
-        #{feeId},#{bId},#{payableAmount},#{payOrderId},#{cashierId},#{cashierName},#{openInvoice}
+        #{feeId},#{bId},#{payableAmount},#{payOrderId},#{cashierId},#{cashierName},#{openInvoice},
+        #{acctAmount},#{discountAmount},#{deductionAmount},#{lateAmount}#{giftAmount}
         <if test="createTime != null">
             ,#{createTime}
         </if>
