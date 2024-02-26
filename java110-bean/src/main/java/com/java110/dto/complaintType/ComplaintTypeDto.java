@@ -17,6 +17,9 @@ import java.util.List;
  **/
 public class ComplaintTypeDto extends PageDto implements Serializable {
 
+    public static final String NOTIFY_WAY_SMS = "SMS"; //短信
+    public static final String NOTIFY_WAY_WECHAT = "WECHAT"; //微信
+
     private String typeCd;
     private String typeName;
     private String notifyWay;
