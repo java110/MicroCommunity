@@ -169,6 +169,8 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
     private void computeTotalInfo(ReportFeeMonthStatisticsTotalDto reportFeeMonthStatisticsTotalDto,
                                   List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
 
+        BigDecimal totalReceivableAmount = new BigDecimal(0.00);
+
         BigDecimal totalReceivedAmount = new BigDecimal(0.00);
         BigDecimal totalPreferentialAmount = new BigDecimal(0.00);
         BigDecimal totalDeductionAmount = new BigDecimal(0.00);
@@ -176,6 +178,7 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
         BigDecimal totalGiftAmount = new BigDecimal(0.00);
 
         for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            totalReceivableAmount = totalReceivableAmount.add(new BigDecimal(reportFeeMonthStatisticsDto.getReceivableAmount()));
             totalReceivedAmount = totalReceivedAmount.add(new BigDecimal(reportFeeMonthStatisticsDto.getReceivedAmount()));
             totalPreferentialAmount = totalPreferentialAmount.add(new BigDecimal(reportFeeMonthStatisticsDto.getDiscountAmount()));
             totalDeductionAmount = totalDeductionAmount.add(new BigDecimal(reportFeeMonthStatisticsDto.getDeductionAmount()));
@@ -187,13 +190,16 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
             reportFeeMonthStatisticsDto.setLateFee(reportFeeMonthStatisticsDto.getLateAmount());
         }
 
+        //todo 应收金额(小计)
+        reportFeeMonthStatisticsTotalDto.setTotalReceivableAmount(String.format("%.2f", totalReceivableAmount.doubleValue()));
+
         //todo 实收金额(小计)
         reportFeeMonthStatisticsTotalDto.setTotalReceivedAmount(String.format("%.2f", totalReceivedAmount.doubleValue()));
-        //优惠金额(小计)
+        //todo 优惠金额(小计)
         reportFeeMonthStatisticsTotalDto.setTotalPreferentialAmount(String.format("%.2f", totalPreferentialAmount));
-        //减免金额(小计)
+        //todo 减免金额(小计)
         reportFeeMonthStatisticsTotalDto.setTotalDeductionAmount(String.format("%.2f", totalDeductionAmount));
-        //滞纳金(小计)
+        //todo 滞纳金(小计)
         reportFeeMonthStatisticsTotalDto.setTotalLateFee(String.format("%.2f", totalLateFee));
 
     }
