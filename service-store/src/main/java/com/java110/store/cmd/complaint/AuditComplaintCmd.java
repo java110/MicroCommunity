@@ -2,18 +2,27 @@ package com.java110.store.cmd.complaint;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.complaint.ComplaintDto;
+import com.java110.dto.complaintEvent.ComplaintEventDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
+import com.java110.intf.store.IComplaintEventV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.complaint.ComplaintPo;
+import com.java110.po.complaintEvent.ComplaintEventPo;
 import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.exception.GenerateCodeException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +33,11 @@ import java.util.List;
 public class AuditComplaintCmd extends Cmd {
 
     @Autowired
-    private IComplaintUserInnerServiceSMO complaintUserInnerServiceSMOImpl;
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
 
     @Autowired
-    private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
+    private IComplaintEventV1InnerServiceSMO complaintEventV1InnerServiceSMOImpl;
 
     @Autowired
     private IComplaintV1InnerServiceSMO complaintV1InnerServiceSMOImpl;
@@ -36,52 +45,46 @@ public class AuditComplaintCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "complaintId", "投诉ID不能为空");
-        Assert.hasKeyAndValue(reqJson, "storeId", "必填，请填写商户ID");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
-        Assert.hasKeyAndValue(reqJson, "taskId", "必填，请填写任务ID");
-        Assert.hasKeyAndValue(reqJson, "state", "必填，请填写审核状态");
-        Assert.hasKeyAndValue(reqJson, "remark", "必填，请填写批注");
-        Assert.hasKeyAndValue(reqJson, "userId", "必填，请填写用户信息");
+        Assert.hasKeyAndValue(reqJson, "context", "必填，请填写批注");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
+        String userId = CmdContextUtils.getUserId(context);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户未登录");
+
         ComplaintDto complaintDto = new ComplaintDto();
         complaintDto.setComplaintId(reqJson.getString("complaintId"));
         complaintDto.setCommunityId(reqJson.getString("communityId"));
 
-        List<ComplaintDto> complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
+        List<ComplaintDto> complaintDtos = complaintV1InnerServiceSMOImpl.queryComplaints(complaintDto);
         Assert.listOnlyOne(complaintDtos, "未存在或存在多条投诉单");
 
-        complaintDto = complaintDtos.get(0);
-//        complaintDto.setTaskId(reqJson.getString("taskId"));
-//        complaintDto.setCommunityId(reqJson.getString("communityId"));
-//        complaintDto.setStoreId(reqJson.getString("storeId"));
-//        complaintDto.setAuditCode(reqJson.getString("state"));
-//        complaintDto.setAuditMessage(reqJson.getString("remark"));
-//        complaintDto.setCurrentUserId(reqJson.getString("userId"));
+        // todo 修改投诉状态
+        ComplaintPo complaintPo = new ComplaintPo();
+        complaintPo.setComplaintId(complaintDtos.get(0).getComplaintId());
+        complaintPo.setState(ComplaintDto.STATE_FINISH);
+        complaintV1InnerServiceSMOImpl.updateComplaint(complaintPo);
 
-        boolean isLastTask = complaintUserInnerServiceSMOImpl.completeTask(complaintDto);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>("成功", HttpStatus.OK);
-        if (isLastTask) {
-            complaintDto = new ComplaintDto();
-            complaintDto.setStoreId(reqJson.getString("storeId"));
-            complaintDto.setCommunityId(reqJson.getString("communityId"));
-            complaintDto.setComplaintId(reqJson.getString("complaintId"));
-            complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
+        ComplaintEventPo complaintEventPo = new ComplaintEventPo();
+        complaintEventPo.setEventId(GenerateCodeFactory.getGeneratorId("11"));
+        complaintEventPo.setCreateUserId(userDtos.get(0).getUserId());
+        complaintEventPo.setCreateUserName(userDtos.get(0).getName());
+        complaintEventPo.setComplaintId(complaintDtos.get(0).getComplaintId());
+        complaintEventPo.setRemark(reqJson.getString("context"));
 
-            Assert.listOnlyOne(complaintDtos, "存在多条记录，或不存在数据" + complaintDto.getComplaintId());
+        complaintEventPo.setEventType(ComplaintEventDto.EVENT_TYPE_DO);
+        complaintEventPo.setCommunityId(complaintDtos.get(0).getCommunityId());
 
-            JSONObject businessComplaint = new JSONObject();
-            businessComplaint.putAll(BeanConvertUtil.beanCovertMap(complaintDtos.get(0)));
-            businessComplaint.put("state", "10002");
-            ComplaintPo complaintPo = BeanConvertUtil.covertBean(businessComplaint, ComplaintPo.class);
-            int flag = complaintV1InnerServiceSMOImpl.updateComplaint(complaintPo);
-            if (flag < 1) {
-                throw new CmdException("投诉不存在");
-            }
-        }
-        context.setResponseEntity(responseEntity);
+        complaintEventV1InnerServiceSMOImpl.saveComplaintEvent(complaintEventPo);
+
+        context.setResponseEntity(ResultVo.success());
     }
 }

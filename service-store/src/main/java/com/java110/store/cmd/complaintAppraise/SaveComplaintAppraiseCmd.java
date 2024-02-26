@@ -23,10 +23,13 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.complaintEvent.ComplaintEventDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IComplaintAppraiseV1InnerServiceSMO;
+import com.java110.intf.store.IComplaintEventV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.complaintAppraise.ComplaintAppraisePo;
+import com.java110.po.complaintEvent.ComplaintEventPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -56,6 +59,9 @@ public class SaveComplaintAppraiseCmd extends Cmd {
 
     @Autowired
     private IComplaintAppraiseV1InnerServiceSMO complaintAppraiseV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IComplaintEventV1InnerServiceSMO complaintEventV1InnerServiceSMOImpl;
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
@@ -91,6 +97,18 @@ public class SaveComplaintAppraiseCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        ComplaintEventPo complaintEventPo = new ComplaintEventPo();
+        complaintEventPo.setEventId(GenerateCodeFactory.getGeneratorId("11"));
+        complaintEventPo.setCreateUserId(userDtos.get(0).getUserId());
+        complaintEventPo.setCreateUserName(userDtos.get(0).getName());
+        complaintEventPo.setComplaintId(reqJson.getString("complaintId"));
+        complaintEventPo.setRemark(reqJson.getString("context"));
+
+        complaintEventPo.setEventType(ComplaintEventDto.EVENT_TYPE_APPRAISE);
+        complaintEventPo.setCommunityId(reqJson.getString("communityId"));
+
+        complaintEventV1InnerServiceSMOImpl.saveComplaintEvent(complaintEventPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

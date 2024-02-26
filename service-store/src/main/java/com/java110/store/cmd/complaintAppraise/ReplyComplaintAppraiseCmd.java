@@ -22,11 +22,15 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.complaintAppraise.ComplaintAppraiseDto;
+import com.java110.dto.complaintEvent.ComplaintEventDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IComplaintAppraiseV1InnerServiceSMO;
+import com.java110.intf.store.IComplaintEventV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.complaintAppraise.ComplaintAppraisePo;
+import com.java110.po.complaintEvent.ComplaintEventPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -60,6 +64,9 @@ public class ReplyComplaintAppraiseCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IComplaintEventV1InnerServiceSMO complaintEventV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "appraiseId", "appraiseId不能为空");
@@ -80,6 +87,11 @@ public class ReplyComplaintAppraiseCmd extends Cmd {
 
         Assert.listOnlyOne(userDtos, "用户未登录");
 
+        ComplaintAppraiseDto complaintAppraiseDto = new ComplaintAppraiseDto();
+        complaintAppraiseDto.setAppraiseId(reqJson.getString("appraiseId"));
+        List<ComplaintAppraiseDto> complaintAppraiseDtos = complaintAppraiseV1InnerServiceSMOImpl.queryComplaintAppraises(complaintAppraiseDto);
+
+        Assert.listOnlyOne(complaintAppraiseDtos, "未包含评价记录");
 
         ComplaintAppraisePo complaintAppraisePo = BeanConvertUtil.covertBean(reqJson, ComplaintAppraisePo.class);
         complaintAppraisePo.setState("C");
@@ -90,6 +102,18 @@ public class ReplyComplaintAppraiseCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
+
+        ComplaintEventPo complaintEventPo = new ComplaintEventPo();
+        complaintEventPo.setEventId(GenerateCodeFactory.getGeneratorId("11"));
+        complaintEventPo.setCreateUserId(userDtos.get(0).getUserId());
+        complaintEventPo.setCreateUserName(userDtos.get(0).getName());
+        complaintEventPo.setComplaintId(complaintAppraiseDtos.get(0).getComplaintId());
+        complaintEventPo.setRemark(reqJson.getString("replyContext"));
+
+        complaintEventPo.setEventType(ComplaintEventDto.EVENT_TYPE_REPLY);
+        complaintEventPo.setCommunityId(reqJson.getString("communityId"));
+
+        complaintEventV1InnerServiceSMOImpl.saveComplaintEvent(complaintEventPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

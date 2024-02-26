@@ -40,17 +40,16 @@ public interface IComplaintV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveComplaint", method = RequestMethod.POST)
-    public int saveComplaint(@RequestBody  ComplaintPo complaintPo);
+    int saveComplaint(@RequestBody ComplaintPo complaintPo);
 
     @RequestMapping(value = "/updateComplaint", method = RequestMethod.POST)
-    public int updateComplaint(@RequestBody  ComplaintPo complaintPo);
+    int updateComplaint(@RequestBody ComplaintPo complaintPo);
 
     @RequestMapping(value = "/deleteComplaint", method = RequestMethod.POST)
-    public int deleteComplaint(@RequestBody  ComplaintPo complaintPo);
+    int deleteComplaint(@RequestBody ComplaintPo complaintPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param complaintDto 数据对象分享
      * @return ComplaintDto 对象数据
