@@ -28,6 +28,7 @@ import com.java110.dto.community.CommunityMemberDto;
 import com.java110.dto.complaint.ComplaintDto;
 import com.java110.dto.complaintEvent.ComplaintEventDto;
 import com.java110.dto.complaintType.ComplaintTypeDto;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.user.UserDto;
@@ -37,6 +38,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.store.IComplaintEventV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintTypeV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintV1InnerServiceSMO;
@@ -96,6 +98,9 @@ public class SaveComplaintCmd extends Cmd {
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
 
     @Override
@@ -186,6 +191,8 @@ public class SaveComplaintCmd extends Cmd {
         //todo 图片
         savePhone(reqJson, complaintPo);
 
+        //todo 发送消息给处理师傅
+        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_SEND_COMPLAINT_NOTIFY_STAFF,BeanConvertUtil.beanCovertJson(complaintPo)));
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

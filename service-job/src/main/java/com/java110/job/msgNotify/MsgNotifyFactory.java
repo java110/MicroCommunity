@@ -355,4 +355,25 @@ public class MsgNotifyFactory {
 
         return notify;
     }
+
+    /**
+     * 投诉通知消息
+     * @param communityId
+     * @param staffId
+     * @param content
+     */
+    public static ResultVo sendComplaintMsg(String communityId, String staffId, JSONObject content) {
+
+        ResultVo resultVo = null;
+        try {
+            IMsgNotify msgNotify = getMsgNotify();
+            resultVo = msgNotify.sendComplaintMsg(communityId, staffId, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("通知 业主报修时 消息", e);
+            resultVo = new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
+
+        return resultVo;
+    }
 }
