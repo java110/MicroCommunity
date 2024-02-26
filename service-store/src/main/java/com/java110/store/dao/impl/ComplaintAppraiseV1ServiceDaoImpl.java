@@ -71,9 +71,9 @@ public class ComplaintAppraiseV1ServiceDaoImpl extends BaseServiceDao implements
     public List<Map> getComplaintAppraiseInfo(Map info) throws DAOException {
         logger.debug("查询 getComplaintAppraiseInfo 入参 info : {}",info);
 
-        List<Map> businessComplaintAppraiseInfos = sqlSessionTemplate.selectList("complaintAppraiseV1ServiceDaoImpl.getComplaintAppraiseInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("complaintAppraiseV1ServiceDaoImpl.getComplaintAppraiseInfo",info);
 
-        return businessComplaintAppraiseInfos;
+        return infos;
     }
 
 
