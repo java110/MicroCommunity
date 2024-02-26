@@ -18,11 +18,14 @@ package com.java110.store.cmd.complaintAppraise;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.complaintAppraise.ComplaintAppraiseDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IComplaintAppraiseV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.complaintAppraise.ComplaintAppraisePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -31,6 +34,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 /**
@@ -43,19 +48,23 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "complaintAppraise.updateComplaintAppraise")
-public class UpdateComplaintAppraiseCmd extends Cmd {
+@Java110Cmd(serviceCode = "complaintAppraise.replyComplaintAppraise")
+public class ReplyComplaintAppraiseCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateComplaintAppraiseCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ReplyComplaintAppraiseCmd.class);
 
 
     @Autowired
     private IComplaintAppraiseV1InnerServiceSMO complaintAppraiseV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "appraiseId", "appraiseId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        Assert.hasKeyAndValue(reqJson, "replyContext", "回复内容不能为空");
 
     }
 
@@ -63,7 +72,19 @@ Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ComplaintAppraisePo complaintAppraisePo = BeanConvertUtil.covertBean(reqJson, ComplaintAppraisePo.class);
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户未登录");
+
+
+        ComplaintAppraisePo complaintAppraisePo = BeanConvertUtil.covertBean(reqJson, ComplaintAppraisePo.class);
+        complaintAppraisePo.setState("C");
+        complaintAppraisePo.setReplyUserId(userDtos.get(0).getUserId());
+        complaintAppraisePo.setReplyUserName(userDtos.get(0).getName());
         int flag = complaintAppraiseV1InnerServiceSMOImpl.updateComplaintAppraise(complaintAppraisePo);
 
         if (flag < 1) {
