@@ -129,6 +129,8 @@ public class RepairDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
 
+    private String notifyWay;
+
 
     public String getRepairName() {
         return repairName;
@@ -569,5 +571,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getNotifyWay() {
+        return notifyWay;
+    }
+
+    public void setNotifyWay(String notifyWay) {
+        this.notifyWay = notifyWay;
     }
 }

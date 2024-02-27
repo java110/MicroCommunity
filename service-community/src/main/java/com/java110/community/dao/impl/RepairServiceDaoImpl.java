@@ -79,8 +79,8 @@ public class RepairServiceDaoImpl extends BaseServiceDao implements IRepairServi
     @Override
     public List<Map> getRepairInfo(Map info) throws DAOException {
         logger.debug("查询报修信息信息 入参 info : {}", info);
-        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getRepairInfo", info);
-        return businessRepairInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getRepairInfo", info);
+        return infos;
     }
 
     /**

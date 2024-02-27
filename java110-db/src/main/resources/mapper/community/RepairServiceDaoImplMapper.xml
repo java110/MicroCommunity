@@ -132,14 +132,14 @@
     <select id="getRepairInfo" parameterType="Map" resultType="Map">
         select t.repair_name,t.repair_name repairName,t.appointment_time,t.appointment_time
         appointmentTime,t.repair_type,t.repair_type repairType,t.context,t.repair_id,t.repair_id
-        repairId,t.tel,t.status_cd,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
+        repairId,t.tel,t.status_cd statusCd,t.state,t.community_id,t.community_id communityId,t.b_id,t.b_id
         bId, d.name stateName,t.maintenance_type maintenanceType,t.repair_channel repairChannel,
         t.repair_materials,t.repair_materials repairMaterials,t.repair_fee,t.repair_fee repairFee,
         rs.repair_type_name repairTypeName,rs.repair_way repairWay,rs.return_visit_flag returnVisitFlag,
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,
         t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext,a.appraise_score
         appraiseScore, a.door_speed_score doorSpeedScore,a.repairman_service_score repairmanServiceScore,
-        t.pay_type,t.pay_type payType,rs.repair_setting_type repairSettingType,d1.name repairSettingTypeName,t.create_time createTime
+        t.pay_type,t.pay_type payType,rs.repair_setting_type repairSettingType,rs.notify_way notifyWay,d1.name repairSettingTypeName,t.create_time createTime
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
