@@ -128,21 +128,21 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             Assert.isDate(startTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行开始时间格式错误 请填写YYYY-MM-DD文本格式");
             Assert.isDate(endTime, DateUtil.DATE_FORMATE_STRING_B, (osIndex + 1) + "行结束时间格式错误 请填写YYYY-MM-DD文本格式");
             importOwnerCar = new OwnerCarDto();
-            importOwnerCar.setCarNum(os[0].toString());
-            importOwnerCar.setOwnerName(os[1].toString());
-            importOwnerCar.setLink(os[2].toString());
-            importOwnerCar.setCarBrand(os[3].toString());
-            importOwnerCar.setCarType(os[4].toString());
-            importOwnerCar.setCarColor(os[5].toString());
-            importOwnerCar.setAreaNum(os[6].toString());
+            importOwnerCar.setCarNum(os[0].toString().trim());
+            importOwnerCar.setOwnerName(os[1].toString().trim());
+            importOwnerCar.setLink(os[2].toString().trim());
+            importOwnerCar.setCarBrand(os[3].toString().trim());
+            importOwnerCar.setCarType(os[4].toString().trim());
+            importOwnerCar.setCarColor(os[5].toString().trim());
+            importOwnerCar.setAreaNum(os[6].toString().trim());
             //获取车位
-            String parkingLot = os[7].toString();
+            String parkingLot = os[7].toString().trim();
             importOwnerCar.setNum(parkingLot);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             importOwnerCar.setStartTime(simpleDateFormat.parse(startTime));
             importOwnerCar.setEndTime(simpleDateFormat.parse(endTime));
-            importOwnerCar.setTypeCd(os[10].toString());
-            importOwnerCar.setSpaceSate(os[11].toString());
+            importOwnerCar.setTypeCd(os[10].toString().trim());
+            importOwnerCar.setSpaceSate(os[11].toString().trim());
             ownerCarDtos.add(importOwnerCar);
 
 
