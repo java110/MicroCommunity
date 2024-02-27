@@ -56,11 +56,12 @@ public class AppTest
      */
     public void testApp()
     {
-        Date startTime = DateUtil.getDateFromStringB("2022-06-30");
-        Date endTime = DateUtil.getDateFromStringB("2024-01-01");
+        Date startTime = DateUtil.getDateFromStringA("2023-12-02 15:00:00");
+        Date endTime = DateUtil.getDateFromStringB("2024-03-01");
         double month = dayCompare(startTime,endTime);
-        System.out.println(month);
+        System.out.println(month* 309.912);
     }
+
 
     /**
      * 计算 两个时间点月份
