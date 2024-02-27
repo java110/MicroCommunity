@@ -25,6 +25,7 @@ import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.job.msgNotify.IMsgNotify;
 import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
@@ -130,7 +131,18 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
         repairDto.setRepairId(repairId);
         repairDto.setStatusCd("0");
         List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
+
         Assert.listOnlyOne(repairDtos, "不存在这条报修信息");
+
+        IMsgNotify msgNotify = null;
+        if(RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDto.getNotifyWay())) {
+            msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_ALI);
+        }else if(RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDto.getNotifyWay())){
+            msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_WECHAT);
+        }else{
+            return;
+        }
+
         //获取报修人姓名
         String repairName = repairDtos.get(0).getRepairName();
         //获取报修内容
@@ -170,7 +182,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             paramIn.put("preStaffId", preStaffId);
             paramIn.put("preStaffName", preStaffName);
             paramIn.put("repairName", repairUserDtos.get(0).getRepairName());
-            sendReturnMessage(paramIn, communityDtos.get(0));
+            sendReturnMessage(paramIn, communityDtos.get(0),msgNotify);
         } else if (RepairUserDto.STATE_CLOSE.equals(state)) {     //结单
             //获取用户id
             String preStaffId = repairUserDtos.get(0).getPreStaffId();
@@ -199,7 +211,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
             //获取报修用户id
             String staffId = repairUserDtoList.get(0).getStaffId();
             paramIn.put("userId", staffId);
-            sendFinishRepairOwnerMsg(paramIn, communityDtos.get(0));
+            sendFinishRepairOwnerMsg(paramIn, communityDtos.get(0),msgNotify);
             if (!StringUtil.isEmpty(price)) {
                 paramIn.put("price", price);
                 paramIn.put("feeState", "未缴费");
@@ -210,7 +222,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
                 paramIn.put("roomId", roomId);
                 paramIn.put("roomName", roomName);
                 //生成费用给业主发送信息
-                sendMessage(paramIn, communityDtos.get(0));
+                sendMessage(paramIn, communityDtos.get(0),msgNotify);
             }
         }
     }
@@ -221,7 +233,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendReturnMessage(JSONObject paramIn, CommunityDto communityDto) {
+    private void sendReturnMessage(JSONObject paramIn, CommunityDto communityDto,IMsgNotify msgNotify) {
 
         JSONObject content = new JSONObject();
         content.put("repairTypeName", paramIn.getString("repairTypeName"));
@@ -235,7 +247,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
         String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
         content.put("url", wechatUrl);
 
-        MsgNotifyFactory.sendReturnRepairMsg(communityDto.getCommunityId(), paramIn.getString("preStaffId"), content);
+        msgNotify.sendReturnRepairMsg(communityDto.getCommunityId(), paramIn.getString("preStaffId"), content);
 
     }
 
@@ -245,7 +257,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendFinishRepairOwnerMsg(JSONObject paramIn, CommunityDto communityDto) {
+    private void sendFinishRepairOwnerMsg(JSONObject paramIn, CommunityDto communityDto,IMsgNotify msgNotify) {
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");
@@ -269,7 +281,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
         }
         content.put("url", wechatUrl);
 
-        MsgNotifyFactory.sendFinishRepairOwnerMsg(communityDto.getCommunityId(), paramIn.getString("userId"), content);
+        msgNotify.sendFinishRepairOwnerMsg(communityDto.getCommunityId(), paramIn.getString("userId"), content);
 
 
     }
@@ -280,7 +292,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendMessage(JSONObject paramIn, CommunityDto communityDto) {
+    private void sendMessage(JSONObject paramIn, CommunityDto communityDto,IMsgNotify msgNotify) {
 
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
@@ -323,7 +335,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
         }
         content.put("url", wechatUrl);
         contents.add(content);
-        MsgNotifyFactory.sendOweFeeMsg(communityDto.getCommunityId(), userId, ownerId, contents);
+        msgNotify.sendOweFeeMsg(communityDto.getCommunityId(), userId, ownerId, contents);
 
     }
 }
