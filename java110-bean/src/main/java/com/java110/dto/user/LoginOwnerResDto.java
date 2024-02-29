@@ -23,6 +23,9 @@ public class LoginOwnerResDto implements Serializable {
 
     private String communityName;
 
+    private String communityTel;
+
+
     private String token;
 
     private String key;
@@ -30,6 +33,7 @@ public class LoginOwnerResDto implements Serializable {
     private String appUserId;
 
     private String ownerTypeCd;
+
 
     public String getUserId() {
         return userId;
@@ -125,5 +129,13 @@ public class LoginOwnerResDto implements Serializable {
 
     public void setOwnerTypeCd(String ownerTypeCd) {
         this.ownerTypeCd = ownerTypeCd;
+    }
+
+    public String getCommunityTel() {
+        return communityTel;
+    }
+
+    public void setCommunityTel(String communityTel) {
+        this.communityTel = communityTel;
     }
 }
