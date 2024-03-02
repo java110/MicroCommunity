@@ -319,9 +319,9 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setFeeTypeCd(feeTypeCd);
         reportFeeMonthStatisticsDto.setConfigId(configId);
         reportFeeMonthStatisticsDto.setStartTime(startTime);
-        if(!StringUtil.isEmpty(endTime)){
+        /*if(!StringUtil.isEmpty(endTime)){
             endTime += " 23:59:59";
-        }
+        }*/
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         reportFeeMonthStatisticsDto.setFeeStartTime(feeStartTime);
         reportFeeMonthStatisticsDto.setFeeEndTime(feeEndTime);

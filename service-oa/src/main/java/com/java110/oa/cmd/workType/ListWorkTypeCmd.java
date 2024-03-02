@@ -17,27 +17,24 @@ package com.java110.oa.cmd.workType;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.oa.IWorkTypeV1InnerServiceSMO;
-import com.java110.po.workType.WorkTypePo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.workType.WorkTypeDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -52,7 +49,8 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "workType.listWorkType")
 public class ListWorkTypeCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListWorkTypeCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListWorkTypeCmd.class);
+
     @Autowired
     private IWorkTypeV1InnerServiceSMO workTypeV1InnerServiceSMOImpl;
 
@@ -60,28 +58,28 @@ public class ListWorkTypeCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
-        reqJson.put("storeId",storeId);
+        reqJson.put("storeId", storeId);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           WorkTypeDto workTypeDto = BeanConvertUtil.covertBean(reqJson, WorkTypeDto.class);
+        WorkTypeDto workTypeDto = BeanConvertUtil.covertBean(reqJson, WorkTypeDto.class);
 
-           int count = workTypeV1InnerServiceSMOImpl.queryWorkTypesCount(workTypeDto);
+        int count = workTypeV1InnerServiceSMOImpl.queryWorkTypesCount(workTypeDto);
 
-           List<WorkTypeDto> workTypeDtos = null;
+        List<WorkTypeDto> workTypeDtos = null;
 
-           if (count > 0) {
-               workTypeDtos = workTypeV1InnerServiceSMOImpl.queryWorkTypes(workTypeDto);
-           } else {
-               workTypeDtos = new ArrayList<>();
-           }
+        if (count > 0) {
+            workTypeDtos = workTypeV1InnerServiceSMOImpl.queryWorkTypes(workTypeDto);
+        } else {
+            workTypeDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workTypeDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workTypeDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

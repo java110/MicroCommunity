@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 
 
 /**
- * 房屋费 停车费缴费
+ * 微信支付房屋费 停车费缴费
  */
 @Service("payFee")
 public class PayFeePaymentBusiness implements IPaymentBusiness {

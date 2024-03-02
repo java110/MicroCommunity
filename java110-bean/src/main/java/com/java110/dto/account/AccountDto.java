@@ -32,6 +32,7 @@ public class AccountDto extends PageDto implements Serializable {
     public static final String OBJ_TYPE_STORE = "7007";
     private String amount;
     private String acctType;
+    private String [] acctTypes;
     private String acctTypeName;
     private String objId;
     private String [] objIds;
@@ -189,5 +190,13 @@ public class AccountDto extends PageDto implements Serializable {
 
     public void setDeductionProportion(String deductionProportion) {
         this.deductionProportion = deductionProportion;
+    }
+
+    public String[] getAcctTypes() {
+        return acctTypes;
+    }
+
+    public void setAcctTypes(String[] acctTypes) {
+        this.acctTypes = acctTypes;
     }
 }

@@ -436,4 +436,5 @@ public class FeeDetailDto extends PageDto implements Serializable {
     public void setOpenInvoice(String openInvoice) {
         this.openInvoice = openInvoice;
     }
+
 }

@@ -219,6 +219,8 @@
         t.warehousing_way warehousingWay,
         t.community_id communityId
         from purchase_apply t
+        left join purchase_apply_detail de on t.apply_order_id = de.apply_order_id and de.status_cd = '0'
+        left join resource_store rs on de.res_id = rs.res_id and rs.status_cd = '0'
         left join t_dict d on t.state = d.status_cd and d.table_name = 'purchase_apply' and d.table_columns = 'state'
         where 1 = 1
         <if test="resOrderType !=null and resOrderType != ''">
@@ -237,8 +239,8 @@
                 #{item}
             </foreach>
         </if>
-        <if test="name !=null and name != ''">
-            and t.user_name like concat('%',#{name},'%')
+        <if test="userName !=null and userName != ''">
+            and t.user_name like concat('%',#{userName},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -267,13 +269,16 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="resName !=null and resName != ''">
+            and rs.res_name like '%${resName}%'
+        </if>
         <if test="startTime !=null and startTime != ''">
             and t.create_time &gt;= #{startTime}
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        order by t.create_time desc
+        group by t.apply_order_id order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -420,8 +425,10 @@
 
     <!-- 查询采购申请数量 add by wuxw 2018-07-03 -->
     <select id="queryPurchaseApplysCount" parameterType="Map" resultType="Map">
-        select count(1) count
-        from purchase_apply t
+        select count(1) count from
+        (select t.apply_order_id from purchase_apply t
+        left join purchase_apply_detail de on t.apply_order_id = de.apply_order_id and de.status_cd = '0'
+        left join resource_store rs on de.res_id = rs.res_id and rs.status_cd = '0'
         where 1 = 1
         <if test="resOrderType !=null and resOrderType != ''">
             and t.res_order_type= #{resOrderType}
@@ -439,8 +446,8 @@
                 #{item}
             </foreach>
         </if>
-        <if test="name !=null and name != ''">
-            and t.user_name like concat('%',#{name},'%')
+        <if test="userName !=null and userName != ''">
+            and t.user_name like concat('%',#{userName},'%')
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
@@ -472,6 +479,9 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id = #{communityId}
         </if>
+        <if test="resName !=null and resName != ''">
+            and rs.res_name like '%${resName}%'
+        </if>
         <if test="startTime !=null and startTime != ''">
             and t.create_time &gt;= #{startTime}
         </if>
@@ -481,6 +491,7 @@
         <if test='urgentFlag !=null and urgentFlag == "1"'>
             and date_format(t.create_time,'%Y-%m') = date_format(now(),'%Y-%m')
         </if>
+        group by t.apply_order_id)A
     </select>
 
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->

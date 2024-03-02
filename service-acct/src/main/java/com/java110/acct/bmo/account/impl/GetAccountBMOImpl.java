@@ -94,32 +94,27 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
      */
     @Override
     public ResponseEntity<String> queryOwnerAccount(AccountDto accountDto, OwnerDto ownerDto) {
-
-        List<OwnerDto> ownerDtos = null;
         List<AccountDto> accountDtos = null;
+        List<OwnerDto> ownerDtos = null;
         int count = 0;
-        if (!StringUtil.isEmpty(ownerDto.getIdCard())) {
-            //先查询业主
+        //先查询业主
+        if (!StringUtil.isEmpty(ownerDto.getIdCard()) || !StringUtil.isEmpty(ownerDto.getLink())) {
             ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             if (ownerDtos != null && ownerDtos.size() > 0) {
                 accountDto.setAcctName("");
                 accountDto.setObjId(ownerDtos.get(0).getMemberId());
             }
         }
-
         count = accountInnerServiceSMOImpl.queryAccountsCount(accountDto);
         if (count > 0) {
             accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
         } else {
             accountDtos = new ArrayList<>();
         }
-
-
-        if (accountDtos == null || accountDtos.size() < 1) {
+        /*if (accountDtos == null || accountDtos.size() < 1) {
             //添加 账户
             accountDtos = addAccountDto(accountDto, ownerDto);
-
-        }
+        }*/
         //积分账户最大使用积分
         String maximumNumber = CommunitySettingFactory.getValue(ownerDto.getCommunityId(), MAXIMUM_NUMBER);
         //积分账户抵扣比例

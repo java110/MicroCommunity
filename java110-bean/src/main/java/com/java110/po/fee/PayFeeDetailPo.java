@@ -39,8 +39,6 @@ public class PayFeeDetailPo implements Serializable {
 
     private String openInvoice; // todo 默认 未开票
 
-
-
     public String getDetailId() {
         return detailId;
     }
@@ -192,4 +190,5 @@ public class PayFeeDetailPo implements Serializable {
     public void setOpenInvoice(String openInvoice) {
         this.openInvoice = openInvoice;
     }
+
 }

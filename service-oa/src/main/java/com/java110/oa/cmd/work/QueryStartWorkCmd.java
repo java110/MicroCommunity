@@ -15,6 +15,7 @@ import com.java110.intf.oa.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +46,6 @@ public class QueryStartWorkCmd extends Cmd {
     @Autowired
     private IWorkPoolContentV1InnerServiceSMO workPoolContentV1InnerServiceSMOImpl;
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         super.validatePageInfo(reqJson);
@@ -56,30 +56,24 @@ public class QueryStartWorkCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         WorkPoolDto workPoolDto = BeanConvertUtil.covertBean(reqJson, WorkPoolDto.class);
-
         String userId = CmdContextUtils.getUserId(context);
         workPoolDto.setCreateUserId(userId);
-
+        if (reqJson.containsKey("staffName") && !StringUtil.isEmpty(reqJson.getString("staffName"))) {
+            workPoolDto.setStaffNameLike(reqJson.getString("staffName"));
+        }
         int count = workPoolV1InnerServiceSMOImpl.queryWorkPoolsCount(workPoolDto);
-
         List<WorkPoolDto> workPoolDtos = null;
-
         if (count > 0) {
             workPoolDtos = workPoolV1InnerServiceSMOImpl.queryWorkPools(workPoolDto);
         } else {
             workPoolDtos = new ArrayList<>();
         }
-
         //todo 查询 处理人 和抄送人
         queryTaskAndCopy(workPoolDtos);
-
         //todo 查询内容
         queryContentAndFile(workPoolDtos);
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolDtos);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
     }
 
@@ -92,36 +86,28 @@ public class QueryStartWorkCmd extends Cmd {
         if (ListUtil.isNull(workPoolDtos)) {
             return;
         }
-
         if (workPoolDtos.size() != 1) {
             return;
         }
-
         WorkPoolContentDto workPoolContentDto = new WorkPoolContentDto();
         workPoolContentDto.setWorkId(workPoolDtos.get(0).getWorkId());
-
         List<WorkPoolContentDto> workPoolContentDtos = workPoolContentV1InnerServiceSMOImpl.queryWorkPoolContents(workPoolContentDto);
-
         if (ListUtil.isNull(workPoolContentDtos)) {
             return;
         }
-
         workPoolDtos.get(0).setContent(workPoolContentDtos.get(0).getContent());
-
         WorkPoolFileDto workPoolFileDto = new WorkPoolFileDto();
         workPoolFileDto.setWorkId(workPoolDtos.get(0).getWorkId());
         workPoolFileDto.setFileType(WorkPoolFileDto.FILE_TYPE_START);
-       List<WorkPoolFileDto> workPoolFileDtos = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFiles(workPoolFileDto);
+        List<WorkPoolFileDto> workPoolFileDtos = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFiles(workPoolFileDto);
 
         if (ListUtil.isNull(workPoolFileDtos)) {
             return;
         }
-
         workPoolDtos.get(0).setPathUrl(workPoolFileDtos.get(0).getPathUrl());
     }
 
     private void queryTaskAndCopy(List<WorkPoolDto> workPoolDtos) {
-
         if (ListUtil.isNull(workPoolDtos)) {
             return;
         }
@@ -129,11 +115,9 @@ public class QueryStartWorkCmd extends Cmd {
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             workIds.add(workPoolDto.getWorkId());
         }
-
         WorkTaskDto workTaskDto = new WorkTaskDto();
         workTaskDto.setWorkIds(workIds.toArray(new String[workIds.size()]));
         List<WorkTaskDto> workTaskDtos = workTaskV1InnerServiceSMOImpl.queryWorkTasks(workTaskDto);
-
         String curStaffName = "";
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curStaffName = "";
@@ -141,46 +125,35 @@ public class QueryStartWorkCmd extends Cmd {
                 if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkTaskDto.getState())) {
                     continue;
                 }
-
                 if (!workPoolDto.getWorkId().equals(tmpWorkTaskDto.getWorkId())) {
                     continue;
                 }
-
-                if (curStaffName.split(",").length > 2) {
+                /*if (curStaffName.split(",").length > 2) {
                     continue;
-                }
-
+                }*/
                 curStaffName += (tmpWorkTaskDto.getStaffName() + ",");
             }
-
-            workPoolDto.setCurStaffName(curStaffName);
+            workPoolDto.setCurStaffName(curStaffName.substring(0, curStaffName.length() - 1));
         }
-
         WorkCopyDto workCopyDto = new WorkCopyDto();
         workCopyDto.setWorkIds(workIds.toArray(new String[workIds.size()]));
         List<WorkCopyDto> workCopyDtos = workCopyV1InnerServiceSMOImpl.queryWorkCopys(workCopyDto);
-
         String curCopyName = "";
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curCopyName = "";
             for (WorkCopyDto tmpWorkCopyDto : workCopyDtos) {
-                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkCopyDto.getState())) {
+                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkCopyDto.getState()) && !WorkTaskDto.STATE_DOING.equals(tmpWorkCopyDto.getState())) {
                     continue;
                 }
-
                 if (!workPoolDto.getWorkId().equals(tmpWorkCopyDto.getWorkId())) {
                     continue;
                 }
-
-                if (curCopyName.split(",").length > 2) {
+                /*if (curCopyName.split(",").length > 2) {
                     continue;
-                }
-
+                }*/
                 curCopyName += (tmpWorkCopyDto.getStaffName() + ",");
             }
-
-            workPoolDto.setCurCopyName(curCopyName);
+            workPoolDto.setCurCopyName(curCopyName.substring(0, curCopyName.length() - 1));
         }
-
     }
 }

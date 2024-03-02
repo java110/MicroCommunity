@@ -267,6 +267,16 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
     @RequestMapping(value = "/queryPayFeeDetail", method = RequestMethod.POST)
     List<ReportFeeMonthStatisticsDto> queryPayFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
+
+    /**
+     * 查询账户抵扣金额(大计)
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryFeeAccountDetailSum", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryFeeAccountDetailSum(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
     /**
      * 查询费用汇总表总费用
      *
@@ -293,6 +303,15 @@ public interface IReportFeeMonthStatisticsInnerServiceSMO {
      */
     @RequestMapping(value = "/queryDeadlineFeeCount", method = RequestMethod.POST)
     int queryDeadlineFeeCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
+
+    /**
+     * 查询优惠金额
+     *
+     * @param reportFeeMonthStatisticsDto
+     * @return
+     */
+    @RequestMapping(value = "/queryPayFeeDetailDiscount", method = RequestMethod.POST)
+    List<ReportFeeMonthStatisticsDto> queryPayFeeDetailDiscount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto);
 
     /**
      * 查询费用汇总表

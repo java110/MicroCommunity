@@ -165,14 +165,10 @@ public class ListPurchaseApplysCmd extends Cmd {
                 purchaseApplyDetailVo.setShId(shId);
                 apiPurchaseApplyDataVo.setShId(shId);
                 cursor++;
-                if (applyDetailList.size() > 1 && !StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())) { //领用多种物品，且规格不为空的情况
+                if(!StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())){
                     resNames.append(cursor + "：" + purchaseApplyDetailVo.getResName() + "(" + purchaseApplyDetailVo.getSpecName() + ")      ");
-                }
-                if (applyDetailList.size() == 1 && !StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())) { //领用一种物品，且规格不为空的情况
-                    resNames.append(purchaseApplyDetailVo.getResName() + "(" + purchaseApplyDetailVo.getSpecName() + ")");
-                }
-                if (applyDetailList.size() == 1 && StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())) { //领用一种物品，且规格为空的情况
-                    resNames.append(purchaseApplyDetailVo.getResName());
+                }else{
+                    resNames.append(cursor+":"+purchaseApplyDetailVo.getResName());
                 }
                 BigDecimal price = new BigDecimal(purchaseApplyDetailVo.getPrice());
                 BigDecimal quantity = new BigDecimal(purchaseApplyDetailVo.getQuantity());

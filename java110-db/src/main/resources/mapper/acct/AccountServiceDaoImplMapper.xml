@@ -110,6 +110,12 @@
         <if test="acctType !=null and acctType != ''">
             and t.acct_type= #{acctType}
         </if>
+        <if test="acctTypes !=null ">
+            and t.acct_type in
+            <foreach collection="acctTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
@@ -209,6 +215,12 @@
         </if>
         <if test="acctType !=null and acctType != ''">
             and t.acct_type= #{acctType}
+        </if>
+        <if test="acctTypes !=null ">
+            and t.acct_type in
+            <foreach collection="acctTypes" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}

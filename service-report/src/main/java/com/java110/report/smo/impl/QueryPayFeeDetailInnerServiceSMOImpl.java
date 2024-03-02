@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.PageDto;
 import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentDto;
 import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentTotalDto;
+import com.java110.dto.fee.FeeAccountDetailDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
@@ -12,7 +13,7 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsTotalDto;
 import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
+import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.report.IQueryPayFeeDetailInnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsPrepaymentInnerServiceSMO;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
-    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+    private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
 
     @Override
     public ResultVo query(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
@@ -81,6 +83,14 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
         Double allVacantHousingReduction = 0.0;
         //赠送金额(大计)
         Double allGiftAmount = 0.0;
+        //无抵扣(大计)
+        Double allNoDeduction = 0.0;
+        //现金账户抵扣(大计)
+        Double allCashDeduction = 0.0;
+        //积分账户抵扣(大计)
+        Double allPointDeduction = 0.0;
+        //优惠卷抵扣(大计)
+        Double allDiscountCouponDeduction = 0.0;
         //吴学文 注释 感觉和上面的369 功能重复
         //int size = 0;
         if (count > 0) {
@@ -92,6 +102,25 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
             List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsSum = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetailSum(reportFeeMonthStatisticsDto);
             allReceivableAmount = Double.valueOf(reportFeeMonthStatisticsList.get(0).getAllReceivableAmount());
             allReceivedAmount = Double.valueOf(reportFeeMonthStatisticsList.get(0).getAllReceivedAmount());
+            //处理账户抵扣大计金额
+            List<ReportFeeMonthStatisticsDto> feeAccountDetailSumList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryFeeAccountDetailSum(reportFeeMonthStatisticsDto);
+            for (ReportFeeMonthStatisticsDto feeAccountDetailSum : feeAccountDetailSumList) {
+                //获取大计金额
+                Double fadAmount = Double.valueOf(feeAccountDetailSum.getFadAmount());
+                //抵扣类型 1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                if (!StringUtil.isEmpty(feeAccountDetailSum.getFadState()) && feeAccountDetailSum.getFadState().equals("1001")) {
+                    allNoDeduction = fadAmount;
+                }
+                if (!StringUtil.isEmpty(feeAccountDetailSum.getFadState()) && feeAccountDetailSum.getFadState().equals("1002")) {
+                    allCashDeduction = fadAmount;
+                }
+                if (!StringUtil.isEmpty(feeAccountDetailSum.getFadState()) && feeAccountDetailSum.getFadState().equals("1003")) {
+                    allPointDeduction = fadAmount;
+                }
+                if (!StringUtil.isEmpty(feeAccountDetailSum.getFadState()) && feeAccountDetailSum.getFadState().equals("1004")) {
+                    allDiscountCouponDeduction = fadAmount;
+                }
+            }
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsSum) {
                 //这里是查询出的金额总和
                 String discountPrice = reportFeeMonthStatistics.getDiscountPrice();
@@ -148,8 +177,18 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
             Double totalGiftAmount = 0.0;
             //滞纳金(小计)
             Double totalLateFee = 0.0;
+            //无抵扣(小计)
+            Double totalNoDeduction = 0.0;
+            //现金账户抵扣(小计)
+            Double totalCashDeduction = 0.0;
+            //积分抵扣(小计)
+            Double totalPointDeduction = 0.0;
+            //优惠卷抵扣(小计)
+            Double totalDiscountCouponDeduction = 0.0;
             List<String> ownerIds = new ArrayList<>();
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatistics : reportFeeMonthStatisticsDtos) {
+                //处理账户抵扣
+                reportFeeMonthStatistics = dealFeeAccountDetail(reportFeeMonthStatistics);
                 //应收金额
                 Double receivableAmount = Double.valueOf(reportFeeMonthStatistics.getReceivableAmount());
                 //实收金额
@@ -157,6 +196,18 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
                 totalReceivableAmount = totalReceivableAmount + receivableAmount;
                 totalReceivedAmount = totalReceivedAmount + receivedAmount;
 
+                //获取无抵扣金额
+                Double noDeduction = Double.valueOf(reportFeeMonthStatistics.getNoDeduction());
+                //获取现金抵扣金额
+                Double cashDeduction = Double.valueOf(reportFeeMonthStatistics.getCashDeduction());
+                //获取积分抵扣金额
+                Double pointDeduction = Double.valueOf(reportFeeMonthStatistics.getPointDeduction());
+                //获取优惠卷抵扣
+                Double discountCouponDeduction = Double.valueOf(reportFeeMonthStatistics.getDiscountCouponDeduction());
+                totalNoDeduction = totalNoDeduction + noDeduction;
+                totalCashDeduction = totalCashDeduction + cashDeduction;
+                totalPointDeduction = totalPointDeduction + pointDeduction;
+                totalDiscountCouponDeduction = totalDiscountCouponDeduction + discountCouponDeduction;
                 if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(reportFeeMonthStatistics.getPayerObjType())) {
                     ownerIds.add(reportFeeMonthStatistics.getOwnerId());
                 }
@@ -167,66 +218,78 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
                     refreshReportFeeMonthStatistics(ownerIds, reportFeeMonthStatisticsDtos);
                     ownerIds = new ArrayList<>();
                 }
-
-                //优惠金额
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeOne()) && reportFeeMonthStatistics.getDiscountSmallTypeOne().equals("1")) {
-                    //获取优惠金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceOne());
-                    totalPreferentialAmount = totalPreferentialAmount + discountPrice;
+                ReportFeeMonthStatisticsDto reportFeeMonthStatistic = new ReportFeeMonthStatisticsDto();
+                reportFeeMonthStatistic.setDetailId(reportFeeMonthStatistics.getDetailId());
+                List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtoList = reportFeeMonthStatisticsInnerServiceSMOImpl.queryPayFeeDetailDiscount(reportFeeMonthStatistic);
+                if (reportFeeMonthStatisticsDtoList == null || reportFeeMonthStatisticsDtoList.size() < 1) {
+                    continue;
+                }
+                for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtoList) {
                     //优惠金额
-                    reportFeeMonthStatistics.setPreferentialAmount(reportFeeMonthStatistics.getDiscountPriceOne());
-                } else {
-                    reportFeeMonthStatistics.setPreferentialAmount("0");
-                }
-                //减免金额
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeTwo()) && reportFeeMonthStatistics.getDiscountSmallTypeTwo().equals("2")) {
-                    //获取减免金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceTwo());
-                    totalDeductionAmount = totalDeductionAmount + discountPrice;
+                    if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto1.getDiscountSmallType()) && reportFeeMonthStatisticsDto1.getDiscountSmallType().equals("1")) {
+                        //获取优惠金额
+                        Double discountPrice = Double.valueOf(reportFeeMonthStatisticsDto1.getDiscountPrice());
+                        totalPreferentialAmount = totalPreferentialAmount + discountPrice;
+                        //优惠金额
+                        BigDecimal bigDecimal = new BigDecimal(reportFeeMonthStatisticsDto1.getDiscountPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                        reportFeeMonthStatistics.setPreferentialAmount(String.valueOf(bigDecimal));
+                    } else {
+                        reportFeeMonthStatistics.setPreferentialAmount("0.00");
+                    }
                     //减免金额
-                    reportFeeMonthStatistics.setDeductionAmount(reportFeeMonthStatistics.getDiscountPriceTwo());
-                } else {
-                    reportFeeMonthStatistics.setDeductionAmount("0");
-                }
-                //滞纳金
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeThree()) && reportFeeMonthStatistics.getDiscountSmallTypeThree().equals("3")) {
-                    //获取滞纳金金额
-                    Double discountPrice = (Double.valueOf(reportFeeMonthStatistics.getDiscountPriceThree()));
-                    totalLateFee = totalLateFee + discountPrice;
+                    if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto1.getDiscountSmallType()) && reportFeeMonthStatisticsDto1.getDiscountSmallType().equals("2")) {
+                        //获取减免金额
+                        Double discountPrice = Double.valueOf(reportFeeMonthStatisticsDto1.getDiscountPrice());
+                        totalDeductionAmount = totalDeductionAmount + discountPrice;
+                        //减免金额
+                        BigDecimal bigDecimal = new BigDecimal(reportFeeMonthStatisticsDto1.getDiscountPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                        reportFeeMonthStatistics.setDeductionAmount(String.valueOf(bigDecimal));
+                    } else {
+                        reportFeeMonthStatistics.setDeductionAmount("0.00");
+                    }
                     //滞纳金
-                    reportFeeMonthStatistics.setLateFee(reportFeeMonthStatistics.getDiscountPriceThree());
-                } else {
-                    reportFeeMonthStatistics.setLateFee("0");
-                }
-                //空置房打折
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeFour()) && reportFeeMonthStatistics.getDiscountSmallTypeFour().equals("4")) {
-                    //空置房打折金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceFour());
-                    totalVacantHousingDiscount = totalVacantHousingDiscount + discountPrice;
+                    if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto1.getDiscountSmallType()) && reportFeeMonthStatisticsDto1.getDiscountSmallType().equals("3")) {
+                        //获取滞纳金金额
+                        Double discountPrice = (Double.valueOf(reportFeeMonthStatisticsDto1.getDiscountPrice()));
+                        totalLateFee = totalLateFee + discountPrice;
+                        //滞纳金
+                        reportFeeMonthStatistics.setLateFee(reportFeeMonthStatisticsDto1.getDiscountPrice());
+                    } else {
+                        reportFeeMonthStatistics.setLateFee("0.00");
+                    }
                     //空置房打折
-                    reportFeeMonthStatistics.setVacantHousingDiscount(reportFeeMonthStatistics.getDiscountPriceFour());
-                } else {
-                    reportFeeMonthStatistics.setVacantHousingDiscount("0");
-                }
-                //空置房减免
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeFive()) && reportFeeMonthStatistics.getDiscountSmallTypeFive().equals("5")) {
-                    //空置房减免金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceFive());
-                    totalVacantHousingReduction = totalVacantHousingReduction + discountPrice;
+                    if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto1.getDiscountSmallType()) && reportFeeMonthStatisticsDto1.getDiscountSmallType().equals("4")) {
+                        //空置房打折金额
+                        Double discountPrice = Double.valueOf(reportFeeMonthStatisticsDto1.getDiscountPrice());
+                        totalVacantHousingDiscount = totalVacantHousingDiscount + discountPrice;
+                        //空置房打折
+                        BigDecimal bigDecimal = new BigDecimal(reportFeeMonthStatisticsDto1.getDiscountPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                        reportFeeMonthStatistics.setVacantHousingDiscount(String.valueOf(bigDecimal));
+                    } else {
+                        reportFeeMonthStatistics.setVacantHousingDiscount("0.00");
+                    }
                     //空置房减免
-                    reportFeeMonthStatistics.setVacantHousingReduction(reportFeeMonthStatistics.getDiscountPriceFive());
-                } else {
-                    reportFeeMonthStatistics.setVacantHousingReduction("0");
-                }
-                //赠送金额
-                if (!StringUtil.isEmpty(reportFeeMonthStatistics.getDiscountSmallTypeSix()) && reportFeeMonthStatistics.getDiscountSmallTypeSix().equals("6")) {
+                    if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto1.getDiscountSmallType()) && reportFeeMonthStatisticsDto1.getDiscountSmallType().equals("5")) {
+                        //空置房减免金额
+                        Double discountPrice = Double.valueOf(reportFeeMonthStatisticsDto1.getDiscountPrice());
+                        totalVacantHousingReduction = totalVacantHousingReduction + discountPrice;
+                        //空置房减免
+                        BigDecimal bigDecimal = new BigDecimal(reportFeeMonthStatisticsDto1.getDiscountPrice());
+                        reportFeeMonthStatistics.setVacantHousingReduction(String.valueOf(bigDecimal));
+                    } else {
+                        reportFeeMonthStatistics.setVacantHousingReduction("0.00");
+                    }
                     //赠送金额
-                    Double discountPrice = Double.valueOf(reportFeeMonthStatistics.getDiscountPriceSix());
-                    totalGiftAmount = totalGiftAmount + discountPrice;
-                    //赠送金额
-                    reportFeeMonthStatistics.setGiftAmount(reportFeeMonthStatistics.getDiscountPriceSix());
-                } else {
-                    reportFeeMonthStatistics.setGiftAmount("0");
+                    if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto1.getDiscountSmallType()) && reportFeeMonthStatisticsDto1.getDiscountSmallType().equals("6")) {
+                        //赠送金额
+                        Double discountPrice = Double.valueOf(reportFeeMonthStatisticsDto1.getDiscountPrice());
+                        totalGiftAmount = totalGiftAmount + discountPrice;
+                        //赠送金额
+                        BigDecimal bigDecimal = new BigDecimal(reportFeeMonthStatisticsDto1.getDiscountPrice()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                        reportFeeMonthStatistics.setGiftAmount(String.valueOf(bigDecimal));
+                    } else {
+                        reportFeeMonthStatistics.setGiftAmount("0.00");
+                    }
                 }
                 if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(reportFeeMonthStatistics.getPayerObjType())) {
                     reportFeeMonthStatistics.setObjName(reportFeeMonthStatistics.getFloorNum()
@@ -327,6 +390,14 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
             reportFeeMonthStatisticsTotalDto.setTotalVacantHousingReduction(String.format("%.2f", totalVacantHousingReduction));
             //赠送规则金额(小计)
             reportFeeMonthStatisticsTotalDto.setTotalGiftAmount(String.format("%.2f", totalGiftAmount));
+            //无抵扣金额(小计)
+            reportFeeMonthStatisticsTotalDto.setTotalNoDeduction(String.format("%.2f", totalNoDeduction));
+            //现金账户抵扣金额(小计)
+            reportFeeMonthStatisticsTotalDto.setTotalCashDeduction(String.format("%.2f", totalCashDeduction));
+            //积分账户抵扣金额(小计)
+            reportFeeMonthStatisticsTotalDto.setTotalPointDeduction(String.format("%.2f", totalPointDeduction));
+            //优惠卷抵扣金额(小计)
+            reportFeeMonthStatisticsTotalDto.setTotalDiscountCouponDeduction(String.format("%.2f", totalDiscountCouponDeduction));
             //应收金额(大计)
             reportFeeMonthStatisticsTotalDto.setAllReceivableAmount(String.format("%.2f", allReceivableAmount));
             //实收金额(大计)
@@ -343,6 +414,14 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
             reportFeeMonthStatisticsTotalDto.setAllVacantHousingReduction(String.format("%.2f", allVacantHousingReduction));
             //赠送规则金额(大计)
             reportFeeMonthStatisticsTotalDto.setAllGiftAmount(String.format("%.2f", allGiftAmount));
+            //无抵扣(大计)
+            reportFeeMonthStatisticsTotalDto.setAllNoDeduction(String.format("%.2f", allNoDeduction));
+            //现金账户抵扣(大计)
+            reportFeeMonthStatisticsTotalDto.setAllCashDeduction(String.format("%.2f", allCashDeduction));
+            //积分账户抵扣(大计)
+            reportFeeMonthStatisticsTotalDto.setAllPointDeduction(String.format("%.2f", allPointDeduction));
+            //优惠卷抵扣(大计)
+            reportFeeMonthStatisticsTotalDto.setAllDiscountCouponDeduction(String.format("%.2f", allDiscountCouponDeduction));
         } else {
             reportFeeMonthStatisticsDtos = new ArrayList<>();
             reportList.addAll(reportFeeMonthStatisticsDtos);
@@ -352,6 +431,50 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportList, reportFeeMonthStatisticsTotalDto);
 
         return resultVo;
+    }
+
+    //处理账户抵扣
+    private ReportFeeMonthStatisticsDto dealFeeAccountDetail(ReportFeeMonthStatisticsDto reportFeeMonthStatistics) {
+        //获取费用明细id
+        String detailId = reportFeeMonthStatistics.getDetailId();
+        FeeAccountDetailDto feeAccountDetailDto = new FeeAccountDetailDto();
+        feeAccountDetailDto.setDetailId(detailId);
+        feeAccountDetailDto.setCommunityId(reportFeeMonthStatistics.getCommunityId());
+        List<FeeAccountDetailDto> feeAccountDetailList = feeAccountDetailServiceSMOImpl.queryFeeAccountDetails(feeAccountDetailDto);
+        BigDecimal noDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //无抵扣
+        BigDecimal cashDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //现金账户抵扣
+        BigDecimal pointDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //积分账户抵扣
+        BigDecimal discountCouponDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //优惠卷抵扣
+        if (feeAccountDetailList != null && feeAccountDetailList.size() > 0) {
+            for (FeeAccountDetailDto feeAccountDetail : feeAccountDetailList) {
+                //抵扣类型 1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1001")) { //无抵扣
+                    //获取账户抵扣金额
+                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
+                    noDeduction = noDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1002")) { //现金账户抵扣
+                    //获取账户抵扣金额
+                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
+                    cashDeduction = cashDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1003")) { //积分账户抵扣
+                    //获取账户抵扣金额
+                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
+                    pointDeduction = pointDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1004")) { //优惠卷抵扣
+                    //获取账户抵扣金额
+                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
+                    discountCouponDeduction = discountCouponDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+            }
+        }
+        reportFeeMonthStatistics.setNoDeduction(String.valueOf(noDeduction)); //无抵扣
+        reportFeeMonthStatistics.setCashDeduction(String.valueOf(cashDeduction)); //现金账户抵扣
+        reportFeeMonthStatistics.setPointDeduction(String.valueOf(pointDeduction)); //积分账户抵扣
+        reportFeeMonthStatistics.setDiscountCouponDeduction(String.valueOf(discountCouponDeduction)); //优惠卷抵扣
+        return reportFeeMonthStatistics;
     }
 
     @Override

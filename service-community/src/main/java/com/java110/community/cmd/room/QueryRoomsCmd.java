@@ -114,7 +114,7 @@ public class QueryRoomsCmd extends Cmd {
         //校验小区楼ID和小区是否有对应关系
         int total = floorInnerServiceSMOImpl.queryFloorsCount(BeanConvertUtil.covertBean(reqJson, FloorDto.class));
 
-        if (total < 1) {
+        if (!StringUtil.isEmpty(reqJson.getString("floorId")) && total < 1) {
             throw new IllegalArgumentException("传入小区楼ID不是该小区的楼");
         }
     }
@@ -123,13 +123,11 @@ public class QueryRoomsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
-
         //todo 员工数据权限
         String staffId = cmdDataFlowContext.getReqHeaders().get("user-id");
         DataPrivilegeStaffDto dataPrivilegeStaffDto = new DataPrivilegeStaffDto();
         dataPrivilegeStaffDto.setStaffId(staffId);
         String[] unitIds = dataPrivilegeUnitV1InnerServiceSMOImpl.queryDataPrivilegeUnitsByStaff(dataPrivilegeStaffDto);
-
 
         //todo 计算房屋ID和单元ID
         computeRoomIdAndUnitId(reqJson, unitIds, roomDto);

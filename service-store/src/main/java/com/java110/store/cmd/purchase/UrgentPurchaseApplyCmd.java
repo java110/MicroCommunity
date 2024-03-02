@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 紧急采购
+ * 紧急采购申请
  */
 @Java110Cmd(serviceCode = "/purchase/urgentPurchaseApply")
 public class UrgentPurchaseApplyCmd extends Cmd {
@@ -185,6 +185,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
             resourceStorePo.setStock(purchaseApplyDetailPo.getQuantity());
             resourceStorePo.setResOrderType(PurchaseApplyDto.WAREHOUSING_TYPE_URGENT);
             resourceStorePo.setOperationType(PurchaseApplyDto.WEIGHTED_MEAN_TRUE);
+            resourceStorePo.setAdjustmentType("1001");
             resourceStoreInnerServiceSMOImpl.updateResourceStore(resourceStorePo);
             // 保存至 物品 times表  (调整原仓库 批次)
             ResourceStoreTimesPo resourceStoreTimesPo1 = new ResourceStoreTimesPo();
@@ -229,8 +230,25 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 //调拨
                 allocationStorehouseApplyDto.setApplyType("30000");
                 allocationStorehouseApplyInnerServiceSMOImpl.saveAllocationStorehouseApplys(allocationStorehouseApplyDto);
+
+
+                //被调拨详情明细
+                AllocationStorehouseDto allocationStorehouseDto1 = allocationStorehouseDto;
+                allocationStorehouseDto1.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
+                allocationStorehouseDto1.setApplyId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyId));
+                allocationStorehouseDto1.setResId(resourceStore.getString("resId"));
+                allocationStorehouseDto1.setCreateTime(new Date());
+                allocationStorehouseInnerServiceSMOImpl.saveAllocationStorehouses(allocationStorehouseDto1);
+
+                //加入被调拨申请记录
+                AllocationStorehouseApplyDto allocationStorehouseApplyDto1 = allocationStorehouseApplyDto;
+                allocationStorehouseApplyDto1.setApplyId(allocationStorehouseDto1.getApplyId());
+                allocationStorehouseApplyDto1.setApplyType("40000");//被调拨记录
+                allocationStorehouseApplyDto1.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                allocationStorehouseApplyDto1.setCommunityId(resourceStore.getString("communityId"));
+                allocationStorehouseApplyInnerServiceSMOImpl.saveAllocationStorehouseApplys(allocationStorehouseApplyDto1);
+
                 //调整小区仓库物品均价、数量
-                //集团仓库商品信息
                 ResourceStoreDto resourceStoreDto2 = new ResourceStoreDto();
                 resourceStoreDto2.setResCode(resourceStore.getString("resCode"));
                 resourceStoreDto2.setResId(purchaseApplyDetailPo.getResId());
@@ -262,12 +280,14 @@ public class UrgentPurchaseApplyCmd extends Cmd {
             } else if (resourceStoreDtos != null && resourceStoreDtos.size() > 1) {
                 throw new IllegalArgumentException("查询商品错误！");
             } else {
-                //生成调拨记录
+                //获取小区新增物品信息ResId
+                String newResId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId);
+                //生成调拨详情记录
                 allocationStorehouseDto.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
                 allocationStorehouseDto.setbId("-1");
                 allocationStorehouseDto.setShIda(resourceStore.getString("shId"));
                 allocationStorehouseDto.setShIdz(resourceStore.getString("shzId"));//小区目标仓库
-                allocationStorehouseDto.setResId(resourceStore.getString("resId"));
+                allocationStorehouseDto.setResId(newResId);
                 allocationStorehouseDto.setResName(resourceStore.getString("resName"));
                 allocationStorehouseDto.setStoreId(storeId);
                 allocationStorehouseDto.setStock(purchaseApplyDetailPo.getQuantity());
@@ -293,18 +313,36 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 //调拨
                 allocationStorehouseApplyDto.setApplyType("30000");
                 allocationStorehouseApplyInnerServiceSMOImpl.saveAllocationStorehouseApplys(allocationStorehouseApplyDto);
+
+                //加入被调拨详情记录
+                //String newApplyId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyId);
+                AllocationStorehouseDto allocationStorehouseDto1 = allocationStorehouseDto;
+                allocationStorehouseDto1.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
+                allocationStorehouseDto1.setApplyId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyId));
+                allocationStorehouseDto1.setResId(resourceStore.getString("resId"));
+                allocationStorehouseDto1.setCreateTime(new Date());
+                allocationStorehouseInnerServiceSMOImpl.saveAllocationStorehouses(allocationStorehouseDto1);
+
+                //加入被调拨申请记录
+                AllocationStorehouseApplyDto allocationStorehouseApplyDto1 = allocationStorehouseApplyDto;
+                allocationStorehouseApplyDto1.setApplyId(allocationStorehouseDto1.getApplyId());
+                allocationStorehouseApplyDto1.setApplyType("40000");//被调拨记录
+                allocationStorehouseApplyDto1.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+                allocationStorehouseApplyDto1.setCommunityId(resourceStore.getString("communityId"));
+                allocationStorehouseApplyInnerServiceSMOImpl.saveAllocationStorehouseApplys(allocationStorehouseApplyDto1);
+
                 //小区仓库进行入库插入
-                //集团仓库商品信息
                 ResourceStoreDto resourceStoreDto2 = new ResourceStoreDto();
                 resourceStoreDto2.setResCode(resourceStore.getString("resCode"));
                 resourceStoreDto2.setResId(purchaseApplyDetailPo.getResId());
                 List<ResourceStoreDto> resourceStoreDtoList = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto2);
                 ResourceStoreDto resourceStoreDto1 = BeanConvertUtil.covertBean(resourceStoreDtoList.get(0), ResourceStoreDto.class);
-                resourceStoreDto1.setResId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_resId));
+                resourceStoreDto1.setResId(newResId);
                 resourceStoreDto1.setShId(resourceStore.getString("shzId"));
                 resourceStoreDto1.setbId("-1");
                 resourceStoreDto1.setStock(purchaseApplyDetailPo.getQuantity());
                 resourceStoreDto1.setCreateTime(new Date());
+                resourceStoreDto1.setCommunityId(resourceStoreTimesPo1.getCommunityId());
                 //获取紧急采购数量
                 BigDecimal purchaseQuantity = new BigDecimal(purchaseApplyDetailPo.getQuantity());
                 //获取最小计量单位数量
@@ -317,7 +355,15 @@ public class UrgentPurchaseApplyCmd extends Cmd {
                 resourceStoreDto1.setMiniStock(String.valueOf(miniStock));
                 resourceStoreInnerServiceSMOImpl.saveResourceStore(resourceStoreDto1);
             }
-            // 保存至 物品 times表  (调整目标仓库 批次)
+            //查询模板仓库所属CommunityId
+            // 保存至 物品 times表  (调整目标仓库 批次) resourceStore.getString("shzId")
+            StorehouseDto storehouseDto = new StorehouseDto();
+            storehouseDto.setShId(resourceStore.getString("shzId"));
+            List<StorehouseDto> storehouseDtoList = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
+            String storehouseCommunityId = "";
+            if (storehouseDtoList.size() > 0) {
+                storehouseCommunityId = storehouseDtoList.get(0).getCommunityId();
+            }
             ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
             resourceStoreTimesPo.setApplyOrderId(allocationStorehouseDto.getApplyId());
             resourceStoreTimesPo.setPrice(purchaseApplyDetailPo.getPrice());
@@ -325,6 +371,7 @@ public class UrgentPurchaseApplyCmd extends Cmd {
             resourceStoreTimesPo.setStock(purchaseApplyDetailPo.getQuantity());
             resourceStoreTimesPo.setStoreId(storeId);
             resourceStoreTimesPo.setShId(resourceStore.getString("shzId"));
+            resourceStoreTimesPo.setCommunityId(storehouseCommunityId);
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         }
         purchaseApplyPo.setPurchaseApplyDetailPos(purchaseApplyDetailPos);

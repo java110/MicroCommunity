@@ -48,7 +48,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * 类表述：更新
  * 服务编码：workPool.updateWorkPool
@@ -107,7 +106,7 @@ public class UpdateWorkPoolCmd extends Cmd {
         workPoolDto.setStoreId(storeId);
         workPoolDto.setCreateUserId(userId);
         int count = workPoolV1InnerServiceSMOImpl.queryWorkPoolsCount(workPoolDto);
-        if(count < 1){
+        if (count < 1) {
             throw new CmdException("您没有权限修改");
         }
 
@@ -142,7 +141,6 @@ public class UpdateWorkPoolCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
@@ -166,10 +164,8 @@ public class UpdateWorkPoolCmd extends Cmd {
         //todo 保存周期
         updateWorkCycle(workPoolPo, reqJson, userDtos.get(0));
 
-
         // todo 保存 工单任务
         updateWorkTask(workPoolPo, reqJson, userDtos.get(0));
-
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
@@ -195,7 +191,7 @@ public class UpdateWorkPoolCmd extends Cmd {
         workPoolFileV1InnerServiceSMOImpl.deleteWorkPoolFile(workPoolFilePo);
 
         for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
-             workTaskPo = new WorkTaskPo();
+            workTaskPo = new WorkTaskPo();
             workTaskPo.setWorkId(workPoolPo.getWorkId());
             workTaskPo.setState(WorkTaskDto.STATE_WAIT);
             workTaskPo.setTaskId(GenerateCodeFactory.getGeneratorId("11"));

@@ -29,7 +29,7 @@ import java.util.Map;
 @Service("reportFeeDetailRoom")
 public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
 
-    private static final int MAX_ROW = 200;
+    private static final int MAX_ROW = 60000;
 
     @Autowired
     private IDictV1InnerServiceSMO dictV1InnerServiceSMOImpl;

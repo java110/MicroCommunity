@@ -15,7 +15,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 查询 费用汇总表
+ * 查询费用汇总表
  * <p>
  * add by  wuxw
  */
@@ -27,7 +27,6 @@ public class QueryReportFeeSummaryCmd extends Cmd {
 
     @Autowired
     private IBaseDataStatistics baseDataStatisticsImpl;
-
 
     /**
      * 校验查询条件
@@ -54,12 +53,14 @@ public class QueryReportFeeSummaryCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
         QueryStatisticsDto queryStatisticsDto = new QueryStatisticsDto();
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
-        queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
-        queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
-        if(reqJson.containsKey("endDate") && !reqJson.getString("endDate").contains(":")) {
+        /*queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
+        queryStatisticsDto.setEndDate(reqJson.getString("endDate"));*/
+        if (reqJson.containsKey("startDate") && !reqJson.getString("startDate").contains(":")) {
+            queryStatisticsDto.setStartDate(reqJson.getString("startDate") + " 00:00:00");
+        }
+        if (reqJson.containsKey("endDate") && !reqJson.getString("endDate").contains(":")) {
             queryStatisticsDto.setEndDate(reqJson.getString("endDate") + " 23:59:59");
         }
         queryStatisticsDto.setConfigId(reqJson.getString("configId"));
@@ -68,49 +69,37 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
         queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
         queryStatisticsDto.setLink(reqJson.getString("link"));
-
-        if(reqJson.containsKey("configIds")){
+        if (reqJson.containsKey("configIds")) {
             queryStatisticsDto.setConfigIds(reqJson.getString("configIds").split(","));
         }
-
         //todo 查询历史欠费
         double hisOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
-
         //todo 查询 单月欠费
         double curOweFee = feeStatisticsImpl.getCurMonthOweFee(queryStatisticsDto);
-
         //todo 查询当月应收
         double curReceivableFee = feeStatisticsImpl.getCurReceivableFee(queryStatisticsDto);
-
         //todo 查询 欠费追回
         double hisReceivedFee = feeStatisticsImpl.getHisReceivedFee(queryStatisticsDto);
-
         //todo  查询 预交费用
         double preReceivedFee = feeStatisticsImpl.getPreReceivedFee(queryStatisticsDto);
-
         //todo 查询实收
         double receivedFee = feeStatisticsImpl.getReceivedFee(queryStatisticsDto);
-
         //todo 房屋数
         long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
-
         //todo 收费房屋数
         long feeRoomCount = feeStatisticsImpl.getFeeRoomCount(queryStatisticsDto);
-
         //todo 欠费户数
         int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
-
         JSONObject data = new JSONObject();
-        data.put("hisOweFee", hisOweFee);
-        data.put("curOweFee", curOweFee);
-        data.put("hisReceivedFee", hisReceivedFee);
-        data.put("preReceivedFee", preReceivedFee);
-        data.put("receivedFee", receivedFee);
-        data.put("roomCount", roomCount);
-        data.put("feeRoomCount", feeRoomCount);
-        data.put("oweRoomCount", oweRoomCount);
-        data.put("curReceivableFee", curReceivableFee);
-
+        data.put("hisOweFee", hisOweFee); //历史欠费
+        data.put("curOweFee", curOweFee); //当期欠费
+        data.put("hisReceivedFee", hisReceivedFee); //欠费追回
+        data.put("preReceivedFee", preReceivedFee); //预缴
+        data.put("receivedFee", receivedFee); //实缴
+        data.put("roomCount", roomCount); //总户数
+        data.put("feeRoomCount", feeRoomCount); //收费户
+        data.put("oweRoomCount", oweRoomCount); //欠费户
+        data.put("curReceivableFee", curReceivableFee); //当期应收
         JSONArray datas = new JSONArray();
         datas.add(data);
         context.setResponseEntity(ResultVo.createResponseEntity(datas));

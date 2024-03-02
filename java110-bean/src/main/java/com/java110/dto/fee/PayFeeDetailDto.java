@@ -231,4 +231,5 @@ public class PayFeeDetailDto extends PageDto implements Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+
 }

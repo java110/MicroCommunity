@@ -6,9 +6,11 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.account.AccountDetailDto;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.coupon.CouponUserDto;
@@ -25,6 +27,8 @@ import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.po.account.AccountDetailPo;
+import com.java110.po.account.AccountPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
@@ -95,13 +99,19 @@ public class PayFeePreCmd extends Cmd {
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
     @Autowired
-    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
-
-    @Autowired
     private IAccountDetailInnerServiceSMO accountDetailInnerServiceSMOImpl;
 
     @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
+    @Autowired
     private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
+
+    //键(积分账户最大使用积分)
+    public static final String MAXIMUM_NUMBER = "MAXIMUM_NUMBER";
+
+    //键(积分账户抵扣比例)
+    public static final String DEDUCTION_PROPORTION = "DEDUCTION_PROPORTION";
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -165,7 +175,7 @@ public class PayFeePreCmd extends Cmd {
 
         String appId = cmdDataFlowContext.getReqHeaders().get("app-id");
         reqJson.put("appId", appId);
-        reqJson.put("userId",userId);
+        reqJson.put("userId", userId);
 
         FeeDto feeDto = new FeeDto();
         feeDto.setFeeId(reqJson.getString("feeId"));
@@ -289,45 +299,71 @@ public class PayFeePreCmd extends Cmd {
             return 0.0;
         }
         BigDecimal money = new BigDecimal(0);
-        BigDecimal totalAccountAmount = new BigDecimal(0);
+        BigDecimal cashMoney = new BigDecimal("0.00"); //抵扣的现金账户
+        BigDecimal pointsMoney = new BigDecimal(0.00); //抵扣的积分数
+        BigDecimal pointsMoneyNow = new BigDecimal(0.00); //积分转换为现金的实际数
+        BigDecimal totalAccountAmount = new BigDecimal(0.00);
+        //获取应收金额
+        BigDecimal dedAmount = new BigDecimal("0.00");
+        if (reqJson.containsKey("receivedMoney") && !StringUtil.isEmpty(reqJson.getString("receivedMoney"))) {
+            dedAmount = new BigDecimal(reqJson.getString("receivedMoney"));
+        } else {
+            dedAmount = new BigDecimal(reqJson.getString("deductionAmount"));
+        }
         for (AccountDto tmpAccountDto : accountDtos) {
-             if (AccountDto.ACCT_TYPE_CASH.equals(tmpAccountDto.getAcctType())) { //现金账户
+            int compare = dedAmount.compareTo(BigDecimal.ZERO);
+            if (AccountDto.ACCT_TYPE_CASH.equals(tmpAccountDto.getAcctType()) && compare > 0) { //现金账户
                 //账户金额
                 BigDecimal amount = new BigDecimal(tmpAccountDto.getAmount());
-                //获取应收金额
-                BigDecimal dedAmount = new BigDecimal("0.00");
-                if (reqJson.containsKey("receivedMoney") && !StringUtil.isEmpty(reqJson.getString("receivedMoney"))) {
-                    dedAmount = new BigDecimal(reqJson.getString("receivedMoney"));
-                } else {
-                    dedAmount = new BigDecimal(reqJson.getString("deductionAmount"));
-                }
                 int flag = amount.compareTo(dedAmount);
+                if (flag == 1 || flag == 0) { //现金账户大于应收金额，或现金账户等于应收金额，就用应收金额抵扣
+                    cashMoney = dedAmount;
+                    dedAmount = new BigDecimal("0.0");
+                }
+                if (flag == -1) { //现金账户小于应收金额，就用现金账户抵扣
+                    cashMoney = amount;
+                    dedAmount = dedAmount.subtract(amount);
+                }
+                money = money.add(cashMoney);
+            } else if (AccountDto.ACCT_TYPE_INTEGRAL.equals(tmpAccountDto.getAcctType()) && compare > 0) { //积分账户
+                //积分账户最大使用积分
+                String maximumNumber = CommunitySettingFactory.getValue(reqJson.getString("communityId"), MAXIMUM_NUMBER);
+                BigDecimal maxNumber = new BigDecimal(maximumNumber);
+                //积分账户抵扣比例
+                String deductionProportion = CommunitySettingFactory.getValue(reqJson.getString("communityId"), DEDUCTION_PROPORTION);
+                BigDecimal deductionProportionNum = new BigDecimal(deductionProportion);
+                //积分账户金额
+                BigDecimal amount = new BigDecimal(tmpAccountDto.getAmount());
+                int flag = amount.compareTo(maxNumber);
+                if (flag == -1) { //积分账户金额小于积分账户最大使用积分，就用积分账户抵扣
+                    pointsMoney = amount;
+                } else if (flag == 0) { //积分账户金额等于积分账户最大使用积分，就用积分账户抵扣
+                    pointsMoney = amount;
+                } else if (flag == 1) { //积分账户金额大于积分账户最大使用积分，就用最大使用积分抵扣
+                    pointsMoney = maxNumber;
+                }
+                //计算抵扣积分抵扣的金额  积分除以比例等于账户能抵扣的钱数
+                BigDecimal integralMoney = pointsMoney.divide(deductionProportionNum);
                 BigDecimal redepositAmount = new BigDecimal("0.00");
-                BigDecimal integralAmount = new BigDecimal("0.00");
-                if (flag == 1) { //现金账户大于应收金额，就用应收金额抵扣
+                int count = integralMoney.compareTo(dedAmount);
+                if (count == 1 || count == 0) { //积分抵扣的金额大于应收金额，或积分抵扣的金额等于应收金额，就用应收金额抵扣
                     redepositAmount = dedAmount;
-                    integralAmount = amount.subtract(dedAmount);
+                    pointsMoney = dedAmount.multiply(deductionProportionNum);//应收金额乘以抵扣比例即为需要扣除的积分数
+                    pointsMoneyNow = dedAmount;
+                    dedAmount = new BigDecimal("0.0");
                 }
-                if (flag > -1) { //现金账户大于等于应收金额，就用应收金额抵扣
-                    redepositAmount = dedAmount;
-                    integralAmount = amount.subtract(dedAmount);
-                }
-                if (flag == -1) { //现金账户小于实收金额，就用现金账户抵扣
-                    redepositAmount = amount;
-                }
-                if (flag < 1) { //现金账户小于等于应收金额，就用现金账户抵扣
-                    redepositAmount = amount;
-                }
-                if (flag == 0) { //现金账户等于应收金额
-                    redepositAmount = amount;
+                if (count == -1) { //积分抵扣的金额小于应收金额，就用积分抵扣的金额抵扣
+                    redepositAmount = integralMoney;
+                    dedAmount = dedAmount.subtract(integralMoney);//剩余应收金额
+                    pointsMoneyNow = integralMoney;
                 }
                 money = money.add(redepositAmount);
             }
-//            totalAccountAmount = totalAccountAmount.add(new BigDecimal(tmpAccountDto.getAmount()));
         }
-
-
         reqJson.put("deductionAmount", money.doubleValue());
+        reqJson.put("cashMoney", cashMoney); //现金抵扣
+        reqJson.put("pointsMoney", pointsMoney); //积分抵扣扣除数
+        reqJson.put("pointsMoneyNow", pointsMoneyNow); //积分抵扣 实际现金数
         reqJson.put("selectUserAccount", BeanConvertUtil.beanCovertJSONArray(accountDtos));
         return money.doubleValue();
     }

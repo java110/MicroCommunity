@@ -33,11 +33,11 @@ public class WorkCycleDto extends PageDto implements Serializable {
 
     private String curTime;
 
-
     private Date createTime;
 
-    private String statusCd = "0";
+    private String[] workIds;
 
+    private String statusCd = "0";
 
     public String getWorkCycle() {
         return workCycle;
@@ -135,7 +135,6 @@ public class WorkCycleDto extends PageDto implements Serializable {
         this.periodDay = periodDay;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -166,5 +165,13 @@ public class WorkCycleDto extends PageDto implements Serializable {
 
     public void setCurTime(String curTime) {
         this.curTime = curTime;
+    }
+
+    public String[] getWorkIds() {
+        return workIds;
+    }
+
+    public void setWorkIds(String[] workIds) {
+        this.workIds = workIds;
     }
 }

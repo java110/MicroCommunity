@@ -10,7 +10,7 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     private String id;
     private String applyOrderId;
-    private String statusCd;
+    private String statusCd = "0";
     private String resId; //物品资源id
     private String rsId; //供应商id
     private String parentRstId; //一级分类
@@ -68,6 +68,7 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     private String startTime;
     private String endTime;
+    private String createUserName;
 
     public String getApplyOrderId() {
         return applyOrderId;
@@ -467,6 +468,14 @@ public class PurchaseApplyDetailDto extends PageDto implements Serializable {
 
     public void setParentRstId(String parentRstId) {
         this.parentRstId = parentRstId;
+    }
+
+    public String getCreateUserName() {
+        return createUserName;
+    }
+
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
     }
 }
 

@@ -55,7 +55,7 @@ public class ApiFeeDetailDataVo extends Vo {
 
     private String receiptCode;
 
-
+    private String note;
 
     public String getPrimeRate() {
         return primeRate;
@@ -287,5 +287,13 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setReceiptCode(String receiptCode) {
         this.receiptCode = receiptCode;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

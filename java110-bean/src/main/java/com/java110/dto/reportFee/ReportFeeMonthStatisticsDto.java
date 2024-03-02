@@ -72,6 +72,14 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     private String oId;
 
+    private String detailState;
+    private String detailStateName;
+
+    private String noDeduction; //无抵扣
+    private String cashDeduction; //现金账户抵扣
+    private String pointDeduction; //积分账户抵扣
+    private String discountCouponDeduction; //优惠卷抵扣
+
     //支付方式
     private String primeRate;
 
@@ -83,6 +91,15 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     //实收总金额(小计)
     private String totalReceivedAmount;
 
+    //无抵扣金额(小计)
+    private String totalNoDeduction;
+    //现金账户抵扣金额(小计)
+    private String totalCashDeduction;
+    //积分账户抵扣金额(小计)
+    private String totalPointDeduction;
+    //优惠券抵扣金额(小计)
+    private String totalDiscountCouponDeduction;
+
     //应收总金额(大计)
     private String allReceivableAmount;
 
@@ -91,6 +108,15 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     //实收总金额(大计)
     private String allOweAmount;
+
+    //无抵扣(大计)
+    private String allNoDeduction;
+    //现金账户抵扣(大计)
+    private String allCashDeduction;
+    //积分账户抵扣(大计)
+    private String allPointDeduction;
+    //优惠卷抵扣(大计)
+    private String allDiscountCouponDeduction;
 
     private List<FeeConfigDto> FeeConfigDtos;
 
@@ -124,7 +150,6 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     //赠送金额
     private String giftAmount;
 
-
     //账户抵扣金额
     private String withholdAmount;
 
@@ -149,7 +174,6 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String[] configIds;
 
     private String yearMonth;
-
 
     private String cashierId;
     private String cashierName;
@@ -178,6 +202,41 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String discountSmallTypeFour;
     private String discountSmallTypeFive;
     private String discountSmallTypeSix;
+
+    private String fadState;
+    private String fadAmount;
+
+    public String getNoDeduction() {
+        return noDeduction;
+    }
+
+    public void setNoDeduction(String noDeduction) {
+        this.noDeduction = noDeduction;
+    }
+
+    public String getCashDeduction() {
+        return cashDeduction;
+    }
+
+    public void setCashDeduction(String cashDeduction) {
+        this.cashDeduction = cashDeduction;
+    }
+
+    public String getPointDeduction() {
+        return pointDeduction;
+    }
+
+    public void setPointDeduction(String pointDeduction) {
+        this.pointDeduction = pointDeduction;
+    }
+
+    public String getDiscountCouponDeduction() {
+        return discountCouponDeduction;
+    }
+
+    public void setDiscountCouponDeduction(String discountCouponDeduction) {
+        this.discountCouponDeduction = discountCouponDeduction;
+    }
 
     public String getReceivableAmount() {
         return receivableAmount;
@@ -977,5 +1036,101 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setDiscountSmallTypeSix(String discountSmallTypeSix) {
         this.discountSmallTypeSix = discountSmallTypeSix;
+    }
+
+    public String getDetailState() {
+        return detailState;
+    }
+
+    public void setDetailState(String detailState) {
+        this.detailState = detailState;
+    }
+
+    public String getDetailStateName() {
+        return detailStateName;
+    }
+
+    public void setDetailStateName(String detailStateName) {
+        this.detailStateName = detailStateName;
+    }
+
+    public String getTotalNoDeduction() {
+        return totalNoDeduction;
+    }
+
+    public void setTotalNoDeduction(String totalNoDeduction) {
+        this.totalNoDeduction = totalNoDeduction;
+    }
+
+    public String getTotalCashDeduction() {
+        return totalCashDeduction;
+    }
+
+    public void setTotalCashDeduction(String totalCashDeduction) {
+        this.totalCashDeduction = totalCashDeduction;
+    }
+
+    public String getTotalPointDeduction() {
+        return totalPointDeduction;
+    }
+
+    public void setTotalPointDeduction(String totalPointDeduction) {
+        this.totalPointDeduction = totalPointDeduction;
+    }
+
+    public String getTotalDiscountCouponDeduction() {
+        return totalDiscountCouponDeduction;
+    }
+
+    public void setTotalDiscountCouponDeduction(String totalDiscountCouponDeduction) {
+        this.totalDiscountCouponDeduction = totalDiscountCouponDeduction;
+    }
+
+    public String getAllNoDeduction() {
+        return allNoDeduction;
+    }
+
+    public void setAllNoDeduction(String allNoDeduction) {
+        this.allNoDeduction = allNoDeduction;
+    }
+
+    public String getAllCashDeduction() {
+        return allCashDeduction;
+    }
+
+    public void setAllCashDeduction(String allCashDeduction) {
+        this.allCashDeduction = allCashDeduction;
+    }
+
+    public String getAllPointDeduction() {
+        return allPointDeduction;
+    }
+
+    public void setAllPointDeduction(String allPointDeduction) {
+        this.allPointDeduction = allPointDeduction;
+    }
+
+    public String getAllDiscountCouponDeduction() {
+        return allDiscountCouponDeduction;
+    }
+
+    public void setAllDiscountCouponDeduction(String allDiscountCouponDeduction) {
+        this.allDiscountCouponDeduction = allDiscountCouponDeduction;
+    }
+
+    public String getFadState() {
+        return fadState;
+    }
+
+    public void setFadState(String fadState) {
+        this.fadState = fadState;
+    }
+
+    public String getFadAmount() {
+        return fadAmount;
+    }
+
+    public void setFadAmount(String fadAmount) {
+        this.fadAmount = fadAmount;
     }
 }

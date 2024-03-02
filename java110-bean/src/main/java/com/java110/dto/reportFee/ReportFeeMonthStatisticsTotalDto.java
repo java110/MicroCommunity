@@ -45,6 +45,14 @@ public class ReportFeeMonthStatisticsTotalDto extends PageDto implements Seriali
     //赠送规则金额(小计)
     private String totalGiftAmount;
 
+    //无抵扣金额(小计)
+    private String totalNoDeduction;
+    //现金账户抵扣金额(小计)
+    private String totalCashDeduction;
+    //积分账户抵扣金额(小计)
+    private String totalPointDeduction;
+    //优惠券抵扣金额(小计)
+    private String totalDiscountCouponDeduction;
     //优惠金额(大计)
     private String allPreferentialAmount;
 
@@ -62,6 +70,15 @@ public class ReportFeeMonthStatisticsTotalDto extends PageDto implements Seriali
 
     //空置房减免金额(大计)
     private String allGiftAmount;
+
+    //无抵扣(大计)
+    private String allNoDeduction;
+    //现金账户抵扣(大计)
+    private String allCashDeduction;
+    //积分账户抵扣(大计)
+    private String allPointDeduction;
+    //优惠卷抵扣(大计)
+    private String allDiscountCouponDeduction;
 
     public String getTotalReceivableAmount() {
         return totalReceivableAmount;
@@ -189,5 +206,69 @@ public class ReportFeeMonthStatisticsTotalDto extends PageDto implements Seriali
 
     public void setAllGiftAmount(String allGiftAmount) {
         this.allGiftAmount = allGiftAmount;
+    }
+
+    public String getTotalNoDeduction() {
+        return totalNoDeduction;
+    }
+
+    public void setTotalNoDeduction(String totalNoDeduction) {
+        this.totalNoDeduction = totalNoDeduction;
+    }
+
+    public String getTotalCashDeduction() {
+        return totalCashDeduction;
+    }
+
+    public void setTotalCashDeduction(String totalCashDeduction) {
+        this.totalCashDeduction = totalCashDeduction;
+    }
+
+    public String getTotalPointDeduction() {
+        return totalPointDeduction;
+    }
+
+    public void setTotalPointDeduction(String totalPointDeduction) {
+        this.totalPointDeduction = totalPointDeduction;
+    }
+
+    public String getTotalDiscountCouponDeduction() {
+        return totalDiscountCouponDeduction;
+    }
+
+    public void setTotalDiscountCouponDeduction(String totalDiscountCouponDeduction) {
+        this.totalDiscountCouponDeduction = totalDiscountCouponDeduction;
+    }
+
+    public String getAllNoDeduction() {
+        return allNoDeduction;
+    }
+
+    public void setAllNoDeduction(String allNoDeduction) {
+        this.allNoDeduction = allNoDeduction;
+    }
+
+    public String getAllCashDeduction() {
+        return allCashDeduction;
+    }
+
+    public void setAllCashDeduction(String allCashDeduction) {
+        this.allCashDeduction = allCashDeduction;
+    }
+
+    public String getAllPointDeduction() {
+        return allPointDeduction;
+    }
+
+    public void setAllPointDeduction(String allPointDeduction) {
+        this.allPointDeduction = allPointDeduction;
+    }
+
+    public String getAllDiscountCouponDeduction() {
+        return allDiscountCouponDeduction;
+    }
+
+    public void setAllDiscountCouponDeduction(String allDiscountCouponDeduction) {
+        this.allDiscountCouponDeduction = allDiscountCouponDeduction;
     }
 }

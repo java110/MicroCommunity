@@ -15,7 +15,6 @@
  */
 package com.java110.job.smo.impl;
 
-
 import com.java110.job.dao.IUserDownloadFileV1ServiceDao;
 import com.java110.intf.job.IUserDownloadFileV1InnerServiceSMO;
 import com.java110.dto.user.UserDownloadFileDto;
@@ -43,46 +42,39 @@ public class UserDownloadFileV1InnerServiceSMOImpl extends BaseServiceSMO implem
     @Autowired
     private IUserDownloadFileV1ServiceDao userDownloadFileV1ServiceDaoImpl;
 
-
     @Override
-    public int saveUserDownloadFile(@RequestBody  UserDownloadFilePo userDownloadFilePo) {
+    public int saveUserDownloadFile(@RequestBody UserDownloadFilePo userDownloadFilePo) {
         int saveFlag = userDownloadFileV1ServiceDaoImpl.saveUserDownloadFileInfo(BeanConvertUtil.beanCovertMap(userDownloadFilePo));
         return saveFlag;
     }
 
-     @Override
-    public int updateUserDownloadFile(@RequestBody  UserDownloadFilePo userDownloadFilePo) {
+    @Override
+    public int updateUserDownloadFile(@RequestBody UserDownloadFilePo userDownloadFilePo) {
         int saveFlag = userDownloadFileV1ServiceDaoImpl.updateUserDownloadFileInfo(BeanConvertUtil.beanCovertMap(userDownloadFilePo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteUserDownloadFile(@RequestBody  UserDownloadFilePo userDownloadFilePo) {
-       userDownloadFilePo.setStatusCd("1");
-       userDownloadFilePo.setRemark(null);
-       int saveFlag = userDownloadFileV1ServiceDaoImpl.updateUserDownloadFileInfo(BeanConvertUtil.beanCovertMap(userDownloadFilePo));
-       return saveFlag;
+    @Override
+    public int deleteUserDownloadFile(@RequestBody UserDownloadFilePo userDownloadFilePo) {
+        userDownloadFilePo.setStatusCd("1");
+        userDownloadFilePo.setRemark(null);
+        int saveFlag = userDownloadFileV1ServiceDaoImpl.updateUserDownloadFileInfo(BeanConvertUtil.beanCovertMap(userDownloadFilePo));
+        return saveFlag;
     }
 
     @Override
-    public List<UserDownloadFileDto> queryUserDownloadFiles(@RequestBody  UserDownloadFileDto userDownloadFileDto) {
-
+    public List<UserDownloadFileDto> queryUserDownloadFiles(@RequestBody UserDownloadFileDto userDownloadFileDto) {
         //校验是否传了 分页信息
-
         int page = userDownloadFileDto.getPage();
-
         if (page != PageDto.DEFAULT_PAGE) {
             userDownloadFileDto.setPage((page - 1) * userDownloadFileDto.getRow());
         }
-
         List<UserDownloadFileDto> userDownloadFiles = BeanConvertUtil.covertBeanList(userDownloadFileV1ServiceDaoImpl.getUserDownloadFileInfo(BeanConvertUtil.beanCovertMap(userDownloadFileDto)), UserDownloadFileDto.class);
-
         return userDownloadFiles;
     }
 
-
     @Override
     public int queryUserDownloadFilesCount(@RequestBody UserDownloadFileDto userDownloadFileDto) {
-        return userDownloadFileV1ServiceDaoImpl.queryUserDownloadFilesCount(BeanConvertUtil.beanCovertMap(userDownloadFileDto));    }
-
+        return userDownloadFileV1ServiceDaoImpl.queryUserDownloadFilesCount(BeanConvertUtil.beanCovertMap(userDownloadFileDto));
+    }
 }

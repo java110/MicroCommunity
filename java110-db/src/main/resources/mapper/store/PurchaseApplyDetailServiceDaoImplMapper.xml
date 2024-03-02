@@ -140,7 +140,10 @@
             and pa.create_user_id= #{createUserId}
         </if>
         <if test="createUserName !=null and createUserName != ''">
-            and pa.user_name like '%${userName}%'
+            and pa.create_user_name= #{createUserName}
+        </if>
+        <if test="name !=null and name != ''">
+            and pa.user_name like '%${name}%'
         </if>
         <if test="description !=null and description != ''">
             and pa.description= #{description}
@@ -286,7 +289,10 @@
             and pa.create_user_id= #{createUserId}
         </if>
         <if test="createUserName !=null and createUserName != ''">
-            and pa.user_name like '%${userName}%'
+            and pa.create_user_name= #{createUserName}
+        </if>
+        <if test="name !=null and name != ''">
+            and pa.user_name like '%${name}%'
         </if>
         <if test="description !=null and description != ''">
             and pa.description= #{description}

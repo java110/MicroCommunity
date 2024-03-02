@@ -7,12 +7,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.doc.annotation.*;
-import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.store.StorehouseDto;
-import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IStorehouseInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Java110CmdDoc(title = "查询仓库",
         description = "外部系统通过此接口查询仓库",
@@ -33,8 +31,8 @@ import java.util.Map;
 )
 
 @Java110ParamsDoc(params = {
-        @Java110ParamDoc(name = "page", length = 11,type = "int",remark = "页数"),
-        @Java110ParamDoc(name = "row", length = 11,type = "int", remark = "行业数"),
+        @Java110ParamDoc(name = "page", length = 11, type = "int", remark = "页数"),
+        @Java110ParamDoc(name = "row", length = 11, type = "int", remark = "行业数"),
 })
 
 @Java110ResponseDoc(
@@ -42,15 +40,15 @@ import java.util.Map;
                 @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
                 @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
-                @Java110ParamDoc(parentNodeName = "data",name = "shName", type = "String", remark = "仓库"),
-                @Java110ParamDoc(parentNodeName = "data",name = "shId", type = "String", remark = "仓库ID"),
+                @Java110ParamDoc(parentNodeName = "data", name = "shName", type = "String", remark = "仓库"),
+                @Java110ParamDoc(parentNodeName = "data", name = "shId", type = "String", remark = "仓库ID"),
         }
 )
 
 @Java110ExampleDoc(
-        reqBody="\n" +
+        reqBody = "\n" +
                 "http://localhost:3000/app/resourceStore.listStorehouses?shName=&shType=&isShow=&shId=&communityId=2023052267100146&page=1&row=10",
-        resBody="{\n" +
+        resBody = "{\n" +
                 "    \"code\": 0,\n" +
                 "    \"data\": [\n" +
                 "        {\n" +
@@ -90,9 +88,6 @@ public class ListStorehousesCmd extends Cmd {
     @Autowired
     private IStorehouseInnerServiceSMO storehouseInnerServiceSMOImpl;
 
-    @Autowired
-    private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
@@ -102,21 +97,34 @@ public class ListStorehousesCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String storeId = CmdContextUtils.getStoreId(context);
         StorehouseDto storehouseDto = BeanConvertUtil.covertBean(reqJson, StorehouseDto.class);
+        if (reqJson.containsKey("flag") && !StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")) {
+            storehouseDto.setCommunityId("");
+        }
         storehouseDto.setStoreId(storeId);
         int count = storehouseInnerServiceSMOImpl.queryStorehousesCount(storehouseDto);
-
-        List<StorehouseDto> storehouseDtos = null;
-
+        List<StorehouseDto> storehouseDtos = new ArrayList<>();
         if (count > 0) {
-            storehouseDtos = storehouseInnerServiceSMOImpl.queryStorehouses(storehouseDto);
+            List<StorehouseDto> storehouseList = storehouseInnerServiceSMOImpl.queryStorehouses(storehouseDto);
+            if (reqJson.containsKey("flag") && !StringUtil.isEmpty(reqJson.getString("flag")) && reqJson.getString("flag").equals("1")) {
+                for (StorehouseDto storehouse : storehouseList) {
+                    //获取仓库所属小区id
+                    String communityId = storehouse.getCommunityId();
+                    //获取仓库是否对外开放
+                    String isShow = storehouse.getIsShow();
+                    if (communityId.equals(reqJson.getString("communityId"))) { //本小区仓库
+                        storehouseDtos.add(storehouse);
+                    } else if (isShow.equals("true")) { //对外开放的仓库
+                        storehouseDtos.add(storehouse);
+                    }
+                }
+            } else {
+                storehouseDtos.addAll(storehouseList);
+            }
         } else {
             storehouseDtos = new ArrayList<>();
         }
-
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, storehouseDtos);
-
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) storehouseDtos.size() / (double) reqJson.getInteger("row")), storehouseDtos.size(), storehouseDtos);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
     }
 }

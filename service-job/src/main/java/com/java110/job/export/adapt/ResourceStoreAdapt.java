@@ -39,7 +39,7 @@ public class ResourceStoreAdapt implements IExportDataAdapt {
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
-    private static final int MAX_ROW = 200;
+    private static final int MAX_ROW = 60000;
 
     @Override
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) {

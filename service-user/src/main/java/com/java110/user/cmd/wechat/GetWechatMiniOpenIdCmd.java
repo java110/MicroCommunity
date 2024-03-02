@@ -14,6 +14,7 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,10 @@ public class GetWechatMiniOpenIdCmd extends Cmd {
         } else {
             SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
             smallWeChatDto.setAppId(reqJson.getString("appId"));
+            String communityId = reqJson.getString("communityId");
+            if (!StringUtil.isEmpty(communityId)) {
+                smallWeChatDto.setObjId(communityId);
+            }
             List<SmallWeChatDto> smallWeChatDtos = smallWechatV1InnerServiceSMOImpl.querySmallWechats(smallWeChatDto);
 
             //todo 读取全局

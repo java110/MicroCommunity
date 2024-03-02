@@ -6,6 +6,7 @@ import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
 import com.java110.dto.store.StorehouseDto;
 import com.java110.intf.store.*;
+import com.java110.po.purchase.AllocationStorehousePo;
 import com.java110.po.purchase.ResourceStorePo;
 import com.java110.po.resource.ResourceStoreTimesPo;
 import com.java110.store.bmo.allocation.IAllocationBMO;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,6 +33,12 @@ public class AllocationBMOImpl implements IAllocationBMO {
 
     @Autowired
     private IResourceStoreV1InnerServiceSMO resourceStoreV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IAllocationStorehouseInnerServiceSMO allocationStorehouseInnerServiceSMOImpl;
+
+    @Autowired
+    private IAllocationStorehouseV1InnerServiceSMO allocationStorehouseV1InnerServiceSMOImpl;
 
     @Override
     public void doToAllocationStorehouse(AllocationStorehouseDto tmpAllocationStorehouseDto, double allocationStock) {
@@ -108,6 +116,25 @@ public class AllocationBMOImpl implements IAllocationBMO {
             tmpResourceStoreTimesPo.setShId(tmpAllocationStorehouseDto.getShIdz());
             tmpResourceStoreTimesPo.setCommunityId(targetStorehouseDtos.get(0).getCommunityId());
             resourceStoreTimesV1InnerServiceSMOImpl.saveResourceStoreTimes(tmpResourceStoreTimesPo);
+
+            //更新调拨物品id
+            AllocationStorehousePo allocationStorehousePo = new AllocationStorehousePo();
+            allocationStorehousePo.setAsId(tmpAllocationStorehouseDto.getAsId());
+            allocationStorehousePo.setResId(tmpResourceStorePo.getResId());
+            allocationStorehousePo.setStock(String.valueOf(allocationStock));
+            allocationStorehouseV1InnerServiceSMOImpl.updateAllocationStorehouse(allocationStorehousePo);
+
+            //加入被调拨记录明细
+            AllocationStorehouseDto allocationStorehouseDto1 = tmpAllocationStorehouseDto;
+            allocationStorehouseDto1.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
+            allocationStorehouseDto1.setApplyId(tmpAllocationStorehouseDto.getApplyIda());
+            allocationStorehouseDto1.setbId("-1");
+            allocationStorehouseDto1.setStock(String.valueOf(allocationStock));
+            allocationStorehouseDto1.setResId(resourceStorePo.getResId());
+            allocationStorehouseDto1.setCreateTime(new Date());
+            allocationStorehouseInnerServiceSMOImpl.saveAllocationStorehouses(allocationStorehouseDto1);
+
+
             return;
         }
         resourceStorePo = new ResourceStorePo();
@@ -124,6 +151,24 @@ public class AllocationBMOImpl implements IAllocationBMO {
         resourceStoreTimesPo.setCommunityId(resourceStoreDtoZs.get(0).getCommunityId());
         resourceStoreTimesPo.setApplyOrderId(tmpAllocationStorehouseDto.getApplyId());
         resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
+
+
+        //更新调拨物品id
+        AllocationStorehousePo allocationStorehousePo = new AllocationStorehousePo();
+        allocationStorehousePo.setAsId(tmpAllocationStorehouseDto.getAsId());
+        allocationStorehousePo.setResId(resourceStorePo.getResId());
+        allocationStorehousePo.setStock(String.valueOf(allocationStock));
+        allocationStorehouseV1InnerServiceSMOImpl.updateAllocationStorehouse(allocationStorehousePo);
+        //加入被调拨记录明细
+        AllocationStorehouseDto allocationStorehouseDto2 = tmpAllocationStorehouseDto;
+        allocationStorehouseDto2.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
+        allocationStorehouseDto2.setApplyId(tmpAllocationStorehouseDto.getApplyIda());
+        allocationStorehouseDto2.setbId("-1");
+        allocationStorehouseDto2.setStock(String.valueOf(allocationStock));
+        allocationStorehouseDto2.setResId(tmpAllocationStorehouseDto.getResId());
+        allocationStorehouseDto2.setCreateTime(new Date());
+        allocationStorehouseInnerServiceSMOImpl.saveAllocationStorehouses(allocationStorehouseDto2);
+
         // todo -------------------------------------------------目标仓库中做增加 (end)-----------------------------------------------------//
     }
 }

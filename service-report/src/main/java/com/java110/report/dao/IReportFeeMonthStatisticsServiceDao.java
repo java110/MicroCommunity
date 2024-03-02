@@ -211,6 +211,8 @@ public interface IReportFeeMonthStatisticsServiceDao {
 
     int queryDeadlineFeeCount(Map info);
 
+
+
     /**
      * 查询费用月统计信息（instance过程）
      * 根据bId 查询费用月统计信息
@@ -243,9 +245,13 @@ public interface IReportFeeMonthStatisticsServiceDao {
 
     List<Map> queryPayFeeDetail(Map info) throws DAOException;
 
+    List<Map> queryFeeAccountDetailSum(Map info);
+
     List<Map> queryAllPayFeeDetail(Map info) throws DAOException;
 
     List<Map> queryDeadlineFee(Map info) throws DAOException;
+
+    List<Map> queryPayFeeDetailDiscount(Map info);
 
     /**
      * 查询预交费

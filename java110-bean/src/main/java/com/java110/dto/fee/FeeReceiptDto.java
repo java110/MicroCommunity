@@ -16,6 +16,7 @@ import java.util.Date;
 public class FeeReceiptDto extends PageDto implements Serializable {
 
     private String amount;
+    private String receivableAmount;
     private String objId;
     private String remark;
     private String objName;
@@ -248,5 +249,13 @@ public class FeeReceiptDto extends PageDto implements Serializable {
 
     public void setReceiptCode(String receiptCode) {
         this.receiptCode = receiptCode;
+    }
+
+    public String getReceivableAmount() {
+        return receivableAmount;
+    }
+
+    public void setReceivableAmount(String receivableAmount) {
+        this.receivableAmount = receivableAmount;
     }
 }

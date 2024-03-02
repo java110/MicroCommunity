@@ -51,6 +51,8 @@ public class ResourceStorePo implements Serializable {
     private String isFixedName;
 
     private String communityId;
+    //调整类型
+    private String adjustmentType;  //1001  无需调整物品库存
 
     public String getResId() {
         return resId;
@@ -322,5 +324,13 @@ public class ResourceStorePo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getAdjustmentType() {
+        return adjustmentType;
+    }
+
+    public void setAdjustmentType(String adjustmentType) {
+        this.adjustmentType = adjustmentType;
     }
 }

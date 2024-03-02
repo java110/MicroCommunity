@@ -27,13 +27,14 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.maintainance.MaintainanceTaskDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -48,41 +49,32 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "maintainanceTask.listMaintainanceTask")
 public class ListMaintainanceTaskCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListMaintainanceTaskCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListMaintainanceTaskCmd.class);
+
     @Autowired
     private IMaintainanceTaskV1InnerServiceSMO maintainanceTaskV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-
-
-           MaintainanceTaskDto maintainanceTaskDto = BeanConvertUtil.covertBean(reqJson, MaintainanceTaskDto.class);
-
+        MaintainanceTaskDto maintainanceTaskDto = BeanConvertUtil.covertBean(reqJson, MaintainanceTaskDto.class);
         if (reqJson.containsKey("moreState") && reqJson.getString("moreState").contains(",")) {
             maintainanceTaskDto.setStates(reqJson.getString("moreState").split(","));
         }
-           int count = maintainanceTaskV1InnerServiceSMOImpl.queryMaintainanceTasksCount(maintainanceTaskDto);
-
-           List<MaintainanceTaskDto> maintainanceTaskDtos = null;
-
-           if (count > 0) {
-               maintainanceTaskDtos = maintainanceTaskV1InnerServiceSMOImpl.queryMaintainanceTasks(maintainanceTaskDto);
-           } else {
-               maintainanceTaskDtos = new ArrayList<>();
-           }
-
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, maintainanceTaskDtos);
-
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        int count = maintainanceTaskV1InnerServiceSMOImpl.queryMaintainanceTasksCount(maintainanceTaskDto);
+        List<MaintainanceTaskDto> maintainanceTaskDtos = null;
+        if (count > 0) {
+            maintainanceTaskDtos = maintainanceTaskV1InnerServiceSMOImpl.queryMaintainanceTasks(maintainanceTaskDto);
+        } else {
+            maintainanceTaskDtos = new ArrayList<>();
+        }
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, maintainanceTaskDtos);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

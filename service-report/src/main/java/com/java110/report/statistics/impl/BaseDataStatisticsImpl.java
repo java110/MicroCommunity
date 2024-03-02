@@ -52,7 +52,7 @@ public class BaseDataStatisticsImpl implements IBaseDataStatistics {
         roomDto.setFloorId(queryStatisticsDto.getFloorId());
         roomDto.setCommunityId(queryStatisticsDto.getCommunityId());
         roomDto.setOwnerName(queryStatisticsDto.getOwnerName());
-        roomDto.setFloorId(queryStatisticsDto.getFloorId());
+        //roomDto.setFloorId(queryStatisticsDto.getFloorId());
         roomDto.setLink(queryStatisticsDto.getLink());
         addRoomNumCondition(queryStatisticsDto, roomDto);
         return baseDataStatisticsInnerServiceSMOImpl.getRoomCount(roomDto);
