@@ -5,19 +5,21 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.room.RoomDto;
 import com.java110.dto.complaint.ComplaintDto;
+import com.java110.dto.complaintType.ComplaintTypeDto;
+import com.java110.dto.complaintTypeUser.ComplaintTypeUserDto;
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.common.IComplaintUserInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.store.IComplaintInnerServiceSMO;
+import com.java110.intf.store.IComplaintTypeUserV1InnerServiceSMO;
+import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.complaint.ApiComplaintDataVo;
 import com.java110.vo.api.complaint.ApiComplaintVo;
 import com.java110.vo.api.junkRequirement.PhotoVo;
@@ -32,7 +34,7 @@ import java.util.List;
 public class ListComplaintsCmd extends Cmd {
 
     @Autowired
-    private IComplaintInnerServiceSMO complaintInnerServiceSMOImpl;
+    private IComplaintV1InnerServiceSMO complaintV1InnerServiceSMOImpl;
 
     @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
@@ -46,6 +48,10 @@ public class ListComplaintsCmd extends Cmd {
     @Autowired
     private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IComplaintTypeUserV1InnerServiceSMO complaintTypeUserV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
@@ -54,71 +60,72 @@ public class ListComplaintsCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        //如果根据业主ID查询转换为用手机号查询
-        hasOwnerId(reqJson);
 
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
-        String roomId = reqJson.getString("roomId");
-        if (!StringUtil.isEmpty(roomId) && roomId.contains("-")) {
-            String[] values = roomId.split("-", 3);
-            if (values.length == 3) {
-                RoomDto roomDto = new RoomDto();
-                roomDto.setFloorNum(values[0]);
-                roomDto.setUnitNum(values[1]);
-                roomDto.setRoomNum(values[2]);
-                roomDto.setCommunityId(reqJson.getString("communityId"));
-                List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-                Assert.listOnlyOne(roomDtos, "未找到房屋信息");
-                complaintDto.setRoomId(roomDtos.get(0).getRoomId());
-            }
-        }
-        int count = complaintInnerServiceSMOImpl.queryComplaintsCount(complaintDto);
-        List<ApiComplaintDataVo> complaints = null;
+        int count = complaintV1InnerServiceSMOImpl.queryComplaintsCount(complaintDto);
+        List<ComplaintDto> complaintDtos = null;
         if (count > 0) {
-            List<ComplaintDto> complaintDtos = complaintInnerServiceSMOImpl.queryComplaints(complaintDto);
-            complaintDtos = freshCurrentUser(complaintDtos);
-            complaints = BeanConvertUtil.covertBeanList(complaintDtos, ApiComplaintDataVo.class);
-            refreshPhotos(complaints);
+            complaintDtos = complaintV1InnerServiceSMOImpl.queryComplaints(complaintDto);
+            refreshPhotos(complaintDtos);
         } else {
-            complaints = new ArrayList<>();
+            complaintDtos = new ArrayList<>();
         }
-        ApiComplaintVo apiComplaintVo = new ApiComplaintVo();
-        apiComplaintVo.setTotal(count);
-        apiComplaintVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        apiComplaintVo.setComplaints(complaints);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiComplaintVo), HttpStatus.OK);
+
+        //todo 查询类型员工
+        toQueryStaff(complaintDtos);
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, complaintDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
         context.setResponseEntity(responseEntity);
     }
 
-    /**
-     * //如果根据业主ID查询转换为用手机号查询
-     * @param reqJson
-     */
-    private void hasOwnerId(JSONObject reqJson) {
-        if(reqJson.containsKey("ownerId") && !StringUtil.isEmpty(reqJson.getString("ownerId"))){
-            OwnerDto ownerDto = new OwnerDto();
-            ownerDto.setMemberId(reqJson.getString("ownerId"));
-            ownerDto.setCommunityId(reqJson.getString("communityId"));
-            List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
-            if(ownerDtos != null && ownerDtos.size() > 0){
-                reqJson.put("tel",ownerDtos.get(0).getLink());
-            }
-        }
-    }
 
-    private List<ComplaintDto> freshCurrentUser(List<ComplaintDto> complaintDtos) {
-        List<ComplaintDto> tmpComplaintDtos = new ArrayList<>();
+    private void toQueryStaff(List<ComplaintDto> complaintDtos) {
+
+        if (ListUtil.isNull(complaintDtos)) {
+            return;
+        }
+
+        List<String> typeCds = new ArrayList<>();
         for (ComplaintDto complaintDto : complaintDtos) {
-            complaintDto = complaintUserInnerServiceSMOImpl.getTaskCurrentUser(complaintDto);
-            tmpComplaintDtos.add(complaintDto);
+            typeCds.add(complaintDto.getTypeCd());
         }
-        return tmpComplaintDtos;
+
+        if (ListUtil.isNull(typeCds)) {
+            return;
+        }
+
+        ComplaintTypeUserDto complaintTypeUserDto = new ComplaintTypeUserDto();
+        complaintTypeUserDto.setTypeCds(typeCds.toArray(new String[typeCds.size()]));
+
+        List<ComplaintTypeUserDto> complaintTypeUserDtos = complaintTypeUserV1InnerServiceSMOImpl.queryComplaintTypeUsers(complaintTypeUserDto);
+
+        if (ListUtil.isNull(complaintTypeUserDtos)) {
+            return;
+        }
+        List<ComplaintTypeUserDto> staffs = null;
+        for (ComplaintDto complaintDto : complaintDtos) {
+            staffs = new ArrayList<>();
+            if (ComplaintDto.STATE_FINISH.equals(complaintDto.getState())) {
+                continue;
+            }
+            for (ComplaintTypeUserDto complaintTypeUserDto1 : complaintTypeUserDtos) {
+                if (complaintDto.getTypeCd().equals(complaintTypeUserDto1.getTypeCd())) {
+                    staffs.add(complaintTypeUserDto1);
+                }
+            }
+            complaintDto.setStaffs(staffs);
+        }
+
     }
 
-    private void refreshPhotos(List<ApiComplaintDataVo> complaints) {
+
+    private void refreshPhotos(List<ComplaintDto> complaints) {
         List<PhotoVo> photoVos = null;
         PhotoVo photoVo = null;
-        for (ApiComplaintDataVo complaintDataVo : complaints) {
+        for (ComplaintDto complaintDataVo : complaints) {
             FileRelDto fileRelDto = new FileRelDto();
             fileRelDto.setObjId(complaintDataVo.getComplaintId());
             fileRelDto.setRelTypeCd("13000");

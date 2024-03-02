@@ -22,6 +22,7 @@ import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.user.dao.IMenuCatalogV1ServiceDao;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 
 import org.springframework.stereotype.Service;
@@ -72,9 +73,9 @@ public class MenuCatalogV1ServiceDaoImpl extends BaseServiceDao implements IMenu
     public List<Map> getMenuCatalogInfo(Map info) throws DAOException {
         logger.debug("查询 getMenuCatalogInfo 入参 info : {}",info);
 
-        List<Map> businessMenuCatalogInfos = sqlSessionTemplate.selectList("menuCatalogV1ServiceDaoImpl.getMenuCatalogInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("menuCatalogV1ServiceDaoImpl.getMenuCatalogInfo",info);
 
-        return businessMenuCatalogInfos;
+        return infos;
     }
 
 
@@ -101,21 +102,21 @@ public class MenuCatalogV1ServiceDaoImpl extends BaseServiceDao implements IMenu
     public int queryMenuCatalogsCount(Map info) {
         logger.debug("查询 queryMenuCatalogsCount 入参 info : {}",info);
 
-        List<Map> businessMenuCatalogInfos = sqlSessionTemplate.selectList("menuCatalogV1ServiceDaoImpl.queryMenuCatalogsCount", info);
-        if (businessMenuCatalogInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("menuCatalogV1ServiceDaoImpl.queryMenuCatalogsCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
 
-        return Integer.parseInt(businessMenuCatalogInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryMenus(Map info) {
         logger.debug("查询 queryMenus 入参 info : {}",info);
 
-        List<Map> businessMenuCatalogInfos = sqlSessionTemplate.selectList("menuCatalogV1ServiceDaoImpl.queryMenus",info);
+        List<Map> infos = sqlSessionTemplate.selectList("menuCatalogV1ServiceDaoImpl.queryMenus",info);
 
-        return businessMenuCatalogInfos;
+        return infos;
     }
 
 

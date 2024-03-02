@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="complaintTypeV1ServiceDaoImpl">
+
+
+    <!-- 保存投诉类型信息 add by wuxw 2018-07-03 -->
+    <insert id="saveComplaintTypeInfo" parameterType="Map">
+        insert into complaint_type(
+        type_cd,type_name,notify_way,remark,community_id,appraise_reply
+        ) values (
+        #{typeCd},#{typeName},#{notifyWay},#{remark},#{communityId},#{appraiseReply}
+        )
+    </insert>
+
+
+    <!-- 查询投诉类型信息 add by wuxw 2018-07-03 -->
+    <select id="getComplaintTypeInfo" parameterType="Map" resultType="Map">
+        select t.type_cd,t.type_cd typeCd,t.type_name,t.type_name typeName,t.notify_way,t.notify_way
+        notifyWay,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
+        communityId,t.appraise_reply,t.appraise_reply appraiseReply,t.create_time createTime
+        from complaint_type t
+        where 1 =1
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            and t.notify_way= #{notifyWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="appraiseReply !=null and appraiseReply != ''">
+            and t.appraise_reply= #{appraiseReply}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改投诉类型信息 add by wuxw 2018-07-03 -->
+    <update id="updateComplaintTypeInfo" parameterType="Map">
+        update complaint_type t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            , t.type_name= #{typeName}
+        </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            , t.notify_way= #{notifyWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+
+        <if test="appraiseReply !=null and appraiseReply != ''">
+            , t.appraise_reply= #{appraiseReply}
+        </if>
+        where 1=1
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询投诉类型数量 add by wuxw 2018-07-03 -->
+    <select id="queryComplaintTypesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from complaint_type t
+        where 1 =1
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="typeName !=null and typeName != ''">
+            and t.type_name= #{typeName}
+        </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            and t.notify_way= #{notifyWay}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="appraiseReply !=null and appraiseReply != ''">
+            and t.appraise_reply= #{appraiseReply}
+        </if>
+
+
+    </select>
+
+</mapper>

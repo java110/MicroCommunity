@@ -28,6 +28,7 @@ import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.attendance.AttendanceClassesStaffDto;
@@ -95,7 +96,7 @@ public class ListAttendanceClassesStaffCmd extends Cmd {
     }
 
     private void refreshPhoto(List<AttendanceClassesStaffDto> attendanceClassesStaffDtos) {
-        if (attendanceClassesStaffDtos == null || attendanceClassesStaffDtos.size() < 1) {
+        if (ListUtil.isNull(attendanceClassesStaffDtos)) {
             return;
         }
 

@@ -12,6 +12,8 @@ import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -70,7 +72,7 @@ public class QueryReportFeeDetailRoomCmd extends Cmd {
         }
 
         // todo 计算 房屋欠费实收数据
-        JSONArray datas = computeRoomOweReceivedFee(rooms,queryStatisticsDto);
+        JSONArray datas = computeRoomOweReceivedFee(rooms, queryStatisticsDto);
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) queryStatisticsDto.getRow()), count, datas);
 
@@ -85,8 +87,8 @@ public class QueryReportFeeDetailRoomCmd extends Cmd {
      * @param rooms
      * @return
      */
-    private JSONArray computeRoomOweReceivedFee(List<RoomDto> rooms,QueryStatisticsDto queryStatisticsDto) {
-        if (rooms == null || rooms.size() < 1) {
+    private JSONArray computeRoomOweReceivedFee(List<RoomDto> rooms, QueryStatisticsDto queryStatisticsDto) {
+        if (ListUtil.isNull(rooms)) {
             return new JSONArray();
         }
 
@@ -97,39 +99,44 @@ public class QueryReportFeeDetailRoomCmd extends Cmd {
         for (RoomDto roomDto : rooms) {
             objIds.add(roomDto.getRoomId());
             data = new JSONObject();
-            data.put("roomId",roomDto.getRoomId());
-            data.put("roomName",roomDto.getFloorNum()+"-"+roomDto.getUnitNum()+"-"+roomDto.getRoomNum());
-            data.put("ownerName",roomDto.getOwnerName());
-            data.put("ownerId",roomDto.getOwnerId());
-            data.put("link",roomDto.getLink());
+            data.put("roomId", roomDto.getRoomId());
+            data.put("roomName", roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum());
+            data.put("ownerName", roomDto.getOwnerName());
+            data.put("ownerId", roomDto.getOwnerId());
+            data.put("link", roomDto.getLink());
             datas.add(data);
         }
 
         queryStatisticsDto.setObjIds(objIds.toArray(new String[objIds.size()]));
         List<Map> infos = feeStatisticsImpl.getObjFeeSummary(queryStatisticsDto);
 
-        if(infos == null || infos.size() < 1){
+        if (infos == null || infos.size() < 1) {
             return datas;
         }
 
         BigDecimal oweFee = null;
         BigDecimal receivedFee = null;
-        for(int dataIndex = 0; dataIndex < datas.size();dataIndex ++){
+        double oweFeeD = 0;
+        double receivedFeeD = 0;
+        for (int dataIndex = 0; dataIndex < datas.size(); dataIndex++) {
             oweFee = new BigDecimal(0.00);
             receivedFee = new BigDecimal(0.00);
             data = datas.getJSONObject(dataIndex);
-            for(Map info : infos){
-                if(!data.get("roomId").toString().equals(info.get("objId"))){
+            for (Map info : infos) {
+                if (!data.get("roomId").toString().equals(info.get("objId"))) {
                     continue;
                 }
 
-                oweFee = oweFee.add(new BigDecimal(info.get("oweFee").toString()));
-                receivedFee = receivedFee.add(new BigDecimal(info.get("receivedFee").toString()));
-                data.put("oweFee"+info.get("feeTypeCd").toString(),info.get("oweFee"));
-                data.put("receivedFee"+info.get("feeTypeCd").toString(),info.get("receivedFee"));
+                oweFeeD = Double.parseDouble(info.get("oweFee").toString());
+                receivedFeeD = Double.parseDouble(info.get("receivedFee").toString());
+
+                oweFee = oweFee.add(new BigDecimal(oweFeeD + ""));
+                receivedFee = receivedFee.add(new BigDecimal(receivedFeeD + ""));
+                data.put("oweFee" + info.get("feeTypeCd").toString(), MoneyUtil.computePriceScale(oweFeeD));
+                data.put("receivedFee" + info.get("feeTypeCd").toString(), MoneyUtil.computePriceScale(receivedFeeD));
             }
-            data.put("oweFee",oweFee.doubleValue());
-            data.put("receivedFee",receivedFee.doubleValue());
+            data.put("oweFee", MoneyUtil.computePriceScale(oweFee.doubleValue()));
+            data.put("receivedFee", MoneyUtil.computePriceScale(receivedFee.doubleValue()));
         }
 
         return datas;

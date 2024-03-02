@@ -128,7 +128,7 @@ public class OwnerUserLoginCmd extends Cmd {
 
         // todo 3.0 查询业主是否存在
         OwnerDto ownerDto = null;
-        if (ownerAppUserDtos.get(0).getMemberId().startsWith("-1")){
+        if (ownerAppUserDtos.get(0).getMemberId().startsWith("-1")) {
             //todo 这里考虑游客的情况
             ownerDto = new OwnerDto();
             ownerDto.setOwnerId(ownerAppUserDtos.get(0).getMemberId());
@@ -136,7 +136,7 @@ public class OwnerUserLoginCmd extends Cmd {
             ownerDto.setName(ownerAppUserDtos.get(0).getAppUserName());
             ownerDto.setLink(ownerAppUserDtos.get(0).getLink());
             ownerDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
-        }else {
+        } else {
             ownerDto = new OwnerDto();
             ownerDto.setMemberId(ownerAppUserDtos.get(0).getMemberId());
             ownerDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
@@ -169,6 +169,7 @@ public class OwnerUserLoginCmd extends Cmd {
         loginOwnerResDto.setOwnerTel(ownerDto.getLink());
         loginOwnerResDto.setCommunityId(ownerDto.getCommunityId());
         loginOwnerResDto.setCommunityName(communityDtos.get(0).getName());
+        loginOwnerResDto.setCommunityTel(communityDtos.get(0).getTel());
         loginOwnerResDto.setToken(token);
         loginOwnerResDto.setKey(newKey);
         loginOwnerResDto.setOwnerTypeCd(ownerDto.getOwnerTypeCd());

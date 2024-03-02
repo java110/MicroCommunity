@@ -7,22 +7,24 @@
     <insert id="saveRepairSettingInfo" parameterType="Map">
         insert into r_repair_setting(price_scope, pay_fee_flag, return_visit_flag, repair_type_name, repair_type,
                                      remark, community_id, public_area, repair_way, repair_setting_type, setting_id,
-                                     is_show)
+                                     is_show,notify_way)
         values (#{priceScope}, #{payFeeFlag}, #{returnVisitFlag}, #{repairTypeName}, #{repairType}, #{remark},
-                #{communityId}, #{publicArea}, #{repairWay}, #{repairSettingType}, #{settingId}, #{isShow})
+                #{communityId}, #{publicArea}, #{repairWay}, #{repairSettingType}, #{settingId}, #{isShow},#{notifyWay})
     </insert>
     <!-- 查询报修设置信息 add by wuxw 2018-07-03 -->
     <select id="getRepairSettingInfo" parameterType="Map" resultType="Map">
-        select t.price_scope,t.price_scope priceScope,t.pay_fee_flag,t.pay_fee_flag
-        payFeeFlag,t.return_visit_flag,t.return_visit_flag returnVisitFlag,t.repair_type_name,t.repair_type_name
-        repairTypeName,t.repair_type,t.repair_type repairType,t.remark,t.status_cd,t.status_cd
-        statusCd,t.community_id,t.community_id communityId,t.public_area,t.public_area
-        publicArea,t.repair_way,t.repair_way repairWay,t.repair_setting_type,t.repair_setting_type
-        repairSettingType,t.setting_id,t.setting_id settingId,t.is_show,t.is_show isShow
+        select t.price_scope priceScope,t.pay_fee_flag
+        payFeeFlag,t.return_visit_flag returnVisitFlag,t.repair_type_name
+        repairTypeName,t.repair_type repairType,t.remark,t.status_cd
+        statusCd,t.community_id communityId,t.public_area publicArea,t.repair_way repairWay,t.repair_setting_type
+        repairSettingType,t.setting_id settingId,t.is_show isShow,t.notify_way notifyWay
         from r_repair_setting t
         where 1 =1
         <if test="priceScope !=null and priceScope != ''">
             and t.price_scope= #{priceScope}
+        </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            and t.notify_way= #{notifyWay}
         </if>
         <if test="payFeeFlag !=null and payFeeFlag != ''">
             and t.pay_fee_flag= #{payFeeFlag}
@@ -90,9 +92,7 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="publicArea !=null and publicArea != ''">
             , t.public_area= #{publicArea}
         </if>
@@ -105,9 +105,15 @@
         <if test="isShow !=null and isShow != ''">
             , t.is_show= #{isShow}
         </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            , t.notify_way= #{notifyWay}
+        </if>
         where 1=1
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
     </update>
 
@@ -154,6 +160,9 @@
         </if>
         <if test="isShow !=null and isShow != ''">
             and t.is_show= #{isShow}
+        </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            and t.notify_way= #{notifyWay}
         </if>
     </select>
 </mapper>

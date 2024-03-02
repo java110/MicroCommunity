@@ -16,6 +16,17 @@ import java.util.List;
  **/
 public class FeeDiscountRuleDto extends PageDto implements Serializable {
 
+    //todo 1: 打折  2:减免  3:滞纳金  4:空置房打折  5:空置房减免
+
+    public static final String DISCOUNT_SMALL_TYPE_DISCOUNT = "1"; //1: 打折
+    public static final String DISCOUNT_SMALL_TYPE_DEDUCTION = "2"; //2:减免
+    public static final String DISCOUNT_SMALL_TYPE_LATE = "3"; //3:滞纳金
+    public static final String DISCOUNT_SMALL_TYPE_APPLY_DISCOUNT = "4"; //4:空置房打折
+    public static final String DISCOUNT_SMALL_TYPE_APPLY_DEDUCTION = "5"; //5:空置房减免
+
+    public static final String DISCOUNT_SMALL_TYPE_GIFT = "6"; //6:赠送
+
+
     private String ruleName;
     private String remark;
     private String ruleId;

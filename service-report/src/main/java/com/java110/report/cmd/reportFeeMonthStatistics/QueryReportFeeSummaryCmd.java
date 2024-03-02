@@ -6,11 +6,13 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.Java110ThreadPoolFactory;
 import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -72,34 +74,80 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         if (reqJson.containsKey("configIds")) {
             queryStatisticsDto.setConfigIds(reqJson.getString("configIds").split(","));
         }
-        //todo 查询历史欠费
-        double hisOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
-        //todo 查询 单月欠费
-        double curOweFee = feeStatisticsImpl.getCurMonthOweFee(queryStatisticsDto);
-        //todo 查询当月应收
-        double curReceivableFee = feeStatisticsImpl.getCurReceivableFee(queryStatisticsDto);
-        //todo 查询 欠费追回
-        double hisReceivedFee = feeStatisticsImpl.getHisReceivedFee(queryStatisticsDto);
-        //todo  查询 预交费用
-        double preReceivedFee = feeStatisticsImpl.getPreReceivedFee(queryStatisticsDto);
-        //todo 查询实收
-        double receivedFee = feeStatisticsImpl.getReceivedFee(queryStatisticsDto);
-        //todo 房屋数
-        long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
-        //todo 收费房屋数
-        long feeRoomCount = feeStatisticsImpl.getFeeRoomCount(queryStatisticsDto);
-        //todo 欠费户数
-        int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
+
+
         JSONObject data = new JSONObject();
-        data.put("hisOweFee", hisOweFee); //历史欠费
-        data.put("curOweFee", curOweFee); //当期欠费
-        data.put("hisReceivedFee", hisReceivedFee); //欠费追回
-        data.put("preReceivedFee", preReceivedFee); //预缴
-        data.put("receivedFee", receivedFee); //实缴
-        data.put("roomCount", roomCount); //总户数
-        data.put("feeRoomCount", feeRoomCount); //收费户
-        data.put("oweRoomCount", oweRoomCount); //欠费户
-        data.put("curReceivableFee", curReceivableFee); //当期应收
+
+        Java110ThreadPoolFactory java110ThreadPoolFactory = null;
+        try {
+            java110ThreadPoolFactory = Java110ThreadPoolFactory.getInstance().createThreadPool(5);
+            java110ThreadPoolFactory.submit(() -> {
+                //todo 查询历史欠费
+                double hisOweFee = feeStatisticsImpl.getHisMonthOweFee(queryStatisticsDto);
+                data.put("hisOweFee", MoneyUtil.computePriceScale(hisOweFee));
+                return hisOweFee;
+            });
+
+            java110ThreadPoolFactory.submit(() -> {
+                //todo 查询 单月欠费
+                double curOweFee = feeStatisticsImpl.getCurMonthOweFee(queryStatisticsDto);
+                data.put("curOweFee", MoneyUtil.computePriceScale(curOweFee));
+                return curOweFee;
+            });
+
+            java110ThreadPoolFactory.submit(() -> {
+                //todo 查询当月应收
+                double curReceivableFee = feeStatisticsImpl.getCurReceivableFee(queryStatisticsDto);
+                data.put("curReceivableFee", MoneyUtil.computePriceScale(curReceivableFee));
+                return curReceivableFee;
+            });
+
+            java110ThreadPoolFactory.submit(() -> {
+                //todo 查询 欠费追回
+                double hisReceivedFee = feeStatisticsImpl.getHisReceivedFee(queryStatisticsDto);
+                data.put("hisReceivedFee", MoneyUtil.computePriceScale(hisReceivedFee));
+                return hisReceivedFee;
+            });
+
+            java110ThreadPoolFactory.submit(() -> {
+                //todo  查询 预交费用
+                double preReceivedFee = feeStatisticsImpl.getPreReceivedFee(queryStatisticsDto);
+                data.put("preReceivedFee", MoneyUtil.computePriceScale(preReceivedFee));
+                return preReceivedFee;
+            });
+
+            java110ThreadPoolFactory.submit(() -> {
+                //todo 查询实收
+                double receivedFee = feeStatisticsImpl.getReceivedFee(queryStatisticsDto);
+                data.put("receivedFee", MoneyUtil.computePriceScale(receivedFee));
+                return receivedFee;
+            });
+
+            java110ThreadPoolFactory.submit(() -> {
+                //todo 房屋数
+                long roomCount = baseDataStatisticsImpl.getRoomCount(queryStatisticsDto);
+                data.put("roomCount", roomCount);
+                return roomCount;
+            });
+            java110ThreadPoolFactory.submit(() -> {
+                //todo 收费房屋数
+                long feeRoomCount = feeStatisticsImpl.getFeeRoomCount(queryStatisticsDto);
+                data.put("feeRoomCount", feeRoomCount);
+                return feeRoomCount;
+            });
+            java110ThreadPoolFactory.submit(() -> {
+                //todo 欠费户数
+                int oweRoomCount = feeStatisticsImpl.getOweRoomCount(queryStatisticsDto);
+                data.put("oweRoomCount", oweRoomCount);
+                return oweRoomCount;
+            });
+
+            java110ThreadPoolFactory.get();
+        } finally {
+            if (java110ThreadPoolFactory != null) {
+                java110ThreadPoolFactory.stop();
+            }
+        }
         JSONArray datas = new JSONArray();
         datas.add(data);
         context.setResponseEntity(ResultVo.createResponseEntity(datas));

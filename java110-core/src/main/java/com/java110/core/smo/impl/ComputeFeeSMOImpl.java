@@ -117,6 +117,46 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         computeFeePrice(tmpFeeDto, roomDto);
     }
 
+    /**
+     * 设定结束时间
+     *
+     * @param feeDto
+     * @param targetEndTime
+     */
+    @Override
+    public void computeEveryOweFeeByTargetEndTime(FeeDto feeDto, String targetEndTime) {
+
+        Date targetEndDate = DateUtil.getDateFromStringB(targetEndTime);
+        double oweMonth = 1.0;
+        if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
+            targetEndDate = feeDto.getEndTime();
+        }
+        if (feeDto.getEndTime().getTime() < targetEndDate.getTime()) {
+            // 目标到期时间 - 到期时间 = 欠费月份
+            oweMonth = DateUtil.dayCompare(feeDto.getEndTime(), targetEndDate);
+        }
+
+        String computingFormula = feeDto.getComputingFormula();
+        Map feePriceAll = getFeePrice(feeDto, null);
+        feeDto.setFeePrice(Double.parseDouble(feePriceAll.get("feePrice").toString()));
+
+        BigDecimal price = new BigDecimal(feeDto.getFeePrice());
+        price = price.multiply(new BigDecimal(oweMonth));
+        feeDto.setFeeTotalPrice(price.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+        feeDto.setDeadlineTime(targetEndDate);
+
+        //动态费用
+        if ("4004".equals(computingFormula)
+                && FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
+                && !FeeDto.STATE_FINISH.equals(feeDto.getState())) {
+            feeDto.setAmountOwed(feeDto.getFeeTotalPrice() + "");
+            //feeDto.setDeadlineTime(DateUtil.getCurrentDate()); 欠费日期不对先注释
+        }
+
+        //todo 考虑租金递增
+        dealRentRate(feeDto);
+    }
+
 
     /**
      * 计算欠费金额
@@ -2144,6 +2184,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         // todo 最大周期
         double maxCycle = Math.ceil(rateMonth / rateCycle);
+
 
         // todo 增长前的欠费
         BigDecimal addTotalAmount = oweAmountDec;

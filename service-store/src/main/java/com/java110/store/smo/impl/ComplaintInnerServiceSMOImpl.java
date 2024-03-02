@@ -50,38 +50,11 @@ public class ComplaintInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
         List<ComplaintDto> complaints = BeanConvertUtil.covertBeanList(complaintServiceDaoImpl.getComplaintInfo(BeanConvertUtil.beanCovertMap(complaintDto)), ComplaintDto.class);
 
-        if(complaints == null || complaints.size() == 0){
-            return complaints;
-        }
-
-        RoomDto roomDto = new RoomDto();
-        roomDto.setCommunityId(complaintDto.getCommunityId());
-        roomDto.setRoomIds(getRoomIds(complaints));
-        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-
-        for (ComplaintDto tmpComplainDto : complaints) {
-            refreshRoomInfo(tmpComplainDto, roomDtos);
-        }
 
         return complaints;
     }
 
-    /**
-     * 从用户列表中查询用户，将用户中的信息 刷新到 floor对象中
-     *
-     * @param complainDto 小区费用信息
-     * @param roomDtos 用户列表
-     */
-    private void refreshRoomInfo(ComplaintDto complainDto, List<RoomDto> roomDtos) {
-        for (RoomDto room : roomDtos) {
-            if (room.getRoomId().equals(complainDto.getRoomId())) {
-                //BeanConvertUtil.covertBean(room, complainDto);
-                complainDto.setFloorNum(room.getFloorNum());
-                complainDto.setRoomNum(room.getRoomNum());
-                complainDto.setUnitNum(room.getUnitNum());
-            }
-        }
-    }
+
 
     private String[] getRoomIds(List<ComplaintDto> complaints) {
         List<String> roomIds = new ArrayList<String>();

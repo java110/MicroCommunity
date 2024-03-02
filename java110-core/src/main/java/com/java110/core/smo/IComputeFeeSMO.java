@@ -159,6 +159,9 @@ public interface IComputeFeeSMO {
 
     void computeEveryOweFee(FeeDto tmpFeeDto, RoomDto roomDto);
 
+
+    void computeEveryOweFeeByTargetEndTime(FeeDto tmpFeeDto, String targetEndTime);
+
     /**
      * 计算停车时间和费用
      *
@@ -196,4 +199,5 @@ public interface IComputeFeeSMO {
     void dealRentRateCustEndTime(FeeDto feeDto, Date custEndTime);
 
     long computeOneIntegralQuantity(IntegralRuleConfigDto integralRuleConfigDto, JSONObject reqJson);
+
 }

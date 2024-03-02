@@ -822,12 +822,17 @@ public class DateUtil {
         startCalendar.setTime(startDate);
         Calendar endCalender = Calendar.getInstance();
         endCalender.setTime(endDate);
-        if (startCalendar.get(Calendar.DAY_OF_MONTH) == endCalender.get(Calendar.DAY_OF_MONTH)) {
+        if (
+                startCalendar.get(Calendar.DAY_OF_MONTH) == endCalender.get(Calendar.DAY_OF_MONTH)
+                && startCalendar.get(Calendar.HOUR_OF_DAY) == endCalender.get(Calendar.HOUR_OF_DAY)
+        ) {
             return true;
         }
 
         return false;
     }
+
+
 
     /**
      * 计算 fromDate 2023-01-12  toDate 2023-09-15
@@ -852,6 +857,8 @@ public class DateUtil {
         Calendar fromDateCal = Calendar.getInstance();
         fromDateCal.setTime(fromDate);
         fromDateCal.set(Calendar.DAY_OF_MONTH, 1);
+        fromDateCal.set(Calendar.HOUR_OF_DAY,0);
+        fromDateCal.set(Calendar.MINUTE,0);
         if (fromDate.getTime() > fromDateCal.getTime().getTime()) {
             fromDateCal.add(Calendar.MONTH, 1);
             firstDay = false;
@@ -862,6 +869,9 @@ public class DateUtil {
         Calendar toDateCal = Calendar.getInstance();
         toDateCal.setTime(toDate);
         toDateCal.set(Calendar.DAY_OF_MONTH, 1);
+        toDateCal.set(Calendar.HOUR_OF_DAY,0);
+        toDateCal.set(Calendar.MINUTE,0);
+
         if (toDate.getTime() > toDateCal.getTime().getTime()) {
             toDateFirstDate = toDateCal.getTime();
         }

@@ -18,6 +18,7 @@ import com.java110.user.bmo.owner.IQueryOwnerStatisticsBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.ApiOwnerDataVo;
 import com.java110.vo.api.ApiOwnerVo;
@@ -150,7 +151,7 @@ public class QueryOwnersCmd extends Cmd {
                 fileRelDto.setObjId(tmpOwnerDto.getMemberId());
                 fileRelDto.setRelTypeCd("10000"); //业主照片
                 List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-                if (fileRelDtos != null && fileRelDtos.size() > 0) {
+                if (!ListUtil.isNull(fileRelDtos)) {
                     List<String> urls = new ArrayList<>();
                     for (FileRelDto fileRel : fileRelDtos) {
                         urls.add(fileRel.getFileRealName());
@@ -207,7 +208,7 @@ public class QueryOwnersCmd extends Cmd {
         });
         List<OwnerDto> ownerMembers = ownerInnerServiceSMOImpl.queryOwnerMembers(tmpOwnerMemberDto);
 
-        if (ownerMembers == null || ownerMembers.size() < 1) {
+        if (ListUtil.isNull(ownerMembers)) {
             ownerDto.setOwnerId("-1"); // 写入-1 查询不到数据
             return;
         }

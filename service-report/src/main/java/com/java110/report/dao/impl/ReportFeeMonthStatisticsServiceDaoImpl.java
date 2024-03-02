@@ -5,6 +5,7 @@ import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -449,9 +450,9 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public List<Map> queryHuaningOweFeeDetail(Map info) {
         logger.debug("查询queryHuaningOweFeeDetail 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetail", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetail", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
 
@@ -459,21 +460,21 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public Map queryPayFeeDetailCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailCount", info);
+        if (ListUtil.isNull(infos)) {
             return null;
         }
 
-        return businessReportFeeMonthStatisticsInfos.get(0);
+        return infos.get(0);
     }
 
     @Override
     public List<Map> queryPayFeeDetail(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetail", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetail", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override

@@ -2,8 +2,10 @@ package com.java110.dto.owner;
 
 import com.java110.dto.PageDto;
 
+import javax.swing.plaf.ListUI;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -23,6 +25,19 @@ public class OwnerAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_EXT_OWNER_ID = "9329000004";
 
     public static final String SPEC_CD_ACCESS_CONTROL_KEY = "081606740011";
+
+    public static String getValue(List<OwnerAttrDto> ownerAttrDtos, String specCd) {
+        if (ownerAttrDtos == null || ownerAttrDtos.size() < 1) {
+            return "";
+        }
+
+        for (OwnerAttrDto ownerAttrDto : ownerAttrDtos) {
+            if (specCd.equals(ownerAttrDto.getSpecCd())) {
+                return ownerAttrDto.getValue();
+            }
+        }
+        return "";
+    }
 
     private String attrId;
     private String specCd;

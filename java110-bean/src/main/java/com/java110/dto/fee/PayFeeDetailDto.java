@@ -40,6 +40,12 @@ public class PayFeeDetailDto extends PageDto implements Serializable {
     private String cashierId;
     private String cashierName;
 
+    private String acctAmount;
+    private String discountAmount;
+    private String deductionAmount;
+    private String lateAmount;
+    private String giftAmount;
+
     public String getDetailId() {
         return detailId;
     }
@@ -232,4 +238,43 @@ public class PayFeeDetailDto extends PageDto implements Serializable {
         this.userName = userName;
     }
 
+    public String getAcctAmount() {
+        return acctAmount;
+    }
+
+    public void setAcctAmount(String acctAmount) {
+        this.acctAmount = acctAmount;
+    }
+
+    public String getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(String discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public String getDeductionAmount() {
+        return deductionAmount;
+    }
+
+    public void setDeductionAmount(String deductionAmount) {
+        this.deductionAmount = deductionAmount;
+    }
+
+    public String getLateAmount() {
+        return lateAmount;
+    }
+
+    public void setLateAmount(String lateAmount) {
+        this.lateAmount = lateAmount;
+    }
+
+    public String getGiftAmount() {
+        return giftAmount;
+    }
+
+    public void setGiftAmount(String giftAmount) {
+        this.giftAmount = giftAmount;
+    }
 }

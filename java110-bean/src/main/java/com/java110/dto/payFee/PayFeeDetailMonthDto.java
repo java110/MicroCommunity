@@ -58,6 +58,11 @@ public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
     private String feeName;
     private String configId;
 
+    private String objFpcId;
+
+    private String feeTypeCd;
+
+
     private List<FeeAttrDto> feeAttrs;
 
     public String getDetailMonth() {
@@ -275,5 +280,23 @@ public class PayFeeDetailMonthDto extends FeeDto implements Serializable {
 
     public void setFeeState(String feeState) {
         this.feeState = feeState;
+    }
+
+    public String getObjFpcId() {
+        return objFpcId;
+    }
+
+    public void setObjFpcId(String objFpcId) {
+        this.objFpcId = objFpcId;
+    }
+
+    @Override
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    @Override
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
     }
 }

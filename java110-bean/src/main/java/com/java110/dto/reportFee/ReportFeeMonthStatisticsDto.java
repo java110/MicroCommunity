@@ -49,6 +49,10 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String psName;
     private String contractCode;
     private String payerObjType;
+    private String payerObjId;
+    private String payerObjName;
+
+
     private String ownerName;
     private String ownerId;
     private String detailId;
@@ -236,6 +240,18 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setDiscountCouponDeduction(String discountCouponDeduction) {
         this.discountCouponDeduction = discountCouponDeduction;
+    }
+
+    private String acctAmount;
+    private String discountAmount;
+    private String lateAmount;
+
+    public String getPayerObjId() {
+        return payerObjId;
+    }
+
+    public void setPayerObjId(String payerObjId) {
+        this.payerObjId = payerObjId;
     }
 
     public String getReceivableAmount() {
@@ -1038,6 +1054,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
         this.discountSmallTypeSix = discountSmallTypeSix;
     }
 
+
     public String getDetailState() {
         return detailState;
     }
@@ -1130,7 +1147,38 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
         return fadAmount;
     }
 
-    public void setFadAmount(String fadAmount) {
-        this.fadAmount = fadAmount;
+    public void setFadAmount(String fadAmount){
+            this.fadAmount = fadAmount;
+    }
+    public String getAcctAmount() {
+        return acctAmount;
+    }
+
+    public void setAcctAmount(String acctAmount) {
+        this.acctAmount = acctAmount;
+    }
+
+    public String getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(String discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public String getLateAmount() {
+        return lateAmount;
+    }
+
+    public void setLateAmount(String lateAmount) {
+        this.lateAmount = lateAmount;
+    }
+
+    public String getPayerObjName() {
+        return payerObjName;
+    }
+
+    public void setPayerObjName(String payerObjName) {
+        this.payerObjName = payerObjName;
     }
 }

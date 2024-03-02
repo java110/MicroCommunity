@@ -28,62 +28,85 @@ import java.io.Serializable;
 public class MenuCatalogPo implements Serializable {
 
     private String storeType;
-private String caId;
-private String name;
-private String icon;
-private String statusCd = "0";
-private String seq;
-private String url;
-private String isShow;
-public String getStoreType() {
+    private String caId;
+    private String name;
+    private String icon;
+    private String statusCd = "0";
+    private String seq;
+    private String url;
+    private String isShow;
+
+    private String privId;
+
+    public String getStoreType() {
         return storeType;
     }
-public void setStoreType(String storeType) {
+
+    public void setStoreType(String storeType) {
         this.storeType = storeType;
     }
-public String getCaId() {
+
+    public String getCaId() {
         return caId;
     }
-public void setCaId(String caId) {
+
+    public void setCaId(String caId) {
         this.caId = caId;
     }
-public String getName() {
+
+    public String getName() {
         return name;
     }
-public void setName(String name) {
+
+    public void setName(String name) {
         this.name = name;
     }
-public String getIcon() {
+
+    public String getIcon() {
         return icon;
     }
-public void setIcon(String icon) {
+
+    public void setIcon(String icon) {
         this.icon = icon;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getSeq() {
+
+    public String getSeq() {
         return seq;
     }
-public void setSeq(String seq) {
+
+    public void setSeq(String seq) {
         this.seq = seq;
     }
-public String getUrl() {
+
+    public String getUrl() {
         return url;
     }
-public void setUrl(String url) {
+
+    public void setUrl(String url) {
         this.url = url;
     }
-public String getIsShow() {
+
+    public String getIsShow() {
         return isShow;
     }
-public void setIsShow(String isShow) {
+
+    public void setIsShow(String isShow) {
         this.isShow = isShow;
     }
 
+    public String getPrivId() {
+        return privId;
+    }
 
-
+    public void setPrivId(String privId) {
+        this.privId = privId;
+    }
 }

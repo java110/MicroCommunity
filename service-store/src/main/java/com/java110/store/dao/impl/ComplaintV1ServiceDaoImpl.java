@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.community.dao.impl;
+package com.java110.store.dao.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
-import com.java110.community.dao.IComplaintV1ServiceDao;
+import com.java110.store.dao.IComplaintV1ServiceDao;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2022-07-17 00:29:44 mail: 928255095@qq.com
+ * add by 吴学文 at 2024-02-21 13:08:05 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
@@ -47,7 +48,7 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
 
 
     /**
-     * 保存投诉建议信息 到 instance
+     * 保存投诉信息 到 instance
      * @param info   bId 信息
      * @throws DAOException DAO异常
      */
@@ -62,7 +63,7 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
 
 
     /**
-     * 查询投诉建议信息（instance）
+     * 查询投诉信息（instance）
      * @param info bId 信息
      * @return List<Map>
      * @throws DAOException DAO异常
@@ -71,14 +72,14 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
     public List<Map> getComplaintInfo(Map info) throws DAOException {
         logger.debug("查询 getComplaintInfo 入参 info : {}",info);
 
-        List<Map> businessComplaintInfos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.getComplaintInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.getComplaintInfo",info);
 
-        return businessComplaintInfos;
+        return infos;
     }
 
 
     /**
-     * 修改投诉建议信息
+     * 修改投诉信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
@@ -92,20 +93,20 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
     }
 
      /**
-     * 查询投诉建议数量
-     * @param info 投诉建议信息
-     * @return 投诉建议数量
+     * 查询投诉数量
+     * @param info 投诉信息
+     * @return 投诉数量
      */
     @Override
     public int queryComplaintsCount(Map info) {
         logger.debug("查询 queryComplaintsCount 入参 info : {}",info);
 
-        List<Map> businessComplaintInfos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryComplaintsCount", info);
-        if (businessComplaintInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryComplaintsCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
 
-        return Integer.parseInt(businessComplaintInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
@@ -113,6 +114,26 @@ public class ComplaintV1ServiceDaoImpl extends BaseServiceDao implements ICompla
         logger.debug("查询 queryComplaintCountByOwnerTels 入参 info : {}",info);
 
         List<Map> result = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryComplaintCountByOwnerTels", info);
+        return result;
+    }
+
+    @Override
+    public int queryStaffComplaintCount(Map info) {
+        logger.debug("查询 queryStaffComplaintCount 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryStaffComplaintCount", info);
+        if (ListUtil.isNull(infos)) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryStaffComplaints(Map info) {
+        logger.debug("查询 queryStaffComplaints 入参 info : {}",info);
+
+        List<Map> result = sqlSessionTemplate.selectList("complaintV1ServiceDaoImpl.queryStaffComplaints", info);
         return result;
     }
 

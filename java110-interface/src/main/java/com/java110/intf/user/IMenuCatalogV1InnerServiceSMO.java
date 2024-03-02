@@ -41,17 +41,16 @@ public interface IMenuCatalogV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveMenuCatalog", method = RequestMethod.POST)
-    public int saveMenuCatalog(@RequestBody  MenuCatalogPo menuCatalogPo);
+    int saveMenuCatalog(@RequestBody MenuCatalogPo menuCatalogPo);
 
     @RequestMapping(value = "/updateMenuCatalog", method = RequestMethod.POST)
-    public int updateMenuCatalog(@RequestBody  MenuCatalogPo menuCatalogPo);
+    int updateMenuCatalog(@RequestBody MenuCatalogPo menuCatalogPo);
 
     @RequestMapping(value = "/deleteMenuCatalog", method = RequestMethod.POST)
-    public int deleteMenuCatalog(@RequestBody  MenuCatalogPo menuCatalogPo);
+    int deleteMenuCatalog(@RequestBody MenuCatalogPo menuCatalogPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param menuCatalogDto 数据对象分享
      * @return MenuCatalogDto 对象数据

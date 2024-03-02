@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="complaintEventV1ServiceDaoImpl">
+
+
+    <!-- 保存投诉事件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveComplaintEventInfo" parameterType="Map">
+        insert into complaint_event(
+        event_id,create_user_id,complaint_id,create_user_name,remark,event_type,community_id
+        ) values (
+        #{eventId},#{createUserId},#{complaintId},#{createUserName},#{remark},#{eventType},#{communityId}
+        )
+    </insert>
+
+
+    <!-- 查询投诉事件信息 add by wuxw 2018-07-03 -->
+    <select id="getComplaintEventInfo" parameterType="Map" resultType="Map">
+        select t.event_id,t.event_id eventId,t.create_user_id,t.create_user_id
+        createUserId,t.complaint_id,t.complaint_id complaintId,t.create_user_name,t.create_user_name
+        createUserName,t.remark,t.status_cd,t.status_cd statusCd,t.event_type,t.event_type
+        eventType,t.community_id,t.community_id communityId,t.create_time createTime
+        from complaint_event t
+        where 1 =1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="complaintId !=null and complaintId != ''">
+            and t.complaint_id= #{complaintId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="eventType !=null and eventType != ''">
+            and t.event_type= #{eventType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        order by t.create_time
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改投诉事件信息 add by wuxw 2018-07-03 -->
+    <update id="updateComplaintEventInfo" parameterType="Map">
+        update complaint_event t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            , t.create_user_id= #{createUserId}
+        </if>
+        <if test="complaintId !=null and complaintId != ''">
+            , t.complaint_id= #{complaintId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            , t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="eventType !=null and eventType != ''">
+            , t.event_type= #{eventType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        where 1=1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+
+    </update>
+
+    <!-- 查询投诉事件数量 add by wuxw 2018-07-03 -->
+    <select id="queryComplaintEventsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from complaint_event t
+        where 1 =1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="createUserId !=null and createUserId != ''">
+            and t.create_user_id= #{createUserId}
+        </if>
+        <if test="complaintId !=null and complaintId != ''">
+            and t.complaint_id= #{complaintId}
+        </if>
+        <if test="createUserName !=null and createUserName != ''">
+            and t.create_user_name= #{createUserName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="eventType !=null and eventType != ''">
+            and t.event_type= #{eventType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+
+    </select>
+
+</mapper>

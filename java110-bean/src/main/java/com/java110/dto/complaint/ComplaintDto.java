@@ -1,13 +1,16 @@
 package com.java110.dto.complaint;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.complaintTypeUser.ComplaintTypeUserDto;
+import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
- * @Description 投诉建议数据层封装
+ * @Description 投诉数据层封装
  * @Author wuxw
  * @Date 2019/4/24 8:52
  * @Version 1.0
@@ -15,47 +18,91 @@ import java.util.Date;
  **/
 public class ComplaintDto extends PageDto implements Serializable {
 
-    public static final String STATE_AGREE = "";
-
-    public static final String STATE_WAIT = "10001";
-    public static final String STATE_FINISH = "10002";
-
-    //工作流实例ID
-    private String processInstanceId;
-
-    private String taskId;
-
+    public static final String STATE_WAIT = "W";
+    public static final String STATE_FINISH = "C";
+    private String storeId;
+    private String ownerId;
+    private String roomId;
+    private String roomName;
+    private String startUserId;
     private String complaintId;
     private String[] complaintIds;
     private String typeCd;
-    private String typeCdName;
+
+    private String typeName;
+    private String ownerName;
     private String context;
     private String complaintName;
     private String tel;
     private String state;
     private String stateName;
-    private String storeId;
-    private String roomId;
-    private String[] roomIds;
-    private String roomNum;
-    private String unitNum;
-    private String floorNum;
     private String communityId;
+
+    private String taskId;
+
     private String currentUserId;
-    private String currentUserName;
     private String currentUserTel;
+
+    private String currentUserName;
+    private String auditCode;
+    private String auditMessage;
+
+    private String processInstanceId;
+
     private String startTime;
     private String endTime;
 
-    private String startUserId;
+    private String staffId;
 
-    private String auditCode;
+    private List<PhotoVo> photos;
 
-    private String auditMessage;
+    private List<ComplaintTypeUserDto> staffs;
+
 
     private Date createTime;
 
     private String statusCd = "0";
+
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getStartUserId() {
+        return startUserId;
+    }
+
+    public void setStartUserId(String startUserId) {
+        this.startUserId = startUserId;
+    }
 
     public String getComplaintId() {
         return complaintId;
@@ -71,6 +118,14 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setTypeCd(String typeCd) {
         this.typeCd = typeCd;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public String getContext() {
@@ -105,21 +160,14 @@ public class ComplaintDto extends PageDto implements Serializable {
         this.state = state;
     }
 
-    public String getStoreId() {
-        return storeId;
+    public String getCommunityId() {
+        return communityId;
     }
 
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
     }
 
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
 
     public Date getCreateTime() {
         return createTime;
@@ -137,68 +185,36 @@ public class ComplaintDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public String getUnitNum() {
-        return unitNum;
-    }
-
-    public void setUnitNum(String unitNum) {
-        this.unitNum = unitNum;
-    }
-
-    public String getFloorNum() {
-        return floorNum;
-    }
-
-    public String getStateName() {
-        return stateName;
-    }
-
-    public void setStateName(String stateName) {
-        this.stateName = stateName;
-    }
-
-    public void setFloorNum(String floorNum) {
-        this.floorNum = floorNum;
-    }
-
-    public String getRoomNum() {
-        return roomNum;
-    }
-
-    public void setRoomNum(String roomNum) {
-        this.roomNum = roomNum;
-    }
-
-    public String getCommunityId() {
-        return communityId;
-    }
-
-    public void setCommunityId(String communityId) {
-        this.communityId = communityId;
-    }
-
-    public String getTypeCdName() {
-        return typeCdName;
-    }
-
-    public void setTypeCdName(String typeCdName) {
-        this.typeCdName = typeCdName;
-    }
-
-    public String getProcessInstanceId() {
-        return processInstanceId;
-    }
-
-    public void setProcessInstanceId(String processInstanceId) {
-        this.processInstanceId = processInstanceId;
-    }
-
     public String getTaskId() {
         return taskId;
     }
 
     public void setTaskId(String taskId) {
         this.taskId = taskId;
+    }
+
+    public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String currentUserId) {
+        this.currentUserId = currentUserId;
+    }
+
+    public String getCurrentUserTel() {
+        return currentUserTel;
+    }
+
+    public void setCurrentUserTel(String currentUserTel) {
+        this.currentUserTel = currentUserTel;
+    }
+
+    public String getCurrentUserName() {
+        return currentUserName;
+    }
+
+    public void setCurrentUserName(String currentUserName) {
+        this.currentUserName = currentUserName;
     }
 
     public String getAuditCode() {
@@ -217,14 +233,6 @@ public class ComplaintDto extends PageDto implements Serializable {
         this.auditMessage = auditMessage;
     }
 
-    public String getCurrentUserId() {
-        return currentUserId;
-    }
-
-    public void setCurrentUserId(String currentUserId) {
-        this.currentUserId = currentUserId;
-    }
-
     public String[] getComplaintIds() {
         return complaintIds;
     }
@@ -233,36 +241,12 @@ public class ComplaintDto extends PageDto implements Serializable {
         this.complaintIds = complaintIds;
     }
 
-    public String getCurrentUserName() {
-        return currentUserName;
+    public String getProcessInstanceId() {
+        return processInstanceId;
     }
 
-    public void setCurrentUserName(String currentUserName) {
-        this.currentUserName = currentUserName;
-    }
-
-    public String getCurrentUserTel() {
-        return currentUserTel;
-    }
-
-    public void setCurrentUserTel(String currentUserTel) {
-        this.currentUserTel = currentUserTel;
-    }
-
-    public String getStartUserId() {
-        return startUserId;
-    }
-
-    public void setStartUserId(String startUserId) {
-        this.startUserId = startUserId;
-    }
-
-    public String[] getRoomIds() {
-        return roomIds;
-    }
-
-    public void setRoomIds(String[] roomIds) {
-        this.roomIds = roomIds;
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
     }
 
     public String getStartTime() {
@@ -279,5 +263,45 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public List<PhotoVo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<PhotoVo> photos) {
+        this.photos = photos;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(String staffId) {
+        this.staffId = staffId;
+    }
+
+    public List<ComplaintTypeUserDto> getStaffs() {
+        return staffs;
+    }
+
+    public void setStaffs(List<ComplaintTypeUserDto> staffs) {
+        this.staffs = staffs;
     }
 }

@@ -87,6 +87,7 @@ public class OwnerCarDto extends PageDto implements Serializable {
     private String carTypeCdName;
     private String[] carTypeCds;
     private String memberId;
+    private String[] memberIds;
     private String unitId;
     private String floorNum;
     private String unitNum;
@@ -108,6 +109,8 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     private String logStartTime;
     private String logEndTime;
+
+    private String paId;
 
     private List<OwnerCarAttrDto> ownerCarAttrDto;
 
@@ -565,5 +568,21 @@ public class OwnerCarDto extends PageDto implements Serializable {
 
     public void setLogEndTime(String logEndTime) {
         this.logEndTime = logEndTime;
+    }
+
+    public String getPaId() {
+        return paId;
+    }
+
+    public void setPaId(String paId) {
+        this.paId = paId;
+    }
+
+    public String[] getMemberIds() {
+        return memberIds;
+    }
+
+    public void setMemberIds(String[] memberIds) {
+        this.memberIds = memberIds;
     }
 }

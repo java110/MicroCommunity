@@ -176,6 +176,8 @@ public class FeeDto extends PageDto implements Serializable {
 
     private String curYear;
 
+    private String targetEndTime;
+
     public String getAmount() {
         return amount;
     }
@@ -865,5 +867,13 @@ public class FeeDto extends PageDto implements Serializable {
 
     public void setCurYear(String curYear) {
         this.curYear = curYear;
+    }
+
+    public String getTargetEndTime() {
+        return targetEndTime;
+    }
+
+    public void setTargetEndTime(String targetEndTime) {
+        this.targetEndTime = targetEndTime;
     }
 }

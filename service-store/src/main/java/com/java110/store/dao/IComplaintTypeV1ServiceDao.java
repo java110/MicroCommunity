@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.java110.community.dao;
+package com.java110.store.dao;
 
 
 import com.java110.utils.exception.DAOException;
@@ -24,51 +24,50 @@ import java.util.Map;
 
 /**
  * 类表述：
- * add by 吴学文 at 2022-07-17 00:29:44 mail: 928255095@qq.com
+ * add by 吴学文 at 2024-02-21 12:06:00 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-public interface IComplaintV1ServiceDao {
+public interface IComplaintTypeV1ServiceDao {
 
 
     /**
-     * 保存 投诉建议信息
+     * 保存 投诉类型信息
      * @param info
      * @throws DAOException DAO异常
      */
-    int saveComplaintInfo(Map info) throws DAOException;
+    int saveComplaintTypeInfo(Map info) throws DAOException;
 
 
 
 
     /**
-     * 查询投诉建议信息（instance过程）
-     * 根据bId 查询投诉建议信息
+     * 查询投诉类型信息（instance过程）
+     * 根据bId 查询投诉类型信息
      * @param info bId 信息
-     * @return 投诉建议信息
+     * @return 投诉类型信息
      * @throws DAOException DAO异常
      */
-    List<Map> getComplaintInfo(Map info) throws DAOException;
+    List<Map> getComplaintTypeInfo(Map info) throws DAOException;
 
 
 
     /**
-     * 修改投诉建议信息
+     * 修改投诉类型信息
      * @param info 修改信息
      * @throws DAOException DAO异常
      */
-    int updateComplaintInfo(Map info) throws DAOException;
+    int updateComplaintTypeInfo(Map info) throws DAOException;
 
 
     /**
-     * 查询投诉建议总数
+     * 查询投诉类型总数
      *
-     * @param info 投诉建议信息
-     * @return 投诉建议数量
+     * @param info 投诉类型信息
+     * @return 投诉类型数量
      */
-    int queryComplaintsCount(Map info);
+    int queryComplaintTypesCount(Map info);
 
-    List<Map> queryComplaintCountByOwnerTels(Map info);
 }

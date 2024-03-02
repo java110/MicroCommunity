@@ -346,9 +346,9 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         List<Task> tasks = taskService.createTaskQuery().processInstanceBusinessKey(complaintDto.getComplaintId()).list();
 
         if (tasks == null || tasks.size() == 0) {
-            complaintDto.setCurrentUserId("");
-            complaintDto.setCurrentUserName("");
-            complaintDto.setCurrentUserTel("");
+//            complaintDto.setCurrentUserId("");
+//            complaintDto.setCurrentUserName("");
+//            complaintDto.setCurrentUserTel("");
             return complaintDto;
         }
         String userIds = "";
@@ -370,10 +370,10 @@ public class ComplaintUserInnerServiceSMOImpl extends BaseServiceSMO implements 
         userNames = userNames.endsWith("/") ? userNames.substring(0, userNames.length() - 1) : userNames;
         userTels = userTels.endsWith("/") ? userTels.substring(0, userTels.length() - 1) : userTels;
         taskIds = taskIds.endsWith("/") ? taskIds.substring(0, taskIds.length() - 1) : taskIds;
-        complaintDto.setCurrentUserId(userIds);
-        complaintDto.setCurrentUserName(userNames);
-        complaintDto.setCurrentUserTel(userTels);
-        complaintDto.setTaskId(taskIds);
+//        complaintDto.setCurrentUserId(userIds);
+//        complaintDto.setCurrentUserName(userNames);
+//        complaintDto.setCurrentUserTel(userTels);
+//        complaintDto.setTaskId(taskIds);
         return complaintDto;
 
     }

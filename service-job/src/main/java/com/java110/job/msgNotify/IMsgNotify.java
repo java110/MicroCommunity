@@ -154,4 +154,13 @@ public interface IMsgNotify {
      * @return
      */
     ResultVo sendOaCreateStaffMsg(String communityId, String userId, JSONObject content);
+
+    /**
+     * 投诉通知 员工
+     * @param communityId
+     * @param userId
+     * @param content
+     * @return
+     */
+    ResultVo sendComplaintMsg(String communityId, String userId, JSONObject content);
 }

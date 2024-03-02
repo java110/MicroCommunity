@@ -36,6 +36,10 @@ public class PayFeeDetailMonthPo implements Serializable {
 
     private String deadlineTime;
 
+    private String objFpcId;
+
+    private String feeTypeCd;
+
 
     public String getDetailMonth() {
         return detailMonth;
@@ -227,5 +231,21 @@ public class PayFeeDetailMonthPo implements Serializable {
 
     public void setDeadlineTime(String deadlineTime) {
         this.deadlineTime = deadlineTime;
+    }
+
+    public String getObjFpcId() {
+        return objFpcId;
+    }
+
+    public void setObjFpcId(String objFpcId) {
+        this.objFpcId = objFpcId;
+    }
+
+    public String getFeeTypeCd() {
+        return feeTypeCd;
+    }
+
+    public void setFeeTypeCd(String feeTypeCd) {
+        this.feeTypeCd = feeTypeCd;
     }
 }

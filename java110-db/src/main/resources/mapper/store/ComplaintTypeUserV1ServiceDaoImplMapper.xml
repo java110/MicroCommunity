@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="complaintTypeUserV1ServiceDaoImpl">
+
+
+    <!-- 保存投诉类型员工信息 add by wuxw 2018-07-03 -->
+    <insert id="saveComplaintTypeUserInfo" parameterType="Map">
+        insert into complaint_type_user(
+        type_cd,type_user_id,staff_name,community_id,staff_id
+        ) values (
+        #{typeCd},#{typeUserId},#{staffName},#{communityId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询投诉类型员工信息 add by wuxw 2018-07-03 -->
+    <select id="getComplaintTypeUserInfo" parameterType="Map" resultType="Map">
+        select t.type_cd,t.type_cd typeCd,t.type_user_id,t.type_user_id typeUserId,t.staff_name,t.staff_name
+        staffName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.staff_id,t.staff_id
+        staffId
+        from complaint_type_user t
+        where 1 =1
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="typeCds !=null ">
+            and t.type_cd in
+            <foreach collection="typeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="typeUserId !=null and typeUserId != ''">
+            and t.type_user_id= #{typeUserId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改投诉类型员工信息 add by wuxw 2018-07-03 -->
+    <update id="updateComplaintTypeUserInfo" parameterType="Map">
+        update complaint_type_user t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="typeUserId !=null and typeUserId != ''">
+            and t.type_user_id= #{typeUserId}
+        </if>
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询投诉类型员工数量 add by wuxw 2018-07-03 -->
+    <select id="queryComplaintTypeUsersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from complaint_type_user t
+        where 1 =1
+        <if test="typeCd !=null and typeCd != ''">
+            and t.type_cd= #{typeCd}
+        </if>
+        <if test="typeCds !=null ">
+            and t.type_cd in
+            <foreach collection="typeCds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="typeUserId !=null and typeUserId != ''">
+            and t.type_user_id= #{typeUserId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>

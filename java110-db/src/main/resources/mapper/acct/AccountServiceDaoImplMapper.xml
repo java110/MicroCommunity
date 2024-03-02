@@ -258,6 +258,9 @@
     <update id="updateAccount" parameterType="Map">
         update account t
         <set>
+            <if test="statusCd !=null and statusCd != ''">
+                t.status_cd = #{statusCd},
+            </if>
             <if test="amount !=null and amount != ''">
                 t.amount= #{amount},
             </if>

@@ -13,6 +13,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.InitConfigDataException;
 import com.java110.utils.exception.InitDataFlowContextException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,6 +175,7 @@ public class FeeApi extends BaseController {
     public ResponseEntity<String> listOweFees(@RequestParam(value = "payObjId", required = false) String payObjId,
                                               @RequestParam(value = "payObjType", required = false) String payObjType,
                                               @RequestParam(value = "ownerId", required = false) String ownerId,
+                                              @RequestParam(value = "targetEndTime", required = false) String targetEndTime,
                                               @RequestParam(value = "communityId") String communityId) {
         if (StringUtil.isEmpty(payObjId) && StringUtil.isEmpty(ownerId)) {
             throw new IllegalArgumentException("费用对象或者业主不能都为空");
@@ -185,6 +187,10 @@ public class FeeApi extends BaseController {
             } else {
                 feeDto.setPayerObjId(payObjId);
             }
+        }
+        if(!StringUtil.isEmpty(targetEndTime)){
+            targetEndTime = DateUtil.getAddDayStringB(DateUtil.getDateFromStringB(targetEndTime),1);
+            feeDto.setTargetEndTime(targetEndTime);
         }
         feeDto.setPayerObjType(payObjType);
         feeDto.setOwnerId(ownerId);

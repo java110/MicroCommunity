@@ -119,14 +119,9 @@
         pa.num areaNum,
         pa.type_cd typeCd,
         t.create_time createTime
-        FROM
-        parking_space t
-        LEFT JOIN t_dict td1 ON t.state = td1.status_cd
-        AND td1.table_name = 'parking_space'
-        AND td1.table_columns = 'state'
-        LEFT JOIN t_dict td2 ON t.parking_type = td2.status_cd
-        AND td2.table_name = 'parking_space'
-        AND td2.table_columns = 'parking_type'
+        FROM parking_space t
+        LEFT JOIN t_dict td1 ON t.state = td1.status_cd AND td1.table_name = 'parking_space' AND td1.table_columns = 'state'
+        LEFT JOIN t_dict td2 ON t.parking_type = td2.status_cd AND td2.table_name = 'parking_space' AND td2.table_columns = 'parking_type'
         LEFT JOIN parking_area pa ON t.pa_id = pa.pa_id
         AND pa.status_cd = '0'
         <where>

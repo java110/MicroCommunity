@@ -118,6 +118,9 @@ public class PayFeeCmd extends Cmd {
     @Autowired
     private FeeReceiptInnerServiceSMOImpl feeReceiptInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeDiscountInnerServiceSMO feeDiscountInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId节点");
@@ -165,22 +168,34 @@ public class PayFeeCmd extends Cmd {
 //            maxEndTime = feeDtos.get(0).getDeadlineTime();
 //        }
 
-        if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+        if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeDtos.get(0).getFeeFlag())) {
             Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
             if (newDate.getTime() > maxEndTime.getTime()) {
                 throw new IllegalArgumentException("缴费周期超过 缴费结束时间,请用按结束时间方式缴费");
             }
         }
 
-        String selectUserAccount = reqJson.getString("selectUserAccount");
-        JSONArray params = JSONArray.parseArray(selectUserAccount);
-        for (int paramIndex = 0; paramIndex < params.size(); paramIndex++) {
-            JSONObject param = params.getJSONObject(paramIndex);
+        JSONArray selectUserAccount = reqJson.getJSONArray("selectUserAccount");
+        for (int paramIndex = 0; paramIndex < selectUserAccount.size(); paramIndex++) {
+            JSONObject param = selectUserAccount.getJSONObject(paramIndex);
             String maximumNumber = param.getString("maximumNumber");
+
         }
+
+
 
         //todo 是否按缴费时间段缴费
         validateIfPayFeeStartEndDate(reqJson, feeConfigDtos.get(0));
+
+        //todo 校验 优惠
+        JSONArray selectDiscounts = reqJson.getJSONArray("selectDiscount");
+        if(!ListUtil.isNull(selectDiscounts)) {
+            for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
+                JSONObject param = selectDiscounts.getJSONObject(discountIndex);
+                Assert.hasKeyAndValue(param, "discountId", "未包含优惠ID");
+                Assert.hasKeyAndValue(param, "discountPrice", "未包含优惠金额");
+            }
+        }
     }
 
 
@@ -220,11 +235,12 @@ public class PayFeeCmd extends Cmd {
             //todo 缓存收据编号
             CommonCache.setValue(payFeeDetailPo.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
 
-            //todo 判断是否有赠送规则
-            hasDiscount(paramObj, payFeePo, payFeeDetailPo);
+            //todo 判断是否有折扣规则
+            hasDiscount(paramObj, payFeePo, payFeeDetailPo,feeInfo);
 
             // todo 处理用户账户
             dealUserAccount(paramObj, payFeeDetailPo);
+
 
             String oId = Java110TransactionalFactory.getOId();
             if (StringUtil.isEmpty(oId)) {
@@ -280,22 +296,14 @@ public class PayFeeCmd extends Cmd {
         } finally {
             DistributedLock.releaseDistributedLock(key, requestId);
         }
-        //账户处理
+        //todo 账户处理
         dealAccount(paramObj);
-        //折扣管理
-        if (paramObj.containsKey("selectDiscount")) {
-            JSONObject discountBusiness = null;
-            JSONArray selectDiscounts = paramObj.getJSONArray("selectDiscount");
-            for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
-                JSONObject param = selectDiscounts.getJSONObject(discountIndex);
-                addPayFeeDetailDiscount(paramObj, param);
-            }
-        }
 
-        //为停车费单独处理
+
+        //todo 为停车费单独处理
         updateCarEndTime(paramObj);
 
-        //处理报修单
+        //todo 处理报修单
         doDealRepairOrder(paramObj);
 
 
@@ -325,7 +333,7 @@ public class PayFeeCmd extends Cmd {
     private void dealUserAccount(JSONObject paramObj, PayFeeDetailPo payFeeDetailPo) {
         //判断选择的账号
         JSONArray jsonArray = paramObj.getJSONArray("selectUserAccount");
-        if (jsonArray == null || jsonArray.size() < 1) {
+        if (ListUtil.isNull(jsonArray)) {
             return;
         }
 
@@ -404,19 +412,32 @@ public class PayFeeCmd extends Cmd {
                     redepositAmount = amount;
                 }
                 cashSum = cashSum.add(redepositAmount);
-                if (cashSum.doubleValue() > 0) {
-                    //生成抵扣明细记录
-                    FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
-                    feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
-                    feeAccountDetailPo.setDetailId(payFeeDetailPo.getDetailId());
-                    feeAccountDetailPo.setCommunityId(payFeeDetailPo.getCommunityId());
-                    feeAccountDetailPo.setState("1002"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-                    feeAccountDetailPo.setAmount(cashSum.doubleValue() + ""); //现金抵扣金额
-                    feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
-                    BigDecimal receivedAmountDec = new BigDecimal(payFeeDetailPo.getReceivedAmount());
-                    receivedAmountDec = receivedAmountDec.subtract(cashSum);
-                    payFeeDetailPo.setReceivedAmount(receivedAmountDec.doubleValue() + "");
-                }
+
+            }
+
+            // todo 如果积分大于0
+            if (integralSum.doubleValue() > 0) {
+                FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
+                feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
+                feeAccountDetailPo.setDetailId(payFeeDetailPo.getDetailId());
+                feeAccountDetailPo.setCommunityId(payFeeDetailPo.getCommunityId());
+                feeAccountDetailPo.setAmount(integralSum.doubleValue() + "");
+                feeAccountDetailPo.setState("1003"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
+            }
+            if (cashSum.doubleValue() > 0) {
+                //生成抵扣明细记录
+                FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
+                feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
+                feeAccountDetailPo.setDetailId(payFeeDetailPo.getDetailId());
+                feeAccountDetailPo.setCommunityId(payFeeDetailPo.getCommunityId());
+                feeAccountDetailPo.setState("1002"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                feeAccountDetailPo.setAmount(cashSum.doubleValue() + ""); //现金抵扣金额
+                feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
+                BigDecimal receivedAmountDec = new BigDecimal(payFeeDetailPo.getReceivedAmount());
+                receivedAmountDec = receivedAmountDec.subtract(cashSum);
+                payFeeDetailPo.setReceivedAmount(receivedAmountDec.doubleValue() + "");
+                payFeeDetailPo.setAcctAmount(cashSum.doubleValue() + "");
             }
         }
     }
@@ -429,22 +450,23 @@ public class PayFeeCmd extends Cmd {
      * @param payFeeDetailPo
      * @throws ParseException
      */
-    private void hasDiscount(JSONObject paramObj, PayFeePo payFeePo, PayFeeDetailPo payFeeDetailPo) throws ParseException {
+    private void hasDiscount(JSONObject paramObj, PayFeePo payFeePo, PayFeeDetailPo payFeeDetailPo,FeeDto feeDto) throws ParseException {
         if (!paramObj.containsKey("selectDiscount")) {
             return;
         }
-        JSONArray selectDiscount = paramObj.getJSONArray("selectDiscount");
+        JSONArray selectDiscounts = paramObj.getJSONArray("selectDiscount");
 
-        if (selectDiscount == null || selectDiscount.size() < 1) {
+        if (ListUtil.isNull(selectDiscounts)) {
             return;
         }
-        for (int index = 0; index < selectDiscount.size(); index++) {
-            JSONObject paramJson = selectDiscount.getJSONObject(index);
+        Map feePriceMap = computeFeeSMOImpl.getFeePrice(feeDto);
+        for (int index = 0; index < selectDiscounts.size(); index++) {
+            JSONObject paramJson = selectDiscounts.getJSONObject(index);
             if (!"102020008".equals(paramJson.getString("ruleId"))) { //赠送规则
                 continue;
             }
             JSONArray feeDiscountSpecs = paramJson.getJSONArray("feeDiscountSpecs");
-            if (feeDiscountSpecs == null || feeDiscountSpecs.size() < 1) {
+            if (ListUtil.isNull(feeDiscountSpecs)) {
                 continue;
             }
             for (int specIndex = 0; specIndex < feeDiscountSpecs.size(); specIndex++) {
@@ -461,8 +483,18 @@ public class PayFeeCmd extends Cmd {
                 cal.add(Calendar.MONTH, Integer.parseInt(specValue));
                 payFeeDetailPo.setEndTime(df.format(cal.getTime()));
                 payFeePo.setEndTime(df.format(cal.getTime()));
+
+                BigDecimal value = new BigDecimal(payFeeDetailPo.getGiftAmount());
+                value = value.add(new BigDecimal(specValue).multiply(new BigDecimal((double)feePriceMap.get("feePrice"))));
+                payFeeDetailPo.setGiftAmount(value.doubleValue() + "");
             }
         }
+
+        for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
+            JSONObject param = selectDiscounts.getJSONObject(discountIndex);
+            addPayFeeDetailDiscount(paramObj, param, payFeeDetailPo);
+        }
+
     }
 
     /**
@@ -677,7 +709,7 @@ public class PayFeeCmd extends Cmd {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public void addPayFeeDetailDiscount(JSONObject paramInJson, JSONObject discountJson) {
+    public void addPayFeeDetailDiscount(JSONObject paramInJson, JSONObject discountJson, PayFeeDetailPo payFeeDetailPo) {
         JSONObject businessFee = new JSONObject();
         businessFee.put("detailDiscountId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailDiscountId));
         businessFee.put("discountPrice", discountJson.getString("discountPrice"));
@@ -691,6 +723,32 @@ public class PayFeeCmd extends Cmd {
 
         if (fage < 1) {
             throw new CmdException("更新费用信息失败");
+        }
+
+        FeeDiscountDto feeDiscountDto = new FeeDiscountDto();
+        feeDiscountDto.setDiscountId(discountJson.getString("discountId"));
+        List<FeeDiscountDto> feeDiscountDtos = feeDiscountInnerServiceSMOImpl.queryFeeDiscounts(feeDiscountDto);
+
+        if (ListUtil.isNull(feeDiscountDtos)) {
+            return;
+        }
+
+        //todo 打折或者空置房打折
+        if (FeeDiscountRuleDto.DISCOUNT_SMALL_TYPE_DISCOUNT.equals(feeDiscountDtos.get(0).getDiscountSmallType())
+                || FeeDiscountRuleDto.DISCOUNT_SMALL_TYPE_APPLY_DISCOUNT.equals(feeDiscountDtos.get(0).getDiscountSmallType())
+        ) {
+            BigDecimal value = new BigDecimal(payFeeDetailPo.getDiscountAmount());
+            value = value.add(new BigDecimal(discountJson.getString("discountPrice")));
+            payFeeDetailPo.setDiscountAmount(value.doubleValue() + "");
+        } else if (FeeDiscountRuleDto.DISCOUNT_SMALL_TYPE_DEDUCTION.equals(feeDiscountDtos.get(0).getDiscountSmallType())
+                || FeeDiscountRuleDto.DISCOUNT_SMALL_TYPE_APPLY_DEDUCTION.equals(feeDiscountDtos.get(0).getDiscountSmallType())) {
+            BigDecimal value = new BigDecimal(payFeeDetailPo.getDeductionAmount());
+            value = value.add(new BigDecimal(discountJson.getString("discountPrice")));
+            payFeeDetailPo.setDeductionAmount(value.doubleValue() + "");
+        } else if (FeeDiscountRuleDto.DISCOUNT_SMALL_TYPE_LATE.equals(feeDiscountDtos.get(0).getDiscountSmallType())) {
+            BigDecimal value = new BigDecimal(payFeeDetailPo.getLateAmount());
+            value = value.add(new BigDecimal(discountJson.getString("discountPrice")));
+            payFeeDetailPo.setLateAmount(value.doubleValue() + "");
         }
     }
 

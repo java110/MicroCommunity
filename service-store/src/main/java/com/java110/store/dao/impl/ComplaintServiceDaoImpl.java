@@ -89,9 +89,9 @@ public class ComplaintServiceDaoImpl extends BaseServiceDao implements IComplain
     public List<Map> getComplaintInfo(Map info) throws DAOException {
         logger.debug("查询投诉建议信息 入参 info : {}", info);
 
-        List<Map> businessComplaintInfos = sqlSessionTemplate.selectList("complaintServiceDaoImpl.getComplaintInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("complaintServiceDaoImpl.getComplaintInfo", info);
 
-        return businessComplaintInfos;
+        return infos;
     }
 
 

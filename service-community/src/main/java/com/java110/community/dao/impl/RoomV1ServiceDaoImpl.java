@@ -71,9 +71,9 @@ public class RoomV1ServiceDaoImpl extends BaseServiceDao implements IRoomV1Servi
     public List<Map> getRoomInfo(Map info) throws DAOException {
         logger.debug("查询 getRoomInfo 入参 info : {}",info);
 
-        List<Map> businessRoomInfos = sqlSessionTemplate.selectList("roomV1ServiceDaoImpl.getRoomInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("roomV1ServiceDaoImpl.getRoomInfo",info);
 
-        return businessRoomInfos;
+        return infos;
     }
 
 

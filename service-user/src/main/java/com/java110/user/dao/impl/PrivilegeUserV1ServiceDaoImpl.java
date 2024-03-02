@@ -71,9 +71,9 @@ public class PrivilegeUserV1ServiceDaoImpl extends BaseServiceDao implements IPr
     public List<Map> getPrivilegeUserInfo(Map info) throws DAOException {
         logger.debug("查询 getPrivilegeUserInfo 入参 info : {}",info);
 
-        List<Map> businessPrivilegeUserInfos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.getPrivilegeUserInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.getPrivilegeUserInfo",info);
 
-        return businessPrivilegeUserInfos;
+        return infos;
     }
 
 

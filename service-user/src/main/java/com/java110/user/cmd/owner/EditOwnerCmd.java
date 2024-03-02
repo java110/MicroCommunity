@@ -28,6 +28,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -246,7 +247,7 @@ public class EditOwnerCmd extends Cmd {
         accountDto.setObjId(ownerDtos.get(0).getMemberId());
         accountDto.setPartId(ownerDtos.get(0).getCommunityId());
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-        if (accountDtos == null || accountDtos.size() < 1) {
+        if (ListUtil.isNull(accountDtos)) {
             return;
         }
         //查询更新后的业主信息

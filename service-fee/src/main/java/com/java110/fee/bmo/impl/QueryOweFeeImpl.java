@@ -81,7 +81,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         feeDto.setState(FeeDto.STATE_DOING);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             feeDtos = new ArrayList<>();
             return ResultVo.createResponseEntity(feeDtos);
         }
@@ -92,7 +92,14 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
-                computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
+                //todo 有目标结束时间,并且不是一次性费用
+                if (!StringUtil.isEmpty(feeDto.getTargetEndTime())
+                        && !FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())
+                ) {
+                    computeFeeSMOImpl.computeEveryOweFeeByTargetEndTime(tmpFeeDto, feeDto.getTargetEndTime());//计算欠费金额
+                } else {
+                    computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
+                }
                 //如果金额为0 就排除
                 tmpFeeDto.setFeeTotalPrice(
                         MoneyUtil.computePriceScale(

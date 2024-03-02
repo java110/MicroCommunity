@@ -128,13 +128,13 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
             importOwnerRoomDto = ownerRooms.get(roomIndex);
             // 1、楼栋单元房屋 中不支持 -  #  ？ & 等特殊符号
             if (hasSpecialCharacters(importOwnerRoomDto.getFloorNum())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行楼栋中包含特殊符号  -  #  ？ & 请删除！");
+                throw new IllegalArgumentException((roomIndex + 2) + "行楼栋中包含特殊符号  -  #  ？ & 请删除！");
             }
             if (hasSpecialCharacters(importOwnerRoomDto.getUnitNum())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行单元中包含特殊符号  -  #  ？ & 请删除！");
+                throw new IllegalArgumentException((roomIndex + 2) + "行单元中包含特殊符号  -  #  ？ & 请删除！");
             }
             if (hasRoomSpecialCharacters(importOwnerRoomDto.getRoomNum())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行单元中包含特殊符号  -  #  ？ & 请删除！");
+                throw new IllegalArgumentException((roomIndex + 2) + "行单元中包含特殊符号  -  #  ？ & 请删除！");
             }
 
 //            if (!StringUtil.isNumber(importOwnerRoomDto.getLayer())) {
@@ -142,25 +142,25 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
 //            }
 
             if (!StringUtil.isNumber(importOwnerRoomDto.getLayerCount())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行总楼层不是有效数字");
+                throw new IllegalArgumentException((roomIndex + 2) + "行总楼层不是有效数字");
             }
             if (!StringUtil.isNumber(importOwnerRoomDto.getRoomSubType())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行房屋类型不是有效数字");
+                throw new IllegalArgumentException((roomIndex + 2) + "行房屋类型不是有效数字");
             }
 
             if (StringUtil.isEmpty(importOwnerRoomDto.getSection())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行房屋户型不能为空");
+                throw new IllegalArgumentException((roomIndex + 2) + "行房屋户型不能为空");
             }
 
             if (StringUtil.isEmpty(importOwnerRoomDto.getBuiltUpArea())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行建筑面积不能为空");
+                throw new IllegalArgumentException((roomIndex + 2) + "行建筑面积不能为空");
             }
 
             if (StringUtil.isEmpty(importOwnerRoomDto.getRoomArea())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行室内面积不能为空");
+                throw new IllegalArgumentException((roomIndex + 2) + "行室内面积不能为空");
             }
             if (StringUtil.isEmpty(importOwnerRoomDto.getRoomRent())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行租金不能为空");
+                throw new IllegalArgumentException((roomIndex + 2) + "行租金不能为空");
             }
             // 如果为空说明 房屋目前是空闲没有业主
             if (StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
@@ -168,7 +168,7 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
             }
 
             if (StringUtil.isEmpty(importOwnerRoomDto.getSex())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行性别不能为空");
+                throw new IllegalArgumentException((roomIndex + 2) + "行性别不能为空");
             }
 
 //            if (StringUtil.isEmpty(importOwnerRoomDto.getAge())) {
@@ -177,11 +177,11 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
             //系统目前 在香港台湾 以及新加坡等地都有商用 所以 并不是中国大陆手机号规则 所以不做严格校验
             //烦请专业测试团队勿喷
             if (StringUtil.isEmpty(importOwnerRoomDto.getTel())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行手机号不能为空");
+                throw new IllegalArgumentException((roomIndex + 2) + "行手机号不能为空");
             }
 
             if (importOwnerRoomDto.getTel().length() > 11) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行手机号超过11位,请核实");
+                throw new IllegalArgumentException((roomIndex + 2) + "行手机号超过11位,请核实");
             }
 
 //            if (StringUtil.isEmpty(importOwnerRoomDto.getIdCard())) {
@@ -189,18 +189,18 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
 //            }
 
             if (!StringUtil.isEmpty(importOwnerRoomDto.getIdCard()) && importOwnerRoomDto.getIdCard().length() > 18) {
-                throw new IllegalArgumentException((roomIndex + 1) + " 的身份证超过18位,请核实");
+                throw new IllegalArgumentException((roomIndex + 2) + " 的身份证超过18位,请核实");
             }
             if (!StringUtil.isNumber(importOwnerRoomDto.getOwnerTypeCd())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行业主类型不能为空");
+                throw new IllegalArgumentException((roomIndex + 2) + "行业主类型不能为空");
             }
 
             if (RoomDto.STATE_FREE.equals(importOwnerRoomDto.getRoomState()) && !StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行房屋状态为未销售状态，不能包含业主信息");
+                throw new IllegalArgumentException((roomIndex + 2) + "行房屋状态为未销售状态，不能包含业主信息");
             }
 
             if (!RoomDto.STATE_FREE.equals(importOwnerRoomDto.getRoomState()) && StringUtil.isEmpty(importOwnerRoomDto.getOwnerName())) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行房屋状态不是未销售状态，必须包含业主信息");
+                throw new IllegalArgumentException((roomIndex + 2) + "行房屋状态不是未销售状态，必须包含业主信息");
             }
 
             // 如果是业主 跳过
@@ -222,7 +222,7 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
             }
 
             if (!hasOwnerType) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行一个房屋必须要有业主存在 才能 写家庭成员和房屋租客 和临时人员，并且业主要写在 其他之前");
+                throw new IllegalArgumentException((roomIndex + 2) + "行一个房屋必须要有业主存在 才能 写家庭成员和房屋租客 和临时人员，并且业主要写在 其他之前");
             }
         }
     }

@@ -89,9 +89,9 @@ public class RepairSettingServiceDaoImpl extends BaseServiceDao implements IRepa
     public List<Map> getRepairSettingInfo(Map info) throws DAOException {
         logger.debug("查询报修设置信息 入参 info : {}", info);
 
-        List<Map> businessRepairSettingInfos = sqlSessionTemplate.selectList("repairSettingServiceDaoImpl.getRepairSettingInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("repairSettingServiceDaoImpl.getRepairSettingInfo", info);
 
-        return businessRepairSettingInfos;
+        return infos;
     }
 
 

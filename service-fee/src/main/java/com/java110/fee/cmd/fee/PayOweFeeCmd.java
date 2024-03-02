@@ -297,6 +297,9 @@ public class PayOweFeeCmd extends Cmd {
         if (!StringUtil.isEmpty(payOrderId)) {
             payFeeDetailPo.setPayOrderId(payOrderId);
         }
+        if (paramInJson.containsKey("accountAmount")) {
+            payFeeDetailPo.setAcctAmount(paramInJson.getString("accountAmount"));
+        }
 
         payFeeDetailPo.setCashierId(userDto.getUserId());
         payFeeDetailPo.setCashierName(userDto.getName());

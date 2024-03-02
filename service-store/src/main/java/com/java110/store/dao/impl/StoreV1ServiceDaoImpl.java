@@ -71,9 +71,9 @@ public class StoreV1ServiceDaoImpl extends BaseServiceDao implements IStoreV1Ser
     public List<Map> getStoreInfo(Map info) throws DAOException {
         logger.debug("查询 getStoreInfo 入参 info : {}",info);
 
-        List<Map> businessStoreInfos = sqlSessionTemplate.selectList("storeV1ServiceDaoImpl.getStoreInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("storeV1ServiceDaoImpl.getStoreInfo",info);
 
-        return businessStoreInfos;
+        return infos;
     }
 
 

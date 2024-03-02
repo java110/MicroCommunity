@@ -11,6 +11,7 @@ import com.java110.report.statistics.IFeeStatistics;
 import com.java110.report.statistics.IOrderStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -59,69 +60,69 @@ public class QueryFeeDataReportCmd extends Cmd {
         double receivedFee = feeStatisticsImpl.getReceivedFee(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","实收金额");
-        data.put("value", receivedFee);
+        data.put("value", MoneyUtil.computePriceScale(receivedFee));
         datas.add(data);
 
         // todo 查询 欠费金额
         double oweFee = feeStatisticsImpl.getOweFee(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","欠费金额");
-        data.put("value", oweFee);
+        data.put("value", MoneyUtil.computePriceScale(oweFee));
         datas.add(data);
 
         // todo 查询 优惠金额
         double discountFee = feeStatisticsImpl.getDiscountFee(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","优惠金额");
-        data.put("value", discountFee);
+        data.put("value", MoneyUtil.computePriceScale(discountFee));
         datas.add(data);
 
         // todo 查询 滞纳金
         double lateFee = feeStatisticsImpl.getLateFee(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","滞纳金");
-        data.put("value", lateFee);
+        data.put("value", MoneyUtil.computePriceScale(lateFee));
         datas.add(data);
 
         // todo 查询 账户预存
         double prestoreAccount = feeStatisticsImpl.getPrestoreAccount(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","账户预存");
-        data.put("value", prestoreAccount);
+        data.put("value", MoneyUtil.computePriceScale(prestoreAccount));
         datas.add(data);
 
         // todo 查询 账户扣款
         double withholdAccount = feeStatisticsImpl.getWithholdAccount(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","账户扣款");
-        data.put("value", withholdAccount);
+        data.put("value", MoneyUtil.computePriceScale(withholdAccount));
         datas.add(data);
 
         // todo 查询 临时车收入
         double tempCarFee = feeStatisticsImpl.getTempCarFee(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","临时车收入");
-        data.put("value", tempCarFee);
+        data.put("value", MoneyUtil.computePriceScale(tempCarFee));
         datas.add(data);
 
         // todo 查询 押金退款
         double refundDeposit = feeStatisticsImpl.geRefundDeposit(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","押金退款");
-        data.put("value", refundDeposit);
+        data.put("value", MoneyUtil.computePriceScale(refundDeposit));
         datas.add(data);
 
         // todo 查询 退款订单数
         double refundOrderCount = feeStatisticsImpl.geRefundOrderCount(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","退款订单数");
-        data.put("value", refundOrderCount);
+        data.put("value", MoneyUtil.computePriceScale(refundOrderCount));
         datas.add(data);
         // todo 查询 退款金额
         double refundFee = feeStatisticsImpl.geRefundFee(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","退款金额");
-        data.put("value", refundFee);
+        data.put("value", MoneyUtil.computePriceScale(refundFee));
         datas.add(data);
 
 
@@ -130,14 +131,14 @@ public class QueryFeeDataReportCmd extends Cmd {
         double chargeFee = feeStatisticsImpl.getChargeFee(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","充电金额");
-        data.put("value", chargeFee);
+        data.put("value", MoneyUtil.computePriceScale(chargeFee));
         datas.add(data);
 
         // todo 查询 月卡金额
         double chargeMonthOrderMoney = orderStatisticsImpl.getChargeMonthOrderCount(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","月卡实收");
-        data.put("value", chargeMonthOrderMoney);
+        data.put("value", MoneyUtil.computePriceScale(chargeMonthOrderMoney));
         datas.add(data);
 
 
