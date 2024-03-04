@@ -21,6 +21,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -67,7 +68,7 @@ public class ListOwnerOweFeeCmd extends Cmd {
 
         List<FeeDto> resultFees = new ArrayList<>();
 
-        if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
+        if (!ListUtil.isNull(ownerRoomRelDtos)) {
             getRoomOweFee(ownerRoomRelDtos, reqJson, resultFees);
         }
 
@@ -78,7 +79,7 @@ public class ListOwnerOweFeeCmd extends Cmd {
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-        if (ownerCarDtos != null && ownerCarDtos.size() > 0) {
+        if (!ListUtil.isNull(ownerCarDtos)) {
             getParkingSpaceOweFee(ownerCarDtos, reqJson, resultFees);
         }
 
