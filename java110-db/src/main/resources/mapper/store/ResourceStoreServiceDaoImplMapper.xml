@@ -412,12 +412,6 @@
         left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
         left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
-        left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
-        'unit_code'
-        left join t_dict td1 on t.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
-        td1.table_columns = 'unit_code'
-        left join t_dict td2 on t.is_fixed = td2.status_cd and td2.table_name='resource_store' and td2.table_columns =
-        'is_fixed'
         where 1 =1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
@@ -519,17 +513,9 @@
         select IFNULL(sum(total_price),0) as totalPrice from(
         select rsts.times_id,rsts.res_code,rsts.stock,rsts.price,rsts.stock*rsts.price total_price
         from resource_store t
-        inner join resource_store_times rsts on t.res_code = rsts.res_code and rsts.status_cd = '0'
-        left join resource_store_type rst on t.rst_id = rst.rst_id and rst.status_cd = '0'
-        left join resource_store_type rst1 on t.parent_rst_id = rst1.rst_id and rst1.status_cd = '0'
+        inner join resource_store_times rsts on t.res_code = rsts.res_code and t.sh_id = rsts.sh_id and rsts.status_cd = '0'
         left join resource_store_specification rss on t.rss_id = rss.rss_id and rss.status_cd = '0'
         left join storehouse sh on t.sh_id = sh.sh_id and t.store_id = sh.store_id and sh.status_cd = '0'
-        left join t_dict td on t.unit_code = td.status_cd and td.table_name = 'resource_store' and td.table_columns =
-        'unit_code'
-        left join t_dict td1 on t.mini_unit_code = td1.status_cd and td1.table_name = 'resource_store' and
-        td1.table_columns = 'unit_code'
-        left join t_dict td2 on t.is_fixed = td2.status_cd and td2.table_name='resource_store' and td2.table_columns =
-        'is_fixed'
         where 1 = 1
         <if test="resName !=null and resName != ''">
             and t.res_name like concat('%',#{resName},'%')
@@ -625,6 +611,7 @@
             and t.stock > 0
         </if>
         group by rsts.times_id,rsts.res_code,rsts.stock,rsts.price
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

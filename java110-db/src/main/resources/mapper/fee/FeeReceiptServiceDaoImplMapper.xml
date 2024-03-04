@@ -1,42 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="feeReceiptServiceDaoImpl">
-
 
     <!-- 保存收据信息 add by wuxw 2018-07-03 -->
     <insert id="saveFeeReceiptInfo" parameterType="Map">
         insert into fee_receipt(
-        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name,receipt_code
+        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name,receipt_code,receivable_amount
         <if test="createTime != null">
             ,create_time
         </if>
         ) values (
-        #{amount},#{objId},#{remark},#{objName},#{communityId},#{receiptId},#{objType},#{payObjId},#{payObjName},#{receiptCode}
+        #{amount},#{objId},#{remark},#{objName},#{communityId},#{receiptId},#{objType},#{payObjId},#{payObjName},#{receiptCode},#{receivableAmount}
         <if test="createTime != null">
             ,#{createTime}
         </if>
         )
     </insert>
 
-
     <!-- 批量插入费用 -->
     <insert id="saveFeeReceipts" parameterType="Map">
         insert into fee_receipt(
-        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name,receipt_code
+        amount,obj_id,remark,obj_name,community_id,receipt_id,obj_type,pay_obj_id,pay_obj_name,receipt_code,receivable_amount
         ) values
         <foreach collection="feeReceiptPos" item="item" separator=",">
-            (#{item.amount},#{item.objId},#{item.remark},#{item.objName},#{item.communityId},#{item.receiptId},#{item.objType},#{item.payObjId},#{item.payObjName},#{item.receiptCode})
+            (#{item.amount},#{item.objId},#{item.remark},#{item.objName},#{item.communityId},#{item.receiptId},#{item.objType},
+            #{item.payObjId},#{item.payObjName},#{item.receiptCode},#{item.receivableAmount})
         </foreach>
     </insert>
-
 
     <!-- 查询收据信息 add by wuxw 2018-07-03 -->
     <select id="getFeeReceiptInfo" parameterType="Map" resultType="Map">
         select t.amount,t.obj_id,t.obj_id objId,t.remark,t.status_cd,t.status_cd statusCd,t.obj_name,t.obj_name
         objName,t.community_id,t.community_id communityId,t.receipt_id,t.receipt_id receiptId,t.obj_type,t.obj_type
-        objType,t.create_time createTime,frd.fee_name feeName,t.pay_obj_id payObjId,t.pay_obj_name payObjName,pf.fee_type_cd feeTypeCd,
+        objType,t.create_time createTime,frd.fee_name feeName,t.pay_obj_id payObjId,t.pay_obj_name
+        payObjName,pf.fee_type_cd feeTypeCd,t.receivable_amount,t.receivable_amount receivableAmount,
         frd.start_time startTime,frd.end_time endTime,pf.fee_flag feeFlag,t.receipt_code receiptCode
         from fee_receipt t
         inner join fee_receipt_detail frd on t.receipt_id = frd.receipt_id and frd.status_cd = '0'
@@ -44,6 +42,9 @@
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
@@ -102,12 +103,9 @@
         </if>
     </select>
 
-
     <!-- 查询收据信息 add by wuxw 2018-07-03 -->
     <select id="getFeeReceiptInfoNew" parameterType="Map" resultType="Map">
-        SELECT
-        *
-        FROM
+        SELECT * FROM
         (
         SELECT
         t.obj_name AS objName,
@@ -264,7 +262,6 @@
         </if>
     </select>
 
-
     <!-- 修改收据信息 add by wuxw 2018-07-03 -->
     <update id="updateFeeReceiptInfo" parameterType="Map">
         update fee_receipt t set t.status_cd = #{statusCd}
@@ -273,6 +270,9 @@
         </if>
         <if test="amount !=null and amount != ''">
             , t.amount= #{amount}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            , t.receivable_amount= #{receivableAmount}
         </if>
         <if test="objId !=null and objId != ''">
             , t.obj_id= #{objId}
@@ -304,6 +304,9 @@
         where 1 =1
         <if test="amount !=null and amount != ''">
             and t.amount= #{amount}
+        </if>
+        <if test="receivableAmount !=null and receivableAmount != ''">
+            and t.receivable_amount= #{receivableAmount}
         </if>
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}

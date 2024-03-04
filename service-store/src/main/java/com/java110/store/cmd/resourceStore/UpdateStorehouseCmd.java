@@ -27,11 +27,11 @@ import com.java110.po.store.StorehousePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：更新
@@ -46,8 +46,7 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "resourceStore.updateStorehouse")
 public class UpdateStorehouseCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateStorehouseCmd.class);
-
+    private static Logger logger = LoggerFactory.getLogger(UpdateStorehouseCmd.class);
 
     @Autowired
     private IStorehouseV1InnerServiceSMO storehouseV1InnerServiceSMOImpl;
@@ -61,11 +60,9 @@ public class UpdateStorehouseCmd extends Cmd {
         if ("ON".equals(reqJson.getString("purchaseSwitch"))) {
             Assert.hasKeyAndValue(reqJson, "purchaseRafId", "请求报文中未包含采购流程");
         }
-
         if ("ON".equals(reqJson.getString("useSwitch"))) {
             Assert.hasKeyAndValue(reqJson, "useRafId", "请求报文中未包含领用流程");
         }
-
         if ("ON".equals(reqJson.getString("allocationSwitch"))) {
             Assert.hasKeyAndValue(reqJson, "allocationRafId", "请求报文中未包含调拨流程");
         }
@@ -74,14 +71,14 @@ public class UpdateStorehouseCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-       StorehousePo storehousePo = BeanConvertUtil.covertBean(reqJson, StorehousePo.class);
+        StorehousePo storehousePo = BeanConvertUtil.covertBean(reqJson, StorehousePo.class);
+        if (StringUtil.isEmpty(storehousePo.getShDesc())) {
+            storehousePo.setShDesc("-1");
+        }
         int flag = storehouseV1InnerServiceSMOImpl.updateStorehouse(storehousePo);
-
         if (flag < 1) {
             throw new CmdException("更新数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 }

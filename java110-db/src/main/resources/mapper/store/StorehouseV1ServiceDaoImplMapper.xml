@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="storehouseV1ServiceDaoImpl">
 
-
     <!-- 保存使用记录信息 add by wuxw 2018-07-03 -->
     <insert id="saveStorehouseInfo" parameterType="Map">
-        insert into storehouse(
-        sh_desc,sh_id,sh_name,store_id,is_show,purchase_switch,purchase_raf_id,
-        use_switch,use_raf_id,allocation_switch,allocation_raf_id,community_id,allow_purchase,allow_use
-        ) values (
-        #{shDesc},#{shId},#{shName},#{storeId},#{isShow}
-        ,#{purchaseSwitch},#{purchaseRafId},#{useSwitch},#{useRafId},#{allocationSwitch},#{allocationRafId},
-        #{communityId},#{allowPurchase},#{allowUse}
-        )
+        insert into storehouse(sh_desc, sh_id, sh_name, store_id, is_show, purchase_switch, purchase_raf_id,
+                               use_switch, use_raf_id, allocation_switch, allocation_raf_id, community_id,
+                               allow_purchase, allow_use)
+        values (#{shDesc}, #{shId}, #{shName}, #{storeId}, #{isShow}
+                   , #{purchaseSwitch}, #{purchaseRafId}, #{useSwitch}, #{useRafId}, #{allocationSwitch},
+                #{allocationRafId},
+                #{communityId}, #{allowPurchase}, #{allowUse})
     </insert>
-
 
     <!-- 查询使用记录信息 add by wuxw 2018-07-03 -->
     <select id="getStorehouseInfo" parameterType="Map" resultType="Map">
@@ -37,7 +33,6 @@
         <if test="shDesc !=null and shDesc != ''">
             and t.sh_desc= #{shDesc}
         </if>
-
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
@@ -66,9 +61,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改使用记录信息 add by wuxw 2018-07-03 -->
     <update id="updateStorehouseInfo" parameterType="Map">
@@ -100,11 +93,9 @@
         <if test="shName !=null and shName != ''">
             , t.sh_name= #{shName}
         </if>
-
         <if test="isShow !=null and isShow != ''">
             , t.is_show= #{isShow}
         </if>
-
         <if test="allowPurchase !=null and allowPurchase != ''">
             , t.allow_purchase= #{allowPurchase}
         </if>
@@ -121,7 +112,6 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-
     </update>
 
     <!-- 查询使用记录数量 add by wuxw 2018-07-03 -->
@@ -132,7 +122,6 @@
         <if test="shDesc !=null and shDesc != ''">
             and t.sh_desc= #{shDesc}
         </if>
-
         <if test="shId !=null and shId != ''">
             and t.sh_id= #{shId}
         </if>
@@ -157,8 +146,5 @@
         <if test="allowUse !=null and allowUse != ''">
             and t.allow_use= #{allowUse}
         </if>
-
-
     </select>
-
 </mapper>

@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="workCycleV1ServiceDaoImpl">
 
-
     <!-- 保存工作单周期信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkCycleInfo" parameterType="Map">
-        insert into work_cycle(
-        work_cycle,period,before_time,cycle_id,period_workday,hours,store_id,work_id,staff_name,period_month,community_id,staff_id,period_day
-        ) values (
-        #{workCycle},#{period},#{beforeTime},#{cycleId},#{periodWorkday},#{hours},#{storeId},#{workId},#{staffName},#{periodMonth},#{communityId},#{staffId},#{periodDay}
-        )
+        insert into work_cycle(work_cycle, period, before_time, cycle_id, period_workday, hours, store_id, work_id,
+                               staff_name, period_month, community_id, staff_id, period_day)
+        values (#{workCycle}, #{period}, #{beforeTime}, #{cycleId}, #{periodWorkday}, #{hours}, #{storeId}, #{workId},
+                #{staffName}, #{periodMonth}, #{communityId}, #{staffId}, #{periodDay})
     </insert>
-
 
     <!-- 查询工作单周期信息 add by wuxw 2018-07-03 -->
     <select id="getWorkCycleInfo" parameterType="Map" resultType="Map">
@@ -27,8 +23,8 @@
         left join work_pool wp on t.work_id = wp.work_id and wp.status_cd = '0'
         where 1=1
         <if test="curTime != null and curTime != ''">
-        and wp.start_time &lt; #{curTime}
-        and wp.end_time &gt; #{curTime}
+            and wp.start_time &lt; #{curTime}
+            and wp.end_time &gt; #{curTime}
         </if>
         <if test="workCycle !=null and workCycle != ''">
             and t.work_cycle= #{workCycle}
@@ -76,9 +72,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改工作单周期信息 add by wuxw 2018-07-03 -->
     <update id="updateWorkCycleInfo" parameterType="Map">
@@ -101,7 +95,6 @@
         <if test="hours !=null and hours != ''">
             , t.hours= #{hours}
         </if>
-
         <if test="staffName !=null and staffName != ''">
             , t.staff_name= #{staffName}
         </if>
@@ -127,7 +120,6 @@
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
         </if>
-
     </update>
 
     <!-- 查询工作单周期数量 add by wuxw 2018-07-03 -->
@@ -177,8 +169,5 @@
         <if test="periodDay !=null and periodDay != ''">
             and t.period_day= #{periodDay}
         </if>
-
-
     </select>
-
 </mapper>

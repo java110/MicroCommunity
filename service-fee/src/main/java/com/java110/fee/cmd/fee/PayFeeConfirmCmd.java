@@ -233,7 +233,6 @@ public class PayFeeConfirmCmd extends Cmd {
                     }
                 }
             }
-
         }
         //回调判断 车位申请表是否有数据，有数据则刷新申请表状态为 3003 完成状态即可
         //判断车辆是否已经有申请单
@@ -250,60 +249,92 @@ public class PayFeeConfirmCmd extends Cmd {
                 throw new CmdException("更新车位申请表状态失败");
             }
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
     private void dealAccount(JSONObject paramObj) {
-
-        if (!paramObj.containsKey("deductionAmount") || paramObj.getDouble("deductionAmount") <= 0) {
-            return;
-        }
-
-        BigDecimal deductionAmount = new BigDecimal(paramObj.getDouble("deductionAmount"));
-
         JSONArray accountDtos = paramObj.getJSONArray("selectUserAccount");
-        BigDecimal amount = null;
         AccountDto accountDto = null;
+        String accountRemark = "";
+        String pointRemark = "";
         for (int accountIndex = 0; accountIndex < accountDtos.size(); accountIndex++) {
             accountDto = BeanConvertUtil.covertBean(accountDtos.getJSONObject(accountIndex), AccountDto.class);
-            amount = new BigDecimal(Double.parseDouble(accountDto.getAmount()));
-            AccountDetailPo accountDetailPo = new AccountDetailPo();
-            accountDetailPo.setAcctId(accountDto.getAcctId());
-            accountDetailPo.setObjId(accountDto.getObjId());
-            accountDetailPo.setObjType(accountDto.getObjType());
-            if (amount.doubleValue() < deductionAmount.doubleValue()) {
-                accountDetailPo.setAmount(amount.doubleValue() + "");
-                deductionAmount = deductionAmount.subtract(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
-            } else {
-                accountDetailPo.setAmount(deductionAmount.doubleValue() + "");
-                deductionAmount = deductionAmount.subtract(deductionAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
-            }
-            int flag = accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
+            if (!StringUtil.isEmpty(accountDto.getAcctType()) && accountDto.getAcctType().equals("2003")) { //2003 现金账户 2004 积分账户
+                //获取现金账户抵扣金额
+                BigDecimal cashMoney = new BigDecimal(0.0);
+                if (!StringUtil.isEmpty(paramObj.getString("cashMoney"))) {
+                    String cashMoney1 = paramObj.getString("cashMoney");
+                    cashMoney = new BigDecimal(cashMoney1);
+                    if (cashMoney.compareTo(BigDecimal.ZERO) > 0) {
+                        accountRemark = "现金账户抵扣" + String.format("%.2f", cashMoney) + "元";
+                    }
+                }
+                int i = cashMoney.compareTo(BigDecimal.ZERO);
+                if (i > 0) {
+                    BigDecimal amount = new BigDecimal(Double.parseDouble(accountDto.getAmount())); //现金账户余额
+                    AccountDetailPo accountDetailPo = new AccountDetailPo();
+                    accountDetailPo.setAcctId(accountDto.getAcctId());
+                    accountDetailPo.setObjId(accountDto.getObjId());
+                    accountDetailPo.setObjType(accountDto.getObjType());
+                    accountDetailPo.setAmount(String.valueOf(cashMoney));
+                    int flag = accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
+                    if (flag < 1) {
+                        throw new CmdException("现金账户扣款失败！");
+                    }
+                    // 现金账户扣款记录，生成抵扣明细记录
+                    FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
+                    feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
+                    feeAccountDetailPo.setDetailId(paramObj.getString("detailId"));
+                    feeAccountDetailPo.setCommunityId(paramObj.getString("communityId"));
+                    feeAccountDetailPo.setState("1002"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                    feeAccountDetailPo.setAmount(String.valueOf(cashMoney)); //现金抵扣金额
+                    feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
+                }
 
-            if (flag < 1) {
-                throw new CmdException("扣款失败");
+            } else if (!StringUtil.isEmpty(accountDto.getAcctType()) && accountDto.getAcctType().equals("2004")) { //积分账户
+                //获取积分账户抵扣的积分数
+                BigDecimal pointsMoney = new BigDecimal(0.0);
+                BigDecimal pointsMoneyNow = new BigDecimal(0.0);
+                if (!StringUtil.isEmpty(paramObj.getString("pointsMoney"))) {
+                    String pointsMoney1 = paramObj.getString("pointsMoney");
+                    pointsMoney = new BigDecimal(pointsMoney1);
+                    String pointsMoneyNow1 = paramObj.getString("pointsMoneyNow");
+                    pointsMoneyNow = new BigDecimal(pointsMoneyNow1);
+                    if (pointsMoneyNow.compareTo(BigDecimal.ZERO) > 0) {
+                        pointRemark = "积分账户抵扣" + String.format("%.2f", pointsMoneyNow) + "元";
+                    }
+
+                }
+                int i = pointsMoney.compareTo(BigDecimal.ZERO);
+                if (i > 0) {
+                    BigDecimal amount = new BigDecimal(Double.parseDouble(accountDto.getAmount())); //积分账户积分数
+                    AccountDetailPo accountDetailPo = new AccountDetailPo();
+                    accountDetailPo.setAcctId(accountDto.getAcctId());
+                    accountDetailPo.setObjId(accountDto.getObjId());
+                    accountDetailPo.setObjType(accountDto.getObjType());
+                    accountDetailPo.setAmount(String.valueOf(pointsMoney));
+                    int flag = accountInnerServiceSMOImpl.withholdAccount(accountDetailPo);
+                    if (flag < 1) {
+                        throw new CmdException("积分账户扣款失败！");
+                    }
+
+                    // 积分账户扣款记录，生成抵扣明细记录
+                    FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
+                    feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
+                    feeAccountDetailPo.setDetailId(paramObj.getString("detailId"));
+                    feeAccountDetailPo.setCommunityId(paramObj.getString("communityId"));
+                    feeAccountDetailPo.setState("1003"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+
+                    feeAccountDetailPo.setAmount(String.valueOf(paramObj.getString("pointsMoneyNow"))); //现金抵扣金额
+                    feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
+                }
             }
         }
-
-
-        if (deductionAmount.doubleValue() > 0) {
-            throw new CmdException("账户金额不足");
+        if (!StringUtil.isEmpty(accountRemark) && !StringUtil.isEmpty(pointRemark)) {
+            paramObj.put("remark", paramObj.getString("remark") + "，" + accountRemark + "，" + pointRemark);
+        } else {
+            paramObj.put("remark", paramObj.getString("remark") + "，" + accountRemark + pointRemark);
         }
-
-        // 现金账户扣款记录，生成抵扣明细记录
-        FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
-        feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
-        feeAccountDetailPo.setDetailId(paramObj.getString("detailId"));
-        feeAccountDetailPo.setCommunityId(paramObj.getString("communityId"));
-        feeAccountDetailPo.setState("1002"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-        feeAccountDetailPo.setAmount(paramObj.getDouble("deductionAmount") + ""); //现金抵扣金额
-        feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
-//        BigDecimal receivedAmountDec = new BigDecimal(payFeeDetailPo.getReceivedAmount());
-//        receivedAmountDec = receivedAmountDec.subtract(cashSum);
-//        payFeeDetailPo.setReceivedAmount(receivedAmountDec.doubleValue() + "");
-
-        paramObj.put("remark", paramObj.getString("remark") + "-现金账户抵扣" + paramObj.getDouble("deductionAmount") + "元");
 
     }
 

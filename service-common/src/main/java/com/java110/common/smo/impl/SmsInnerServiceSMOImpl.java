@@ -72,6 +72,8 @@ public class SmsInnerServiceSMOImpl extends BaseServiceSMO implements ISmsInnerS
         if (smsDto.getCode().equals(smsCode)) {
             smsDto.setSuccess(true);
             smsDto.setMsg("校验成功");
+            //将验证码清除
+            CommonCache.setValue(smsDto.getTel() + SendSmsFactory.VALIDATE_CODE, "", 0);
             return smsDto;
         }
         smsDto.setSuccess(false);

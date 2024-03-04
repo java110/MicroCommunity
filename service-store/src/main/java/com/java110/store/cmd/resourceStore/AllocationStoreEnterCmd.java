@@ -7,9 +7,11 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.purchase.AllocationStorehouseApplyDto;
 import com.java110.dto.purchase.AllocationStorehouseDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
+import com.java110.dto.store.StorehouseDto;
 import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.po.purchase.AllocationStorehouseApplyPo;
@@ -17,14 +19,16 @@ import com.java110.po.purchase.AllocationStorehousePo;
 import com.java110.store.bmo.allocation.IAllocationBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
- * 调拨入库
+ * 确认调拨入库
  */
 @Java110Cmd(serviceCode = "resourceStore.allocationStoreEnter")
 public class AllocationStoreEnterCmd extends Cmd {
@@ -46,6 +50,9 @@ public class AllocationStoreEnterCmd extends Cmd {
 
     @Autowired
     private IOaWorkflowActivitiInnerServiceSMO oaWorkflowUserInnerServiceSMOImpl;
+
+    @Autowired
+    private IStorehouseInnerServiceSMO storehouseInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -94,6 +101,8 @@ public class AllocationStoreEnterCmd extends Cmd {
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         JSONObject resourceStore = null;
         double quantity = 0;
+        //被调拨ApplyId
+        String newApplyId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyId);
         for (int detailIndex = 0; detailIndex < resourceStores.size(); detailIndex++) {
             resourceStore = resourceStores.getJSONObject(detailIndex);
             //todo 查询调拨记录
@@ -103,12 +112,13 @@ public class AllocationStoreEnterCmd extends Cmd {
             List<AllocationStorehouseDto> allocationStorehouseDtos = allocationStorehouseV1InnerServiceSMOImpl.queryAllocationStorehouses(allocationStorehouseDto);
             quantity = Double.parseDouble(resourceStore.getString("quantity"));
             //todo 每条记录调拨
+            allocationStorehouseDtos.get(0).setApplyIda(newApplyId);
             allocationBMOImpl.doToAllocationStorehouse(allocationStorehouseDtos.get(0), quantity);
             //把调拨申请库存更新为实际调拨库存
-            AllocationStorehousePo allocationStorehousePo = new AllocationStorehousePo();
-            allocationStorehousePo.setAsId(resourceStore.getString("asId"));
-            allocationStorehousePo.setStock(resourceStore.getString("quantity"));
-            allocationStorehouseV1InnerServiceSMOImpl.updateAllocationStorehouse(allocationStorehousePo);
+//            AllocationStorehousePo allocationStorehousePo = new AllocationStorehousePo();
+//            allocationStorehousePo.setAsId(resourceStore.getString("asId"));
+//            allocationStorehousePo.setStock(resourceStore.getString("quantity"));
+//            allocationStorehouseV1InnerServiceSMOImpl.updateAllocationStorehouse(allocationStorehousePo);
         }
         String applyId = reqJson.getString("applyId");
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
@@ -116,7 +126,7 @@ public class AllocationStoreEnterCmd extends Cmd {
         //todo 如果包含taskId 流程提交下去
         if (reqJson.containsKey("taskId")) {
             reqJson.put("auditCode", "1100");
-            reqJson.put("auditMessage", "入库成功");
+            reqJson.put("auditMessage", "调拨审核入库成功");
             reqJson.put("id", reqJson.getString("applyId"));
             reqJson.put("storeId", CmdContextUtils.getStoreId(context));
             reqJson.put("nextUserId", reqJson.getString("staffId"));
@@ -131,6 +141,24 @@ public class AllocationStoreEnterCmd extends Cmd {
         }
         allocationStorehouseApplyPo.setStatusCd("0");
         allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
+
+        //加入被调拨申请记录
+        AllocationStorehouseApplyDto allocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
+        allocationStorehouseApplyDto.setApplyId(applyId);
+        List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtoList = allocationStorehouseApplyV1InnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
+        AllocationStorehouseApplyDto allocationStorehouseApplyDto1 = allocationStorehouseApplyDtoList.get(0);
+        allocationStorehouseApplyDto1.setApplyId(newApplyId);
+        allocationStorehouseApplyDto1.setApplyType("40000");//调拨记录
+        allocationStorehouseApplyDto1.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        //查询被调拨仓库归属小区
+        String shIda = resourceStore.getString("shIda");
+        StorehouseDto storehouseDto = new StorehouseDto();
+        storehouseDto.setShId(shIda);
+        List<StorehouseDto> storehouseList = storehouseInnerServiceSMOImpl.queryStorehouses(storehouseDto);
+        allocationStorehouseApplyDto1.setCommunityId(storehouseList.get(0).getCommunityId());
+        allocationStorehouseApplyDto1.setbId("-1");
+        allocationStorehouseApplyInnerServiceSMOImpl.saveAllocationStorehouseApplys(allocationStorehouseApplyDto1);
+
         context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, "采购申请成功"));
     }
 }

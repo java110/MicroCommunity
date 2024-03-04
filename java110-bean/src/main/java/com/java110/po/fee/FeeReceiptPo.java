@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class FeeReceiptPo implements Serializable {
 
     private String amount;
+    private String receivableAmount;
     private String objId;
     private String remark;
     private String statusCd = "0";
@@ -112,5 +113,13 @@ public class FeeReceiptPo implements Serializable {
 
     public void setReceiptCode(String receiptCode) {
         this.receiptCode = receiptCode;
+    }
+
+    public String getReceivableAmount() {
+        return receivableAmount;
+    }
+
+    public void setReceivableAmount(String receivableAmount) {
+        this.receivableAmount = receivableAmount;
     }
 }

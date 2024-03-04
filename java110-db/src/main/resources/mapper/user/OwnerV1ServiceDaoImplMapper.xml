@@ -87,9 +87,7 @@
         <if test="newBId != null and newBId != ''">
             ,t.b_id = #{newBId}
         </if>
-        <if test="idCard != null and idCard != ''">
-            ,t.id_card= #{idCard}
-        </if>
+        ,t.id_card= #{idCard}
         <if test="sex !=null and sex != ''">
             ,t.sex= #{sex}
         </if>

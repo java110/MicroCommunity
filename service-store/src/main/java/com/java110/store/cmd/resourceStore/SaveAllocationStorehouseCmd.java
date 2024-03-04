@@ -90,6 +90,13 @@ public class SaveAllocationStorehouseCmd extends Cmd {
     @Autowired
     private IResourceStoreUseRecordV1InnerServiceSMO resourceStoreUseRecordV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IStorehouseInnerServiceSMO storehouseInnerServiceSMOImpl;
+
+    @Autowired
+    private IAllocationStorehouseApplyInnerServiceSMO allocationStorehouseApplyInnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "remark", "请求报文中未包含申请信息");
@@ -151,10 +158,14 @@ public class SaveAllocationStorehouseCmd extends Cmd {
             resourceStoreDto.setShId(resourceStores.getJSONObject(resIndex).getString("shId"));
             List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
             Assert.listOnlyOne(resourceStoreDtos, "未包含 物品信息");
-            double stockA = Double.parseDouble(resourceStoreDtos.get(0).getStock());
+            ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+            resourceStoreTimesDto.setTimesId(resourceStores.getJSONObject(resIndex).getString("timesId"));
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+            Assert.listOnlyOne(resourceStoreTimesDtos, "查询物品批次表错误！");
+            double stockA = Double.parseDouble(resourceStoreTimesDtos.get(0).getStock());
             double stockB = Double.parseDouble(resourceStores.getJSONObject(resIndex).getString("curStock"));
             if (stockA < stockB) {
-                throw new IllegalArgumentException("库存不足");
+                throw new IllegalArgumentException("该批次价格下库存数量不足！");
             }
             resourceStores.getJSONObject(resIndex).put("resName", resourceStoreDtos.get(0).getResName());
             resourceStores.getJSONObject(resIndex).put("stockA", stockA);
@@ -295,9 +306,12 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         if (allocationStorehouseDtos == null || allocationStorehouseDtos.size() < 1) {
             return;
         }
+        //被调拨ApplyId
+        String newApplyId = GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_applyId);
         for (AllocationStorehouseDto tmpAllocationStorehouseDto : allocationStorehouseDtos) {
-            int allocationStock = Integer.parseInt(tmpAllocationStorehouseDto.getStock());
+            double allocationStock = new Double(tmpAllocationStorehouseDto.getStock());
             //todo 每条记录调拨
+            tmpAllocationStorehouseDto.setApplyIda(newApplyId);
             allocationBMOImpl.doToAllocationStorehouse(tmpAllocationStorehouseDto, allocationStock);
         }
         String applyId = allocationStorehouseApplyPo.getApplyId();
@@ -306,7 +320,7 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         //todo 如果包含taskId 流程提交下去
         if (reqJson.containsKey("taskId")) {
             reqJson.put("auditCode", "1100");
-            reqJson.put("auditMessage", "入库成功");
+            reqJson.put("auditMessage", "调拨入库成功");
             reqJson.put("id", reqJson.getString("applyId"));
             reqJson.put("storeId", reqJson.getString("storeId"));
             reqJson.put("nextUserId", reqJson.getString("staffId"));
@@ -321,6 +335,23 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         }
         tmpAllocationStorehouseApplyPo.setStatusCd("0");
         allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(tmpAllocationStorehouseApplyPo);
+
+        //加入被调拨申请记录
+        AllocationStorehouseApplyDto allocationStorehouseApplyDto = new AllocationStorehouseApplyDto();
+        allocationStorehouseApplyDto.setApplyId(applyId);
+        List<AllocationStorehouseApplyDto> allocationStorehouseApplyDtoList = allocationStorehouseApplyV1InnerServiceSMOImpl.queryAllocationStorehouseApplys(allocationStorehouseApplyDto);
+        AllocationStorehouseApplyDto allocationStorehouseApplyDto1 = allocationStorehouseApplyDtoList.get(0);
+        allocationStorehouseApplyDto1.setApplyId(newApplyId);
+        allocationStorehouseApplyDto1.setApplyType("40000");//调拨记录
+        allocationStorehouseApplyDto1.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        //查询被调拨仓库归属小区
+        String shId = storehouseDto.getShId();
+        StorehouseDto storehouseDto1 = new StorehouseDto();
+        storehouseDto1.setShId(shId);
+        List<StorehouseDto> storehouseList = storehouseInnerServiceSMOImpl.queryStorehouses(storehouseDto);
+        allocationStorehouseApplyDto1.setCommunityId(storehouseList.get(0).getCommunityId());
+        allocationStorehouseApplyDto1.setbId("-1");
+        allocationStorehouseApplyInnerServiceSMOImpl.saveAllocationStorehouseApplys(allocationStorehouseApplyDto1);
     }
 
     /**
@@ -360,15 +391,14 @@ public class SaveAllocationStorehouseCmd extends Cmd {
         }
         String miniUnitCode = userStorehouseDtos.get(0).getMiniUnitCode(); //获取最小计量单位
         //计算个人物品剩余的最小计量总数
-        BigDecimal curStockNew = new BigDecimal(resObj.getString("curStock"));
-        BigDecimal curStock = miniStock.subtract(curStockNew);
-        if (unitCode.equals(miniUnitCode)) { //物品单位与最小计量单位相同时，就不向上取整
+        BigDecimal curStockNew = new BigDecimal(resObj.getString("curStock")); //退还的数量
+        BigDecimal curStock = miniStock.subtract(curStockNew).setScale(2, BigDecimal.ROUND_HALF_UP);
+        if (unitCode.equals(miniUnitCode)) { //物品单位与最小计量单位相同时
             userStorehousePo.setStock(String.valueOf(curStock));
-        } else { //物品单位与最小计量单位不同时就向上取整
-            //计算个人物品剩余的库存(向上取整)
+        } else { //物品单位与最小计量单位不同时,四舍五入保留两位小数
+            //计算个人物品剩余的库存
             BigDecimal newMiniStock = curStock.divide(miniUnitStock, 2, BigDecimal.ROUND_HALF_UP);
-            Integer newMiniStock1 = (int) Math.ceil(Double.valueOf(newMiniStock.toString()));
-            userStorehousePo.setStock(String.valueOf(newMiniStock1));
+            userStorehousePo.setStock(String.valueOf(newMiniStock));
         }
         userStorehousePo.setUsId(userStorehouseDtos.get(0).getUsId());
         userStorehousePo.setMiniStock(String.valueOf(curStock));
@@ -391,11 +421,11 @@ public class SaveAllocationStorehouseCmd extends Cmd {
                 if (StringUtil.isEmpty(resourceStore.getMiniStock())) {
                     throw new IllegalArgumentException("最小计量总数不能为空！");
                 }
-                double oldMiniStock = Double.parseDouble(resourceStore.getMiniStock());
+                //double oldMiniStock = Double.parseDouble(resourceStore.getMiniStock());
                 //计算返还后总的最小计量总数
-                BigDecimal num1 = new BigDecimal(oldMiniStock);
-                BigDecimal num2 = new BigDecimal(Double.parseDouble(resObj.getString("curStock")));
-                BigDecimal allMiniStock = num1.add(num2);
+                BigDecimal num1 = new BigDecimal(resourceStore.getMiniStock());
+                BigDecimal num2 = new BigDecimal(resObj.getString("curStock"));
+                BigDecimal allMiniStock = num1.add(num2).setScale(2, BigDecimal.ROUND_HALF_UP);
                 //获取最小计量单位数量
                 if (StringUtil.isEmpty(resourceStore.getMiniUnitStock())) {
                     throw new IllegalArgumentException("最小计量单位数量不能为空！");
@@ -411,13 +441,12 @@ public class SaveAllocationStorehouseCmd extends Cmd {
                     throw new IllegalArgumentException("物品最小计量单位不能为空！");
                 }
                 String miniUnitCode1 = resourceStore.getMiniUnitCode();
-                if (unitCode1.equals(miniUnitCode1)) { //物品单位与物品最小计量单位相同时，就不向上取整
+                if (unitCode1.equals(miniUnitCode1)) { //物品单位与物品最小计量单位相同时
                     resourceStorePo.setStock(String.valueOf(allMiniStock));
-                } else { //物品单位与物品最小计量单位不同时，就向上取整
-                    //计算返还后物品资源库存(向上取整)
+                } else { //物品单位与物品最小计量单位不同时,四舍五入保留两位小数
+                    //计算返还后物品资源库存
                     BigDecimal newStock = allMiniStock.divide(miniUnitStock1, 2, BigDecimal.ROUND_HALF_UP);
-                    Integer newStock1 = (int) Math.ceil(Double.valueOf(newStock.toString()));
-                    resourceStorePo.setStock(String.valueOf(newStock1));
+                    resourceStorePo.setStock(String.valueOf(newStock));
                 }
                 resourceStorePo.setResId(resourceStore.getResId());
                 resourceStorePo.setMiniStock(String.valueOf(allMiniStock));
@@ -433,14 +462,13 @@ public class SaveAllocationStorehouseCmd extends Cmd {
                 ResourceStoreTimesPo resourceStoreTimesPo = new ResourceStoreTimesPo();
                 resourceStoreTimesPo.setApplyOrderId(GenerateCodeFactory.getGeneratorId("10"));
                 resourceStoreTimesPo.setPrice(resourceStoreTimesDtos.get(0).getPrice());
-                if (unitCode1.equals(miniUnitCode1)) { //物品单位与物品最小计量单位相同时，就不向上取整
+                if (unitCode1.equals(miniUnitCode1)) { //物品单位与物品最小计量单位相同时
                     resourceStoreTimesPo.setStock(resObj.getString("curStock"));
-                } else { //物品单位与物品最小计量单位不同时，就向上取整
-                    //计算返还后物品资源库存(向上取整)
+                } else { //物品单位与物品最小计量单位不同时,四舍五入保留两位小数
+                    //计算返还后物品资源库存
                     BigDecimal curStock1 = new BigDecimal(resObj.getString("curStock"));
-                    BigDecimal divide = curStock1.divide(miniUnitStock1, 2, BigDecimal.ROUND_HALF_UP);
-                    Integer ceil = (int) Math.ceil(Double.valueOf(divide.toString()));
-                    resourceStoreTimesPo.setStock(String.valueOf(ceil));
+                    BigDecimal divide = curStock1.divide(miniUnitStock1);
+                    resourceStoreTimesPo.setStock(String.valueOf(divide));
                 }
                 resourceStoreTimesPo.setResCode(resObj.getString("resCode"));
                 resourceStoreTimesPo.setStoreId(reqJson.getString("storeId"));
@@ -504,10 +532,18 @@ public class SaveAllocationStorehouseCmd extends Cmd {
                 BigDecimal num1 = new BigDecimal(resourceStorePo.getMiniStock());
                 BigDecimal num2 = new BigDecimal(resourceStorePo.getMiniUnitStock());
                 BigDecimal newStock = num1.divide(num2, 2, BigDecimal.ROUND_HALF_UP);
-                Integer newStock1 = (int) Math.ceil(newStock.doubleValue());
-                resourceStorePo.setStock(String.valueOf(newStock1));
+                resourceStorePo.setStock(String.valueOf(newStock));
             }
             resourceStorePo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+            StorehouseDto storehouseDto = new StorehouseDto();
+            storehouseDto.setShId(resourceStoreList.get(0).getShId());
+            List<StorehouseDto> storehouseDtoList = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
+            String storehouseCommunityId = "";
+            if (storehouseDtoList.size() > 0) {
+                storehouseCommunityId = storehouseDtoList.get(0).getCommunityId();
+            }
+            resourceStorePo.setCommunityId(storehouseCommunityId);
+            //退还仓库中保存一条物品记录
             flag = resourceStoreV1InnerServiceSMOImpl.saveResourceStore(resourceStorePo);
             if (flag < 1) {
                 throw new CmdException("保存修改物品失败");
@@ -527,14 +563,14 @@ public class SaveAllocationStorehouseCmd extends Cmd {
                 //计算物品库存
                 BigDecimal curStock1 = new BigDecimal(resObj.getString("curStock"));
                 BigDecimal miniUnitStock1 = new BigDecimal(resourceStorePo.getMiniUnitStock());
-                BigDecimal divide = curStock1.divide(miniUnitStock1, 2, BigDecimal.ROUND_HALF_UP);
-                Integer newStock1 = (int) Math.ceil(divide.doubleValue());
-                resourceStoreTimesPo.setStock(String.valueOf(newStock1));
+                BigDecimal divide = curStock1.divide(miniUnitStock1);
+                resourceStoreTimesPo.setStock(String.valueOf(divide));
             }
             resourceStoreTimesPo.setResCode(resourceStoreList.get(0).getResCode());
             resourceStoreTimesPo.setStoreId(reqJson.getString("storeId"));
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
             resourceStoreTimesPo.setShId(resObj.getString("shzId"));
+            resourceStoreTimesPo.setCommunityId(storehouseCommunityId);
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
             ResourceStoreUseRecordPo resourceStoreUseRecordPo = new ResourceStoreUseRecordPo();
             resourceStoreUseRecordPo.setRsurId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_rsurId));

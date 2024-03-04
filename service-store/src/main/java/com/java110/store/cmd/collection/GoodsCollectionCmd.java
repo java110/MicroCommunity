@@ -40,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 物品领用
+ * 物品领用申请
  */
 @Java110Cmd(serviceCode = "/collection/goodsCollection")
 public class GoodsCollectionCmd extends Cmd {
@@ -83,7 +83,7 @@ public class GoodsCollectionCmd extends Cmd {
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
         String storeId = CmdContextUtils.getStoreId(context);
         if (resourceStores == null || resourceStores.size() < 1) {
-            throw new CmdException("未包含领用物品");
+            throw new IllegalArgumentException("未包含领用物品");
         }
         double quanitity = 0;
         double stock = 0;
@@ -95,13 +95,16 @@ public class GoodsCollectionCmd extends Cmd {
             resourceStoreTimesDto.setStoreId(storeId);
             List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
             Assert.listOnlyOne(resourceStoreTimesDtos, "价格不存在");
+            if(StringUtil.isEmpty(resourceStore.getString("quantity"))){
+                throw new IllegalArgumentException("申请数量不能为空");
+            }
             quanitity = Double.parseDouble(resourceStore.getString("quantity"));
-            if (quanitity < 1) {
-                throw new CmdException("申请数量不正确");
+            if (quanitity <= 0) {
+                throw new IllegalArgumentException("申请数量不正确");
             }
             stock = Double.parseDouble(resourceStoreTimesDtos.get(0).getStock());
             if (quanitity > stock) {
-                throw new CmdException(resourceStoreTimesDtos.get(0).getResCode() + "出库不足,库存为=" + stock + ",申请数为=" + quanitity);
+                throw new IllegalArgumentException("该批次价格下库存数量不足！");
             }
             resourceStore.put("resourceStoreTimesDtos", resourceStoreTimesDtos);
         }
@@ -140,6 +143,10 @@ public class GoodsCollectionCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String storeId = context.getReqHeaders().get("store-id");
         String userId = context.getReqHeaders().get("user-id");
+        String acceptStaffId = reqJson.getString("acceptStaffId");
+        if (!StringUtil.isEmpty(acceptStaffId)) {
+            userId = acceptStaffId;
+        }
         //todo 查询仓库是否存在
         StorehouseDto storehouseDto = new StorehouseDto();
         storehouseDto.setShId(reqJson.getString("shId"));
@@ -164,6 +171,10 @@ public class GoodsCollectionCmd extends Cmd {
         purchaseApplyPo.setCreateUserId(userId);
         purchaseApplyPo.setCreateUserName(userName);
         purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_APPLY);
+        //直接出库不走OA流程
+        if (!StringUtil.isEmpty(reqJson.getString("useSwitch")) && StorehouseDto.SWITCH_OFF.equals(reqJson.getString("useSwitch"))) {
+            purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT);
+        }
         purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
         //todo 封装物品
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
@@ -201,6 +212,10 @@ public class GoodsCollectionCmd extends Cmd {
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(purchaseApplyPo, PurchaseApplyDto.class);
         purchaseApplyDto.setCurrentUserId(purchaseApplyPo.getUserId());
         purchaseApplyDto.setNextStaffId(reqJson.getString("staffId"));
+        //直接出库不走OA流程
+        if (!StringUtil.isEmpty(reqJson.getString("useSwitch")) && StorehouseDto.SWITCH_OFF.equals(reqJson.getString("useSwitch"))) {
+            storehouseDtos.get(0).setUseSwitch(StorehouseDto.SWITCH_OFF);
+        }
         //todo 启动审核流程
         toStartWorkflow(purchaseApplyDto, storehouseDtos.get(0), reqJson);
         context.setResponseEntity(ResultVo.createResponseEntity(ResultVo.CODE_OK, "物品领用成功"));

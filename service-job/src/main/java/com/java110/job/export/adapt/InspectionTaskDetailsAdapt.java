@@ -24,7 +24,7 @@ public class InspectionTaskDetailsAdapt implements IExportDataAdapt {
     @Autowired
     private IInspectionTaskDetailInnerServiceSMO inspectionTaskDetailInnerServiceSMOImpl;
 
-    private static final int MAX_ROW = 200;
+    private static final int MAX_ROW = 60000;
 
 
     @Override

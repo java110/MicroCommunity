@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="workPoolFileV1ServiceDaoImpl">
 
-
     <!-- 保存工作单文件信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkPoolFileInfo" parameterType="Map">
-        insert into work_pool_file(
-        path_url,community_id,store_id,work_id,file_id,task_id,file_type
-        ) values (
-        #{pathUrl},#{communityId},#{storeId},#{workId},#{fileId},#{taskId},#{fileType}
-        )
+        insert into work_pool_file(path_url, community_id, store_id, work_id, file_id, task_id, file_type)
+        values (#{pathUrl}, #{communityId}, #{storeId}, #{workId}, #{fileId}, #{taskId}, #{fileType})
     </insert>
-
 
     <!-- 查询工作单文件信息 add by wuxw 2018-07-03 -->
     <select id="getWorkPoolFileInfo" parameterType="Map" resultType="Map">
         select t.path_url,t.path_url pathUrl,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.file_id,t.file_id fileId,t.task_id taskId,
+        communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.file_id,t.file_id fileId,t.task_id
+        taskId,
         t.file_type fileType,wt.staff_name staffName
         from work_pool_file t
-        left join work_task wt on t.task_id = wt.task_id
+        left join work_task wt on t.task_id = wt.task_id and wt.status_cd = '0'
         where 1 =1
         <if test="pathUrl !=null and pathUrl != ''">
             and t.path_url= #{pathUrl}
@@ -60,9 +55,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改工作单文件信息 add by wuxw 2018-07-03 -->
     <update id="updateWorkPoolFileInfo" parameterType="Map">
@@ -73,9 +66,6 @@
         <if test="pathUrl !=null and pathUrl != ''">
             , t.path_url= #{pathUrl}
         </if>
-
-
-
         where 1=1
         <if test="fileId !=null and fileId != ''">
             and t.file_id= #{fileId}
@@ -95,13 +85,13 @@
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
         </if>
-
     </update>
 
     <!-- 查询工作单文件数量 add by wuxw 2018-07-03 -->
     <select id="queryWorkPoolFilesCount" parameterType="Map" resultType="Map">
         select count(1) count
         from work_pool_file t
+        left join work_task wt on t.task_id = wt.task_id and wt.status_cd = '0'
         where 1 =1
         <if test="pathUrl !=null and pathUrl != ''">
             and t.path_url= #{pathUrl}
@@ -136,7 +126,5 @@
         <if test="queryEndTime !=null and queryEndTime != ''">
             and t.create_time &lt; #{queryEndTime}
         </if>
-
     </select>
-
 </mapper>

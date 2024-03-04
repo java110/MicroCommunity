@@ -73,6 +73,8 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
 
+    private String applyIda;//被调拨申请id
+
     private List<ResourceStoreTimesDto> times;
 
     public String getAsId() {
@@ -450,5 +452,13 @@ public class AllocationStorehouseDto extends PageDto implements Serializable {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public String getApplyIda() {
+        return applyIda;
+    }
+
+    public void setApplyIda(String applyIda) {
+        this.applyIda = applyIda;
     }
 }

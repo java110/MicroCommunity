@@ -17,7 +17,7 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 查询 费用汇总表
+ * 查询费用汇总表
  * <p>
  * add by  wuxw
  */
@@ -29,7 +29,6 @@ public class QueryReportFeeSummaryCmd extends Cmd {
 
     @Autowired
     private IBaseDataStatistics baseDataStatisticsImpl;
-
 
     /**
      * 校验查询条件
@@ -56,11 +55,13 @@ public class QueryReportFeeSummaryCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-
         QueryStatisticsDto queryStatisticsDto = new QueryStatisticsDto();
         queryStatisticsDto.setCommunityId(reqJson.getString("communityId"));
-        queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
-        queryStatisticsDto.setEndDate(reqJson.getString("endDate"));
+        /*queryStatisticsDto.setStartDate(reqJson.getString("startDate"));
+        queryStatisticsDto.setEndDate(reqJson.getString("endDate"));*/
+        if (reqJson.containsKey("startDate") && !reqJson.getString("startDate").contains(":")) {
+            queryStatisticsDto.setStartDate(reqJson.getString("startDate") + " 00:00:00");
+        }
         if (reqJson.containsKey("endDate") && !reqJson.getString("endDate").contains(":")) {
             queryStatisticsDto.setEndDate(reqJson.getString("endDate") + " 23:59:59");
         }
@@ -70,7 +71,6 @@ public class QueryReportFeeSummaryCmd extends Cmd {
         queryStatisticsDto.setFeeTypeCd(reqJson.getString("feeTypeCd"));
         queryStatisticsDto.setOwnerName(reqJson.getString("ownerName"));
         queryStatisticsDto.setLink(reqJson.getString("link"));
-
         if (reqJson.containsKey("configIds")) {
             queryStatisticsDto.setConfigIds(reqJson.getString("configIds").split(","));
         }
@@ -148,7 +148,6 @@ public class QueryReportFeeSummaryCmd extends Cmd {
                 java110ThreadPoolFactory.stop();
             }
         }
-
         JSONArray datas = new JSONArray();
         datas.add(data);
         context.setResponseEntity(ResultVo.createResponseEntity(datas));

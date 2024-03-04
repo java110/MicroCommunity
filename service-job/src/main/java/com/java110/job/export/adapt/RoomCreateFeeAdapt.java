@@ -70,7 +70,7 @@ public class RoomCreateFeeAdapt implements IExportDataAdapt {
     //禁用电脑端提交收费按钮
     public static final String OFFLINE_PAY_FEE_SWITCH = "OFFLINE_PAY_FEE_SWITCH";
 
-    private static final int MAX_ROW = 200;
+    private static final int MAX_ROW = 60000;
 
     @Override
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) throws ParseException {

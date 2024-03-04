@@ -30,7 +30,6 @@ public class WorkPoolDto extends PageDto implements Serializable {
     private String wtId;
     private String typeName;
 
-
     private String createUserTel;
     private String startTime;
     private String endTime;
@@ -43,7 +42,6 @@ public class WorkPoolDto extends PageDto implements Serializable {
     private String curStaffName;
 
     private String curCopyName;
-
 
     private Date createTime;
 
@@ -63,12 +61,23 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     private String copyId;
 
-    private String remark ;
+    private String remark;
 
     private String staffNameLike;
 
     private String workNameLike;
 
+    private String period;
+
+    private String hours;
+
+    private String beforeTime;
+
+    private String periodMonth;
+
+    private String periodDay;
+
+    private String periodWorkday;
 
     public String getWorkCycle() {
         return workCycle;
@@ -165,7 +174,6 @@ public class WorkPoolDto extends PageDto implements Serializable {
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
     public Date getCreateTime() {
         return createTime;
@@ -294,4 +302,53 @@ public class WorkPoolDto extends PageDto implements Serializable {
     public void setWorkNameLike(String workNameLike) {
         this.workNameLike = workNameLike;
     }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public String getHours() {
+        return hours;
+    }
+
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
+
+    public String getBeforeTime() {
+        return beforeTime;
+    }
+
+    public void setBeforeTime(String beforeTime) {
+        this.beforeTime = beforeTime;
+    }
+
+    public String getPeriodMonth() {
+        return periodMonth;
+    }
+
+    public void setPeriodMonth(String periodMonth) {
+        this.periodMonth = periodMonth;
+    }
+
+    public String getPeriodDay() {
+        return periodDay;
+    }
+
+    public void setPeriodDay(String periodDay) {
+        this.periodDay = periodDay;
+    }
+
+    public String getPeriodWorkday() {
+        return periodWorkday;
+    }
+
+    public void setPeriodWorkday(String periodWorkday) {
+        this.periodWorkday = periodWorkday;
+    }
+
 }

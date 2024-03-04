@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.PageDto;
 import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentDto;
 import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentTotalDto;
+import com.java110.dto.fee.FeeAccountDetailDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
@@ -16,6 +17,7 @@ import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
+import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.report.IQueryPayFeeDetailInnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
@@ -61,7 +63,7 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
-    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+    private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
 
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
@@ -202,6 +204,50 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
         //todo 滞纳金(小计)
         reportFeeMonthStatisticsTotalDto.setTotalLateFee(String.format("%.2f", totalLateFee));
 
+    }
+
+    //处理账户抵扣
+    private ReportFeeMonthStatisticsDto dealFeeAccountDetail(ReportFeeMonthStatisticsDto reportFeeMonthStatistics) {
+        //获取费用明细id
+        String detailId = reportFeeMonthStatistics.getDetailId();
+        FeeAccountDetailDto feeAccountDetailDto = new FeeAccountDetailDto();
+        feeAccountDetailDto.setDetailId(detailId);
+        feeAccountDetailDto.setCommunityId(reportFeeMonthStatistics.getCommunityId());
+        List<FeeAccountDetailDto> feeAccountDetailList = feeAccountDetailServiceSMOImpl.queryFeeAccountDetails(feeAccountDetailDto);
+        BigDecimal noDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //无抵扣
+        BigDecimal cashDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //现金账户抵扣
+        BigDecimal pointDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //积分账户抵扣
+        BigDecimal discountCouponDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //优惠卷抵扣
+        if (feeAccountDetailList != null && feeAccountDetailList.size() > 0) {
+            for (FeeAccountDetailDto feeAccountDetail : feeAccountDetailList) {
+                //抵扣类型 1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1001")) { //无抵扣
+                    //获取账户抵扣金额
+                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
+                    noDeduction = noDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1002")) { //现金账户抵扣
+                    //获取账户抵扣金额
+                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
+                    cashDeduction = cashDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1003")) { //积分账户抵扣
+                    //获取账户抵扣金额
+                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
+                    pointDeduction = pointDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1004")) { //优惠卷抵扣
+                    //获取账户抵扣金额
+                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
+                    discountCouponDeduction = discountCouponDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+            }
+        }
+        reportFeeMonthStatistics.setNoDeduction(String.valueOf(noDeduction)); //无抵扣
+        reportFeeMonthStatistics.setCashDeduction(String.valueOf(cashDeduction)); //现金账户抵扣
+        reportFeeMonthStatistics.setPointDeduction(String.valueOf(pointDeduction)); //积分账户抵扣
+        reportFeeMonthStatistics.setDiscountCouponDeduction(String.valueOf(discountCouponDeduction)); //优惠卷抵扣
+        return reportFeeMonthStatistics;
     }
 
     @Override

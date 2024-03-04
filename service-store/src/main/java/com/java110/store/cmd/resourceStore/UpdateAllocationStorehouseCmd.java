@@ -4,41 +4,23 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
-import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.oaWorkflow.OaWorkflowDto;
-import com.java110.dto.purchase.AllocationStorehouseApplyDto;
-import com.java110.dto.purchase.AllocationStorehouseDto;
 import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
-import com.java110.dto.store.StorehouseDto;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.user.UserStorehouseDto;
 import com.java110.intf.common.IAllocationStorehouseUserInnerServiceSMO;
-import com.java110.intf.common.IOaWorkflowActivitiInnerServiceSMO;
-import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.intf.store.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.purchase.AllocationStorehouseApplyPo;
 import com.java110.po.purchase.AllocationStorehousePo;
-import com.java110.po.purchase.ResourceStorePo;
-import com.java110.po.resource.ResourceStoreTimesPo;
-import com.java110.po.user.UserStorehousePo;
-import com.java110.store.bmo.allocation.IAllocationBMO;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,11 +50,11 @@ public class UpdateAllocationStorehouseCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
-
     @Autowired
     private IStorehouseV1InnerServiceSMO storehouseV1InnerServiceSMOImpl;
 
-
+    @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -85,7 +67,7 @@ public class UpdateAllocationStorehouseCmd extends Cmd {
         if (resourceStores == null || resourceStores.size() < 1) {
             throw new IllegalArgumentException("请求报文中未包含物品信息");
         }
-        //todo 校验 物品是否存在
+        //todo 校验 物品是否存在(用批次表的物品数量与前端传过来的数量比较，因为不同价格物品数量不同)
         for (int resIndex = 0; resIndex < resourceStores.size(); resIndex++) {
             //主要用来校验库存够不够
             ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
@@ -94,16 +76,20 @@ public class UpdateAllocationStorehouseCmd extends Cmd {
             resourceStoreDto.setShId(resourceStores.getJSONObject(resIndex).getString("shId"));
             List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
             Assert.listOnlyOne(resourceStoreDtos, "未包含 物品信息");
-            double stockA = Double.parseDouble(resourceStoreDtos.get(0).getStock());
+
+            ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+            resourceStoreTimesDto.setTimesId(resourceStores.getJSONObject(resIndex).getString("timesId"));
+            List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+            Assert.listOnlyOne(resourceStoreTimesDtos, "查询物品批次表错误！");
+            double stockA = Double.parseDouble(resourceStoreTimesDtos.get(0).getStock());
             double stockB = Double.parseDouble(resourceStores.getJSONObject(resIndex).getString("curStock"));
             if (stockA < stockB) {
-                throw new IllegalArgumentException("库存不足");
+                throw new IllegalArgumentException("该批次价格下库存数量不足！");
             }
             resourceStores.getJSONObject(resIndex).put("resName", resourceStoreDtos.get(0).getResName());
             resourceStores.getJSONObject(resIndex).put("stockA", stockA);
         }
     }
-
 
     /**
      * 调拨申请-调拨申请发起
@@ -117,20 +103,16 @@ public class UpdateAllocationStorehouseCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         int flag = 0;
-
         // 查询用户名称
         UserDto userDto = new UserDto();
         userDto.setUserId(reqJson.getString("userId"));
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
         Assert.listOnlyOne(userDtos, "用户不存在");
         reqJson.put("userName", userDtos.get(0).getName());
-
         //封装调拨对象
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = covertAllocationStorehouseApply(reqJson);
         //todo 默认写0 后面 相加
-        allocationStorehouseApplyPo.setApplyCount("0");
-
+        allocationStorehouseApplyPo.setApplyCount("0.0");
         //todo 删除 老的 调拨物品
         AllocationStorehousePo allocationStorehousePo = new AllocationStorehousePo();
         allocationStorehousePo.setApplyId(allocationStorehouseApplyPo.getApplyId());
@@ -142,26 +124,22 @@ public class UpdateAllocationStorehouseCmd extends Cmd {
             resObj = resourceStores.getJSONObject(resIndex);
             //todo 记录明细
             saveAllocationStorehouse(reqJson, allocationStorehouseApplyPo, resObj);
-
         }
         flag = allocationStorehouseApplyV1InnerServiceSMOImpl.updateAllocationStorehouseApply(allocationStorehouseApplyPo);
         if (flag < 1) {
             throw new CmdException("保存修改物品失败");
         }
-
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
+
     private void saveAllocationStorehouse(JSONObject reqJson, AllocationStorehouseApplyPo allocationStorehouseApplyPo, JSONObject resObj) {
         AllocationStorehousePo allocationStorehousePo = new AllocationStorehousePo();
         allocationStorehousePo.setAsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_allocationStorehouseId));
         allocationStorehousePo.setApplyId(allocationStorehouseApplyPo.getApplyId());
         allocationStorehousePo.setResId(resObj.getString("resId"));
         allocationStorehousePo.setResName(resObj.getString("resName"));
-
         allocationStorehousePo.setShIda(resObj.getString("shId"));
         allocationStorehouseApplyPo.setShId(resObj.getString("shId"));
-
         allocationStorehousePo.setShIdz(resObj.getString("shzId"));
         allocationStorehousePo.setStoreId(reqJson.getString("storeId"));
         //调拨(返还)数量
@@ -173,13 +151,11 @@ public class UpdateAllocationStorehouseCmd extends Cmd {
         allocationStorehousePo.setStartUserName(reqJson.getString("userName"));
         allocationStorehousePo.setTimesId(resObj.getString("timesId"));
         int flag = allocationStorehouseV1InnerServiceSMOImpl.saveAllocationStorehouse(allocationStorehousePo);
-
         if (flag < 1) {
             throw new CmdException("保存调拨物品失败");
         }
-
-        int applyCount = Integer.parseInt(allocationStorehouseApplyPo.getApplyCount());
-        applyCount += resObj.getIntValue("curStock");
+        double applyCount = Double.parseDouble(allocationStorehouseApplyPo.getApplyCount());
+        applyCount += resObj.getDoubleValue("curStock");
         allocationStorehouseApplyPo.setApplyCount(applyCount + "");
     }
 
@@ -190,7 +166,6 @@ public class UpdateAllocationStorehouseCmd extends Cmd {
      * @return
      */
     private AllocationStorehouseApplyPo covertAllocationStorehouseApply(JSONObject reqJson) {
-
         AllocationStorehouseApplyPo allocationStorehouseApplyPo = new AllocationStorehouseApplyPo();
         allocationStorehouseApplyPo.setApplyId(reqJson.getString("applyId"));
         allocationStorehouseApplyPo.setRemark(reqJson.getString("remark"));

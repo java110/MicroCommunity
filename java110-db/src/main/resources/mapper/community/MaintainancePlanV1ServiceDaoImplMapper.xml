@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="maintainancePlanV1ServiceDaoImpl">
 
-
     <!-- 保存保养计划信息 add by wuxw 2018-07-03 -->
     <insert id="saveMaintainancePlanInfo" parameterType="Map">
-        insert into maintainance_plan(
-        maintainance_day,plan_period,create_user_id,end_date,standard_id,plan_name,remark,create_user_name,maintainance_everyday,maintainance_month,plan_id,state,community_id,start_date
-        ) values (
-        #{maintainanceDay},#{planPeriod},#{createUserId},#{endDate},#{standardId},#{planName},#{remark},#{createUserName},#{maintainanceEveryday},#{maintainanceMonth},#{planId},#{state},#{communityId},#{startDate}
-        )
+        insert into maintainance_plan(maintainance_day, plan_period, create_user_id, end_date, standard_id, plan_name,
+                                      remark, create_user_name, maintainance_everyday, maintainance_month, plan_id,
+                                      state, community_id, start_date)
+        values (#{maintainanceDay}, #{planPeriod}, #{createUserId}, #{endDate}, #{standardId}, #{planName}, #{remark},
+                #{createUserName}, #{maintainanceEveryday}, #{maintainanceMonth}, #{planId}, #{state}, #{communityId},
+                #{startDate})
     </insert>
-
 
     <!-- 查询保养计划信息 add by wuxw 2018-07-03 -->
     <select id="getMaintainancePlanInfo" parameterType="Map" resultType="Map">
         select t.maintainance_day,t.maintainance_day maintainanceDay,t.plan_period,t.plan_period
-        planPeriod,t.create_user_id,t.create_user_id createUserId,t.end_date,t.standard_id,t.standard_id standardId,t.plan_name,t.plan_name
+        planPeriod,t.create_user_id,t.create_user_id createUserId,t.end_date,t.standard_id,t.standard_id
+        standardId,t.plan_name,t.plan_name
         planName,t.remark,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
         statusCd,t.maintainance_everyday,t.maintainance_everyday
         maintainanceEveryday,t.maintainance_month,t.maintainance_month maintainanceMonth,t.plan_id,t.plan_id
-        planId,t.state,t.community_id,t.community_id communityId,t.start_date,DATE_FORMAT(t.start_date,'%Y-%m-%d') startDate,
+        planId,t.state,t.community_id,t.community_id communityId,t.start_date,DATE_FORMAT(t.start_date,'%Y-%m-%d')
+        startDate,
         DATE_FORMAT(t.end_date,'%Y-%m-%d') endDate,
         ms.standard_name standardName, d.name stateName,c.name planPeriodName,t.create_time createTime
         from maintainance_plan t
         left join maintainance_standard ms on t.standard_id = ms.standard_id and ms.status_cd = '0'
         left join t_dict d on t.state = d.status_cd and d.table_name = 'maintainance_plan' and d.table_columns = 'state'
-        left join t_dict c on t.plan_period = c.status_cd and c.table_name = 'maintainance_plan' and  c.table_columns = 'plan_period'
+        left join t_dict c on t.plan_period = c.status_cd and c.table_name = 'maintainance_plan' and c.table_columns =
+        'plan_period'
         where 1 =1
         <if test="maintainanceDay !=null and maintainanceDay != ''">
             and t.maintainance_day= #{maintainanceDay}
@@ -50,7 +51,7 @@
             and t.standard_id= #{standardId}
         </if>
         <if test="planName !=null and planName != ''">
-            and t.plan_name= #{planName}
+            and t.plan_name like '%${planName}%'
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -83,9 +84,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改保养计划信息 add by wuxw 2018-07-03 -->
     <update id="updateMaintainancePlanInfo" parameterType="Map">
@@ -136,7 +135,6 @@
         <if test="planId !=null and planId != ''">
             and t.plan_id= #{planId}
         </if>
-
     </update>
 
     <!-- 查询保养计划数量 add by wuxw 2018-07-03 -->
@@ -160,7 +158,7 @@
             and t.standard_id= #{standardId}
         </if>
         <if test="planName !=null and planName != ''">
-            and t.plan_name= #{planName}
+            and t.plan_name like '%${planName}%'
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -189,10 +187,5 @@
         <if test="startDate !=null and startDate != ''">
             and t.start_date= #{startDate}
         </if>
-
-
     </select>
-
-
-
 </mapper>

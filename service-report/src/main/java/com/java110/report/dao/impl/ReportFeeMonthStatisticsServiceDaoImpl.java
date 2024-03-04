@@ -478,6 +478,15 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     }
 
     @Override
+    public List<Map> queryFeeAccountDetailSum(Map info) {
+        logger.debug("查询账户抵扣金额大计入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeAccountDetailSum", info);
+
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
+    @Override
     public List<Map> queryAllPayFeeDetail(Map info) throws DAOException {
         logger.debug("查询费用总数月统计信息 入参 info : {}", info);
 
@@ -503,6 +512,15 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
         List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryDeadlineFee", info);
+
+        return businessReportFeeMonthStatisticsInfos;
+    }
+
+    @Override
+    public List<Map> queryPayFeeDetailDiscount(Map info) {
+        logger.debug("查询优惠金额 入参 info : {}", info);
+
+        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailDiscount", info);
 
         return businessReportFeeMonthStatisticsInfos;
     }

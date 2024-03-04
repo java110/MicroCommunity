@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -99,6 +100,7 @@ public class AccountApi {
                                                     @RequestParam(value = "link", required = false) String link,
                                                     @RequestParam(value = "idCard", required = false) String idCard,
                                                     @RequestParam(value = "acctType", required = false) String acctType,
+                                                    @RequestParam(value = "acctTypes", required = false) String[] acctTypes,
                                                     @RequestParam(value = "acctId", required = false) String acctId,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row,
@@ -145,6 +147,9 @@ public class AccountApi {
         accountDto.setAcctName(ownerName);
         accountDto.setPartId(communityId);
         accountDto.setAcctType(acctType);
+        if(!StringUtil.isNullOrNone(acctTypes)){
+            accountDto.setAcctTypes(acctTypes);
+        }
         accountDto.setLink(link);
         accountDto.setAcctId(acctId);
 

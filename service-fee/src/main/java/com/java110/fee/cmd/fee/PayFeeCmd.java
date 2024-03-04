@@ -38,9 +38,7 @@ import com.java110.po.owner.RepairUserPo;
 import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.FeeFlagTypeConstant;
-import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
@@ -257,6 +255,31 @@ public class PayFeeCmd extends Cmd {
             payFeeDetailPo.setCashierId(userDtos.get(0).getUserId());
             payFeeDetailPo.setCashierName(userDtos.get(0).getName());
             payFeeDetailPo.setOpenInvoice("N");
+            if (!StringUtil.isEmpty(paramObj.getString("cashAmount")) && !StringUtil.isEmpty(paramObj.getString("integralAmount"))) {
+                BigDecimal cashAmount = new BigDecimal(paramObj.getString("cashAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                BigDecimal integralAmount = new BigDecimal(paramObj.getString("integralAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                if (!StringUtil.isEmpty(payFeeDetailPo.getRemark())) {
+                    payFeeDetailPo.setRemark(payFeeDetailPo.getRemark() + "，现金账户抵扣" + cashAmount + "元，积分账户抵扣" + integralAmount + "元");
+                } else {
+                    payFeeDetailPo.setRemark("现金账户抵扣" + cashAmount + "元，积分账户抵扣" + integralAmount + "元");
+                }
+            }
+            if (!StringUtil.isEmpty(paramObj.getString("cashAmount")) && StringUtil.isEmpty(paramObj.getString("integralAmount"))) {
+                BigDecimal cashAmount = new BigDecimal(paramObj.getString("cashAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                if (!StringUtil.isEmpty(payFeeDetailPo.getRemark())) {
+                    payFeeDetailPo.setRemark(payFeeDetailPo.getRemark() + "，现金账户抵扣" + cashAmount + "元");
+                } else {
+                    payFeeDetailPo.setRemark("现金账户抵扣" + cashAmount + "元");
+                }
+            }
+            if (StringUtil.isEmpty(paramObj.getString("cashAmount")) && !StringUtil.isEmpty(paramObj.getString("integralAmount"))) {
+                BigDecimal integralAmount = new BigDecimal(paramObj.getString("integralAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
+                if (!StringUtil.isEmpty(payFeeDetailPo.getRemark())) {
+                    payFeeDetailPo.setRemark(payFeeDetailPo.getRemark() + "，积分账户抵扣" + integralAmount + "元");
+                } else {
+                    payFeeDetailPo.setRemark("积分账户抵扣" + integralAmount + "元");
+                }
+            }
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
@@ -355,8 +378,19 @@ public class PayFeeCmd extends Cmd {
                 } else if (flag < 1) { //积分换算金额小于等于实付金额
                     subtract = receivedAmount.subtract(divide);
                 }
-                integralSum = integralSum.add(subtract);
+//                integralSum = integralSum.add(subtract);
                 payFeeDetailPo.setReceivedAmount(subtract.toString());
+                integralSum = integralSum.add(divide);
+                // todo 如果积分大于0
+                if (integralSum.doubleValue() > 0) {
+                    FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
+                    feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
+                    feeAccountDetailPo.setDetailId(payFeeDetailPo.getDetailId());
+                    feeAccountDetailPo.setCommunityId(payFeeDetailPo.getCommunityId());
+                    feeAccountDetailPo.setAmount(integralSum.doubleValue() + "");
+                    feeAccountDetailPo.setState("1003"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+                    feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
+                }
             } else if (AccountDto.ACCT_TYPE_CASH.equals(param.getString("acctType"))) { //现金账户
                 //实收金额
                 BigDecimal receivedAmount = new BigDecimal(payFeeDetailPo.getReceivedAmount());
@@ -1121,8 +1155,32 @@ public class PayFeeCmd extends Cmd {
         tmpPayFeeDetailPo.setEndTime(reqJson.getString("customStartTime"));
         tmpPayFeeDetailPo.setState(FeeDetailDto.STATE_OWE);
         tmpPayFeeDetailPo.setOpenInvoice("N");
-
         tmpPayFeeDetailPo.setRemark("按缴费时间段缴费,这部分费用按欠费的方式重新生成，请在" + payObjNameRemark + "上查看");
+        if (!StringUtil.isEmpty(reqJson.getString("cashAmount")) && !StringUtil.isEmpty(reqJson.getString("integralAmount"))) {
+            BigDecimal cashAmount = new BigDecimal(reqJson.getString("cashAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal integralAmount = new BigDecimal(reqJson.getString("integralAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
+            if (!StringUtil.isEmpty(tmpPayFeeDetailPo.getRemark())) {
+                tmpPayFeeDetailPo.setRemark(tmpPayFeeDetailPo.getRemark() + "，现金账户抵扣" + cashAmount + "元，积分账户抵扣" + integralAmount + "元");
+            } else {
+                tmpPayFeeDetailPo.setRemark("现金账户抵扣" + cashAmount + "元，积分账户抵扣" + integralAmount + "元");
+            }
+        }
+        if (!StringUtil.isEmpty(reqJson.getString("cashAmount")) && StringUtil.isEmpty(reqJson.getString("integralAmount"))) {
+            BigDecimal cashAmount = new BigDecimal(reqJson.getString("cashAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
+            if (!StringUtil.isEmpty(tmpPayFeeDetailPo.getRemark())) {
+                tmpPayFeeDetailPo.setRemark(tmpPayFeeDetailPo.getRemark() + "，现金账户抵扣" + cashAmount + "元");
+            } else {
+                tmpPayFeeDetailPo.setRemark("现金账户抵扣" + cashAmount + "元");
+            }
+        }
+        if (StringUtil.isEmpty(reqJson.getString("cashAmount")) && !StringUtil.isEmpty(reqJson.getString("integralAmount"))) {
+            BigDecimal integralAmount = new BigDecimal(reqJson.getString("integralAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
+            if (!StringUtil.isEmpty(tmpPayFeeDetailPo.getRemark())) {
+                tmpPayFeeDetailPo.setRemark(tmpPayFeeDetailPo.getRemark() + "，积分账户抵扣" + integralAmount + "元");
+            } else {
+                tmpPayFeeDetailPo.setRemark("积分账户抵扣" + integralAmount + "元");
+            }
+        }
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(tmpPayFeeDetailPo);
 
         if (flag < 1) {

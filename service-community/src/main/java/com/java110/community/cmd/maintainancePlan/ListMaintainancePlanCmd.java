@@ -39,7 +39,6 @@ import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 类表述：查询
  * 服务编码：maintainancePlan.listMaintainancePlan
@@ -54,6 +53,7 @@ import org.slf4j.LoggerFactory;
 public class ListMaintainancePlanCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListMaintainancePlanCmd.class);
+
     @Autowired
     private IMaintainancePlanV1InnerServiceSMO maintainancePlanV1InnerServiceSMOImpl;
 
@@ -63,8 +63,6 @@ public class ListMaintainancePlanCmd extends Cmd {
     @Autowired
     private IMaintainancePlanMachineV1InnerServiceSMO maintainancePlanMachineV1InnerServiceSMOImpl;
 
-
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -72,46 +70,33 @@ public class ListMaintainancePlanCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         MaintainancePlanDto maintainancePlanDto = BeanConvertUtil.covertBean(reqJson, MaintainancePlanDto.class);
-
         int count = maintainancePlanV1InnerServiceSMOImpl.queryMaintainancePlansCount(maintainancePlanDto);
-
         List<MaintainancePlanDto> maintainancePlanDtos = null;
-
         if (count > 0) {
             maintainancePlanDtos = maintainancePlanV1InnerServiceSMOImpl.queryMaintainancePlans(maintainancePlanDto);
             freshStaffAndMachineCount(maintainancePlanDtos);
         } else {
             maintainancePlanDtos = new ArrayList<>();
         }
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, maintainancePlanDtos);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     private void freshStaffAndMachineCount(List<MaintainancePlanDto> maintainancePlanDtos) {
-
-        if(maintainancePlanDtos == null || maintainancePlanDtos.size()<1){
+        if (maintainancePlanDtos == null || maintainancePlanDtos.size() < 1) {
             return;
         }
-
         List<String> planIds = new ArrayList<>();
-
-        for(MaintainancePlanDto maintainancePlanDto : maintainancePlanDtos){
+        for (MaintainancePlanDto maintainancePlanDto : maintainancePlanDtos) {
             planIds.add(maintainancePlanDto.getPlanId());
         }
-
-
         MaintainancePlanMachineDto maintainancePlanMachineDto = new MaintainancePlanMachineDto();
         maintainancePlanMachineDto.setPlanIds(planIds.toArray(new String[planIds.size()]));
         maintainancePlanMachineDto.setCommunityId(maintainancePlanDtos.get(0).getCommunityId());
         List<MaintainancePlanMachineDto> maintainancePlanMachineDtos = maintainancePlanMachineV1InnerServiceSMOImpl.queryMaintainancePlanMachinesGroupCount(maintainancePlanMachineDto);
-
-        if(maintainancePlanMachineDtos != null && maintainancePlanMachineDtos.size()> 0) {
+        if (maintainancePlanMachineDtos != null && maintainancePlanMachineDtos.size() > 0) {
             for (MaintainancePlanDto maintainancePlanDto : maintainancePlanDtos) {
                 for (MaintainancePlanMachineDto tmpMaintainancePlanMachineDto : maintainancePlanMachineDtos) {
                     if (maintainancePlanDto.getPlanId().equals(tmpMaintainancePlanMachineDto.getPlanId())) {
@@ -120,13 +105,11 @@ public class ListMaintainancePlanCmd extends Cmd {
                 }
             }
         }
-
         MaintainancePlanStaffDto maintainancePlanStaffDto = new MaintainancePlanStaffDto();
         maintainancePlanStaffDto.setPlanIds(planIds.toArray(new String[planIds.size()]));
         maintainancePlanStaffDto.setCommunityId(maintainancePlanDtos.get(0).getCommunityId());
         List<MaintainancePlanStaffDto> maintainancePlanStaffDtos = maintainancePlanStaffV1InnerServiceSMOImpl.queryMaintainancePlanStaffsGroupCount(maintainancePlanStaffDto);
-
-        if(maintainancePlanStaffDtos != null && maintainancePlanStaffDtos.size()> 0) {
+        if (maintainancePlanStaffDtos != null && maintainancePlanStaffDtos.size() > 0) {
             for (MaintainancePlanDto maintainancePlanDto : maintainancePlanDtos) {
                 for (MaintainancePlanStaffDto tmpMaintainancePlanStaffDto : maintainancePlanStaffDtos) {
                     if (maintainancePlanDto.getPlanId().equals(tmpMaintainancePlanStaffDto.getPlanId())) {

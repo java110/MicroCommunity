@@ -170,7 +170,7 @@ public class ResourceOutCmd extends Cmd {
             if (StringUtil.isEmpty(resourceStoreDtos.get(0).getMiniStock())) {
                 throw new IllegalArgumentException("最小计量总数不能为空！");
             }
-            //获取领用拨放的数量
+            //获取领用发放的数量
             BigDecimal quantity = new BigDecimal(tmpPurchaseApplyDetailDto.getQuantity());
             //原库存总数
             BigDecimal stock = new BigDecimal(resourceStoreDtos.get(0).getStock());
