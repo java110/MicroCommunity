@@ -2,7 +2,6 @@ package com.java110.acct.payment.adapt.easypay;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IRefundMoneyAdapt;
-import com.java110.acct.payment.adapt.bbgpay.EncryptDecryptFactory;
 import com.java110.acct.payment.adapt.easypay.utils.HttpConnectUtils;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
