@@ -45,13 +45,6 @@ public class QrCodeEasyPaymentAdapt implements IQrCodePaymentSMO {
 
     private static final String WECHAT_SERVICE_MCH_ID = "SERVICE_MCH_ID";
 
-    private static String VERSION = "1.0";
-
-    private static String SIGN_TYPE = "RSA2";// 加密算法：SM4、RSA2
-
-    private static String gzhPayUrl = "https://mbank.bankofbbg.com/www/corepaycer/ScanCodePay";
-
-    private static String queryUrl = "https://mbank.bankofbbg.com/www/corepaycer/QueryTxnInfo";// 交易查询地址
 
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;

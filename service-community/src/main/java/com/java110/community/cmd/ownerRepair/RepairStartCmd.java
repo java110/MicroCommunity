@@ -2,16 +2,19 @@ package com.java110.community.cmd.ownerRepair;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.constant.BusinessTypeConstant;
@@ -41,6 +44,9 @@ public class RepairStartCmd extends Cmd {
     @Autowired
     private IRepairUserV1InnerServiceSMO repairUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "repairId", "未包含报修单信息");
@@ -49,6 +55,14 @@ public class RepairStartCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+        String userId = CmdContextUtils.getUserId(context);
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos,"用户未登录");
+
         RepairDto repairDto = new RepairDto();
         repairDto.setRepairId(reqJson.getString("repairId"));
         //查询报修信息
@@ -79,8 +93,8 @@ public class RepairStartCmd extends Cmd {
                 repairUserPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
                 repairUserPo.setState(RepairUserDto.STATE_START);
                 repairUserPo.setContext("启动报修流程");
-                repairUserPo.setStaffId(reqJson.getString("userId"));
-                repairUserPo.setStaffName(reqJson.getString("userName"));
+                repairUserPo.setStaffId(userDtos.get(0).getUserId()); //当前处理员工id
+                repairUserPo.setStaffName(userDtos.get(0).getName()); //当前处理员工名称
                 for (RepairUserDto repairUser : repairUserDtos) {
                     if (repairUser.getEndTime() == null) {
                         repairUserPo.setPreStaffId(repairUser.getStaffId());

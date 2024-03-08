@@ -82,8 +82,8 @@ public class FeeConfigServiceDaoImpl extends BaseServiceDao implements IFeeConfi
     @Override
     public List<Map> getFeeConfigInfo(Map info) throws DAOException {
         logger.debug("查询费用配置信息 入参 info : {}", info);
-        List<Map> businessFeeConfigInfos = sqlSessionTemplate.selectList("feeConfigServiceDaoImpl.getFeeConfigInfo", info);
-        return businessFeeConfigInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("feeConfigServiceDaoImpl.getFeeConfigInfo", info);
+        return infos;
     }
 
 
