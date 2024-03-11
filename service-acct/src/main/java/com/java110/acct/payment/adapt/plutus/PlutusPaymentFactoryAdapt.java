@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.CommunitySettingFactory;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
@@ -13,10 +14,13 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.wechat.SmallWeChatDto;
+import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
+import com.java110.po.wechat.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.MappingConstant;
@@ -85,6 +89,10 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
     @Autowired
     private IPaymentPoolValueV1InnerServiceSMO paymentPoolValueV1InnerServiceSMOImpl;
+
+
+    @Autowired
+    private IOnlinePayV1InnerServiceSMO onlinePayV1InnerServiceSMOImpl;
 
 
     @Override
@@ -242,6 +250,9 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             throw new IllegalArgumentException("支付失败" + paramObj.getString("error"));
         }
 
+        doSaveOnlinePay(smallWeChatDto, openid, orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付",paymentPoolValueDtos.get(0).getPpId());
+
+
         if (TRADE_TYPE_NATIVE.equals(tradeType)) {
             paramObj.put("code", 0);
             return paramObj;
@@ -300,6 +311,7 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         //更新数据
         paymentOrderDto.setOrderId(map.getString("outTransId"));
         paymentOrderDto.setResponseEntity(new ResponseEntity<String>("SUCCESS", HttpStatus.OK));
+        doUpdateOnlinePay(map.getString("outTransId"), OnlinePayDto.STATE_COMPILE, "支付成功");
         return paymentOrderDto;
     }
 
@@ -325,6 +337,32 @@ public class PlutusPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         }
 
         return BeanConvertUtil.covertBean(smallWeChatDtos.get(0), SmallWeChatDto.class);
+    }
+
+    private void doSaveOnlinePay(SmallWeChatDto smallWeChatDto, String openId, String orderId, String feeName,
+                                 double money, String state, String message,String ppId) {
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setAppId(smallWeChatDto.getAppId());
+        onlinePayPo.setMchId(smallWeChatDto.getMchId());
+        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setOpenId(openId);
+        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setPayId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        onlinePayPo.setPayName(feeName);
+        onlinePayPo.setRefundFee("0");
+        onlinePayPo.setState(state);
+        onlinePayPo.setTotalFee(money + "");
+        onlinePayPo.setTransactionId(orderId);
+        onlinePayPo.setPaymentPoolId(ppId);
+        onlinePayV1InnerServiceSMOImpl.saveOnlinePay(onlinePayPo);
+    }
+
+    private void doUpdateOnlinePay(String orderId, String state, String message) {
+        OnlinePayPo onlinePayPo = new OnlinePayPo();
+        onlinePayPo.setMessage(message.length() > 1000 ? message.substring(0, 1000) : message);
+        onlinePayPo.setOrderId(orderId);
+        onlinePayPo.setState(state);
+        onlinePayV1InnerServiceSMOImpl.updateOnlinePay(onlinePayPo);
     }
 
 }
