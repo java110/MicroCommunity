@@ -2236,18 +2236,23 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
      * @return
      */
     private Date correctByFeeStartTime(Date rateStartTime, Date startTime) {
-        int rateDay = DateUtil.getMonthDay(rateStartTime);
-        int day = DateUtil.getMonthDay(startTime);
+        Calendar rateCalendar = Calendar.getInstance();
+        rateCalendar.setTime(rateStartTime);
+        int rateDay = rateCalendar.get(Calendar.DAY_OF_MONTH);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startTime);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
         if(rateDay == day){
             return rateStartTime;
         }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(rateStartTime);
-        calendar.add(Calendar.MONTH,1);
-        calendar.set(Calendar.DAY_OF_MONTH,day);
-        return calendar.getTime();
+        rateCalendar = Calendar.getInstance();
+        rateCalendar.setTime(rateStartTime);
+        rateCalendar.add(Calendar.MONTH,1);
+        rateCalendar.set(Calendar.DAY_OF_MONTH,day);
+        return rateCalendar.getTime();
     }
+
 
     /**
      * 租金处理
