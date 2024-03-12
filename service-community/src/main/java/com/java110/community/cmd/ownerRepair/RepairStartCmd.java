@@ -104,7 +104,7 @@ public class RepairStartCmd extends Cmd {
                         repairUserPo.setPreRuId(repairUser.getRuId());
                     }
                 }
-                repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
+                repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_AUDIT_USER);
                 flag = repairUserV1InnerServiceSMOImpl.saveRepairUserNew(repairUserPo);
                 if (flag < 1) {
                     throw new CmdException("添加报修工单信息失败！");

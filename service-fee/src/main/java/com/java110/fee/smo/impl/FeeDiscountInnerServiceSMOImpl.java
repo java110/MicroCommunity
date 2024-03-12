@@ -16,10 +16,7 @@ import com.java110.intf.fee.*;
 import com.java110.po.fee.FeeDiscountPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.factory.ApplicationContextFactory;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.MoneyUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -165,7 +162,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
         //根据费用项查询折扣（该费用项下的所有折扣信息）
         List<PayFeeConfigDiscountDto> payFeeConfigDiscountDtos =
                 payFeeConfigDiscountInnerServiceSMOImpl.queryPayFeeConfigDiscounts(payFeeConfigDiscountDto);
-        if (payFeeConfigDiscountDtos == null || payFeeConfigDiscountDtos.size() < 1) {
+        if (ListUtil.isNull(payFeeConfigDiscountDtos)) {
             computeApplyRoomDiscount(feeDetailDto, simpleDateFormat, c, computeDiscountDtos);
             //取出开关映射的值
             String value = MappingCache.getValue(DOMAIN_COMMON, DISCOUNT_MODE);
@@ -200,7 +197,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             //查询打折表
             List<FeeDiscountDto> feeDiscountInfo = BeanConvertUtil.covertBeanList(feeDiscountServiceDaoImpl.getFeeDiscountInfo(BeanConvertUtil.beanCovertMap(feeDiscountDto)), FeeDiscountDto.class);
             //Assert.listOnlyOne(feeDiscountInfo, "查询打折表错误！");
-            if(feeDiscountInfo == null || feeDiscountInfo.size() < 1){
+            if(!ListUtil.isNull(feeDiscountInfo)){
                 continue;
             }
             FeeDiscountRuleDto feeDiscountRuleDto = new FeeDiscountRuleDto();
@@ -208,7 +205,7 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
             //查询打折规则表
             List<FeeDiscountRuleDto> feeDiscountRuleDtos = feeDiscountRuleInnerServiceSMOImpl.queryFeeDiscountRules(feeDiscountRuleDto);
             //Assert.listOnlyOne(feeDiscountRuleDtos, "查询打折规则表错误！");
-            if(feeDiscountRuleDtos == null || feeDiscountRuleDtos.size() < 1){
+            if(!ListUtil.isNull(feeDiscountRuleDtos)){
                 continue;
             }
             if (!StringUtil.isEmpty(feeDiscountRuleDtos.get(0).getBeanImpl()) && feeDiscountRuleDtos.get(0).getBeanImpl().equals("reductionMonthFeeRule")) { //赠送规则
@@ -217,7 +214,10 @@ public class FeeDiscountInnerServiceSMOImpl extends BaseServiceSMO implements IF
                 feeDiscountSpecDto.setSpecId(SPEC_RATE);
                 //查询打折规格
                 List<FeeDiscountSpecDto> feeDiscountSpecDtos = feeDiscountSpecInnerServiceSMOImpl.queryFeeDiscountSpecs(feeDiscountSpecDto);
-                Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
+                //Assert.listOnlyOne(feeDiscountSpecDtos, "查询打折规格表错误！");
+                if(!ListUtil.isNull(feeDiscountSpecDtos)){
+                    continue;
+                }
                 //获取赠送月份
                 String specValue = feeDiscountSpecDtos.get(0).getSpecValue();
                 Calendar cal = Calendar.getInstance();

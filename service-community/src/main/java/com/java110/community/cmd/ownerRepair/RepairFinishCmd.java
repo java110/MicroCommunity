@@ -39,10 +39,7 @@ import com.java110.po.resource.ResourceStoreUseRecordPo;
 import com.java110.po.user.UserStorehousePo;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -141,7 +138,7 @@ public class RepairFinishCmd extends Cmd {
         String repairMaterial = "";
         //费用明细(单价 * 数量 = 总价)
         String repairFee = "";
-        if (json != null && json.size() > 0 && ("1001".equals(maintenanceType) || "1003".equals(maintenanceType))) {
+        if (ListUtil.isNull(json) && ("1001".equals(maintenanceType) || "1003".equals(maintenanceType))) {
             Object[] objects = json.toArray();
             //数据前期校验
             for (int i = 0; i < objects.length; i++) {
