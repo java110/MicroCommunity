@@ -211,12 +211,12 @@ public class RoomCreatePayFeeAdapt extends DatabusAdaptImpl {
         businessUnit.put("state", "2008001");
         businessUnit.put("batchId", paramInJson.getString("batchId"));
         businessUnit.put("userId", paramInJson.getString("userId"));
-        paramInJson.put("feeId", businessUnit.getString("feeId"));
+        businessUnit.put("feeId", businessUnit.getString("feeId"));
         if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDto.getFeeFlag())
                 && !StringUtil.isEmpty(paramInJson.getString("endTime"))) {
-            paramInJson.put("maxTime", paramInJson.getString("endTime"));
+            businessUnit.put("maxTime", paramInJson.getString("endTime"));
         } else {
-            paramInJson.put("maxTime", feeConfigDto.getEndTime());
+            businessUnit.put("maxTime", feeConfigDto.getEndTime());
         }
         return BeanConvertUtil.covertBean(businessUnit, PayFeePo.class);
     }
