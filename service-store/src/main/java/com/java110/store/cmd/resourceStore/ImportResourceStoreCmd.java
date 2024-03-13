@@ -44,6 +44,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,7 +114,7 @@ public class ImportResourceStoreCmd extends Cmd {
 
         JSONArray importResourceStoreDtos = reqJson.getJSONArray("importResourceStoreDtos");
         List<ImportResourceStoreDto> tmpImportResourceStoreDtos = JSONArray.parseArray(importResourceStoreDtos.toJSONString(), ImportResourceStoreDto.class);
-        if (tmpImportResourceStoreDtos == null || tmpImportResourceStoreDtos.size() < 1) {
+        if (ListUtil.isNull(tmpImportResourceStoreDtos)) {
             cmdDataFlowContext.setResponseEntity(ResultVo.createResponseEntity(0));
             return;
         }
@@ -154,8 +155,9 @@ public class ImportResourceStoreCmd extends Cmd {
             resourceStorePo.setRemark(importResourceStoreDto.getRemark());
             resourceStorePo.setWarningStock(importResourceStoreDto.getWarningStock());
             resourceStorePo.setAveragePrice(importResourceStoreDto.getPrice());
+            resourceStorePo.setCommunityId(reqJson.getString("communityId"));
             int flag = 0;
-            if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
+            if (ListUtil.isNull(resourceStoreDtos)) {
                 resourceStorePo.setResId(GenerateCodeFactory.getResId(GenerateCodeFactory.CODE_PREFIX_resId));
                 flag = resourceStoreV1InnerServiceSMOImpl.saveResourceStore(resourceStorePo);
 
@@ -274,6 +276,7 @@ public class ImportResourceStoreCmd extends Cmd {
             resourceStoreTimesPo.setStoreId(resourceStorePo.getStoreId());
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("10"));
             resourceStoreTimesPo.setShId(resourceStorePo.getShId());
+            resourceStoreTimesPo.setCommunityId(resourceStorePo.getCommunityId());
 
             resourceStoreTimesV1InnerServiceSMOImpl.saveOrUpdateResourceStoreTimes(resourceStoreTimesPo);
         }
