@@ -20,6 +20,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -127,7 +128,7 @@ public class ImportCarHistoryFeeDetailQueueDataAdapt extends DefaultImportData i
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         List<PayFeePo> payFeePos = null;
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             PayFeePo payFeePo = new PayFeePo();
             payFeePo.setCommunityId(importRoomFee.getCommunityId());
             payFeePo.setConfigId(feeDto.getConfigId());
