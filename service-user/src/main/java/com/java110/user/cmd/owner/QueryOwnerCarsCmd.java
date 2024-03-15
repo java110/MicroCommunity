@@ -21,6 +21,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,7 +198,7 @@ public class QueryOwnerCarsCmd extends Cmd {
         ownerRoomRelDto.setPage(1);
         ownerRoomRelDto.setRow(3); //只展示3个房屋以内 不然页面太乱
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
             ownerCarDto.setRoomName("-");
             return;
         }
@@ -211,7 +212,7 @@ public class QueryOwnerCarsCmd extends Cmd {
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
         String roomName = "";
         for (RoomDto tRoomDto : roomDtos) {
-            roomName += (tRoomDto.getFloorNum() + "栋" + tRoomDto.getUnitNum() + "单元" + tRoomDto.getRoomNum() + "室" + "/");
+            roomName += (tRoomDto.getFloorNum() + "-" + tRoomDto.getUnitNum() + "-" + tRoomDto.getRoomNum() + "-" + "/");
         }
         roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
         ownerCarDto.setRoomName(roomName);

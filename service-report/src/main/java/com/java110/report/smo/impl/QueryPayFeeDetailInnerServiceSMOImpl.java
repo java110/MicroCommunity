@@ -16,6 +16,7 @@ import com.java110.dto.reportFee.ReportFeeMonthStatisticsTotalDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IParkingSpaceV1InnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
@@ -67,6 +68,9 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
 
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
@@ -136,31 +140,86 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
         roomDto.setCommunityId(reportFeeMonthStatisticsDtos.get(0).getCommunityId());
         List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
 
-        if(!ListUtil.isNull(roomDtos)){
+        if (!ListUtil.isNull(roomDtos)) {
             for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
-                for(RoomDto tmpRoomDto: roomDtos){
-                    if(reportFeeMonthStatisticsDto.getPayerObjId().equals(tmpRoomDto.getRoomId())){
+                for (RoomDto tmpRoomDto : roomDtos) {
+                    if (reportFeeMonthStatisticsDto.getPayerObjId().equals(tmpRoomDto.getRoomId())) {
                         reportFeeMonthStatisticsDto.setBuiltUpArea(tmpRoomDto.getBuiltUpArea());
                     }
                 }
             }
         }
 
+        computeParkingSpace(reportFeeMonthStatisticsDtos, payerObjIds);
+
+    }
+
+    private void computeParkingSpace(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos, List<String> payerObjIds) {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setMemberIds(payerObjIds.toArray(new String[payerObjIds.size()]));
         ownerCarDto.setCommunityId(reportFeeMonthStatisticsDtos.get(0).getCommunityId());
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-        if(!ListUtil.isNull(ownerCarDtos)){
-            for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
-                for(OwnerCarDto tmpOwnerCarDto: ownerCarDtos){
-                    if(reportFeeMonthStatisticsDto.getPayerObjId().equals(tmpOwnerCarDto.getMemberId())){
-                        reportFeeMonthStatisticsDto.setPsName(tmpOwnerCarDto.getAreaNum()+"-"+tmpOwnerCarDto.getNum());
-                    }
+        if (ListUtil.isNull(ownerCarDtos)) {
+            return;
+        }
+        freshRoomInfo(ownerCarDtos);
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
+                if (!reportFeeMonthStatisticsDto.getPayerObjId().equals(tmpOwnerCarDto.getMemberId())) {
+                    continue;
                 }
+                reportFeeMonthStatisticsDto.setPsName(tmpOwnerCarDto.getAreaNum() + "-" + tmpOwnerCarDto.getNum());
+                reportFeeMonthStatisticsDto.setRoomName(tmpOwnerCarDto.getRoomName());
             }
         }
 
+    }
+
+    /**
+     * 刷入房屋信息
+     *
+     * @param ownerCarDtos
+     */
+    private void freshRoomInfo(List<OwnerCarDto> ownerCarDtos) {
+
+        if (ListUtil.isNull(ownerCarDtos) || ownerCarDtos.size() > 30) {
+            return;
+        }
+        for (OwnerCarDto ownerCarDto : ownerCarDtos) {
+            doFreshRoomInfo(ownerCarDto);
+        }
+    }
+
+    /**
+     * 车位信息刷入房屋信息
+     *
+     * @param ownerCarDto
+     */
+    private void doFreshRoomInfo(OwnerCarDto ownerCarDto) {
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setOwnerId(ownerCarDto.getOwnerId());
+        ownerRoomRelDto.setPage(1);
+        ownerRoomRelDto.setRow(3); //只展示3个房屋以内 不然页面太乱
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
+            ownerCarDto.setRoomName("-");
+            return;
+        }
+        List<String> roomIds = new ArrayList<>();
+        for (OwnerRoomRelDto tOwnerRoomRelDto : ownerRoomRelDtos) {
+            roomIds.add(tOwnerRoomRelDto.getRoomId());
+        }
+        RoomDto roomDto = new RoomDto();
+        roomDto.setCommunityId(ownerCarDto.getCommunityId());
+        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        String roomName = "";
+        for (RoomDto tRoomDto : roomDtos) {
+            roomName += (tRoomDto.getFloorNum() + "-" + tRoomDto.getUnitNum() + "-" + tRoomDto.getRoomNum() + "-" + "/");
+        }
+        roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
+        ownerCarDto.setRoomName(roomName);
     }
 
     /**
@@ -206,49 +265,6 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
 
     }
 
-    //处理账户抵扣
-    private ReportFeeMonthStatisticsDto dealFeeAccountDetail(ReportFeeMonthStatisticsDto reportFeeMonthStatistics) {
-        //获取费用明细id
-        String detailId = reportFeeMonthStatistics.getDetailId();
-        FeeAccountDetailDto feeAccountDetailDto = new FeeAccountDetailDto();
-        feeAccountDetailDto.setDetailId(detailId);
-        feeAccountDetailDto.setCommunityId(reportFeeMonthStatistics.getCommunityId());
-        List<FeeAccountDetailDto> feeAccountDetailList = feeAccountDetailServiceSMOImpl.queryFeeAccountDetails(feeAccountDetailDto);
-        BigDecimal noDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //无抵扣
-        BigDecimal cashDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //现金账户抵扣
-        BigDecimal pointDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //积分账户抵扣
-        BigDecimal discountCouponDeduction = new BigDecimal(0.00).setScale(2, BigDecimal.ROUND_HALF_UP); //优惠卷抵扣
-        if (feeAccountDetailList != null && feeAccountDetailList.size() > 0) {
-            for (FeeAccountDetailDto feeAccountDetail : feeAccountDetailList) {
-                //抵扣类型 1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1001")) { //无抵扣
-                    //获取账户抵扣金额
-                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
-                    noDeduction = noDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
-                }
-                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1002")) { //现金账户抵扣
-                    //获取账户抵扣金额
-                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
-                    cashDeduction = cashDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
-                }
-                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1003")) { //积分账户抵扣
-                    //获取账户抵扣金额
-                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
-                    pointDeduction = pointDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
-                }
-                if (!StringUtil.isEmpty(feeAccountDetail.getState()) && feeAccountDetail.getState().equals("1004")) { //优惠卷抵扣
-                    //获取账户抵扣金额
-                    BigDecimal amount = new BigDecimal(feeAccountDetail.getAmount());
-                    discountCouponDeduction = discountCouponDeduction.add(amount).setScale(2, BigDecimal.ROUND_HALF_UP);
-                }
-            }
-        }
-        reportFeeMonthStatistics.setNoDeduction(String.valueOf(noDeduction)); //无抵扣
-        reportFeeMonthStatistics.setCashDeduction(String.valueOf(cashDeduction)); //现金账户抵扣
-        reportFeeMonthStatistics.setPointDeduction(String.valueOf(pointDeduction)); //积分账户抵扣
-        reportFeeMonthStatistics.setDiscountCouponDeduction(String.valueOf(discountCouponDeduction)); //优惠卷抵扣
-        return reportFeeMonthStatistics;
-    }
 
     @Override
     public ResultVo queryPrepayment(@RequestBody ReportFeeMonthStatisticsPrepaymentDto reportFeeMonthStatisticsPrepaymentDto) {
@@ -741,61 +757,5 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
         return reportFeeMonthStatisticsPrepaymentTotal;
     }
 
-    /**
-     * @param ownerIds
-     * @param reportFeeMonthStatisticsDtos
-     */
-    private void refreshReportFeeMonthStatistics(List<String> ownerIds, List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
-        if (ownerIds == null || ownerIds.size() < 1) {
-            return;
-        }
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
-        List<OwnerDto> ownerDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryRoomAndParkingSpace(ownerDto);
-        String objName = "";
-        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
-            if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(reportFeeMonthStatisticsDto.getPayerObjType())) {
-                continue;
-            }
-            for (OwnerDto ownerDto1 : ownerDtos) {
-                if (!StringUtil.isEmpty(reportFeeMonthStatisticsDto.getOwnerId()) && !reportFeeMonthStatisticsDto.getOwnerId().equals(ownerDto1.getOwnerId())) {
-                    continue;
-                }
-                objName = reportFeeMonthStatisticsDto.getObjName() + "(" + ownerDto1.getFloorNum() + "栋" + ownerDto1.getUnitNum() + "单元" + ownerDto1.getRoomNum() + "室)";
-                reportFeeMonthStatisticsDto.setObjName(objName);
-            }
-        }
-    }
 
-    private boolean hasInReportListAndMerge(List<ReportFeeMonthStatisticsDto> reportList, ReportFeeMonthStatisticsDto reportFeeMonthStatistics) {
-        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportList) {
-            if (reportFeeMonthStatisticsDto.getDetailId().equals(reportFeeMonthStatistics.getDetailId())) {
-                combineSydwCore(reportFeeMonthStatistics, reportFeeMonthStatisticsDto);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    //针对所用对象
-    private static ReportFeeMonthStatisticsDto combineSydwCore(ReportFeeMonthStatisticsDto sourceBean, ReportFeeMonthStatisticsDto targetBean) {
-        Class sourceBeanClass = sourceBean.getClass();
-        Class targetBeanClass = targetBean.getClass();
-        Field[] sourceFields = sourceBeanClass.getDeclaredFields();
-        Field[] targetFields = sourceBeanClass.getDeclaredFields();
-        for (int i = 0; i < sourceFields.length; i++) {
-            Field sourceField = sourceFields[i];
-            Field targetField = targetFields[i];
-            sourceField.setAccessible(true);
-            targetField.setAccessible(true);
-            try {
-                if (!(sourceField.get(sourceBean) == null)) {
-                    targetField.set(targetBean, sourceField.get(sourceBean));
-                }
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-        return targetBean;
-    }
 }

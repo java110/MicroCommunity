@@ -276,64 +276,6 @@ public class ReportFeeMonthStatisticsApi {
         return getReportFeeMonthStatisticsBMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
     }
 
-    /**
-     * 缴费明细表
-     *
-     * @param communityId 小区ID
-     * @return
-     * @serviceCode /reportFeeMonthStatistics/queryPayFeeDetail
-     * @path /app/reportFeeMonthStatistics/queryPayFeeDetail
-     */
-    @RequestMapping(value = "/queryPayFeeDetail", method = RequestMethod.GET)
-    public ResponseEntity<String> queryPayFeeDetail(@RequestParam(value = "communityId") String communityId,
-                                                    @RequestParam(value = "floorId", required = false) String floorId,
-                                                    @RequestParam(value = "floorNum", required = false) String floorNum,
-                                                    @RequestParam(value = "unitNum", required = false) String unitNum,
-                                                    @RequestParam(value = "unitId", required = false) String unitId,
-                                                    @RequestParam(value = "roomId", required = false) String roomId,
-                                                    @RequestParam(value = "roomNum", required = false) String roomNum,
-                                                    @RequestParam(value = "primeRate", required = false) String primeRate,
-                                                    @RequestParam(value = "state", required = false) String state,
-                                                    @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
-                                                    @RequestParam(value = "configId", required = false) String configId,
-                                                    @RequestParam(value = "startTime", required = false) String startTime,
-                                                    @RequestParam(value = "endTime", required = false) String endTime,
-                                                    @RequestParam(value = "feeStartTime", required = false) String feeStartTime,
-                                                    @RequestParam(value = "feeEndTime", required = false) String feeEndTime,
-                                                    @RequestParam(value = "objId", required = false) String objId,
-                                                    @RequestParam(value = "roomName", required = false) String roomName,
-                                                    @RequestParam(value = "page") int page,
-                                                    @RequestParam(value = "row") int row) {
-        ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = new ReportFeeMonthStatisticsDto();
-        reportFeeMonthStatisticsDto.setPage(page);
-        reportFeeMonthStatisticsDto.setRow(row);
-        reportFeeMonthStatisticsDto.setCommunityId(communityId);
-        reportFeeMonthStatisticsDto.setFloorId(floorId);
-        reportFeeMonthStatisticsDto.setFloorNum(floorNum);
-        reportFeeMonthStatisticsDto.setUnitId(unitId);
-        reportFeeMonthStatisticsDto.setUnitNum(unitNum);
-        reportFeeMonthStatisticsDto.setRoomId(roomId);
-        reportFeeMonthStatisticsDto.setRoomNum(roomNum);
-        reportFeeMonthStatisticsDto.setPrimeRate(primeRate);
-        reportFeeMonthStatisticsDto.setState(state);
-        reportFeeMonthStatisticsDto.setFeeTypeCd(feeTypeCd);
-        reportFeeMonthStatisticsDto.setConfigId(configId);
-        reportFeeMonthStatisticsDto.setStartTime(startTime);
-        /*if(!StringUtil.isEmpty(endTime)){
-            endTime += " 23:59:59";
-        }*/
-        reportFeeMonthStatisticsDto.setEndTime(endTime);
-        reportFeeMonthStatisticsDto.setFeeStartTime(feeStartTime);
-        reportFeeMonthStatisticsDto.setFeeEndTime(feeEndTime);
-        reportFeeMonthStatisticsDto.setObjId(objId);
-        if (!StringUtil.isEmpty(roomName)) {
-            String[] roomNameArray = roomName.split("-", 3);
-            reportFeeMonthStatisticsDto.setFloorNum(roomNameArray[0]);
-            reportFeeMonthStatisticsDto.setUnitNum(roomNameArray[1]);
-            reportFeeMonthStatisticsDto.setRoomNum(roomNameArray[2]);
-        }
-        return getReportFeeMonthStatisticsBMOImpl.queryPayFeeDetail(reportFeeMonthStatisticsDto);
-    }
 
     /**
      * 押金报表

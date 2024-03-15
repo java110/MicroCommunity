@@ -390,18 +390,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         return responseEntity;
     }
 
-    /**
-     * 前台查询分页查询
-     *
-     * @param reportFeeMonthStatisticsDto
-     * @return
-     */
-    @Override
-    public ResponseEntity<String> queryPayFeeDetail(ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
-        ResultVo resultVo = queryPayFeeDetailInnerServiceSMOImpl.query(reportFeeMonthStatisticsDto);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-        return responseEntity;
-    }
+
 
     /**
      * @param ownerIds

@@ -45,6 +45,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String unitNum;
     private String roomId;
     private String roomNum;
+
+    private String roomName;
     private String carNum;
     private String psName;
     private String contractCode;
@@ -1180,5 +1182,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setPayerObjName(String payerObjName) {
         this.payerObjName = payerObjName;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

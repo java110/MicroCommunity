@@ -4,11 +4,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
+import com.java110.dto.room.RoomDto;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.report.IQueryPayFeeDetailInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +37,12 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
 
     @Autowired
     private IQueryPayFeeDetailInnerServiceSMO queryPayFeeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     private static final int MAX_ROW = 60000;
 
@@ -106,7 +119,14 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
             dataObj = reportFeeMonthStatisticsDtos.getJSONObject(roomIndex);
 //            dataObj = JSONObject.parseObject(JSONObject.toJSONString(reportFeeMonthStatisticsDtos.get(roomIndex)));
             row.createCell(0).setCellValue(dataObj.getString("oId"));
-            row.createCell(1).setCellValue(dataObj.getString("payerObjName"));
+            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(dataObj.getString("payerObjType"))) {
+                String payerObjName = dataObj.getString("payerObjName");
+                payerObjName += doFreshRoomInfo(dataObj.getString("payerObjId"));
+                row.createCell(1).setCellValue(payerObjName);
+
+            } else {
+                row.createCell(1).setCellValue(dataObj.getString("payerObjName"));
+            }
             endDate = DateUtil.getDateFromStringB(dataObj.getString("endTime"));
             //todo 如果不是一次性费用结束时间建1
             if (!StringUtil.isEmpty(dataObj.getString("feeFlag"))
@@ -135,5 +155,34 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
             row.createCell(19).setCellValue(dataObj.getString("cashierName"));
             row.createCell(20).setCellValue(dataObj.getString("remark"));
         }
+    }
+
+    private String doFreshRoomInfo(String ownerId) {
+
+        if (StringUtil.isNullOrNone(ownerId)) {
+            return "";
+        }
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setOwnerId(ownerId);
+        ownerRoomRelDto.setPage(1);
+        ownerRoomRelDto.setRow(3); //只展示3个房屋以内 不然页面太乱
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
+            return "";
+        }
+        List<String> roomIds = new ArrayList<>();
+        for (OwnerRoomRelDto tOwnerRoomRelDto : ownerRoomRelDtos) {
+            roomIds.add(tOwnerRoomRelDto.getRoomId());
+        }
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        String roomName = "";
+        for (RoomDto tRoomDto : roomDtos) {
+            roomName += (tRoomDto.getFloorNum() + "-" + tRoomDto.getUnitNum() + "-" + tRoomDto.getRoomNum() + "-" + "/");
+        }
+        roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
+        return "(" + roomName + ")";
+
     }
 }
