@@ -54,6 +54,10 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
 
     public static final String PAY_UNIFIED_ORDER_URL = "https://api.plutuspay.com/open/v2/pay";
 
+    public static final String QUERY_ORDER_URL = "https://api.plutuspay.com/open/v2/query";
+
+
+
 
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
@@ -182,11 +186,12 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         JSONObject paramMap = new JSONObject();
         paramMap.put("sn", mchId); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
+        System.out.println(paramMap.toJSONString());
 
         String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, key,devId);
         System.out.println(param);
 
-        String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
+        String str = PlutusFactory.post(QUERY_ORDER_URL, param);
         System.out.println(str);
 
         JSONObject json = JSON.parseObject(str);
