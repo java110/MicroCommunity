@@ -69,8 +69,8 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
 
         AlipayClient alipayClient = new DefaultAlipayClient(GETEWAY_URL,
                 CommunitySettingFactory.getValue(communityId, "APP_ID"),
-                CommunitySettingFactory.getRemark(communityId, "APP_PRIVATE_KEY"),
-                "json", "UTF-8", CommunitySettingFactory.getRemark(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
+                CommunitySettingFactory.getValue(communityId, "APP_PRIVATE_KEY"),
+                "json", "UTF-8", CommunitySettingFactory.getValue(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
         AlipayTradePayRequest request = new AlipayTradePayRequest();
         if (!StringUtil.isEmpty(CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN))) {
             request.putOtherTextParam("app_auth_token", CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN));
@@ -101,9 +101,9 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
     public ResultVo checkPayFinish(String communityId, String orderNum,String paymentPoolId) {
         AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",
                 CommunitySettingFactory.getValue(communityId, "APP_ID"),
-                CommunitySettingFactory.getRemark(communityId, "APP_PRIVATE_KEY"),
+                CommunitySettingFactory.getValue(communityId, "APP_PRIVATE_KEY"),
                 "json", "UTF-8",
-                CommunitySettingFactory.getRemark(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
+                CommunitySettingFactory.getValue(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
         if (!StringUtil.isEmpty(CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN))) {
             request.putOtherTextParam("app_auth_token", CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN));
