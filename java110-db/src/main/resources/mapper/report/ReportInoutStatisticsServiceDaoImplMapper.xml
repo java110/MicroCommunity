@@ -57,6 +57,7 @@
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '10000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
         where 1=1
         and pa.store_id = #{storeId}
+        and pa.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
@@ -68,6 +69,7 @@
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '20000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
         where 1=1
         and pa.store_id = #{storeId}
+        and pa.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
@@ -79,6 +81,7 @@
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '10000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
         where 1=1
         and pa.store_id = #{storeId}
+        and pa.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
@@ -90,6 +93,7 @@
         inner join purchase_apply pa on t.apply_order_id = pa.apply_order_id and pa.res_order_type = '20000' and pa.status_cd = '0' and pa.state  in ('1003','1002')
         where 1=1
         and pa.store_id = #{storeId}
+        and pa.community_id = #{communityId}
         and t.create_time &gt; #{startDate}
         and t.create_time &lt; #{endDate}
         and t.status_cd = '0'
