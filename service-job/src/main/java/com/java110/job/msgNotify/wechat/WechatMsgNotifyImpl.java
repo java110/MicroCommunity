@@ -285,7 +285,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         staffAppAuthDto.setStaffId(userId);
         staffAppAuthDto.setAppType("WECHAT");
         List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMOImpl.queryStaffAppAuths(staffAppAuthDto);
-        if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
+        if (ListUtil.isNull(staffAppAuthDtos)) {
             throw new IllegalArgumentException("员工未认证，没有获取到微信openId");
         }
         String openId = staffAppAuthDtos.get(0).getOpenId();
@@ -535,7 +535,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         staffAppAuthDto.setStaffId(userId);
         staffAppAuthDto.setAppType("WECHAT");
         List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMOImpl.queryStaffAppAuths(staffAppAuthDto);
-        if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
+        if (ListUtil.isNull(staffAppAuthDtos)) {
             throw new IllegalArgumentException("员工未认证，没有获取到微信openId");
         }
         String openId = staffAppAuthDtos.get(0).getOpenId();
