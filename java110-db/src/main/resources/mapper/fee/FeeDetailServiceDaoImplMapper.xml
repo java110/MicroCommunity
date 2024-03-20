@@ -352,20 +352,24 @@
         </if>
     </select>
 
-    <!-- 保存费用明细信息至 instance表中 add by wuxw 2018-07-03 -->
+    <!-- 保存费用明细信息至 instance表中 add by wuxw 2018-07-03
+
+     ,
+        acct_amount,discount_amount,deduction_amount,late_amount,gift_amount
+        ,
+        #{acctAmount},#{discountAmount},#{deductionAmount},#{lateAmount},#{giftAmount}
+        -->
     <insert id="saveFeeDetail" parameterType="Map">
         insert into
         pay_fee_detail(
         prime_rate,detail_id,receivable_amount,cycles,remark,received_amount,community_id,
-        fee_id,state,start_time,end_time,payable_amount,cashier_name,cashier_id,open_invoice,
-        acct_amount,discount_amount,deduction_amount,late_amount,gift_amount
+        fee_id,state,start_time,end_time,payable_amount,cashier_name,cashier_id,open_invoice
         <if test="createTime != null and createTime != ''">
             ,create_time
         </if>
         )
         values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},#{receivedAmount},#{communityId},#{feeId},#{state},
-        #{startTime},#{endTime},#{payableAmount},#{cashierName},#{cashierId},#{openInvoice},
-        #{acctAmount},#{discountAmount},#{deductionAmount},#{lateAmount},#{giftAmount}
+        #{startTime},#{endTime},#{payableAmount},#{cashierName},#{cashierId},#{openInvoice}
         <if test="createTime != null and createTime != ''">
             ,#{createTime}
         </if>
