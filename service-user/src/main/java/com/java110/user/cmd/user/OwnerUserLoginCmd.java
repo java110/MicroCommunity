@@ -13,10 +13,12 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.system.SystemInfoDto;
 import com.java110.dto.user.LoginOwnerResDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.common.ISystemInfoV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
@@ -27,10 +29,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.SMOException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
-import com.java110.utils.util.ValidatorUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +70,9 @@ public class OwnerUserLoginCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ISystemInfoV1InnerServiceSMO systemInfoV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "username", "请求报文中未包含用户名");
@@ -109,10 +111,10 @@ public class OwnerUserLoginCmd extends Cmd {
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
         //todo 1.1 如果验证码登录，自动绑定关系
-        if (userDtos == null || userDtos.size() < 1) {
+        if (ListUtil.isNull(userDtos)) {
             userDtos = ifOwnerLoginByPhone(reqJson, context);
         }
-        if (userDtos == null || userDtos.size() < 1) {
+        if (ListUtil.isNull(userDtos)) {
             throw new CmdException("用户不存在，请先注册");
         }
 
@@ -120,38 +122,22 @@ public class OwnerUserLoginCmd extends Cmd {
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setUserId(userDtos.get(0).getUserId());
         ownerAppUserDto.setLink(userDtos.get(0).getTel());
+        ownerAppUserDto.setState(OwnerAppUserDto.STATE_AUDIT_SUCCESS);
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
-            throw new CmdException("用户未注册，请先注册");
+        String communityId = "";
+        if (!ListUtil.isNull(ownerAppUserDtos)) {
+            // todo 4.0 查询小区是否存在
+            communityId = ownerAppUserDtos.get(0).getCommunityId();
+        }else{
+            SystemInfoDto systemInfoDto = new SystemInfoDto();
+            List<SystemInfoDto> systemInfoDtos = systemInfoV1InnerServiceSMOImpl.querySystemInfos(systemInfoDto);
+            communityId = systemInfoDtos.get(0).getDefaultCommunityId();
         }
-
-        // todo 3.0 查询业主是否存在
-        OwnerDto ownerDto = null;
-        if (ownerAppUserDtos.get(0).getMemberId().startsWith("-1")) {
-            //todo 这里考虑游客的情况
-            ownerDto = new OwnerDto();
-            ownerDto.setOwnerId(ownerAppUserDtos.get(0).getMemberId());
-            ownerDto.setMemberId(ownerAppUserDtos.get(0).getMemberId());
-            ownerDto.setName(ownerAppUserDtos.get(0).getAppUserName());
-            ownerDto.setLink(ownerAppUserDtos.get(0).getLink());
-            ownerDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
-        } else {
-            ownerDto = new OwnerDto();
-            ownerDto.setMemberId(ownerAppUserDtos.get(0).getMemberId());
-            ownerDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
-            List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
-            Assert.listOnlyOne(ownerDtos, "业主不存在");
-            ownerDto = ownerDtos.get(0);
-        }
-
-
-        // todo 4.0 查询小区是否存在
         CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
+        communityDto.setCommunityId(communityId);
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-        Assert.listOnlyOne(communityDtos, "小区不存在，" + ownerAppUserDtos.get(0).getCommunityId());
-
+        Assert.listOnlyOne(communityDtos, "小区不存在，确保开发者账户配置默认小区" + ownerAppUserDtos.get(0).getCommunityId());
 
         //todo 生成 app 永久登录key
         UserDto tmpUserDto = userDtos.get(0);
@@ -159,21 +145,16 @@ public class OwnerUserLoginCmd extends Cmd {
 
         //todo 生成登录token
         String token = generatorLoginToken(tmpUserDto);
-
         LoginOwnerResDto loginOwnerResDto = new LoginOwnerResDto();
-        loginOwnerResDto.setOwnerId(ownerDto.getOwnerId());
-        loginOwnerResDto.setMemberId(ownerDto.getMemberId());
-        loginOwnerResDto.setOwnerName(ownerDto.getName());
-        loginOwnerResDto.setUserId(tmpUserDto.getUserId());
-        loginOwnerResDto.setUserName(tmpUserDto.getName());
-        loginOwnerResDto.setOwnerTel(ownerDto.getLink());
-        loginOwnerResDto.setCommunityId(ownerDto.getCommunityId());
+
+        loginOwnerResDto.setCommunityId(communityDtos.get(0).getCommunityId());
         loginOwnerResDto.setCommunityName(communityDtos.get(0).getName());
         loginOwnerResDto.setCommunityTel(communityDtos.get(0).getTel());
+        loginOwnerResDto.setUserId(tmpUserDto.getUserId());
+        loginOwnerResDto.setUserName(tmpUserDto.getName());
+        loginOwnerResDto.setOwnerTel(tmpUserDto.getTel());
         loginOwnerResDto.setToken(token);
         loginOwnerResDto.setKey(newKey);
-        loginOwnerResDto.setOwnerTypeCd(ownerDto.getOwnerTypeCd());
-        loginOwnerResDto.setAppUserId(ownerAppUserDtos.get(0).getAppUserId());
         context.setResponseEntity(ResultVo.createResponseEntity(loginOwnerResDto));
 
     }
@@ -250,7 +231,7 @@ public class OwnerUserLoginCmd extends Cmd {
         List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
 
         // 说明业主不存在 直接返回跑异常
-        if (ownerDtos == null || ownerDtos.size() < 1) {
+        if (ListUtil.isNull(ownerDtos)) {
             return null;
         }
 
