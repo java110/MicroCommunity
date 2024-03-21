@@ -54,10 +54,16 @@ public class QueryUserAuthOwnerCmd extends Cmd {
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setUserId(userId);
         ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
-        ownerAppUserDto.setState(OwnerAppUserDto.STATE_AUDIT_SUCCESS);
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        if (ListUtil.isNull(ownerAppUserDtos)) {
+        if (ListUtil.isNull(ownerAppUserDtos)
+                || OwnerAppUserDto.STATE_AUDIT_ERROR.equals(ownerAppUserDtos.get(0).getState())) {
             throw new CmdException("用户未认证,请先认证");
+        }
+
+        if (OwnerAppUserDto.STATE_AUDITING.equals(ownerAppUserDtos.get(0).getState())) {
+            ResultVo resultVo = new ResultVo(-101, "认证审核中");
+            context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
+            return;
         }
 
         OwnerDto ownerDto = new OwnerDto();
