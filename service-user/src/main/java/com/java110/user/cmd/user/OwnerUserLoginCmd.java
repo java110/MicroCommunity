@@ -13,6 +13,8 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.system.SystemInfoDto;
 import com.java110.dto.user.LoginOwnerResDto;
 import com.java110.dto.user.UserAttrDto;
@@ -20,6 +22,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.common.ISystemInfoV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.user.UserAttrPo;
@@ -72,6 +75,12 @@ public class OwnerUserLoginCmd extends Cmd {
 
     @Autowired
     private ISystemInfoV1InnerServiceSMO systemInfoV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -129,7 +138,7 @@ public class OwnerUserLoginCmd extends Cmd {
         if (!ListUtil.isNull(ownerAppUserDtos)) {
             // todo 4.0 查询小区是否存在
             communityId = ownerAppUserDtos.get(0).getCommunityId();
-        }else{
+        } else {
             SystemInfoDto systemInfoDto = new SystemInfoDto();
             List<SystemInfoDto> systemInfoDtos = systemInfoV1InnerServiceSMOImpl.querySystemInfos(systemInfoDto);
             communityId = systemInfoDtos.get(0).getDefaultCommunityId();
@@ -269,6 +278,10 @@ public class OwnerUserLoginCmd extends Cmd {
         ownerAppUserPo.setLink(ownerDtos.get(0).getLink());
         ownerAppUserPo.setUserId(userPo.getUserId());
         ownerAppUserPo.setOpenId("-1");
+        ownerAppUserPo.setOwnerTypeCd(ownerDtos.get(0).getOwnerTypeCd());
+
+        queryOwnerRoom(ownerDtos.get(0), ownerAppUserPo);
+
 
         flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
         if (flag < 1) {
@@ -279,6 +292,29 @@ public class OwnerUserLoginCmd extends Cmd {
         userDto.setUserId(userPo.getUserId());
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
         return userDtos;
+    }
+
+    private void queryOwnerRoom(OwnerDto ownerDto, OwnerAppUserPo ownerAppUserPo) {
+
+
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setOwnerId(ownerDto.getOwnerId());
+
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
+            return;
+        }
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(ownerRoomRelDtos.get(0).getRoomId());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        if (ListUtil.isNull(roomDtos)) {
+            return;
+        }
+
+        ownerAppUserPo.setRoomId(roomDtos.get(0).getRoomId());
+        ownerAppUserPo.setRoomName(roomDtos.get(0).getFloorNum() + "-" + roomDtos.get(0).getUnitNum() + "-" + roomDtos.get(0).getRoomNum());
     }
 
     private UserAttrDto getCurrentUserAttrDto(List<UserAttrDto> userAttrDtos, String specCd) {

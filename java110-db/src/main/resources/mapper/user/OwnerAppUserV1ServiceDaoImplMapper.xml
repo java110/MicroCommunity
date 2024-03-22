@@ -8,9 +8,11 @@
     <!-- 保存业主绑定信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerAppUserInfo" parameterType="Map">
         insert into owner_app_user(
-        id_card,open_id,link,remark,user_id,app_type,app_user_name,nickname,headimgurl,community_name,state,app_user_id,community_id,app_type_cd,member_id
+        id_card,open_id,link,remark,user_id,app_type,app_user_name,nickname,headimgurl,community_name,state,app_user_id,
+        community_id,app_type_cd,member_id,room_id,room_name,owner_type_cd
         ) values (
-        #{idCard},#{openId},#{link},#{remark},#{userId},#{appType},#{appUserName},#{nickname},#{headimgurl},#{communityName},#{state},#{appUserId},#{communityId},#{appTypeCd},#{memberId}
+        #{idCard},#{openId},#{link},#{remark},#{userId},#{appType},#{appUserName},#{nickname},#{headimgurl},#{communityName},#{state},#{appUserId},
+        #{communityId},#{appTypeCd},#{memberId},#{roomId},#{roomName},#{ownerTypeCd}
         )
     </insert>
 
@@ -21,7 +23,8 @@
         statusCd,t.user_id,t.user_id userId,t.app_type,t.app_type appType,t.app_user_name,t.app_user_name
         appUserName,t.nickname,t.headimgurl,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
-        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.member_id,t.member_id memberId
+        communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.member_id,t.member_id memberId,
+        t.room_id roomId,t.room_name roomName,t.owner_type_cd ownerTypeCd
         from owner_app_user t
         where 1 =1
         <if test="idCard !=null and idCard != ''">
@@ -127,6 +130,15 @@
         </if>
         <if test="memberId !=null and memberId != ''">
             , t.member_id= #{memberId}
+        </if>
+        <if test="roomId !=null and roomId != ''">
+            , t.room_id= #{roomId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        <if test="ownerTypeCd !=null and ownerTypeCd != ''">
+            , t.owner_type_cd= #{ownerTypeCd}
         </if>
         where 1=1
         <if test="appUserId !=null and appUserId != ''">

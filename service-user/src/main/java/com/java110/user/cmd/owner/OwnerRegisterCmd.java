@@ -14,10 +14,14 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
@@ -67,6 +71,12 @@ public class OwnerRegisterCmd extends Cmd {
 
     @Autowired
     private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
 
     @Override
@@ -177,6 +187,8 @@ public class OwnerRegisterCmd extends Cmd {
             ownerAppUserPo.setRemark("注册自动关联");
             ownerAppUserPo.setUserId(userPo.getUserId());
             ownerAppUserPo.setAppType(appType);
+            ownerAppUserPo.setOwnerTypeCd(tmpOwnerDto.getOwnerTypeCd());
+            queryOwnerRoom(tmpOwnerDto, ownerAppUserPo);
             flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
             if (flag < 1) {
                 throw new CmdException("添加用户业主关系失败");
@@ -186,46 +198,28 @@ public class OwnerRegisterCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
-    private void addOwnerAppUser(JSONObject paramInJson, List<OwnerDto> ownerDtos) {
-        List<CommunityDto> communityDtos = null;
-        CommunityDto tmpCommunityDto = null;
-        String communityName = "无";
+    private void queryOwnerRoom(OwnerDto ownerDto, OwnerAppUserPo ownerAppUserPo) {
 
-        if (ownerDtos == null || ownerDtos.size() < 1) {
-            CommunityDto communityDto = new CommunityDto();
-            communityDto.setState("1100");
-            communityDto.setCommunityId(paramInJson.getString("defaultCommunityId"));
-            communityDto.setPage(1);
-            communityDto.setRow(1);
-            communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-            if (communityDtos != null && communityDtos.size() > 0) {
-                communityName = communityDtos.get(0).getName();
-            }
-            OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(paramInJson, OwnerAppUserPo.class);
-            //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-            ownerAppUserPo.setState("12000");
-            ownerAppUserPo.setAppTypeCd("10010");
-            ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
-            ownerAppUserPo.setMemberId("-1");
-            ownerAppUserPo.setCommunityName(communityName);
-            ownerAppUserPo.setCommunityId(paramInJson.getString("defaultCommunityId"));
-            ownerAppUserPo.setAppUserName("游客");
-            ownerAppUserPo.setIdCard("无");
 
-            int flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
-            if (flag < 1) {
-                throw new CmdException("添加用户业主关系失败");
-            }
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setOwnerId(ownerDto.getOwnerId());
+
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
             return;
         }
 
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(ownerRoomRelDtos.get(0).getRoomId());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        if (ListUtil.isNull(roomDtos)) {
+            return;
+        }
 
+        ownerAppUserPo.setRoomId(roomDtos.get(0).getRoomId());
+        ownerAppUserPo.setRoomName(roomDtos.get(0).getFloorNum() + "-" + roomDtos.get(0).getUnitNum() + "-" + roomDtos.get(0).getRoomNum());
     }
 
-    /**
-     * 注册用户
-     *
-     * @param paramObj
-     */
 
 }

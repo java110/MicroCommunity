@@ -30,6 +30,12 @@ public class OwnerAppUserPo implements Serializable {
     private String statusCd = "0";
     private String bId;
 
+    private String roomId;
+
+    private String roomName;
+
+    private String ownerTypeCd;
+
     public String getAppUserId() {
         return appUserId;
     }
@@ -165,5 +171,29 @@ public class OwnerAppUserPo implements Serializable {
 
     public void setbId(String bId) {
         this.bId = bId;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getOwnerTypeCd() {
+        return ownerTypeCd;
+    }
+
+    public void setOwnerTypeCd(String ownerTypeCd) {
+        this.ownerTypeCd = ownerTypeCd;
     }
 }
