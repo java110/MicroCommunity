@@ -27,6 +27,12 @@
         <if test="busiId !=null and busiId != ''">
             and t.busi_id= #{busiId}
         </if>
+        <if test="busiIds !=null ">
+            and t.busi_id in
+            <foreach collection="busiIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -94,6 +100,12 @@
         </if>
         <if test="busiId !=null and busiId != ''">
             and t.busi_id= #{busiId}
+        </if>
+        <if test="busiIds !=null ">
+            and t.busi_id in
+            <foreach collection="busiIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

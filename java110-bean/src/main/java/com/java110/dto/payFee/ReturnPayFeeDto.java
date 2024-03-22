@@ -69,6 +69,10 @@ public class ReturnPayFeeDto extends PageDto implements Serializable {
     private String auditPersonId;
     private String auditPersonName;
 
+    private String refundState;
+
+    private String refundRemark;
+
     private List<FeeAccountDetailDto> feeAccountDetailDtoList;
     private List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtoList;
 
@@ -390,5 +394,21 @@ public class ReturnPayFeeDto extends PageDto implements Serializable {
 
     public void setAuditPersonName(String auditPersonName) {
         this.auditPersonName = auditPersonName;
+    }
+
+    public String getRefundState() {
+        return refundState;
+    }
+
+    public void setRefundState(String refundState) {
+        this.refundState = refundState;
+    }
+
+    public String getRefundRemark() {
+        return refundRemark;
+    }
+
+    public void setRefundRemark(String refundRemark) {
+        this.refundRemark = refundRemark;
     }
 }

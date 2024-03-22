@@ -17,6 +17,9 @@ public class OnlinePayRefundDto extends PageDto implements Serializable {
 
     private String refundFee;
     private String busiId;
+
+    private String[] busiIds;
+
     private String payId;
     private String state;
     private String message;
@@ -101,5 +104,13 @@ public class OnlinePayRefundDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String[] getBusiIds() {
+        return busiIds;
+    }
+
+    public void setBusiIds(String[] busiIds) {
+        this.busiIds = busiIds;
     }
 }

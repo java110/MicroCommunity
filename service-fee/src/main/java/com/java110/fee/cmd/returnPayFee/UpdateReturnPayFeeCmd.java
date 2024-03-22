@@ -61,13 +61,11 @@ import com.java110.po.wechat.OnlinePayPo;
 import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.po.payFee.ReturnPayFeePo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.listener.ListenerUtils;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -650,7 +648,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         OnlinePayDto onlinePayDto = new OnlinePayDto();
         onlinePayDto.setOrderId(feeDetailDto.getPayOrderId());
         List<OnlinePayDto> onlinePayDtos = onlinePayV1InnerServiceSMOImpl.queryOnlinePays(onlinePayDto);
-        if (onlinePayDtos == null || onlinePayDtos.size() < 1) {
+        if (ListUtil.isNull(onlinePayDtos)) {
             return;
         }
         OnlinePayPo onlinePayPo = new OnlinePayPo();
