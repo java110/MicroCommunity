@@ -388,7 +388,7 @@ public class PayBatchFeeCmd extends Cmd {
             }
 
             payFeeDataDto.setReceivedAmount("0");
-            payFeeDataDto.setAccountAmount(accountAmount);
+            payFeeDataDto.setAccountAmount(receivedAmount);
             payFeeDataDto.setAcctId(acctId);
 
             accountAmountDec = accountAmountDec.subtract(receivedAmountDec).setScale(2, BigDecimal.ROUND_HALF_UP);
