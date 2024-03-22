@@ -24,7 +24,7 @@
         appUserName,t.nickname,t.headimgurl,t.community_name,t.community_name
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
         communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.member_id,t.member_id memberId,
-        t.room_id roomId,t.room_name roomName,t.owner_type_cd ownerTypeCd
+        t.room_id roomId,t.room_name roomName,t.owner_type_cd ownerTypeCd,t.create_time createTime
         from owner_app_user t
         where 1 =1
         <if test="idCard !=null and idCard != ''">
