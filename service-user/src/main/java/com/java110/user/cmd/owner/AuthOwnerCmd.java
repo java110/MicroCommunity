@@ -107,15 +107,16 @@ public class AuthOwnerCmd extends Cmd {
         List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
         Assert.listOnlyOne(roomDtos, "房屋不存在");
 
-        if (!OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
-            return;
-        }
-
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setRoomId(roomDtos.get(0).getRoomId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
         if (ListUtil.isNull(ownerRoomRelDtos)) {
+            throw new CmdException("房屋未销售，请联系物业");
+        }
+
+
+        if (!OwnerDto.OWNER_TYPE_CD_OWNER.equals(reqJson.getString("ownerTypeCd"))) {
             return;
         }
 
