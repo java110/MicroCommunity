@@ -157,7 +157,7 @@ public class AuthOwnerCmd extends Cmd {
 
         OwnerAppUserPo ownerAppUserPo = new OwnerAppUserPo();
         //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-        ownerAppUserPo.setState("12000");
+        ownerAppUserPo.setState(OwnerAppUserDto.STATE_AUDITING);
         ownerAppUserPo.setAppTypeCd("10010");
         ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
         ownerAppUserPo.setMemberId("-1");
