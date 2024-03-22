@@ -12,6 +12,8 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerDataVo;
 import com.java110.vo.api.auditAppUserBindingOwner.ApiAuditAppUserBindingOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +47,13 @@ public class ListAuditAppUserBindingOwnersCmd extends Cmd {
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
         ownerAppUserDto.setUserId("");
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
+        int row = reqJson.getIntValue("row");
 
-        List<ApiAuditAppUserBindingOwnerDataVo> auditAppUserBindingOwners = null;
-        List<ApiAuditAppUserBindingOwnerDataVo> ownerDtos = new ArrayList<>();
+        List<OwnerAppUserDto> ownerAppUserDtos = null;
         if (count > 0) {
-            auditAppUserBindingOwners = BeanConvertUtil.covertBeanList(ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto), ApiAuditAppUserBindingOwnerDataVo.class);
+            ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
             List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
-            for (ApiAuditAppUserBindingOwnerDataVo owner : auditAppUserBindingOwners) {
+            for (OwnerAppUserDto owner : ownerAppUserDtos) {
                 //区分小程序和和公众号
                 if (owner.getAppType().equals("WECHAT")) {
                     owner.setAppTypeName("公众号");
@@ -60,31 +62,22 @@ public class ListAuditAppUserBindingOwnersCmd extends Cmd {
                 }
                 //对业主身份证号隐藏处理
                 String idCard = owner.getIdCard();
-                if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {
+                if (mark.size() == 0 && !StringUtil.isEmpty(idCard) && idCard.length() > 16) {
                     idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
                     owner.setIdCard(idCard);
                 }
                 //对业主手机号隐藏处理
                 String link = owner.getLink();
-                if (mark.size() == 0 && link != null && !link.equals("") && link.length() == 11) {
+                if (mark.size() == 0 &&!StringUtil.isEmpty(link) && link.length() == 11) {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                     owner.setLink(link);
                 }
-                ownerDtos.add(owner);
             }
         } else {
-            auditAppUserBindingOwners = new ArrayList<>();
-            ownerDtos.addAll(auditAppUserBindingOwners);
+            ownerAppUserDtos = new ArrayList<>();
         }
 
-        ApiAuditAppUserBindingOwnerVo apiAuditAppUserBindingOwnerVo = new ApiAuditAppUserBindingOwnerVo();
-
-        apiAuditAppUserBindingOwnerVo.setTotal(count);
-        apiAuditAppUserBindingOwnerVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        apiAuditAppUserBindingOwnerVo.setAuditAppUserBindingOwners(ownerDtos);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiAuditAppUserBindingOwnerVo), HttpStatus.OK);
-
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) row), count, ownerAppUserDtos);
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 

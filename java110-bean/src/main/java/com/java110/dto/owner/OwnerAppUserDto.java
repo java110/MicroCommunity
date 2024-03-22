@@ -61,9 +61,13 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String headImgUrl;
     private String ownerTypeCd;
 
+    private String ownerTypeCdName;
+
     private String roomId;
 
     private String roomName;
+
+    private String appTypeName;
 
 
 
@@ -331,5 +335,21 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getAppTypeName() {
+        return appTypeName;
+    }
+
+    public void setAppTypeName(String appTypeName) {
+        this.appTypeName = appTypeName;
+    }
+
+    public String getOwnerTypeCdName() {
+        return ownerTypeCdName;
+    }
+
+    public void setOwnerTypeCdName(String ownerTypeCdName) {
+        this.ownerTypeCdName = ownerTypeCdName;
     }
 }

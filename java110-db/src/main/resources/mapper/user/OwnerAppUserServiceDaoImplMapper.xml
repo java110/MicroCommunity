@@ -131,12 +131,14 @@
         communityName,t.state,t.app_user_id,t.app_user_id appUserId,t.community_id,t.community_id
         communityId,t.app_type_cd,t.app_type_cd appTypeCd,t.b_id,t.b_id bId,t.member_id,t.member_id memberId,
         td1.name stateName,t.user_id,t.user_id userId,t.app_type,t.app_type appType,t.create_time createTime,
-        bo.owner_id ownerId,bo.owner_type_cd ownerTypeCd,t.room_id roomId,t.room_name roomName
+        bo.owner_id ownerId,t.owner_type_cd ownerTypeCd,t.room_id roomId,t.room_name roomName,td2.name ownerTypeCdName
         from owner_app_user t
         left join t_dict td1 on t.state = td1.status_cd and td1.table_name = 'owner_app_user' and td1.table_columns =
         'state'
         left join building_owner bo on t.member_id = bo.member_id and t.community_id = bo.community_id and bo.status_cd
         = '0'
+        left join t_dict td2 on t.owner_type_cd = td2.status_cd and td2.table_name = 'building_owner' and td2.table_columns =
+        'owner_type_cd'
         where 1 =1
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
