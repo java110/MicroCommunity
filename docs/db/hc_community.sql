@@ -8033,7 +8033,7 @@ CREATE TABLE `product_group` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态',
   PRIMARY KEY (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product_group
@@ -8066,7 +8066,7 @@ CREATE TABLE `product_group_order` (
   `group_count` int NOT NULL DEFAULT '1' COMMENT '拼团人数',
   `open_grouper` varchar(30) NOT NULL COMMENT '开团人',
   PRIMARY KEY (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product_group_order
@@ -8091,7 +8091,7 @@ CREATE TABLE `product_group_order_return` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态',
   PRIMARY KEY (`return_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product_group_order_return
@@ -8257,7 +8257,7 @@ CREATE TABLE `product_seckill` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态',
   PRIMARY KEY (`kill_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product_seckill
@@ -8854,7 +8854,7 @@ CREATE TABLE `rebate_order` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `status_cd` varchar(2) NOT NULL DEFAULT '0' COMMENT '数据状态',
   PRIMARY KEY (`rebate_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of rebate_order
