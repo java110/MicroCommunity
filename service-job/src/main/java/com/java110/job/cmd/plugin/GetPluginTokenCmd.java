@@ -7,6 +7,7 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.AuthenticationFactory;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
@@ -18,6 +19,7 @@ import com.java110.job.adapt.hcIotNew.http.ISendIot;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -47,7 +49,6 @@ public class GetPluginTokenCmd extends Cmd {
 
     @Autowired
     private RestTemplate outRestTemplate;
-
 
 
     @Override
@@ -86,12 +87,14 @@ public class GetPluginTokenCmd extends Cmd {
         Assert.listOnlyOne(storeDtos, "商户不存在");
 
         JSONObject staff = new JSONObject();
-        staff.put("tel", userDtos.get(0).getTel());
-        staff.put("storeName", storeDtos.get(0).getName());
+        staff.put("staffId", userId);
+        staff.put("timestamp", DateUtil.getCurrentDate().getTime());
+        staff.put("sign", createSign(staff));
+
         HttpHeaders header = new HttpHeaders();
         HttpEntity<String> httpEntity = new HttpEntity<String>(staff.toJSONString(), header);
 
-        String pluginUrl = MappingCache.getValue("PLUGIN", "PLUGIN_URL")+"/pluginToken/apply";
+        String pluginUrl = MappingCache.getValue("PLUGIN", "PLUGIN_URL") + "/pluginToken/apply";
 
         ResponseEntity<String> tokenRes = outRestTemplate.exchange(pluginUrl, HttpMethod.POST, httpEntity, String.class);
 
@@ -104,8 +107,15 @@ public class GetPluginTokenCmd extends Cmd {
 
         pluginUrl = MappingCache.getValue(URL_DOMAIN, IotConstant.PLUGIN_URL);
         String targetUrl = pluginUrl + reqJson.getString("targetUrl");
-        String url = pluginUrl + "/sso.html?token=" + paramOut.getString("data") +"&communityId=" + reqJson.getString("communityId") + "&targetUrl=" + targetUrl;
+        String url = pluginUrl + "/sso.html?token=" + paramOut.getString("data") + "&communityId=" + reqJson.getString("communityId") + "&targetUrl=" + targetUrl;
         paramOut.put("url", url);
         context.setResponseEntity(ResultVo.createResponseEntity(paramOut));
+    }
+
+    public String createSign(JSONObject staff) {
+        String secure = MappingCache.getValue("PLUGIN", "PLUGIN_SECURE");
+        String sign = staff.getString("staffId") + staff.getString("timestamp") + secure;
+        sign = AuthenticationFactory.md5(sign);
+        return sign;
     }
 }
