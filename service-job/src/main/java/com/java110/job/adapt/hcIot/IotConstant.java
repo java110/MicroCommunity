@@ -30,6 +30,7 @@ public class IotConstant {
     public static final String IOT_URL = "IOT_URL"; // 物联网域
     public static final String IOT_APP_ID = "APP_ID"; // 物联网域
     public static final String IOT_APP_SECRET = "APP_SECRET"; // 物联网域
+    public static final String PLUGIN_URL = "PLUGIN_URL";
 
     private static final String DEFAULT_IOT_URL = "https://things.homecommunity.cn";
 
@@ -119,7 +120,6 @@ public class IotConstant {
     public static final String GET_TEMP_CAR_FEE_ORDER = "/extApi/fee/getTempCarFeeOrder";
 
 
-
     //查询临时停车费订单
     public static final String NOTIFY_TEMP_CAR_FEE_ORDER = "/extApi/fee/notifyTempCarFeeOrder";
 
@@ -129,7 +129,6 @@ public class IotConstant {
      * 查询临时车审核
      */
     public static final String GET_CAR_INOUT_TEMPAUTHS = "/extApi/tempCarAuth/getCarInoutTempAuths";
-
 
 
     //添加车辆
