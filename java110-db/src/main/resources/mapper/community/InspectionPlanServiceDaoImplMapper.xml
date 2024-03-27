@@ -148,11 +148,11 @@
         t.inspection_plan_period inspectionPlanPeriod,
         t.remark,
         t.status_cd statusCd,
-        DATE_FORMAT(t.end_time,'%H:%i:%s') endTime,
+        t.end_time endTime,
         t.sign_type signType,
-        DATE_FORMAT(t.start_time,'%H:%i:%s') startTime,
-        DATE_FORMAT(t.end_date,'%Y-%m-%d') endDate,
-        DATE_FORMAT(t.start_date,'%Y-%m-%d') startDate,
+        t.start_time startTime,
+        t.end_date endDate,
+        t.start_date startDate,
         t.create_user_id createUserId,
         t.create_user_name createUserName,
         t.inspection_plan_id inspectionPlanId,
@@ -168,7 +168,8 @@
         d.name stateName,
         c.name inspectionPlanPeriodName,
         i.name signTypeName
-        from inspection_plan t
+        from
+        inspection_plan t
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'inspection_plan' and d.table_columns = 'state'
         inner join t_dict c on t.inspection_plan_period = c.status_cd and c.table_name = 'inspection_plan' and
         c.table_columns = 'inspection_plan_period'
