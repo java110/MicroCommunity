@@ -97,7 +97,10 @@ public class ListReportCustomComponentDataCmd extends Cmd {
             reqJson.put("page", (page - 1) * reqJson.getIntValue("row"));
         }
         JSONObject data = queryServiceSMOImpl.execJava(reqJson, javaScript);
-        long total = data.getLong("total");
+        long total = 0;
+        if (data.getLong("total") != null) {
+            total = data.getLong("total");
+        }
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) total / (double) reqJson.getInteger("row")), total, data);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         cmdDataFlowContext.setResponseEntity(responseEntity);

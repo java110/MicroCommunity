@@ -13,10 +13,10 @@ import com.java110.dto.resource.ResourceStoreDto;
 import com.java110.dto.resource.ResourceStoreTimesDto;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreInnerServiceSMO;
+import com.java110.intf.store.IResourceStoreTimesV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.resourceStore.ApiResourceStoreDataVo;
 import com.java110.vo.api.resourceStore.ApiResourceStoreVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,15 +151,18 @@ public class ListResourceStoresCmd extends Cmd {
     private IResourceStoreInnerServiceSMO resourceStoreInnerServiceSMOImpl;
 
     @Autowired
+    private IResourceStoreTimesV1InnerServiceSMO resourceStoreTimesV1InnerServiceSMOImpl;
+
+    @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含商户ID");
-        if (!reqJson.containsKey("shId") || StringUtil.isEmpty(reqJson.getString("shId"))) {
+        /*if (!reqJson.containsKey("shId") || StringUtil.isEmpty(reqJson.getString("shId"))) {
             Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区ID");
-        }
+        }*/
     }
 
     @Override
@@ -184,13 +187,28 @@ public class ListResourceStoresCmd extends Cmd {
         //计算总价(大计)
         BigDecimal totalPrice = BigDecimal.ZERO;
         if (count > 0) {
-            resourceStores = BeanConvertUtil.covertBeanList(resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto), ApiResourceStoreDataVo.class);
+            List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
+            resourceStores = BeanConvertUtil.covertBeanList(resourceStoreDtos, ApiResourceStoreDataVo.class);
             //todo 计算物品 库存和 价格
             queryResourceStoreAndResourceTotalPrice(resourceStores);
-            resourceStoreDto.setPage(Integer.valueOf(reqJson.getString("page")));
-            subTotalPrice = new BigDecimal(resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto));
+            BigDecimal number = BigDecimal.ZERO;
+            for (ResourceStoreDto resourceStore : resourceStoreDtos) {
+                ResourceStoreTimesDto resourceStoreTimesDto = new ResourceStoreTimesDto();
+                resourceStoreTimesDto.setResCode(resourceStore.getResCode());
+                resourceStoreTimesDto.setShId(resourceStore.getShId());
+                //查询批次表
+                List<ResourceStoreTimesDto> resourceStoreTimesDtos = resourceStoreTimesV1InnerServiceSMOImpl.queryResourceStoreTimess(resourceStoreTimesDto);
+                for (ResourceStoreTimesDto resourceStoreTimes : resourceStoreTimesDtos) {
+                    BigDecimal stock = new BigDecimal(resourceStoreTimes.getStock());
+                    BigDecimal price = new BigDecimal(resourceStoreTimes.getPrice());
+                    BigDecimal multiply = stock.multiply(price).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    number = number.add(multiply);
+                }
+            }
+            subTotalPrice = number;
             resourceStoreDto.setPage(PageDto.DEFAULT_PAGE);
-            totalPrice = new BigDecimal(resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto));
+            String price = resourceStoreInnerServiceSMOImpl.queryResourceStoresTotalPrice(resourceStoreDto);
+            totalPrice = new BigDecimal(price);
         } else {
             resourceStores = new ArrayList<>();
         }
@@ -223,8 +241,8 @@ public class ListResourceStoresCmd extends Cmd {
                 continue;
             }
             for (ResourceStoreTimesDto resourceStoreTimesDto : resourceStoreTimesDtos) {
-                stock = stock.add(new BigDecimal(resourceStoreTimesDto.getStock())).setScale(2,BigDecimal.ROUND_HALF_EVEN);
-                totalPrice = totalPrice.add(new BigDecimal(resourceStoreTimesDto.getTotalPrice())).setScale(2,BigDecimal.ROUND_HALF_EVEN);
+                stock = stock.add(new BigDecimal(resourceStoreTimesDto.getStock())).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+                totalPrice = totalPrice.add(new BigDecimal(resourceStoreTimesDto.getTotalPrice())).setScale(2, BigDecimal.ROUND_HALF_EVEN);
             }
             resourceStore.setStock(stock.doubleValue() + "");
             resourceStore.setTotalPrice(totalPrice.doubleValue() + "");

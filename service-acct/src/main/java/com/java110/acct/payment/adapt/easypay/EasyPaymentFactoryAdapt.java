@@ -68,11 +68,6 @@ public class EasyPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     public static final String TRADE_TYPE_MWEB = "MWEB";
     public static final String TRADE_TYPE_APP = "APP";
 
-    private static String VERSION = "1.0";
-
-    private static String SIGN_TYPE = "RSA2";// 加密算法：SM4、RSA2
-
-    private static String gzhPayUrl = "https://mbank.bankofbbg.com/www/corepaycer/WxGzhPay";
 
     @Autowired
     private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;

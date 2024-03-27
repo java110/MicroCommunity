@@ -33,6 +33,7 @@ import com.java110.po.oweFeeCallable.OweFeeCallablePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -73,7 +74,7 @@ public class SaveOweFeeCallableCmd extends Cmd {
 
         JSONArray roomIds = reqJson.getJSONArray("roomIds");
 
-        if (roomIds == null || roomIds.size() < 1) {
+        if (ListUtil.isNull(roomIds)) {
             throw new CmdException("未包含房屋信息");
         }
 

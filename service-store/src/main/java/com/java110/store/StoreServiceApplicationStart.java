@@ -62,6 +62,7 @@ import java.nio.charset.Charset;
         "com.java110.intf.acct",
         "com.java110.intf.order",
         "com.java110.intf.oa",
+        "com.java110.intf.job",
         "com.java110.intf.mall"
 })
 public class StoreServiceApplicationStart {

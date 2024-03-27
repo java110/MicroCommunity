@@ -21,13 +21,17 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeAccountDetailDto;
+import com.java110.dto.onlinePayRefund.OnlinePayRefundDto;
 import com.java110.dto.payFee.PayFeeDetailDiscountDto;
+import com.java110.intf.acct.IOnlinePayRefundV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeAccountDetailServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeDataVo;
 import com.java110.vo.api.returnPayFee.ApiReturnPayFeeVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +69,9 @@ public class ListReturnPayFeesCmd extends Cmd {
     @Autowired
     private IPayFeeDetailDiscountInnerServiceSMO payFeeDetailDiscountInnerServiceSMOImpl;
 
+    @Autowired
+    private IOnlinePayRefundV1InnerServiceSMO onlinePayRefundV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -78,41 +85,64 @@ public class ListReturnPayFeesCmd extends Cmd {
 
         int count = returnPayFeeInnerServiceSMOImpl.queryReturnPayFeesCount(returnPayFeeDto);
 
-        List<ReturnPayFeeDto> returnPayFeeDtos = new ArrayList<>();
-
-        List<ApiReturnPayFeeDataVo> returnPayFees;
+        List<ReturnPayFeeDto> returnPayFees;
 
         if (count > 0) {
             //注意这里处理 记得测试退费逻辑
-            List<ReturnPayFeeDto> returnPayFeeList = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
-            for (ReturnPayFeeDto returnPayFee : returnPayFeeList) {
+            returnPayFees = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
+            for (ReturnPayFeeDto returnPayFee : returnPayFees) {
                 FeeAccountDetailDto feeAccountDetailDto = new FeeAccountDetailDto();
                 feeAccountDetailDto.setDetailId(returnPayFee.getDetailId());
                 List<FeeAccountDetailDto> feeAccountDetailDtos = feeAccountDetailServiceSMOImpl.queryFeeAccountDetails(feeAccountDetailDto);
-                if (feeAccountDetailDtos != null && feeAccountDetailDtos.size() > 0) {
+                if (!ListUtil.isNull(feeAccountDetailDtos)) {
                     returnPayFee.setFeeAccountDetailDtoList(feeAccountDetailDtos);
                 }
                 PayFeeDetailDiscountDto payFeeDetailDiscountDto = new PayFeeDetailDiscountDto();
                 payFeeDetailDiscountDto.setDetailId(returnPayFee.getDetailId());
                 List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtos = payFeeDetailDiscountInnerServiceSMOImpl.queryPayFeeDetailDiscounts(payFeeDetailDiscountDto);
-                if (payFeeDetailDiscountDtos != null && payFeeDetailDiscountDtos.size() > 0) {
+                if (!ListUtil.isNull(payFeeDetailDiscountDtos)) {
                     returnPayFee.setPayFeeDetailDiscountDtoList(payFeeDetailDiscountDtos);
                 }
-                returnPayFeeDtos.add(returnPayFee);
             }
-            returnPayFees = BeanConvertUtil.covertBeanList(returnPayFeeDtos, ApiReturnPayFeeDataVo.class);
         } else {
             returnPayFees = new ArrayList<>();
         }
+        //todo 查询退款 支付系统返回内容
+        computeOnlinePayRefundRemark(returnPayFees);
 
-        ApiReturnPayFeeVo apiReturnPayFeeVo = new ApiReturnPayFeeVo();
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, returnPayFees);
 
-        apiReturnPayFeeVo.setTotal(count);
-        apiReturnPayFeeVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        apiReturnPayFeeVo.setReturnPayFees(returnPayFees);
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiReturnPayFeeVo), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void computeOnlinePayRefundRemark(List<ReturnPayFeeDto> returnPayFees) {
+
+        if (ListUtil.isNull(returnPayFees)) {
+            return;
+        }
+
+        List<String> detailIds = new ArrayList<>();
+        for (ReturnPayFeeDto returnPayFeeDto : returnPayFees) {
+            detailIds.add(returnPayFeeDto.getDetailId());
+        }
+
+        OnlinePayRefundDto onlinePayRefundDto = new OnlinePayRefundDto();
+        onlinePayRefundDto.setBusiIds(detailIds.toArray(new String[detailIds.size()]));
+        List<OnlinePayRefundDto> onlinePayRefundDtos = onlinePayRefundV1InnerServiceSMOImpl.queryOnlinePayRefunds(onlinePayRefundDto);
+
+        if (ListUtil.isNull(onlinePayRefundDtos)) {
+            return;
+        }
+
+        for (ReturnPayFeeDto returnPayFeeDto : returnPayFees) {
+            for(OnlinePayRefundDto tmpOnlinePayRefundDto:onlinePayRefundDtos){
+                if(returnPayFeeDto.getDetailId().equals(tmpOnlinePayRefundDto.getBusiId())){
+                    returnPayFeeDto.setRefundState(tmpOnlinePayRefundDto.getState());
+                    returnPayFeeDto.setRefundRemark(tmpOnlinePayRefundDto.getMessage());
+                }
+            }
+        }
     }
 }

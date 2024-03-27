@@ -343,6 +343,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         ownerAppUserPo.setLink(ownerPo.getLink());
         ownerAppUserPo.setUserId(userPo.getUserId());
         ownerAppUserPo.setOpenId("-1");
+        ownerAppUserPo.setOwnerTypeCd(ownerPo.getOwnerTypeCd());
 
         flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
         if (flag < 1) {

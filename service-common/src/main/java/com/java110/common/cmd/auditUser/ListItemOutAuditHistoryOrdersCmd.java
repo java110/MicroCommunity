@@ -17,6 +17,7 @@ import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import com.java110.vo.api.resourceOrder.ApiResourceOrderDataVo;
 import com.java110.vo.api.resourceOrder.ApiResourceOrderVo;
@@ -91,25 +92,25 @@ public class ListItemOutAuditHistoryOrdersCmd extends Cmd {
         if (count > 0) {
             datas = oaWorkflowUserInnerServiceSMOImpl.getDefinitionKeysUserHistoryTasks(auditUser);
             //刷新 表单数据
-            refreshFormData(datas, reqJson, storeId);
+            datas = refreshFormData(datas, reqJson, storeId);
         } else {
             datas = new ArrayList<>();
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, datas);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) datas.size() / (double) reqJson.getInteger("row")), datas.size(), datas);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
     }
 
-    private void refreshFormData(List<JSONObject> datas, JSONObject paramIn, String storeId) {
-
+    private List<JSONObject> refreshFormData(List<JSONObject> datas, JSONObject paramIn, String storeId) {
+        List<JSONObject> params = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         for (JSONObject data : datas) {
             ids.add(data.getString("id"));
         }
         if (ids.size() < 1) {
-            return;
+            return params;
         }
 
         //todo 查询 领用
@@ -119,7 +120,7 @@ public class ListItemOutAuditHistoryOrdersCmd extends Cmd {
         List<PurchaseApplyDto> tmpPurchaseApplyDtos = purchaseApplyInnerServiceSMOImpl.queryPurchaseApplyAndDetails(purchaseApplyDto);
 
         if (tmpPurchaseApplyDtos == null || tmpPurchaseApplyDtos.size() < 1) {
-            return;
+            return params;
         }
 
         for (PurchaseApplyDto tmpPurchaseApplyDto : tmpPurchaseApplyDtos) {
@@ -139,17 +140,27 @@ public class ListItemOutAuditHistoryOrdersCmd extends Cmd {
             } else {
                 tmpPurchaseApplyDto.setResOrderTypeName("出库申请");
             }
-
-
         }
         JSONObject curTaskNode = null;
         for (JSONObject data : datas) {
-
+            outerLoop:
             for (PurchaseApplyDto form : tmpPurchaseApplyDtos) {
+                if (!StringUtil.isEmpty(form.getState()) && form.getState().equals("1000")) {
+                    continue;
+                }
                 if (data.getString("id").equals(form.getApplyOrderId())) {
                     data.putAll(BeanConvertUtil.beanCovertJson(form));
+                    if (params.size() > 0) {
+                        for (JSONObject param : params) {
+                            if (data.getString("id").equals(param.getString("id"))) {
+                                break outerLoop;
+                            }
+                        }
+                    }
+                    params.add(data);
                 }
             }
         }
+        return params;
     }
 }

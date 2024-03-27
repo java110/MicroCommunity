@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.WechatFactory;
 import com.java110.dto.community.CommunityMemberDto;
+import com.java110.dto.complaintType.ComplaintTypeDto;
 import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.repair.RepairDto;
+import com.java110.dto.repair.RepairSettingDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.dto.wechat.SmallWechatAttrDto;
 import com.java110.dto.user.StaffAppAuthDto;
@@ -23,6 +25,7 @@ import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.job.msgNotify.IMsgNotify;
 import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.utils.cache.MappingCache;
@@ -115,7 +118,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         paramIn.put("context", context);
         paramIn.put("repairName", repairName);
         paramIn.put("repairId", repairDtos.get(0).getRepairId());
-        sendMessage(paramIn, communityDtos.get(0));
+        sendMessage(paramIn, communityDtos.get(0),repairDtos.get(0));
     }
 
     /**
@@ -124,7 +127,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendMessage(JSONObject paramIn, CommunityDto communityDto) {
+    private void sendMessage(JSONObject paramIn, CommunityDto communityDto,RepairDto repairDto) {
 
         //查询小区物业公司
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
@@ -140,6 +143,14 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         basePrivilegeDto.setCommunityId(communityMemberDtos.get(0).getCommunityId());
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         List<String> userIds = new ArrayList<>();
+        IMsgNotify msgNotify = null;
+        if(RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDto.getNotifyWay())) {
+            msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_ALI);
+        }else if(RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDto.getNotifyWay())){
+            msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_WECHAT);
+        }else{
+            return;
+        }
         for (UserDto userDto : userDtos) {
             if (userIds.contains(userDto.getUserId())) {
                 continue;
@@ -157,7 +168,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
             String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
             content.put("url",wechatUrl);
 
-            MsgNotifyFactory.sendAddOwnerRepairMsg(communityDto.getCommunityId(),userDto.getUserId(),content);
+            msgNotify.sendAddOwnerRepairMsg(communityDto.getCommunityId(),userDto.getUserId(),content);
         }
     }
 }

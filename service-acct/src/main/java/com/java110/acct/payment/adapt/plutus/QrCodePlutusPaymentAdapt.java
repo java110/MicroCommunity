@@ -16,6 +16,7 @@ import com.java110.po.wechat.OnlinePayPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.vo.ResultVo;
 import org.bouncycastle.util.encoders.Base64;
@@ -53,6 +54,10 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
 
     public static final String PAY_UNIFIED_ORDER_URL = "https://api.plutuspay.com/open/v2/pay";
 
+    public static final String QUERY_ORDER_URL = "https://api.plutuspay.com/open/v2/query";
+
+
+
 
     @Autowired
     private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
@@ -81,7 +86,7 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setObjId(communityId);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        if (smallWeChatDtos == null && smallWeChatDtos.size() < 1) {
+        if (ListUtil.isNull(smallWeChatDtos)) {
             shopSmallWeChatDto = new SmallWeChatDto();
             shopSmallWeChatDto.setObjId(communityId);
             shopSmallWeChatDto.setAppId(MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId"));
@@ -181,11 +186,12 @@ public class QrCodePlutusPaymentAdapt implements IQrCodePaymentSMO {
         JSONObject paramMap = new JSONObject();
         paramMap.put("sn", mchId); // 富友分配给二级商户的商户号
         paramMap.put("outTradeId", orderNum);
+        System.out.println(paramMap.toJSONString());
 
         String param = PlutusFactory.Encryption(paramMap.toJSONString(), privateKey, key,devId);
         System.out.println(param);
 
-        String str = PlutusFactory.post(PAY_UNIFIED_ORDER_URL, param);
+        String str = PlutusFactory.post(QUERY_ORDER_URL, param);
         System.out.println(str);
 
         JSONObject json = JSON.parseObject(str);

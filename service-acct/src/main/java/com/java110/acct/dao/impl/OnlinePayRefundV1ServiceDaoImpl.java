@@ -71,9 +71,9 @@ public class OnlinePayRefundV1ServiceDaoImpl extends BaseServiceDao implements I
     public List<Map> getOnlinePayRefundInfo(Map info) throws DAOException {
         logger.debug("查询 getOnlinePayRefundInfo 入参 info : {}",info);
 
-        List<Map> businessOnlinePayRefundInfos = sqlSessionTemplate.selectList("onlinePayRefundV1ServiceDaoImpl.getOnlinePayRefundInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("onlinePayRefundV1ServiceDaoImpl.getOnlinePayRefundInfo",info);
 
-        return businessOnlinePayRefundInfos;
+        return infos;
     }
 
 

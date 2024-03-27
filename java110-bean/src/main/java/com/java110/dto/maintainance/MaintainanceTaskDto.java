@@ -42,11 +42,12 @@ public class MaintainanceTaskDto extends PageDto implements Serializable {
     private String[] states;
     private String stateName;
 
-
     private Date createTime;
 
-    private String statusCd = "0";
+    private String startTime;
+    private String endTime;
 
+    private String statusCd = "0";
 
     public String getPlanUserId() {
         return planUserId;
@@ -176,7 +177,6 @@ public class MaintainanceTaskDto extends PageDto implements Serializable {
         this.mpsId = mpsId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -223,5 +223,21 @@ public class MaintainanceTaskDto extends PageDto implements Serializable {
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

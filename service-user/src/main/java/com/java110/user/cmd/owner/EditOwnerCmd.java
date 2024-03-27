@@ -261,15 +261,14 @@ public class EditOwnerCmd extends Cmd {
         if (!accountDtos.get(0).getLink().equals(owners.get(0).getLink()) || !accountDtos.get(0).getAcctName().equals(owners.get(0).getName())) {
             AccountPo accountPo = new AccountPo();
             accountPo.setAcctName(owners.get(0).getName());
-            accountPo.setLink(owners.get(0).getLink());
+            accountPo.setoLink(owners.get(0).getLink());
             accountPo.setAcctId(accountDtos.get(0).getAcctId());
             accountInnerServiceSMOImpl.updateAccount(accountPo);
         }
-
-        AccountPo accountPo = new AccountPo();
+        /*AccountPo accountPo = new AccountPo();
         accountPo.setoLink(ownerDtos.get(0).getLink());
         accountPo.setAcctId(accountDtos.get(0).getAcctId());
-        accountInnerServiceSMOImpl.updateAccount(accountPo);
+        accountInnerServiceSMOImpl.updateAccount(accountPo);*/
     }
 
     public void editOwnerPhoto(JSONObject paramInJson) {

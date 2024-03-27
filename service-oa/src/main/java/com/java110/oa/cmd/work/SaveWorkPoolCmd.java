@@ -24,14 +24,12 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.workCopy.WorkCopyDto;
 import com.java110.dto.workCycle.WorkCycleDto;
 import com.java110.dto.workPool.WorkPoolDto;
 import com.java110.dto.workPoolFile.WorkPoolFileDto;
 import com.java110.dto.workTask.WorkTaskDto;
-import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.oa.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.workCopy.WorkCopyPo;
@@ -88,8 +86,6 @@ public class SaveWorkPoolCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
-
-
     /**
      * {"workName":"关于扫雪任务","workTypes":[],"wtId":"102023122586210045",
      * "workCycle":"1001","startTime":"2023-12-26 14:20:17","endTime":"2023-12-27 14:20:17",
@@ -112,52 +108,41 @@ public class SaveWorkPoolCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
         reqJson.put("storeId", storeId);
-
         if (!reqJson.containsKey("staffs")) {
             throw new CmdException("未包含处理人");
         }
-
         JSONArray staffs = reqJson.getJSONArray("staffs");
         if (staffs == null || staffs.isEmpty()) {
             throw new CmdException("未包含处理人");
         }
-
         if (WorkPoolDto.WORK_CYCLE_ONE.equals(reqJson.getString("workCycle"))) {
             return;
         }
         Assert.hasKeyAndValue(reqJson, "period", "周期性工单未包含周期");
         Assert.hasKeyAndValue(reqJson, "hours", "周期性工单未包含完成小时");
-
         if (WorkCycleDto.PERIOD_MONTH_DAY.equals(reqJson.getString("period"))) {
             JSONArray months = reqJson.getJSONArray("months");
             JSONArray days = reqJson.getJSONArray("days");
-
             if (ListUtil.isNull(months) || ListUtil.isNull(days)) {
                 throw new CmdException("未包含月/天");
             }
         }
-
         if (WorkCycleDto.PERIOD_MONTH_WORKDAY.equals(reqJson.getString("period"))) {
             JSONArray workdays = reqJson.getJSONArray("workdays");
             if (ListUtil.isNull(workdays)) {
                 throw new CmdException("未包含按周");
             }
         }
-
-
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-
         Assert.listOnlyOne(userDtos, "用户未登录");
-
         WorkPoolPo workPoolPo = BeanConvertUtil.covertBean(reqJson, WorkPoolPo.class);
         workPoolPo.setWorkId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         workPoolPo.setCreateUserId(userDtos.get(0).getUserId());
@@ -165,26 +150,17 @@ public class SaveWorkPoolCmd extends Cmd {
         workPoolPo.setCreateUserTel(userDtos.get(0).getTel());
         workPoolPo.setState(WorkPoolDto.STATE_WAIT);
         int flag = workPoolV1InnerServiceSMOImpl.saveWorkPool(workPoolPo);
-
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
-
         //todo 保存 工作单内容
         saveContent(workPoolPo, reqJson, userDtos.get(0));
-
         //todo 保存 抄送人
         saveCopyStaff(workPoolPo, reqJson, userDtos.get(0));
-
         //todo 保存周期
         saveWorkCycle(workPoolPo, reqJson, userDtos.get(0));
-
-
         // todo 保存 工单任务
         saveWorkTask(workPoolPo, reqJson, userDtos.get(0));
-
-
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
@@ -192,13 +168,10 @@ public class SaveWorkPoolCmd extends Cmd {
         JSONArray staffs = reqJson.getJSONArray("staffs");
         String startTime = reqJson.getString("startTime");
         String endTime = reqJson.getString("endTime");
-
         if (WorkPoolDto.WORK_CYCLE_CYCLE.equals(workPoolPo.getWorkCycle())) {
             Date sTime = DateUtil.getDateFromStringA(startTime);
             endTime = DateUtil.getAddHoursStringA(sTime, reqJson.getIntValue("hours"));
         }
-
-
         for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
             WorkTaskPo workTaskPo = new WorkTaskPo();
             workTaskPo.setWorkId(workPoolPo.getWorkId());
@@ -213,15 +186,12 @@ public class SaveWorkPoolCmd extends Cmd {
             workTaskPo.setOrgStaffId(staffs.getJSONObject(staffIndex).getString("staffId"));
             workTaskPo.setOrgStaffName(staffs.getJSONObject(staffIndex).getString("staffName"));
             int flag = workTaskV1InnerServiceSMOImpl.saveWorkTask(workTaskPo);
-
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
             }
-
-            if(StringUtil.isEmpty(reqJson.getString("pathUrl"))){
+            if (StringUtil.isEmpty(reqJson.getString("pathUrl"))) {
                 continue;
             }
-
             WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
             workPoolFilePo.setCommunityId(workPoolPo.getCommunityId());
             workPoolFilePo.setFileType(WorkPoolFileDto.FILE_TYPE_START);
@@ -235,7 +205,6 @@ public class SaveWorkPoolCmd extends Cmd {
     }
 
     private void saveWorkCycle(WorkPoolPo workPoolPo, JSONObject reqJson, UserDto userDto) {
-
         JSONArray staffs = reqJson.getJSONArray("staffs");
         for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
             WorkCyclePo workCyclePo = new WorkCyclePo();
@@ -277,7 +246,6 @@ public class SaveWorkPoolCmd extends Cmd {
                 throw new CmdException("保存数据失败");
             }
         }
-
     }
 
     /**
@@ -288,11 +256,9 @@ public class SaveWorkPoolCmd extends Cmd {
      * @param userDto
      */
     private void saveCopyStaff(WorkPoolPo workPoolPo, JSONObject reqJson, UserDto userDto) {
-
         if (!reqJson.containsKey("copyStaffs")) {
             return;
         }
-
         JSONArray copyStaffs = reqJson.getJSONArray("copyStaffs");
         if (ListUtil.isNull(copyStaffs)) {
             return;
@@ -319,7 +285,6 @@ public class SaveWorkPoolCmd extends Cmd {
      * @param userDto
      */
     private void saveContent(WorkPoolPo workPoolPo, JSONObject reqJson, UserDto userDto) {
-
         WorkPoolContentPo workPoolContentPo = new WorkPoolContentPo();
         workPoolContentPo.setContentId(GenerateCodeFactory.getGeneratorId("11"));
         workPoolContentPo.setContent(reqJson.getString("content"));

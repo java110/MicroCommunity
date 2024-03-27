@@ -29,17 +29,7 @@ public class QueryTaskWorkCmd extends Cmd {
     private IWorkPoolV1InnerServiceSMO workPoolV1InnerServiceSMOImpl;
 
     @Autowired
-    private IWorkTaskV1InnerServiceSMO workTaskV1InnerServiceSMOImpl;
-
-    @Autowired
     private IWorkCopyV1InnerServiceSMO workCopyV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IWorkPoolContentV1InnerServiceSMO workPoolContentV1InnerServiceSMOImpl;
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -51,34 +41,23 @@ public class QueryTaskWorkCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         WorkPoolDto workPoolDto = BeanConvertUtil.covertBean(reqJson, WorkPoolDto.class);
-
-
         String userId = CmdContextUtils.getUserId(context);
         workPoolDto.setStaffId(userId);
-
         int count = workPoolV1InnerServiceSMOImpl.queryTaskWorkPoolsCount(workPoolDto);
-
         List<WorkPoolDto> workPoolDtos = null;
-
         if (count > 0) {
             workPoolDtos = workPoolV1InnerServiceSMOImpl.queryTaskWorkPools(workPoolDto);
         } else {
             workPoolDtos = new ArrayList<>();
         }
-
         //todo 查询 处理人 和抄送人
         queryCopy(workPoolDtos);
-
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolDtos);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         context.setResponseEntity(responseEntity);
     }
 
     private void queryCopy(List<WorkPoolDto> workPoolDtos) {
-
         if (ListUtil.isNull(workPoolDtos)) {
             return;
         }
@@ -86,11 +65,9 @@ public class QueryTaskWorkCmd extends Cmd {
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             workIds.add(workPoolDto.getWorkId());
         }
-
         WorkCopyDto workCopyDto = new WorkCopyDto();
         workCopyDto.setWorkIds(workIds.toArray(new String[workIds.size()]));
         List<WorkCopyDto> workCopyDtos = workCopyV1InnerServiceSMOImpl.queryWorkCopys(workCopyDto);
-
         String curCopyName = "";
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curCopyName = "";
@@ -98,20 +75,15 @@ public class QueryTaskWorkCmd extends Cmd {
                 if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkCopyDto.getState())) {
                     continue;
                 }
-
                 if (!workPoolDto.getWorkId().equals(tmpWorkCopyDto.getWorkId())) {
                     continue;
                 }
-
                 if (curCopyName.split(",").length > 2) {
                     continue;
                 }
-
                 curCopyName += (tmpWorkCopyDto.getStaffName() + ",");
             }
-
             workPoolDto.setCurCopyName(curCopyName);
         }
-
     }
 }

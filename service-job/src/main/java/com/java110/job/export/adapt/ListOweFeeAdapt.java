@@ -21,7 +21,7 @@ import java.util.List;
 @Service("listOweFee")
 public class ListOweFeeAdapt implements IExportDataAdapt {
 
-    private static final int MAX_ROW = 100;
+    private static final int MAX_ROW = 60000;
 
     @Override
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) {

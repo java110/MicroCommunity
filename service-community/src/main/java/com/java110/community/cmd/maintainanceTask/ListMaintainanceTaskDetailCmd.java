@@ -32,13 +32,14 @@ import com.java110.vo.ResultVo;
 import com.java110.vo.api.junkRequirement.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.maintainance.MaintainanceTaskDetailDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -53,10 +54,10 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "maintainanceTask.listMaintainanceTaskDetail")
 public class ListMaintainanceTaskDetailCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListMaintainanceTaskDetailCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListMaintainanceTaskDetailCmd.class);
+
     @Autowired
     private IMaintainanceTaskDetailV1InnerServiceSMO maintainanceTaskDetailV1InnerServiceSMOImpl;
-
 
     @Autowired
     private IFileRelInnerServiceSMO fileRelInnerServiceSMOImpl;
@@ -64,39 +65,31 @@ public class ListMaintainanceTaskDetailCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-           MaintainanceTaskDetailDto maintainanceTaskDetailDto = BeanConvertUtil.covertBean(reqJson, MaintainanceTaskDetailDto.class);
-
-           int count = maintainanceTaskDetailV1InnerServiceSMOImpl.queryMaintainanceTaskDetailsCount(maintainanceTaskDetailDto);
-
-           List<MaintainanceTaskDetailDto> maintainanceTaskDetailDtos = null;
-
-           if (count > 0) {
-               maintainanceTaskDetailDtos = maintainanceTaskDetailV1InnerServiceSMOImpl.queryMaintainanceTaskDetails(maintainanceTaskDetailDto);
-               refreshPhotos(maintainanceTaskDetailDtos);
-           } else {
-               maintainanceTaskDetailDtos = new ArrayList<>();
-           }
-
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, maintainanceTaskDetailDtos);
-
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        MaintainanceTaskDetailDto maintainanceTaskDetailDto = BeanConvertUtil.covertBean(reqJson, MaintainanceTaskDetailDto.class);
+        int count = maintainanceTaskDetailV1InnerServiceSMOImpl.queryMaintainanceTaskDetailsCount(maintainanceTaskDetailDto);
+        List<MaintainanceTaskDetailDto> maintainanceTaskDetailDtos = null;
+        if (count > 0) {
+            maintainanceTaskDetailDtos = maintainanceTaskDetailV1InnerServiceSMOImpl.queryMaintainanceTaskDetails(maintainanceTaskDetailDto);
+            refreshPhotos(maintainanceTaskDetailDtos);
+        } else {
+            maintainanceTaskDetailDtos = new ArrayList<>();
+        }
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, maintainanceTaskDetailDtos);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
-    private void refreshPhotos( List<MaintainanceTaskDetailDto> maintainanceTaskDetailDtos) {
+    private void refreshPhotos(List<MaintainanceTaskDetailDto> maintainanceTaskDetailDtos) {
         List<PhotoVo> photoVos = null;
         PhotoVo photoVo = null;
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
-
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
         for (MaintainanceTaskDetailDto inspectionTaskDetail : maintainanceTaskDetailDtos) {
-            if(!"20200407".equals(inspectionTaskDetail.getState())){
+            if (!"20200407".equals(inspectionTaskDetail.getState())) {
                 continue;
             }
             FileRelDto fileRelDto = new FileRelDto();
@@ -105,7 +98,7 @@ public class ListMaintainanceTaskDetailCmd extends Cmd {
             photoVos = new ArrayList<>();
             for (FileRelDto tmpFileRelDto : fileRelDtos) {
                 photoVo = new PhotoVo();
-                photoVo.setUrl(tmpFileRelDto.getFileRealName().startsWith("http")?tmpFileRelDto.getFileRealName():imgUrl+tmpFileRelDto.getFileRealName());
+                photoVo.setUrl(tmpFileRelDto.getFileRealName().startsWith("http") ? tmpFileRelDto.getFileRealName() : imgUrl + tmpFileRelDto.getFileRealName());
                 photoVos.add(photoVo);
             }
             inspectionTaskDetail.setPhotos(photoVos);

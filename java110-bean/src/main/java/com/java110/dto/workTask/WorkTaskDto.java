@@ -16,8 +16,9 @@ import java.util.Date;
  **/
 public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
-    public static final String STATE_WAIT = "W";// 待处理
-    public static final String STATE_COMPLETE = "C";// 处理完成
+    public static final String STATE_WAIT = "W";// W 待处理 D 处理中 C 处理完成
+    public static final String STATE_DOING = "D"; //  W 待处理 D 处理中 C 处理完成
+    public static final String STATE_COMPLETE = "C";// W 待处理 D 处理中 C 处理完成
 
     private String staffName;
     private String startTime;
@@ -46,15 +47,9 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
     private String orgStaffId;
     private String orgStaffName;
 
-
-
-
     private Date createTime;
 
-
-
     private String statusCd = "0";
-
 
     public String getStaffName() {
         return staffName;
@@ -127,7 +122,6 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
     public void setStaffId(String staffId) {
         this.staffId = staffId;
     }
-
 
     public Date getCreateTime() {
         return createTime;

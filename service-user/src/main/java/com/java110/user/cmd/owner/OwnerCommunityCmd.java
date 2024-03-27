@@ -69,9 +69,9 @@ public class OwnerCommunityCmd extends Cmd {
         communityDto.setState("1100");
         communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
         List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-        if(communityDtos == null || communityDtos.size()<1){
+        if (communityDtos == null || communityDtos.size() < 1) {
             cmdDataFlowContext.setResponseEntity(ResultVo.success());
-            return ;
+            return;
         }
         for (OwnerDto tmpOwnerDto : ownerDtos) {
             for (CommunityDto tmpCommunityDto : communityDtos) {
@@ -132,6 +132,7 @@ public class OwnerCommunityCmd extends Cmd {
         ownerAppUserPo.setCommunityId(ownerDto.getCommunityId());
         ownerAppUserPo.setAppUserName(ownerDto.getName());
         ownerAppUserPo.setIdCard(ownerDto.getIdCard());
+        ownerAppUserPo.setOwnerTypeCd(ownerDto.getOwnerTypeCd());
         int flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
         if (flag < 1) {
             throw new CmdException("添加用户业主关系失败");

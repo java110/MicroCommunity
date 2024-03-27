@@ -9,6 +9,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IRepairSettingInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,7 +47,7 @@ public class RepairSettingInnerServiceSMOImpl extends BaseServiceSMO implements 
 
         List<RepairSettingDto> repairSettings = BeanConvertUtil.covertBeanList(repairSettingServiceDaoImpl.getRepairSettingInfo(BeanConvertUtil.beanCovertMap(repairSettingDto)), RepairSettingDto.class);
 
-        if (repairSettings == null || repairSettings.size() == 0) {
+        if (ListUtil.isNull(repairSettings)) {
             return repairSettings;
         }
 

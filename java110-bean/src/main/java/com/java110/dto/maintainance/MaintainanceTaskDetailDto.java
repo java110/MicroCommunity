@@ -53,15 +53,18 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
     private String planEndTime;
     private String planInsTime;
 
+    private String planId;
+    private String startTime;
+    private String endTime;
+    private String taskState;
+
     private List<PhotoVo> photos;
 
     private String description;
 
-
     private Date createTime;
 
     private String statusCd = "0";
-
 
     public String getSendFlag() {
         return sendFlag;
@@ -167,7 +170,6 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
         this.taskId = taskId;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -254,5 +256,37 @@ public class MaintainanceTaskDetailDto extends PageDto implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(String taskState) {
+        this.taskState = taskState;
     }
 }

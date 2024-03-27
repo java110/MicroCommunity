@@ -15,6 +15,7 @@ import com.java110.store.dao.IResourceStoreServiceDao;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -138,10 +139,14 @@ public class ResourceStoreInnerServiceSMOImpl extends BaseServiceSMO implements 
                 resourceStorePo.setStock(totalStock + "");
             }
             resourceStorePo.setStatusCd("0");
-            //计算最小计量总数
-            BigDecimal miniUnitStock = new BigDecimal(stores.get(0).get("miniUnitStock").toString());//最小计量单位数量
-            BigDecimal newMiniStock = totalStock.multiply(miniUnitStock);
-            resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
+
+            if (StringUtil.isEmpty(resourceStorePo.getAdjustmentType())) {
+                //计算最小计量总数
+                BigDecimal miniUnitStock = new BigDecimal(stores.get(0).get("miniUnitStock").toString());//最小计量单位数量
+                BigDecimal newMiniStock = totalStock.multiply(miniUnitStock);
+                resourceStorePo.setMiniStock(String.valueOf(newMiniStock));
+            }
+
             return resourceResourceStoreServiceDaoImpl.updateResourceStoreInfoInstance(BeanConvertUtil.beanCovertMap(resourceStorePo));
         } finally {
             DistributedLock.releaseDistributedLock(key, requestId);

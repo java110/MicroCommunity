@@ -158,7 +158,7 @@ public class SendCommunityDataToIotAdapt extends DatabusAdaptImpl {
         paramIn.put("name", communityDtos.get(0).getName());
         paramIn.put("address", communityDtos.get(0).getAddress());
         paramIn.put("cityCode", communityDtos.get(0).getCityCode());
-        paramIn.put("tel", communityDtos.get(0).getTel());
+        paramIn.put("tel", storeDtos.get(0).getTel()); //todo 这里取 物业的
         paramIn.put("storeId", storeDtos.get(0).getStoreId());
         paramIn.put("storeName", storeDtos.get(0).getName());
         ResultVo resultVo = sendIotImpl.post("/iot/api/community.addCommunityApi", paramIn);

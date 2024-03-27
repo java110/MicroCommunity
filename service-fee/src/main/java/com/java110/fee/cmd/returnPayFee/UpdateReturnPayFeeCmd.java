@@ -22,6 +22,7 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.account.AccountDto;
@@ -60,13 +61,11 @@ import com.java110.po.wechat.OnlinePayPo;
 import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.po.payFee.ReturnPayFeePo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.listener.ListenerUtils;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -164,6 +163,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     private static final String SPEC_MONTH = "89002020980014"; //月份
 
     public static final String CODE_PREFIX_ID = "10";
+
+    //键(积分账户抵扣比例)
+    public static final String DEDUCTION_PROPORTION = "DEDUCTION_PROPORTION";
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -313,41 +315,77 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         }
         for (int index = 0; index < feeAccountDetails.size(); index++) {
             JSONObject param = feeAccountDetails.getJSONObject(index);
-            String state = param.getString("state");
-            if (!"1002".equals(param.getString("state"))) { //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-                continue;
-            }
             AccountDto accountDto = new AccountDto();
             accountDto.setObjId(ownerId);
-            accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH); //2003  现金账户
-            List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-            Assert.listOnlyOne(accountDtos, "查询业主现金账户错误！");
-            BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
-            BigDecimal money = new BigDecimal(param.getString("amount"));
-            BigDecimal newAmount = amount.add(money);
-            AccountPo accountPo = new AccountPo();
-            accountPo.setAcctId(accountDtos.get(0).getAcctId());
-            accountPo.setAmount(String.valueOf(newAmount));
-            int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
-            if (flag < 1) {
-                throw new IllegalArgumentException("更新业主现金账户失败！");
+            String returnAmount = param.getString("amount");
+            //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
+            if ("1002".equals(param.getString("state"))) {
+                accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH); //2003  现金账户
+                List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+                Assert.listOnlyOne(accountDtos, "查询业主现金账户错误！");
+                BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
+                BigDecimal money = new BigDecimal(returnAmount);
+                BigDecimal newAmount = amount.add(money);
+                AccountPo accountPo = new AccountPo();
+                accountPo.setAcctId(accountDtos.get(0).getAcctId());
+                accountPo.setAmount(String.valueOf(newAmount));
+                int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
+                if (flag < 1) {
+                    throw new IllegalArgumentException("更新业主现金账户失败！");
+                }
+                AccountDetailPo accountDetailPo = new AccountDetailPo();
+                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+                accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
+                accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
+                accountDetailPo.setRelAcctId("-1");
+                accountDetailPo.setAmount(returnAmount);
+                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
+                accountDetailPo.setObjId(ownerId);
+                accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+                accountDetailPo.setbId("-1");
+                accountDetailPo.setRemark("现金账户退费");
+                accountDetailPo.setCreateTime(new Date());
+                int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
+                if (i < 1) {
+                    throw new IllegalArgumentException("保存业主现金账户明细失败！");
+                }
             }
-            AccountDetailPo accountDetailPo = new AccountDetailPo();
-            accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-            accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
-            accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
-            accountDetailPo.setRelAcctId("-1");
-            accountDetailPo.setAmount(param.getString("amount"));
-            accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
-            accountDetailPo.setObjId(ownerId);
-            accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
-            accountDetailPo.setbId("-1");
-            accountDetailPo.setRemark("现金账户退费");
-            accountDetailPo.setCreateTime(new Date());
-            int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
-            if (i < 1) {
-                throw new IllegalArgumentException("保存业主现金账户明细失败！");
+            if ("1003".equals(param.getString("state"))) {
+                //积分账户抵扣比例
+                BigDecimal deductionProportion = new BigDecimal(CommunitySettingFactory.getValue(reqJson.getString("communityId"), DEDUCTION_PROPORTION));
+                BigDecimal returnAmount1 = new BigDecimal(returnAmount);
+                BigDecimal money = returnAmount1.multiply(deductionProportion);
+                accountDto.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL); //2004  积分账户
+                List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+                Assert.listOnlyOne(accountDtos, "查询业主积分账户错误！");
+                BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
+                BigDecimal newAmount = amount.add(money);
+                AccountPo accountPo = new AccountPo();
+                accountPo.setAcctId(accountDtos.get(0).getAcctId());
+                accountPo.setAmount(String.valueOf(newAmount));
+                int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
+                if (flag < 1) {
+                    throw new IllegalArgumentException("更新业主积分账户失败！");
+                }
+                AccountDetailPo accountDetailPo = new AccountDetailPo();
+                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+                accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
+                accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
+                accountDetailPo.setRelAcctId("-1");
+                accountDetailPo.setAmount(money.toString());
+                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
+                accountDetailPo.setObjId(ownerId);
+                accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+                accountDetailPo.setbId("-1");
+                accountDetailPo.setRemark("积分账户退费");
+                accountDetailPo.setCreateTime(new Date());
+                int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
+                if (i < 1) {
+                    throw new IllegalArgumentException("保存业主积分账户明细失败！");
+                }
             }
+
+
         }
     }
 
@@ -610,7 +648,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         OnlinePayDto onlinePayDto = new OnlinePayDto();
         onlinePayDto.setOrderId(feeDetailDto.getPayOrderId());
         List<OnlinePayDto> onlinePayDtos = onlinePayV1InnerServiceSMOImpl.queryOnlinePays(onlinePayDto);
-        if (onlinePayDtos == null || onlinePayDtos.size() < 1) {
+        if (ListUtil.isNull(onlinePayDtos)) {
             return;
         }
         OnlinePayPo onlinePayPo = new OnlinePayPo();

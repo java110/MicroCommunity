@@ -103,7 +103,7 @@
         createTime,d.name repairWayName,d2.name repairSettingTypeName,
         t.public_area,t.public_area publicArea,t.pay_fee_flag,t.pay_fee_flag payFeeFlag
         ,t.price_scope,t.price_scope priceScope,t.return_visit_flag,t.return_visit_flag returnVisitFlag,d1.name
-        returnVisitFlagName,t.is_show,t.is_show isShow
+        returnVisitFlagName,t.is_show,t.is_show isShow,t.notify_way notifyWay
         from r_repair_setting t
         left join t_dict d on t.repair_way = d.status_cd and d.table_name = 'r_repair_setting' and d.table_columns
         ='repair_way'
@@ -117,6 +117,9 @@
         </if>
         <if test="repairType !=null and repairType != ''">
             and t.repair_type= #{repairType}
+        </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            and t.notify_way= #{notifyWay}
         </if>
         <if test="repairSettingType !=null and repairSettingType != ''">
             and t.repair_setting_type= #{repairSettingType}
@@ -175,9 +178,7 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="repairWay !=null and repairWay != ''">
             , t.repair_way= #{repairWay}
         </if>
@@ -196,12 +197,18 @@
         <if test="isShow !=null and isShow != ''">
             , t.is_show= #{isShow}
         </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            , t.notify_way= #{notifyWay}
+        </if>
         where 1=1
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
         <if test="settingId !=null and settingId != ''">
             and t.setting_id= #{settingId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
     </update>
 
@@ -250,6 +257,9 @@
         </if>
         <if test="isShow !=null and isShow != ''">
             and t.is_show= #{isShow}
+        </if>
+        <if test="notifyWay !=null and notifyWay != ''">
+            and t.notify_way= #{notifyWay}
         </if>
     </select>
 </mapper>

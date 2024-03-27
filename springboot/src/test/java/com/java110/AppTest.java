@@ -5,7 +5,9 @@ import static org.junit.Assert.assertTrue;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.utils.constant.FeeConfigConstant;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.MoneyUtil;
 import com.java110.utils.util.StringUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
@@ -26,21 +28,103 @@ public class AppTest {
      */
     @Test
     public void should() {
-//解密
-//        FeeDto feeDto = new FeeDto();
-//        feeDto.setStartTime(DateUtil.getDateFromStringB("2023-01-01"));
-//        feeDto.setEndTime(DateUtil.getDateFromStringB("2023-01-12"));
-//        feeDto.setPrepaymentPeriod("20");
-//        feeDto.setState(FeeDto.STATE_DOING);
-//        feeDto.setConfigEndTime(DateUtil.getDateFromStringB("2050-01-01"));
-//        feeDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
-//        feeDto.setPaymentCd("1200");
-//        feeDto.setPaymentCycle("12");
-//        getTargetEndDateAndOweMonth(feeDto,null);
-// 0.3667 0.3226
-//        double month = dayCompare(DateUtil.getDateFromStringB("2023-01-1"), DateUtil.getDateFromStringB("2023-09-1"));
-//        System.out.println("month=" + month);
-        System.out.println(StringUtil.maskName("张三三sss"));
+//todo 递增时间 不是 费用建账时间的倍数时，修正一下
+        Date rateStartTime = DateUtil.getDateFromStringB("2023-03-20");
+        FeeDto feeDto =  new FeeDto();
+        feeDto.setStartTime(DateUtil.getDateFromStringB("2023-01-01"));
+        feeDto.setEndTime(DateUtil.getDateFromStringB("2024-03-01"));
+        feeDto.setDeadlineTime(DateUtil.getDateFromStringB("2024-04-01"));
+        feeDto.setFeePrice(1000);
+
+        int rateCycle = 12;
+
+        double rate = 0.03;
+
+        rateStartTime = correctByFeeStartTime(rateStartTime,feeDto.getStartTime());
+
+        BigDecimal addTotalAmount = new BigDecimal("0");
+        double curOweMonth = 0;
+        BigDecimal curFeePrice = new BigDecimal(feeDto.getFeePrice());
+
+        //todo 递增本轮欠费开始时间
+        Date curOweStartTime = null;
+        // todo 如果计费起始时间 小于 递增开始时间
+        if (feeDto.getEndTime().getTime() < rateStartTime.getTime()) {
+            //todo 递增前的欠费
+            curOweMonth = DateUtil.dayCompare(feeDto.getEndTime(), rateStartTime);
+            addTotalAmount = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
+            // todo 递增
+            curOweStartTime = rateStartTime;
+        } else {
+            // todo 递增
+            curOweStartTime = feeDto.getEndTime();
+        }
+        double rateMonth = DateUtil.dayCompare(rateStartTime, feeDto.getDeadlineTime());
+
+        // todo 最大周期 递增轮数
+        double maxCycle = Math.ceil(rateMonth / rateCycle);
+
+        // todo 增长前的欠费
+        BigDecimal rateDec = new BigDecimal(rate + "");
+        BigDecimal oweAmountDec = null;
+        //todo 递增轮数 循环 curFeePrice 这个是 原始租金
+        for (int cycleIndex = 0; cycleIndex < maxCycle; cycleIndex++) {
+            //todo 递增月单价
+            curFeePrice = new BigDecimal("1").add(rateDec).multiply(curFeePrice).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
+
+            //todo 计算 curCycleRateEneTime 本轮递增结束时间
+            Date curCycleRateEneTime = DateUtil.stepMonth(rateStartTime, (cycleIndex + 1) * rateCycle);
+
+            //todo 说明这个已经缴费了
+            if (curOweStartTime.getTime() > curCycleRateEneTime.getTime()) {
+                continue;
+            }
+            //todo 本轮 欠费开始时间大于 deadlineTime 跳过
+            if(curOweStartTime.getTime() >= feeDto.getDeadlineTime().getTime()){
+                continue;
+            }
+
+            //todo 本轮递增时间未到 费用deadlineTime
+            if (curCycleRateEneTime.getTime() < feeDto.getDeadlineTime().getTime()) {
+                curOweMonth = DateUtil.dayCompare(curOweStartTime, curCycleRateEneTime);
+                curOweStartTime = curCycleRateEneTime;
+            } else {
+                curOweMonth = DateUtil.dayCompare(curOweStartTime, feeDto.getDeadlineTime());
+                curOweStartTime = feeDto.getDeadlineTime();
+            }
+
+            oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
+
+            addTotalAmount = addTotalAmount.add(oweAmountDec);
+        }
+
+        Double amountOwed = MoneyUtil.computePriceScale(addTotalAmount.doubleValue(), feeDto.getScale(), 4);
+        System.out.println(amountOwed);
+    }
+
+    /**
+     * 修正递增 开始时间
+     * 如果设置的 递增开始时间和建账时间不是同一天 强制修正下
+     * @param rateStartTime
+     * @param startTime
+     * @return
+     */
+    private Date correctByFeeStartTime(Date rateStartTime, Date startTime) {
+        Calendar rateCalendar = Calendar.getInstance();
+        rateCalendar.setTime(rateStartTime);
+        int rateDay = rateCalendar.get(Calendar.DAY_OF_MONTH);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startTime);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        if(rateDay == day){
+            return rateStartTime;
+        }
+
+        rateCalendar = Calendar.getInstance();
+        rateCalendar.setTime(rateStartTime);
+        rateCalendar.add(Calendar.MONTH,1);
+        rateCalendar.set(Calendar.DAY_OF_MONTH,day);
+        return rateCalendar.getTime();
     }
 
     public Map getTargetEndDateAndOweMonth(FeeDto feeDto, OwnerCarDto ownerCarDto) {

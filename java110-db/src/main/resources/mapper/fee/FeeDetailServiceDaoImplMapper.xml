@@ -121,8 +121,10 @@
         t.state,d.name stateName,t.start_time,t.end_time,t.start_time startTime,t.end_time endTime,pfa.`value`
         importFeeName,pfc.fee_name feeName,t.payable_amount,t.payable_amount payableAmount,
         mw.cur_degrees curDegrees,mw.pre_degrees preDegrees, mw.pre_reading_time preReadingTime,mw.cur_reading_time
-        curReadingTime,t.pay_order_id payOrderId,pfc.config_id configId,td.`name` primeRateName,pfao1.`value` payerObjName,
-        t.cashier_id cashierId,t.cashier_name cashierName,pfc.fee_flag feeFlag,fr.receipt_code receiptCode,t.open_invoice openInvoice
+        curReadingTime,t.pay_order_id payOrderId,pfc.config_id configId,td.`name` primeRateName,pfao1.`value`
+        payerObjName,
+        t.cashier_id cashierId,t.cashier_name cashierName,pfc.fee_flag feeFlag,fr.receipt_code
+        receiptCode,t.open_invoice openInvoice
         from pay_fee_detail t
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
@@ -133,7 +135,8 @@
             left join pay_fee_attrs pfao on pfao.fee_id = t.fee_id and pfao.spec_cd = '390007' and pfao.status_cd = '0'
         </if>
         left join t_dict d on t.state = d.status_cd and d.table_name = 'pay_fee_detail' and d.table_columns = 'state'
-        left join t_dict td on t.prime_rate = td.status_cd and td.table_name = 'pay_fee_detail' and td.table_columns = 'prime_rate'
+        left join t_dict td on t.prime_rate = td.status_cd and td.table_name = 'pay_fee_detail' and td.table_columns =
+        'prime_rate'
         left join fee_receipt_detail frd on t.detail_id = frd.detail_id and frd.status_cd = '0'
         left join fee_receipt fr on frd.receipt_id = fr.receipt_id and fr.status_cd = '0'
         where 1 =1
@@ -215,7 +218,7 @@
         <if test="openInvoice !=null and openInvoice != ''">
             and t.open_invoice= #{openInvoice}
         </if>
-        order by pf.payer_obj_id,  t.create_time desc
+        order by t.create_time desc,pf.payer_obj_id desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -353,13 +356,16 @@
     <insert id="saveFeeDetail" parameterType="Map">
         insert into
         pay_fee_detail(
-        prime_rate,detail_id,receivable_amount,cycles,remark,received_amount,community_id,fee_id,state,start_time,end_time,payable_amount,cashier_name,cashier_id,open_invoice
+        prime_rate,detail_id,receivable_amount,cycles,remark,received_amount,community_id,
+        fee_id,state,start_time,end_time,payable_amount,cashier_name,cashier_id,open_invoice,
+        acct_amount,discount_amount,deduction_amount,late_amount,gift_amount
         <if test="createTime != null and createTime != ''">
             ,create_time
         </if>
         )
         values(#{primeRate},#{detailId},#{receivableAmount},#{cycles},#{remark},#{receivedAmount},#{communityId},#{feeId},#{state},
-        #{startTime},#{endTime},#{payableAmount},#{cashierName},#{cashierId},#{openInvoice}
+        #{startTime},#{endTime},#{payableAmount},#{cashierName},#{cashierId},#{openInvoice},
+        #{acctAmount},#{discountAmount},#{deductionAmount},#{lateAmount},#{giftAmount}
         <if test="createTime != null and createTime != ''">
             ,#{createTime}
         </if>

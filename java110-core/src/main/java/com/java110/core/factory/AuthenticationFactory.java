@@ -748,8 +748,8 @@ public class AuthenticationFactory {
 //        PrivateKey privateKey = keyPair.getPrivate();
 //        System.out.println("私钥：" + new String(Base64.getEncoder().encode(privateKey.getEncoded())));
 
-        System.out.printf("passwdMd5 " + passwdMd5("V1TAj91GZXNNMlAR"));
-        System.out.printf("passwdMd5 " + md5("5616d148-c941-4873-9c1f-b59a08b4068320240108140611992020061452450002page=1&row=1123"));
+        System.out.println("passwdMd5 " + passwdMd5("V1TAj91GZXNNMlAR"));
+        System.out.println("passwdMd5 " + md5("25330330-a601-4e6f-8ecc-e0654eb65b4420240306131842992019111758490006whoisyoudad!!!"));
 
     }
 

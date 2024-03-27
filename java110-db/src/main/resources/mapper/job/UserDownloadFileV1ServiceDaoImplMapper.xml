@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="userDownloadFileV1ServiceDaoImpl">
 
-
     <!-- 保存文件下载信息 add by wuxw 2018-07-03 -->
     <insert id="saveUserDownloadFileInfo" parameterType="Map">
-        insert into user_download_file(
-        name,download_id,download_user_id,state,temp_url,community_id,download_user_name,file_type
-        ) values (
-        #{name},#{downloadId},#{downloadUserId},#{state},#{tempUrl},#{communityId},#{downloadUserName},#{fileType}
-        )
+        insert into user_download_file(name, download_id, download_user_id, state, temp_url, community_id,
+                                       download_user_name, file_type)
+        values (#{name}, #{downloadId}, #{downloadUserId}, #{state}, #{tempUrl}, #{communityId}, #{downloadUserName},
+                #{fileType})
     </insert>
-
 
     <!-- 查询文件下载信息 add by wuxw 2018-07-03 -->
     <select id="getUserDownloadFileInfo" parameterType="Map" resultType="Map">
         select t.name,t.download_id,t.download_id downloadId,t.download_user_id,t.download_user_id
         downloadUserId,t.status_cd,t.status_cd statusCd,t.state,t.temp_url,t.temp_url
         tempUrl,t.community_id,t.community_id communityId,t.download_user_name,t.download_user_name
-        downloadUserName,t.file_type,t.file_type fileType,td.name stateName,td1.name fileTypeName,t.create_time createTime,t.remark
+        downloadUserName,t.file_type,t.file_type fileType,td.name stateName,td1.name fileTypeName,t.create_time
+        createTime,t.remark
         from user_download_file t
-        left join t_dict td on t.state = td.status_cd and td.table_name = 'user_download_file' and td.table_columns = 'state'
-        left join t_dict td1 on t.file_type = td1.status_cd and td1.table_name = 'user_download_file' and td1.table_columns = 'file_type'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'user_download_file' and td.table_columns =
+        'state'
+        left join t_dict td1 on t.file_type = td1.status_cd and td1.table_name = 'user_download_file' and
+        td1.table_columns = 'file_type'
         where 1 =1
         <if test="name !=null and name != ''">
             and t.name= #{name}
@@ -56,9 +55,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改文件下载信息 add by wuxw 2018-07-03 -->
     <update id="updateUserDownloadFileInfo" parameterType="Map">
@@ -81,7 +78,6 @@
         <if test="remark !=null and remark != ''">
             , t.remark= #{remark}
         </if>
-
         <if test="downloadUserName !=null and downloadUserName != ''">
             , t.download_user_name= #{downloadUserName}
         </if>
@@ -92,10 +88,9 @@
         <if test="downloadId !=null and downloadId != ''">
             and t.download_id= #{downloadId}
         </if>
-        <if test="communityId !=null and communityId != ''">
+        <!--<if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
-        </if>
-
+        </if>-->
     </update>
 
     <!-- 查询文件下载数量 add by wuxw 2018-07-03 -->
@@ -130,8 +125,5 @@
         <if test="fileType !=null and fileType != ''">
             and t.file_type= #{fileType}
         </if>
-
-
     </select>
-
 </mapper>

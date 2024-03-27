@@ -133,7 +133,10 @@ public class PurchaseApplyCmd extends Cmd {
         storehouseDto.setShId(reqJson.getString("shId"));
         List<StorehouseDto> storehouseDtos = storehouseV1InnerServiceSMOImpl.queryStorehouses(storehouseDto);
         Assert.listOnlyOne(storehouseDtos, "仓库不存在");
-
+        //判断是直接采购入库还是流程审批入库
+        if (!StringUtil.isEmpty(reqJson.getString("purchaseSwitch")) && StorehouseDto.SWITCH_OFF.equals(reqJson.getString("purchaseSwitch"))) {
+            storehouseDtos.get(0).setPurchaseSwitch(StorehouseDto.SWITCH_OFF);
+        }
         //todo 查询用户
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
@@ -156,6 +159,9 @@ public class PurchaseApplyCmd extends Cmd {
         purchaseApplyPo.setCreateUserId(userId);
         purchaseApplyPo.setCreateUserName(userName);
         purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_APPLY);
+        if (!StorehouseDto.SWITCH_ON.equals(storehouseDtos.get(0).getPurchaseSwitch())) {
+            purchaseApplyPo.setWarehousingWay(PurchaseApplyDto.WAREHOUSING_TYPE_DIRECT);
+        }
         purchaseApplyPo.setCommunityId(reqJson.getString("communityId"));
         //todo 封装物品
         JSONArray resourceStores = reqJson.getJSONArray("resourceStores");
@@ -190,6 +196,7 @@ public class PurchaseApplyCmd extends Cmd {
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(purchaseApplyPo, PurchaseApplyDto.class);
         purchaseApplyDto.setCurrentUserId(purchaseApplyPo.getUserId());
         purchaseApplyDto.setNextStaffId(reqJson.getString("staffId"));
+
         //todo 启动审核流程
         toStartWorkflow(purchaseApplyDto, storehouseDtos.get(0), reqJson);
 
@@ -231,7 +238,7 @@ public class PurchaseApplyCmd extends Cmd {
         String nextUserId = "-1";
         if (audit != null) {
             String staffId = reqJson.getJSONObject("audit").getString("staffId");
-            if(!StringUtil.isEmpty(staffId)) {
+            if (!StringUtil.isEmpty(staffId)) {
                 nextUserId = reqJson.getJSONObject("audit").getString("staffId");
             } else {
                 nextUserId = reqJson.getJSONObject("audit").getString("assignee");

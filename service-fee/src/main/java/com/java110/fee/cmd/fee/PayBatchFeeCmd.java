@@ -131,7 +131,7 @@ public class PayBatchFeeCmd extends Cmd {
                 maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
             }
 
-            if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeDtos.get(0).getFeeFlag())) {
                 Date newDate = DateUtil.stepMonth(endTime, paramInObj.getDouble("cycles").intValue());
                 if (newDate.getTime() > maxEndTime.getTime()) {
                     throw new IllegalArgumentException("缴费周期超过 缴费结束时间,请用按结束时间方式缴费");
@@ -219,6 +219,7 @@ public class PayBatchFeeCmd extends Cmd {
          *         payFeeDetailPo.setPayableAmount(receivableAmount);
          */
         computeEndTimeCycleAmount(payFeeDataDto, payFeeDetailPo);
+        payFeeDetailPo.setAcctAmount(payFeeDataDto.getAcctAmount());
 
         //todo 缓存收据编号
         CommonCache.setValue(payFeeDetailPo.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
@@ -387,7 +388,7 @@ public class PayBatchFeeCmd extends Cmd {
             }
 
             payFeeDataDto.setReceivedAmount("0");
-            payFeeDataDto.setAccountAmount(accountAmount);
+            payFeeDataDto.setAccountAmount(receivedAmount);
             payFeeDataDto.setAcctId(acctId);
 
             accountAmountDec = accountAmountDec.subtract(receivedAmountDec).setScale(2, BigDecimal.ROUND_HALF_UP);

@@ -14,8 +14,14 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.dto.room.RoomDto;
+import com.java110.dto.user.UserAttrDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
@@ -27,6 +33,7 @@ import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -65,6 +72,12 @@ public class OwnerRegisterCmd extends Cmd {
     @Autowired
     private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -72,12 +85,21 @@ public class OwnerRegisterCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "msgCode", "未包含联系电话验证码");
         Assert.hasKeyAndValue(reqJson, "password", "未包含密码");
 
+        UserDto userDto = new UserDto();
+        userDto.setTel(reqJson.getString("link"));
+        userDto.setLevelCd(UserDto.LEVEL_CD_USER);
+        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
+
+        if (!ListUtil.isNull(userDtos)) {
+            throw new CmdException("手机号已存在，请登陆");
+        }
+
         SmsDto smsDto = new SmsDto();
         smsDto.setTel(reqJson.getString("link"));
         smsDto.setCode(reqJson.getString("msgCode"));
         smsDto = smsInnerServiceSMOImpl.validateCode(smsDto);
 
-        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(MappingConstant.SMS_DOMAIN,SendSmsFactory.SMS_SEND_SWITCH))) {
+        if (!smsDto.isSuccess() && "ON".equals(MappingCache.getValue(MappingConstant.SMS_DOMAIN, SendSmsFactory.SMS_SEND_SWITCH))) {
             throw new IllegalArgumentException(smsDto.getMsg());
         }
     }
@@ -86,77 +108,63 @@ public class OwnerRegisterCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
-        ownerAppUserDto.setStates(new String[]{"10000", "12000"});
-
-        //是否已经注册过
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-
-        if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
-            throw new IllegalArgumentException("已经注册过用户");
-        }
 
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setLink(reqJson.getString("link"));
-
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
-        String appId = cmdDataFlowContext.getReqHeaders().get("app-id");
-        if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) { //公众号
-            reqJson.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT);
-        } else if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) { //小程序
-            reqJson.put("appType", OwnerAppUserDto.APP_TYPE_WECHAT_MINA);
-        } else {//app
-            reqJson.put("appType", OwnerAppUserDto.APP_TYPE_APP);
+        //设置默认密码
+        String userPassword = reqJson.getString("password");
+        userPassword = AuthenticationFactory.passwdMd5(userPassword);
+        String name = reqJson.getString("link");
+        if (!ListUtil.isNull(ownerDtos)) {
+            name = ownerDtos.get(0).getName();
         }
-        reqJson.put("userId", GenerateCodeFactory.getUserId());
-        if (reqJson.containsKey("openId")) {
-            reqJson.put("openId", reqJson.getString("openId"));
-        } else {
-            reqJson.put("openId", "-1");
+        //todo 注册用户
+        UserPo userPo = new UserPo();
+        userPo.setAddress("无");
+        userPo.setUserId(GenerateCodeFactory.getUserId());
+        userPo.setLevelCd(UserLevelConstant.USER_LEVEL_ORDINARY);
+        userPo.setName(name);
+        userPo.setTel(reqJson.getString("link"));
+        userPo.setPassword(userPassword);
+
+        int flag = userV1InnerServiceSMOImpl.saveUser(userPo);
+        if (flag < 1) {
+            throw new CmdException("注册失败");
         }
-        //添加小区楼
-        addOwnerAppUser(reqJson, ownerDtos);
-        registerUser(reqJson, ownerDtos);
-
-        cmdDataFlowContext.setResponseEntity(ResultVo.success());
-    }
-
-    private void addOwnerAppUser(JSONObject paramInJson, List<OwnerDto> ownerDtos) {
-        List<CommunityDto> communityDtos = null;
-        CommunityDto tmpCommunityDto = null;
-        String communityName = "无";
-
-        if (ownerDtos == null || ownerDtos.size() < 1) {
-            CommunityDto communityDto = new CommunityDto();
-            communityDto.setState("1100");
-            communityDto.setCommunityId(paramInJson.getString("defaultCommunityId"));
-            communityDto.setPage(1);
-            communityDto.setRow(1);
-            communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-            if (communityDtos != null && communityDtos.size() > 0) {
-                communityName = communityDtos.get(0).getName();
-            }
-            OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(paramInJson, OwnerAppUserPo.class);
-            //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-            ownerAppUserPo.setState("12000");
-            ownerAppUserPo.setAppTypeCd("10010");
-            ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
-            ownerAppUserPo.setMemberId("-1");
-            ownerAppUserPo.setCommunityName(communityName);
-            ownerAppUserPo.setCommunityId(paramInJson.getString("defaultCommunityId"));
-            ownerAppUserPo.setAppUserName("游客");
-            ownerAppUserPo.setIdCard("无");
-
-            int flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
+        //todo 保存openId
+        String openId = reqJson.getString("openId");
+        if (!StringUtil.isEmpty(openId)) {
+            UserAttrPo userAttrPo = new UserAttrPo();
+            userAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
+            userAttrPo.setSpecCd(UserAttrDto.SPEC_OPEN_ID);
+            userAttrPo.setUserId(userPo.getUserId());
+            userAttrPo.setValue(openId);
+            flag = userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
             if (flag < 1) {
-                throw new CmdException("添加用户业主关系失败");
+                throw new CmdException("注册失败");
             }
+        }
+
+        //todo 根据手机号未关联到业主直接返回成功，后续通过认证房屋的方式操作
+        if (ListUtil.isNull(ownerDtos)) {
             return;
+        }
+        String appId = cmdDataFlowContext.getReqHeaders().get("app-id");
+        String appType = "";
+        if (AppDto.WECHAT_OWNER_APP_ID.equals(appId)) { //公众号
+            appType = OwnerAppUserDto.APP_TYPE_WECHAT;
+        } else if (AppDto.WECHAT_MINA_OWNER_APP_ID.equals(appId)) { //小程序
+            appType = OwnerAppUserDto.APP_TYPE_WECHAT_MINA;
+        } else {//app
+            appType = OwnerAppUserDto.APP_TYPE_APP;
         }
 
         OwnerAppUserPo ownerAppUserPo = null;
-        for (OwnerDto ownerDto : ownerDtos) {
+
+        List<CommunityDto> communityDtos = null;
+        for (OwnerDto tmpOwnerDto : ownerDtos) {
             CommunityDto communityDto = new CommunityDto();
             communityDto.setState("1100");
             communityDto.setCommunityId(ownerDto.getCommunityId());
@@ -164,68 +172,54 @@ public class OwnerRegisterCmd extends Cmd {
             if (communityDtos == null || communityDtos.size() < 1) {
                 continue;
             }
-            tmpCommunityDto = communityDtos.get(0);
-            ownerAppUserPo = BeanConvertUtil.covertBean(paramInJson, OwnerAppUserPo.class);
-            //状态类型，10000 审核中，12000 审核成功，13000 审核失败
-            ownerAppUserPo.setState("12000");
-            ownerAppUserPo.setAppTypeCd("10010");
+            communityDto = communityDtos.get(0);
+            ownerAppUserPo = new OwnerAppUserPo();
             ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
-            ownerAppUserPo.setMemberId(ownerDto.getMemberId());
-            ownerAppUserPo.setCommunityName(tmpCommunityDto.getName());
-            ownerAppUserPo.setCommunityId(tmpCommunityDto.getCommunityId());
-            ownerAppUserPo.setAppUserName(ownerDto.getName());
-            ownerAppUserPo.setIdCard(ownerDto.getIdCard());
-
-            int flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
+            ownerAppUserPo.setMemberId(tmpOwnerDto.getMemberId());
+            ownerAppUserPo.setCommunityId(communityDto.getCommunityId());
+            ownerAppUserPo.setCommunityName(communityDto.getName());
+            ownerAppUserPo.setAppUserName(tmpOwnerDto.getName());
+            ownerAppUserPo.setIdCard(tmpOwnerDto.getIdCard());
+            ownerAppUserPo.setLink(tmpOwnerDto.getLink());
+            ownerAppUserPo.setOpenId("-1");
+            ownerAppUserPo.setAppTypeCd("10010");
+            ownerAppUserPo.setState(OwnerAppUserDto.STATE_AUDIT_SUCCESS);
+            ownerAppUserPo.setRemark("注册自动关联");
+            ownerAppUserPo.setUserId(userPo.getUserId());
+            ownerAppUserPo.setAppType(appType);
+            ownerAppUserPo.setOwnerTypeCd(tmpOwnerDto.getOwnerTypeCd());
+            queryOwnerRoom(tmpOwnerDto, ownerAppUserPo);
+            flag = ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
             if (flag < 1) {
                 throw new CmdException("添加用户业主关系失败");
             }
         }
+
+        cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
 
-    /**
-     * 注册用户
-     *
-     * @param paramObj
-     */
-    public void registerUser(JSONObject paramObj, List<OwnerDto> ownerDtos) {
+    private void queryOwnerRoom(OwnerDto ownerDto, OwnerAppUserPo ownerAppUserPo) {
 
-        if (paramObj.containsKey("email") && !StringUtil.isEmpty(paramObj.getString("email"))) {
-            Assert.isEmail(paramObj, "email", "不是有效的邮箱格式");
-        }
 
-        paramObj.put("levelCd", UserLevelConstant.USER_LEVEL_ORDINARY);
-        //设置默认密码
-        String userPassword = paramObj.getString("password");
-        userPassword = AuthenticationFactory.passwdMd5(userPassword);
-        paramObj.put("password", userPassword);
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setOwnerId(ownerDto.getOwnerId());
 
-        String tel = paramObj.getString("link");
-        String name = tel;
-        if (ownerDtos != null && ownerDtos.size() > 0) {
-            name = ownerDtos.get(0).getName();
-        }
-        UserPo userPo = BeanConvertUtil.covertBean(paramObj, UserPo.class);
-        userPo.setName(name);
-        userPo.setTel(tel);
-        int flag = userV1InnerServiceSMOImpl.saveUser(userPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
-        }
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if (!paramObj.containsKey("openId") || "-1".equals(paramObj.getString("openId"))) {
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
             return;
         }
-        JSONObject userAttrObj = new JSONObject();
-        userAttrObj.put("attrId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
-        userAttrObj.put("specCd", "100201911001");
-        userAttrObj.put("value", paramObj.getString("openId"));
-        UserAttrPo userAttrPo = BeanConvertUtil.covertBean(userAttrObj, UserAttrPo.class);
-        userAttrPo.setUserId(userPo.getUserId());
-        flag = userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
-        if (flag < 1) {
-            throw new CmdException("注册失败");
+
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomId(ownerRoomRelDtos.get(0).getRoomId());
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        if (ListUtil.isNull(roomDtos)) {
+            return;
         }
 
+        ownerAppUserPo.setRoomId(roomDtos.get(0).getRoomId());
+        ownerAppUserPo.setRoomName(roomDtos.get(0).getFloorNum() + "-" + roomDtos.get(0).getUnitNum() + "-" + roomDtos.get(0).getRoomNum());
     }
+
+
 }

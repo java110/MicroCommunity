@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="workTaskV1ServiceDaoImpl">
 
-
     <!-- 保存工作单任务信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkTaskInfo" parameterType="Map">
-        insert into work_task(
-        staff_name,start_time,state,end_time,community_id,store_id,task_id,work_id,staff_id,org_staff_id,org_staff_name
-        ) values (
-        #{staffName},#{startTime},#{state},#{endTime},#{communityId},#{storeId},#{taskId},#{workId},#{staffId},#{orgStaffId},#{orgStaffName}
-        )
+        insert into work_task(staff_name, start_time, state, end_time, community_id, store_id, task_id, work_id,
+                              staff_id, org_staff_id, org_staff_name)
+        values (#{staffName}, #{startTime}, #{state}, #{endTime}, #{communityId}, #{storeId}, #{taskId}, #{workId},
+                #{staffId}, #{orgStaffId}, #{orgStaffName})
     </insert>
-
 
     <!-- 查询工作单任务信息 add by wuxw 2018-07-03 -->
     <select id="getWorkTaskInfo" parameterType="Map" resultType="Map">
@@ -23,8 +19,10 @@
         createTime,
         td.`name` stateName,
         wp.work_cycle workCycle,wp.create_user_id
-        createUserId,wp.create_user_name createUserName,wp.work_name workName,wp.wt_id wtId,wp.create_user_tel createUserTel,
-        wt.type_name typeName,t.finish_time finishTime,t.task_timeout taskTimeout,t.org_staff_id orgStaffId,t.org_staff_name orgStaffName
+        createUserId,wp.create_user_name createUserName,wp.work_name workName,wp.wt_id wtId,wp.create_user_tel
+        createUserTel,
+        wt.type_name typeName,t.finish_time finishTime,t.task_timeout taskTimeout,t.org_staff_id
+        orgStaffId,t.org_staff_name orgStaffName
         from work_task t
         left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         left join work_pool wp on t.work_id = wp.work_id and wp.status_cd = '0'
@@ -49,7 +47,6 @@
         <if test="taskInsTime !=null and taskInsTime != ''">
             and DATE_FORMAT(t.start_time,'%Y-%m-%d')= #{taskInsTime}
         </if>
-
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -83,23 +80,20 @@
         <if test="orgStaffId !=null and orgStaffId != ''">
             and t.org_staff_id= #{orgStaffId}
         </if>
-
         <if test="taskTimeout !=null and taskTimeout != ''">
             and t.task_timeout= #{taskTimeout}
         </if>
         <if test="queryStartTime !=null and queryStartTime != ''">
-            and t.create_time &gt; #{queryStartTime}
+            and t.start_time &lt;= #{queryStartTime}
         </if>
         <if test="queryEndTime !=null and queryEndTime != ''">
-            and t.create_time &lt; #{queryEndTime}
+            and t.end_time &gt;= #{queryEndTime}
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
-
     </select>
-
 
     <!-- 修改工作单任务信息 add by wuxw 2018-07-03 -->
     <update id="updateWorkTaskInfo" parameterType="Map">
@@ -125,7 +119,6 @@
         <if test="taskTimeout !=null and taskTimeout != ''">
             , t.task_timeout= #{taskTimeout}
         </if>
-
         <if test="staffId !=null and staffId != ''">
             , t.staff_id= #{staffId}
         </if>
@@ -142,7 +135,6 @@
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
         </if>
-
     </update>
 
     <!-- 查询工作单任务数量 add by wuxw 2018-07-03 -->
@@ -163,7 +155,6 @@
         <if test="staffName !=null and staffName != ''">
             and t.staff_name= #{staffName}
         </if>
-
         <if test="staffNameLike !=null and staffNameLike != ''">
             and t.staff_name like concat('%', #{staffNameLike},'%')
         </if>
@@ -207,13 +198,10 @@
             and t.task_timeout= #{taskTimeout}
         </if>
         <if test="queryStartTime !=null and queryStartTime != ''">
-            and t.create_time &gt; #{queryStartTime}
+            and t.start_time &lt;= #{queryStartTime}
         </if>
         <if test="queryEndTime !=null and queryEndTime != ''">
-            and t.create_time &lt; #{queryEndTime}
+            and t.end_time &gt;= #{queryEndTime}
         </if>
-
-
     </select>
-
 </mapper>

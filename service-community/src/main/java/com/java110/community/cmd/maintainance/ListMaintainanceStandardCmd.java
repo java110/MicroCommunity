@@ -29,13 +29,14 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.maintainance.MaintainanceStandardDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * 类表述：查询
@@ -50,10 +51,10 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "maintainance.listMaintainanceStandard")
 public class ListMaintainanceStandardCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListMaintainanceStandardCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListMaintainanceStandardCmd.class);
+
     @Autowired
     private IMaintainanceStandardV1InnerServiceSMO maintainanceStandardV1InnerServiceSMOImpl;
-
 
     @Autowired
     private IMaintainanceStandardItemV1InnerServiceSMO maintainanceStandardItemV1InnerServiceSMOImpl;
@@ -61,54 +62,40 @@ public class ListMaintainanceStandardCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson,"communityId","小区不存在");
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区不存在");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-           MaintainanceStandardDto maintainanceStandardDto = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardDto.class);
-
-           int count = maintainanceStandardV1InnerServiceSMOImpl.queryMaintainanceStandardsCount(maintainanceStandardDto);
-
-           List<MaintainanceStandardDto> maintainanceStandardDtos = null;
-
-           if (count > 0) {
-               maintainanceStandardDtos = maintainanceStandardV1InnerServiceSMOImpl.queryMaintainanceStandards(maintainanceStandardDto);
-
-               refreshItemCount(maintainanceStandardDtos);
-
-           } else {
-               maintainanceStandardDtos = new ArrayList<>();
-           }
-
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, maintainanceStandardDtos);
-
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        MaintainanceStandardDto maintainanceStandardDto = BeanConvertUtil.covertBean(reqJson, MaintainanceStandardDto.class);
+        int count = maintainanceStandardV1InnerServiceSMOImpl.queryMaintainanceStandardsCount(maintainanceStandardDto);
+        List<MaintainanceStandardDto> maintainanceStandardDtos = null;
+        if (count > 0) {
+            maintainanceStandardDtos = maintainanceStandardV1InnerServiceSMOImpl.queryMaintainanceStandards(maintainanceStandardDto);
+            refreshItemCount(maintainanceStandardDtos);
+        } else {
+            maintainanceStandardDtos = new ArrayList<>();
+        }
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, maintainanceStandardDtos);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     private void refreshItemCount(List<MaintainanceStandardDto> maintainanceStandardDtos) {
-
-        if(maintainanceStandardDtos == null || maintainanceStandardDtos.size()< 1){
-            return ;
+        if (maintainanceStandardDtos == null || maintainanceStandardDtos.size() < 1) {
+            return;
         }
-
         List<String> standardIds = new ArrayList<>();
-        for(MaintainanceStandardDto maintainanceStandardDto : maintainanceStandardDtos){
+        for (MaintainanceStandardDto maintainanceStandardDto : maintainanceStandardDtos) {
             standardIds.add(maintainanceStandardDto.getStandardId());
         }
-
         MaintainanceStandardItemDto maintainanceStandardItemDto = new MaintainanceStandardItemDto();
         maintainanceStandardItemDto.setStandardIds(standardIds.toArray(new String[standardIds.size()]));
         maintainanceStandardItemDto.setCommunityId(maintainanceStandardDtos.get(0).getCommunityId());
-
         List<MaintainanceStandardItemDto> maintainanceStandardItemDtos = maintainanceStandardItemV1InnerServiceSMOImpl.queryMaintainanceStandardItemsGroupCount(maintainanceStandardItemDto);
-
-        for(MaintainanceStandardDto maintainanceStandardDto : maintainanceStandardDtos){
-            for(MaintainanceStandardItemDto tmpMaintainanceStandardItemDto : maintainanceStandardItemDtos){
-                if(maintainanceStandardDto.getStandardId().equals(tmpMaintainanceStandardItemDto.getStandardId()))
+        for (MaintainanceStandardDto maintainanceStandardDto : maintainanceStandardDtos) {
+            for (MaintainanceStandardItemDto tmpMaintainanceStandardItemDto : maintainanceStandardItemDtos) {
+                if (maintainanceStandardDto.getStandardId().equals(tmpMaintainanceStandardItemDto.getStandardId()))
                     maintainanceStandardDto.setItemCount(tmpMaintainanceStandardItemDto.getItemCount());
             }
         }

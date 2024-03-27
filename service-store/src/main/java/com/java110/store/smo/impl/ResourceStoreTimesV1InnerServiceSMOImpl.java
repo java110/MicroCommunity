@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -71,8 +72,10 @@ public class ResourceStoreTimesV1InnerServiceSMOImpl extends BaseServiceSMO impl
             resourceStoreTimesPo.setTimesId(GenerateCodeFactory.getGeneratorId("11"));
             return saveResourceStoreTimes(resourceStoreTimesPo);
         }
-        double stock = Double.parseDouble(resourceStoreTimesDtos.get(0).getStock()) + Double.parseDouble(resourceStoreTimesPo.getStock());
-        resourceStoreTimesPo.setStock(stock + "");
+        BigDecimal stock = new BigDecimal(resourceStoreTimesDtos.get(0).getStock());
+        BigDecimal newStock = new BigDecimal(resourceStoreTimesPo.getStock());
+        BigDecimal bigDecimal = stock.add(newStock).setScale(2, BigDecimal.ROUND_HALF_UP);
+        resourceStoreTimesPo.setStock(String.valueOf(bigDecimal));
         resourceStoreTimesPo.setTimesId(resourceStoreTimesDtos.get(0).getTimesId());
         return updateResourceStoreTimes(resourceStoreTimesPo);
     }

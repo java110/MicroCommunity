@@ -40,6 +40,12 @@ public class PayFeeDetailPo implements Serializable {
     private String openInvoice; // todo 默认 未开票
 
 
+    private String acctAmount = "0";
+    private String discountAmount = "0";
+    private String deductionAmount = "0";
+    private String lateAmount = "0";
+    private String giftAmount = "0";
+
 
     public String getDetailId() {
         return detailId;
@@ -191,5 +197,45 @@ public class PayFeeDetailPo implements Serializable {
 
     public void setOpenInvoice(String openInvoice) {
         this.openInvoice = openInvoice;
+    }
+
+    public String getAcctAmount() {
+        return acctAmount;
+    }
+
+    public void setAcctAmount(String acctAmount) {
+        this.acctAmount = acctAmount;
+    }
+
+    public String getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(String discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public String getDeductionAmount() {
+        return deductionAmount;
+    }
+
+    public void setDeductionAmount(String deductionAmount) {
+        this.deductionAmount = deductionAmount;
+    }
+
+    public String getLateAmount() {
+        return lateAmount;
+    }
+
+    public void setLateAmount(String lateAmount) {
+        this.lateAmount = lateAmount;
+    }
+
+    public String getGiftAmount() {
+        return giftAmount;
+    }
+
+    public void setGiftAmount(String giftAmount) {
+        this.giftAmount = giftAmount;
     }
 }

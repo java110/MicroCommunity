@@ -27,7 +27,7 @@ public class AssetInventoryManage implements IExportDataAdapt {
     @Autowired
     private IAssetInventoryV1InnerServiceSMO assetInventoryV1InnerServiceSMOImpl;
 
-    private static final int MAX_ROW = 200;
+    private static final int MAX_ROW = 60000;
 
     @Override
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) {

@@ -17,6 +17,8 @@ public class RepairSettingPo implements Serializable {
     private String statusCd = "0";
     private String isShow;
 
+    private String notifyWay;
+
     public String getRepairTypeName() {
         return repairTypeName;
     }
@@ -119,5 +121,13 @@ public class RepairSettingPo implements Serializable {
 
     public void setIsShow(String isShow) {
         this.isShow = isShow;
+    }
+
+    public String getNotifyWay() {
+        return notifyWay;
+    }
+
+    public void setNotifyWay(String notifyWay) {
+        this.notifyWay = notifyWay;
     }
 }

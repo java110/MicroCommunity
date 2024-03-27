@@ -50,8 +50,6 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
-
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         //Assert.hasKeyAndValue(reqJson, "xxx", "xxx");
@@ -63,7 +61,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         String userId = reqJson.getString("userId");
-        if(StringUtil.isEmpty(userId)){
+        if (StringUtil.isEmpty(userId)) {
             userId = context.getReqHeaders().get("user-id");
         }
         UserDto userDto = new UserDto();
@@ -72,18 +70,18 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
         userDto.setRow(1);
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
-        Assert.listOnlyOne(userDtos,"用户不存在");
+        Assert.listOnlyOne(userDtos, "用户不存在");
 
-        reqJson.put("userName",userDtos.get(0).getName());
+        reqJson.put("userName", userDtos.get(0).getName());
 
         String acceptUserId = reqJson.getString("acceptUserId");
-        if(!StringUtil.isEmpty(userId) && !StringUtil.isEmpty(acceptUserId) && acceptUserId.equals(userId)){
+        if (!StringUtil.isEmpty(userId) && !StringUtil.isEmpty(acceptUserId) && acceptUserId.equals(userId)) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "物品接受人不能是本人，所以无法进行转赠操作！");
             context.setResponseEntity(responseEntity);
             return;
         }
 
-        addAllocationUserStorehouse(reqJson,context);
+        addAllocationUserStorehouse(reqJson, context);
     }
 
     public void addAllocationUserStorehouse(JSONObject paramInJson, ICmdDataFlowContext dataFlowContext) {
@@ -116,7 +114,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                     resourceStoreUseRecordPo.setResourceStoreName(paramIn.getString("resName")); //物品名称
                     resourceStoreUseRecordPo.setState(paramIn.getString("state")); //1001 报废回收   2002 工单损耗   3003 公用损耗
                     flag1 = resourceStoreUseRecordV1InnerServiceSMOImpl.saveResourceStoreUseRecord(resourceStoreUseRecordPo);
-                    if(flag1 <1){
+                    if (flag1 < 1) {
                         throw new CmdException("保存失败");
                     }
                     //个人物品处理
@@ -149,29 +147,28 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                     //除去报废个人物品剩余的最小单位计量总数
                     BigDecimal num1 = new BigDecimal(miniStock);
                     BigDecimal num2 = new BigDecimal(giveQuantity);
-                    BigDecimal quantity = num1.subtract(num2);
+                    BigDecimal quantity = num1.subtract(num2); //计算剩余最小计量单位总数
                     if (quantity.doubleValue() == 0.0) { //如果减去报废后剩余0个，那么最小计量单位总数和物品数量都变为0
                         userStorehousePo.setMiniStock("0");
                         userStorehousePo.setStock("0");
                     } else {
                         userStorehousePo.setMiniStock(String.valueOf(quantity)); //减去报废后剩余的最小计量单位总数
                         BigDecimal reduceNum = num1.subtract(num2);
-                        if (unitCode.equals(miniUnitCode)) { //如果物品单位与最小计量单位相同，就不向上取整
+                        if (unitCode.equals(miniUnitCode)) { //如果物品单位与最小计量单位相同
                             userStorehousePo.setStock(String.valueOf(reduceNum));
-                        } else { //如果物品最小计量单位与物品单位不同，就向上取整
-                            //用转赠后最小计量总数除以最小计量单位数量，并向上取整，获取转赠后的库存数
+                        } else { //如果物品最小计量单位与物品单位不同
+                            //用转赠后最小计量总数除以最小计量单位数量，四舍五入保留两位小数，获取转赠后的库存数
                             BigDecimal num3 = new BigDecimal(miniUnitStock);
                             BigDecimal unitStock = reduceNum.divide(num3, 2, BigDecimal.ROUND_HALF_UP);
-                            Integer stockNumber = (int) Math.ceil(unitStock.doubleValue());
-                            userStorehousePo.setStock(String.valueOf(stockNumber)); //减去报废后剩余的个人物品数量
+                            userStorehousePo.setStock(String.valueOf(unitStock)); //减去报废后剩余的个人物品数量
                         }
                     }
                     flag1 = userStorehouseV1InnerServiceSMOImpl.updateUserStorehouse(userStorehousePo);
-                    if(flag1 <1){
+                    if (flag1 < 1) {
                         throw new CmdException("保存失败");
                     }
                 }
-            } else { //退还
+            } else { //转增
                 for (int i = 0; i < objects.length; i++) {
                     Object object = objects[i];
                     JSONObject paramIn = JSONObject.parseObject(String.valueOf(object));
@@ -214,7 +211,7 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                     allocationUserStorehouseJson.put("remark", paramInJson.getString("description"));
                     AllocationUserStorehousePo allocationUserStorehousePo = BeanConvertUtil.covertBean(allocationUserStorehouseJson, AllocationUserStorehousePo.class);
                     flag1 = allocationUserStorehouseV1InnerServiceSMOImpl.saveAllocationUserStorehouse(allocationUserStorehousePo);
-                    if(flag1 <1){
+                    if (flag1 < 1) {
                         throw new CmdException("保存失败");
                     }
                     UserStorehouseDto userStorehouseDto = new UserStorehouseDto();
@@ -252,13 +249,12 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                             //用转赠后最小计量总数除以最小计量单位数量，并向上取整，获取转赠后的库存数
                             BigDecimal num3 = new BigDecimal(miniUnitStock);
                             BigDecimal unitStock = reduceNum.divide(num3, 2, BigDecimal.ROUND_HALF_UP);
-                            Integer stockNumber = (int) Math.ceil(unitStock.doubleValue());
-                            userStorehousePo.setStock(String.valueOf(stockNumber));
+                            userStorehousePo.setStock(String.valueOf(unitStock));
                         }
                     }
                     //更新当前用户库存数
                     flag1 = userStorehouseV1InnerServiceSMOImpl.updateUserStorehouse(userStorehousePo);
-                    if(flag1 <1){
+                    if (flag1 < 1) {
                         throw new CmdException("保存失败");
                     }
                     UserStorehouseDto userStorehouse = new UserStorehouseDto();
@@ -287,47 +283,46 @@ public class SaveAllocationUserStorehouseCmd extends Cmd {
                         //计算接受用户的库存数量
                         BigDecimal num6 = new BigDecimal(miniUnitStock);
                         BigDecimal unitStock = addNum.divide(num6, 2, BigDecimal.ROUND_HALF_UP);
-                        if (unitCode1.equals(miniUnitCode1)) { //如果物品单位与物品最小计量单位相同，就不向上取整
+                        if (unitCode1.equals(miniUnitCode1)) { //如果物品单位与物品最小计量单位相同
                             //如果物品单位与最小计量单位相同，物品库存就等于最小计量总数
                             userStorePo.setStock(String.valueOf(acceptMiniStock));
-                        } else { //如果物品单位与物品最小计量单位不同，就向上取整
-                            Integer stockNumber = (int) Math.ceil(unitStock.doubleValue());
-                            userStorePo.setStock(String.valueOf(stockNumber));
+                        } else { //如果物品单位与物品最小计量单位不同,四舍五入保留两位小数
+                            userStorePo.setStock(String.valueOf(unitStock));
                         }
                         userStorePo.setUsId(userStorehouses.get(0).getUsId());
                         userStorePo.setTimesId(timesId);
                         //更新当前用户的库存数量
                         flag1 = userStorehouseV1InnerServiceSMOImpl.updateUserStorehouse(userStorePo);
-                        if(flag1 <1){
+                        if (flag1 < 1) {
                             throw new CmdException("保存失败");
                         }
                     } else if (userStorehouses != null && userStorehouses.size() > 1) {
                         throw new IllegalArgumentException("查询个人物品信息错误！");
                     } else {
                         //计算转赠后库存数量
-                        BigDecimal num7 = new BigDecimal(giveQuantity);
-                        BigDecimal num8 = new BigDecimal(miniUnitStock);
-                        BigDecimal unitStock = num7.divide(num8, 2, BigDecimal.ROUND_HALF_UP);
+                        BigDecimal num7 = new BigDecimal(giveQuantity); //转增物品最小计量单位数量
+                        BigDecimal num8 = new BigDecimal(miniUnitStock); //最小计量单位数量
+                        BigDecimal unitStock = num7.divide(num8, 2, BigDecimal.ROUND_HALF_UP); //转增物品数量
                         UserStorehousePo userStorePo = new UserStorehousePo();
                         userStorePo.setUsId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_usId));
                         userStorePo.setResId(resId);
                         userStorePo.setResName(resName);
                         userStorePo.setStoreId(storeId);
                         userStorePo.setResCode(resCode);
-                        if (unitCode.equals(miniUnitCode)) { //如果物品单位与物品最小计量单位相同，就不向上取整
+                        if (unitCode.equals(miniUnitCode)) { //如果物品单位与物品最小计量单位相同
                             userStorePo.setStock(String.valueOf(num7));
-                        } else { //如果物品单位与物品最小计量单位不同，就向上取整
-                            Integer stockNumber = (int) Math.ceil(unitStock.doubleValue());
-                            userStorePo.setStock(String.valueOf(stockNumber));
+                        } else { //如果物品单位与物品最小计量单位不同,四舍五入保留两位
+                            userStorePo.setStock(String.valueOf(unitStock));
                         }
                         userStorePo.setMiniStock(giveQuantity);
                         userStorePo.setUserId(acceptUserId);
                         userStorePo.setTimesId(timesId);
                         //保存接受转赠用户个人物品信息
                         flag1 = userStorehouseV1InnerServiceSMOImpl.saveUserStorehouse(userStorePo);
-                        if(flag1 <1){
+                        if (flag1 < 1) {
                             throw new CmdException("保存失败");
-                        }                    }
+                        }
+                    }
                 }
             }
         }

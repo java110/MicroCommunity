@@ -68,6 +68,7 @@ public class ServiceConfiguration {
 //        exclusions.append("/app/floor.queryFloors,");
 //        exclusions.append("/app/unit.queryUnits,");
 //        exclusions.append("/app/room.queryRooms,");
+        exclusions.append("/app/room.queryRoomsByApp,");
         exclusions.append("/app/productCategory/queryMainCategoryAllGoods,");
         exclusions.append("/app/productCategory/queryMainCategory,");
         exclusions.append("/app/product.queryPhoneMainCategoryProduct,");
@@ -121,6 +122,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/payment.cashier,");// 收银接口
         exclusions.append("/app/fee.queryFeeDetail,");// 缴费明细
         exclusions.append("/app/payment.getNativeQrcodePayment,");// 获取二维码信息
+        exclusions.append("/app/fee.listOwnerTelOweFee,");// 根据手机号查询欠费
 
 
         exclusions.append("/app/reportInfoAnswer/queryReportInfoAnswerByOpenId");

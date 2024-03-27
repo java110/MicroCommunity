@@ -18,12 +18,18 @@ package com.java110.store.cmd.complaintAppraise;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.complaintEvent.ComplaintEventDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IComplaintAppraiseV1InnerServiceSMO;
+import com.java110.intf.store.IComplaintEventV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.complaintAppraise.ComplaintAppraisePo;
+import com.java110.po.complaintEvent.ComplaintEventPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,6 +37,8 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,12 +60,18 @@ public class SaveComplaintAppraiseCmd extends Cmd {
     @Autowired
     private IComplaintAppraiseV1InnerServiceSMO complaintAppraiseV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IComplaintEventV1InnerServiceSMO complaintEventV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "complaintId", "请求报文中未包含complaintId");
-Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-Assert.hasKeyAndValue(reqJson, "score", "请求报文中未包含score");
-Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "score", "请求报文中未包含score");
 
     }
 
@@ -65,13 +79,36 @@ Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       ComplaintAppraisePo complaintAppraisePo = BeanConvertUtil.covertBean(reqJson, ComplaintAppraisePo.class);
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+
+        Assert.listOnlyOne(userDtos, "用户未登录");
+
+        ComplaintAppraisePo complaintAppraisePo = BeanConvertUtil.covertBean(reqJson, ComplaintAppraisePo.class);
         complaintAppraisePo.setAppraiseId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        complaintAppraisePo.setState("W");
+        complaintAppraisePo.setCreateUserId(userDtos.get(0).getUserId());
+        complaintAppraisePo.setCreateUserName(userDtos.get(0).getName());
         int flag = complaintAppraiseV1InnerServiceSMOImpl.saveComplaintAppraise(complaintAppraisePo);
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
         }
+
+        ComplaintEventPo complaintEventPo = new ComplaintEventPo();
+        complaintEventPo.setEventId(GenerateCodeFactory.getGeneratorId("11"));
+        complaintEventPo.setCreateUserId(userDtos.get(0).getUserId());
+        complaintEventPo.setCreateUserName(userDtos.get(0).getName());
+        complaintEventPo.setComplaintId(reqJson.getString("complaintId"));
+        complaintEventPo.setRemark(reqJson.getString("context"));
+
+        complaintEventPo.setEventType(ComplaintEventDto.EVENT_TYPE_APPRAISE);
+        complaintEventPo.setCommunityId(reqJson.getString("communityId"));
+
+        complaintEventV1InnerServiceSMOImpl.saveComplaintEvent(complaintEventPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

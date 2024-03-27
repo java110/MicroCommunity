@@ -61,6 +61,16 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
     private String headImgUrl;
     private String ownerTypeCd;
 
+    private String ownerTypeCdName;
+
+    private String roomId;
+
+    private String roomName;
+
+    private String appTypeName;
+
+
+
 
     public String getIdCard() {
         return idCard;
@@ -309,5 +319,37 @@ public class OwnerAppUserDto extends PageDto implements Serializable {
 
     public void setCommunityQrCode(String communityQrCode) {
         this.communityQrCode = communityQrCode;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getAppTypeName() {
+        return appTypeName;
+    }
+
+    public void setAppTypeName(String appTypeName) {
+        this.appTypeName = appTypeName;
+    }
+
+    public String getOwnerTypeCdName() {
+        return ownerTypeCdName;
+    }
+
+    public void setOwnerTypeCdName(String ownerTypeCdName) {
+        this.ownerTypeCdName = ownerTypeCdName;
     }
 }

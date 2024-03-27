@@ -19,10 +19,7 @@ import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,7 +115,7 @@ public class MachineAllocationStorehouse extends DatabusAdaptImpl {
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         smallWeChatDto.setObjId(paramIn.getString("communityId"));
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        if (smallWeChatDto == null || smallWeChatDtos.size() <= 0) {
+        if (ListUtil.isNull(smallWeChatDtos)) {
             logger.info("未配置微信公众号信息,定时任务执行结束");
             return;
         }
@@ -128,7 +125,7 @@ public class MachineAllocationStorehouse extends DatabusAdaptImpl {
         smallWechatAttrDto.setWechatId(weChatDto.getWeChatId());
         smallWechatAttrDto.setSpecCd(SmallWechatAttrDto.SPEC_CD_WECHAT_PROCESS_TEMPLATE);
         List<SmallWechatAttrDto> smallWechatAttrDtos = smallWechatAttrInnerServiceSMOImpl.querySmallWechatAttrs(smallWechatAttrDto);
-        if (smallWechatAttrDtos == null || smallWechatAttrDtos.size() <= 0) {
+        if (ListUtil.isNull(smallWeChatDtos)) {
             logger.info("未配置微信公众号消息模板");
             return;
         }

@@ -38,7 +38,6 @@ import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * 类表述：查询
  * 服务编码：maintainance.listMaintainanceItem
@@ -53,12 +52,12 @@ import org.slf4j.LoggerFactory;
 public class ListMaintainanceItemCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListMaintainanceItemCmd.class);
+
     @Autowired
     private IMaintainanceItemV1InnerServiceSMO maintainanceItemV1InnerServiceSMOImpl;
 
     @Autowired
     private IMaintainanceItemValueV1InnerServiceSMO maintainanceItemValueV1InnerServiceSMOImpl;
-
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -68,44 +67,33 @@ public class ListMaintainanceItemCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         MaintainanceItemDto maintainanceItemDto = BeanConvertUtil.covertBean(reqJson, MaintainanceItemDto.class);
-
         int count = maintainanceItemV1InnerServiceSMOImpl.queryMaintainanceItemsCount(maintainanceItemDto);
-
         List<MaintainanceItemDto> maintainanceItemDtos = null;
-
         if (count > 0) {
             maintainanceItemDtos = maintainanceItemV1InnerServiceSMOImpl.queryMaintainanceItems(maintainanceItemDto);
             refreshTitileValues(maintainanceItemDtos);
         } else {
             maintainanceItemDtos = new ArrayList<>();
         }
-
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, maintainanceItemDtos);
-
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
     private void refreshTitileValues(List<MaintainanceItemDto> maintainanceItemDtos) {
-
         if (maintainanceItemDtos == null || maintainanceItemDtos.size() < 1) {
             return;
         }
-
         List<String> itemIds = new ArrayList<>();
         for (MaintainanceItemDto maintainanceItemDto : maintainanceItemDtos) {
             itemIds.add(maintainanceItemDto.getItemId());
         }
-
         MaintainanceItemValueDto maintainanceItemValueDto = new MaintainanceItemValueDto();
         maintainanceItemValueDto.setItemIds(itemIds.toArray(new String[itemIds.size()]));
         maintainanceItemValueDto.setCommunityId(maintainanceItemDtos.get(0).getCommunityId());
         List<MaintainanceItemValueDto> maintainanceItemValueDtos
                 = maintainanceItemValueV1InnerServiceSMOImpl.queryMaintainanceItemValues(maintainanceItemValueDto);
-
         List<MaintainanceItemValueDto> tmpMaintainanceItemValueDtos = null;
         for (MaintainanceItemDto maintainanceItemDto : maintainanceItemDtos) {
             tmpMaintainanceItemValueDtos = new ArrayList<>();
@@ -116,7 +104,5 @@ public class ListMaintainanceItemCmd extends Cmd {
             }
             maintainanceItemDto.setTitleValues(tmpMaintainanceItemValueDtos);
         }
-
-
     }
 }

@@ -324,6 +324,12 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     }
 
     @Override
+    public List<ReportFeeMonthStatisticsDto> queryFeeAccountDetailSum(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryFeeAccountDetailSum(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+        return reportFeeMonthStatisticss;
+    }
+
+    @Override
     public List<ReportFeeMonthStatisticsDto> queryAllPayFeeDetail(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(
                 reportFeeMonthStatisticsServiceDaoImpl.queryAllPayFeeDetail(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)),
@@ -341,6 +347,17 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
     @Override
     public int queryDeadlineFeeCount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
         return reportFeeMonthStatisticsServiceDaoImpl.queryDeadlineFeeCount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto));
+    }
+
+    @Override
+    public List<ReportFeeMonthStatisticsDto> queryPayFeeDetailDiscount(@RequestBody ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto) {
+        //校验是否传了 分页信息
+        int page = reportFeeMonthStatisticsDto.getPage();
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportFeeMonthStatisticsDto.setPage((page - 1) * reportFeeMonthStatisticsDto.getRow());
+        }
+        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailDiscount(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+        return reportFeeMonthStatisticss;
     }
 
     @Override

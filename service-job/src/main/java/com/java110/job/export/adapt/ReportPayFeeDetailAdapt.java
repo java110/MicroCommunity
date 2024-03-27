@@ -4,11 +4,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.data.ExportDataDto;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
+import com.java110.dto.room.RoomDto;
+import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.report.IQueryPayFeeDetailInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +38,13 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
     @Autowired
     private IQueryPayFeeDetailInnerServiceSMO queryPayFeeDetailInnerServiceSMOImpl;
 
-    private static final int MAX_ROW = 200;
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
+    @Autowired
+    private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
+
+    private static final int MAX_ROW = 60000;
 
     @Override
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) throws ParseException {
@@ -58,28 +71,20 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
         row.createCell(13).setCellValue("减免金额");
         row.createCell(14).setCellValue("赠送金额");
         row.createCell(15).setCellValue("滞纳金");
-        row.createCell(16).setCellValue("空置房打折金额");
-        row.createCell(17).setCellValue("空置房减免金额");
-        row.createCell(18).setCellValue("面积");
-        row.createCell(19).setCellValue("车位");
-        row.createCell(20).setCellValue("账户抵扣");
-        row.createCell(21).setCellValue("收银员");
-        row.createCell(22).setCellValue("备注");
+        row.createCell(16).setCellValue("面积");
+        row.createCell(17).setCellValue("车位");
+        row.createCell(18).setCellValue("账户抵扣");
+        row.createCell(19).setCellValue("收银员");
+        row.createCell(20).setCellValue("备注");
         JSONObject reqJson = exportDataDto.getReqJson();
 
         String endTime = reqJson.getString("endTime");
 
-        if (!StringUtil.isEmpty(endTime)) {
+        if (!StringUtil.isEmpty(endTime) && !endTime.contains(":")) {
             endTime += " 23:59:59";
             reqJson.put("endTime", endTime);
         }
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson, ReportFeeMonthStatisticsDto.class);
-        if (reqJson.containsKey("roomName") && !StringUtil.isEmpty(reqJson.getString("roomName"))) {
-            String[] roomNameArray = reqJson.getString("roomName").split("-", 3);
-            reportFeeMonthStatisticsDto.setFloorNum(roomNameArray[0]);
-            reportFeeMonthStatisticsDto.setUnitNum(roomNameArray[1]);
-            reportFeeMonthStatisticsDto.setRoomNum(roomNameArray[2]);
-        }
         //查询数据
         getRepairPayFeeDetail(sheet, reportFeeMonthStatisticsDto);
         return workbook;
@@ -114,16 +119,19 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
             dataObj = reportFeeMonthStatisticsDtos.getJSONObject(roomIndex);
 //            dataObj = JSONObject.parseObject(JSONObject.toJSONString(reportFeeMonthStatisticsDtos.get(roomIndex)));
             row.createCell(0).setCellValue(dataObj.getString("oId"));
-            if (!StringUtil.isEmpty(dataObj.getString("payerObjType")) && dataObj.getString("payerObjType").equals("3333")) { //房屋
-                row.createCell(1).setCellValue(dataObj.getString("floorNum") + "-" + dataObj.getString("unitNum") + "-" + dataObj.getString("roomNum"));
+            if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(dataObj.getString("payerObjType"))) {
+                String payerObjName = dataObj.getString("payerObjName");
+                payerObjName += doFreshRoomInfo(dataObj.getString("payerObjId"));
+                row.createCell(1).setCellValue(payerObjName);
+
             } else {
-                row.createCell(1).setCellValue(dataObj.getString("objName"));
+                row.createCell(1).setCellValue(dataObj.getString("payerObjName"));
             }
-            endDate =  DateUtil.getDateFromStringB(dataObj.getString("endTime"));
+            endDate = DateUtil.getDateFromStringB(dataObj.getString("endTime"));
             //todo 如果不是一次性费用结束时间建1
-            if(!StringUtil.isEmpty(dataObj.getString("feeFlag"))
-                    && !FeeDto.FEE_FLAG_ONCE.equals(dataObj.getString("feeFlag"))){
-                endDate = DateUtil.stepDay(endDate,-1);
+            if (!StringUtil.isEmpty(dataObj.getString("feeFlag"))
+                    && !FeeDto.FEE_FLAG_ONCE.equals(dataObj.getString("feeFlag"))) {
+                endDate = DateUtil.stepDay(endDate, -1);
             }
 
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
@@ -141,13 +149,40 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
             row.createCell(13).setCellValue(dataObj.getDouble("deductionAmount"));
             row.createCell(14).setCellValue(dataObj.getDouble("giftAmount"));
             row.createCell(15).setCellValue(dataObj.getDouble("lateFee"));
-            row.createCell(16).setCellValue(dataObj.getDouble("vacantHousingDiscount"));
-            row.createCell(17).setCellValue(dataObj.getDouble("vacantHousingReduction"));
-            row.createCell(18).setCellValue(dataObj.getString("builtUpArea"));
-            row.createCell(19).setCellValue(dataObj.getString("psName"));
-            row.createCell(20).setCellValue(dataObj.getString("withholdAmount"));
-            row.createCell(21).setCellValue(dataObj.getString("cashierName"));
-            row.createCell(22).setCellValue(dataObj.getString("remark"));
+            row.createCell(16).setCellValue(dataObj.getString("builtUpArea"));
+            row.createCell(17).setCellValue(dataObj.getString("psName"));
+            row.createCell(18).setCellValue(dataObj.getString("withholdAmount"));
+            row.createCell(19).setCellValue(dataObj.getString("cashierName"));
+            row.createCell(20).setCellValue(dataObj.getString("remark"));
         }
+    }
+
+    private String doFreshRoomInfo(String ownerId) {
+
+        if (StringUtil.isNullOrNone(ownerId)) {
+            return "";
+        }
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setOwnerId(ownerId);
+        ownerRoomRelDto.setPage(1);
+        ownerRoomRelDto.setRow(3); //只展示3个房屋以内 不然页面太乱
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
+            return "";
+        }
+        List<String> roomIds = new ArrayList<>();
+        for (OwnerRoomRelDto tOwnerRoomRelDto : ownerRoomRelDtos) {
+            roomIds.add(tOwnerRoomRelDto.getRoomId());
+        }
+        RoomDto roomDto = new RoomDto();
+        roomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
+        String roomName = "";
+        for (RoomDto tRoomDto : roomDtos) {
+            roomName += (tRoomDto.getFloorNum() + "-" + tRoomDto.getUnitNum() + "-" + tRoomDto.getRoomNum() + "-" + "/");
+        }
+        roomName = roomName.endsWith("/") ? roomName.substring(0, roomName.length() - 1) : roomName;
+        return "(" + roomName + ")";
+
     }
 }

@@ -22,6 +22,8 @@ public class MsgNotifyFactory {
 
     public static final String NOTIFY_WAY_WECHAT = "WECHAT";
     public static final String NOTIFY_WAY_ALI = "ALI";
+    public static final String NOTIFY_WAY_WORK_LICENSE = "WORK_LICENSE"; // todo 工牌
+
     public static final String NOTIFY_WAY_TENCENT = "TENCENT";
     public static final String ROLE_OWNER = "OWNER"; // 业主
     public static final String ROLE_STAFF = "STAFF"; // 员工
@@ -351,8 +353,13 @@ public class MsgNotifyFactory {
             case NOTIFY_WAY_ALI:
                 notify = ApplicationContextFactory.getBean("aliMsgNotifyImpl", IMsgNotify.class);
                 break;
+            case NOTIFY_WAY_WORK_LICENSE:
+                notify = ApplicationContextFactory.getBean("workLicenseMsgNotifyImpl", IMsgNotify.class);
+                break;
         }
 
         return notify;
     }
+
+
 }

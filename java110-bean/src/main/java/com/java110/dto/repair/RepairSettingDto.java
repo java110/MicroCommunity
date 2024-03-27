@@ -14,6 +14,9 @@ import java.util.Date;
  * add by wuxw 2019/4/24
  **/
 public class RepairSettingDto extends PageDto implements Serializable {
+
+    public static final String NOTIFY_WAY_SMS = "SMS"; //短信
+    public static final String NOTIFY_WAY_WECHAT = "WECHAT"; //微信
     private String repairTypeName;
     private String repairType;
     private String remark;
@@ -31,6 +34,8 @@ public class RepairSettingDto extends PageDto implements Serializable {
     private Date createTime;
     private String statusCd = "0";
     private String isShow;
+
+    private String notifyWay;
 
     public String getRepairTypeName() {
         return repairTypeName;
@@ -166,5 +171,13 @@ public class RepairSettingDto extends PageDto implements Serializable {
 
     public void setIsShow(String isShow) {
         this.isShow = isShow;
+    }
+
+    public String getNotifyWay() {
+        return notifyWay;
+    }
+
+    public void setNotifyWay(String notifyWay) {
+        this.notifyWay = notifyWay;
     }
 }

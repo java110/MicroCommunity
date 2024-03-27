@@ -19,6 +19,7 @@ import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -284,7 +285,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         staffAppAuthDto.setStaffId(userId);
         staffAppAuthDto.setAppType("WECHAT");
         List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMOImpl.queryStaffAppAuths(staffAppAuthDto);
-        if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
+        if (ListUtil.isNull(staffAppAuthDtos)) {
             throw new IllegalArgumentException("员工未认证，没有获取到微信openId");
         }
         String openId = staffAppAuthDtos.get(0).getOpenId();
@@ -534,7 +535,7 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         staffAppAuthDto.setStaffId(userId);
         staffAppAuthDto.setAppType("WECHAT");
         List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMOImpl.queryStaffAppAuths(staffAppAuthDto);
-        if (staffAppAuthDtos == null || staffAppAuthDtos.size() < 1) {
+        if (ListUtil.isNull(staffAppAuthDtos)) {
             throw new IllegalArgumentException("员工未认证，没有获取到微信openId");
         }
         String openId = staffAppAuthDtos.get(0).getOpenId();
@@ -605,6 +606,56 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         data.put("thing6", new Content(content.getString("staffName")));
         templateMessage.setData(data);
         templateMessage.setUrl(content.getString("url"));
+        logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
+        ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
+        logger.info("微信模板返回内容:{}", responseEntity);
+
+        JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
+        return new ResultVo(paramOut.getIntValue("errcode"), paramOut.getString("errmsg"));
+    }
+
+    /**
+     * 投诉通知员工
+     *
+     * @param communityId 小区
+     * @param userId      用户
+     * @param content     {
+     *                    complainName
+     *                    }
+     * @return
+     */
+    @Override
+    public ResultVo sendComplaintMsg(String communityId, String userId, JSONObject content) {
+        String accessToken = wechatTemplateImpl.getAccessToken(communityId);
+
+        StaffAppAuthDto staffAppAuthDto = new StaffAppAuthDto();
+        staffAppAuthDto.setStaffId(userId);
+        staffAppAuthDto.setAppType("WECHAT");
+        List<StaffAppAuthDto> staffAppAuthDtos = staffAppAuthInnerServiceSMOImpl.queryStaffAppAuths(staffAppAuthDto);
+        if (ListUtil.isNull(staffAppAuthDtos)) {
+            throw new IllegalArgumentException("员工未认证，没有获取到微信openId");
+        }
+        String openId = staffAppAuthDtos.get(0).getOpenId();
+        Mapping mapping = MappingCache.getMapping(MappingConstant.WECHAT_DOMAIN, SPEC_CD_WECHAT_PROCESS_TEMPLATE);
+
+        if (mapping == null) {
+            throw new IllegalArgumentException("开发者账户编码映射未配置域为=" + MappingConstant.WECHAT_DOMAIN + ",键为=" + SPEC_CD_WECHAT_PROCESS_TEMPLATE);
+        }
+        String templateId = wechatTemplateImpl.getTemplateId(communityId, mapping.getValue(), mapping.getName(), templateKeys.get(SPEC_CD_WECHAT_PROCESS_TEMPLATE));
+
+        String url = sendMsgUrl + accessToken;
+
+        JSONObject data = new JSONObject();
+        PropertyFeeTemplateMessage templateMessage = new PropertyFeeTemplateMessage();
+        templateMessage.setTemplate_id(templateId);
+        templateMessage.setTouser(openId);
+        data.put("thing2", new Content("投诉单处理流程"));
+        data.put("time10", new Content(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
+        data.put("thing9", new Content(content.getString("complaintName")));
+        templateMessage.setData(data);
+        //获取员工公众号地址
+        String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
+        templateMessage.setUrl(wechatUrl);
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
         logger.info("微信模板返回内容:{}", responseEntity);

@@ -2,6 +2,7 @@ package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -15,6 +16,8 @@ import com.java110.po.user.UserAttrPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -30,54 +33,37 @@ public class RefreshAppUserBindingOwnerOpenIdCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "appUserId", "绑定ID不能为空");
         Assert.hasKeyAndValue(reqJson, "openId", "必填，请填写状态");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
-        if (reqJson.getString("appUserId").startsWith("-")) {
-            Assert.hasKeyAndValue(reqJson, "oldAppUserId", "必填，请填写老绑定ID");
-            Assert.hasKeyAndValue(reqJson, "appType", "必填，请填写appType");
-        }
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        String appUserId = reqJson.getString("appUserId");
 
-        if (appUserId.startsWith("-")) {
-            OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-            ownerAppUserDto.setAppUserId(reqJson.getString("oldAppUserId"));
-            ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
-            List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
 
-            Assert.listOnlyOne(ownerAppUserDtos, "传入oldAppUserId错误");
-            OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUserDtos.get(0), OwnerAppUserPo.class);
-            ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_userId));
-            ownerAppUserPo.setAppType(reqJson.getString("appType"));
-            ownerAppUserPo.setOpenId(reqJson.getString("openId"));
-            ownerAppUserPo.setNickName(reqJson.getString("nickName"));
-            ownerAppUserPo.setHeadImgUrl(reqJson.getString("headImgUrl"));
-            ownerAppUserV1InnerServiceSMOImpl.saveOwnerAppUser(ownerAppUserPo);
-            freshUserToken(reqJson, ownerAppUserDtos.get(0).getUserId());
-            return;
+        if (StringUtil.isEmpty(userId)) {
+            throw new CmdException("用户未登录");
         }
 
+        //todo 刷user_attr 中的openId
+        freshUserToken(reqJson, userId);
+
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setUserId(userId);
+        ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+
+        if (ListUtil.isNull(ownerAppUserDtos)) {
+            return;
+        }
         OwnerAppUserPo ownerAppUserPo = new OwnerAppUserPo();
-        ownerAppUserPo.setAppUserId(appUserId);
+        ownerAppUserPo.setAppUserId(ownerAppUserDtos.get(0).getAppUserId());
         ownerAppUserPo.setCommunityId(reqJson.getString("communityId"));
         ownerAppUserPo.setOpenId(reqJson.getString("openId"));
         ownerAppUserPo.setNickName(reqJson.getString("nickName"));
         ownerAppUserPo.setHeadImgUrl(reqJson.getString("headImgUrl"));
         ownerAppUserV1InnerServiceSMOImpl.updateOwnerAppUser(ownerAppUserPo);
-
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setAppUserId(appUserId);
-        ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-
-        Assert.listOnlyOne(ownerAppUserDtos, "传入appUserId错误");
-
-
-        freshUserToken(reqJson, ownerAppUserDtos.get(0).getUserId());
     }
 
     private void freshUserToken(JSONObject reqJson, String userId) {
@@ -91,7 +77,7 @@ public class RefreshAppUserBindingOwnerOpenIdCmd extends Cmd {
         userAttrDto.setUserId(userId);
         userAttrDto.setSpecCd(UserAttrDto.SPEC_OPEN_ID);
         List<UserAttrDto> userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
-        if (userAttrDtos == null || userAttrDtos.size() < 1) {
+        if (ListUtil.isNull(userAttrDtos)) {
             UserAttrPo userAttrPo = new UserAttrPo();
             userAttrPo.setUserId(userId);
             userAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
@@ -115,7 +101,7 @@ public class RefreshAppUserBindingOwnerOpenIdCmd extends Cmd {
         userAttrDto.setUserId(userId);
         userAttrDto.setSpecCd(UserAttrDto.SPEC_UNION_ID);
         userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
-        if (userAttrDtos == null || userAttrDtos.size() < 1) {
+        if (ListUtil.isNull(userAttrDtos)) {
             userAttrPo = new UserAttrPo();
             userAttrPo.setUserId(userId);
             userAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
@@ -130,7 +116,5 @@ public class RefreshAppUserBindingOwnerOpenIdCmd extends Cmd {
         userAttrPo.setSpecCd(UserAttrDto.SPEC_UNION_ID);
         userAttrPo.setValue(reqJson.getString("unionId"));
         userAttrV1InnerServiceSMOImpl.updateUserAttr(userAttrPo);
-
-
     }
 }

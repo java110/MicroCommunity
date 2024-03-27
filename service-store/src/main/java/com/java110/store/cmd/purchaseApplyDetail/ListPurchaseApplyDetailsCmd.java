@@ -48,11 +48,11 @@ public class ListPurchaseApplyDetailsCmd extends Cmd {
         basePrivilegeDto.setUserId(reqJson.getString("userId"));
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         if (privileges == null || privileges.size() == 0) {
-            purchaseApplyDetailDto.setUserId(reqJson.getString("userId"));
-            purchaseApplyDetailDto.setUserName(reqJson.getString("userName"));
+            purchaseApplyDetailDto.setCreateUserId(reqJson.getString("userId"));
+            purchaseApplyDetailDto.setCreateUserName(reqJson.getString("userName"));
         } else {
-            purchaseApplyDetailDto.setUserId("");
-            purchaseApplyDetailDto.setUserName("");
+            purchaseApplyDetailDto.setCreateUserId("");
+            purchaseApplyDetailDto.setCreateUserName("");
         }
         int count = purchaseApplyDetailInnerServiceSMOImpl.queryPurchaseApplyDetailsCount(purchaseApplyDetailDto);
         List<ApiPurchaseApplyDetailDataVo> purchaseApplyDetails = null;

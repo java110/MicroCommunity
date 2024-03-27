@@ -88,9 +88,9 @@ public class FeeDetailServiceDaoImpl extends BaseServiceDao implements IFeeDetai
     public List<Map> getFeeDetailInfo(Map info) throws DAOException {
         logger.debug("查询费用明细信息 入参 info : {}",info);
 
-        List<Map> businessFeeDetailInfos = sqlSessionTemplate.selectList("feeDetailServiceDaoImpl.getFeeDetailInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("feeDetailServiceDaoImpl.getFeeDetailInfo",info);
 
-        return businessFeeDetailInfos;
+        return infos;
     }
 
 

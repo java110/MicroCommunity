@@ -33,7 +33,7 @@ public class MyResourceStoreManage implements IExportDataAdapt {
     @Autowired
     private IMenuInnerServiceSMO menuInnerServiceSMOImpl;
 
-    private static final int MAX_ROW = 200;
+    private static final int MAX_ROW = 60000;
 
     @Override
     public SXSSFWorkbook exportData(ExportDataDto exportDataDto) {
@@ -74,6 +74,7 @@ public class MyResourceStoreManage implements IExportDataAdapt {
             userStorehouseDto.setUserId("");
             userStorehouseDto.setUserName("");
         }
+        userStorehouseDto.setLagerStockZero("1"); //这一步是筛选个人物品数量大于0的数据
         List<UserStorehouseDto> userStorehouses = userStorehouseInnerServiceSMOImpl.queryUserStorehouses(userStorehouseDto);
         appendData(userStorehouses, sheet);
     }
@@ -97,7 +98,7 @@ public class MyResourceStoreManage implements IExportDataAdapt {
             row.createCell(7).setCellValue(userStorehouseDto.getIsFixedName());
             row.createCell(8).setCellValue(userStorehouseDto.getStock() + userStorehouseDto.getUnitCodeName());
             row.createCell(9).setCellValue(userStorehouseDto.getMiniStock() + userStorehouseDto.getMiniUnitCodeName());
-            row.createCell(10).setCellValue("1" + userStorehouseDto.getUnitCodeName() + "=" + userStorehouseDto.getMiniStock() + userStorehouseDto.getMiniUnitCodeName());
+            row.createCell(10).setCellValue("1" + userStorehouseDto.getUnitCodeName() + "=" + userStorehouseDto.getMiniUnitStock() + userStorehouseDto.getMiniUnitCodeName());
             if (userStorehouseDto.getOutHighPrice().equals(userStorehouseDto.getOutLowPrice())) {
                 row.createCell(11).setCellValue("￥" + userStorehouseDto.getOutLowPrice());
             } else {

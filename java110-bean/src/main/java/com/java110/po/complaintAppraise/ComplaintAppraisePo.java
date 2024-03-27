@@ -17,6 +17,7 @@ package com.java110.po.complaintAppraise;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2024-02-21 13:04:55 mail: 928255095@qq.com
@@ -28,90 +29,113 @@ import java.util.Date;
 public class ComplaintAppraisePo implements Serializable {
 
     private String score;
-private String replyContext;
-private String createUserId;
-private String replyUserId;
-private String complaintId;
-private String replyUserName;
-private String appraiseId;
-private String context;
-private String createUserName;
-private String statusCd = "0";
-private String state;
-private String communityId;
-public String getScore() {
+    private String replyContext;
+    private String createUserId;
+    private String replyUserId;
+    private String complaintId;
+    private String replyUserName;
+    private String appraiseId;
+    private String context;
+    private String createUserName;
+    private String statusCd = "0";
+    private String state;
+    private String communityId;
+
+    public String getScore() {
         return score;
     }
-public void setScore(String score) {
+
+    public void setScore(String score) {
         this.score = score;
     }
-public String getReplyContext() {
+
+    public String getReplyContext() {
         return replyContext;
     }
-public void setReplyContext(String replyContext) {
+
+    public void setReplyContext(String replyContext) {
         this.replyContext = replyContext;
     }
-public String getCreateUserId() {
+
+    public String getCreateUserId() {
         return createUserId;
     }
-public void setCreateUserId(String createUserId) {
+
+    public void setCreateUserId(String createUserId) {
         this.createUserId = createUserId;
     }
-public String getReplyUserId() {
+
+    public String getReplyUserId() {
         return replyUserId;
     }
-public void setReplyUserId(String replyUserId) {
+
+    public void setReplyUserId(String replyUserId) {
         this.replyUserId = replyUserId;
     }
-public String getComplaintId() {
+
+    public String getComplaintId() {
         return complaintId;
     }
-public void setComplaintId(String complaintId) {
+
+    public void setComplaintId(String complaintId) {
         this.complaintId = complaintId;
     }
-public String getReplyUserName() {
+
+    public String getReplyUserName() {
         return replyUserName;
     }
-public void setReplyUserName(String replyUserName) {
+
+    public void setReplyUserName(String replyUserName) {
         this.replyUserName = replyUserName;
     }
-public String getAppraiseId() {
+
+    public String getAppraiseId() {
         return appraiseId;
     }
-public void setAppraiseId(String appraiseId) {
+
+    public void setAppraiseId(String appraiseId) {
         this.appraiseId = appraiseId;
     }
-public String getContext() {
+
+    public String getContext() {
         return context;
     }
-public void setContext(String context) {
+
+    public void setContext(String context) {
         this.context = context;
     }
-public String getCreateUserName() {
+
+    public String getCreateUserName() {
         return createUserName;
     }
-public void setCreateUserName(String createUserName) {
+
+    public void setCreateUserName(String createUserName) {
         this.createUserName = createUserName;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-
 
 
 }

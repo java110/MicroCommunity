@@ -11,6 +11,7 @@ import com.java110.dto.printerRule.PrinterRuleDto;
 import com.java110.dto.printerRule.PrinterRuleMachineDto;
 import com.java110.dto.printerRule.PrinterRuleRepairDto;
 import com.java110.dto.repair.RepairDto;
+import com.java110.dto.repair.RepairSettingDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.dto.user.UserDto;
@@ -25,6 +26,7 @@ import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
+import com.java110.job.msgNotify.IMsgNotify;
 import com.java110.job.msgNotify.MsgNotifyFactory;
 import com.java110.job.printer.IPrinter;
 import com.java110.po.owner.RepairUserPo;
@@ -140,6 +142,15 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         RepairDto repairDto = new RepairDto();
         repairDto.setRepairId(repairId);
         List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
+        IMsgNotify msgNotify = null;
+        if(RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDto.getNotifyWay())) {
+            msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_ALI);
+        }else if(RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDto.getNotifyWay())){
+            msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_WECHAT);
+        }else{
+            return;
+        }
+
         //查询报修状态(1000 未派单；1100 接单；1200 退单；1300 转单；1400 申请支付；1500 支付失败；1700 待评价；1800 电话回访；1900 办理完成；2000 未办理结单)
         String repairState = repairDtos.get(0).getState();
         //获取联系人姓名
@@ -185,9 +196,9 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             paramIn.put("repairObjId", repairObjId);
             paramIn.put("repairId", repairId);
             //给维修师傅推送信息
-            sendStaffMsg(paramIn, communityDtos.get(0));
+            sendStaffMsg(paramIn, communityDtos.get(0),msgNotify);
             //派单成功给业主推送信息
-            sendOwnerMsg(paramIn, communityDtos.get(0));
+            sendOwnerMsg(paramIn, communityDtos.get(0),msgNotify);
 
             // 自动打印小票
             autoPrintRepair(repairUserDtos.get(0).getRuId(), repairDtos.get(0).getRepairType(), communityDtos.get(0));
@@ -208,9 +219,9 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             paramIn.put("repairObjName", repairObjName);
             paramIn.put("repairId", repairId);
             //抢单成功给维修师傅推送信息
-            sendStaffMsg(paramIn, communityDtos.get(0));
+            sendStaffMsg(paramIn, communityDtos.get(0),msgNotify);
             //抢单成功给业主推送信息
-            sendOwnerMsg(paramIn, communityDtos.get(0));
+            sendOwnerMsg(paramIn, communityDtos.get(0),msgNotify);
         } else if (repairState.equals("1300")) {   //转单
             JSONObject paramIn = new JSONObject();
             paramIn.put("repairName", repairName);
@@ -222,7 +233,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             paramIn.put("preStaffName", businessRepairUser.getString("preStaffName"));
             paramIn.put("repairId", repairId);
             //给维修师傅推送信息
-            sendStaffMsg(paramIn, communityDtos.get(0));
+            sendStaffMsg(paramIn, communityDtos.get(0),msgNotify);
         }
 
     }
@@ -234,7 +245,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendStaffMsg(JSONObject paramIn, CommunityDto communityDto) {
+    private void sendStaffMsg(JSONObject paramIn, CommunityDto communityDto,IMsgNotify msgNotify) {
         JSONObject content = new JSONObject();
         content.put("repairId", paramIn.getString("repairId"));
         content.put("repairName", paramIn.getString("repairName"));
@@ -250,7 +261,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             address = communityDto.getName() + paramIn.getString("repairObjName");
         }
         content.put("address", address);
-        MsgNotifyFactory.sendDistributeRepairStaffMsg(communityDto.getCommunityId(), paramIn.getString("staffId"), content);
+        msgNotify.sendDistributeRepairStaffMsg(communityDto.getCommunityId(), paramIn.getString("staffId"), content);
     }
 
 
@@ -260,7 +271,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendOwnerMsg(JSONObject paramIn, CommunityDto communityDto) {
+    private void sendOwnerMsg(JSONObject paramIn, CommunityDto communityDto,IMsgNotify msgNotify) {
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");
@@ -298,7 +309,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         }
         content.put("url", wechatUrl);
 
-        MsgNotifyFactory.sendDistributeRepairOwnerMsg(communityDto.getCommunityId(), preStaffId, content);
+        msgNotify.sendDistributeRepairOwnerMsg(communityDto.getCommunityId(), preStaffId, content);
 
     }
 
