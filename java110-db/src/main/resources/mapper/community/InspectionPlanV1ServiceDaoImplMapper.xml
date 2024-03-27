@@ -17,15 +17,15 @@
 
     <!-- 查询巡检计划信息 add by wuxw 2018-07-03 -->
     <select id="getInspectionPlanInfo" parameterType="Map" resultType="Map">
+
         select t.inspection_plan_name,t.inspection_plan_name inspectionPlanName,t.create_user_id,t.create_user_id
         createUserId,t.inspection_route_id,t.inspection_route_id inspectionRouteId
         ,t.can_reexamine,t.can_reexamine canReexamine,t.inspection_plan_period,t.inspection_plan_period
         inspectionPlanPeriod,t.remark,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
-        statusCd,t.sign_type,t.sign_type signType,DATE_FORMAT(t.start_time,'%H:%i:%s')
-        startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,DATE_FORMAT(t.end_time,'%H:%i:%s')
+        statusCd,t.sign_type,t.sign_type signType,t.start_time,t.start_time
+        startTime,t.inspection_plan_id,t.inspection_plan_id inspectionPlanId,t.end_time,t.end_time
         endTime,t.state,t.community_id,t.community_id communityId,
-        DATE_FORMAT(t.start_date,'%Y-%m-%d') startDate,DATE_FORMAT(t.end_date,'%Y-%m-%d') endDate,t.inspection_month
-        inspectionMonth,t.inspection_day inspectionDay,
+        DATE_FORMAT(t.start_date,'%Y-%m-%d') startDate,DATE_FORMAT(t.end_date,'%Y-%m-%d') endDate,t.inspection_month inspectionMonth,t.inspection_day inspectionDay,
         t.inspection_workday inspectionWorkday,t.before_time beforeTime,t.create_time createTime,
         d.name stateName,
         c.name inspectionPlanPeriodName,
@@ -92,6 +92,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+
     </select>
 
     <!-- 修改巡检计划信息 add by wuxw 2018-07-03 -->
