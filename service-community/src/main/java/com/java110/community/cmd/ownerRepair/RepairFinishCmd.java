@@ -138,7 +138,7 @@ public class RepairFinishCmd extends Cmd {
         String repairMaterial = "";
         //费用明细(单价 * 数量 = 总价)
         String repairFee = "";
-        if (ListUtil.isNull(json) && ("1001".equals(maintenanceType) || "1003".equals(maintenanceType))) {
+        if (!ListUtil.isNull(json) && ("1001".equals(maintenanceType) || "1003".equals(maintenanceType))) {
             Object[] objects = json.toArray();
             //数据前期校验
             for (int i = 0; i < objects.length; i++) {

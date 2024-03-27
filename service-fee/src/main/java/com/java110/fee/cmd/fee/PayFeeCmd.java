@@ -485,7 +485,7 @@ public class PayFeeCmd extends Cmd {
                 payFeePo.setEndTime(df.format(cal.getTime()));
 
                 BigDecimal value = new BigDecimal(payFeeDetailPo.getGiftAmount());
-                value = value.add(new BigDecimal(specValue).multiply(new BigDecimal((double)feePriceMap.get("feePrice"))));
+                value = value.add(new BigDecimal(specValue).multiply(new BigDecimal(feePriceMap.get("feePrice").toString())));
                 payFeeDetailPo.setGiftAmount(value.doubleValue() + "");
             }
         }
