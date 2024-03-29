@@ -162,10 +162,10 @@
         select count(DISTINCT t.user_id) count
         from u_user t
         inner join s_store_user su on t.user_id = su.user_id and su.status_cd = '0'
-        LEFT JOIN u_org_staff_rel osr on su.user_id = osr.staff_id and osr.status_cd = '0'
+        LEFT JOIN u_org_staff_rel osr on su.user_id = osr.staff_id and osr.status_cd = '0'  and osr.org_id = #{orgId}
         where t.level_cd = '01'
         and su.store_id = #{storeId}
-        and (osr.org_id != #{orgId} or osr.org_id is null)
+        and  osr.org_id is null
         <if test="staffName !=null and staffName != ''">
             and t.name like concat('%', #{staffName},'%')
         </if>
