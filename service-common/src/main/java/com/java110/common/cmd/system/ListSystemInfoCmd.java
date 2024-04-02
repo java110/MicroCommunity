@@ -15,22 +15,26 @@
  */
 package com.java110.common.cmd.system;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.system.SystemInfoDto;
 import com.java110.intf.common.ISystemInfoV1InnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +56,9 @@ public class ListSystemInfoCmd extends Cmd {
     private static Logger logger = LoggerFactory.getLogger(ListSystemInfoCmd.class);
     @Autowired
     private ISystemInfoV1InnerServiceSMO systemInfoV1InnerServiceSMOImpl;
+
+    @Autowired
+    private RestTemplate outRestTemplate;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -75,10 +82,44 @@ public class ListSystemInfoCmd extends Cmd {
             systemInfoDtos = new ArrayList<>();
         }
 
+        //todo 查询第三方开发的插件
+        queryThirdPlugin(systemInfoDtos);
+
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, systemInfoDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
+    }
+
+    private void queryThirdPlugin(List<SystemInfoDto> systemInfoDtos) {
+
+        String pluginSwitch = MappingCache.getValue("PLUGIN", "PLUGIN_SWITCH");
+
+        if (!"ON".equals(pluginSwitch)) {
+            return;
+        }
+
+        if (ListUtil.isNull(systemInfoDtos)) {
+            return;
+        }
+
+        try {
+            JSONObject paramIn = new JSONObject();
+
+            HttpHeaders header = new HttpHeaders();
+            HttpEntity<String> httpEntity = new HttpEntity<String>(paramIn.toJSONString(), header);
+
+            String pluginUrl = MappingCache.getValue("PLUGIN", "PLUGIN_URL") + "/plugin/plugin.queryValidPlugins";
+
+            ResponseEntity<String> tokenRes = outRestTemplate.exchange(pluginUrl, HttpMethod.POST, httpEntity, String.class);
+
+            String body = tokenRes.getBody();
+            JSONArray paramOut = JSONArray.parseArray(body);
+
+            systemInfoDtos.get(0).setPlugins(paramOut);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

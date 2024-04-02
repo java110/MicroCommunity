@@ -1,5 +1,6 @@
 package com.java110.dto.system;
 
+import com.alibaba.fastjson.JSONArray;
 import com.java110.dto.PageDto;
 
 import java.io.Serializable;
@@ -38,6 +39,8 @@ public class SystemInfoDto extends PageDto implements Serializable {
     private Date createTime;
 
     private String statusCd = "0";
+
+    private JSONArray plugins;
 
 
     public String getImgUrl() {
@@ -167,5 +170,13 @@ public class SystemInfoDto extends PageDto implements Serializable {
 
     public void setPropertyUrl(String propertyUrl) {
         this.propertyUrl = propertyUrl;
+    }
+
+    public JSONArray getPlugins() {
+        return plugins;
+    }
+
+    public void setPlugins(JSONArray plugins) {
+        this.plugins = plugins;
     }
 }
