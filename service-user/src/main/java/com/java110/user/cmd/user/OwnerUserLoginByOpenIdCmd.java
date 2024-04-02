@@ -13,10 +13,12 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.msg.SmsDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.system.SystemInfoDto;
 import com.java110.dto.user.LoginOwnerResDto;
 import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.ISmsInnerServiceSMO;
+import com.java110.intf.common.ISystemInfoV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
@@ -26,10 +28,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.SMOException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
-import com.java110.utils.util.ValidatorUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +55,7 @@ public class OwnerUserLoginByOpenIdCmd extends Cmd {
     @Autowired
     private IUserAttrV1InnerServiceSMO userAttrV1InnerServiceSMOImpl;
 
+
     @Autowired
     private ISmsInnerServiceSMO smsInnerServiceSMOImpl;
 
@@ -71,6 +71,11 @@ public class OwnerUserLoginByOpenIdCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ISystemInfoV1InnerServiceSMO systemInfoV1InnerServiceSMOImpl;
+
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "openId", "请求报文中未包含openId");
@@ -81,18 +86,38 @@ public class OwnerUserLoginByOpenIdCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
-        // todo  2.0 校验 业主用户绑定表是否存在记录
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setOpenId(reqJson.getString("openId"));
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+        UserAttrDto userAttrDto = new UserAttrDto();
+        userAttrDto.setSpecCd(UserAttrDto.SPEC_OPEN_ID);
+        userAttrDto.setValue(reqJson.getString("openId"));
+        List<UserAttrDto> userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
 
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+        if(ListUtil.isNull(userAttrDtos)){
             throw new CmdException("未找到用户信息");
         }
 
+        // todo  2.0 校验 业主用户绑定表是否存在记录
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setUserId(userAttrDtos.get(0).getUserId());
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+
+        String communityId = "";
+        if (!ListUtil.isNull(ownerAppUserDtos)) {
+            // todo 4.0 查询小区是否存在
+            communityId = ownerAppUserDtos.get(0).getCommunityId();
+        } else {
+            SystemInfoDto systemInfoDto = new SystemInfoDto();
+            List<SystemInfoDto> systemInfoDtos = systemInfoV1InnerServiceSMOImpl.querySystemInfos(systemInfoDto);
+            communityId = systemInfoDtos.get(0).getDefaultCommunityId();
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(communityId);
+        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
+        Assert.listOnlyOne(communityDtos, "小区不存在，确保开发者账户配置默认小区" + communityId);
+
+
         UserDto userDto = new UserDto();
         userDto.setLevelCd(UserDto.LEVEL_CD_USER);
-        userDto.setUserId(ownerAppUserDtos.get(0).getUserId());
+        userDto.setUserId(userAttrDtos.get(0).getUserId());
 
         //todo 1.0 查询用户是否存在
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
@@ -101,43 +126,22 @@ public class OwnerUserLoginByOpenIdCmd extends Cmd {
             throw new CmdException("业主不存在，请先注册");
         }
 
-
-        // todo 3.0 查询业主是否存在
-        OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setMemberId(ownerAppUserDtos.get(0).getMemberId());
-        ownerDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
-        List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
-
-        Assert.listOnlyOne(ownerDtos, "业主不存在");
-
-        // todo 4.0 查询小区是否存在
-        CommunityDto communityDto = new CommunityDto();
-        communityDto.setCommunityId(ownerAppUserDtos.get(0).getCommunityId());
-        List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-        Assert.listOnlyOne(communityDtos, "小区不存在，" + ownerAppUserDtos.get(0).getCommunityId());
-
-
-        //todo 生成 app 永久登录key
         UserDto tmpUserDto = userDtos.get(0);
         String newKey = generatorLoginKey(tmpUserDto);
 
         //todo 生成登录token
         String token = generatorLoginToken(tmpUserDto);
-
         LoginOwnerResDto loginOwnerResDto = new LoginOwnerResDto();
-        loginOwnerResDto.setOwnerId(ownerDtos.get(0).getOwnerId());
-        loginOwnerResDto.setMemberId(ownerDtos.get(0).getMemberId());
-        loginOwnerResDto.setOwnerName(ownerDtos.get(0).getName());
+
+        loginOwnerResDto.setCommunityId(communityDtos.get(0).getCommunityId());
+        loginOwnerResDto.setCommunityName(communityDtos.get(0).getName());
+        loginOwnerResDto.setCommunityTel(communityDtos.get(0).getTel());
         loginOwnerResDto.setUserId(tmpUserDto.getUserId());
         loginOwnerResDto.setUserName(tmpUserDto.getName());
-        loginOwnerResDto.setOwnerTel(ownerDtos.get(0).getLink());
-        loginOwnerResDto.setCommunityId(ownerDtos.get(0).getCommunityId());
-        loginOwnerResDto.setCommunityName(communityDtos.get(0).getName());
+        loginOwnerResDto.setOwnerTel(tmpUserDto.getTel());
         loginOwnerResDto.setToken(token);
         loginOwnerResDto.setKey(newKey);
-        loginOwnerResDto.setAppUserId(ownerAppUserDtos.get(0).getAppUserId());
         context.setResponseEntity(ResultVo.createResponseEntity(loginOwnerResDto));
-
     }
 
     /**
