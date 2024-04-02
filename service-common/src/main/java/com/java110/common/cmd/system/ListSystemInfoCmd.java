@@ -115,9 +115,9 @@ public class ListSystemInfoCmd extends Cmd {
             ResponseEntity<String> tokenRes = outRestTemplate.exchange(pluginUrl, HttpMethod.POST, httpEntity, String.class);
 
             String body = tokenRes.getBody();
-            JSONArray paramOut = JSONArray.parseArray(body);
+            JSONObject paramOut = JSONObject.parseObject(body);
 
-            systemInfoDtos.get(0).setPlugins(paramOut);
+            systemInfoDtos.get(0).setPlugins(paramOut.getJSONArray("data"));
         } catch (Exception e) {
             e.printStackTrace();
         }
