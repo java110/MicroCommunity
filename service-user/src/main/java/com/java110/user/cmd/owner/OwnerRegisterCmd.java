@@ -167,16 +167,16 @@ public class OwnerRegisterCmd extends Cmd {
         for (OwnerDto tmpOwnerDto : ownerDtos) {
             CommunityDto communityDto = new CommunityDto();
             communityDto.setState("1100");
-            communityDto.setCommunityId(ownerDto.getCommunityId());
+            communityDto.setCommunityId(tmpOwnerDto.getCommunityId());
             communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-            if (communityDtos == null || communityDtos.size() < 1) {
+            if (ListUtil.isNull(communityDtos)) {
                 continue;
             }
             communityDto = communityDtos.get(0);
             ownerAppUserPo = new OwnerAppUserPo();
             ownerAppUserPo.setAppUserId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_appUserId));
             ownerAppUserPo.setMemberId(tmpOwnerDto.getMemberId());
-            ownerAppUserPo.setCommunityId(communityDto.getCommunityId());
+            ownerAppUserPo.setCommunityId(tmpOwnerDto.getCommunityId());
             ownerAppUserPo.setCommunityName(communityDto.getName());
             ownerAppUserPo.setAppUserName(tmpOwnerDto.getName());
             ownerAppUserPo.setIdCard(tmpOwnerDto.getIdCard());

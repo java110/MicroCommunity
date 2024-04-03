@@ -44,6 +44,7 @@ public class QueryRoomsByAppCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
+        roomDto.setUserId("");
 
         //查询总记录数
         int total = roomV1InnerServiceSMOImpl.queryRoomsCount(roomDto);

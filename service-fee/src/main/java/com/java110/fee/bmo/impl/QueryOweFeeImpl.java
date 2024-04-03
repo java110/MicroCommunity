@@ -94,7 +94,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             try {
                 //todo 有目标结束时间,并且不是一次性费用
                 if (!StringUtil.isEmpty(feeDto.getTargetEndTime())
-                        && !FeeDto.FEE_FLAG_ONCE.equals(feeDtos.get(0).getFeeFlag())
+                        && !FeeDto.FEE_FLAG_ONCE.equals(tmpFeeDto.getFeeFlag())
                 ) {
                     computeFeeSMOImpl.computeEveryOweFeeByTargetEndTime(tmpFeeDto, feeDto.getTargetEndTime());//计算欠费金额
                 } else {
