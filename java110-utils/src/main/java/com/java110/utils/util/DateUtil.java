@@ -412,10 +412,10 @@ public class DateUtil {
 
     public static Date getNextMonthFirstDate(Date curDate) {
 
-        return getNextMonthFirstDate(curDate,1);
+        return getNextMonthFirstDate(curDate, 1);
     }
 
-    public static Date getNextMonthFirstDate(Date curDate,int monthCount) {
+    public static Date getNextMonthFirstDate(Date curDate, int monthCount) {
 
         Calendar curDateCal = Calendar.getInstance();
         curDateCal.setTime(curDate);
@@ -824,7 +824,7 @@ public class DateUtil {
         endCalender.setTime(endDate);
         if (
                 startCalendar.get(Calendar.DAY_OF_MONTH) == endCalender.get(Calendar.DAY_OF_MONTH)
-                && startCalendar.get(Calendar.HOUR_OF_DAY) == endCalender.get(Calendar.HOUR_OF_DAY)
+                        && startCalendar.get(Calendar.HOUR_OF_DAY) == endCalender.get(Calendar.HOUR_OF_DAY)
         ) {
             return true;
         }
@@ -832,8 +832,8 @@ public class DateUtil {
         return false;
     }
 
-    public static double dayCompare(Date fromDate, Date toDate){
-        return dayCompare(fromDate,toDate,false);
+    public static double dayCompare(Date fromDate, Date toDate) {
+        return dayCompare(fromDate, toDate, false);
     }
 
     /**
@@ -845,12 +845,12 @@ public class DateUtil {
      * @param toDate
      * @return
      */
-    public static double dayCompare(Date fromDate, Date toDate,boolean plusOneSec) {
+    public static double dayCompare(Date fromDate, Date toDate, boolean plusOneSec) {
 
-        if(plusOneSec){
+        if (plusOneSec) {
             Calendar toD = Calendar.getInstance();
             toD.setTime(toDate);
-            toD.add(Calendar.SECOND,1);
+            toD.add(Calendar.SECOND, 1);
             toDate = toD.getTime();
         }
 
@@ -866,8 +866,8 @@ public class DateUtil {
         Calendar fromDateCal = Calendar.getInstance();
         fromDateCal.setTime(fromDate);
         fromDateCal.set(Calendar.DAY_OF_MONTH, 1);
-        fromDateCal.set(Calendar.HOUR_OF_DAY,0);
-        fromDateCal.set(Calendar.MINUTE,0);
+        fromDateCal.set(Calendar.HOUR_OF_DAY, 0);
+        fromDateCal.set(Calendar.MINUTE, 0);
         if (fromDate.getTime() > fromDateCal.getTime().getTime()) {
             fromDateCal.add(Calendar.MONTH, 1);
             firstDay = false;
@@ -878,8 +878,8 @@ public class DateUtil {
         Calendar toDateCal = Calendar.getInstance();
         toDateCal.setTime(toDate);
         toDateCal.set(Calendar.DAY_OF_MONTH, 1);
-        toDateCal.set(Calendar.HOUR_OF_DAY,0);
-        toDateCal.set(Calendar.MINUTE,0);
+        toDateCal.set(Calendar.HOUR_OF_DAY, 0);
+        toDateCal.set(Calendar.MINUTE, 0);
 
         if (toDate.getTime() > toDateCal.getTime().getTime()) {
             toDateFirstDate = toDateCal.getTime();
@@ -932,5 +932,17 @@ public class DateUtil {
         Double hour = doubleMonth * futureDay * 24;
         endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
         return endDate.getTime();
+    }
+
+    public static String getNextSecTime(String time) {
+        Date tTime = getDateFromStringA(time);
+        return getNextSecTime(tTime);
+    }
+
+    public static String getNextSecTime(Date time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        calendar.add(Calendar.SECOND, 1);
+        return getFormatTimeStringA(calendar.getTime());
     }
 }

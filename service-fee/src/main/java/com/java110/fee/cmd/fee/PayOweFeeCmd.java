@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -145,7 +146,7 @@ public class PayOweFeeCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext dataFlowContext, JSONObject paramObj) throws CmdException, ParseException {
         logger.info("======欠费缴费返回======：" + JSONArray.toJSONString(paramObj));
-        String userId = dataFlowContext.getReqHeaders().get("user-id");
+        String userId = CmdContextUtils.getUserId(dataFlowContext);
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
@@ -223,15 +224,15 @@ public class PayOweFeeCmd extends Cmd {
         FeeDto feeInfo = (FeeDto) paramInJson.get("feeInfo");
         Map feeMap = BeanConvertUtil.beanCovertMap(feeInfo);
         feeMap.put("startTime", DateUtil.getFormatTimeString(feeInfo.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
-        feeMap.put("endTime", paramInJson.getString("endTime"));
+        feeMap.put("endTime", DateUtil.getNextSecTime(paramInJson.getString("endTime")));
         feeMap.put("cycles", paramInJson.getString("cycles"));
         feeMap.put("configEndTime", feeInfo.getConfigEndTime());
         if (FeeDto.FEE_FLAG_ONCE.equals(feeInfo.getFeeFlag())) { //缴费结束
             feeMap.put("state", FeeDto.STATE_FINISH);
         }
-        Date maxEndTime = feeInfo.getConfigEndTime();
-        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())) {
-            maxEndTime = feeInfo.getDeadlineTime();
+        Date maxEndTime = feeInfo.getMaxEndTime();
+        if (maxEndTime == null) {
+            maxEndTime = feeInfo.getConfigEndTime();
         }
         if (maxEndTime != null) { //这里数据问题的情况下
             Date endTime = DateUtil.getDateFromStringA(paramInJson.getString("endTime"));

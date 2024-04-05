@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -142,7 +143,7 @@ public class PayFeeCmd extends Cmd {
         feeDto = feeDtos.get(0);
 
         if (FeeDto.STATE_FINISH.equals(feeDto.getState())) {
-            throw new IllegalArgumentException("收费已经结束，不能再缴费");
+            throw new CmdException("收费已经结束，不能再缴费");
         }
 
         Date endTime = feeDto.getEndTime();
@@ -151,22 +152,15 @@ public class PayFeeCmd extends Cmd {
         feeConfigDto.setConfigId(feeDto.getConfigId());
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-
-        if (feeConfigDtos == null || feeConfigDtos.size() != 1) {
-            throw new IllegalArgumentException("费用项不存在");
+        if (ListUtil.isNull(feeConfigDtos)) {
+            throw new CmdException("费用项不存在");
         }
-        //一次性费用 和间接性费用
+        // 获取费用结束时间
         Date maxEndTime = feeDtos.get(0).getDeadlineTime();
         //周期性费用
-        if (maxEndTime == null || FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+        if (maxEndTime == null) {
             maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
         }
-//        Date maxEndTime = null;
-//        if (!StringUtil.isEmpty(feeDto.getFeeFlag()) && feeDto.getFeeFlag().equals(FeeDto.FEE_FLAG_CYCLE)) { //周期性费用
-//            maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
-//        } else { //一次性费用 和间接性费用
-//            maxEndTime = feeDtos.get(0).getDeadlineTime();
-//        }
 
         if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeDtos.get(0).getFeeFlag())) {
             Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
@@ -179,9 +173,7 @@ public class PayFeeCmd extends Cmd {
         for (int paramIndex = 0; paramIndex < selectUserAccount.size(); paramIndex++) {
             JSONObject param = selectUserAccount.getJSONObject(paramIndex);
             String maximumNumber = param.getString("maximumNumber");
-
         }
-
 
 
         //todo 是否按缴费时间段缴费
@@ -189,7 +181,7 @@ public class PayFeeCmd extends Cmd {
 
         //todo 校验 优惠
         JSONArray selectDiscounts = reqJson.getJSONArray("selectDiscount");
-        if(!ListUtil.isNull(selectDiscounts)) {
+        if (!ListUtil.isNull(selectDiscounts)) {
             for (int discountIndex = 0; discountIndex < selectDiscounts.size(); discountIndex++) {
                 JSONObject param = selectDiscounts.getJSONObject(discountIndex);
                 Assert.hasKeyAndValue(param, "discountId", "未包含优惠ID");
@@ -205,7 +197,7 @@ public class PayFeeCmd extends Cmd {
         logger.debug("paramObj : {}", paramObj);
         String payOrderId = paramObj.getString("payOrderId");
 
-        String userId = cmdDataFlowContext.getReqHeaders().get("user-id");
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
@@ -227,16 +219,18 @@ public class PayFeeCmd extends Cmd {
             FeeDto feeInfo = (FeeDto) paramObj.get("feeInfo");
             endTime = feeInfo.getEndTime();
             feeDetail.put("payableAmount", feeDetail.getString("receivableAmount"));
-            //todo 封装 修改费用时间报文
-            JSONObject fee = modifyFee(paramObj);
-            payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
+
             PayFeeDetailPo payFeeDetailPo = BeanConvertUtil.covertBean(feeDetail, PayFeeDetailPo.class);
             payFeeDetailPo.setReceivableAmount(feeDetail.getString("totalFeePrice"));
             //todo 缓存收据编号
             CommonCache.setValue(payFeeDetailPo.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
 
+            //todo 封装 修改费用时间报文
+            JSONObject fee = modifyFee(paramObj, payFeeDetailPo);
+            payFeePo = BeanConvertUtil.covertBean(fee, PayFeePo.class);
+
             //todo 判断是否有折扣规则
-            hasDiscount(paramObj, payFeePo, payFeeDetailPo,feeInfo);
+            hasDiscount(paramObj, payFeePo, payFeeDetailPo, feeInfo);
 
             // todo 处理用户账户
             dealUserAccount(paramObj, payFeeDetailPo);
@@ -450,7 +444,7 @@ public class PayFeeCmd extends Cmd {
      * @param payFeeDetailPo
      * @throws ParseException
      */
-    private void hasDiscount(JSONObject paramObj, PayFeePo payFeePo, PayFeeDetailPo payFeeDetailPo,FeeDto feeDto) throws ParseException {
+    private void hasDiscount(JSONObject paramObj, PayFeePo payFeePo, PayFeeDetailPo payFeeDetailPo, FeeDto feeDto) throws ParseException {
         if (!paramObj.containsKey("selectDiscount")) {
             return;
         }
@@ -596,7 +590,7 @@ public class PayFeeCmd extends Cmd {
         feeDto.setCommunityId(paramObj.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             return;
         }
         if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDtos.get(0).getPayerObjType())) {
@@ -609,7 +603,7 @@ public class PayFeeCmd extends Cmd {
         ownerCarDto.setCarTypeCd("1001"); //业主车辆
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+        if (ListUtil.isNull(ownerCarDtos)) {
             return;
         }
         //获取车位id
@@ -778,7 +772,6 @@ public class PayFeeCmd extends Cmd {
         }
         feeDto = feeDtos.get(0);
         businessFeeDetail.put("startTime", DateUtil.getFormatTimeStringA(feeDto.getEndTime()));
-        int hours = 0;
         Date targetEndTime = null;
         BigDecimal cycles = null;
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
@@ -871,60 +864,15 @@ public class PayFeeCmd extends Cmd {
         return businessFeeDetail;
     }
 
-    public JSONObject modifyFee(JSONObject paramInJson) {
+    public JSONObject modifyFee(JSONObject paramInJson, PayFeeDetailPo payFeeDetailPo) {
 
         JSONObject businessFee = new JSONObject();
         FeeDto feeInfo = (FeeDto) paramInJson.get("feeInfo");
-        Date endTime = feeInfo.getEndTime();
-        Calendar endCalender = Calendar.getInstance();
-        endCalender.setTime(endTime);
-        int hours = 0;
-        //-101自定义金额 -102自定义周期 -103 自定义结束时间
-        if ("-101".equals(paramInJson.getString("cycles"))) {
-            endCalender = getTargetEndTime(endCalender, Double.parseDouble(paramInJson.getString("tmpCycles")));
-        } else if ("-103".equals(paramInJson.getString("cycles"))) {
-            String custEndTime = paramInJson.getString("custEndTime");
-            Date endDates = DateUtil.getDateFromStringB(custEndTime);
-            Calendar c = Calendar.getInstance();
-            c.setTime(endDates);
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            endDates = c.getTime();//这是明天
-            endCalender.setTime(endDates);
-        } else if ("-105".equals(paramInJson.getString("cycles"))) {
-            String customEndTime = paramInJson.getString("customEndTime");
-            Date endDates = DateUtil.getDateFromStringB(customEndTime);
-            Calendar c = Calendar.getInstance();
-            c.setTime(endDates);
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            endDates = c.getTime();//这是明天
-            endCalender.setTime(endDates);
-        } else {
-            endCalender.add(Calendar.MONTH, Integer.parseInt(paramInJson.getString("cycles")));
-        }
-        if (FeeDto.FEE_FLAG_ONCE.equals(feeInfo.getFeeFlag())) {
-            if (feeInfo.getDeadlineTime() != null) {
-                endCalender.setTime(feeInfo.getDeadlineTime());
-            } else if (!StringUtil.isEmpty(feeInfo.getCurDegrees())) {
-                endCalender.setTime(feeInfo.getCurReadingTime());
-            } else if (feeInfo.getImportFeeEndTime() == null) {
-                endCalender.setTime(feeInfo.getConfigEndTime());
-            } else {
-                endCalender.setTime(feeInfo.getImportFeeEndTime());
-            }
-            //businessFee.put("state",FeeDto.STATE_FINISH);
-            feeInfo.setState(FeeDto.STATE_FINISH);
-        }
-        feeInfo.setEndTime(endCalender.getTime());
-        Date maxEndTime = feeInfo.getDeadlineTime();
-        if (FeeDto.FEE_FLAG_CYCLE.equals(feeInfo.getFeeFlag())) {
-            maxEndTime = feeInfo.getConfigEndTime();
-        }
 
-        if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeInfo.getFeeFlag())) {
-            maxEndTime = feeInfo.getMaxEndTime();
-        }
+        String endTime = DateUtil.getNextSecTime(payFeeDetailPo.getEndTime());
+        feeInfo.setEndTime(DateUtil.getDateFromStringA(endTime));
 
-        //如果间歇性费用没有设置结束时间 则取费用项的
+        Date maxEndTime = feeInfo.getMaxEndTime();
         if (maxEndTime == null) {
             maxEndTime = feeInfo.getConfigEndTime();
         }
@@ -965,7 +913,7 @@ public class PayFeeCmd extends Cmd {
     public void dealAccount(JSONObject paramObj) {
         //判断选择的账号
         JSONArray jsonArray = paramObj.getJSONArray("selectUserAccount");
-        if (jsonArray == null || jsonArray.size() < 1) {
+        if (ListUtil.isNull(jsonArray)) {
             return;
         }
         List<AccountDto> accountDtos = new ArrayList<>();

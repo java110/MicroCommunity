@@ -127,7 +127,7 @@ public class PayBatchFeeCmd extends Cmd {
             }
             Date maxEndTime = feeDtos.get(0).getDeadlineTime();
             //周期性费用
-            if (maxEndTime == null || FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            if (maxEndTime == null) {
                 maxEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
             }
 
@@ -230,7 +230,7 @@ public class PayBatchFeeCmd extends Cmd {
 
         PayFeePo payFeePo = new PayFeePo();
         payFeePo.setFeeId(payFeeDataDto.getFeeId());
-        payFeePo.setEndTime(payFeeDetailPo.getEndTime());
+        payFeePo.setEndTime(DateUtil.getNextSecTime(payFeeDetailPo.getEndTime()));
         payFeePo.setState(FeeDto.STATE_FINISH);
 
         Date maxTime = payFeeDataDto.getFeeDto().getDeadlineTime();
