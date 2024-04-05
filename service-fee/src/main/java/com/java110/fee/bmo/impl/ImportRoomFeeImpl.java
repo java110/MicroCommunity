@@ -25,10 +25,7 @@ import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.importFee.ImportFeePo;
 import com.java110.po.importFee.ImportFeeDetailPo;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -106,7 +103,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
 
         List<ImportRoomFee> tmpImportRoomFees = importRoomFees.toJavaList(ImportRoomFee.class);
 
-        if (tmpImportRoomFees == null || tmpImportRoomFees.size() < 1) {
+        if (ListUtil.isNull(tmpImportRoomFees)) {
             throw new IllegalArgumentException("未包含导入费用");
         }
 
@@ -133,15 +130,10 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         // 根据费用大类 判断是否有存在 费用导入收入项
-        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
-
+        if (ListUtil.isNull(feeConfigDtos)) {
             throw new IllegalArgumentException("费用项不存在");
-            //生成导入费
-            //feeConfigDto.setConfigId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
-            //saveFeeConfig(feeConfigDto);
-        } else {
-            feeConfigDto.setConfigId(feeConfigDtos.get(0).getConfigId());
         }
+        feeConfigDto.setConfigId(feeConfigDtos.get(0).getConfigId());
 
         for (ImportRoomFee tmpImportRoomFee : tmpImportRoomFees) {
             tmpImportRoomFee.setCommunityId(communityId);
@@ -177,6 +169,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         List<ImportFeeDetailPo> importFeeDetailPos = new ArrayList<>();
         PayFeePo payFeePo = null;
         ImportFeeDetailPo importFeeDetailPo = null;
+        String endTime = "";
         for (ImportRoomFee importRoomFee : tmpImportRoomFees) {
             if (StringUtil.isEmpty(importRoomFee.getRoomId()) || importRoomFee.getRoomId().startsWith("-") ||
                     StringUtil.isEmpty(importRoomFee.getFloorNum()) || importRoomFee.getFloorNum().startsWith("-") ||
@@ -185,6 +178,11 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
                 errorCount++;
                 continue;
             }
+            endTime = importRoomFee.getEndTime();
+            if(!endTime.contains(":")){
+                endTime += " 23:59:59";
+            }
+
             successCount++;
             payFeePo = new PayFeePo();
             payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId, true));
@@ -218,7 +216,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setCommunityId(communityId);
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
-            feeAttrPo.setValue(importRoomFee.getEndTime());
+            feeAttrPo.setValue(endTime);
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
 
@@ -371,12 +369,17 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         List<ImportFeeDetailPo> importFeeDetailPos = new ArrayList<>();
         PayFeePo payFeePo = null;
         ImportFeeDetailPo importFeeDetailPo = null;
+        String endTime = "";
         for (ImportRoomFee importCarFee : tmpImportCarFees) {
             if (StringUtil.isEmpty(importCarFee.getCarId()) || importCarFee.getCarId().startsWith("-") ||
                     StringUtil.isEmpty(importCarFee.getCarNum()) || importCarFee.getCarNum().startsWith("-")
             ) {
                 errorCount++;
                 continue;
+            }
+            endTime = importCarFee.getEndTime();
+            if(!endTime.contains(":")){
+                endTime += " 23:59:59";
             }
             successCount++;
             payFeePo = new PayFeePo();
@@ -411,7 +414,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setCommunityId(communityId);
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
-            feeAttrPo.setValue(importCarFee.getEndTime());
+            feeAttrPo.setValue(endTime);
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
 

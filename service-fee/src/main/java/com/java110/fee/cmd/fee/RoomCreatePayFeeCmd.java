@@ -21,6 +21,7 @@ import com.java110.po.payFee.PayFeeBatchPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
@@ -54,6 +55,13 @@ public class RoomCreatePayFeeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
         Assert.hasKeyAndValue(reqJson, "startTime", "开始时间不存在");
+        Assert.hasKeyAndValue(reqJson, "endTime", "结束时间不存在");
+
+        String endTime = reqJson.getString("endTime");
+        if (!endTime.contains(":")) {
+            endTime += " 23:59:59";
+            reqJson.put("endTime", endTime);
+        }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
@@ -69,19 +77,8 @@ public class RoomCreatePayFeeCmd extends Cmd {
         }
 
         JSONArray roomIds = reqJson.getJSONArray("roomIds");
-        if (roomIds == null || roomIds.isEmpty()) {
+        if (ListUtil.isNull(roomIds)) {
             throw new IllegalArgumentException("未包含房屋");
-        }
-        //todo 不是周期性费用 endTime 必须存在
-        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
-            Assert.hasKeyAndValue(reqJson, "endTime", "结束时间不存在");
-            Date endTime = null;
-            Date configEndTime = null;
-            endTime = DateUtil.getDateFromStringB(reqJson.getString("endTime"));
-            configEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
-            if (endTime.getTime() > configEndTime.getTime()) {
-                throw new IllegalArgumentException("结束时间不能超过费用项时间");
-            }
         }
 
         //todo 动态费用
@@ -109,20 +106,6 @@ public class RoomCreatePayFeeCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         //todo 生成批次
-        generatorBatch(reqJson);
-
-
-        //todo 交给databus 异步方式处理，同步方式处理很容易超时
-        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_ROOM_CREATE_PAY_FEE, reqJson));
-
-    }
-
-    /**
-     * 生成批次号
-     *
-     * @param reqJson
-     */
-    private void generatorBatch(JSONObject reqJson) {
         PayFeeBatchPo payFeeBatchPo = new PayFeeBatchPo();
         payFeeBatchPo.setBatchId(GenerateCodeFactory.getGeneratorId("12"));
         payFeeBatchPo.setCommunityId(reqJson.getString("communityId"));
@@ -141,5 +124,11 @@ public class RoomCreatePayFeeCmd extends Cmd {
         }
 
         reqJson.put("batchId", payFeeBatchPo.getBatchId());
+
+
+        //todo 交给databus 异步方式处理，同步方式处理很容易超时
+        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_ROOM_CREATE_PAY_FEE, reqJson));
+
     }
+
 }

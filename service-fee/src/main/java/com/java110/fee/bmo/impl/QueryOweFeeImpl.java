@@ -143,7 +143,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             return ResultVo.success();
         }
         String cycel = null;
@@ -182,7 +182,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
             }
             roomDto = roomDtos.get(0);
-            feeDto.setPayerObjName(roomDto.getFloorNum() + "栋" + roomDto.getUnitNum() + "单元" + roomDto.getRoomNum() + "室");
+            feeDto.setPayerObjName(roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum() );
             feeDto.setBuiltUpArea(roomDto.getBuiltUpArea());
 
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
@@ -196,7 +196,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
             parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
             parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-            if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+            if (ListUtil.isNull(parkingSpaceDtos)) { //数据有问题
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到停车位信息，查询多条数据");
             }
             ownerCarDto = ownerCarDtos.get(0);

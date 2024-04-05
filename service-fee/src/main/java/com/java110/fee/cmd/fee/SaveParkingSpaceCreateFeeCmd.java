@@ -78,7 +78,14 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "locationObjId", "未包含收费对象");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
-        //Assert.hasKeyAndValue(reqJson, "startTime", "未包含费用起始时间");
+        Assert.hasKeyAndValue(reqJson, "startTime", "未包含费用起始时间");
+        Assert.hasKeyAndValue(reqJson, "endTime", "未包含费用结束时间");
+
+        String endTime = reqJson.getString("endTime");
+        if (!endTime.contains(":")) {
+            endTime += " 23:59:59";
+            reqJson.put("endTime", endTime);
+        }
     }
 
     @Override
@@ -93,19 +100,6 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         reqJson.put("configEndTime", feeConfigDtos.get(0).getEndTime());
 
-        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
-            Date endTime = null;
-            Date configEndTime = null;
-            try {
-                endTime = DateUtil.getDateFromString(reqJson.getString("endTime"), DateUtil.DATE_FORMATE_STRING_B);
-                configEndTime = DateUtil.getDateFromString(feeConfigDtos.get(0).getEndTime(), DateUtil.DATE_FORMATE_STRING_A);
-                if (endTime.getTime() > configEndTime.getTime()) {
-                    throw new IllegalArgumentException("结束时间不能超过费用项时间");
-                }
-            } catch (ParseException e) {
-                throw new IllegalArgumentException("结束时间错误" + reqJson.getString("endTime"));
-            }
-        }
         //生成批次
         generatorBatch(reqJson);
         //判断收费范围
@@ -224,11 +218,9 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
         for (int ownerCarIndex = 0; ownerCarIndex < ownerCarDtos.size(); ownerCarIndex++) {
             curFailRoomCount++;
             feePos.add(BeanConvertUtil.covertBean(feeBMOImpl.addFee(ownerCarDtos.get(ownerCarIndex), reqJson, context), PayFeePo.class));
+            feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                    reqJson.getString("endTime")));
             if (!StringUtil.isEmpty(ownerCarDtos.get(ownerCarIndex).getOwnerId())) {
-                if (!FeeDto.FEE_FLAG_CYCLE.equals(reqJson.getString("feeFlag"))) {
-                    feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
-                            reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
-                }
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, ownerCarDtos.get(ownerCarIndex).getOwnerId()));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, ownerCarDtos.get(ownerCarIndex).getLink()));
                 feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, ownerCarDtos.get(ownerCarIndex).getOwnerName()));

@@ -832,7 +832,9 @@ public class DateUtil {
         return false;
     }
 
-
+    public static double dayCompare(Date fromDate, Date toDate){
+        return dayCompare(fromDate,toDate,false);
+    }
 
     /**
      * 计算 fromDate 2023-01-12  toDate 2023-09-15
@@ -843,7 +845,14 @@ public class DateUtil {
      * @param toDate
      * @return
      */
-    public static double dayCompare(Date fromDate, Date toDate) {
+    public static double dayCompare(Date fromDate, Date toDate,boolean plusOneSec) {
+
+        if(plusOneSec){
+            Calendar toD = Calendar.getInstance();
+            toD.setTime(toDate);
+            toD.add(Calendar.SECOND,1);
+            toDate = toD.getTime();
+        }
 
 
         //todo 需要计算三端时间 相加即可

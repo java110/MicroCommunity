@@ -1665,7 +1665,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Date preEndTime = preEndTimeCal.getTime();
 
         //todo 当前费用为一次性费用
-        Date maxEndTime = feeDto.getConfigEndTime();
+        Date maxEndTime = feeDto.getDeadlineTime();
+        if (maxEndTime == null) {
+            maxEndTime = feeDto.getConfigEndTime();
+        }
         if (FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
             //先取 deadlineTime
             if (feeDto.getDeadlineTime() != null) {
@@ -1687,11 +1690,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             if (StringUtil.isNumber(feeDto.getMonthCycle())) {
                 oweMonth = Integer.parseInt(feeDto.getMonthCycle());
             }
-
-        } else if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeDto.getFeeFlag())) {
-            if (feeDto.getDeadlineTime() != null) {
-                maxEndTime = feeDto.getDeadlineTime();
-            }
+        } else {
             Date billEndTime = DateUtil.getCurrentDate();
             //建账时间
             Date startDate = feeDto.getStartTime();
@@ -1719,7 +1718,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             ) {
                 targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate);//目标结束时间
             }
-
 
             //todo 费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
             if (maxEndTime.getTime() < targetEndDate.getTime()) {
@@ -1728,50 +1726,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             //说明欠费
             if (endDate.getTime() < targetEndDate.getTime()) {
                 // 目标到期时间 - 到期时间 = 欠费月份
-                oweMonth = DateUtil.dayCompare(endDate, targetEndDate);
-            }
-
-            if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
-                targetEndDate = feeDto.getEndTime();
-            }
-        } else { // todo 周期性费用
-            //当前时间
-            Date billEndTime = DateUtil.getCurrentDate();
-            //建账时间
-            Date startDate = feeDto.getStartTime();
-            //计费起始时间
-            Date endDate = feeDto.getEndTime();
-            //缴费周期
-            long paymentCycle = Long.parseLong(feeDto.getPaymentCycle());
-            // 当前时间 - 开始时间  = 月份
-            double mulMonth = 0.0;
-            mulMonth = DateUtil.dayCompare(startDate, billEndTime);
-
-            // 月份/ 周期 = 轮数（向上取整）
-            double round = 0.0;
-            if ("1200".equals(feeDto.getPaymentCd())) { // 1200预付费
-                round = Math.floor(mulMonth / paymentCycle) + 1;
-            } else { //2100后付费
-                round = Math.floor(mulMonth / paymentCycle);
-            }
-            // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-            targetEndDate = getTargetEndTime(round * paymentCycle, startDate);//目标结束时间
-
-            //todo 如果 到了 预付期 产生下个周期的费用
-            if (DateUtil.getFormatTimeStringB(targetEndDate).equals(DateUtil.getFormatTimeStringB(endDate))
-                    && DateUtil.getCurrentDate().getTime() > preEndTime.getTime()
-            ) {
-                targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate);//目标结束时间
-            }
-
-            //费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
-            if (maxEndTime.getTime() < targetEndDate.getTime()) {
-                targetEndDate = maxEndTime;
-            }
-            //说明欠费
-            if (endDate.getTime() < targetEndDate.getTime()) {
-                // 目标到期时间 - 到期时间 = 欠费月份
-                oweMonth = DateUtil.dayCompare(endDate, targetEndDate);
+                oweMonth = DateUtil.dayCompare(endDate, targetEndDate, true);
             }
 
             if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
@@ -2165,7 +2120,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         }
 
         //todo 递增时间 不是 费用建账时间的倍数时，修正一下
-        rateStartTime = correctByFeeStartTime(rateStartTime,feeDto.getStartTime());
+        rateStartTime = correctByFeeStartTime(rateStartTime, feeDto.getStartTime());
 
         BigDecimal addTotalAmount = new BigDecimal("0");
         double curOweMonth = 0;
@@ -2205,7 +2160,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 continue;
             }
             //todo 本轮 欠费开始时间大于 deadlineTime 跳过
-            if(curOweStartTime.getTime() >= feeDto.getDeadlineTime().getTime()){
+            if (curOweStartTime.getTime() >= feeDto.getDeadlineTime().getTime()) {
                 continue;
             }
 
@@ -2231,6 +2186,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     /**
      * 修正递增 开始时间
      * 如果设置的 递增开始时间和建账时间不是同一天 强制修正下
+     *
      * @param rateStartTime
      * @param startTime
      * @return
@@ -2242,14 +2198,14 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startTime);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        if(rateDay == day){
+        if (rateDay == day) {
             return rateStartTime;
         }
 
         rateCalendar = Calendar.getInstance();
         rateCalendar.setTime(rateStartTime);
-        rateCalendar.add(Calendar.MONTH,1);
-        rateCalendar.set(Calendar.DAY_OF_MONTH,day);
+        rateCalendar.add(Calendar.MONTH, 1);
+        rateCalendar.set(Calendar.DAY_OF_MONTH, day);
         return rateCalendar.getTime();
     }
 

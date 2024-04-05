@@ -83,6 +83,14 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "locationObjId", "未包含收费对象");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含收费项目");
         Assert.hasKeyAndValue(reqJson, "storeId", "未包含商户ID");
+        Assert.hasKeyAndValue(reqJson, "startTime", "未包含计费起始时间");
+        Assert.hasKeyAndValue(reqJson, "endTime", "未包含计费结束时间");
+
+        String endTime = reqJson.getString("endTime");
+        if (!endTime.contains(":")) {
+            endTime += " 23:59:59";
+            reqJson.put("endTime", endTime);
+        }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
@@ -92,18 +100,6 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         reqJson.put("feeTypeCd", feeConfigDtos.get(0).getFeeTypeCd());
         reqJson.put("feeFlag", feeConfigDtos.get(0).getFeeFlag());
         reqJson.put("configEndTime", feeConfigDtos.get(0).getEndTime());
-
-
-        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag()) && reqJson.containsKey("endTime")) {
-            Date endTime = null;
-            Date configEndTime = null;
-
-            endTime = DateUtil.getDateFromStringB(reqJson.getString("endTime"));
-            configEndTime = DateUtil.getDateFromStringA(feeConfigDtos.get(0).getEndTime());
-            if (endTime.getTime() > configEndTime.getTime()) {
-                throw new IllegalArgumentException("结束时间不能超过费用项时间");
-            }
-        }
 
         if (FeeConfigDto.COMPUTING_FORMULA_RANT_RATE.equals(feeConfigDtos.get(0).getComputingFormula())) {
             Assert.hasKeyAndValue(reqJson, "rateCycle", "未包含递增周期");
@@ -169,10 +165,12 @@ public class SaveRoomCreateFeeCmd extends Cmd {
             return;
         }
 
+        feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson,
+                context,
+                FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
+                reqJson.getString("endTime")));
+
         if (!StringUtil.isEmpty(roomDto.getOwnerId())) {
-            if (!FeeDto.FEE_FLAG_CYCLE.equals(reqJson.getString("feeFlag"))) {
-                feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME, reqJson.containsKey("endTime") ? reqJson.getString("endTime") : reqJson.getString("configEndTime")));
-            }
             feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_ID, roomDto.getOwnerId()));
             feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_LINK, roomDto.getLink()));
             feeAttrsPos.add(feeBMOImpl.addFeeAttr(reqJson, context, FeeAttrDto.SPEC_CD_OWNER_NAME, roomDto.getOwnerName()));

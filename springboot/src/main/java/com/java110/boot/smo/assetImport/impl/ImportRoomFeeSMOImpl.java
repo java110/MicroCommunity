@@ -209,8 +209,7 @@ public class ImportRoomFeeSMOImpl extends DefaultAbstractComponentSMO implements
                 tmpImportRoomFees = new ArrayList<>();
             }
         }
-        if (tmpImportRoomFees != null && tmpImportRoomFees.size() > 0) {
-
+        if (!ListUtil.isNull(tmpImportRoomFees)) {
             createRoomFee(pd, tmpImportRoomFees, data, paramOut);
         }
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "成功：" + paramOut.getString("successCount") + ",失败：" + paramOut.getString("errorCount"));

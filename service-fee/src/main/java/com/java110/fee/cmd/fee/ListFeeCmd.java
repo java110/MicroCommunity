@@ -127,7 +127,8 @@ public class ListFeeCmd extends Cmd {
         int count = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
         if (count > 0) {
             List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);//查询费用项目
-            computeFeePrice(feeDtos);//计算费用
+            //todo 计算费用
+            computeFeePrice(feeDtos);
             List<ApiFeeDataVo> apiFeeDataVos = BeanConvertUtil.covertBeanList(feeDtos, ApiFeeDataVo.class);
             for (ApiFeeDataVo apiFeeDataVo : apiFeeDataVos) {
                 //获取付费对象类型
@@ -183,7 +184,7 @@ public class ListFeeCmd extends Cmd {
         floorDto.setFloorNum(floorNum);
         floorDto.setCommunityId(reqJson.getString("communityId"));
         List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-        if (floorDtos == null || floorDtos.size() < 1) {
+        if (ListUtil.isNull(floorDtos)) {
             return;
         }
         for (FloorDto floor : floorDtos) {
@@ -217,7 +218,7 @@ public class ListFeeCmd extends Cmd {
     }
 
     private void computeFeePrice(List<FeeDto> feeDtos) {
-        if (feeDtos == null || feeDtos.isEmpty()) {
+        if (ListUtil.isNull(feeDtos)) {
             return;
         }
         String val = CommunitySettingFactory.getValue(feeDtos.get(0).getCommunityId(), TOTAL_FEE_PRICE);

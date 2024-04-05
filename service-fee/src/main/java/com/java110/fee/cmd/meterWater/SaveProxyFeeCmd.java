@@ -74,6 +74,12 @@ public class SaveProxyFeeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含结束时间");
+
+        String endTime = reqJson.getString("endTime");
+        if (!endTime.contains(":")) {
+            endTime += " 23:59:59";
+            reqJson.put("endTime", endTime);
+        }
     }
 
     @Override

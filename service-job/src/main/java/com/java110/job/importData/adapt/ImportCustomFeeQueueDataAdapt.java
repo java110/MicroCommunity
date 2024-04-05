@@ -84,6 +84,11 @@ public class ImportCustomFeeQueueDataAdapt extends DefaultImportData implements 
         JSONObject data = JSONObject.parseObject(assetImportLogDetailDto.getContent());
         ImportCustomCreateFeeDto importExportMeterWaterDto = BeanConvertUtil.covertBean(data, ImportCustomCreateFeeDto.class);
 
+        //todo 处理结束时间
+        if (!importExportMeterWaterDto.getEndTime().contains(":")) {
+            importExportMeterWaterDto.setEndTime(importExportMeterWaterDto.getEndTime() + " 23:59:59");
+        }
+
         String communityId = importExportMeterWaterDto.getCommunityId();
         String batchId = importExportMeterWaterDto.getBatchId();
 
