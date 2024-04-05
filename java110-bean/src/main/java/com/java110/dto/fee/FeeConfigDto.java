@@ -105,6 +105,8 @@ public class FeeConfigDto extends PageDto implements Serializable {
     private String logStartTime;
     private String logEndTime;
 
+    private String state;
+
 
     public String getFeeTypeCd() {
         return feeTypeCd;
@@ -435,5 +437,13 @@ public class FeeConfigDto extends PageDto implements Serializable {
 
     public void setLogEndTime(String logEndTime) {
         this.logEndTime = logEndTime;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

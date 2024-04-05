@@ -7,6 +7,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDto;
 import com.java110.dto.payFeeRule.PayFeeRuleDto;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
@@ -64,11 +65,18 @@ public class UpdateFeeConfigCmd extends Cmd {
         businessFeeConfig.putAll(reqJson);
         businessFeeConfig.put("isDefault", feeConfigDtos.get(0).getIsDefault());
         PayFeeConfigPo payFeeConfigPo = BeanConvertUtil.covertBean(businessFeeConfig, PayFeeConfigPo.class);
+        if("NA".equals(payFeeConfigPo.getState())){
+            payFeeConfigPo.setState("N");
+        }
         int flag = payFeeConfigV1InnerServiceSMOImpl.updatePayFeeConfig(payFeeConfigPo);
         if (flag < 1) {
             throw new CmdException("修改费用项失败");
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+        //todo 结束费用
+        finishFee(reqJson,feeConfigDtos);
+
         //todo 修改费用标识
         if (!reqJson.containsKey("feeFlag")) {
             return;
@@ -93,5 +101,23 @@ public class UpdateFeeConfigCmd extends Cmd {
         payFeePo.setFeeFlag(reqJson.getString("feeFlag"));
 
         payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
+    }
+
+    /**
+     * 结束费用
+     * @param reqJson
+     * @param feeConfigDtos
+     */
+    private void finishFee(JSONObject reqJson, List<FeeConfigDto> feeConfigDtos) {
+        String state = reqJson.getString("state");
+        if(!"NA".equals(state)){
+            return;
+        }
+        PayFeePo payFeePo = new PayFeePo();
+        payFeePo.setConfigId(feeConfigDtos.get(0).getConfigId());
+        payFeePo.setState(FeeDto.STATE_FINISH);
+
+        payFeeV1InnerServiceSMOImpl.updatePayFee(payFeePo);
+
     }
 }
