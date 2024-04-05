@@ -173,8 +173,8 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "state", "state不能为空");
         Assert.hasKeyAndValue(reqJson, "feeId", "feeId不能为空");
         if (reqJson.containsKey("cycles")) {
-            String cycles = reqJson.getString("cycles");
-            if (!cycles.startsWith("-")) {
+            double cycles = reqJson.getDouble("cycles");
+            if (cycles < 0) {
                 throw new IllegalArgumentException("退费周期必须负数");// 这里必须传入负数，否则费用自动相加不会退费
             }
         }

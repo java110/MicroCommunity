@@ -142,7 +142,7 @@
         t.payment_cd,t.payment_cycle,t.payment_cd paymentCd,t.payment_cycle paymentCycle,
         t.computing_formula_text,t.computing_formula_text computingFormulaText,t.deduct_from,t.deduct_from
         deductFrom,td4.name computingFormulaName,t.pay_online payOnline,t.scale,t.decimal_place decimalPlace,t.units,
-        t.prepayment_period,t.prepayment_period prepaymentPeriod
+        t.prepayment_period,t.prepayment_period prepaymentPeriod,t.state
         from pay_fee_config t
         left join t_dict td1 on t.fee_type_cd = td1.status_cd and td1.table_name = 'pay_fee_config' and
         td1.table_columns = 'fee_type_cd'
@@ -217,6 +217,9 @@
         <if test="prepaymentPeriod !=null and prepaymentPeriod != ''">
             and t.prepayment_period = #{prepaymentPeriod}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state = #{state}
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -276,6 +279,9 @@
         </if>
         <if test="prepaymentPeriod !=null and prepaymentPeriod != ''">
             , t.prepayment_period = #{prepaymentPeriod}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state = #{state}
         </if>
         where 1=1
         <if test="configId !=null and configId != ''">
@@ -356,6 +362,9 @@
         <if test="prepaymentPeriod !=null and prepaymentPeriod != ''">
             and t.prepayment_period = #{prepaymentPeriod}
         </if>
+        <if test="state !=null and state != ''">
+            and t.state = #{state}
+        </if>
     </select>
 
     <!-- 保存费用配置信息 add by wuxw 2018-07-03 -->
@@ -364,10 +373,10 @@
                                    is_default, config_id, fee_flag, fee_name,
                                    start_time, end_time, community_id, b_id, bill_type, payment_cd, payment_cycle,
                                    computing_formula_text, deduct_from, pay_online, scale, decimal_place, units,
-                                   prepayment_period)
+                                   prepayment_period,state)
         values (#{feeTypeCd}, #{computingFormula}, #{additionalAmount}, '0', #{squarePrice}, #{isDefault}, #{configId},
                 #{feeFlag}, #{feeName}, #{startTime}, #{endTime}, #{communityId}, '-1', #{billType}, #{paymentCd},
                 #{paymentCycle}, #{computingFormulaText}, #{deductFrom}, #{payOnline}, #{scale}, #{decimalPlace},
-                #{units}, #{prepaymentPeriod})
+                #{units}, #{prepaymentPeriod},#{state})
     </insert>
 </mapper>
