@@ -41,6 +41,8 @@ public class PayFeeConfigPo implements Serializable {
     private String units;
     private String prepaymentPeriod;
 
+    private String state;
+
     public String getConfigId() {
         return configId;
     }
@@ -211,5 +213,13 @@ public class PayFeeConfigPo implements Serializable {
 
     public void setPrepaymentPeriod(String prepaymentPeriod) {
         this.prepaymentPeriod = prepaymentPeriod;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

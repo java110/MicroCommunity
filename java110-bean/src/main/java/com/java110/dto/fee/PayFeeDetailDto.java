@@ -46,6 +46,7 @@ public class PayFeeDetailDto extends PageDto implements Serializable {
     private String lateAmount;
     private String giftAmount;
 
+
     public String getDetailId() {
         return detailId;
     }

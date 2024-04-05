@@ -36,6 +36,7 @@ public class SaveFeeConfigCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "billType", "未包含出账类型");
         Assert.hasKeyAndValue(reqJson, "paymentCd", "付费类型不能为空");
         Assert.hasKeyAndValue(reqJson, "paymentCycle", "缴费周期不能为空");
+        Assert.hasKeyAndValue(reqJson, "state", "状态不能为空");
 
         // todo 这里校验费用名称不能重复，因为很多物业建相同名字的费用后自己都分不清然后 随便删了一个导致系统有问题
 
