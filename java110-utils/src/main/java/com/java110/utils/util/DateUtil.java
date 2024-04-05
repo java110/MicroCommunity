@@ -945,4 +945,16 @@ public class DateUtil {
         calendar.add(Calendar.SECOND, 1);
         return getFormatTimeStringA(calendar.getTime());
     }
+
+    public static String getPreSecTime(String time) {
+        Date tTime = getDateFromStringA(time);
+        return getPreSecTime(tTime);
+    }
+
+    public static String getPreSecTime(Date time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        calendar.add(Calendar.SECOND, -1);
+        return getFormatTimeStringA(calendar.getTime());
+    }
 }

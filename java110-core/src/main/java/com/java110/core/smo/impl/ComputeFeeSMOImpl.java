@@ -1718,6 +1718,9 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate);//目标结束时间
             }
 
+            //todo 减去一秒
+            targetEndDate = DateUtil.getDateFromStringA(DateUtil.getPreSecTime(targetEndDate));
+
             //todo 费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
             if (maxEndTime.getTime() < targetEndDate.getTime()) {
                 targetEndDate = maxEndTime;
