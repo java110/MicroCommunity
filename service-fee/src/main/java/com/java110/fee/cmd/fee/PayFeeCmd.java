@@ -798,12 +798,11 @@ public class PayFeeCmd extends Cmd {
             }
         } else if ("-103".equals(paramInJson.getString("cycles"))) { //这里按缴费结束时间缴费
             String custEndTime = paramInJson.getString("custEndTime");
-            Date endDates = DateUtil.getDateFromStringB(custEndTime);
-            Calendar c = Calendar.getInstance();
-            c.setTime(endDates);
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            endDates = c.getTime();//这是明天
-            targetEndTime = endDates;
+            if(!custEndTime.contains(":")){
+                custEndTime += " 23:59:59";
+            }
+            targetEndTime = DateUtil.getDateFromStringA(custEndTime);
+
             BigDecimal receivedAmount1 = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount1.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
             paramInJson.put("tmpCycles", cycles.doubleValue());
