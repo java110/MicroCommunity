@@ -20,6 +20,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,7 @@ public class ImportRoomHistoryFeeDetailQueueDataAdapt extends DefaultImportData 
             importRoomFees.add(importRoomFee);
         }
 
-        if (importRoomFees.size() < 1) {
+        if (ListUtil.isNull(importRoomFees)) {
             return;
         }
 
@@ -89,7 +90,16 @@ public class ImportRoomHistoryFeeDetailQueueDataAdapt extends DefaultImportData 
     private void importFeeDetails(String storeId, String userId, List<ImportRoomFee> importRoomFees, String batchId) {
 
         importRoomFees = roomInnerServiceSMOImpl.freshRoomIds(importRoomFees);
+        String endTime = "";
         for (ImportRoomFee importRoomFee : importRoomFees) {
+
+            endTime = importRoomFee.getEndTime();
+            if (!endTime.contains(":")) {
+                endTime += " 23:59:59";
+                importRoomFee.setEndTime(endTime);
+            }
+
+
             try {
                 if (StringUtil.isEmpty(importRoomFee.getRoomId())) {
                     continue;
@@ -115,7 +125,7 @@ public class ImportRoomHistoryFeeDetailQueueDataAdapt extends DefaultImportData 
         feeConfigDto.setCommunityId(importRoomFee.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
-        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
+        if (ListUtil.isNull(feeConfigDtos)) {
             return;
         }
 
@@ -129,14 +139,14 @@ public class ImportRoomHistoryFeeDetailQueueDataAdapt extends DefaultImportData 
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
         List<PayFeePo> payFeePos = null;
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
             PayFeePo payFeePo = new PayFeePo();
             payFeePo.setCommunityId(importRoomFee.getCommunityId());
             payFeePo.setConfigId(feeDto.getConfigId());
             payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
             payFeePo.setStartTime(importRoomFee.getStartTime());
-            payFeePo.setEndTime(importRoomFee.getEndTime());
+            payFeePo.setEndTime(DateUtil.getNextSecTime(importRoomFee.getEndTime()));
             payFeePo.setAmount(importRoomFee.getAmount());
             payFeePo.setFeeFlag(tmpFeeConfigDto.getFeeFlag());
             payFeePo.setFeeTypeCd(tmpFeeConfigDto.getFeeTypeCd());
@@ -203,15 +213,6 @@ public class ImportRoomHistoryFeeDetailQueueDataAdapt extends DefaultImportData 
         payFeeDetailPo.setPrimeRate("1.0");
         payFeeDetailPo.setFeeId(tmpFeeDto.getFeeId());
         payFeeDetailPo.setStartTime(importRoomFee.getStartTime());
-        String endTime = importRoomFee.getEndTime();
-        //todo 周期性费用时时间自动加一天，因为物业统计的Excel 一般少一天
-        if (!FeeDto.FEE_FLAG_ONCE.equals(tmpFeeDto.getFeeFlag())) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(DateUtil.getDateFromStringB(endTime));
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            endTime = DateUtil.getFormatTimeStringB(calendar.getTime());
-            importRoomFee.setEndTime(endTime);
-        }
         payFeeDetailPo.setEndTime(importRoomFee.getEndTime());
         payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         payFeeDetailPo.setRemark(importRoomFee.getRemark());
@@ -234,7 +235,7 @@ public class ImportRoomHistoryFeeDetailQueueDataAdapt extends DefaultImportData 
         payFeePo.setCommunityId(importRoomFee.getCommunityId());
         payFeePo.setStatusCd(StatusConstant.STATUS_CD_VALID);
         payFeePo.setFeeId(tmpFeeDto.getFeeId());
-        payFeePo.setEndTime(importRoomFee.getEndTime());
+        payFeePo.setEndTime(DateUtil.getNextSecTime(importRoomFee.getEndTime()));
         if (FeeDto.FEE_FLAG_ONCE.equals(tmpFeeDto.getFeeFlag())) {
             payFeePo.setState(FeeDto.STATE_FINISH);
         }
