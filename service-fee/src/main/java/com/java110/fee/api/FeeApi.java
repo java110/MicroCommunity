@@ -181,15 +181,15 @@ public class FeeApi extends BaseController {
             throw new IllegalArgumentException("费用对象或者业主不能都为空");
         }
         FeeDto feeDto = new FeeDto();
-        if(!StringUtil.isEmpty(payObjId)) {
+        if (!StringUtil.isEmpty(payObjId)) {
             if (payObjId.contains(",")) {
                 feeDto.setPayerObjIds(payObjId.split(","));
             } else {
                 feeDto.setPayerObjId(payObjId);
             }
         }
-        if(!StringUtil.isEmpty(targetEndTime)){
-            targetEndTime = DateUtil.getAddDayStringB(DateUtil.getDateFromStringB(targetEndTime),1);
+        if (!StringUtil.isEmpty(targetEndTime)) {
+            targetEndTime = targetEndTime + " 23:59:59";
             feeDto.setTargetEndTime(targetEndTime);
         }
         feeDto.setPayerObjType(payObjType);

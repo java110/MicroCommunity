@@ -133,7 +133,8 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         }
         if (feeDto.getEndTime().getTime() < targetEndDate.getTime()) {
             // 目标到期时间 - 到期时间 = 欠费月份
-            oweMonth = DateUtil.dayCompare(feeDto.getEndTime(), targetEndDate);
+            oweMonth = DateUtil.dayCompare(feeDto.getEndTime(), targetEndDate,true);
+
         }
 
         String computingFormula = feeDto.getComputingFormula();
@@ -1842,13 +1843,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         endDate.add(Calendar.MONTH, intMonth.intValue());
         double doubleMonth = month - intMonth;
         if (doubleMonth <= 0) {
-            endDate.add(Calendar.SECOND,-1);
+            endDate.add(Calendar.SECOND, -1);
             return endDate.getTime();
         }
         int futureDay = endDate.getActualMaximum(Calendar.DAY_OF_MONTH);
         Double hour = doubleMonth * futureDay * 24;
         endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
-        endDate.add(Calendar.SECOND,-1);
+        endDate.add(Calendar.SECOND, -1);
         return endDate.getTime();
     }
 
