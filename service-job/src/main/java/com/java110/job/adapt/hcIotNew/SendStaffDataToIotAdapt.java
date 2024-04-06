@@ -161,7 +161,7 @@ public class SendStaffDataToIotAdapt extends DatabusAdaptImpl {
             return "";
         }
 
-        return fileDtos.get(0).getFileName();
+        return fileDtos.get(0).getContext();
     }
 
 }
