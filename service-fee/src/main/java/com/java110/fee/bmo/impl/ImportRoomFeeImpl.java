@@ -83,7 +83,6 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
      * @return
      */
     @Override
-    @Java110Transactional
     public ResponseEntity<String> importFee(JSONObject reqJson) {
 
         int successCount = 0;
