@@ -178,7 +178,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
                 continue;
             }
             endTime = importRoomFee.getEndTime();
-            if(!endTime.contains(":")){
+            if (!endTime.contains(":")) {
                 endTime += " 23:59:59";
             }
 
@@ -206,7 +206,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setCommunityId(communityId);
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_IMPORT_FEE_NAME);
-            feeAttrPo.setValue(importRoomFee.getFeeName());
+            feeAttrPo.setValue(feeConfigDtos.get(0).getFeeName());
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
 
@@ -377,7 +377,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
                 continue;
             }
             endTime = importCarFee.getEndTime();
-            if(!endTime.contains(":")){
+            if (!endTime.contains(":")) {
                 endTime += " 23:59:59";
             }
             successCount++;
