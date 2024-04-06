@@ -67,8 +67,17 @@ public class SendIotImpl implements ISendIot {
             saveTranslateError(paramIn.getString("communityId"),paramIn.toJSONString(),body,url);
         }
 
+        int total =1;
+        int records = 1;
+        if(paramOut.containsKey("total")){
+            total = paramOut.getIntValue("total");
+        }
 
-        return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.get("data"));
+        if(paramOut.containsKey("records")){
+            records = paramOut.getIntValue("records");
+        }
+
+        return new ResultVo(records,total,paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.get("data"));
     }
 
 
