@@ -127,7 +127,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     public void computeEveryOweFeeByTargetEndTime(FeeDto feeDto, String targetEndTime) {
 
         Date targetEndDate = DateUtil.getDateFromStringB(targetEndTime);
-        double oweMonth = 1.0;
+        double oweMonth = 0;
         if (feeDto.getEndTime().getTime() > targetEndDate.getTime()) {
             targetEndDate = feeDto.getEndTime();
         }
