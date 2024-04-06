@@ -902,6 +902,8 @@ public class PayFeeCmd extends Cmd {
                 businessFee.put("state", FeeDto.STATE_FINISH);
                 businessFee.put("endTime", maxEndTime);
             }
+        }else{
+            businessFee.put("state", FeeDto.STATE_FINISH);
         }
         return businessFee;
     }
