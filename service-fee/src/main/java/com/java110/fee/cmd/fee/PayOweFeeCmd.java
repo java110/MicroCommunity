@@ -151,7 +151,7 @@ public class PayOweFeeCmd extends Cmd {
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
-
+        userDto = userDtos.get(0);
         String payOrderId = paramObj.getString("payOrderId");
 
         JSONArray fees = paramObj.getJSONArray("fees");

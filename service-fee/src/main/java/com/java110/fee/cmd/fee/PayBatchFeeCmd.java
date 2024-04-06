@@ -291,18 +291,15 @@ public class PayBatchFeeCmd extends Cmd {
                 receivedAmount = receivedAmount.add(new BigDecimal(payFeeDataDto.getAccountAmount()));
             }
             cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
-            endCalender = getTargetEndTime(endCalender, cycles.doubleValue());
-            targetEndTime = endCalender.getTime();
+            targetEndTime = computeFeeSMOImpl.getTargetEndTime(cycles.doubleValue(),endCalender.getTime());
             receivableAmount = payFeeDataDto.getReceivedAmount();
             //处理 可能还存在 实收手工减免的情况
         } else if (PayFeeDataDto.TEMP_CYCLE_CUSTOM_END_TIME.equals(payFeeDataDto.getTempCycle())) { //todo 这里按缴费结束时间缴费
             String custEndTime = payFeeDataDto.getCustEndTime();
-            Date endDates = DateUtil.getDateFromStringB(custEndTime);
-            Calendar c = Calendar.getInstance();
-            c.setTime(endDates);
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            endDates = c.getTime();//这是明天
-            targetEndTime = endDates;
+            if(!custEndTime.contains(":")){
+                custEndTime += " 23:59:59";
+            }
+            targetEndTime = DateUtil.getDateFromStringA(custEndTime);
             BigDecimal receivedAmount1 = new BigDecimal(Double.parseDouble(payFeeDataDto.getReceivedAmount()));
             cycles = receivedAmount1.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
             receivableAmount = payFeeDataDto.getReceivedAmount();
@@ -330,20 +327,7 @@ public class PayBatchFeeCmd extends Cmd {
     }
 
 
-    private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
-        if (StringUtil.isInteger(cycles.toString())) {
-            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
-            return endCalender;
-        }
-        if (cycles >= 1) {
-            endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
-            cycles = cycles - Math.floor(cycles);
-        }
-        int futureDay = endCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int hours = new Double(cycles * futureDay * 24).intValue();
-        endCalender.add(Calendar.HOUR, hours);
-        return endCalender;
-    }
+
 
 
     private void ifHasAccount(JSONObject reqJson, List<PayFeeDataDto> feeDataDtos) {

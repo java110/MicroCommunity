@@ -777,7 +777,7 @@ public class PayFeeCmd extends Cmd {
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
 
-        if ("-101".equals(paramInJson.getString("cycles"))) { // todo 自定义金额交费
+        if (PayFeeDataDto.TEMP_CYCLE_CUSTOM_AMOUNT.equals(paramInJson.getString("cycles"))) { // todo 自定义金额交费
             Date endTime = feeDto.getEndTime();
             Calendar endCalender = Calendar.getInstance();
             endCalender.setTime(endTime);
@@ -796,7 +796,7 @@ public class PayFeeCmd extends Cmd {
             if (businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()) {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
-        } else if ("-103".equals(paramInJson.getString("cycles"))) { //todo 这里按缴费结束时间缴费
+        } else if (PayFeeDataDto.TEMP_CYCLE_CUSTOM_END_TIME.equals(paramInJson.getString("cycles"))) { //todo 这里按缴费结束时间缴费
             String custEndTime = paramInJson.getString("custEndTime");
             if(!custEndTime.contains(":")){
                 custEndTime += " 23:59:59";
