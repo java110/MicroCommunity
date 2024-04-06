@@ -11,6 +11,7 @@ import com.java110.intf.report.IGeneratorOweFeeInnerServiceSMO;
 import com.java110.po.payFee.PayFeeDetailMonthPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -176,7 +177,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
             feeDto.setFeeId(feeId);
             List<FeeDto> tmpFeeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-           if(tmpFeeDtos == null || tmpFeeDtos.size() < 1){
+           if(ListUtil.isNull(tmpFeeDtos)){
                continue;
            }
             generatorOweFeeInnerServiceSMOImpl.computeOweFee(tmpFeeDtos.get(0));
