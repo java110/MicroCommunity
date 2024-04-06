@@ -315,7 +315,6 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
      * @return
      */
     @Override
-    @Java110Transactional
     public ResponseEntity<String> importCarFee(JSONObject reqJson) {
 
         int successCount = 0;
@@ -346,7 +345,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
         feeConfigDto.setCommunityId(communityId);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         // 根据费用大类 判断是否有存在 费用导入收入项
-        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
+        if (ListUtil.isNull(feeConfigDtos)) {
             //生成导入费
             feeConfigDto.setConfigId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_configId));
             saveFeeConfig(feeConfigDto);
@@ -404,7 +403,7 @@ public class ImportRoomFeeImpl implements IImportRoomFee {
             feeAttrPo.setCommunityId(communityId);
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_IMPORT_FEE_NAME);
-            feeAttrPo.setValue(importCarFee.getFeeName());
+            feeAttrPo.setValue(feeName);
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
 
