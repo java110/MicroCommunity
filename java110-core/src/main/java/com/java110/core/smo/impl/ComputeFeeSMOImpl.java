@@ -1842,11 +1842,13 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         endDate.add(Calendar.MONTH, intMonth.intValue());
         double doubleMonth = month - intMonth;
         if (doubleMonth <= 0) {
+            endDate.add(Calendar.SECOND,-1);
             return endDate.getTime();
         }
         int futureDay = endDate.getActualMaximum(Calendar.DAY_OF_MONTH);
         Double hour = doubleMonth * futureDay * 24;
         endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
+        endDate.add(Calendar.SECOND,-1);
         return endDate.getTime();
     }
 

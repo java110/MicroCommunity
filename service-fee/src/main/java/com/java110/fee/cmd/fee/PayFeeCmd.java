@@ -776,14 +776,14 @@ public class PayFeeCmd extends Cmd {
         BigDecimal cycles = null;
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
         BigDecimal feePrice = new BigDecimal(feePriceAll.get("feePrice").toString());
-        if ("-101".equals(paramInJson.getString("cycles"))) { // 自定义金额交费
+
+        if ("-101".equals(paramInJson.getString("cycles"))) { // todo 自定义金额交费
             Date endTime = feeDto.getEndTime();
             Calendar endCalender = Calendar.getInstance();
             endCalender.setTime(endTime);
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
-            endCalender = getTargetEndTime(endCalender, cycles.doubleValue());
-            targetEndTime = endCalender.getTime();
+            targetEndTime = computeFeeSMOImpl.getTargetEndTime(cycles.doubleValue(),endCalender.getTime());
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
             //处理 可能还存在 实收手工减免的情况
@@ -796,7 +796,7 @@ public class PayFeeCmd extends Cmd {
             if (businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()) {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
-        } else if ("-103".equals(paramInJson.getString("cycles"))) { //这里按缴费结束时间缴费
+        } else if ("-103".equals(paramInJson.getString("cycles"))) { //todo 这里按缴费结束时间缴费
             String custEndTime = paramInJson.getString("custEndTime");
             if(!custEndTime.contains(":")){
                 custEndTime += " 23:59:59";
@@ -818,14 +818,12 @@ public class PayFeeCmd extends Cmd {
             if (businessFeeDetail.getDoubleValue("receivableAmount") < receivedAmount.doubleValue()) {
                 businessFeeDetail.put("receivableAmount", receivedAmount.doubleValue());
             }
-        } else if ("-105".equals(paramInJson.getString("cycles"))) { //这里按缴费结束时间缴费
+        } else if ("-105".equals(paramInJson.getString("cycles"))) { //这里按自定义时间段
             String customEndTime = paramInJson.getString("customEndTime");
-            Date endDates = DateUtil.getDateFromStringB(customEndTime);
-            Calendar c = Calendar.getInstance();
-            c.setTime(endDates);
-            c.add(Calendar.DAY_OF_MONTH, 1);
-            endDates = c.getTime();//这是明天
-            targetEndTime = endDates;
+            if(!customEndTime.contains(":")){
+                customEndTime += " 23:59:59";
+            }
+            targetEndTime = DateUtil.getDateFromStringA(customEndTime);
             BigDecimal receivedAmount1 = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount1.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
             paramInJson.put("tmpCycles", cycles.doubleValue());
@@ -1213,21 +1211,6 @@ public class PayFeeCmd extends Cmd {
         feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(tmpFeeConfigDto);
 
         tmpPayFeePo.setConfigId(feeConfigDtos.get(0).getConfigId());
-    }
-
-    private static Calendar getTargetEndTime(Calendar endCalender, Double cycles) {
-        if (StringUtil.isInteger(cycles.toString())) {
-            endCalender.add(Calendar.MONTH, new Double(cycles).intValue());
-            return endCalender;
-        }
-        if (cycles >= 1) {
-            endCalender.add(Calendar.MONTH, new Double(Math.floor(cycles)).intValue());
-            cycles = cycles - Math.floor(cycles);
-        }
-        int futureDay = endCalender.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int hours = new Double(cycles * futureDay * 24).intValue();
-        endCalender.add(Calendar.HOUR, hours);
-        return endCalender;
     }
 
 }
