@@ -120,10 +120,9 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
             throw new IllegalArgumentException("收费范围错误");
         }
 
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+        if (ListUtil.isNull(ownerCarDtos)) {
             throw new IllegalArgumentException("未查到需要付费的车位");
         }
-
         dealParkingSpaceFee(ownerCarDtos, cmdDataFlowContext, reqJson, event);
     }
 
@@ -134,7 +133,7 @@ public class SaveParkingSpaceCreateFeeCmd extends Cmd {
         parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
         List<String> states = new ArrayList<>();
         JSONArray carStates = reqJson.getJSONArray("carState");
-        if (carStates.size() < 1) {
+        if (ListUtil.isNull(carStates)) {
             throw new IllegalArgumentException("未选择车位状态");
         }
 
