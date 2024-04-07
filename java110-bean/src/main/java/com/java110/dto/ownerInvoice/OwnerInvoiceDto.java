@@ -1,6 +1,7 @@
 package com.java110.dto.ownerInvoice;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +16,18 @@ import java.util.Date;
 public class OwnerInvoiceDto extends PageDto implements Serializable {
 
     private String oiId;
-private String invoiceName;
-private String ownerName;
-private String invoiceType;
-private String invoiceAddress;
-private String remark;
-private String ownerId;
-private String communityId;
-private String invoiceNum;
+    private String invoiceName;
+    private String ownerName;
+    private String invoiceType;
+    private String invoiceAddress;
+    private String remark;
+    private String ownerId;
+    private String communityId;
+    private String invoiceNum;
+
+    private String invoiceLink;
+
+    private String invoiceAccount;
 
 
     private Date createTime;
@@ -33,55 +38,72 @@ private String invoiceNum;
     public String getOiId() {
         return oiId;
     }
-public void setOiId(String oiId) {
+
+    public void setOiId(String oiId) {
         this.oiId = oiId;
     }
-public String getInvoiceName() {
+
+    public String getInvoiceName() {
         return invoiceName;
     }
-public void setInvoiceName(String invoiceName) {
+
+    public void setInvoiceName(String invoiceName) {
         this.invoiceName = invoiceName;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getInvoiceType() {
+
+    public String getInvoiceType() {
         return invoiceType;
     }
-public void setInvoiceType(String invoiceType) {
+
+    public void setInvoiceType(String invoiceType) {
         this.invoiceType = invoiceType;
     }
-public String getInvoiceAddress() {
+
+    public String getInvoiceAddress() {
         return invoiceAddress;
     }
-public void setInvoiceAddress(String invoiceAddress) {
+
+    public void setInvoiceAddress(String invoiceAddress) {
         this.invoiceAddress = invoiceAddress;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getOwnerId() {
+
+    public String getOwnerId() {
         return ownerId;
     }
-public void setOwnerId(String ownerId) {
+
+    public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getInvoiceNum() {
+
+    public String getInvoiceNum() {
         return invoiceNum;
     }
-public void setInvoiceNum(String invoiceNum) {
+
+    public void setInvoiceNum(String invoiceNum) {
         this.invoiceNum = invoiceNum;
     }
 
@@ -100,5 +122,21 @@ public void setInvoiceNum(String invoiceNum) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getInvoiceLink() {
+        return invoiceLink;
+    }
+
+    public void setInvoiceLink(String invoiceLink) {
+        this.invoiceLink = invoiceLink;
+    }
+
+    public String getInvoiceAccount() {
+        return invoiceAccount;
+    }
+
+    public void setInvoiceAccount(String invoiceAccount) {
+        this.invoiceAccount = invoiceAccount;
     }
 }
