@@ -27,6 +27,7 @@ import com.java110.utils.cache.UrlCache;
 import com.java110.utils.constant.WechatConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,7 +132,7 @@ public class OweFeeCallableAdapt extends DatabusAdaptImpl {
                     ownerAppUserDto.setCommunityId(oweFeeCallablePo.getCommunityId());
                     ownerAppUserDto.setAppType(OwnerAppUserDto.APP_TYPE_WECHAT);
                     List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-                    if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
+                    if (!ListUtil.isNull(ownerAppUserDtos)) {
                         userId = ownerAppUserDtos.get(0).getUserId();
                     }
 

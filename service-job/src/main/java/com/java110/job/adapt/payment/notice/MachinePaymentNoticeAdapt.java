@@ -153,16 +153,6 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         }
     }
 
-    private String subDay(String date) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date dt = sdf.parse(date);
-        Calendar rightNow = Calendar.getInstance();
-        rightNow.setTime(dt);
-        rightNow.add(Calendar.DAY_OF_MONTH, -1);
-        Date dt1 = rightNow.getTime();
-        String reStr = sdf.format(dt1);
-        return reStr;
-    }
 
     private void doSendPayFeeDetail(Business business, JSONObject businessPayFeeDetail) {
         //查询缴费明细
@@ -184,11 +174,6 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String startTime = DateUtil.dateTimeToDate(payFeeDetailPo.getStartTime());
         //获取用户缴费到期时间
         String endTime = DateUtil.dateTimeToDate(payFeeDetailPo.getEndTime());
-        try {
-            endTime = subDay(endTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         //获取用户缴费金额
         String receivedAmount = payFeeDetailPo.getReceivedAmount();
         //获取费用类型
@@ -337,7 +322,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         smallWeChatDto.setObjType(SmallWeChatDto.OBJ_TYPE_COMMUNITY);
         smallWeChatDto.setObjId(communityDto.getCommunityId());
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        if (smallWeChatDto == null || smallWeChatDtos.isEmpty()) {
+        if (ListUtil.isNull(smallWeChatDtos)) {
             logger.info("未配置微信公众号信息,定时任务执行结束");
             return;
         }
