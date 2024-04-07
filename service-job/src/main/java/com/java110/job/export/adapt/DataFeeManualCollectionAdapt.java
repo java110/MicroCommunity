@@ -97,7 +97,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         roomDto.setCommunityId(reqJson.getString("communityId"));
         List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
 
-        if (roomDtos == null || roomDtos.isEmpty()) {
+        if (ListUtil.isNull(roomDtos)) {
             throw new IllegalArgumentException("未包含房屋");
         }
 
@@ -210,7 +210,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         subTitleCellStyle.setVerticalAlignment(VerticalAlignment.BOTTOM);
         row = sheet.createRow(1 + line);
         Cell cell1 = row.createCell(1);
-        if (fees != null && fees.size() > 0) {
+        if (!ListUtil.isNull(fees)) {
             cell1.setCellValue("业主：" + fees.get(0).getOwnerName());
         } else {
             cell1.setCellValue("业主：无");
@@ -275,11 +275,6 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
             row = sheet.createRow(line + feeIndex + 3);
             startTime = DateUtil.getFormatTimeStringB(feeObj.getDate("endTime"));
             endTime = DateUtil.getFormatTimeStringB(feeObj.getDate("deadlineTime"));
-            //todo 如果费用是周期性费用 则 结束时间减一天
-            if (feeObj.containsKey("feeFlag") && (FeeDto.FEE_FLAG_CYCLE.equals(feeObj.getString("feeFlag")) || FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeObj.getString("feeFlag")))) {
-                endTime = DateUtil.getFormatTimeStringB(DateUtil.stepDay(DateUtil.getDateFromStringB(endTime), -1));
-            }
-
             squarePrice = feeObj.getString("squarePrice");
 
             //动态费用单价就去动态单价
