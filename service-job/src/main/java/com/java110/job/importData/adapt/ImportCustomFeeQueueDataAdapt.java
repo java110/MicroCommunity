@@ -29,6 +29,7 @@ import com.java110.po.importFee.ImportFeeDetailPo;
 import com.java110.po.meter.MeterWaterPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -179,7 +180,7 @@ public class ImportCustomFeeQueueDataAdapt extends DefaultImportData implements 
         feeConfigDto.setCommunityId(importCustomCreateFeeDto.getCommunityId());
         feeConfigDto.setConfigId(importCustomCreateFeeDto.getConfigId());
         List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
-        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
+        if (ListUtil.isNull(feeConfigDtos)) {
             throw new IllegalArgumentException("费用项不存在");
         }
         payFeePo = new PayFeePo();
@@ -204,8 +205,7 @@ public class ImportCustomFeeQueueDataAdapt extends DefaultImportData implements 
         payFeePo.setBatchId(batchId);
         payFeePo.setEndTime(importCustomCreateFeeDto.getStartTime());
         payFeePo.setStartTime(importCustomCreateFeeDto.getCreateTime());
-        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())
-                && !StringUtil.isEmpty(importCustomCreateFeeDto.getEndTime())) {
+        if (!StringUtil.isEmpty(importCustomCreateFeeDto.getEndTime())) {
             payFeePo.setMaxTime(importCustomCreateFeeDto.getEndTime());
         } else {
             payFeePo.setMaxTime(feeConfigDtos.get(0).getEndTime());
@@ -229,9 +229,8 @@ public class ImportCustomFeeQueueDataAdapt extends DefaultImportData implements 
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
 
-        //todo 不是周期性费用的场景需要写入结束时间
-        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())
-                && !StringUtil.isEmpty(importCustomCreateFeeDto.getEndTime())) {
+        //todo 需要写入结束时间
+        if (!StringUtil.isEmpty(importCustomCreateFeeDto.getEndTime())) {
             feeAttrPo = new FeeAttrPo();
             feeAttrPo.setCommunityId(importCustomCreateFeeDto.getCommunityId());
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
