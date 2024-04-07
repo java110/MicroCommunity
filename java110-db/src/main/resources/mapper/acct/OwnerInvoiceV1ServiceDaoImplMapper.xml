@@ -12,7 +12,7 @@
         invoice_link,invoice_account
         ) values (
         #{oiId},#{invoiceName},#{ownerName},#{invoiceType},#{invoiceAddress},#{remark},#{ownerId},#{communityId},#{invoiceNum},
-        ,#{invoiceLink},#{invoiceAccount}
+        #{invoiceLink},#{invoiceAccount}
         )
     </insert>
 
