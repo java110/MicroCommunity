@@ -48,6 +48,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -208,7 +209,7 @@ public class SaveInvoiceApplyCmd extends Cmd {
         feeDetailDto.setCommunityId(reqJson.getString("communityId"));
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
 
-        if (feeDetailDtos == null || feeDetailDtos.isEmpty()) {
+        if (ListUtil.isNull(feeDetailDtos)) {
             return invoiceAmount;
         }
         InvoiceApplyItemPo invoiceApplyItemPo = null;
