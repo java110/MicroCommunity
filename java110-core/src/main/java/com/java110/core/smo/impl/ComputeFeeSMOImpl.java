@@ -133,7 +133,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         }
         if (feeDto.getEndTime().getTime() < targetEndDate.getTime()) {
             // 目标到期时间 - 到期时间 = 欠费月份
-            oweMonth = DateUtil.dayCompare(feeDto.getEndTime(), targetEndDate,true);
+            oweMonth = DateUtil.dayCompare(feeDto.getEndTime(), targetEndDate, true);
 
         }
 
@@ -2083,7 +2083,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         feeAttrDto.setCommunityId(feeDto.getCommunityId());
         List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
 
-        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+        if (ListUtil.isNull(feeAttrDtos)) {
             return;
         }
         int rateCycle = 0;
@@ -2121,6 +2121,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             return;
         }
 
+        Date oRateStartTime = rateStartTime;
         //todo 递增时间 不是 费用建账时间的倍数时，修正一下
         rateStartTime = correctByFeeStartTime(rateStartTime, feeDto.getStartTime());
 
@@ -2150,8 +2151,10 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         BigDecimal rateDec = new BigDecimal(rate + "");
         BigDecimal oweAmountDec = null;
         //todo 递增轮数 循环 curFeePrice 这个是 原始租金
+        BigDecimal oldFeePrice = null;
         for (int cycleIndex = 0; cycleIndex < maxCycle; cycleIndex++) {
             //todo 递增月单价
+            oldFeePrice = curFeePrice;
             curFeePrice = new BigDecimal("1").add(rateDec).multiply(curFeePrice).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
 
             //todo 计算 curCycleRateEneTime 本轮递增结束时间
@@ -2166,16 +2169,27 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 continue;
             }
 
+            boolean hasInRateMonth = false;
             //todo 本轮递增时间未到 费用deadlineTime
             if (curCycleRateEneTime.getTime() < feeDto.getDeadlineTime().getTime()) {
                 curOweMonth = DateUtil.dayCompare(curOweStartTime, curCycleRateEneTime);
+                hasInRateMonth = rateStartMonthIn(oRateStartTime,curOweStartTime,curCycleRateEneTime);
                 curOweStartTime = curCycleRateEneTime;
             } else {
                 curOweMonth = DateUtil.dayCompare(curOweStartTime, feeDto.getDeadlineTime());
+                hasInRateMonth = rateStartMonthIn(oRateStartTime,curOweStartTime,feeDto.getDeadlineTime());
+
                 curOweStartTime = feeDto.getDeadlineTime();
             }
 
             oweAmountDec = curFeePrice.multiply(new BigDecimal(curOweMonth)).setScale(FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP);
+
+            if (hasInRateMonth) {
+                //todo 递增月如果建账时间和递增日期不一致，那么减去建账时间日至 递增日的递增部分
+                int moreComputeDay = getRateDay(feeDto.getStartTime(), oRateStartTime);
+                BigDecimal moreComputeAmountDec = oldFeePrice.multiply(rateDec).divide(new BigDecimal(DateUtil.getMonthDay(oRateStartTime)), FeeConfigConstant.FEE_SCALE, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(moreComputeDay));
+                oweAmountDec = oweAmountDec.subtract(moreComputeAmountDec);
+            }
 
             addTotalAmount = addTotalAmount.add(oweAmountDec);
         }
@@ -2183,6 +2197,56 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         Double amountOwed = MoneyUtil.computePriceScale(addTotalAmount.doubleValue(), feeDto.getScale(), Integer.parseInt(feeDto.getDecimalPlace()));
         feeDto.setAmountOwed(amountOwed + "");
         feeDto.setFeeTotalPrice(amountOwed);
+    }
+
+    /**
+     * 递增月在这个之间
+     * @param oRateStartTime
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    private boolean rateStartMonthIn(Date oRateStartTime, Date startTime, Date endTime) {
+
+        Calendar calendarStartTime = Calendar.getInstance();
+        calendarStartTime.setTime(startTime);
+        calendarStartTime.set(Calendar.DAY_OF_MONTH,1);
+
+        Calendar calendarEndTime = Calendar.getInstance();
+        calendarEndTime.setTime(endTime);
+        calendarEndTime.set(Calendar.DAY_OF_MONTH,1);
+
+
+        Calendar calendarOrate = Calendar.getInstance();
+        calendarOrate.setTime(oRateStartTime);
+        calendarOrate.set(Calendar.YEAR,calendarStartTime.get(Calendar.YEAR));
+
+        if(calendarStartTime.getTime().before(calendarOrate.getTime()) && calendarEndTime.getTime().after(calendarOrate.getTime())){
+            return true;
+        }
+
+        calendarOrate.set(Calendar.YEAR,calendarEndTime.get(Calendar.YEAR));
+
+        if(calendarStartTime.getTime().before(calendarOrate.getTime()) && calendarEndTime.getTime().after(calendarOrate.getTime())){
+            return true;
+        }
+
+
+        return false;
+
+    }
+
+    private int getRateDay(Date startTime, Date rateStartTime) {
+        Calendar rateCalendar = Calendar.getInstance();
+        rateCalendar.setTime(rateStartTime);
+        int rateDay = rateCalendar.get(Calendar.DAY_OF_MONTH);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startTime);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        if (rateDay == day || rateDay < day) {
+            return 0;
+        }
+        return rateDay - day;
     }
 
     /**
@@ -2206,7 +2270,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         rateCalendar = Calendar.getInstance();
         rateCalendar.setTime(rateStartTime);
-        rateCalendar.add(Calendar.MONTH, 1);
+        //rateCalendar.add(Calendar.MONTH, 1);
         rateCalendar.set(Calendar.DAY_OF_MONTH, day);
         return rateCalendar.getTime();
     }

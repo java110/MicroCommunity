@@ -115,7 +115,7 @@ public class ListFeeCmd extends Cmd {
             ownerRoomRelDto.setRoomId(reqJson.getString("payerObjId"));
             ownerRoomRelDto.setOwnerId(reqJson.getString("ownerId"));
             List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-            if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+            if (ListUtil.isNull(ownerRoomRelDtos)) {
                 ApiFeeVo apiFeeVo = new ApiFeeVo();
                 apiFeeVo.setTotal(0);
                 apiFeeVo.setRecords((int) Math.ceil((double) 0 / (double) reqJson.getInteger("row")));
