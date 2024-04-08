@@ -100,7 +100,7 @@ public class DeleteInvoiceApplyCmd extends Cmd {
 
         PayFeeDetailPo payFeeDetailPo = null;
         for(InvoiceApplyItemDto tmpInvoiceApplyItemDto: invoiceApplyItemDtos){
-            if(InvoiceApplyItemDto.ITEM_TYPE_FEE.equals(tmpInvoiceApplyItemDto.getItemType())){
+            if(!InvoiceApplyItemDto.ITEM_TYPE_FEE.equals(tmpInvoiceApplyItemDto.getItemType())){
                 continue;
             }
             payFeeDetailPo = new PayFeeDetailPo();
