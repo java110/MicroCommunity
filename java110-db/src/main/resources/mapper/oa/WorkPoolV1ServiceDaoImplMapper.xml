@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="workPoolV1ServiceDaoImpl">
 
+
     <!-- 保存工作单信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkPoolInfo" parameterType="Map">
-        insert into work_pool(work_cycle, create_user_id, create_user_name, store_id, work_name, work_id, wt_id,
-                              create_user_tel, start_time, end_time, state, community_id)
-        values (#{workCycle}, #{createUserId}, #{createUserName}, #{storeId}, #{workName}, #{workId}, #{wtId},
-                #{createUserTel}, #{startTime}, #{endTime}, #{state}, #{communityId})
+        insert into work_pool(
+        work_cycle,create_user_id,create_user_name,store_id,work_name,work_id,wt_id,create_user_tel,start_time,end_time,state,community_id
+        ) values (
+        #{workCycle},#{createUserId},#{createUserName},#{storeId},#{workName},#{workId},#{wtId},#{createUserTel},#{startTime},#{endTime},#{state},#{communityId}
+        )
     </insert>
+
 
     <!-- 查询工作单信息 add by wuxw 2018-07-03 -->
     <select id="getWorkPoolInfo" parameterType="Map" resultType="Map">
@@ -17,13 +21,10 @@
         createUserId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
         statusCd,t.store_id,t.store_id storeId,t.work_name,t.work_name workName,t.work_id,t.work_id
         workId,t.wt_id,t.wt_id wtId,t.create_user_tel,t.create_user_tel createUserTel,t.start_time,t.start_time
-        startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,t.create_time
-        createTime,td.`name` stateName,wt.type_name typeName,wc.period,wc.hours,wc.before_time beforeTime,
-        wc.period_month periodMonth,wc.period_day periodDay,wc.period_workday periodWorkday
+        startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,t.create_time createTime,
+        td.`name` stateName,wt.type_name typeName
         from work_pool t
-        left join work_task wta on t.work_id = wta.work_id and wta.status_cd = '0'
-        left join work_type wt on t.wt_id = wt.wt_id and wt.status_cd = '0'
-        left join work_cycle wc on t.work_id = wc.work_id and wc.status_cd = '0'
+        left join work_type wt on t.wt_id = wt.wt_id
         left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
         <if test="createUserNameLike !=null and createUserNameLike != ''">
@@ -48,10 +49,7 @@
             and t.store_id= #{storeId}
         </if>
         <if test="workName !=null and workName != ''">
-            and t.work_name like concat('%', #{workName},'%')
-        </if>
-        <if test="staffNameLike !=null and staffNameLike != ''">
-            and wta.staff_name like concat('%', #{staffNameLike},'%')
+            and t.work_name= #{workName}
         </if>
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
@@ -80,12 +78,13 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        group by t.work_id
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+
     </select>
+
 
     <!-- 修改工作单信息 add by wuxw 2018-07-03 -->
     <update id="updateWorkPoolInfo" parameterType="Map">
@@ -130,23 +129,13 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+
     </update>
 
     <!-- 查询工作单数量 add by wuxw 2018-07-03 -->
     <select id="queryWorkPoolsCount" parameterType="Map" resultType="Map">
-        select count(1) count from (
-        select t.work_cycle,t.work_cycle workCycle,t.create_user_id,t.create_user_id
-        createUserId,t.create_user_name,t.create_user_name createUserName,t.status_cd,t.status_cd
-        statusCd,t.store_id,t.store_id storeId,t.work_name,t.work_name workName,t.work_id,t.work_id
-        workId,t.wt_id,t.wt_id wtId,t.create_user_tel,t.create_user_tel createUserTel,t.start_time,t.start_time
-        startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,t.create_time
-        createTime,td.`name` stateName,wt.type_name typeName,wc.period,wc.hours,wc.before_time beforeTime,
-        wc.period_month periodMonth,wc.period_day periodDay,wc.period_workday periodWorkday
+        select count(1) count
         from work_pool t
-        left join work_task wta on t.work_id = wta.work_id and wta.status_cd = '0'
-        left join work_type wt on t.wt_id = wt.wt_id and wt.status_cd = '0'
-        left join work_cycle wc on t.work_id = wc.work_id and wc.status_cd = '0'
-        left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'
         where 1 =1
         <if test="createUserNameLike !=null and createUserNameLike != ''">
             and t.create_user_name like concat('%', #{createUserNameLike},'%')
@@ -170,10 +159,7 @@
             and t.store_id= #{storeId}
         </if>
         <if test="workName !=null and workName != ''">
-            and t.work_name like concat('%', #{workName},'%')
-        </if>
-        <if test="staffNameLike !=null and staffNameLike != ''">
-            and wta.staff_name like concat('%', #{staffNameLike},'%')
+            and t.work_name= #{workName}
         </if>
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
@@ -190,6 +176,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
+
         <if test="queryStartTime !=null and queryStartTime !=''">
             and t.create_time &gt;= #{queryStartTime}
         </if>
@@ -202,7 +189,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        group by t.work_id) A
+
+
     </select>
 
     <select id="queryTaskWorkPoolsCount" parameterType="Map" resultType="Map">
@@ -227,9 +215,6 @@
         <if test="staffName !=null and staffName != ''">
             and wtk.staff_name = #{staffName}
         </if>
-        <if test="staffNameLike !=null and staffNameLike != ''">
-            and wtk.staff_name like '%${staffNameLike}%'
-        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -245,11 +230,12 @@
         <if test="wtId !=null and wtId != ''">
             and t.wt_id= #{wtId}
         </if>
+
         <if test="queryStartTime !=null and queryStartTime !=''">
-            and wtk.start_time &lt;= #{queryStartTime}
+            and wtk.create_time &gt;= #{queryStartTime}
         </if>
         <if test="queryEndTime !=null and queryEndTime !=''">
-            and wtk.end_time &gt;= #{queryEndTime}
+            and wtk.create_time &lt;= #{queryEndTime}
         </if>
         <if test="state !=null and state != ''">
             and wtk.state= #{state}
@@ -257,6 +243,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+
+
     </select>
 
     <select id="queryTaskWorkPools" parameterType="Map" resultType="Map">
@@ -286,9 +274,6 @@
         <if test="staffName !=null and staffName != ''">
             and wtk.staff_name = #{staffName}
         </if>
-        <if test="staffNameLike !=null and staffNameLike != ''">
-            and wtk.staff_name like '%${staffNameLike}%'
-        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -304,11 +289,12 @@
         <if test="wtId !=null and wtId != ''">
             and t.wt_id= #{wtId}
         </if>
+
         <if test="queryStartTime !=null and queryStartTime !=''">
-            and wtk.start_time &lt;= #{queryStartTime}
+            and wtk.create_time &gt;= #{queryStartTime}
         </if>
         <if test="queryEndTime !=null and queryEndTime !=''">
-            and wtk.end_time &gt;= #{queryEndTime}
+            and wtk.create_time &lt;= #{queryEndTime}
         </if>
         <if test="state !=null and state != ''">
             and wtk.state= #{state}
@@ -320,6 +306,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+
     </select>
 
     <select id="queryCopyWorkPoolsCount" parameterType="Map" resultType="Map">
@@ -359,6 +346,7 @@
         <if test="wtId !=null and wtId != ''">
             and t.wt_id= #{wtId}
         </if>
+
         <if test="queryStartTime !=null and queryStartTime !=''">
             and wc.create_time &gt;= #{queryStartTime}
         </if>
@@ -371,6 +359,8 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+
+
     </select>
 
     <select id="queryCopyWorkPools" parameterType="Map" resultType="Map">
@@ -415,6 +405,7 @@
         <if test="wtId !=null and wtId != ''">
             and t.wt_id= #{wtId}
         </if>
+
         <if test="queryStartTime !=null and queryStartTime !=''">
             and wc.create_time &gt;= #{queryStartTime}
         </if>
@@ -431,5 +422,7 @@
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
+
     </select>
+
 </mapper>
