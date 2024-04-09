@@ -20,6 +20,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -64,9 +65,7 @@ public class UpdateFeeCmd extends Cmd {
 
         Assert.listOnlyOne(feeDtos, "未查询到费用信息 或查询到多条" + reqJson);
 
-        if(FeeDto.FEE_FLAG_CYCLE.equals(feeDtos.get(0).getFeeFlag()) && reqJson.containsKey("maxEndTime")){
-            reqJson.remove("maxEndTime");
-        }
+
     }
 
     @Override
@@ -100,7 +99,7 @@ public class UpdateFeeCmd extends Cmd {
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
             feeAttrPo.setValue(reqJson.getString("maxEndTime"));
             feeAttrPo.setCommunityId(reqJson.getString("communityId"));
-            if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+            if (ListUtil.isNull(feeAttrDtos)) {
                 feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
                 feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
             } else {
