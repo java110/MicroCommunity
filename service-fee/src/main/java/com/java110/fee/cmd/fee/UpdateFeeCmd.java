@@ -56,6 +56,10 @@ public class UpdateFeeCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "feeId", "未包含feeId");
         Assert.hasKeyAndValue(reqJson, "startTime", "未包含开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "未包含结束时间");
+        Assert.hasKeyAndValue(reqJson, "maxEndTime", "未包含结束时间");
+        if(!reqJson.getString("maxEndTime").contains(":")){
+            reqJson.put("maxEndTime",reqJson.getString("maxEndTime")+" 23:59:59");
+        }
 
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(reqJson.getString("communityId"));
