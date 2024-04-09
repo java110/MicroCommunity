@@ -67,9 +67,6 @@
         <if test="batchId !=null and batchId != ''">
             and t.batch_id= #{batchId}
         </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
-        </if>
         <if test="incomeObjId !=null and incomeObjId != ''">
             and t.income_obj_id= #{incomeObjId}
         </if>
@@ -194,9 +191,6 @@
         </if>
         <if test="batchId !=null and batchId != ''">
             and t.batch_id= #{batchId}
-        </if>
-        <if test="userId !=null and userId != ''">
-            and t.user_id= #{userId}
         </if>
         <if test="incomeObjId !=null and incomeObjId != ''">
             and t.income_obj_id= #{incomeObjId}
