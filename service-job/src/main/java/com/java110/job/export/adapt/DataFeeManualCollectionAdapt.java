@@ -197,7 +197,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
             XSSFClientAnchor anchor = new XSSFClientAnchor(0, 0, 0, 0, (short) 0, 1 + line, (short) 1, 1 + line + 1);
             anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);//设置图片随单元移动调整大小
             try {
-                String qrImg = feePrintSpecDto.getQrImg().replace("data:image/webp;base64,", "")
+                String qrImg = ImageUtils.getBase64ByImgUrl(feePrintSpecDto.getQrImg()).replace("data:image/webp;base64,", "")
                         .replace("data:image/png;base64,", "")
                         .replace("data:image/jpeg;base64,", "");
                 patriarch.createPicture(anchor, workbook.addPicture(Base64Convert.base64ToByte(qrImg), XSSFWorkbook.PICTURE_TYPE_JPEG));
