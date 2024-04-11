@@ -14,10 +14,12 @@ import com.java110.dto.fee.TempCarPayOrderDto;
 import com.java110.dto.system.Business;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.job.adapt.IDatabusAdapt;
+import com.java110.job.adapt.hcIotNew.http.ISendIot;
 import com.java110.job.databus.DatabusDataQueue;
 import com.java110.po.log.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.DatabusCache;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.ExceptionUtil;
 import com.java110.vo.ResultVo;
@@ -52,6 +54,9 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
 
     @Autowired
     private ISaveSystemErrorSMO saveSystemErrorSMOImpl;
+
+    @Autowired
+    private ISendIot sendIotImpl;
 
     @Override
     public boolean exchange(@RequestBody List<Business> businesses) {
@@ -145,6 +150,8 @@ public class DataBusInnerServiceSMOImpl extends BaseServiceSMO implements IDataB
         IDatabusAdapt databusAdaptImpl = ApplicationContextFactory.getBean(DEFAULT_NOTIFY_TEMP_CAR_FEE_ORDER_PROTOCOL, IDatabusAdapt.class);
         return databusAdaptImpl.getTempCarAuths(reqJson);
     }
+
+
 
     @Override
     public ResultVo notifyTempCarFeeOrder(@RequestBody TempCarPayOrderDto tempCarPayOrderDto) {

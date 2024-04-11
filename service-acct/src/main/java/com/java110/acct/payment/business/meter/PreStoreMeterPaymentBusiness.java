@@ -1,5 +1,6 @@
 package com.java110.acct.payment.business.meter;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.core.context.ICmdDataFlowContext;
@@ -22,12 +23,16 @@ import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,6 +81,9 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
+
 
     @Override
     public PaymentOrderDto unified(ICmdDataFlowContext context, JSONObject reqJson) {
@@ -84,18 +92,33 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         Assert.hasKeyAndValue(reqJson, "receivedAmount", "请求报文中未包含receivedAmount");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
-        MeterMachineDto meterMachineDto = new MeterMachineDto();
-        meterMachineDto.setMachineId(reqJson.getString("machineId"));
-        List<MeterMachineDto> meterMachineDtos = meterMachineV1InnerServiceSMOImpl.queryMeterMachines(meterMachineDto);
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("machineId", reqJson.getString("machineId"));
+        paramIn.put("communityId", reqJson.getString("communityId"));
+        paramIn.put("iotApiCode", "listMeterMachineBmoImpl");
+        ResultVo resultVo = iotInnerServiceSMOImpl.postIot(paramIn);
+        JSONArray machines = (JSONArray) resultVo.getData();
 
-        Assert.listOnlyOne(meterMachineDtos, "表不存在");
+        Assert.listOnlyOne(machines, "表不存在");
+
+        String typeCd = machines.getJSONObject(0).getString("typeCd");
+        String typeCdName = "";
+        if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(typeCd)) {
+            typeCdName = "水费";
+        } else if (FeeConfigDto.FEE_TYPE_CD_METER.equals(typeCd)) {
+            typeCdName = "电费";
+        } else {
+            typeCdName = "煤气";
+        }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(meterMachineDtos.get(0).getCommunityId());
-        feeConfigDto.setConfigId(meterMachineDtos.get(0).getFeeConfigId());
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        feeConfigDto.setFeeTypeCd(typeCd);
         feeConfigDto.setComputingFormula("6006");
         List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
-        Assert.listOnlyOne(feeConfigDtos, "费用项公式设置错误，请选择 用量*单价+附加费");
+        if (ListUtil.isNull(feeConfigDtos)) {
+            throw new IllegalArgumentException(typeCdName + "费用项公式设置错误，请选择 用量*单价+附加费");
+        }
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(GenerateCodeFactory.getOId());
@@ -104,35 +127,33 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
 
         reqJson.put("receivableAmount", reqJson.getDoubleValue("receivedAmount"));
         reqJson.put("receivedAmount", reqJson.getDoubleValue("receivedAmount"));
+        reqJson.put("configId", feeConfigDtos.get(0).getConfigId());
         return paymentOrderDto;
     }
 
     @Override
     public void notifyPayment(PaymentOrderDto paymentOrderDto, JSONObject reqJson) {
 
-        MeterMachineDto meterMachineDto = new MeterMachineDto();
-        meterMachineDto.setMachineId(reqJson.getString("machineId"));
-        List<MeterMachineDto> meterMachineDtos = meterMachineV1InnerServiceSMOImpl.queryMeterMachines(meterMachineDto);
-
-        Assert.listOnlyOne(meterMachineDtos, "表不存在");
-
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(meterMachineDtos.get(0).getCommunityId());
-        feeConfigDto.setConfigId(meterMachineDtos.get(0).getFeeConfigId());
-        feeConfigDto.setComputingFormula("6006");
-        List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
-        Assert.listOnlyOne(feeConfigDtos, "费用项公式设置错误，请选择 用量*单价+附加费");
 
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityId(feeConfigDtos.get(0).getCommunityId());
+        communityMemberDto.setCommunityId(reqJson.getString("communityId"));
         communityMemberDto.setMemberTypeCd(CommunityMemberDto.MEMBER_TYPE_PROPERTY);
         List<CommunityMemberDto> communityMemberDtos = communityMemberV1InnerServiceSMOImpl.queryCommunityMembers(communityMemberDto);
 
         Assert.listOnlyOne(communityMemberDtos, "物业不存在");
 
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        feeConfigDto.setConfigId(reqJson.getString("configId"));
+        feeConfigDto.setComputingFormula("6006");
+        List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
+        if (ListUtil.isNull(feeConfigDtos)) {
+            throw new IllegalArgumentException("费用项公式设置错误，请选择 用量*单价+附加费");
+        }
+
         PayFeePo payFeePo = new PayFeePo();
-        payFeePo.setCommunityId(meterMachineDtos.get(0).getCommunityId());
-        payFeePo.setConfigId(feeConfigDtos.get(0).getConfigId());
+        payFeePo.setCommunityId(reqJson.getString("communityId"));
+        payFeePo.setConfigId(reqJson.getString("configId"));
         payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
         payFeePo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         Calendar calendar = Calendar.getInstance();
@@ -162,10 +183,10 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
 
         //todo 查询房屋信息
         RoomDto roomDto = new RoomDto();
-        roomDto.setCommunityId(meterMachineDtos.get(0).getCommunityId());
+        roomDto.setCommunityId(feeConfigDtos.get(0).getCommunityId());
         roomDto.setRoomId(reqJson.getString("roomId"));
         List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
-        if(roomDtos != null && roomDtos.size() > 0){
+        if (!ListUtil.isNull(roomDtos)) {
             feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME,
                     roomDtos.get(0).getFloorNum() + "-" + roomDtos.get(0).getUnitNum() + "-" + roomDtos.get(0).getRoomNum()));
         }
@@ -174,7 +195,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setRoomId(reqJson.getString("roomId"));
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-        if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
+        if (!ListUtil.isNull(ownerRoomRelDtos)) {
 
             feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME,
                     payFeePo.getEndTime()));
@@ -185,7 +206,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
 
         }
 
-        if (feeAttrsPos.size() > 0) {
+        if (!ListUtil.isNull(feeConfigDtos)) {
             feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrsPos);
         }
 
@@ -197,7 +218,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         payFeeDetailPo.setPrimeRate(FeeDetailDto.PRIME_REATE_WECHAT);
         payFeeDetailPo.setFeeId(payFeePo.getFeeId());
         payFeeDetailPo.setStartTime(payFeePo.getStartTime());
-        payFeeDetailPo.setEndTime(payFeePo.getEndTime());
+        payFeeDetailPo.setEndTime(DateUtil.getPreSecTime(payFeePo.getEndTime()));
         payFeeDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
         payFeeDetailPo.setRemark("手机端充值");
         payFeeDetailPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));

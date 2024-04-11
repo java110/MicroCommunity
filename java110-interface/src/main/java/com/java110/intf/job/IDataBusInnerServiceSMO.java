@@ -116,4 +116,5 @@ public interface IDataBusInnerServiceSMO {
 
     @RequestMapping(value = "/getTempCarAuths", method = RequestMethod.POST)
     ResultVo getTempCarAuths(@RequestBody JSONObject reqJson);
+
 }
