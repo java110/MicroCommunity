@@ -95,6 +95,8 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         JSONObject paramIn = new JSONObject();
         paramIn.put("machineId", reqJson.getString("machineId"));
         paramIn.put("communityId", reqJson.getString("communityId"));
+        paramIn.put("page", 1);
+        paramIn.put("row", 1);
         paramIn.put("iotApiCode", "listMeterMachineBmoImpl");
         ResultVo resultVo = iotInnerServiceSMOImpl.postIot(paramIn);
         JSONArray machines = (JSONArray) resultVo.getData();
