@@ -138,7 +138,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="acctName !=null and acctName != ''">
-            and t.acct_name like '%${acctName}%'
+            and t.acct_name like concat('%',#{acctName},'%')
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -238,7 +238,7 @@
             and t.status_cd= #{statusCd}
         </if>
         <if test="acctName !=null and acctName != ''">
-            and t.acct_name like '%${acctName}%'
+            and t.acct_name like concat('%',#{acctName},'%')
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
