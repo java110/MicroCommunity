@@ -124,7 +124,7 @@ public class OwnerUserLoginCmd extends Cmd {
             userDtos = ifOwnerLoginByPhone(reqJson, context);
         }
         if (ListUtil.isNull(userDtos)) {
-            throw new CmdException("用户不存在，请先注册");
+            throw new CmdException("密码错误或者用户不存在");
         }
 
         // todo  2.0 校验 业主用户绑定表是否存在记录
