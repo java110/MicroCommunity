@@ -135,6 +135,8 @@ public class SmartMeterAdapt extends DatabusAdaptImpl {
             JSONObject reqJson = new JSONObject();
             reqJson.put("roomId", feeDtos.get(0).getPayerObjId());
             reqJson.put("communityId", feeDtos.get(0).getCommunityId());
+            reqJson.put("receivedAmount", payFeeDetailPo.getReceivedAmount());
+
             reqJson.put("iotApiCode", "preStoreMeterBmoImpl");
 
             ResultVo resultVo = sendIotImpl.post("/iot/api/common.openCommonApi", reqJson);
