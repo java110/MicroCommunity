@@ -143,9 +143,9 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         repairDto.setRepairId(repairId);
         List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
         IMsgNotify msgNotify = null;
-        if(RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDto.getNotifyWay())) {
+        if(RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDtos.get(0).getNotifyWay())) {
             msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_ALI);
-        }else if(RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDto.getNotifyWay())){
+        }else if(RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDtos.get(0).getNotifyWay())){
             msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_WECHAT);
         }else{
             return;
