@@ -1,11 +1,15 @@
 package com.java110.job.databus;
 
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.data.DatabusQueueDataDto;
+import com.java110.dto.log.LogSystemErrorDto;
 import com.java110.job.adapt.IDatabusAdapt;
 import com.java110.job.importData.ImportDataQueue;
+import com.java110.po.log.LogSystemErrorPo;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ExceptionUtil;
 import org.slf4j.Logger;
 
 import java.util.concurrent.*;
@@ -70,7 +74,12 @@ public class DatabusDataExecutor implements Runnable {
         FutureTask<String> futureTask = new FutureTask<>(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                databusAdaptImpl.execute(databusQueueDataDto.getBusiness(), databusQueueDataDto.getBusinesses());
+                try {
+                    databusAdaptImpl.execute(databusQueueDataDto.getBusiness(), databusQueueDataDto.getBusinesses());
+                }catch (Exception e){
+                    e.printStackTrace();
+                    log.error("执行databus失败", e);
+                }
                 return "";
             }
         });

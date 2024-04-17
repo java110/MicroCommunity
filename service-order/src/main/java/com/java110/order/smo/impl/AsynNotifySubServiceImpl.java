@@ -16,6 +16,7 @@ import com.java110.order.smo.IAsynNotifySubService;
 import com.java110.utils.cache.DatabusCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.DomainContant;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -66,9 +67,9 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
             httpEntity = new HttpEntity<String>(params.toJSONString(), header);
             //通过fallBack 的方式生成Business
 
-            if(Environment.isStartBootWay()){
+            if (Environment.isStartBootWay()) {
                 outRestTemplate.exchange(BOOT_FALLBACK_URL, HttpMethod.POST, httpEntity, String.class);
-            }else {
+            } else {
                 restTemplate.exchange(FALLBACK_URL.replace(SERVICE_NAME, orderItemDto.getServiceName()), HttpMethod.POST, httpEntity, String.class);
             }
         } catch (Exception e) {
@@ -81,8 +82,8 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
     public void notifyDatabus(List<Map> orderItemMaps, OrderDto orderDto) {
 
 
-        if (orderItemMaps == null || orderItemMaps.size() < 1) {
-            return ;
+        if (ListUtil.isNull(orderItemMaps)) {
+            return;
         }
         //触发databug
         //查询 事务项
@@ -96,12 +97,12 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
         String databusSwitch = MappingCache.getValue(DomainContant.COMMON_DOMAIN, DATABUS_SWITCH);
 
         if (!DATABUS_SWITCH_ON.equals(databusSwitch)) {
-            return ;
+            return;
         }
         List<BusinessDatabusDto> databusDtos = DatabusCache.getDatabuss();
 
         if (!hasTypeCd(databusDtos, businesses) || !SecureInvocation.secure(this.getClass())) {
-            return ;
+            return;
         }
 
         try {
@@ -188,11 +189,11 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
             case "MOD":
                 params = new JSONArray();
                 JSONArray paramDels = generateBusinessDelInsertSql(orderItemDto, businessTableHisDto);
-                for(int delIndex = 0 ; delIndex < paramDels.size(); delIndex ++){
+                for (int delIndex = 0; delIndex < paramDels.size(); delIndex++) {
                     params.add(paramDels.getJSONObject(delIndex));
                 }
                 JSONArray paramAdds = generateBusinessInsertInsertSql(orderItemDto, businessTableHisDto);
-                for(int addIndex = 0 ; addIndex < paramAdds.size(); addIndex ++){
+                for (int addIndex = 0; addIndex < paramAdds.size(); addIndex++) {
                     params.add(paramAdds.getJSONObject(addIndex));
                 }
                 break;
@@ -223,7 +224,7 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
         JSONArray afterValues = logTextObj.getJSONArray("afterValue");
         for (int afterValueIndex = 0; afterValueIndex < afterValues.size(); afterValueIndex++) {
             sql = "insert into " + businessTableHisDto.getActionObjHis() + " ";
-            updateSql = "update " + businessTableHisDto.getActionObj() +" set b_id='"+orderItemDto.getbId()+"' where 1=1 ";
+            updateSql = "update " + businessTableHisDto.getActionObj() + " set b_id='" + orderItemDto.getbId() + "' where 1=1 ";
 
             param = new JSONObject();
             updateParam = new JSONObject();
@@ -240,7 +241,7 @@ public class AsynNotifySubServiceImpl implements IAsynNotifySubService {
                 keySql += (key + ",");
                 valueSql += (keyValue.getString(key) + ",");
 
-                updateSql += (" and "+key +"=" + keyValue.getString(key));
+                updateSql += (" and " + key + "=" + keyValue.getString(key));
             }
             keySql += "operate,b_id";
             valueSql += "'ADD','" + orderItemDto.getbId() + "'";
