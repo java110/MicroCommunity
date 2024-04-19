@@ -48,10 +48,10 @@ public class InitializeBuildingUnitSMOImpl extends BaseServiceSMO implements Iin
 
     @Override
     public int deleteBuildingRoom(@RequestBody Map communityId) {
-        int deleteFlag = initializeBuildingUnitDaoImpl.deleteBuildingRoom(communityId);
+
 
         //todo 自动解绑房屋 先注释，子查询删除报错
-        // initializeBuildingUnitDaoImpl.deleteOwnerRoomRel(communityId);
+        //initializeBuildingUnitDaoImpl.deleteOwnerRoomRel(communityId);
         RoomDto roomDto = new RoomDto();
         roomDto.setCommunityId(communityId.get("communityId").toString());
         int count = roomV1InnerServiceSMOImpl.queryRoomsCount(roomDto);
@@ -74,6 +74,8 @@ public class InitializeBuildingUnitSMOImpl extends BaseServiceSMO implements Iin
             initializeBuildingUnitDaoImpl.deleteOwnerRoomRel(communityId);
 
         }
+
+        int deleteFlag = initializeBuildingUnitDaoImpl.deleteBuildingRoom(communityId);
         return deleteFlag;
     }
 
