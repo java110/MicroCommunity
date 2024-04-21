@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.user.UserLoginDto;
+import com.java110.intf.job.IMallInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.user.bmo.userLogin.IGetUserLoginBMO;
 import com.java110.utils.cache.CommonCache;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,9 @@ public class GetUserLoginBMOImpl implements IGetUserLoginBMO {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IMallInnerServiceSMO mallInnerServiceSMOImpl;
 
     /**
      * @param userLoginDto
@@ -63,12 +68,15 @@ public class GetUserLoginBMOImpl implements IGetUserLoginBMO {
 
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
-        if(userDtos == null || userDtos.size()< 1){
+        if(ListUtil.isNull(userDtos)){
             throw new IllegalArgumentException("用户不存在");
         }
 
-        String hcCode = PREFIX_CODE + GenerateCodeFactory.getUUID();
-        CommonCache.setValue(hcCode, JSONObject.toJSONString(userDtos.get(0)), CommonCache.defaultExpireTime);
+        //todo 调用商城接口 获取hcCode
+        String hcCode = mallInnerServiceSMOImpl.generatorMallCode(userDtos.get(0));
+
+//        String hcCode = PREFIX_CODE + GenerateCodeFactory.getUUID();
+//        CommonCache.setValue(hcCode, JSONObject.toJSONString(userDtos.get(0)), CommonCache.defaultExpireTime);
         JSONObject paramOut = new JSONObject();
         paramOut.put("hcCode", hcCode);
         return ResultVo.createResponseEntity(paramOut);
