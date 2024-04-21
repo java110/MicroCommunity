@@ -38,7 +38,7 @@ public class GetMallTokenCmd extends Cmd {
     public static final String URL_DOMAIN = "URL_DOMAIN"; // 物联网域
 
 
-    public static final String MALL_URL = "MALL_URL"; // 物联网域
+    public static final String MALL_PC_URL = "MALL_PC_URL"; // 物联网域
 
 
     @Autowired
@@ -93,7 +93,7 @@ public class GetMallTokenCmd extends Cmd {
 
         JSONObject paramOut = (JSONObject) resultVo.getData();
 
-        String mallUrl = MappingCache.getValue(URL_DOMAIN, MALL_URL);
+        String mallUrl = MappingCache.getValue(URL_DOMAIN, MALL_PC_URL);
         String targetUrl = mallUrl + reqJson.getString("targetUrl");
         String url = mallUrl + paramOut.getString("url") + "&targetUrl=" + targetUrl;
         paramOut.put("url", url);
