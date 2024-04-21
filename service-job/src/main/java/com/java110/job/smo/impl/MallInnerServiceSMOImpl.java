@@ -57,7 +57,7 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         paramIn.put("userName", userDto.getName());
         paramIn.put("address", userDto.getAddress());
 
-        ResultVo resultVo = sendMallImpl.post("/mall/api/common.generatorCode", paramIn);
+        ResultVo resultVo = sendMallImpl.post("/mall/api/token.generatorCode", paramIn);
 
         if (resultVo.getCode() != ResultVo.CODE_OK) {
             throw new IllegalArgumentException(resultVo.getMsg());

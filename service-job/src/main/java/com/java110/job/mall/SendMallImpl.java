@@ -121,8 +121,8 @@ public class SendMallImpl implements ISendMall {
 
         String url = getUrl(GET_TOKEN_URL);
 
-        String userName = MappingCache.getValue(MALL_DOMAIN, "IOT_USERNAME");
-        String password = MappingCache.getValue(MALL_DOMAIN, "IOT_PASSWORD");
+        String userName = MappingCache.getValue(MALL_DOMAIN, "MALL_USERNAME");
+        String password = MappingCache.getValue(MALL_DOMAIN, "MALL_PASSWORD");
         JSONObject param = new JSONObject();
         param.put("username", userName);
         param.put("passwd", password);
