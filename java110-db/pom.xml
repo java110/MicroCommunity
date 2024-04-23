@@ -64,10 +64,10 @@
             <artifactId>sharding-jdbc-core</artifactId>
         </dependency>-->
 
-        <dependency>
-            <groupId>org.apache.shardingsphere</groupId>
-            <artifactId>sharding-jdbc-core</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.shardingsphere</groupId>-->
+<!--            <artifactId>sharding-jdbc-core</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.java110</groupId>
             <artifactId>java110-interface</artifactId>

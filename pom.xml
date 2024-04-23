@@ -352,12 +352,12 @@
             </dependency>
 
 
-            <dependency>
-                <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>sharding-jdbc-core</artifactId>
-                <version>4.0.0-RC1</version>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.shardingsphere</groupId>-->
+<!--                <artifactId>sharding-jdbc-core</artifactId>-->
+<!--                <version>4.0.0-RC1</version>-->
 
-            </dependency>
+<!--            </dependency>-->
 
 
 

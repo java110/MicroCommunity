@@ -1,6 +1,5 @@
 package com.java110.job.myquartz;
 
-import groovy.util.logging.Log4j;
 import org.quartz.JobExecutionContext;
 import org.quartz.Trigger;
 import org.quartz.TriggerListener;
@@ -12,7 +11,7 @@ import com.java110.core.log.LoggerFactory;
  * 2019/07/26
  * 师延俊
  */
-@Log4j
+
 public class MonitorTriggerListener implements TriggerListener {
     private final static Logger logger = LoggerFactory.getLogger(MonitorTriggerListener.class);
 

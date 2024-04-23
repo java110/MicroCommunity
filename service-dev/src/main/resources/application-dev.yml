@@ -35,6 +35,17 @@ spring:
       max-idle: 100
       min-idle: 0
       timeout: 0
+  datasource:
+    url: jdbc:mysql://dev.db.java110.com:3306/TT?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: TT
+    password: hc12345678
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 5
+      max-active: 10
+      min-idle: 5
+      max-wait: 60000
 
 
 #============== kafka ===================
