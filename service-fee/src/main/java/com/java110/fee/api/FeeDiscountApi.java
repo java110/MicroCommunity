@@ -16,6 +16,8 @@ import com.java110.fee.bmo.feeDiscountRuleSpec.IGetFeeDiscountRuleSpecBMO;
 import com.java110.po.fee.FeeDiscountPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -190,8 +192,13 @@ public class FeeDiscountApi {
                                                      @RequestParam(value = "payerObjId") String payerObjId,
                                                      @RequestParam(value = "payerObjType") String payerObjType,
                                                      @RequestParam(value = "endTime") String endTime,
+                                                     @RequestParam(value = "custEndTime",required = false) String custEndTime,
                                                      @RequestParam(value = "page") int page,
                                                      @RequestParam(value = "row") int row) throws ParseException {
+        if(!StringUtil.isEmpty(custEndTime)){
+            double c = DateUtil.dayCompare(DateUtil.getDateFromStringB(endTime),DateUtil.getDateFromStringB(custEndTime));
+            cycles = c;
+        }
         return computeFeeDiscountBMOImpl.compute(feeId, communityId, cycles, payerObjId, payerObjType, endTime, page, row);
     }
 
