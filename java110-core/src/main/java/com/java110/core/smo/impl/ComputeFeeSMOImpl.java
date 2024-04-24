@@ -2214,7 +2214,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         Calendar calendarEndTime = Calendar.getInstance();
         calendarEndTime.setTime(endTime);
-        calendarEndTime.set(Calendar.DAY_OF_MONTH,1);
+        //calendarEndTime.set(Calendar.DAY_OF_MONTH,1);
 
 
         Calendar calendarOrate = Calendar.getInstance();

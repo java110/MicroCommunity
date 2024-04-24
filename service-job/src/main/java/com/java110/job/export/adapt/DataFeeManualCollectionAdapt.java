@@ -289,7 +289,14 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
             cell1.setCellValue(squarePrice);
             cell1.setCellStyle(cellStyle);
             cell2 = row.createCell(2);
+            //todo 不能只展示面积
             cell2.setCellValue(roomDto.getBuiltUpArea());
+            if (!StringUtil.isEmpty(feeObj.getString("curDegrees"))) {
+                BigDecimal degrees = new BigDecimal(feeObj.getString("curDegrees"))
+                        .subtract(new BigDecimal(feeObj.getString("preDegrees")));
+                cell2.setCellValue(degrees.doubleValue());
+            }
+
             cell2.setCellStyle(cellStyle);
             cell3 = row.createCell(3);
             if (feeObj.containsKey("curDegrees")) {
