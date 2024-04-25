@@ -76,7 +76,7 @@ public class SendDeleteAttendanceStaffDataToIotAdapt extends DatabusAdaptImpl {
 
         AttendanceClassesStaffDto attendanceClassesStaffDto = new AttendanceClassesStaffDto();
         attendanceClassesStaffDto.setCsId(csId);
-        attendanceClassesStaffDto.setStatusCd("1");
+        attendanceClassesStaffDto.setStatusCd("");
         List<AttendanceClassesStaffDto> attendanceClassesStaffs = attendanceClassesStaffV1InnerServiceSMOImpl.queryAttendanceClassesStaffs(attendanceClassesStaffDto);
         if (ListUtil.isNull(attendanceClassesStaffs)) {
             return;
