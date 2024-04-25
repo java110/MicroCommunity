@@ -122,7 +122,7 @@ public class TqDianBiaoDanxiangDanFeiLvFactoryAdaptImpl implements ISmartMeterFa
             MeterMachineSpecDto meterMachineSpecDto = new MeterMachineSpecDto();
             meterMachineSpecDto.setMachineId(meterMachineDto.getMachineId());
             meterMachineSpecDto.setCommunityId(meterMachineDto.getCommunityId());
-            meterMachineSpecDto.setSpecId("120101");
+            meterMachineSpecDto.setSpecId("120102");
             List<MeterMachineSpecDto> meterMachineSpecDtos = meterMachineSpecV1InnerServiceSMOImpl.queryMeterMachineSpecs(meterMachineSpecDto);
             if (meterMachineSpecDtos == null || meterMachineSpecDtos.size() < 1) {
                 continue;

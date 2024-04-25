@@ -121,7 +121,7 @@ public class ImportMeterMachineQueueDataAdapt extends DefaultImportData implemen
         MeterMachineSpecPo meterMachineSpecPo = null;
         meterMachineSpecPo = new MeterMachineSpecPo();
         meterMachineSpecPo.setMachineId(meterMachinePo.getMachineId());
-        meterMachineSpecPo.setSpecId("120101");
+        meterMachineSpecPo.setSpecId("120102");
         meterMachineSpecPo.setSpecName("采集器ID");
         meterMachineSpecPo.setSpecValue(importMeterMachineDto.getValue1());
         meterMachineSpecPo.setMmsId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
