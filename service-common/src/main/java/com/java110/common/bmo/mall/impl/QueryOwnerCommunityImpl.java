@@ -14,6 +14,7 @@ import com.java110.intf.user.IBuildingOwnerV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,14 @@ public class QueryOwnerCommunityImpl implements IMallCommonApiBmo {
     @Override
     public void validate(ICmdDataFlowContext context, JSONObject reqJson) {
 
-        Assert.hasKeyAndValue(reqJson, "link", "未包含手机号");
+
+        String link = reqJson.getString("link");
+
+        String ownerId = reqJson.getString("ownerId");
+
+        if (StringUtil.isEmpty(link) && StringUtil.isEmpty(ownerId)) {
+            throw new IllegalArgumentException("未包含手机号和业主ID");
+        }
 
     }
 
@@ -46,6 +54,7 @@ public class QueryOwnerCommunityImpl implements IMallCommonApiBmo {
     public void doCmd(ICmdDataFlowContext context, JSONObject reqJson) {
 
         OwnerDto ownerDto = new OwnerDto();
+        ownerDto.setMemberId(reqJson.getString("ownerId"));
         ownerDto.setLink(reqJson.getString("link"));
         ownerDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerDto> ownerDtos = buildingOwnerV1InnerServiceSMOImpl.queryBuildingOwners(ownerDto);

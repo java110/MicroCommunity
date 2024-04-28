@@ -15,6 +15,7 @@ import com.java110.po.account.AccountPo;
 import com.java110.po.account.AccountDetailPo;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -141,7 +142,7 @@ public class AccountInnerServiceSMOImpl extends BaseServiceSMO implements IAccou
             accountDto.setObjId(accountDetailPo.getObjId());
             accountDto.setAcctId(accountDetailPo.getAcctId());
             accounts = BeanConvertUtil.covertBeanList(accountServiceDaoImpl.getAccountInfo(BeanConvertUtil.beanCovertMap(accountDto)), AccountDto.class);
-            if (accounts == null || accounts.size() < 1) {
+            if (ListUtil.isNull(accounts)) {
                 throw new IllegalArgumentException("账户不存在");
             }
             //在账户增加
