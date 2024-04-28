@@ -33,6 +33,7 @@ import com.java110.po.maintainance.MaintainanceItemValuePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -97,7 +98,7 @@ public class UpdateMaintainanceItemCmd extends Cmd {
         MaintainanceItemValueDto maintainanceItemValueDto = new MaintainanceItemValueDto();
         maintainanceItemValueDto.setItemId(reqJson.getString("itemId"));
         List<MaintainanceItemValueDto> maintainanceItemValueDtos = maintainanceItemValueV1InnerServiceSMOImpl.queryMaintainanceItemValues(maintainanceItemValueDto);
-        if (maintainanceItemValueDtos != null && maintainanceItemValueDtos.size() > 0) {
+        if (!ListUtil.isNull(maintainanceItemValueDtos)) {
             MaintainanceItemValuePo deleteMaintainanceItemValuePo = new MaintainanceItemValuePo();
             deleteMaintainanceItemValuePo.setItemId(maintainanceItemPo.getItemId());
             flag = maintainanceItemValueV1InnerServiceSMOImpl.deleteMaintainanceItemValue(deleteMaintainanceItemValuePo);
