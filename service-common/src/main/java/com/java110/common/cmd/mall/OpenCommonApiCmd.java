@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 专属于HC小区管理系统调用
  */
-@Java110Cmd(serviceCode = "common.openCommonApi")
+@Java110Cmd(serviceCode = "mall.openCommonApi")
 public class OpenCommonApiCmd extends Cmd {
 
     private IMallCommonApiBmo mallCommonApiBmoImpl;
