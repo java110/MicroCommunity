@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service("queryOwnerCommunityImpl")
 public class QueryOwnerCommunityImpl implements IMallCommonApiBmo {
 
     @Autowired
