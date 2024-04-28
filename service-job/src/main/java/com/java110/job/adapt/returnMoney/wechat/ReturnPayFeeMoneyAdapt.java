@@ -204,6 +204,7 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
                 .setSSLSocketFactory(sslsf)
                 .build();
         String jsonStr = "";
+        System.out.println("请求微信地址："+wechatReturnUrl+",请求报文："+xmlData);
         try {
             HttpPost httpost = new HttpPost(wechatReturnUrl);
             httpost.setEntity(new StringEntity(xmlData, "UTF-8"));
@@ -218,6 +219,8 @@ public class ReturnPayFeeMoneyAdapt extends DatabusAdaptImpl {
             }
         } finally {
             httpclient.close();
+            System.out.println("返回报文："+jsonStr);
+
         }
         Map<String, String> resMap = PayUtil.xmlStrToMap(jsonStr);
         if ("SUCCESS".equals(resMap.get("return_code")) && "SUCCESS".equals(resMap.get("result_code"))) {
