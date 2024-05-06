@@ -159,6 +159,7 @@ public class OwnerUserLoginCmd extends Cmd {
         loginOwnerResDto.setCommunityId(communityDtos.get(0).getCommunityId());
         loginOwnerResDto.setCommunityName(communityDtos.get(0).getName());
         loginOwnerResDto.setCommunityTel(communityDtos.get(0).getTel());
+        loginOwnerResDto.setCommunityQrCode(communityDtos.get(0).getQrCode());
         loginOwnerResDto.setUserId(tmpUserDto.getUserId());
         loginOwnerResDto.setUserName(tmpUserDto.getName());
         loginOwnerResDto.setOwnerTel(tmpUserDto.getTel());

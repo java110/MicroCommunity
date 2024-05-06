@@ -374,7 +374,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         tmpFeeDto.setConfigIds(configIds.split(","));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.querySimpleFees(tmpFeeDto);
 
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             return null;
         }
 

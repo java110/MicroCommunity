@@ -34,6 +34,8 @@ public class LoginOwnerResDto implements Serializable {
 
     private String ownerTypeCd;
 
+    private String communityQrCode;
+
 
     public String getUserId() {
         return userId;
@@ -137,5 +139,13 @@ public class LoginOwnerResDto implements Serializable {
 
     public void setCommunityTel(String communityTel) {
         this.communityTel = communityTel;
+    }
+
+    public String getCommunityQrCode() {
+        return communityQrCode;
+    }
+
+    public void setCommunityQrCode(String communityQrCode) {
+        this.communityQrCode = communityQrCode;
     }
 }
