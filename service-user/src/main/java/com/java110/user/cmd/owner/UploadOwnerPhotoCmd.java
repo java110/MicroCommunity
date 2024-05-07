@@ -26,6 +26,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -120,14 +121,14 @@ public class UploadOwnerPhotoCmd extends Cmd {
         fileRelDto.setRelTypeCd("10000");
         fileRelDto.setObjId(paramInJson.getString("memberId"));
         List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-        if (fileRelDtos == null || fileRelDtos.size() == 0) {
+        if (ListUtil.isNull(fileRelDtos)) {
             JSONObject businessUnit = new JSONObject();
             businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
             businessUnit.put("relTypeCd", "10000");
             businessUnit.put("saveWay", "table");
             businessUnit.put("objId", paramInJson.getString("memberId"));
-            businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
-            businessUnit.put("fileSaveName", paramInJson.getString("ownerPhotoId"));
+            businessUnit.put("fileRealName", paramInJson.getString("fileSaveName"));
+            businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
             FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
             fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
             return;
@@ -135,7 +136,7 @@ public class UploadOwnerPhotoCmd extends Cmd {
 
         JSONObject businessUnit = new JSONObject();
         businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
-        businessUnit.put("fileRealName", paramInJson.getString("ownerPhotoId"));
+        businessUnit.put("fileRealName", paramInJson.getString("fileSaveName"));
         businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
         FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
         fileRelInnerServiceSMOImpl.updateFileRel(fileRelPo);
