@@ -38,7 +38,7 @@ public class OpenCommonApiCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        mallCommonApiBmoImpl = ApplicationContextFactory.getBean(reqJson.getString("iotApiCode"), IMallCommonApiBmo.class);
+        mallCommonApiBmoImpl = ApplicationContextFactory.getBean(reqJson.getString("mallApiCode"), IMallCommonApiBmo.class);
         if (mallCommonApiBmoImpl == null) {
             throw new CmdException("未实现该能力");
         }
