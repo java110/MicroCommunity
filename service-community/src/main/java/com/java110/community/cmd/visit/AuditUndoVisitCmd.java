@@ -19,6 +19,7 @@ import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,14 +89,14 @@ public class AuditUndoVisitCmd extends Cmd {
             } else {
                 visitPo.setState(VisitDto.STATE_D);
             }
-            if (!StringUtil.isEmpty(visitPo.getState()) && visitPo.getState().equals(VisitDto.STATE_C)) { //访客审核通过
+            if (VisitDto.STATE_C.equals(visitPo.getState())) { //访客审核通过
                 //查询访客配置信息
                 VisitSettingDto visitSettingDto = new VisitSettingDto();
                 visitSettingDto.setCommunityId(reqJson.getString("communityId"));
                 List<VisitSettingDto> visitSettingDtos = visitSettingV1InnerServiceSMOImpl.queryVisitSettings(visitSettingDto);
                 if (!StringUtil.isEmpty(visitDtos.get(0).getCarNum())) { //有车辆
 
-                    if (visitSettingDtos != null && visitSettingDtos.size() == 1 && visitSettingDtos.get(0).getCarNumWay().equals("Y")) { //车辆同步 Y 是 N 否
+                    if (!ListUtil.isNull(visitSettingDtos) && "Y".equals(visitSettingDtos.get(0).getCarNumWay())) { //车辆同步 Y 是 N 否
                         //获取预约车辆停车场ID、预约车辆免费时长、预约车限制次数、预约车是否审核
                         JSONObject visitJson = getVisitCarOperate(reqJson);
                         //车辆是否需要审核
