@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "org.deleteOrgRelStaff")
-public class DeleteStaffOrgRelCmd extends Cmd {
+public class DeleteOrgRelStaffCmd extends Cmd {
     @Autowired
     private IOrgStaffRelV1InnerServiceSMO orgStaffRelV1InnerServiceSMOImpl;
 
