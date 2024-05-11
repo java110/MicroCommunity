@@ -57,29 +57,5 @@ public class GetUserLoginBMOImpl implements IGetUserLoginBMO {
         return responseEntity;
     }
 
-    /**
-     * 生成HCCODE
-     *
-     * @param userDto
-     * @return
-     */
-    @Override
-    public ResponseEntity<String> generatorHcCode(UserDto userDto) {
-
-        List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
-
-        if(ListUtil.isNull(userDtos)){
-            throw new IllegalArgumentException("用户不存在");
-        }
-
-        //todo 调用商城接口 获取hcCode
-        String hcCode = mallInnerServiceSMOImpl.generatorMallCode(userDtos.get(0));
-
-//        String hcCode = PREFIX_CODE + GenerateCodeFactory.getUUID();
-//        CommonCache.setValue(hcCode, JSONObject.toJSONString(userDtos.get(0)), CommonCache.defaultExpireTime);
-        JSONObject paramOut = new JSONObject();
-        paramOut.put("hcCode", hcCode);
-        return ResultVo.createResponseEntity(paramOut);
-    }
 
 }

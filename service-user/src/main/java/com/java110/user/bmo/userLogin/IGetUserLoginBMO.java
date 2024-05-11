@@ -14,11 +14,4 @@ public interface IGetUserLoginBMO {
     ResponseEntity<String> get(UserLoginDto userLoginDto);
 
 
-    /**
-     * 生成CODE
-     *
-     * @param userDto
-     * @return
-     */
-    ResponseEntity<String> generatorHcCode(UserDto userDto);
 }
