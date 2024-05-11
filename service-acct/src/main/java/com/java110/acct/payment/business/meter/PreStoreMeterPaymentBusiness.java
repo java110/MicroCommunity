@@ -226,6 +226,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         payFeeDetailPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         payFeeDetailPo.setState("1400");
         payFeeDetailPo.setPayableAmount(reqJson.getString("receivedAmount"));
+        payFeeDetailPo.setPayOrderId(paymentOrderDto.getOrderId());
         feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
 
     }

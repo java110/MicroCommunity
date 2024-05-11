@@ -163,6 +163,7 @@ public class PreStoreOnlinePaymentBusiness implements IPaymentBusiness {
         accountReceiptPo.setReceivedAmount(receivedAmount);
         accountReceiptPo.setRemark("线上充值");
         accountReceiptPo.setCommunityId(ownerDtos.get(0).getCommunityId());
+
         accountReceiptV1InnerServiceSMOImpl.saveAccountReceipt(accountReceiptPo);
     }
 }
