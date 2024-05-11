@@ -125,7 +125,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(GenerateCodeFactory.getOId());
         paymentOrderDto.setMoney(reqJson.getDoubleValue("receivedAmount"));
-        paymentOrderDto.setName(reqJson.getString("feeName"));
+        paymentOrderDto.setName(typeCdName);
 
         reqJson.put("receivableAmount", reqJson.getDoubleValue("receivedAmount"));
         reqJson.put("receivedAmount", reqJson.getDoubleValue("receivedAmount"));
