@@ -70,11 +70,11 @@ public class ServiceConfiguration {
 //        exclusions.append("/app/room.queryRooms,");
         exclusions.append("/app/room.queryRoomsByApp,");
         exclusions.append("/app/productCategory/queryMainCategoryAllGoods,");
-        exclusions.append("/app/productCategory/queryMainCategory,");
-        exclusions.append("/app/product.queryPhoneMainCategoryProduct,");
+        exclusions.append("/app/mall.queryMainCategory,");
+        exclusions.append("/app/mall.queryPhoneMainCategoryProduct,");
         exclusions.append("/app/shop/queryShopCommunity,");
-        exclusions.append("/app/shopType/queryShopType,");
-        exclusions.append("/app/housekeepingType/queryHousekeepingType,");
+        exclusions.append("/app/mall.queryShopType,");
+        exclusions.append("/app/mall.queryHousekeepingType,");
         exclusions.append("/app/couponUser.listCouponUser,");
         exclusions.append("/app/machine.customCarInOutCmd,");
         exclusions.append("/callComponent/propertyRightRegistration.savePropertyRightRegistration,");
@@ -98,7 +98,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/product/queryGroupProduct,");//拼团商品
         exclusions.append("/app/product/querySeckillProduct,");//秒杀商品
 
-        exclusions.append("/app/productSeckill.listProductSeckill,");//秒杀商品
+        exclusions.append("/app/mall.listProductSeckill,");//秒杀商品
         exclusions.append("/app/system.listRegisterProtocol,");//查询注册信息
         exclusions.append("/app/chargeMachine.listChargeMachine,");//查询充电桩
         exclusions.append("/app/chargeMachine.listChargeMachinePort,");//查询充电桩

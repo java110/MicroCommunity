@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.db.dao.impl.QueryServiceDAOImpl;
 import com.java110.dto.machine.MachineTranslateErrorDto;
 import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
 import com.java110.job.adapt.hcIot.IotConstant;
@@ -14,18 +16,21 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Service
 public class SendMallImpl implements ISendMall {
+    private final static Logger logger = LoggerFactory.getLogger(SendMallImpl.class);
 
     public static final String GET_TOKEN_URL = "/mall/api/login.pcUserLogin";
     private static final String DEFAULT_MALL_URL = "https://mall.homecommunity.cn";
@@ -44,9 +49,19 @@ public class SendMallImpl implements ISendMall {
 
     @Override
     public ResultVo get(String url) {
-        HttpHeaders header = getHeaders(url, "", HttpMethod.POST);
+        url = getUrl(url);
+        HttpHeaders header = getHeaders(url, "", HttpMethod.GET);
         HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
-        ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+        ResponseEntity<String> tokenRes = null;
+        try {
+            tokenRes = outRestTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) {
+            logger.error("调用异常", e);
+            return new ResultVo(ResultVo.CODE_ERROR, e.getResponseBodyAsString());
+        } catch (Exception e) {
+            logger.error("调用异常", e);
+            return new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
 
         String body = tokenRes.getBody();
         JSONObject paramOut = JSONObject.parseObject(body);
@@ -59,8 +74,16 @@ public class SendMallImpl implements ISendMall {
         url = getUrl(url);
         HttpHeaders header = getHeaders(url, paramIn.toJSONString(), HttpMethod.POST);
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramIn.toJSONString(), header);
-        ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-
+        ResponseEntity<String> tokenRes = null;
+        try {
+            tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) {
+            logger.error("调用异常", e);
+            return new ResultVo(ResultVo.CODE_ERROR, e.getResponseBodyAsString());
+        } catch (Exception e) {
+            logger.error("调用异常", e);
+            return new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
+        }
         String body = tokenRes.getBody();
         JSONObject paramOut = JSONObject.parseObject(body);
 
