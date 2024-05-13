@@ -15,6 +15,7 @@
  */
 package com.java110.fee.smo.impl;
 
+import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.PayFeeDetailDto;
 import com.java110.fee.dao.IPayFeeDetailNewV1ServiceDao;
@@ -43,6 +44,7 @@ public class PayFeeDetailV1InnerServiceSMOImpl extends BaseServiceSMO implements
     private IPayFeeDetailNewV1ServiceDao payFeeDetailNewV1ServiceDaoImpl;
 
     @Override
+    @Java110Transactional
     public int savePayFeeDetailNew(@RequestBody PayFeeDetailPo PayFeeDetailPo) {
         int saveFlag = payFeeDetailNewV1ServiceDaoImpl.savePayFeeDetailNewInfo(BeanConvertUtil.beanCovertMap(PayFeeDetailPo));
         return saveFlag;
