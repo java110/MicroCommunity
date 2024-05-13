@@ -106,11 +106,11 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         String typeCd = machines.getJSONObject(0).getString("typeCd");
         String typeCdName = "";
         if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(typeCd)) {
-            typeCdName = "水费";
+            typeCdName = "水费充值";
         } else if (FeeConfigDto.FEE_TYPE_CD_METER.equals(typeCd)) {
-            typeCdName = "电费";
+            typeCdName = "电费充值";
         } else {
-            typeCdName = "煤气";
+            typeCdName = "煤气充值";
         }
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
