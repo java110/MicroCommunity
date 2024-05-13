@@ -19,10 +19,7 @@ import com.java110.intf.common.IMeterMachineV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
@@ -76,7 +73,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
     @Autowired
-    private IFeeDetailInnerServiceSMO feeDetailInnerServiceSMOImpl;
+    private IPayFeeDetailV1InnerServiceSMO payFeeDetailV1InnerServiceSMOImpl;
 
     @Autowired
     private IRoomV1InnerServiceSMO roomV1InnerServiceSMOImpl;
@@ -227,7 +224,15 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         payFeeDetailPo.setState("1400");
         payFeeDetailPo.setPayableAmount(reqJson.getString("receivedAmount"));
         payFeeDetailPo.setPayOrderId(paymentOrderDto.getOrderId());
-        feeDetailInnerServiceSMOImpl.saveFeeDetail(payFeeDetailPo);
+        payFeeDetailPo.setOpenInvoice("N");
+        payFeeDetailPo.setDeductionAmount("0");
+        payFeeDetailPo.setGiftAmount("0");
+        payFeeDetailPo.setDiscountAmount("0");
+        payFeeDetailPo.setLateAmount("0");
+        payFeeDetailPo.setCashierName("手机缴费");
+        payFeeDetailPo.setCashierId("-1");
+
+        payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
 
     }
 
