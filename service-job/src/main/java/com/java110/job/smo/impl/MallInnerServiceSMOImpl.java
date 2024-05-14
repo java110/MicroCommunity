@@ -66,4 +66,25 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         return resultVo.getData().toString();
     }
 
+    @Override
+    public ResultVo sendUserInfo(@RequestBody UserDto userDto) {
+
+        String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
+
+        if ("OFF".equals(mallSwitch)) {
+           return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+        }
+
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("userId", userDto.getUserId());
+        paramIn.put("tel", userDto.getTel());
+        paramIn.put("password", userDto.getPassword());
+        paramIn.put("userName", userDto.getName());
+        paramIn.put("address", userDto.getAddress());
+
+        ResultVo resultVo = sendMallImpl.post("/mall/api/token.generatorCode", paramIn);
+
+        return resultVo;
+    }
+
 }

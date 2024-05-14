@@ -23,6 +23,7 @@ import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.common.ISystemInfoV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.job.IMallInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.user.UserAttrPo;
@@ -80,6 +81,9 @@ public class OwnerUserLoginCmd extends Cmd {
     private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
 
     @Autowired
+    private IMallInnerServiceSMO mallInnerServiceSMOImpl;
+
+    @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     @Override
@@ -126,6 +130,9 @@ public class OwnerUserLoginCmd extends Cmd {
         if (ListUtil.isNull(userDtos)) {
             throw new CmdException("密码错误或者用户不存在");
         }
+
+        //todo 1.2 同步物业用户资料给商城
+        mallInnerServiceSMOImpl.sendUserInfo(userDtos.get(0));
 
         // todo  2.0 校验 业主用户绑定表是否存在记录
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();

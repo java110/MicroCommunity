@@ -34,4 +34,7 @@ public interface IMallInnerServiceSMO {
 
     @RequestMapping(value = "/generatorMallCode", method = RequestMethod.POST)
     String generatorMallCode(@RequestBody UserDto userDto);
+
+    @RequestMapping(value = "/sendUserInfo", method = RequestMethod.POST)
+    ResultVo sendUserInfo(@RequestBody UserDto userDto);
 }
