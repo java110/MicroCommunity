@@ -118,7 +118,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         paramIn.put("context", context);
         paramIn.put("repairName", repairName);
         paramIn.put("repairId", repairDtos.get(0).getRepairId());
-        sendMessage(paramIn, communityDtos.get(0),repairDtos.get(0));
+        sendMessage(paramIn, communityDtos.get(0), repairDtos.get(0));
     }
 
     /**
@@ -127,7 +127,7 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendMessage(JSONObject paramIn, CommunityDto communityDto,RepairDto repairDto) {
+    private void sendMessage(JSONObject paramIn, CommunityDto communityDto, RepairDto repairDto) {
 
         //查询小区物业公司
         CommunityMemberDto communityMemberDto = new CommunityMemberDto();
@@ -144,11 +144,11 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
         List<UserDto> userDtos = privilegeInnerServiceSMO.queryPrivilegeUsers(basePrivilegeDto);
         List<String> userIds = new ArrayList<>();
         IMsgNotify msgNotify = null;
-        if(RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDto.getNotifyWay())) {
+        if (RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDto.getNotifyWay())) {
             msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_ALI);
-        }else if(RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDto.getNotifyWay())){
+        } else if (RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDto.getNotifyWay())) {
             msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_WECHAT);
-        }else{
+        } else {
             return;
         }
         for (UserDto userDto : userDtos) {
@@ -156,19 +156,23 @@ public class MachineAddOwnerRepairAdapt extends DatabusAdaptImpl {
                 continue;
             }
             JSONObject content = new JSONObject();
-            content.put("repairTypeName",paramIn.getString("repairTypeName"));
+            content.put("repairTypeName", paramIn.getString("repairTypeName"));
             if (communityDto.getName().equals(paramIn.getString("repairObjName"))) {
-                content.put("repairObjName",paramIn.getString("repairObjName"));
+                content.put("repairObjName", paramIn.getString("repairObjName"));
             } else {
-                content.put("repairObjName",communityDto.getName() + paramIn.getString("repairObjName"));
+                content.put("repairObjName", communityDto.getName() + paramIn.getString("repairObjName"));
             }
-            content.put("repairName",paramIn.getString("repairName"));
-            content.put("context",paramIn.getString("context"));
-            content.put("repairId",paramIn.getString("repairId"));
-            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN,"STAFF_WECHAT_URL");
-            content.put("url",wechatUrl);
+            content.put("repairName", paramIn.getString("repairName"));
+            content.put("context", paramIn.getString("context"));
+            content.put("repairId", paramIn.getString("repairId"));
+            String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
+            content.put("url", wechatUrl);
 
-            msgNotify.sendAddOwnerRepairMsg(communityDto.getCommunityId(),userDto.getUserId(),content);
+            try {
+                msgNotify.sendAddOwnerRepairMsg(communityDto.getCommunityId(), userDto.getUserId(), content);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
