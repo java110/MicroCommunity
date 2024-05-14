@@ -53,7 +53,7 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         JSONObject paramIn = new JSONObject();
         paramIn.put("userId", userDto.getUserId());
         paramIn.put("tel", userDto.getTel());
-        paramIn.put("password", userDto.getPassword());
+        paramIn.put("passwd", userDto.getPassword());
         paramIn.put("userName", userDto.getName());
         paramIn.put("address", userDto.getAddress());
 
@@ -78,7 +78,7 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         JSONObject paramIn = new JSONObject();
         paramIn.put("userId", userDto.getUserId());
         paramIn.put("tel", userDto.getTel());
-        paramIn.put("password", userDto.getPassword());
+        paramIn.put("passwd", userDto.getPassword());
         paramIn.put("userName", userDto.getName());
         paramIn.put("address", userDto.getAddress());
 
