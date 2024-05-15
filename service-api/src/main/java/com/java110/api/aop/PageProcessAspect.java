@@ -133,7 +133,7 @@ public class PageProcessAspect {
             headers.put(headerName.toLowerCase(), request.getHeader(headerName));
         }
         //pd = PageData.newInstance().builder(userId, userName, this.getToken(request), reqData, componentCode, componentMethod, url, sessionId, appId, headers);
-        headers.put("_java110_token",this.getToken(request));
+        headers.put(CommonConstant.COOKIE_AUTH_TOKEN,this.getToken(request));
         pd = PageData.newInstance().builder(userId, userName, "", reqData, componentCode, componentMethod, url, sessionId, appId, headers);
         pd.setMethod(request.getMethod().equals("GET") ? HttpMethod.GET : HttpMethod.POST);
 

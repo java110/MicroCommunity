@@ -152,5 +152,18 @@ public class CmdContextUtils {
     }
 
 
+    public static String getTokenId(ICmdDataFlowContext context) {
 
+
+        if (context == null) {
+            return "";
+        }
+
+        Map<String, String> headers = context.getReqHeaders();
+
+        if (headers.containsKey(CommonConstant.COOKIE_AUTH_TOKEN)) {
+            return headers.get(CommonConstant.COOKIE_AUTH_TOKEN);
+        }
+        return "";
+    }
 }
