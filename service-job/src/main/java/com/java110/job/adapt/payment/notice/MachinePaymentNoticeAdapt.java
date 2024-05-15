@@ -14,6 +14,8 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.PayFeeDetailDto;
 import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.fee.FeeDetailDto;
@@ -188,7 +190,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String num = "";
         //车位
         String spaceNum = "";
-        if (!StringUtil.isEmpty(payerObjType) && payerObjType.equals("6666")) {
+        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(payerObjType)) {
             String[] split = payerObjName.split("-");
             //获取车牌
             carNum = split[0];
@@ -212,16 +214,23 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         paramIn.put("num", num);
         paramIn.put("spaceNum", spaceNum);
         paramIn.put("state", state);
-        //给业主推送消息
-        sendMessage(paramIn, communityDtos.get(0), payFeeDetailPo);
-        if (!StringUtil.isEmpty(state) && !state.equals("1300") && feeTypeCd.equals("888800010012")) {
+        //todo 退费单，退费没必要发因为 微信会发送退费 通知的，所以我们就没有必要发了
+        if (FeeDetailDto.STATE_RETURN_ORDER.equals(state)) {
+            return;
+        }
+        //todo 给业主推送消息
+        sendOwnerMessage(paramIn, communityDtos.get(0), payFeeDetailPo);
+
+
+        //todo 给员工推送消息
+        publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
+
+        //todo 维修费
+        if ("888800010012".equals(feeTypeCd)) {
             //给处理报修完结单的维修师傅推送消息
             sendMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
         }
-        if (!StringUtil.isEmpty(state) && !state.equals("1300")) {
-            //给员工推送消息
-            publishMsg(paramIn, communityDtos.get(0), payFeeDetailPo);
-        }
+
     }
 
     /**
@@ -315,7 +324,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
      * @param communityDto
      * @param payFeeDetailPo
      */
-    private void sendMessage(JSONObject paramIn, CommunityDto communityDto, PayFeeDetailPo payFeeDetailPo) {
+    private void sendOwnerMessage(JSONObject paramIn, CommunityDto communityDto, PayFeeDetailPo payFeeDetailPo) {
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");
@@ -339,7 +348,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String payerObjType = feeDtos.get(0).getPayerObjType();
         String ownerId = "";
         //3333 房屋缴费 6666 是车位缴费
-        if (payerObjType.equals("3333")) {
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(payerObjType)) {
             OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
             ownerRoomRelDto.setRoomId(payerObjId);
             List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMO.queryOwnerRoomRels(ownerRoomRelDto);
@@ -348,7 +357,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             }
             //取得业主id
             ownerId = ownerRoomRelDtos.get(0).getOwnerId();
-        } else if (payerObjType.equals("6666")) {
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(payerObjType)) {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
             ownerCarDto.setCarId(payerObjId);
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMO.queryOwnerCars(ownerCarDto);
@@ -371,7 +380,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         ownerAppUserDto.setMemberId(memberId);
         ownerAppUserDto.setAppType("WECHAT");
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMO.queryOwnerAppUsers(ownerAppUserDto);
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+        if (ListUtil.isNull(ownerAppUserDtos)) {
             return;
         }
         JSONObject content = new JSONObject();
@@ -389,8 +398,8 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         if (FeeDetailDto.STATE_RETURN_ORDER.equals(paramIn.getString("state"))) {
             //获取退费金额
             double receivedAmount = Double.parseDouble(paramIn.getString("receivedAmount"));
-            double money = receivedAmount * (-1.00);
-            content.put("receivedAmount", money + "元");
+            double money = receivedAmount ;
+            content.put("receivedAmount", money + "元(退费)");
         } else {
             content.put("receivedAmount", paramIn.getString("receivedAmount") + "元");
         }
