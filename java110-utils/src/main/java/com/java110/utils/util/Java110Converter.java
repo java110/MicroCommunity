@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -54,6 +57,15 @@ public class Java110Converter implements Converter {
         if (value instanceof Date && target == Date.class) {
             return value;
         }
+
+        //2.0 Date 转 Date
+        if (value instanceof LocalDateTime && target == Date.class) {
+            ZoneId zoneId = ZoneId.systemDefault();
+            ZonedDateTime zonedDateTime = ((LocalDateTime)value).atZone(zoneId);
+            Date date = Date.from(zonedDateTime.toInstant());
+            return date;
+        }
+
 
         // 3.0 Date 转 String
         if (value instanceof Date && target == String.class) {
