@@ -46,7 +46,7 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
 
         String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
 
-        if ("OFF".equals(mallSwitch)) {
+        if (!"ON".equals(mallSwitch)) {
             throw new IllegalArgumentException("未部署商城系统");
         }
 
@@ -71,7 +71,7 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
 
         String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
 
-        if ("OFF".equals(mallSwitch)) {
+        if (!"ON".equals(mallSwitch)) {
            return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
         }
 
