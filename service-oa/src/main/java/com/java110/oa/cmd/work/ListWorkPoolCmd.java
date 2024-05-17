@@ -26,6 +26,8 @@ import com.java110.dto.workPoolContent.WorkPoolContentDto;
 import com.java110.dto.workPoolFile.WorkPoolFileDto;
 import com.java110.dto.workTask.WorkTaskDto;
 import com.java110.intf.oa.*;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
@@ -138,7 +140,9 @@ public class ListWorkPoolCmd extends Cmd {
             return;
         }
 
-        workPoolDtos.get(0).setPathUrl(workPoolFileDtos.get(0).getPathUrl());
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
+        workPoolDtos.get(0).setPathUrl(imgUrl +workPoolFileDtos.get(0).getPathUrl());
     }
 
     private void queryTaskAndCopy(List<WorkPoolDto> workPoolDtos) {
