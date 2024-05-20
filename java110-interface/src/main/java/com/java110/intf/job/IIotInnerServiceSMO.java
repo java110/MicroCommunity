@@ -2,6 +2,7 @@ package com.java110.intf.job;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.IotDataDto;
 import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.fee.TempCarPayOrderDto;
 import com.java110.dto.machine.CarInoutDto;
@@ -38,4 +39,12 @@ public interface IIotInnerServiceSMO {
     ResultVo postIot(@RequestBody JSONObject reqJson);
 
 
+    /**
+     * <p>重启设备</p>
+     *
+     * @param iotDataDto 请求信息
+     * @return TaskDto 对象数据
+     */
+    @RequestMapping(value = "/postIotData", method = RequestMethod.POST)
+    ResultVo postIotData(@RequestBody IotDataDto iotDataDto);
 }

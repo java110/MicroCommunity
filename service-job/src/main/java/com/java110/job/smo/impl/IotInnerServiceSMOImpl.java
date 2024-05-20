@@ -4,8 +4,10 @@ package com.java110.job.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.IotDataDto;
 import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
+import com.java110.utils.cache.MappingCache;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,24 @@ public class IotInnerServiceSMOImpl extends BaseServiceSMO implements IIotInnerS
 
     @Override
     public ResultVo postIot(@RequestBody JSONObject paramIn) {
+        String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
+        if (!"ON".equals(iotSwitch)) {
+            return new ResultVo(ResultVo.CODE_ERROR, "未部署IOT系统");
+        }
+        ResultVo resultVo = sendIotImpl.post("/iot/api/common.openCommonApi", paramIn);
+        return resultVo;
+    }
+
+    @Override
+    public ResultVo postIotData(@RequestBody IotDataDto iotDataDto) {
+
+        String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
+        if (!"ON".equals(iotSwitch)) {
+            return new ResultVo(ResultVo.CODE_ERROR, "未部署IOT系统");
+        }
+
+        JSONObject paramIn = iotDataDto.getData();
+        paramIn.put("iotApiCode", iotDataDto.getIotApiCode());
         ResultVo resultVo = sendIotImpl.post("/iot/api/common.openCommonApi", paramIn);
         return resultVo;
     }
