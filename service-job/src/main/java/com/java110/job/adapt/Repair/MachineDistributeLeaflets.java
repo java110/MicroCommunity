@@ -143,11 +143,11 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         repairDto.setRepairId(repairId);
         List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
         IMsgNotify msgNotify = null;
-        if(RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDtos.get(0).getNotifyWay())) {
+        if (RepairSettingDto.NOTIFY_WAY_SMS.equals(repairDtos.get(0).getNotifyWay())) {
             msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_ALI);
-        }else if(RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDtos.get(0).getNotifyWay())){
+        } else if (RepairSettingDto.NOTIFY_WAY_WECHAT.equals(repairDtos.get(0).getNotifyWay())) {
             msgNotify = MsgNotifyFactory.getMsgNotify(MsgNotifyFactory.NOTIFY_WAY_WECHAT);
-        }else{
+        } else {
             return;
         }
 
@@ -172,57 +172,8 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
         CommunityDto communityDto = new CommunityDto();
         communityDto.setCommunityId(communityId);
         List<CommunityDto> communityDtos = communityInnerServiceSMO.queryCommunitys(communityDto);
-        if (repairState.equals("1100") && businessRepairUser.getString("state").equals("10006")) { //派单
-            JSONObject paramIn = new JSONObject();
-            for (Business business : businesses) {
-                String businessTypeCd = business.getBusinessTypeCd();
-                if (!StringUtil.isEmpty(businessTypeCd) && businessTypeCd.equals("130200030001")) {
-                    JSONObject data = business.getData();
-                    if (!StringUtil.isEmpty(data.getString("state")) && data.getString("state").equals("10001")) {
-                        paramIn.put("staffId", data.getString("staffId"));
-                        paramIn.put("staffName", data.getString("staffName"));
-                    } else if (data.getString("state").equals("10006")) {
-                        paramIn.put("preStaffId", data.getString("preStaffId"));
-                        paramIn.put("preStaffName", data.getString("preStaffName"));
-                    }
-                }
-            }
-            paramIn.put("repairName", repairName);
-            paramIn.put("repairObjName", repairObjName);
-            paramIn.put("tel", tel);
-            paramIn.put("communityId", communityId);
-            paramIn.put("context", context);
-            paramIn.put("time", time);
-            paramIn.put("repairObjId", repairObjId);
-            paramIn.put("repairId", repairId);
-            //给维修师傅推送信息
-            sendStaffMsg(paramIn, communityDtos.get(0),msgNotify);
-            //派单成功给业主推送信息
-            sendOwnerMsg(paramIn, communityDtos.get(0),msgNotify);
-
-            // 自动打印小票
-            autoPrintRepair(repairUserDtos.get(0).getRuId(), repairDtos.get(0).getRepairType(), communityDtos.get(0));
-
-            //为企业微信群发消息
-            sendMsgToWechatGroup(paramIn, communityDtos.get(0));
-
-
-        } else if (repairState.equals("1100") && !businessRepairUser.getString("state").equals("10006")) {
-            JSONObject paramIn = new JSONObject();
-            paramIn.put("staffId", businessRepairUser.getString("staffId"));
-            paramIn.put("context", context);
-            paramIn.put("time", time);
-            paramIn.put("repairObjId", repairObjId);
-            paramIn.put("preStaffId", businessRepairUser.getString("preStaffId"));
-            paramIn.put("repairName", repairName);
-            paramIn.put("tel", tel);
-            paramIn.put("repairObjName", repairObjName);
-            paramIn.put("repairId", repairId);
-            //抢单成功给维修师傅推送信息
-            sendStaffMsg(paramIn, communityDtos.get(0),msgNotify);
-            //抢单成功给业主推送信息
-            sendOwnerMsg(paramIn, communityDtos.get(0),msgNotify);
-        } else if (repairState.equals("1300")) {   //转单
+        //todo 转单
+        if (RepairDto.STATE_TRANSFER.equals(repairState)) {
             JSONObject paramIn = new JSONObject();
             paramIn.put("repairName", repairName);
             paramIn.put("repairObjName", repairObjName);
@@ -233,9 +184,35 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
             paramIn.put("preStaffName", businessRepairUser.getString("preStaffName"));
             paramIn.put("repairId", repairId);
             //给维修师傅推送信息
-            sendStaffMsg(paramIn, communityDtos.get(0),msgNotify);
+            sendStaffMsg(paramIn, communityDtos.get(0), msgNotify);
+            return;
         }
-
+        //todo 不是结单跳过
+        if (!RepairDto.STATE_TAKING.equals(repairState)) {
+            return;
+        }
+        //todo 派单只打印小票
+        if (RepairUserDto.STATE_DISPATCH.equals(businessRepairUser.getString("state"))) { //派单
+            // 自动打印小票
+            autoPrintRepair(repairUserDtos.get(0).getRuId(), repairDtos.get(0).getRepairType(), communityDtos.get(0));
+            return;
+        }
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("staffId", businessRepairUser.getString("staffId"));
+        paramIn.put("context", context);
+        paramIn.put("time", time);
+        paramIn.put("repairObjId", repairObjId);
+        paramIn.put("preStaffId", businessRepairUser.getString("preStaffId"));
+        paramIn.put("repairName", repairName);
+        paramIn.put("tel", tel);
+        paramIn.put("repairObjName", repairObjName);
+        paramIn.put("repairId", repairId);
+        //抢单成功给维修师傅推送信息
+        sendStaffMsg(paramIn, communityDtos.get(0), msgNotify);
+        //抢单成功给业主推送信息
+        sendOwnerMsg(paramIn, communityDtos.get(0), msgNotify);
+        //为企业微信群发消息
+        sendMsgToWechatGroup(paramIn, communityDtos.get(0));
     }
 
 
@@ -245,7 +222,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendStaffMsg(JSONObject paramIn, CommunityDto communityDto,IMsgNotify msgNotify) {
+    private void sendStaffMsg(JSONObject paramIn, CommunityDto communityDto, IMsgNotify msgNotify) {
         JSONObject content = new JSONObject();
         content.put("repairId", paramIn.getString("repairId"));
         content.put("repairName", paramIn.getString("repairName"));
@@ -271,7 +248,7 @@ public class MachineDistributeLeaflets extends DatabusAdaptImpl {
      * @param paramIn
      * @param communityDto
      */
-    private void sendOwnerMsg(JSONObject paramIn, CommunityDto communityDto,IMsgNotify msgNotify) {
+    private void sendOwnerMsg(JSONObject paramIn, CommunityDto communityDto, IMsgNotify msgNotify) {
         //查询公众号配置
         SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
         smallWeChatDto.setWeChatType("1100");

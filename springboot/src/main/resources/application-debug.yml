@@ -29,15 +29,15 @@ spring:
   activiti:
     database-schema-update: false
   datasource:
-    url: jdbc:mysql://192.168.100.108:3306/TT?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
-    username: TT
-    password: hc12345678
+    url: jdbc:mysql://116.147.38.39:63306/tt_new?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: huanfa@2024#mysql
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
     druid:
-      initial-size: 5
-      max-active: 10
-      min-idle: 5
+      initial-size: 20
+      max-active: 50
+      min-idle: 20
       max-wait: 60000
 
 
