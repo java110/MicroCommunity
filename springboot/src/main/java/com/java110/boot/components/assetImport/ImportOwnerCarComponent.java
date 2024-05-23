@@ -1,7 +1,6 @@
 package com.java110.boot.components.assetImport;
 
 import com.java110.boot.smo.assetExport.IExportOwnerCarSMO;
-import com.java110.boot.smo.assetImport.impl.ImportOwnerCarSMOImpl;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.log.LoggerFactory;
@@ -24,20 +23,9 @@ public class ImportOwnerCarComponent {
     private final static Logger logger = LoggerFactory.getLogger(ImportOwnerCarComponent.class);
 
     @Autowired
-    private ImportOwnerCarSMOImpl importOwnerCarSMOImpl;
-
-    @Autowired
     private IExportOwnerCarSMO exportOwnerCarSMOImpl;
 
-    /**
-     * 添加应用数据
-     *
-     * @param pd 页面数据封装
-     * @return ResponseEntity 对象
-     */
-    public ResponseEntity<String> importData(IPageData pd, MultipartFile uploadFile) throws Exception {
-        return importOwnerCarSMOImpl.importExcelData(pd, uploadFile);
-    }
+
 
     /**
      * 添加应用数据
