@@ -70,7 +70,7 @@ public class QueryOwnerCarsCmd extends Cmd {
             parkingSpaceDto.setNum(reqJson.getString("num"));
             parkingSpaceDto.setCommunityId(reqJson.getString("communityId"));
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-            if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) {
+            if (ListUtil.isNull(parkingSpaceDtos)) {
                 ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(1, 1, new JSONArray());
                 cmdDataFlowContext.setResponseEntity(responseEntity);
                 return;

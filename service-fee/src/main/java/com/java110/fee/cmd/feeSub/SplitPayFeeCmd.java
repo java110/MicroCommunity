@@ -23,11 +23,9 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.fee.FeeAttrDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IFeeInnerServiceSMO;
-import com.java110.intf.fee.IPayFeeSubV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFeeSub.PayFeeSubPo;
@@ -74,6 +72,9 @@ public class SplitPayFeeCmd extends Cmd {
     @Autowired
     private IFeeAttrInnerServiceSMO feeAttrInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "preFeeId", "请求报文中未包含preFeeId");
@@ -94,8 +95,17 @@ public class SplitPayFeeCmd extends Cmd {
             throw new CmdException("费用已结束不能拆分");
         }
 
-        if (FeeDto.FEE_FLAG_CYCLE.equals(feeDtos.get(0).getFeeFlag())) {
-            throw new CmdException("只有间接性费用和一次性费用才能做拆分");
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(feeDtos.get(0).getConfigId());
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+
+        Assert.listOnlyOne(feeConfigDtos, "费用项不存在");
+
+
+        if (!FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+            throw new CmdException("只有周期性费用才能做拆分");
         }
 
         if (ListUtil.isNull(feeDtos.get(0).getFeeAttrDtos())) {
@@ -121,11 +131,11 @@ public class SplitPayFeeCmd extends Cmd {
         }
 
         String startDate = DateUtil.getFormatTimeStringB(endTime);
-        String deadlineTime =DateUtil.getFormatTimeStringB(maxTime);
+        String deadlineTime = DateUtil.getFormatTimeStringB(maxTime);
 
 
-        if(splitTime.getTime() == DateUtil.getDateFromStringB(startDate).getTime()
-                ||splitTime.getTime() == DateUtil.getDateFromStringB(deadlineTime).getTime()){
+        if (splitTime.getTime() == DateUtil.getDateFromStringB(startDate).getTime()
+                || splitTime.getTime() == DateUtil.getDateFromStringB(deadlineTime).getTime()) {
             throw new CmdException("拆分时间不能为 开始时间或者结束时间");
         }
 
