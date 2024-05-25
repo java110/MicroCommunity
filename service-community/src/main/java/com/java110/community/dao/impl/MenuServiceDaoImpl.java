@@ -221,9 +221,9 @@ public class MenuServiceDaoImpl extends BaseServiceDao implements IMenuServiceDa
     public List<Map> getMenuInfo(Map info) throws DAOException {
         logger.debug("查询路由信息 入参 info : {}", info);
 
-        List<Map> businessMenuInfos = sqlSessionTemplate.selectList("menuServiceDaoImpl.getMenuInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("menuServiceDaoImpl.getMenuInfo", info);
 
-        return businessMenuInfos;
+        return infos;
     }
 
 

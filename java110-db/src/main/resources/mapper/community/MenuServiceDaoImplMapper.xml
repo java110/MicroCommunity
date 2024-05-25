@@ -289,7 +289,7 @@
             AND ppr.status_cd = '0'
             )
         </if>
-        order by t.seq
+        order by mg.name, t.seq
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
