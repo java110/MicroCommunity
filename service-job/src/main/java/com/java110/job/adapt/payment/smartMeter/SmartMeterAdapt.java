@@ -136,7 +136,9 @@ public class SmartMeterAdapt extends DatabusAdaptImpl {
             reqJson.put("roomId", feeDtos.get(0).getPayerObjId());
             reqJson.put("communityId", feeDtos.get(0).getCommunityId());
             reqJson.put("receivedAmount", payFeeDetailPo.getReceivedAmount());
-            reqJson.put("feeTypeCd",feeDtos.get(0).getFeeTypeCd());
+            reqJson.put("feeTypeCd", feeDtos.get(0).getFeeTypeCd());
+            String address = FeeAttrDto.getFeeAttrValue(feeDtos.get(0), FeeAttrDto.SPEC_CD_METER_ADDRESS);
+            reqJson.put("address", address);
 
             reqJson.put("iotApiCode", "preStoreMeterBmoImpl");
 

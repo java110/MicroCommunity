@@ -35,6 +35,8 @@ public class FeeAttrDto extends PageDto implements Serializable {
     public static final String SPEC_CD_RATE = "390015";//递增率
     public static final String SPEC_CD_RATE_START_TIME = "390016";//递增开始时间
 
+    public static final String SPEC_CD_METER_ADDRESS = "390017";
+
     /**
      * INSERT INTO `tt`.`t_dict` ( `status_cd`, `name`, `description`, `create_time`, `table_name`, `table_columns`)
      * VALUES ( '390014', '递增周期', '递增周期', '2020-01-30 17:09:43', 'pay_fee_attrs', 'spec_cd');

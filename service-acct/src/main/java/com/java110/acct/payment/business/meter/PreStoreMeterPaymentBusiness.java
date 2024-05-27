@@ -40,7 +40,7 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * 欠费缴费
+ * 水电充值
  */
 @Service("preStoreMeter")
 public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
@@ -101,6 +101,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         Assert.listOnlyOne(machines, "表不存在");
 
         String typeCd = machines.getJSONObject(0).getString("typeCd");
+        String address = machines.getJSONObject(0).getString("address");
         String typeCdName = "";
         if (FeeConfigDto.FEE_TYPE_CD_WATER.equals(typeCd)) {
             typeCdName = "水费充值";
@@ -127,6 +128,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         reqJson.put("receivableAmount", reqJson.getDoubleValue("receivedAmount"));
         reqJson.put("receivedAmount", reqJson.getDoubleValue("receivedAmount"));
         reqJson.put("configId", feeConfigDtos.get(0).getConfigId());
+        reqJson.put("address", address);
         return paymentOrderDto;
     }
 
@@ -179,6 +181,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         receivedAmountDec = receivedAmountDec.divide(new BigDecimal(feeConfigDtos.get(0).getSquarePrice()), 0, BigDecimal.ROUND_HALF_UP);
         List<FeeAttrPo> feeAttrsPos = new ArrayList<>();
         feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_PROXY_CONSUMPTION, receivedAmountDec.doubleValue() + ""));
+        feeAttrsPos.add(addFeeAttr(payFeePo, FeeAttrDto.SPEC_CD_METER_ADDRESS, reqJson.getString("address")));
 
         //todo 查询房屋信息
         RoomDto roomDto = new RoomDto();
