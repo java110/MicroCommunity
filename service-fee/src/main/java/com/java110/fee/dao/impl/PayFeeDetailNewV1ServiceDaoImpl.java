@@ -61,8 +61,8 @@ public class PayFeeDetailNewV1ServiceDaoImpl extends BaseServiceDao implements I
     @Override
     public List<Map> getPayFeeDetailNewInfo(Map info) throws DAOException {
         logger.debug("查询 getPayFeeDetailNewInfo 入参 info : {}", info);
-        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.getPayFeeDetailNewInfo", info);
-        return businessPayFeeDetailNewInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.getPayFeeDetailNewInfo", info);
+        return infos;
     }
 
     /**
@@ -87,34 +87,51 @@ public class PayFeeDetailNewV1ServiceDaoImpl extends BaseServiceDao implements I
     @Override
     public int queryPayFeeDetailNewsCount(Map info) {
         logger.debug("查询 queryPayFeeDetailNewsCount 入参 info : {}", info);
-        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewsCount", info);
-        if (businessPayFeeDetailNewInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
-        return Integer.parseInt(businessPayFeeDetailNewInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryPayFeeDetailNewInfo(Map info) {
         logger.debug("查询 queryPayFeeDetailNewInfo 入参 info : {}", info);
-        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewInfo", info);
-        return businessPayFeeDetailNewInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewInfo", info);
+        return infos;
     }
 
     @Override
     public int queryPayFeeDetailNewCount(Map info) {
         logger.debug("查询 queryPayFeeDetailNewCount 入参 info : {}", info);
-        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewCount", info);
-        if (businessPayFeeDetailNewInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
-        return Integer.parseInt(businessPayFeeDetailNewInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryPayFeeDetailNewSumInfo(Map info) {
         logger.debug("查询 queryPayFeeDetailNewSumInfo 入参 info : {}", info);
-        List<Map> businessPayFeeDetailNewInfos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewSumInfo", info);
-        return businessPayFeeDetailNewInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewSumInfo", info);
+        return infos;
+    }
+
+    @Override
+    public int queryFeeDepositCount(Map info) {
+        logger.debug("查询 queryFeeDepositCount 入参 info : {}", info);
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryFeeDepositCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryFeeDeposit(Map info) {
+        logger.debug("查询 queryFeeDeposit 入参 info : {}", info);
+        List<Map> infos = sqlSessionTemplate.selectList("payFeeDetailNewV1ServiceDaoImpl.queryFeeDeposit", info);
+        return infos;
     }
 }

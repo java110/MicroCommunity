@@ -17,6 +17,7 @@ package com.java110.fee.smo.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.dto.PageDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.PayFeeDetailDto;
 import com.java110.fee.dao.IPayFeeDetailNewV1ServiceDao;
 import com.java110.intf.fee.IPayFeeDetailV1InnerServiceSMO;
@@ -88,6 +89,22 @@ public class PayFeeDetailV1InnerServiceSMOImpl extends BaseServiceSMO implements
         }
         List<PayFeeDetailDto> payFeeDetailNews = BeanConvertUtil.covertBeanList(payFeeDetailNewV1ServiceDaoImpl.queryPayFeeDetailNewSumInfo(BeanConvertUtil.beanCovertMap(payFeeDetailDto)), PayFeeDetailDto.class);
         return payFeeDetailNews;
+    }
+
+    @Override
+    public int queryFeeDepositCount(@RequestBody FeeDetailDto feeDetailDto) {
+        return payFeeDetailNewV1ServiceDaoImpl.queryFeeDepositCount(BeanConvertUtil.beanCovertMap(feeDetailDto));
+    }
+
+    @Override
+    public List<FeeDetailDto> queryFeeDeposit(@RequestBody FeeDetailDto feeDetailDto) {
+        //校验是否传了 分页信息
+        int page = feeDetailDto.getPage();
+        if (page != PageDto.DEFAULT_PAGE) {
+            feeDetailDto.setPage((page - 1) * feeDetailDto.getRow());
+        }
+        List<FeeDetailDto> feeDetailDtos = BeanConvertUtil.covertBeanList(payFeeDetailNewV1ServiceDaoImpl.queryFeeDeposit(BeanConvertUtil.beanCovertMap(feeDetailDto)), FeeDetailDto.class);
+        return feeDetailDtos;
     }
 //
 //    @Override

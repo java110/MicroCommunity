@@ -531,4 +531,112 @@
         </if>
         )) rt
     </select>
+
+
+    <select id="queryFeeDepositCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from pay_fee_detail t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'pay_fee_detail' and td.table_columns = 'state'
+        LEFT JOIN pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.spec_cd = '390008' and pfa1.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.spec_cd = '390012' and pfa2.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa3 on t.fee_id = pfa3.fee_id and pfa3.spec_cd = '390007' and pfa3.status_cd = '0'
+        where 1=1
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and pfa3.`value`= #{ownerId}
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and pf.payer_obj_id= #{payerObjId}
+        </if>
+        and pf.fee_type_cd = '888800010006'
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="payOrderId !=null and payOrderId != ''">
+            and t.pay_order_id= #{payOrderId}
+        </if>
+        <if test="cashierId !=null and cashierId != ''">
+            and t.cashier_id= #{cashierId}
+        </if>
+        <if test="cashierName !=null and cashierName != ''">
+            and t.cashier_name= #{cashierName}
+        </if>
+    </select>
+    <select id="queryFeeDeposit" parameterType="Map" resultType="Map">
+        select t.detail_id detailId,t.fee_id feeId,t.start_time startTime,
+        t.end_time endTime,t.received_amount receivedAmount,pfc.fee_name feeName,
+        t.create_time createTime,t.state,td.name stateName,pfa1.`value` ownerName,pfa2.`value` payerObjName,
+        pfa3.`value` ownerId,pf.payer_obj_id payerObjId,t.cashier_name cashierName,t.pay_order_id payOrderId,t.remark
+        from pay_fee_detail t
+        left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
+        left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 'pay_fee_detail' and td.table_columns = 'state'
+        LEFT JOIN pay_fee_attrs pfa1 on t.fee_id = pfa1.fee_id and pfa1.spec_cd = '390008' and pfa1.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa2 on t.fee_id = pfa2.fee_id and pfa2.spec_cd = '390012' and pfa2.status_cd = '0'
+        LEFT JOIN pay_fee_attrs pfa3 on t.fee_id = pfa3.fee_id and pfa3.spec_cd = '390007' and pfa3.status_cd = '0'
+        where 1=1
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="ownerId !=null and ownerId != ''">
+            and pfa3.`value`= #{ownerId}
+        </if>
+
+        <if test="payerObjId !=null and payerObjId != ''">
+            and pf.payer_obj_id= #{payerObjId}
+        </if>
+        and pf.fee_type_cd = '888800010006'
+        <if test="primeRate !=null and primeRate != ''">
+            and t.prime_rate= #{primeRate}
+        </if>
+        <if test="detailId !=null and detailId != ''">
+            and t.detail_id= #{detailId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="startTime !=null and startTime != ''">
+            and t.create_time &gt;= #{startTime}
+        </if>
+        <if test="endTime !=null and endTime != ''">
+            and t.create_time &lt;= #{endTime}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="payOrderId !=null and payOrderId != ''">
+            and t.pay_order_id= #{payOrderId}
+        </if>
+        <if test="cashierId !=null and cashierId != ''">
+            and t.cashier_id= #{cashierId}
+        </if>
+        <if test="cashierName !=null and cashierName != ''">
+            and t.cashier_name= #{cashierName}
+        </if>
+    </select>
 </mapper>

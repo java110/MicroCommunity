@@ -16,6 +16,7 @@
 package com.java110.intf.fee;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.PayFeeDetailDto;
 import com.java110.po.fee.PayFeeDetailPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -54,6 +55,12 @@ public interface IPayFeeDetailV1InnerServiceSMO {
 
     @RequestMapping(value = "/queryPayFeeDetailNewSum", method = RequestMethod.POST)
     public List<PayFeeDetailDto> queryPayFeeDetailNewSum(@RequestBody PayFeeDetailDto payFeeDetailDto);
+
+    @RequestMapping(value = "/queryFeeDepositCount", method = RequestMethod.POST)
+    int queryFeeDepositCount(@RequestBody FeeDetailDto feeDetailDto);
+
+    @RequestMapping(value = "/queryFeeDeposit", method = RequestMethod.POST)
+    List<FeeDetailDto> queryFeeDeposit(@RequestBody FeeDetailDto feeDetailDto);
 
 //    /**
 //     * <p>查询小区楼信息</p>

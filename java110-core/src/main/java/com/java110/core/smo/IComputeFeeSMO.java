@@ -82,6 +82,14 @@ public interface IComputeFeeSMO {
     public OwnerDto getFeeOwnerDto(FeeDto feeDto);
 
     /**
+     * 查询费用的业主信息
+     *
+     * @param feeId
+     * @return
+     */
+    OwnerDto getFeeOwnerDto(String feeId);
+
+    /**
      * 刷入 付费方名称
      *
      * @param feeDtos

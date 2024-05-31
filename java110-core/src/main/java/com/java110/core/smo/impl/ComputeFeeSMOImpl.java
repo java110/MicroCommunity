@@ -490,7 +490,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             parkingSpaceDto.setCommunityId(feeDto.getCommunityId());
             parkingSpaceDto.setPsId(ownerCarDtos.get(0).getPsId());
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-            if (parkingSpaceDtos == null || parkingSpaceDtos.size() < 1) { //数据有问题
+            if (ListUtil.isNull(parkingSpaceDtos)) { //数据有问题
                 return objName;
             }
             objName = objName + "-" + parkingSpaceDtos.get(0).getAreaNum() + "停车场" + "-" + parkingSpaceDtos.get(0).getNum() + "车位";
@@ -506,6 +506,19 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         }
         return objName;
+    }
+
+    @Override
+    public OwnerDto getFeeOwnerDto(String feeId) {
+
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(feeId);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        Assert.listOnlyOne(feeDtos, "费用不存在");
+        feeDtos.get(0).setFeeAttrDtos(null); // todo 这里设置为空，不要从属性中查以防数据有问题导致有问题
+
+        return getFeeOwnerDto(feeDtos.get(0));
     }
 
     @Override
@@ -559,7 +572,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     private OwnerDto getOwnerDtoByFeeAttr(FeeDto feeDto) {
         List<FeeAttrDto> feeAttrDtos = feeDto.getFeeAttrDtos();
 
-        if (feeAttrDtos == null || feeAttrDtos.size() < 1) {
+        if (ListUtil.isNull(feeAttrDtos)) {
             return null;
         }
 
@@ -2173,11 +2186,11 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             //todo 本轮递增时间未到 费用deadlineTime
             if (curCycleRateEneTime.getTime() < feeDto.getDeadlineTime().getTime()) {
                 curOweMonth = DateUtil.dayCompare(curOweStartTime, curCycleRateEneTime);
-                hasInRateMonth = rateStartMonthIn(oRateStartTime,curOweStartTime,curCycleRateEneTime);
+                hasInRateMonth = rateStartMonthIn(oRateStartTime, curOweStartTime, curCycleRateEneTime);
                 curOweStartTime = curCycleRateEneTime;
             } else {
                 curOweMonth = DateUtil.dayCompare(curOweStartTime, feeDto.getDeadlineTime());
-                hasInRateMonth = rateStartMonthIn(oRateStartTime,curOweStartTime,feeDto.getDeadlineTime());
+                hasInRateMonth = rateStartMonthIn(oRateStartTime, curOweStartTime, feeDto.getDeadlineTime());
 
                 curOweStartTime = feeDto.getDeadlineTime();
             }
@@ -2201,6 +2214,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     /**
      * 递增月在这个之间
+     *
      * @param oRateStartTime
      * @param startTime
      * @param endTime
@@ -2210,7 +2224,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         Calendar calendarStartTime = Calendar.getInstance();
         calendarStartTime.setTime(startTime);
-        calendarStartTime.set(Calendar.DAY_OF_MONTH,1);
+        calendarStartTime.set(Calendar.DAY_OF_MONTH, 1);
 
         Calendar calendarEndTime = Calendar.getInstance();
         calendarEndTime.setTime(endTime);
@@ -2219,15 +2233,15 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
         Calendar calendarOrate = Calendar.getInstance();
         calendarOrate.setTime(oRateStartTime);
-        calendarOrate.set(Calendar.YEAR,calendarStartTime.get(Calendar.YEAR));
+        calendarOrate.set(Calendar.YEAR, calendarStartTime.get(Calendar.YEAR));
 
-        if(calendarStartTime.getTime().before(calendarOrate.getTime()) && calendarEndTime.getTime().after(calendarOrate.getTime())){
+        if (calendarStartTime.getTime().before(calendarOrate.getTime()) && calendarEndTime.getTime().after(calendarOrate.getTime())) {
             return true;
         }
 
-        calendarOrate.set(Calendar.YEAR,calendarEndTime.get(Calendar.YEAR));
+        calendarOrate.set(Calendar.YEAR, calendarEndTime.get(Calendar.YEAR));
 
-        if(calendarStartTime.getTime().before(calendarOrate.getTime()) && calendarEndTime.getTime().after(calendarOrate.getTime())){
+        if (calendarStartTime.getTime().before(calendarOrate.getTime()) && calendarEndTime.getTime().after(calendarOrate.getTime())) {
             return true;
         }
 

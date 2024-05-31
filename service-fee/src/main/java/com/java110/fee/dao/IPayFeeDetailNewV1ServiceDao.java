@@ -87,4 +87,8 @@ public interface IPayFeeDetailNewV1ServiceDao {
      * @date 2023-11-13
      */
     List<Map> queryPayFeeDetailNewSumInfo(Map info);
+
+    int queryFeeDepositCount(Map info);
+
+    List<Map> queryFeeDeposit(Map info);
 }
