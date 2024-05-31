@@ -6,6 +6,7 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
@@ -51,9 +52,18 @@ public class GetOpenApiCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
         Assert.listOnlyOne(userDtos, "用户未登录");
+        String storeId = CmdContextUtils.getStoreId(context);
 
         reqJson.put("propertyUserId", userDtos.get(0).getUserId());
         reqJson.put("propertyUserTel", userDtos.get(0).getTel());
+        reqJson.put("propertyStoreId", storeId);
+
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(storeId);
+        storeDto.setStoreTypeCd(StoreDto.STORE_TYPE_PROPERTY);
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+
+        Assert.listOnlyOne(storeDtos,"不是物业公司");
 
     }
 
