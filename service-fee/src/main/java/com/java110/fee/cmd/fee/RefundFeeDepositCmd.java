@@ -24,6 +24,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -125,6 +126,7 @@ public class RefundFeeDepositCmd extends Cmd {
         refundPayFeeDetailPo.setAcctAmount("0");
         refundPayFeeDetailPo.setCycles(unum(refundPayFeeDetailPo.getCycles()) + "");
         refundPayFeeDetailPo.setPrimeRate(FeeDetailDto.PRIME_REATE_REFUND_ACCT);
+        refundPayFeeDetailPo.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         payFeeDetailV1InnerServiceSMOImpl.savePayFeeDetailNew(refundPayFeeDetailPo);
 
 
