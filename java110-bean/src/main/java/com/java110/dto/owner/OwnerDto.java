@@ -114,6 +114,8 @@ public class OwnerDto extends PageDto implements Serializable {
     private String memberName;
     private String memberLike;
 
+    private String acctAmount;
+
 
     public String getSex() {
         return sex;
@@ -596,5 +598,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setMemberLike(String memberLike) {
         this.memberLike = memberLike;
+    }
+
+    public String getAcctAmount() {
+        return acctAmount;
+    }
+
+    public void setAcctAmount(String acctAmount) {
+        this.acctAmount = acctAmount;
     }
 }

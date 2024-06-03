@@ -24,14 +24,9 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.*;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.account.AccountDto;
-import com.java110.dto.fee.FeeDetailDto;
-import com.java110.dto.fee.FeeDto;
-import com.java110.dto.fee.FeeDiscountDto;
-import com.java110.dto.fee.FeeDiscountRuleDto;
-import com.java110.dto.fee.FeeDiscountSpecDto;
-import com.java110.dto.fee.FeeReceiptDetailDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
@@ -157,6 +152,9 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     @Autowired
     private IOnlinePayRefundV1InnerServiceSMO onlinePayRefundV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;
+
 
     private static final String SPEC_RATE = "89002020980015"; //赠送月份
 
@@ -203,6 +201,19 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         returnPayFeeDto.setReturnFeeId(reqJson.getString("returnFeeId"));
         List<ReturnPayFeeDto> returnPayFeeDtos = returnPayFeeInnerServiceSMOImpl.queryReturnPayFees(returnPayFeeDto);
         Assert.listOnlyOne(returnPayFeeDtos, "未找到需要修改的活动 或多条数据");
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId((String) reqJson.get("feeId"));
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+        Assert.listOnlyOne(feeDtos, "费用不存在");
+        FeeDto feeDto1 = feeDtos.get(0);
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(feeDto1.getConfigId());
+        feeConfigDto.setCommunityId(feeDto1.getCommunityId());
+        List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
+
+        Assert.listOnlyOne(feeConfigDtos, "费用项不存在");
+
 
         // todo 修改退款状态
         updateReturnPayFee(reqJson, userDtos.get(0), returnPayFeeDtos.get(0));
@@ -227,11 +238,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             // todo 修改 缴费记录
             updateFeeDetail(reqJson);
             //修改pay_fee 费用到期时间  以及如果是押金则修改状态为结束收费
-            FeeDto feeDto = new FeeDto();
-            feeDto.setFeeId((String) reqJson.get("feeId"));
-            List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-            Assert.listOnlyOne(feeDtos, "费用不存在");
-            FeeDto feeDto1 = feeDtos.get(0);
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             reqJson.put("endTime", DateUtil.getFormatTimeString(feeDetailDto.getStartTime(), DateUtil.DATE_FORMATE_STRING_A));
             reqJson.put("amount", feeDto1.getAmount());
@@ -248,9 +255,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             reqJson.put("payerObjType", feeDto1.getPayerObjType());
             reqJson.put("feeId", feeDto1.getFeeId());
             //1003006 周期性费用  2006012 一次性费用  4012024 间接性费用
-            //todo 这里一次性费用还是要恢复成 再用状态 不然会让 物业感觉懵逼，让他自己手工点击结束去
-            //if ("2006012".equals(feeDto1.getFeeFlag()) || "888800010006".equals(feeDto1.getFeeTypeCd())) { //888800010006 押金
-            if ("888800010006".equals(feeDto1.getFeeTypeCd())) { //888800010006 押金
+            if (FeeDto.FEE_FLAG_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) { //888800010006 押金
                 reqJson.put("state", "2009001"); //2007001 收费未开始  2008001 有效  2009001 收费结束
             } else {
                 reqJson.put("state", "2008001");

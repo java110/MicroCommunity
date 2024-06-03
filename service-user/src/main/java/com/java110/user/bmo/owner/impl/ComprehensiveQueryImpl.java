@@ -1,11 +1,13 @@
 package com.java110.user.bmo.owner.impl;
 
+import com.java110.dto.account.AccountDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.contract.ContractDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
+import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
@@ -16,6 +18,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.user.bmo.owner.IComprehensiveQuery;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +66,9 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
     @Autowired
     private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
+    @Autowired
+    private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
+
     @Override
     public ResponseEntity<String> query(String communityId, String searchValue, String searchType, String userId, String storeId) {
         OwnerDto ownerDto = null;
@@ -98,6 +104,20 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
                 ownerDto = queryByContract(communityId, searchValue, userId, storeId);
                 break;
         }
+
+        if(ownerDto == null){
+            return ResultVo.createResponseEntity(1, 1, ownerDto);
+        }
+        //todo 查询账户余额
+        AccountDto accountDto = new AccountDto();
+        accountDto.setObjId(ownerDto.getMemberId());
+        accountDto.setPartId(communityId);
+        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH);
+        List<AccountDto> accountDtos =accountInnerServiceSMOImpl.queryAccounts(accountDto);
+        if(!ListUtil.isNull(accountDtos)){
+            ownerDto.setAcctAmount(accountDtos.get(0).getAmount());
+        }
+
         return ResultVo.createResponseEntity(1, 1, ownerDto);
     }
 
