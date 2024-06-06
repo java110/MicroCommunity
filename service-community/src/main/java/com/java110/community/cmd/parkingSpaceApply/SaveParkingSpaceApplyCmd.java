@@ -34,6 +34,8 @@ import com.java110.po.parking.ParkingSpaceApplyPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
@@ -73,8 +75,6 @@ public class SaveParkingSpaceApplyCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "carBrand", "请求报文中未包含carBrand");
         Assert.hasKeyAndValue(reqJson, "carType", "请求报文中未包含carType");
         Assert.hasKeyAndValue(reqJson, "carColor", "请求报文中未包含carColor");
-        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
-        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
         Assert.hasKeyAndValue(reqJson, "applyPersonName", "请求报文中未包含applyPersonName");
         Assert.hasKeyAndValue(reqJson, "applyPersonLink", "请求报文中未包含applyPersonLink");
@@ -101,13 +101,14 @@ public class SaveParkingSpaceApplyCmd extends Cmd {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(parkingSpaceApplyPo.getApplyPersonId());
         List<OwnerDto> ownerDtos = buildingOwnerV1InnerServiceSMOImpl.queryBuildingOwners(ownerDto);
-        if (ownerDtos == null || ownerDtos.size() < 1) {
+        if (ListUtil.isNull(ownerDtos)) {
             throw new CmdException("不是本小区业主不能申请车位！");
         }
         //判断车辆是否已经有申请单
         ParkingSpaceApplyDto parkingSpaceApplyDto = new ParkingSpaceApplyDto();
         parkingSpaceApplyDto.setCarNum(parkingSpaceApplyPo.getCarNum());
         parkingSpaceApplyDto.setState("1001");//审核中
+        parkingSpaceApplyDto.setCommunityId(reqJson.getString("communityId"));
         int count = parkingSpaceApplyV1InnerServiceSMOImpl.queryParkingSpaceApplysCount(parkingSpaceApplyDto);
         if (count > 1) {
             throw new CmdException("当前车辆申请处理审核中，不能重复申请。");
@@ -117,17 +118,12 @@ public class SaveParkingSpaceApplyCmd extends Cmd {
         ownerCarDto.setCarNum(parkingSpaceApplyPo.getCarNum());
         ownerCarDto.setCommunityId(parkingSpaceApplyPo.getCommunityId());
         List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-        if (ownerCarDtos != null && ownerCarDtos.size() > 0) {
-            PayFeeDto payFeeDto = new PayFeeDto();
-            payFeeDto.setPayerObjId(ownerCarDtos.get(0).getCarId());
-            payFeeDto.setState("2008001");
-            List<PayFeeDto> payFeeDtos = payFeeV1InnerServiceSMOImpl.queryPayFees(payFeeDto);
-            if (payFeeDtos != null && payFeeDtos.size() > 0) {
-                throw new CmdException("该车辆已经有相关费用，请到停车费中续费。或者联系管理员");
-            }
+        if (!ListUtil.isNull(ownerCarDtos)) {
+            throw new CmdException("该车辆已存在，购买月卡续费。或者联系管理员");
         }
-
         parkingSpaceApplyPo.setApplyId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+        parkingSpaceApplyPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        parkingSpaceApplyPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         int flag = parkingSpaceApplyV1InnerServiceSMOImpl.saveParkingSpaceApply(parkingSpaceApplyPo);
         if (flag < 1) {
             throw new CmdException("保存数据失败");

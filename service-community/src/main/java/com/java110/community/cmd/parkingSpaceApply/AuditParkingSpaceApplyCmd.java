@@ -43,6 +43,7 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,8 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "applyId", "applyId不能为空");
+        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+
     }
 
     @Override
@@ -104,9 +107,8 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
             }
             return;
         }
-        PayFeePo payFeePo = new PayFeePo();
-        payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        parkingSpaceApplyPo.setFeeId(payFeePo.getFeeId());
+        parkingSpaceApplyPo.setFeeId("-1");
+        parkingSpaceApplyPo.setState(ParkingSpaceApplyDto.STATE_SUCCESS);
         int flag = parkingSpaceApplyV1InnerServiceSMOImpl.updateParkingSpaceApply(parkingSpaceApplyPo);
         if (flag < 1) {
             throw new CmdException("更新数据失败");
@@ -114,7 +116,7 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
         ParkingSpaceApplyDto parkingSpaceApplyDto = new ParkingSpaceApplyDto();
         parkingSpaceApplyDto.setApplyId(parkingSpaceApplyPo.getApplyId());
         List<ParkingSpaceApplyDto> parkingSpaceApplyDtos = parkingSpaceApplyV1InnerServiceSMOImpl.queryParkingSpaceApplys(parkingSpaceApplyDto);
-        if (parkingSpaceApplyDtos == null || parkingSpaceApplyDtos.size() < 1) {
+        if (ListUtil.isNull(parkingSpaceApplyDtos)) {
             throw new CmdException("未查询到申请单，请联系管理员");
         }
         ParkingSpaceApplyDto parkingSpaceApply = parkingSpaceApplyDtos.get(0);
@@ -126,7 +128,7 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
         List<OwnerCarDto> ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
         String catId = "";
         OwnerCarPo ownerCarPo = new OwnerCarPo();
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+        if (ListUtil.isNull(ownerCarDtos)) {
             ownerCarPo.setCarId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
             ownerCarPo.setOwnerId(parkingSpaceApply.getApplyPersonId());
             ownerCarPo.setbId("-1");
@@ -159,38 +161,6 @@ public class AuditParkingSpaceApplyCmd extends Cmd {
         flag = parkingSpaceV1InnerServiceSMOImpl.updateParkingSpace(parkingSpacePo);
         if (flag < 1) {
             throw new CmdException("更新车位状态失败");
-        }
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setConfigId(parkingSpaceApply.getConfigId());
-        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
-            throw new CmdException("未查询到相关费用项设置，请联系管理员");
-        }
-        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
-        communityMemberDto.setCommunityId(parkingSpaceApply.getCommunityId());
-        communityMemberDto.setMemberTypeCd("390001200002");
-        List<CommunityMemberDto> communityMemberDtos = communityMemberV1InnerServiceSMOImpl.queryCommunityMembers(communityMemberDto);
-        if (communityMemberDtos == null || communityMemberDtos.size() < 1) {
-            throw new CmdException("未查询到小区和商户的关系，请联系管理员");
-        }
-        FeeConfigDto feeConfig = feeConfigDtos.get(0);
-        payFeePo.setCommunityId(feeConfig.getCommunityId());
-        payFeePo.setConfigId(feeConfig.getConfigId());
-        payFeePo.setFeeTypeCd(feeConfig.getFeeTypeCd());
-        payFeePo.setPayerObjId(catId);
-        payFeePo.setIncomeObjId(communityMemberDtos.get(0).getMemberId());//根据小区ID查询storeId
-        payFeePo.setStartTime(parkingSpaceApply.getStartTime());
-        payFeePo.setEndTime(parkingSpaceApply.getStartTime());
-        payFeePo.setAmount("0");
-        payFeePo.setFeeFlag(feeConfig.getFeeFlag());
-        payFeePo.setState(FeeDto.STATE_DOING);
-        payFeePo.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_PARKING_SPACE);
-        payFeePo.setBatchId("-1");
-        payFeePo.setbId("-1");
-        payFeePo.setUserId(userId);
-        flag = payFeeNewV1InnerServiceSMOImpl.savePayFee(payFeePo);
-        if (flag < 1) {
-            throw new CmdException("更新数据失败");
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

@@ -16,6 +16,7 @@ import java.util.Date;
 public class ParkingSpaceApplyDto extends PageDto implements Serializable {
 
     public static final String STATE_FAIL = "4004"; // 审核失败
+    public static final String STATE_SUCCESS = "3003"; // 审核成功
 
     private String carBrand;
     private String applyPersonName;
