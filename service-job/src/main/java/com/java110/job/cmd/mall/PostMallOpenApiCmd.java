@@ -52,7 +52,7 @@ public class PostMallOpenApiCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson, "mallApiCode", "未包含IOT接口编码");
+        Assert.hasKeyAndValue(reqJson, "mallApiCode", "未包含MALL接口编码");
 
         String mallSwitch = MappingCache.getValue("MALL", "MALL_SWITCH");
         if (!"ON".equals(mallSwitch)) {
