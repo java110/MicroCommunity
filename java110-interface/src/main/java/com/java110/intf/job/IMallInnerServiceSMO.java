@@ -2,6 +2,8 @@ package com.java110.intf.job;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.IotDataDto;
+import com.java110.dto.MallDataDto;
 import com.java110.dto.user.UserDto;
 import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -30,6 +32,15 @@ public interface IMallInnerServiceSMO {
      */
     @RequestMapping(value = "/postMall", method = RequestMethod.POST)
     ResultVo postMall(@RequestBody JSONObject reqJson);
+
+    /**
+     * <p>重启设备</p>
+     *
+     * @param mallDataDto 请求信息
+     * @return TaskDto 对象数据
+     */
+    @RequestMapping(value = "/postMallData", method = RequestMethod.POST)
+    ResultVo postMallData(@RequestBody MallDataDto mallDataDto);
 
 
     @RequestMapping(value = "/generatorMallCode", method = RequestMethod.POST)

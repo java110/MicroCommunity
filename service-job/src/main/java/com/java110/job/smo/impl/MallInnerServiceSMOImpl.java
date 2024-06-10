@@ -4,6 +4,7 @@ package com.java110.job.smo.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.MallDataDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IMallInnerServiceSMO;
 import com.java110.job.adapt.hcIot.IotConstant;
@@ -37,6 +38,28 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
 
     @Override
     public ResultVo postMall(@RequestBody JSONObject paramIn) {
+        String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
+
+        if (!"ON".equals(mallSwitch)) {
+            return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+        }
+
+        ResultVo resultVo = sendMallImpl.post("/mall/api/common.openCommonApi", paramIn);
+        return resultVo;
+    }
+
+    @Override
+    public ResultVo postMallData(@RequestBody MallDataDto mallDataDto) {
+
+        String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
+
+        if (!"ON".equals(mallSwitch)) {
+            return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+        }
+
+
+        JSONObject paramIn = mallDataDto.getData();
+        paramIn.put("mallApiCode", mallDataDto.getMallApiCode());
         ResultVo resultVo = sendMallImpl.post("/mall/api/common.openCommonApi", paramIn);
         return resultVo;
     }
