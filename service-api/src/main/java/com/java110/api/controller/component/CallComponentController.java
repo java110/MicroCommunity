@@ -113,7 +113,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
                     msg = targetEx.getMessage();
                 }
             } else {
-                msg = e.getMessage();
+                msg ="调用异常";
             }
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
@@ -185,7 +185,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
                     msg = targetEx.getMessage();
                 }
             } else {
-                msg = e.getMessage();
+                msg ="调用异常";
             }
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
@@ -258,7 +258,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
                     msg = targetEx.getMessage();
                 }
             } else {
-                msg = e.getMessage();
+                msg ="调用异常";
             }
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
@@ -321,7 +321,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
                     msg = targetEx.getMessage();
                 }
             } else {
-                msg = e.getMessage();
+                msg ="调用异常";
             }
             responseEntity = new ResponseEntity<Object>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
