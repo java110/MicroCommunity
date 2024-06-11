@@ -131,6 +131,7 @@ public class AppEditSelfCarNumCmd extends Cmd {
         paramIn.put("page", 1);
         paramIn.put("row", 1);
         paramIn.put("paNum", areaNum);
+        paramIn.put("carNum",carNum);
 
         ResultVo resultVo = iotInnerServiceSMOImpl.postIotData(new IotDataDto("listCarInParkingAreaBmoImpl", paramIn));
 
