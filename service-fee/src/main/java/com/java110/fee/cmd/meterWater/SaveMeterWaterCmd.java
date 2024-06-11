@@ -31,10 +31,7 @@ import com.java110.dto.payFee.PayFeeBatchDto;
 import com.java110.dto.user.UserDto;
 import com.java110.fee.feeMonth.IPayFeeMonth;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
-import com.java110.intf.fee.IMeterWaterV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeBatchV1InnerServiceSMO;
-import com.java110.intf.fee.IPayFeeV1InnerServiceSMO;
+import com.java110.intf.fee.*;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.fee.FeeAttrPo;
@@ -45,6 +42,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +86,9 @@ public class SaveMeterWaterCmd extends Cmd {
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
 
     @Autowired
+    private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;
+
+    @Autowired
     private IPayFeeBatchV1InnerServiceSMO payFeeBatchV1InnerServiceSMOImpl;
 
     @Autowired
@@ -105,7 +106,6 @@ public class SaveMeterWaterCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "feeTypeCd", "请求报文中未包含费用类型");
         Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含费用项");
         Assert.hasKeyAndValue(reqJson, "objType", "请求报文中未包含objType");
         Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId");
@@ -119,11 +119,22 @@ public class SaveMeterWaterCmd extends Cmd {
         if (reqJson.getDoubleValue("curDegrees") < reqJson.getDoubleValue("preDegrees")) {
             throw new CmdException("当前读数小于上期读数");
         }
+
+
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(reqJson.getString("configId"));
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
+        List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
+        if (ListUtil.isNull(feeConfigDtos)) {
+            throw new CmdException("费用项不存在");
+        }
+        reqJson.put("feeTypeCd", feeConfigDtos.get(0).getFeeTypeCd());
         String objId = reqJson.getString("objId");
         RoomDto roomDto = new RoomDto();
         roomDto.setRoomId(objId);
@@ -151,15 +162,17 @@ public class SaveMeterWaterCmd extends Cmd {
             //将数组转成list集合(电费黑名单集合)
             electricRemarkList = Arrays.asList(electricSplit);
         }
+
+
         //如果是水费，且在水费黑名单就直接生成水费记录，不生成费用
         if (waterRemarkList.contains(communityId)
                 && FeeConfigDto.FEE_TYPE_CD_METER.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("feeId", "-1");
-            addMeterWater(reqJson);
+            addMeterWater(reqJson, roomList.get(0));
         } else if (electricRemarkList.contains(communityId)
                 && FeeConfigDto.FEE_TYPE_CD_WATER.equals(reqJson.getString("feeTypeCd"))) {
             reqJson.put("feeId", "-1");
-            addMeterWater(reqJson);
+            addMeterWater(reqJson, roomList.get(0));
         } else {
             PayFeePo payFeePo = BeanConvertUtil.covertBean(reqJson, PayFeePo.class);
             payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId));
@@ -178,7 +191,7 @@ public class SaveMeterWaterCmd extends Cmd {
 
             //todo 先写 不然 写月离散表 查询费用时 查不到
             reqJson.put("feeId", payFeePo.getFeeId());
-            addMeterWater(reqJson);
+            addMeterWater(reqJson, roomList.get(0));
 
             int flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
             if (flag < 1) {
@@ -257,13 +270,13 @@ public class SaveMeterWaterCmd extends Cmd {
      * @param paramInJson 接口调用放传入入参
      * @return 订单服务能够接受的报文
      */
-    public void addMeterWater(JSONObject paramInJson) {
+    public void addMeterWater(JSONObject paramInJson, RoomDto roomDto) {
         MeterWaterPo meterWaterPo = BeanConvertUtil.covertBean(paramInJson, MeterWaterPo.class);
         if (StringUtil.isEmpty(meterWaterPo.getbId())) {
             meterWaterPo.setbId("-1");
         }
         meterWaterPo.setWaterId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-
+        meterWaterPo.setObjName(roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum());
         int flag = meterWaterV1InnerServiceSMOImpl.saveMeterWater(meterWaterPo);
 
         if (flag < 1) {
