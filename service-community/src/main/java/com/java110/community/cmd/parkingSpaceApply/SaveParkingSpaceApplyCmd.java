@@ -72,9 +72,7 @@ public class SaveParkingSpaceApplyCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "carNum", "请求报文中未包含carNum");
-        Assert.hasKeyAndValue(reqJson, "carBrand", "请求报文中未包含carBrand");
         Assert.hasKeyAndValue(reqJson, "carType", "请求报文中未包含carType");
-        Assert.hasKeyAndValue(reqJson, "carColor", "请求报文中未包含carColor");
         Assert.hasKeyAndValue(reqJson, "state", "请求报文中未包含state");
         Assert.hasKeyAndValue(reqJson, "applyPersonName", "请求报文中未包含applyPersonName");
         Assert.hasKeyAndValue(reqJson, "applyPersonLink", "请求报文中未包含applyPersonLink");
