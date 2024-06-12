@@ -41,7 +41,7 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
 
         if (!"ON".equals(mallSwitch)) {
-            return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+            return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
         }
 
         ResultVo resultVo = sendMallImpl.post("/mall/api/common.openCommonApi", paramIn);
@@ -54,7 +54,7 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
 
         if (!"ON".equals(mallSwitch)) {
-            return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+            return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
         }
 
 
@@ -95,7 +95,7 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
 
         if (!"ON".equals(mallSwitch)) {
-           return new ResultVo(ResultVo.CODE_OK,ResultVo.MSG_OK);
+            return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
         }
 
         JSONObject paramIn = new JSONObject();
@@ -108,6 +108,26 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         ResultVo resultVo = sendMallImpl.post("/mall/api/token.generatorCode", paramIn);
 
         return resultVo;
+    }
+
+    @Override
+    public double computeIntegralMoney(@RequestBody int quantity) {
+
+        String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
+
+        if (!"ON".equals(mallSwitch)) {
+            return 0;
+        }
+
+
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("quantity", quantity);
+        paramIn.put("mallApiCode", "computeIntegralMoneyBmoImpl");
+        ResultVo resultVo = sendMallImpl.post("/mall/api/common.openCommonApi", paramIn);
+        if (resultVo.getCode() != ResultVo.CODE_OK) {
+            throw new IllegalArgumentException(resultVo.getMsg());
+        }
+        return Double.parseDouble(resultVo.getData().toString());
     }
 
 }

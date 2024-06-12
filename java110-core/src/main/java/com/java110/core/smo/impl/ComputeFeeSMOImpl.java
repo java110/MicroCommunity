@@ -2052,33 +2052,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
 
     }
 
-    @Override
-    public long computeOneIntegralQuantity(IntegralRuleConfigDto integralRuleConfigDto, JSONObject reqJson) {
-        String computingFormula = integralRuleConfigDto.getComputingFormula();
-        BigDecimal amountDec = null;
-        long amount = 0;
-        if (IntegralRuleConfigDto.COMPUTING_FORMULA_AREA.equals(computingFormula)) { //面积乘以单价
-            BigDecimal areaDec = new BigDecimal(Double.parseDouble(reqJson.getString("area")));
-            BigDecimal squarePriceDec = new BigDecimal(Double.parseDouble(integralRuleConfigDto.getSquarePrice()));
-            amountDec = areaDec.multiply(squarePriceDec).setScale(2, BigDecimal.ROUND_HALF_UP);
-        } else if (IntegralRuleConfigDto.COMPUTING_FORMULA_MONEY.equals(computingFormula)) { // 金额乘以单价
-            BigDecimal aDec = new BigDecimal(Double.parseDouble(reqJson.getString("amount")));
-            BigDecimal squarePriceDec = new BigDecimal(Double.parseDouble(integralRuleConfigDto.getSquarePrice()));
-            amountDec = aDec.multiply(squarePriceDec).setScale(2, BigDecimal.ROUND_HALF_UP);
-        } else if (IntegralRuleConfigDto.COMPUTING_FORMULA_FIXED.equals(computingFormula)) { // 固定积分
-            amountDec = new BigDecimal(Double.parseDouble(integralRuleConfigDto.getAdditionalAmount()));
-        } else {
-            amountDec = new BigDecimal(0);
-        }
 
-        if (IntegralRuleConfigDto.SCALE_UP.equals(integralRuleConfigDto.getScale())) {
-            amount = new Double(Math.ceil(amountDec.doubleValue())).longValue();
-        } else {
-            amount = new Double(Math.floor(amountDec.doubleValue())).longValue();
-        }
-        integralRuleConfigDto.setQuantity(amount + "");
-        return amount;
-    }
 
     /**
      * 租金处理

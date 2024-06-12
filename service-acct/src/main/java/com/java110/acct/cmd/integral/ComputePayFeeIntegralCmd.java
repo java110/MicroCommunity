@@ -121,9 +121,9 @@ public class ComputePayFeeIntegralCmd extends Cmd {
     private long computeIntegralQuantity(List<IntegralRuleConfigDto> integralRuleConfigDtos,JSONObject reqJson) {
 
         long quantity = 0;
-        for(IntegralRuleConfigDto integralRuleConfigDto:integralRuleConfigDtos){
-            quantity += computeFeeSMOImpl.computeOneIntegralQuantity(integralRuleConfigDto,reqJson);
-        }
+//        for(IntegralRuleConfigDto integralRuleConfigDto:integralRuleConfigDtos){
+//            quantity += computeFeeSMOImpl.computeOneIntegralQuantity(integralRuleConfigDto,reqJson);
+//        }
         return quantity;
     }
 

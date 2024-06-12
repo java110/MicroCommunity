@@ -14,6 +14,8 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -410,5 +412,52 @@ public class PayUtil {
 //生成环境
             return money;
         }
+    }
+
+    public static String createSignSha256(SortedMap<String, String> parameters, String key) {
+        StringBuffer sb = new StringBuffer();
+        Set es = parameters.entrySet();
+        Iterator<?> it = es.iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            String k = (String) entry.getKey();
+            if (entry.getValue() != null || !"".equals(entry.getValue())) {
+                String v = String.valueOf(entry.getValue());
+                if (null != v && !"".equals(v) && !"sign".equals(k) && !"key".equals(k)) {
+                    sb.append(k + "=" + v + "&");
+                }
+            }
+        }
+        sb.append("key=" + key);
+        logger.debug("加密前串：" + sb.toString());
+        //String sign = md5(sb.toString()).toUpperCase();
+        String sign = "";
+        try {
+            Mac sha256_HMAC = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secret_key = new SecretKeySpec(key.getBytes(), "HmacSHA256");
+            sha256_HMAC.init(secret_key);
+            //  utf-8 : 解决中文加密不一致问题,必须指定编码格式
+            sign = byteArrayToHexString(sha256_HMAC.doFinal(sb.toString().getBytes("utf-8"))).toUpperCase();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sign;
+    }
+    /**
+     * 将加密后的字节数组转换成字符串
+     *
+     * @param b 字节数组
+     * @return 字符串
+     */
+    private static String byteArrayToHexString(byte[] b) {
+        StringBuilder hs = new StringBuilder();
+        String stmp;
+        for (int n = 0; b != null && n < b.length; n++) {
+            stmp = Integer.toHexString(b[n] & 0XFF);
+            if (stmp.length() == 1)
+                hs.append('0');
+            hs.append(stmp);
+        }
+        return hs.toString().toLowerCase();
     }
 }

@@ -15,10 +15,9 @@ import java.util.Date;
  **/
 public class IntegralRuleConfigDto extends PageDto implements Serializable {
 
-    //计算公式 1001 面积*单价 2002 金额乘以单价 3003 固定积分
-    public static final String COMPUTING_FORMULA_AREA = "1001";
-    public static final String COMPUTING_FORMULA_MONEY = "2002";
-    public static final String COMPUTING_FORMULA_FIXED = "3003";
+    //计算公式 1001 金额 2002 月份
+    public static final String COMPUTING_FORMULA_MONEY = "1001";
+    public static final String COMPUTING_FORMULA_MONTH = "2002";
 
     public static final String SCALE_UP = "3";
     public static final String SCALE_DOWN = "4";

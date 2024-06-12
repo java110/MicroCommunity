@@ -1,15 +1,18 @@
 package com.java110.acct.payment.business.payFee;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.acct.integral.IComputeGiftIntegral;
 import com.java110.acct.payment.IPaymentBusiness;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.fee.FeeDto;
+import com.java110.dto.integral.GiftIntegralDto;
 import com.java110.dto.payment.PaymentOrderDto;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.util.MoneyUtil;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,6 +28,10 @@ public class PayFeePaymentBusiness implements IPaymentBusiness {
     private final static Logger logger = LoggerFactory.getLogger(PayFeePaymentBusiness.class);
 
 
+    @Autowired
+    private IComputeGiftIntegral computeGiftIntegralImpl;
+
+
     @Override
     public PaymentOrderDto unified(ICmdDataFlowContext context, JSONObject reqJson) {
 
@@ -35,14 +42,24 @@ public class PayFeePaymentBusiness implements IPaymentBusiness {
         String feeName = orderInfo.getString("feeName");
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
 
+        GiftIntegralDto giftIntegralDto = computeGiftIntegralImpl.gift(money, reqJson.getIntValue("cycles"), reqJson.getString("communityId"));
+
         //这里防止 小数点不是 2位 比如 3位之类的 微信平台不支持
-        money = MoneyUtil.computePriceScale(money,"1",2);
+        money = MoneyUtil.computePriceScale(money, "1", 2);
 
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(orderId);
         paymentOrderDto.setMoney(money);
         paymentOrderDto.setName(feeName);
+
+        if (giftIntegralDto != null && giftIntegralDto.getMoney() > 0) {
+            paymentOrderDto.setIsShare("Y");
+            giftIntegralDto.setUserId(userId);
+            paymentOrderDto.setGiftIntegralDto(giftIntegralDto);
+        }
+
+
         return paymentOrderDto;
     }
 

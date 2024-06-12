@@ -48,4 +48,8 @@ public interface IMallInnerServiceSMO {
 
     @RequestMapping(value = "/sendUserInfo", method = RequestMethod.POST)
     ResultVo sendUserInfo(@RequestBody UserDto userDto);
+
+
+    @RequestMapping(value = "/computeIntegralMoney", method = RequestMethod.POST)
+    double computeIntegralMoney(@RequestBody int quantity);
 }

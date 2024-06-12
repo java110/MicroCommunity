@@ -206,6 +206,5 @@ public interface IComputeFeeSMO {
      */
     void dealRentRateCustEndTime(FeeDto feeDto, Date custEndTime);
 
-    long computeOneIntegralQuantity(IntegralRuleConfigDto integralRuleConfigDto, JSONObject reqJson);
 
 }
