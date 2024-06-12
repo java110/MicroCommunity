@@ -94,15 +94,15 @@ public class ListPayFeeRuleBillCmd extends Cmd {
 
     private void computeFeePrice(List<PayFeeRuleBillDto> payFeeRuleBillDtos) {
 
-        if(payFeeRuleBillDtos == null || payFeeRuleBillDtos.isEmpty()){
-            return ;
+        if (payFeeRuleBillDtos == null || payFeeRuleBillDtos.isEmpty()) {
+            return;
         }
 
-        for(PayFeeRuleBillDto payFeeRuleBillDto : payFeeRuleBillDtos){
+        for (PayFeeRuleBillDto payFeeRuleBillDto : payFeeRuleBillDtos) {
             payFeeRuleBillDto.setCycle("1");
 
-            try{
-                doComputeFeePrice(payFeeRuleBillDto,1);
+            try {
+                doComputeFeePrice(payFeeRuleBillDto, 1);
             } catch (Exception e) {
                 logger.error("查询费用信息 ，费用信息错误", e);
             }
@@ -154,7 +154,7 @@ public class ListPayFeeRuleBillCmd extends Cmd {
         payFeeRuleBillDto.setCommunityId(reqJson.getString("communityId"));
         List<PayFeeRuleBillDto> payFeeRuleBillDtos = payFeeRuleBillV1InnerServiceSMOImpl.queryPayFeeRuleBills(payFeeRuleBillDto);
 
-        if (payFeeRuleBillDtos == null || payFeeRuleBillDtos.isEmpty()) {
+        if (ListUtil.isNull(payFeeRuleBillDtos)) {
             return;
         }
         reqJson.remove("feeId");

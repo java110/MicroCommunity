@@ -84,6 +84,9 @@
         <if test="feeId !=null and feeId != ''">
             and pfrb.fee_id= #{feeId}
         </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id = #{payerObjId}
+        </if>
         order by pfrb.cur_year_month
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -133,37 +136,43 @@
     <!-- 查询费用账单数量 add by wuxw 2018-07-03 -->
     <select id="queryPayFeeRuleBillsCount" parameterType="Map" resultType="Map">
         select count(1) count
-        from pay_fee_rule_bill t
+        from pay_fee t
+        inner join pay_fee_rule_bill pfrb on t.fee_id = pfrb.fee_id and pfrb.status_cd = '0'
+        INNER join pay_fee_config pfc on t.config_id = pfc.config_id and
+        pfc.status_cd = '0'
         where 1 =1
         <if test="billName !=null and billName != ''">
-            and t.bill_name= #{billName}
+            and pfrb.bill_name= #{billName}
         </if>
         <if test="configId !=null and configId != ''">
-            and t.config_id= #{configId}
+            and pfrb.config_id= #{configId}
         </if>
         <if test="billId !=null and billId != ''">
-            and t.bill_id= #{billId}
+            and pfrb.bill_id= #{billId}
         </if>
         <if test="curYearMonth !=null and curYearMonth != ''">
-            and t.cur_year_month= #{curYearMonth}
+            and pfrb.cur_year_month= #{curYearMonth}
         </if>
         <if test="statusCd !=null and statusCd != ''">
-            and t.status_cd= #{statusCd}
+            and pfrb.status_cd= #{statusCd}
         </if>
         <if test="remark !=null and remark != ''">
-            and t.remark= #{remark}
+            and pfrb.remark= #{remark}
         </if>
         <if test="ruleId !=null and ruleId != ''">
-            and t.rule_id= #{ruleId}
+            and pfrb.rule_id= #{ruleId}
         </if>
         <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+            and pfrb.community_id= #{communityId}
         </if>
         <if test="batchId !=null and batchId != ''">
-            and t.batch_id= #{batchId}
+            and pfrb.batch_id= #{batchId}
         </if>
         <if test="feeId !=null and feeId != ''">
-            and t.fee_id= #{feeId}
+            and pfrb.fee_id= #{feeId}
+        </if>
+        <if test="payerObjId !=null and payerObjId != ''">
+            and t.payer_obj_id = #{payerObjId}
         </if>
 
 
