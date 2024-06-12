@@ -92,6 +92,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String relId;
 
+    private String idCard;
+
     private List<String> urls;
 
 
@@ -407,5 +409,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setNameLike(String nameLike) {
         this.nameLike = nameLike;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }

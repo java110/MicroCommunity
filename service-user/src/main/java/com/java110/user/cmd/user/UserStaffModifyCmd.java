@@ -12,17 +12,20 @@ import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.store.StoreUserDto;
+import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.org.OrgStaffRelPo;
 import com.java110.po.store.StoreUserPo;
+import com.java110.po.user.UserAttrPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -93,6 +96,9 @@ public class UserStaffModifyCmd extends Cmd {
     @Autowired
     private IStoreUserV1InnerServiceSMO storeUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserAttrV1InnerServiceSMO userAttrV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.jsonObjectHaveKey(reqJson, "staffId", "请求参数中未包含员工 节点，请确认");
@@ -157,9 +163,9 @@ public class UserStaffModifyCmd extends Cmd {
         UserDto userDto = new UserDto();
         userDto.setTel(userPo.getTel());
         userDto.setUserFlag("1");
-        userDto.setLevelCd("01"); //员工
+        userDto.setLevelCd(UserDto.LEVEL_CD_STAFF); //员工
         List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
-        if (users != null && users.size() > 0) {
+        if (!ListUtil.isNull(users)) {
             for (UserDto user : users) {
                 if (!user.getUserId().equals(userPo.getUserId())) {
                     throw new IllegalArgumentException("员工手机号不能重复，请重新输入");
@@ -174,6 +180,9 @@ public class UserStaffModifyCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存用户异常");
         }
+
+        //todo 修改身份证
+        updateStaffIdCard(users.get(0),paramObj);
 
         StoreUserDto storeUserDto = new StoreUserDto();
         storeUserDto.setUserId(userPo.getUserId());
@@ -212,6 +221,43 @@ public class UserStaffModifyCmd extends Cmd {
             throw new CmdException("保存员工 失败");
         }
 
+    }
+
+    /**
+     * 修改员工身份证号
+     * @param userDto
+     * @param paramObj
+     */
+    private void updateStaffIdCard(UserDto userDto, JSONObject paramObj) {
+
+        if (!paramObj.containsKey("idCard")) {
+            return;
+        }
+
+        UserAttrDto userAttrDto = new UserAttrDto();
+        userAttrDto.setUserId(userDto.getUserId());
+        userAttrDto.setSpecCd(UserAttrDto.SPEC_ID_CARD);
+        List<UserAttrDto> userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
+
+        if(!ListUtil.isNull(userAttrDtos)){
+            UserAttrPo userAttrPo = new UserAttrPo();
+            userAttrPo.setAttrId(userAttrDtos.get(0).getAttrId());
+            userAttrV1InnerServiceSMOImpl.deleteUserAttr(userAttrPo);
+        }
+
+
+        String idCard = paramObj.getString("idCard");
+        if (StringUtil.isEmpty(idCard)) {
+            return;
+        }
+
+        UserAttrPo userAttrPo = new UserAttrPo();
+        userAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+        userAttrPo.setSpecCd(UserAttrDto.SPEC_ID_CARD);
+        userAttrPo.setUserId(userDto.getUserId());
+        userAttrPo.setValue(idCard);
+
+        userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
     }
 
 

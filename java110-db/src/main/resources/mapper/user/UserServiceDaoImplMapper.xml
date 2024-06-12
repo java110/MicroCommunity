@@ -527,7 +527,7 @@
     <select id="getStaffs" parameterType="Map" resultType="Map">
         select u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,su.rel_cd relCd,td.name relCdName
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,su.rel_cd relCd,td.name relCdName,ua.value idCard
         <if test="orgId !=null and orgId != ''">
             ,uo.org_id orgId,uo.org_name,uo.org_name orgName,uosr.store_id storeId,uosr.rel_id relId
         </if>
@@ -535,6 +535,7 @@
         u_user u
         inner join s_store_user su on su.user_id = u.user_id
         left join t_dict td on su.rel_cd = td.status_cd and td.table_name='s_store_user' and td.table_columns='rel_cd'
+        left join u_user_attr ua on ua.user_id = u.user_id and ua.spec_cd = '100202406002' and ua.status_cd = '0'
         <if test="(orgId !=null and orgId != '')||(orgIds != null and orgIds.length > 0)">
             left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
             left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
@@ -582,7 +583,7 @@
             and uosr.status_cd =0
             GROUP BY u.user_id,u.name,u.email,u.address,u.location_cd,
             u.age,u.sex,u.tel,u.level_cd ,u.b_id,su.rel_cd ,td.name
-            ,uo.org_id,uo.org_name,uosr.store_id,uosr.rel_id
+            ,uo.org_id,uo.org_name,uosr.store_id,uosr.rel_id,ua.value
         </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">

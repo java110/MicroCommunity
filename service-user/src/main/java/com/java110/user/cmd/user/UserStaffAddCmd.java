@@ -9,15 +9,18 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.user.UserAttrDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.store.IOrgStaffRelV1InnerServiceSMO;
 import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
+import com.java110.intf.user.IUserAttrV1InnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.org.OrgStaffRelPo;
 import com.java110.po.store.StoreUserPo;
+import com.java110.po.user.UserAttrPo;
 import com.java110.po.user.UserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -62,8 +65,8 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\"orgId\":\"102022091988250052\",\"orgName\":\"演示物业 / 件部\",\"username\":\"张三\",\"sex\":\"0\",\"email\":\"231@qq.com\",\"tel\":\"123\",\"address\":\"123\",\"relCd\":\"1000\",\"photo\":\"\",\"name\":\"张三\"}",
-        resBody="{'code':0,'msg':'成功'}"
+        reqBody = "{\"orgId\":\"102022091988250052\",\"orgName\":\"演示物业 / 件部\",\"username\":\"张三\",\"sex\":\"0\",\"email\":\"231@qq.com\",\"tel\":\"123\",\"address\":\"123\",\"relCd\":\"1000\",\"photo\":\"\",\"name\":\"张三\"}",
+        resBody = "{'code':0,'msg':'成功'}"
 )
 
 @Java110Cmd(serviceCode = "user.staff.add")
@@ -71,6 +74,9 @@ public class UserStaffAddCmd extends Cmd {
 
     @Autowired
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserAttrV1InnerServiceSMO userAttrV1InnerServiceSMOImpl;
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
@@ -163,6 +169,33 @@ public class UserStaffAddCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存用户异常");
         }
+        //todo 保存用户身份证号
+        saveUserIdCard(userPo, paramObj);
+    }
+
+    /**
+     * 保存用户身份证号
+     *
+     * @param userPo
+     * @param paramObj
+     */
+    private void saveUserIdCard(UserPo userPo, JSONObject paramObj) {
+        if (!paramObj.containsKey("idCard")) {
+            return;
+        }
+
+        String idCard = paramObj.getString("idCard");
+        if (StringUtil.isEmpty(idCard)) {
+            return;
+        }
+
+        UserAttrPo userAttrPo = new UserAttrPo();
+        userAttrPo.setAttrId(GenerateCodeFactory.getAttrId());
+        userAttrPo.setSpecCd(UserAttrDto.SPEC_ID_CARD);
+        userAttrPo.setUserId(userPo.getUserId());
+        userAttrPo.setValue(idCard);
+
+        userAttrV1InnerServiceSMOImpl.saveUserAttr(userAttrPo);
     }
 
     /**

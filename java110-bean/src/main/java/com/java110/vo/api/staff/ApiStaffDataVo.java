@@ -51,6 +51,8 @@ public class ApiStaffDataVo implements Serializable {
 
     private String relId;
 
+    private String idCard;
+
     private List<String> urls;
 
     public String getUserId() {
@@ -251,5 +253,13 @@ public class ApiStaffDataVo implements Serializable {
 
     public void setRelId(String relId) {
         this.relId = relId;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }
