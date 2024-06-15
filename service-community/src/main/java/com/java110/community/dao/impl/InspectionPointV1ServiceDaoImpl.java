@@ -71,9 +71,9 @@ public class InspectionPointV1ServiceDaoImpl extends BaseServiceDao implements I
     public List<Map> getInspectionPointInfo(Map info) throws DAOException {
         logger.debug("查询 getInspectionPointInfo 入参 info : {}",info);
 
-        List<Map> businessInspectionPointInfos = sqlSessionTemplate.selectList("inspectionPointV1ServiceDaoImpl.getInspectionPointInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionPointV1ServiceDaoImpl.getInspectionPointInfo",info);
 
-        return businessInspectionPointInfos;
+        return infos;
     }
 
 
@@ -100,12 +100,12 @@ public class InspectionPointV1ServiceDaoImpl extends BaseServiceDao implements I
     public int queryInspectionPointsCount(Map info) {
         logger.debug("查询 queryInspectionPointsCount 入参 info : {}",info);
 
-        List<Map> businessInspectionPointInfos = sqlSessionTemplate.selectList("inspectionPointV1ServiceDaoImpl.queryInspectionPointsCount", info);
-        if (businessInspectionPointInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionPointV1ServiceDaoImpl.queryInspectionPointsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessInspectionPointInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 

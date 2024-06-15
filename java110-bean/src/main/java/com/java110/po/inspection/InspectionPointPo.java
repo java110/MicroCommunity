@@ -22,6 +22,10 @@ public class InspectionPointPo implements Serializable {
     private String itemId;
     private String nfcCode;
 
+    private String lng;
+
+    private String lat;
+
     public String statusCd="0";
 
     public String getInspectionId() {
@@ -104,5 +108,21 @@ public class InspectionPointPo implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
     }
 }

@@ -46,6 +46,10 @@ public class InspectionDto extends PageDto implements Serializable {
     private String itemName;
     private String nfcCode;
 
+    private String lng;
+
+    private String lat;
+
 
     public String getInspectionId() {
         return inspectionId;
@@ -247,5 +251,21 @@ public class InspectionDto extends PageDto implements Serializable {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
     }
 }

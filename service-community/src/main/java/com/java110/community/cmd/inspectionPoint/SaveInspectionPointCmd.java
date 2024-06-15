@@ -25,6 +25,8 @@ public class SaveInspectionPointCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "pointObjId", "必填，请填写位置信息");
         Assert.hasKeyAndValue(reqJson, "pointObjType", "必填，请填写巡检类型");
         Assert.hasKeyAndValue(reqJson, "pointObjName", "必填，请填写位置信息");
+        Assert.hasKeyAndValue(reqJson, "lng", "必填，请填写经度");
+        Assert.hasKeyAndValue(reqJson, "lat", "必填，请填写纬度");
     }
 
     @Override

@@ -3,7 +3,6 @@
  * <p>
  * 版本信息：
  * 日期：2017-3-1
- * Copyright 亚信联创 Corporation 2017
  * 版权所有
  */
 package com.java110.utils.util;

@@ -11,6 +11,7 @@ import com.java110.dto.IotDataDto;
 import com.java110.dto.community.CommunityMemberDto;
 import com.java110.dto.fee.FeeAttrDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
@@ -244,7 +245,7 @@ public class BuyCarMonthCardPaymentBusiness implements IPaymentBusiness {
         payFeeDetailPo.setReceivedAmount(reqJson.getString("receivedAmount"));
         payFeeDetailPo.setReceivableAmount(reqJson.getString("receivedAmount"));
         payFeeDetailPo.setCycles("1");
-        payFeeDetailPo.setPrimeRate(reqJson.getString("primeRate"));
+        payFeeDetailPo.setPrimeRate(FeeDetailDto.PRIME_REATE_WECHAT);
         payFeeDetailPo.setFeeId(payFeePo.getFeeId());
         payFeeDetailPo.setStartTime(payFeePo.getStartTime());
         payFeeDetailPo.setEndTime(DateUtil.getPreSecTime(payFeePo.getEndTime()));
@@ -275,7 +276,7 @@ public class BuyCarMonthCardPaymentBusiness implements IPaymentBusiness {
         paramIn.put("cardId", reqJson.getString("cardId"));
         paramIn.put("carNum", reqJson.getString("carNum"));
         paramIn.put("communityId", reqJson.getString("communityId"));
-        paramIn.put("primeRate", reqJson.getString("primeRate"));
+        paramIn.put("primeRate", payFeeDetailPo.getPrimeRate());
         paramIn.put("receivedAmount", reqJson.getString("receivedAmount"));
         paramIn.put("endTime", endTime);
         paramIn.put("cashierId", userId);

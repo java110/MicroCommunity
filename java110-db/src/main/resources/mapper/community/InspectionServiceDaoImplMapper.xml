@@ -74,7 +74,9 @@
         t.inspection_name,t.inspection_name inspectionName,t.community_id,
         t.community_id communityId,t.b_id,t.b_id bId,
         t.point_obj_type,t.point_obj_type pointObjType,td.name pointTypeName,t.point_obj_id,
-        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName,t.item_id ,t.item_id itemId,t.nfc_code,t.nfc_code nfcCode,ii.item_name itemName
+        t.point_obj_id pointObjId,t.point_obj_name,t.point_obj_name pointObjName,t.item_id ,
+        t.item_id itemId,t.nfc_code,t.nfc_code nfcCode,ii.item_name itemName,
+        t.lng,t.lat
         from inspection_point t
         LEFT JOIN inspection_item ii on t.item_id = ii.item_id and ii.status_cd = '0'
         <if test="inspectionRouteId != null  and  inspectionRouteId != ''">

@@ -17,6 +17,8 @@ public class InspectionRouteDto extends PageDto implements Serializable {
 
     private String inspectionRouteId;
     private String routeName;
+
+    private String inspectionId;
     private int seq;
     private String remark;
 
@@ -90,5 +92,13 @@ public class InspectionRouteDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public String getInspectionId() {
+        return inspectionId;
+    }
+
+    public void setInspectionId(String inspectionId) {
+        this.inspectionId = inspectionId;
     }
 }

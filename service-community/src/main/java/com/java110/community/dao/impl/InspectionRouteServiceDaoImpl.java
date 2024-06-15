@@ -118,12 +118,12 @@ public class InspectionRouteServiceDaoImpl extends BaseServiceDao implements IIn
     public int queryInspectionRoutesCount(Map info) {
         logger.debug("查询巡检路线数据 入参 info : {}",info);
 
-        List<Map> businessInspectionRouteInfos = sqlSessionTemplate.selectList("inspectionRouteServiceDaoImpl.queryInspectionRoutesCount", info);
-        if (businessInspectionRouteInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionRouteServiceDaoImpl.queryInspectionRoutesCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessInspectionRouteInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
