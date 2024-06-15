@@ -32,6 +32,8 @@ public class PaymentOrderDto implements Serializable{
 
     private String cycles;
 
+    private String useIntegral;
+
     private GiftIntegralDto giftIntegralDto;
 
 
@@ -125,5 +127,13 @@ public class PaymentOrderDto implements Serializable{
 
     public void setCycles(String cycles) {
         this.cycles = cycles;
+    }
+
+    public String getUseIntegral() {
+        return useIntegral;
+    }
+
+    public void setUseIntegral(String useIntegral) {
+        this.useIntegral = useIntegral;
     }
 }

@@ -146,6 +146,9 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
         paymentOrderDto.setOrderId(orderId);
         paymentOrderDto.setMoney(money);
         paymentOrderDto.setName(feeName + "欠费费用");
+        paymentOrderDto.setUserId(userId);
+        paymentOrderDto.setCycles("1");
+
 
         JSONObject saveFees = new JSONObject();
         saveFees.put("orderId", orderId);

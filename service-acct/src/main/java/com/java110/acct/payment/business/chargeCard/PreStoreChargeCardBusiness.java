@@ -101,6 +101,7 @@ public class PreStoreChargeCardBusiness implements IPaymentBusiness {
      */
     @Override
     public PaymentOrderDto unified(ICmdDataFlowContext context, JSONObject reqJson) {
+        String userId = context.getReqHeaders().get("user-id");
 
         //Assert.hasKeyAndValue(reqJson, "spaceId", "请求报文中未包含spaceId");
         Assert.hasKeyAndValue(reqJson, "cardId", "请求报文中未包含cardId");
@@ -118,6 +119,8 @@ public class PreStoreChargeCardBusiness implements IPaymentBusiness {
         paymentOrderDto.setOrderId(GenerateCodeFactory.getOId());
         paymentOrderDto.setMoney(Double.parseDouble(chargeMonthCardDtos.get(0).getCardPrice()));
         paymentOrderDto.setName("购买充电月卡");
+        paymentOrderDto.setUserId(userId);
+        paymentOrderDto.setCycles("1");
 
         reqJson.put("receivableAmount", paymentOrderDto.getMoney());
         reqJson.put("receivedAmount", paymentOrderDto.getMoney());

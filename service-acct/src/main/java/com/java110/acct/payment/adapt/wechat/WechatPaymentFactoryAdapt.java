@@ -2,7 +2,9 @@ package com.java110.acct.payment.adapt.wechat;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.acct.integral.IComputeDeductionIntegral;
 import com.java110.acct.integral.IComputeGiftIntegral;
+import com.java110.acct.integral.IDeductionIntegral;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ICmdDataFlowContext;
@@ -10,6 +12,7 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.app.AppDto;
+import com.java110.dto.integral.DeductionIntegralDto;
 import com.java110.dto.integral.GiftIntegralDto;
 import com.java110.dto.paymentPool.PaymentPoolDto;
 import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
@@ -97,6 +100,12 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     @Autowired
     private IComputeGiftIntegral computeGiftIntegralImpl;
 
+    @Autowired
+    private IComputeDeductionIntegral computeDeductionIntegralImpl;
+
+    @Autowired
+    private IDeductionIntegral deductionIntegralImpl;
+
 
     @Override
     public Map java110Payment(PaymentOrderDto paymentOrderDto, JSONObject reqJson, ICmdDataFlowContext context) throws Exception {
@@ -104,6 +113,8 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         SmallWeChatDto smallWeChatDto = getSmallWechat(reqJson);
 
         String paymentPoolId = reqJson.getString("paymentPoolId");
+        String useIntegral = reqJson.getString("useIntegral");
+        paymentOrderDto.setUseIntegral(useIntegral);
 
 
         String appId = context.getReqHeaders().get("app-id");
@@ -152,7 +163,6 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         Map<String, String> resMap = null;
         resMap = this.java110UnifieldOrder(paymentOrderDto.getName(),
-                paymentOrderDto.getOrderId(),
                 tradeType,
                 payAmount,
                 openId,
@@ -197,7 +207,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     }
 
 
-    private Map<String, String> java110UnifieldOrder(String feeName, String orderNum,
+    private Map<String, String> java110UnifieldOrder(String feeName,
                                                      String tradeType, double payAmount, String openid,
                                                      SmallWeChatDto smallWeChatDto,
                                                      List<PaymentPoolValueDto> paymentPoolValueDtos,
@@ -217,9 +227,16 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             paymentOrderDto.setGiftIntegralDto(giftIntegralDto);
         }
 
+        //todo 计算 积分抵扣
+        if ("Y".equals(paymentOrderDto.getUseIntegral())) {
+            DeductionIntegralDto deductionIntegralDto = computeDeductionIntegralImpl.deduction(paymentOrderDto.getUserId(),
+                    paymentOrderDto.getOrderId(),
+                    paymentPoolValueDtos.get(0).getCommunityId());
+            payAmount = payAmount - deductionIntegralDto.getMoney();
+        }
+
         //这里防止 小数点不是 2位 比如 3位之类的 微信平台不支持
         payAmount = MoneyUtil.computePriceScale(payAmount, "1", 2);
-
 
 
         String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
@@ -234,7 +251,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         paramMap.put("mch_id", mchId);
         paramMap.put("nonce_str", PayUtil.makeUUID(32));
         paramMap.put("body", feeName);
-        paramMap.put("out_trade_no", orderNum);
+        paramMap.put("out_trade_no", paymentOrderDto.getOrderId());
         paramMap.put("total_fee", PayUtil.moneyToIntegerStr(payAmount));
         paramMap.put("spbill_create_ip", PayUtil.getLocalIp());
         paramMap.put("notify_url", notifyUrl + "?wId=" + WechatFactory.getWId(smallWeChatDto.getAppId()));
@@ -275,7 +292,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("支付失败" + responseEntity.getBody());
         }
-        doSaveOnlinePay(smallWeChatDto, openid, orderNum, feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付", paymentPoolValueDtos.get(0).getPpId());
+        doSaveOnlinePay(smallWeChatDto, openid, paymentOrderDto.getOrderId(), feeName, payAmount, OnlinePayDto.STATE_WAIT, "待支付", paymentPoolValueDtos.get(0).getPpId());
         return PayUtil.xmlStrToMap(responseEntity.getBody());
     }
 
@@ -380,6 +397,12 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         doUpdateOnlinePay(outTradeNo, OnlinePayDto.STATE_COMPILE, "支付成功");
 
+        //todo 将抵扣积分转给物业
+        deductionIntegralImpl.deduction(paymentOrderDto.getOrderId());
+
+
+
+
         String giftIntegralDtoStr = CommonCache.getAndRemoveValue("integral_share_acct_" + paymentOrderDto.getOrderId());
 
         if (StringUtil.isEmpty(giftIntegralDtoStr)) {
@@ -412,6 +435,7 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         // todo 给用户赠送积分
         wechatIntegralShareAcct.sendIntegral(giftIntegralDto);
+
 
         return 1;
     }

@@ -135,15 +135,17 @@ public class BuyCarMonthCardPaymentBusiness implements IPaymentBusiness {
 
         String typeCdName = reqJson.getString("carNum") + "购买月卡";
 
+        String userId = context.getReqHeaders().get("user-id");
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(GenerateCodeFactory.getOId());
         paymentOrderDto.setMoney(carMonthCardDtos.getJSONObject(0).getDoubleValue("cardPrice"));
         paymentOrderDto.setName(typeCdName);
+        paymentOrderDto.setUserId(userId);
+        paymentOrderDto.setCycles("1");
 
         reqJson.put("receivableAmount", carMonthCardDtos.getJSONObject(0).getString("cardPrice"));
         reqJson.put("receivedAmount", carMonthCardDtos.getJSONObject(0).getString("cardPrice"));
-        String userId = context.getReqHeaders().get("user-id");
 
         reqJson.put("cardMonth", carMonthCardDtos.getJSONObject(0).getString("cardMonth"));
         reqJson.put("carMemberId", ownerCarDtos.get(0).getMemberId());

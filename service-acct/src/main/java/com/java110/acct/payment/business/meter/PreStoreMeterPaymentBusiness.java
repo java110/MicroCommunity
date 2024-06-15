@@ -110,6 +110,7 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         } else {
             typeCdName = "煤气充值";
         }
+        String userId = context.getReqHeaders().get("user-id");
 
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
@@ -124,6 +125,8 @@ public class PreStoreMeterPaymentBusiness implements IPaymentBusiness {
         paymentOrderDto.setOrderId(GenerateCodeFactory.getOId());
         paymentOrderDto.setMoney(reqJson.getDoubleValue("receivedAmount"));
         paymentOrderDto.setName(typeCdName);
+        paymentOrderDto.setUserId(userId);
+        paymentOrderDto.setCycles("1");
 
         reqJson.put("receivableAmount", reqJson.getDoubleValue("receivedAmount"));
         reqJson.put("receivedAmount", reqJson.getDoubleValue("receivedAmount"));
