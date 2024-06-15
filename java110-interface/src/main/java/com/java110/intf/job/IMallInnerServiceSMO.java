@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.IotDataDto;
 import com.java110.dto.MallDataDto;
+import com.java110.dto.integral.GiftIntegralDto;
 import com.java110.dto.user.UserDto;
 import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -52,4 +53,7 @@ public interface IMallInnerServiceSMO {
 
     @RequestMapping(value = "/computeIntegralMoney", method = RequestMethod.POST)
     double computeIntegralMoney(@RequestBody int quantity);
+
+    @RequestMapping(value = "/sendUserIntegral", method = RequestMethod.POST)
+    ResultVo sendUserIntegral(@RequestBody GiftIntegralDto giftIntegralDto);
 }

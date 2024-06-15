@@ -19,11 +19,11 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
     private String createUserId;
     private String quantity;
     private String detailId;
-    private String acctId;
+
     private String userName;
-    private String acctName;
+
     private String configId;
-    private String acctDetailId;
+
     private String ruleName;
     private String tel;
     private String communityId;
@@ -67,13 +67,7 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
         this.detailId = detailId;
     }
 
-    public String getAcctId() {
-        return acctId;
-    }
 
-    public void setAcctId(String acctId) {
-        this.acctId = acctId;
-    }
 
     public String getUserName() {
         return userName;
@@ -83,13 +77,7 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
         this.userName = userName;
     }
 
-    public String getAcctName() {
-        return acctName;
-    }
 
-    public void setAcctName(String acctName) {
-        this.acctName = acctName;
-    }
 
     public String getConfigId() {
         return configId;
@@ -99,13 +87,7 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
         this.configId = configId;
     }
 
-    public String getAcctDetailId() {
-        return acctDetailId;
-    }
 
-    public void setAcctDetailId(String acctDetailId) {
-        this.acctDetailId = acctDetailId;
-    }
 
     public String getRuleName() {
         return ruleName;

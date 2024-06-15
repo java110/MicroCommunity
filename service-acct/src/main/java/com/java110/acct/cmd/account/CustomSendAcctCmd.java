@@ -203,9 +203,6 @@ public class CustomSendAcctCmd extends Cmd {
         //先加明细
         IntegralGiftDetailPo integralGiftDetailPo = new IntegralGiftDetailPo();
         integralGiftDetailPo.setCommunityId(reqJson.getString("communityId"));
-        integralGiftDetailPo.setAcctId(accountDto.getAcctId());
-        integralGiftDetailPo.setAcctName(accountDto.getAcctName());
-        integralGiftDetailPo.setAcctDetailId("-1");
         integralGiftDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId("11"));
         integralGiftDetailPo.setConfigId(integralConfigDtos.get(0).getConfigId());
         integralGiftDetailPo.setConfigName(integralConfigDtos.get(0).getConfigName());

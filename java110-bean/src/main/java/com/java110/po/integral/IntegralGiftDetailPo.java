@@ -28,20 +28,21 @@ import java.util.Date;
  */
 public class IntegralGiftDetailPo implements Serializable {
 
-    private String configName;
+
     private String createUserId;
     private String quantity;
     private String detailId;
-    private String acctId;
     private String statusCd = "0";
     private String userName;
-    private String acctName;
     private String configId;
-    private String acctDetailId;
+
+    private String configName;
+
+    private String ruleId;
+
     private String ruleName;
     private String tel;
     private String communityId;
-    private String ruleId;
 
     public String getConfigName() {
         return configName;
@@ -75,13 +76,6 @@ public class IntegralGiftDetailPo implements Serializable {
         this.detailId = detailId;
     }
 
-    public String getAcctId() {
-        return acctId;
-    }
-
-    public void setAcctId(String acctId) {
-        this.acctId = acctId;
-    }
 
     public String getStatusCd() {
         return statusCd;
@@ -99,13 +93,6 @@ public class IntegralGiftDetailPo implements Serializable {
         this.userName = userName;
     }
 
-    public String getAcctName() {
-        return acctName;
-    }
-
-    public void setAcctName(String acctName) {
-        this.acctName = acctName;
-    }
 
     public String getConfigId() {
         return configId;
@@ -115,13 +102,6 @@ public class IntegralGiftDetailPo implements Serializable {
         this.configId = configId;
     }
 
-    public String getAcctDetailId() {
-        return acctDetailId;
-    }
-
-    public void setAcctDetailId(String acctDetailId) {
-        this.acctDetailId = acctDetailId;
-    }
 
     public String getRuleName() {
         return ruleName;

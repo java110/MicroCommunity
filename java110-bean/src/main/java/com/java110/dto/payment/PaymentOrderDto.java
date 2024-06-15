@@ -30,6 +30,8 @@ public class PaymentOrderDto implements Serializable{
 
     private String isShare;
 
+    private String cycles;
+
     private GiftIntegralDto giftIntegralDto;
 
 
@@ -115,5 +117,13 @@ public class PaymentOrderDto implements Serializable{
 
     public void setGiftIntegralDto(GiftIntegralDto giftIntegralDto) {
         this.giftIntegralDto = giftIntegralDto;
+    }
+
+    public String getCycles() {
+        return cycles;
+    }
+
+    public void setCycles(String cycles) {
+        this.cycles = cycles;
     }
 }

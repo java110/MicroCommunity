@@ -43,7 +43,7 @@ public class ComputeGiftIntegralImpl implements IComputeGiftIntegral {
         String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
 
         if (!"ON".equals(mallSwitch)) {
-            return new GiftIntegralDto(0, 0);
+            return new GiftIntegralDto(0, 0, communityId);
         }
 
         IntegralRuleFeeDto integralRuleFeeDto = new IntegralRuleFeeDto();
@@ -52,7 +52,7 @@ public class ComputeGiftIntegralImpl implements IComputeGiftIntegral {
         List<IntegralRuleFeeDto> integralRuleFeeDtos = integralRuleFeeV1InnerServiceSMOImpl.queryIntegralRuleFees(integralRuleFeeDto);
 
         if (ListUtil.isNull(integralRuleFeeDtos)) {
-            return new GiftIntegralDto(0, 0);
+            return new GiftIntegralDto(0, 0, communityId);
         }
 
         List<String> ruleIds = new ArrayList<>();
@@ -65,19 +65,24 @@ public class ComputeGiftIntegralImpl implements IComputeGiftIntegral {
         List<IntegralRuleConfigDto> integralRuleConfigDtos = integralRuleConfigV1InnerServiceSMOImpl.queryIntegralRuleConfigs(integralRuleConfigDto);
 
         if (ListUtil.isNull(integralRuleConfigDtos)) {
-            return new GiftIntegralDto(0, 0);
+            return new GiftIntegralDto(0, 0, communityId);
         }
 
         int quantity = computeOneIntegralQuantity(integralRuleConfigDtos.get(0), payMoney, month);
 
-        if(quantity <= 0){
-            return new GiftIntegralDto(0, 0);
+        if (quantity <= 0) {
+            return new GiftIntegralDto(0, 0, communityId);
         }
 
         double money = mallInnerServiceSMOImpl.computeIntegralMoney(quantity);
 
 
-        return new GiftIntegralDto(quantity, money);
+        return new GiftIntegralDto(quantity, money, communityId,
+                integralRuleFeeDtos.get(0).getRuleId(),
+                integralRuleConfigDtos.get(0).getRuleName(),
+                integralRuleConfigDtos.get(0).getConfigId(),
+                integralRuleConfigDtos.get(0).getConfigName()
+                );
     }
 
     public int computeOneIntegralQuantity(IntegralRuleConfigDto integralRuleConfigDto, double payMoney, int month) {

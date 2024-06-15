@@ -28,8 +28,7 @@ public class PayFeePaymentBusiness implements IPaymentBusiness {
     private final static Logger logger = LoggerFactory.getLogger(PayFeePaymentBusiness.class);
 
 
-    @Autowired
-    private IComputeGiftIntegral computeGiftIntegralImpl;
+
 
 
     @Override
@@ -42,22 +41,15 @@ public class PayFeePaymentBusiness implements IPaymentBusiness {
         String feeName = orderInfo.getString("feeName");
         double money = Double.parseDouble(orderInfo.getString("receivedAmount"));
 
-        GiftIntegralDto giftIntegralDto = computeGiftIntegralImpl.gift(money, reqJson.getIntValue("cycles"), reqJson.getString("communityId"));
 
-        //这里防止 小数点不是 2位 比如 3位之类的 微信平台不支持
-        money = MoneyUtil.computePriceScale(money, "1", 2);
 
 
         PaymentOrderDto paymentOrderDto = new PaymentOrderDto();
         paymentOrderDto.setOrderId(orderId);
         paymentOrderDto.setMoney(money);
         paymentOrderDto.setName(feeName);
-
-        if (giftIntegralDto != null && giftIntegralDto.getMoney() > 0) {
-            paymentOrderDto.setIsShare("Y");
-            giftIntegralDto.setUserId(userId);
-            paymentOrderDto.setGiftIntegralDto(giftIntegralDto);
-        }
+        paymentOrderDto.setUserId(userId);
+        paymentOrderDto.setCycles(reqJson.getString("cycles"));
 
 
         return paymentOrderDto;

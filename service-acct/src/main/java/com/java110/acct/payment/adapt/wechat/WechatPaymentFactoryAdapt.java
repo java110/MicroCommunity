@@ -2,6 +2,7 @@ package com.java110.acct.payment.adapt.wechat;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.acct.integral.IComputeGiftIntegral;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ICmdDataFlowContext;
@@ -70,8 +71,6 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     public static final String wxPayUnifiedOrder = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
 
-
-
     @Autowired
     private ISmallWechatV1InnerServiceSMO smallWechatV1InnerServiceSMOImpl;
 
@@ -95,6 +94,8 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     @Autowired
     private WechatIntegralShareAcct wechatIntegralShareAcct;
 
+    @Autowired
+    private IComputeGiftIntegral computeGiftIntegralImpl;
 
 
     @Override
@@ -206,6 +207,20 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
 
+        //todo 计算赠送积分
+        GiftIntegralDto giftIntegralDto = computeGiftIntegralImpl.gift(payAmount, Integer.parseInt(paymentOrderDto.getCycles()),
+                paymentPoolValueDtos.get(0).getCommunityId());
+
+        if (giftIntegralDto != null && giftIntegralDto.getMoney() > 0) {
+            paymentOrderDto.setIsShare("Y");
+            giftIntegralDto.setUserId(paymentOrderDto.getUserId());
+            paymentOrderDto.setGiftIntegralDto(giftIntegralDto);
+        }
+
+        //这里防止 小数点不是 2位 比如 3位之类的 微信平台不支持
+        payAmount = MoneyUtil.computePriceScale(payAmount, "1", 2);
+
+
 
         String mchId = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_MCHID");
         String key = PaymentPoolValueDto.getValue(paymentPoolValueDtos, "WECHAT_KEY");
@@ -231,7 +246,9 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             paymentOrderDto.getGiftIntegralDto().setAppId(smallWeChatDto.getAppId());
             paymentOrderDto.getGiftIntegralDto().setMchId(mchId);
             paymentOrderDto.getGiftIntegralDto().setMchKey(key);
+            paymentOrderDto.getGiftIntegralDto().setUserId(paymentOrderDto.getUserId());
             paymentOrderDto.getGiftIntegralDto().setCertPath(getWechatCertPath(paymentPoolValueDtos.get(0).getPpId()));
+            paymentOrderDto.getGiftIntegralDto().setOrderId(paymentOrderDto.getOrderId());
             CommonCache.setValue("integral_share_acct_" + paymentOrderDto.getOrderId(), JSONObject.toJSONString(paymentOrderDto.getGiftIntegralDto()), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         }
 
@@ -398,8 +415,6 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
 
         return 1;
     }
-
-
 
 
     private SmallWeChatDto getSmallWechat(JSONObject paramIn) {

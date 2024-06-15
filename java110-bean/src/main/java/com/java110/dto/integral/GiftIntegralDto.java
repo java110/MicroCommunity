@@ -7,9 +7,22 @@ public class GiftIntegralDto implements Serializable {
     public GiftIntegralDto() {
     }
 
-    public GiftIntegralDto(int integral, double money) {
+    public GiftIntegralDto(int integral, double money,String communityId) {
         this.integral = integral;
         this.money = money;
+        this.communityId = communityId;
+    }
+
+    public GiftIntegralDto(int integral, double money,String communityId,
+                           String ruleId,String ruleName,String configId,String configName
+    ) {
+        this.integral = integral;
+        this.money = money;
+        this.communityId = communityId;
+        this.ruleId = ruleId;
+        this.ruleName = ruleName;
+        this.configId = configId;
+        this.configName = configName;
     }
 
     private int integral;
@@ -29,6 +42,24 @@ public class GiftIntegralDto implements Serializable {
     private String certPath;
 
     private String userId;
+
+    private String link;
+
+    private String remark;
+
+    private String orderId;
+
+    private String communityId;
+
+    private String configId;
+
+    private String configName;
+
+    private String ruleId;
+
+    private String ruleName;
+
+
 
 
     public int getIntegral() {
@@ -101,5 +132,69 @@ public class GiftIntegralDto implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+
+    public void setConfigName(String configName) {
+        this.configName = configName;
+    }
+
+    public String getRuleId() {
+        return ruleId;
+    }
+
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
+
+    public String getRuleName() {
+        return ruleName;
+    }
+
+    public void setRuleName(String ruleName) {
+        this.ruleName = ruleName;
     }
 }
