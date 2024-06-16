@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.IotDataDto;
 import com.java110.dto.MallDataDto;
+import com.java110.dto.integral.DeductionIntegralDto;
 import com.java110.dto.integral.GiftIntegralDto;
 import com.java110.dto.user.UserDto;
 import com.java110.vo.ResultVo;
@@ -56,4 +57,7 @@ public interface IMallInnerServiceSMO {
 
     @RequestMapping(value = "/sendUserIntegral", method = RequestMethod.POST)
     ResultVo sendUserIntegral(@RequestBody GiftIntegralDto giftIntegralDto);
+
+    @RequestMapping(value = "/userIntegralToCommunity", method = RequestMethod.POST)
+    ResultVo userIntegralToCommunity(@RequestBody DeductionIntegralDto deductionIntegralDto);
 }

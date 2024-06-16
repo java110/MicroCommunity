@@ -29,7 +29,7 @@ public class ComputeDeductionIntegralImpl implements IComputeDeductionIntegral {
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
-    public DeductionIntegralDto deduction(String userId,String orderId, String communityId) {
+    public DeductionIntegralDto deduction(String userId, String orderId, String communityId) {
 
         String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
 
@@ -58,7 +58,9 @@ public class ComputeDeductionIntegralImpl implements IComputeDeductionIntegral {
         JSONObject data = reqJson.getJSONObject("data");
 
 
-       DeductionIntegralDto deductionIntegralDto =  new DeductionIntegralDto(data.getIntValue("integral"), data.getDoubleValue("integralMoney"));
+        DeductionIntegralDto deductionIntegralDto = new DeductionIntegralDto(data.getIntValue("integral"), data.getDoubleValue("integralMoney"));
+        deductionIntegralDto.setLink(userDtos.get(0).getTel());
+        deductionIntegralDto.setCommunityId(communityId);
         CommonCache.setValue("integral_deduction_" + orderId, JSONObject.toJSONString(deductionIntegralDto), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
         return deductionIntegralDto;
     }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.MallDataDto;
+import com.java110.dto.integral.DeductionIntegralDto;
 import com.java110.dto.integral.GiftIntegralDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IMallInnerServiceSMO;
@@ -148,6 +149,28 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         paramIn.put("remark", giftIntegralDto.getRemark());
 
         paramIn.put("mallApiCode", "sendIntegralToUserBmoImpl");
+        ResultVo resultVo = sendMallImpl.post("/mall/api/common.openCommonApi", paramIn);
+
+        return resultVo;
+    }
+
+    @Override
+    public ResultVo userIntegralToCommunity(@RequestBody DeductionIntegralDto deductionIntegralDto) {
+
+        String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
+
+        if (!"ON".equals(mallSwitch)) {
+            return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+        }
+
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("link", deductionIntegralDto.getLink());
+        paramIn.put("integral", deductionIntegralDto.getIntegral());
+        paramIn.put("communityId", deductionIntegralDto.getCommunityId());
+
+        paramIn.put("remark", deductionIntegralDto.getRemark());
+
+        paramIn.put("mallApiCode", "userIntegralToCommunity");
         ResultVo resultVo = sendMallImpl.post("/mall/api/common.openCommonApi", paramIn);
 
         return resultVo;
