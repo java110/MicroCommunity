@@ -15,14 +15,11 @@ import java.util.Date;
  **/
 public class IntegralRuleFeeDto extends PageDto implements Serializable {
 
-    private String payMonth;
     private String irfId;
-    private String feeConfigName;
     private String payStartTime;
     private String payEndTime;
     private String ruleId;
     private String communityId;
-    private String feeConfigId;
 
     private String curTime;
     private String cycle;
@@ -33,28 +30,12 @@ public class IntegralRuleFeeDto extends PageDto implements Serializable {
     private String statusCd = "0";
 
 
-    public String getPayMonth() {
-        return payMonth;
-    }
-
-    public void setPayMonth(String payMonth) {
-        this.payMonth = payMonth;
-    }
-
     public String getIrfId() {
         return irfId;
     }
 
     public void setIrfId(String irfId) {
         this.irfId = irfId;
-    }
-
-    public String getFeeConfigName() {
-        return feeConfigName;
-    }
-
-    public void setFeeConfigName(String feeConfigName) {
-        this.feeConfigName = feeConfigName;
     }
 
     public String getPayStartTime() {
@@ -87,14 +68,6 @@ public class IntegralRuleFeeDto extends PageDto implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
-    }
-
-    public String getFeeConfigId() {
-        return feeConfigId;
-    }
-
-    public void setFeeConfigId(String feeConfigId) {
-        this.feeConfigId = feeConfigId;
     }
 
 

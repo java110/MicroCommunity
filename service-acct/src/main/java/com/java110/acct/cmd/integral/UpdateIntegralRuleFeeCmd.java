@@ -69,13 +69,8 @@ public class UpdateIntegralRuleFeeCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setConfigId(reqJson.getString("feeConfigId"));
-        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
 
-        Assert.listOnlyOne(feeConfigDtos,"费用项不存在");
         IntegralRuleFeePo integralRuleFeePo = BeanConvertUtil.covertBean(reqJson, IntegralRuleFeePo.class);
-        integralRuleFeePo.setFeeConfigName(feeConfigDtos.get(0).getFeeName());
         int flag = integralRuleFeeV1InnerServiceSMOImpl.updateIntegralRuleFee(integralRuleFeePo);
 
         if (flag < 1) {

@@ -71,9 +71,9 @@ public class IntegralRuleFeeV1ServiceDaoImpl extends BaseServiceDao implements I
     public List<Map> getIntegralRuleFeeInfo(Map info) throws DAOException {
         logger.debug("查询 getIntegralRuleFeeInfo 入参 info : {}",info);
 
-        List<Map> businessIntegralRuleFeeInfos = sqlSessionTemplate.selectList("integralRuleFeeV1ServiceDaoImpl.getIntegralRuleFeeInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("integralRuleFeeV1ServiceDaoImpl.getIntegralRuleFeeInfo",info);
 
-        return businessIntegralRuleFeeInfos;
+        return infos;
     }
 
 

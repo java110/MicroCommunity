@@ -88,7 +88,6 @@ public class ComputePayFeeIntegralCmd extends Cmd {
         Assert.listOnlyOne(feeDtos,"费用不存在");
 
         IntegralRuleFeeDto integralRuleFeeDto = new IntegralRuleFeeDto();
-        integralRuleFeeDto.setFeeConfigId(feeDtos.get(0).getConfigId());
         integralRuleFeeDto.setCurTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         integralRuleFeeDto.setCommunityId(reqJson.getString("communityId"));
         integralRuleFeeDto.setCycle(reqJson.getString("cycles"));

@@ -28,23 +28,13 @@ import java.util.Date;
  */
 public class IntegralRuleFeePo implements Serializable {
 
-    private String payMonth;
     private String irfId;
-    private String feeConfigName;
     private String payStartTime;
     private String payEndTime;
     private String statusCd = "0";
     private String ruleId;
     private String communityId;
-    private String feeConfigId;
 
-    public String getPayMonth() {
-        return payMonth;
-    }
-
-    public void setPayMonth(String payMonth) {
-        this.payMonth = payMonth;
-    }
 
     public String getIrfId() {
         return irfId;
@@ -54,13 +44,6 @@ public class IntegralRuleFeePo implements Serializable {
         this.irfId = irfId;
     }
 
-    public String getFeeConfigName() {
-        return feeConfigName;
-    }
-
-    public void setFeeConfigName(String feeConfigName) {
-        this.feeConfigName = feeConfigName;
-    }
 
     public String getPayStartTime() {
         return payStartTime;
@@ -100,14 +83,6 @@ public class IntegralRuleFeePo implements Serializable {
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
-    }
-
-    public String getFeeConfigId() {
-        return feeConfigId;
-    }
-
-    public void setFeeConfigId(String feeConfigId) {
-        this.feeConfigId = feeConfigId;
     }
 
 
