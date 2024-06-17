@@ -193,6 +193,8 @@ public class PayFeePreCmd extends Cmd {
         BigDecimal receivableAmount = new BigDecimal(feePriceAll.get("feePrice").toString());
         BigDecimal cycles = new BigDecimal(Double.parseDouble(reqJson.getString("cycles")));
         double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+
+
         JSONObject paramOut = new JSONObject();
         paramOut.put("receivableAmount", tmpReceivableAmount);
         paramOut.put("oId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_oId));
