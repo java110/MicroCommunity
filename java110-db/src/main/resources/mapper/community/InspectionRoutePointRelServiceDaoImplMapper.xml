@@ -77,7 +77,8 @@
         ip.inspection_id inspectionId,ip.remark,td.name pointTypeName,
         ip.inspection_name inspectionName,ip.point_obj_type,ip.point_obj_id,ip.point_obj_name,
         ip.point_obj_type pointObjType,ip.point_obj_id pointObjId,ip.point_obj_name pointObjName,
-        t.point_start_time,t.point_start_time pointStartTime,t.point_end_time,t.point_end_time pointEndTime,t.sort_number,t.sort_number sortNumber
+        t.point_start_time,t.point_start_time pointStartTime,t.point_end_time,t.point_end_time pointEndTime,t.sort_number,t.sort_number sortNumber,
+        ip.lng,ip.lat
         from inspection_route_point_rel t,inspection_point ip
         left join t_dict td on ip.point_obj_type = td.status_cd and td.table_name = 'inspection_point'
         and td.table_columns = 'point_obj_type'

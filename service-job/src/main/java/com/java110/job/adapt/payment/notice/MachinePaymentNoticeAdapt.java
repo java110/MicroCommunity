@@ -278,7 +278,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
                 content.put("feeName", paramIn.getString("feeName"));
                 content.put("payFeeTime", paramIn.getString("payFeeTime"));
                 content.put("receivedAmount", paramIn.getString("receivedAmount") + "元");
-                content.put("url", wechatUrl);
+                //content.put("url", wechatUrl);
                 MsgNotifyFactory.sendPayFeeMsg(payFeeDetailPo.getCommunityId(), userDto.getUserId(), content, MsgNotifyFactory.ROLE_STAFF);
             } catch (Exception e) {
                 logger.error("发送缴费信息失败", e);
@@ -309,7 +309,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             content.put("feeTypeCdName", paramIn.getString("feeTypeCdName"));
             content.put("payFeeTime", paramIn.getString("payFeeTime"));
             content.put("receivedAmount", paramIn.getString("receivedAmount") + "元");
-            content.put("url", paramIn.getString("wechatUrl"));
+            //content.put("url", paramIn.getString("wechatUrl"));
             MsgNotifyFactory.sendPayFeeMsg(payFeeDetailPo.getCommunityId(), userId, content, MsgNotifyFactory.ROLE_STAFF);
 
         } catch (Exception e) {
@@ -410,7 +410,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         } else {
             wechatUrl += ("?wAppId=" + smallWeChatDtos.get(0).getAppId());
         }
-        content.put("url", wechatUrl);
+//        content.put("url", wechatUrl);
         MsgNotifyFactory.sendPayFeeMsg(payFeeDetailPo.getCommunityId(), ownerAppUserDtos.get(0).getUserId(), content, MsgNotifyFactory.ROLE_OWNER);
 
     }

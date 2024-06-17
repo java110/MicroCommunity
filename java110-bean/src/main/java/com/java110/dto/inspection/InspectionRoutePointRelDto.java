@@ -41,6 +41,10 @@ public class InspectionRoutePointRelDto extends PageDto implements Serializable 
 
     private Date createTime;
 
+    private String lng;
+
+    private String lat;
+
     private String statusCd = "0";
 
     public String getInspectionId() {
@@ -226,5 +230,21 @@ public class InspectionRoutePointRelDto extends PageDto implements Serializable 
 
     public void setSortNumber(String sortNumber) {
         this.sortNumber = sortNumber;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
     }
 }

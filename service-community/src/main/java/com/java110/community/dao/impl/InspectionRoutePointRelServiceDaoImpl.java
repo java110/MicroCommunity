@@ -89,9 +89,9 @@ public class InspectionRoutePointRelServiceDaoImpl extends BaseServiceDao implem
     public List<Map> getInspectionRoutePointRelInfo(Map info) throws DAOException {
         logger.debug("查询巡检路线巡检点关系信息 入参 info : {}", info);
 
-        List<Map> businessInspectionRoutePointRelInfos = sqlSessionTemplate.selectList("inspectionRoutePointRelServiceDaoImpl.getInspectionRoutePointRelInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionRoutePointRelServiceDaoImpl.getInspectionRoutePointRelInfo", info);
 
-        return businessInspectionRoutePointRelInfos;
+        return infos;
     }
 
 
