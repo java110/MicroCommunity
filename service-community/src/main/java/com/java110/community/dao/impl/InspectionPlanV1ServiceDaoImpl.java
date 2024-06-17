@@ -108,5 +108,37 @@ public class InspectionPlanV1ServiceDaoImpl extends BaseServiceDao implements II
         return Integer.parseInt(businessInspectionPlanInfos.get(0).get("count").toString());
     }
 
+    /**
+     * 查询巡检计划数量
+     * @param info 巡检计划信息
+     * @return 巡检计划数量
+     */
+    @Override
+    public int queryPointInspectionPlansCount(Map info) {
+        logger.debug("查询 queryInspectionPlansCount 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionPlanV1ServiceDaoImpl.queryPointInspectionPlansCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    /**
+     * 查询巡检计划信息（instance）
+     * @param info bId 信息
+     * @return List<Map>
+     * @throws DAOException DAO异常
+     */
+    @Override
+    public List<Map> queryPointInspectionPlans(Map info) throws DAOException {
+        logger.debug("查询 getInspectionPlanInfo 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionPlanV1ServiceDaoImpl.queryPointInspectionPlans",info);
+
+        return infos;
+    }
+
 
 }

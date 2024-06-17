@@ -85,4 +85,22 @@ public class InspectionPlanV1InnerServiceSMOImpl extends BaseServiceSMO implemen
         return inspectionPlanV1ServiceDaoImpl.queryInspectionPlansCount(BeanConvertUtil.beanCovertMap(inspectionPlanDto));
     }
 
+    public int queryPointInspectionPlansCount(@RequestBody InspectionPlanDto inspectionPlanDto) {
+        return inspectionPlanV1ServiceDaoImpl.queryPointInspectionPlansCount(BeanConvertUtil.beanCovertMap(inspectionPlanDto));
+
+    }
+
+    public List<InspectionPlanDto> queryPointInspectionPlans(@RequestBody InspectionPlanDto inspectionPlanDto) {
+        //校验是否传了 分页信息
+
+        int page = inspectionPlanDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            inspectionPlanDto.setPage((page - 1) * inspectionPlanDto.getRow());
+        }
+
+        List<InspectionPlanDto> inspectionPlans = BeanConvertUtil.covertBeanList(inspectionPlanV1ServiceDaoImpl.queryPointInspectionPlans(BeanConvertUtil.beanCovertMap(inspectionPlanDto)), InspectionPlanDto.class);
+
+        return inspectionPlans;
+    }
 }

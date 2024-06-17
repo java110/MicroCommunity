@@ -144,10 +144,10 @@
         <if test="originalPlanUserId !=null and originalPlanUserId != ''">
             and t.original_plan_user_id= #{originalPlanUserId}
         </if>
-        <if test="startTime != null">
+        <if test="startTime != null and startTime != ''">
             and t.act_ins_time &gt;= #{startTime}
         </if>
-        <if test="endTime != null">
+        <if test="endTime != null and endTime != ''">
             and t.act_ins_time &lt;= #{endTime}
         </if>
         <if test="planInsTime !=null ">
@@ -201,7 +201,7 @@
                 #{item}
             </foreach>
         </if>
-        <if test="scopeTime !=null ">
+        <if test="scopeTime !=null and scopeTime != ''">
             and t.create_time &lt; #{scopeTime}
             and t.create_time &gt; #{createTime}
         </if>
@@ -294,10 +294,10 @@
         <if test="originalPlanUserId !=null and originalPlanUserId != ''">
             and t.original_plan_user_id= #{originalPlanUserId}
         </if>
-        <if test="startTime != null">
+        <if test="startTime != null and startTime != ''">
             and t.act_ins_time &gt;= #{startTime}
         </if>
-        <if test="endTime != null">
+        <if test="endTime != null and endTime != ''">
             and t.act_ins_time &lt;= #{endTime}
         </if>
         <if test="planInsTime !=null ">

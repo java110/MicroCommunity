@@ -19,6 +19,7 @@ public class InspectionPlanStaffDto extends PageDto implements Serializable {
     private String staffName;
     private String startTime;
     private String inspectionPlanId;
+    private String[] inspectionPlanIds;
     private String endTime;
     private String communityId;
     private String staffId;
@@ -100,5 +101,13 @@ public class InspectionPlanStaffDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String[] getInspectionPlanIds() {
+        return inspectionPlanIds;
+    }
+
+    public void setInspectionPlanIds(String[] inspectionPlanIds) {
+        this.inspectionPlanIds = inspectionPlanIds;
     }
 }

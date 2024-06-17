@@ -70,4 +70,7 @@ public interface IInspectionTaskV1ServiceDao {
      */
     int queryInspectionTasksCount(Map info);
 
+    int queryPointInspectionTasksCount(Map info);
+
+    List<Map> queryPointInspectionTasks(Map info);
 }

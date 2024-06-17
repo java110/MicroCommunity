@@ -4,6 +4,7 @@ import com.java110.dto.PageDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -51,6 +52,10 @@ public class InspectionPlanDto extends PageDto implements Serializable {
     private String endDate;
     private String beforeTime;
     private String canReexamine;
+
+    private String inspectionId;
+
+    private List<InspectionPlanStaffDto> staffs;
 
 
     public String getInspectionPlanName() {
@@ -285,5 +290,21 @@ public class InspectionPlanDto extends PageDto implements Serializable {
 
     public void setCanReexamine(String canReexamine) {
         this.canReexamine = canReexamine;
+    }
+
+    public List<InspectionPlanStaffDto> getStaffs() {
+        return staffs;
+    }
+
+    public void setStaffs(List<InspectionPlanStaffDto> staffs) {
+        this.staffs = staffs;
+    }
+
+    public String getInspectionId() {
+        return inspectionId;
+    }
+
+    public void setInspectionId(String inspectionId) {
+        this.inspectionId = inspectionId;
     }
 }

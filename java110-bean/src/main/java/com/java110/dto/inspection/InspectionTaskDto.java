@@ -55,6 +55,10 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     private String orderByDesc;
 
+    private String inspectionId;
+
+    private String inspectionRouteId;
+
     public String getPlanUserId() {
         return planUserId;
     }
@@ -286,5 +290,21 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     public void setOrderByDesc(String orderByDesc) {
         this.orderByDesc = orderByDesc;
+    }
+
+    public String getInspectionId() {
+        return inspectionId;
+    }
+
+    public void setInspectionId(String inspectionId) {
+        this.inspectionId = inspectionId;
+    }
+
+    public String getInspectionRouteId() {
+        return inspectionRouteId;
+    }
+
+    public void setInspectionRouteId(String inspectionRouteId) {
+        this.inspectionRouteId = inspectionRouteId;
     }
 }

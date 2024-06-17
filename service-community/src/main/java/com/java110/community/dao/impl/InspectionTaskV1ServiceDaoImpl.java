@@ -100,12 +100,33 @@ public class InspectionTaskV1ServiceDaoImpl extends BaseServiceDao implements II
     public int queryInspectionTasksCount(Map info) {
         logger.debug("查询 queryInspectionTasksCount 入参 info : {}",info);
 
-        List<Map> businessInspectionTaskInfos = sqlSessionTemplate.selectList("inspectionTaskV1ServiceDaoImpl.queryInspectionTasksCount", info);
-        if (businessInspectionTaskInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionTaskV1ServiceDaoImpl.queryInspectionTasksCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessInspectionTaskInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public int queryPointInspectionTasksCount(Map info) {
+        logger.debug("查询 queryInspectionTasksCount 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionTaskV1ServiceDaoImpl.queryPointInspectionTasksCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryPointInspectionTasks(Map info) {
+        logger.debug("查询 getInspectionTaskInfo 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionTaskV1ServiceDaoImpl.queryPointInspectionTasks",info);
+
+        return infos;
     }
 
 

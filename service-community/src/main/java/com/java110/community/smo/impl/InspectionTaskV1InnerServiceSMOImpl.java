@@ -85,4 +85,26 @@ public class InspectionTaskV1InnerServiceSMOImpl extends BaseServiceSMO implemen
     public int queryInspectionTasksCount(@RequestBody InspectionTaskDto inspectionTaskDto) {
         return inspectionTaskV1ServiceDaoImpl.queryInspectionTasksCount(BeanConvertUtil.beanCovertMap(inspectionTaskDto));    }
 
+    @Override
+    public int queryPointInspectionTasksCount(@RequestBody InspectionTaskDto inspectionTaskDto) {
+        return inspectionTaskV1ServiceDaoImpl.queryPointInspectionTasksCount(BeanConvertUtil.beanCovertMap(inspectionTaskDto));
+    }
+
+    @Override
+    public List<InspectionTaskDto> queryPointInspectionTasks(@RequestBody InspectionTaskDto inspectionTaskDto) {
+        //校验是否传了 分页信息
+
+        int page = inspectionTaskDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            inspectionTaskDto.setPage((page - 1) * inspectionTaskDto.getRow());
+        }
+
+        List<InspectionTaskDto> inspectionTasks = BeanConvertUtil.covertBeanList(
+                inspectionTaskV1ServiceDaoImpl.queryPointInspectionTasks(BeanConvertUtil.beanCovertMap(inspectionTaskDto)),
+                InspectionTaskDto.class);
+
+        return inspectionTasks;
+    }
+
 }

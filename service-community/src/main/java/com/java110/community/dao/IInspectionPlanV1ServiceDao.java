@@ -70,4 +70,7 @@ public interface IInspectionPlanV1ServiceDao {
      */
     int queryInspectionPlansCount(Map info);
 
+    int queryPointInspectionPlansCount(Map info);
+
+    List<Map> queryPointInspectionPlans(Map info);
 }
