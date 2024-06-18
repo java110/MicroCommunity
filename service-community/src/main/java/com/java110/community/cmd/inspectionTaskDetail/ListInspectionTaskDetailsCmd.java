@@ -12,6 +12,7 @@ import com.java110.intf.community.IInspectionTaskDetailInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.inspectionTaskDetail.ApiInspectionTaskDetailDataVo;
 import com.java110.vo.api.inspectionTaskDetail.ApiInspectionTaskDetailVo;
@@ -35,6 +36,8 @@ public class ListInspectionTaskDetailsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+
     }
 
     @Override
