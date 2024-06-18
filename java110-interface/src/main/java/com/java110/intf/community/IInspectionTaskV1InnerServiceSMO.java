@@ -72,4 +72,10 @@ public interface IInspectionTaskV1InnerServiceSMO {
 
     @RequestMapping(value = "/queryPointInspectionTasks", method = RequestMethod.POST)
     List<InspectionTaskDto> queryPointInspectionTasks(@RequestBody InspectionTaskDto inspectionTaskDto);
+
+    @RequestMapping(value = "/queryRouteInspectionTasksCount", method = RequestMethod.POST)
+    int queryRouteInspectionTasksCount(@RequestBody InspectionTaskDto inspectionTaskDto);
+
+    @RequestMapping(value = "/queryRouteInspectionTasks", method = RequestMethod.POST)
+    List<InspectionTaskDto> queryRouteInspectionTasks(@RequestBody InspectionTaskDto inspectionTaskDto);
 }

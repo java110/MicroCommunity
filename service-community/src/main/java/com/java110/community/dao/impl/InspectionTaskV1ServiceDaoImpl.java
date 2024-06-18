@@ -129,5 +129,23 @@ public class InspectionTaskV1ServiceDaoImpl extends BaseServiceDao implements II
         return infos;
     }
 
+    @Override
+    public int queryRouteInspectionTasksCount(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionTaskV1ServiceDaoImpl.queryRouteInspectionTasksCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());    }
+
+    @Override
+    public List<Map> queryRouteInspectionTasks(Map info) {
+        logger.debug("查询 getInspectionTaskInfo 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionTaskV1ServiceDaoImpl.queryRouteInspectionTasks",info);
+
+        return infos;
+    }
+
 
 }

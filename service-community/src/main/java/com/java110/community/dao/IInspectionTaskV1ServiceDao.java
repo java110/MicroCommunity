@@ -73,4 +73,8 @@ public interface IInspectionTaskV1ServiceDao {
     int queryPointInspectionTasksCount(Map info);
 
     List<Map> queryPointInspectionTasks(Map info);
+
+    int queryRouteInspectionTasksCount(Map info);
+
+    List<Map> queryRouteInspectionTasks(Map info);
 }

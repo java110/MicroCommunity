@@ -93,7 +93,7 @@ public class ImportMeterMachineQueueDataAdapt extends DefaultImportData implemen
         meterTypeDto.setTypeName(importMeterMachineDto.getMeterType());
         List<MeterTypeDto> meterTypeDtos = meterTypeV1InnerServiceSMOImpl.queryMeterTypes(meterTypeDto);
 
-        Assert.listOnlyOne(meterTypeDtos, "房屋不存在");
+        Assert.listOnlyOne(meterTypeDtos, "抄表类型不存在");
 
 
         MeterMachinePo meterMachinePo = BeanConvertUtil.covertBean(importMeterMachineDto, MeterMachinePo.class);

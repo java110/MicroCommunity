@@ -18,6 +18,7 @@ package com.java110.acct.cmd.payment;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.dao.IPaymentPoolValueV1ServiceDao;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -69,6 +70,7 @@ public class ListPaymentPoolCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+
 
     }
 
