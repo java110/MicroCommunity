@@ -71,9 +71,9 @@ public class InspectionPlanV1ServiceDaoImpl extends BaseServiceDao implements II
     public List<Map> getInspectionPlanInfo(Map info) throws DAOException {
         logger.debug("查询 getInspectionPlanInfo 入参 info : {}",info);
 
-        List<Map> businessInspectionPlanInfos = sqlSessionTemplate.selectList("inspectionPlanV1ServiceDaoImpl.getInspectionPlanInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionPlanV1ServiceDaoImpl.getInspectionPlanInfo",info);
 
-        return businessInspectionPlanInfos;
+        return infos;
     }
 
 

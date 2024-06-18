@@ -29,8 +29,10 @@
         t.inspection_workday inspectionWorkday,t.before_time beforeTime,t.create_time createTime,
         d.name stateName,
         c.name inspectionPlanPeriodName,
-        i.name signTypeName
+        i.name signTypeName,
+        ir.route_name inspectionRouteName
         from inspection_plan t
+        left join inspection_route ir on t.inspection_route_id = ir.inspection_route_id and ir.status_cd = '0'
         inner join t_dict d on t.state = d.status_cd and d.table_name = 'inspection_plan' and d.table_columns = 'state'
         inner join t_dict c on t.inspection_plan_period = c.status_cd and c.table_name = 'inspection_plan' and
         c.table_columns = 'inspection_plan_period'

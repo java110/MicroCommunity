@@ -52,57 +52,6 @@ public class ListInspectionPlansCmd extends Cmd {
 
         if (count > 0) {
             inspectionPlans = BeanConvertUtil.covertBeanList(inspectionPlanV1InnerServiceSMOImpl.queryInspectionPlans(inspectionPlanDto), ApiInspectionPlanDataVo.class);
-            List<Object> staffIds = new ArrayList<Object>();
-            List<Object> inspectionRouteIds = new ArrayList<Object>();
-            for (ApiInspectionPlanDataVo Plans : inspectionPlans) {
-                staffIds.add(Plans.getStaffId());
-                String[] ids = Plans.getInspectionRouteId().split(",");
-                for (String s : ids) {
-                    inspectionRouteIds.add(s);
-                }
-            }
-            if (staffIds.size() > 0) {
-                OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
-                String[] staffIdsArray = new String[staffIds.size()];
-                staffIds.toArray(staffIdsArray);
-                orgStaffRelDto.setStaffIds(staffIdsArray);
-                List<OrgStaffRelDto> orgStaffRelDtos = iOrgStaffRelInnerServiceSMO.queryOrgInfoByStaffIds(orgStaffRelDto);
-                for (ApiInspectionPlanDataVo planDataVo : inspectionPlans) {
-                    for (OrgStaffRelDto orgs : orgStaffRelDtos) {
-                        if (planDataVo.getStaffId().equals(orgs.getStaffId())) {
-                            planDataVo.setDepartmentId(orgs.getDepartmentId());
-                            planDataVo.setDepartmentName(orgs.getDepartmentName());
-                            planDataVo.setCompanyId(orgs.getCompanyId());
-                            planDataVo.setCompanyName(orgs.getCompanyName());
-                        }
-                    }
-                }
-            }
-            if (inspectionRouteIds.size() > 0) {
-                //去重
-                HashSet set = new HashSet(inspectionRouteIds);
-                inspectionRouteIds.clear();
-                inspectionRouteIds.addAll(set);
-                InspectionRouteDto inspectionRouteDto = new InspectionRouteDto();
-                String[] routeIds = (String[]) inspectionRouteIds.toArray(new String[inspectionRouteIds.size()]);
-                inspectionRouteDto.setInspectionRouteIds(routeIds);
-                List<InspectionRouteDto> inspectionRouteDtoList = inspectionRouteInnerServiceSMOImpl.queryInspectionRoutes(inspectionRouteDto);
-                for (ApiInspectionPlanDataVo planDataVo : inspectionPlans) {
-                    String[] routeIdArray = planDataVo.getInspectionRouteId().split(",");
-                    for (String s : routeIdArray) {
-                        for (InspectionRouteDto inspectionRouteDto1 : inspectionRouteDtoList) {
-                            if (inspectionRouteDto1.getInspectionRouteId().equals(s)) {
-                                if (planDataVo.getInspectionRouteName() == null) {
-                                    planDataVo.setInspectionRouteName(inspectionRouteDto1.getRouteName());
-                                } else {
-                                    planDataVo.setInspectionRouteName(planDataVo.getInspectionRouteName() + "," + inspectionRouteDto1.getRouteName());
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
         } else {
             inspectionPlans = new ArrayList<>();
         }
