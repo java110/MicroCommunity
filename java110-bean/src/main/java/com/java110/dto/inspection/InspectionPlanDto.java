@@ -30,6 +30,8 @@ public class InspectionPlanDto extends PageDto implements Serializable {
     private String remark;
     private String endTime;
     private String staffName;
+
+    private String staffNameLike;
     private String signType;
     private String startTime;
     private String curTime;
@@ -306,5 +308,13 @@ public class InspectionPlanDto extends PageDto implements Serializable {
 
     public void setInspectionId(String inspectionId) {
         this.inspectionId = inspectionId;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
     }
 }

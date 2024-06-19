@@ -38,7 +38,13 @@
         c.table_columns = 'inspection_plan_period'
         inner join t_dict i on t.sign_type = i.status_cd and i.table_name = 'inspection_plan' and i.table_columns =
         'sign_type'
+        <if test="staffNameLike !=null and staffNameLike != ''">
+        left join inspection_plan_staff ips on t.inspection_plan_id = ips.inspection_plan_id and ips.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="staffNameLike !=null and staffNameLike != ''">
+        and ips.staff_name like concat('%',#{staffNameLike},'%')
+        </if>
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
             and t.inspection_plan_name= #{inspectionPlanName}
         </if>
@@ -167,7 +173,13 @@
     <select id="queryInspectionPlansCount" parameterType="Map" resultType="Map">
         select count(1) count
         from inspection_plan t
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            left join inspection_plan_staff ips on t.inspection_plan_id = ips.inspection_plan_id and ips.status_cd = '0'
+        </if>
         where 1 =1
+        <if test="staffNameLike !=null and staffNameLike != ''">
+            and ips.staff_name like concat('%',#{staffNameLike},'%')
+        </if>
         <if test="inspectionPlanName !=null and inspectionPlanName != ''">
             and t.inspection_plan_name= #{inspectionPlanName}
         </if>
