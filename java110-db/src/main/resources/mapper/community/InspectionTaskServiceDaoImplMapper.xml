@@ -127,7 +127,8 @@
         actUserId,t.task_id,t.task_id taskId,t.state,td1.name signTypeName,td2.name stateName,ip.inspection_plan_name
         inspectionPlanName,t.original_plan_user_id,t.original_plan_user_id
         originalPlanUserId,t.original_plan_user_name,t.original_plan_user_name originalPlanUserName,
-        t.transfer_desc,t.transfer_desc transferDesc,t.task_type,t.task_type taskType
+        t.transfer_desc,t.transfer_desc transferDesc,t.task_type,t.task_type taskType,
+        ip.inspection_route_id inspectionRouteId
         from inspection_task t,inspection_plan ip,t_dict td1,t_dict td2
         where 1 =1
         and t.sign_type = td1.status_cd

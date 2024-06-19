@@ -34,6 +34,12 @@
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
         </if>
+        <if test="inspectionPlanIds !=null ">
+            and t.inspection_plan_id in
+            <foreach collection="inspectionPlanIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}
         </if>
@@ -99,6 +105,12 @@
         </if>
         <if test="inspectionPlanId !=null and inspectionPlanId != ''">
             and t.inspection_plan_id= #{inspectionPlanId}
+        </if>
+        <if test="inspectionPlanIds !=null ">
+            and t.inspection_plan_id in
+            <foreach collection="inspectionPlanIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.end_time= #{endTime}

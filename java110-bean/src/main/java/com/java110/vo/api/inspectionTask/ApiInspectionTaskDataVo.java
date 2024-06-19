@@ -29,6 +29,9 @@ public class ApiInspectionTaskDataVo implements Serializable {
     private String transferDesc;
     private String taskType;
 
+    private String inspectionRouteId;
+
+
 
     public String getPlanUserId() {
         return planUserId;
@@ -212,5 +215,13 @@ public class ApiInspectionTaskDataVo implements Serializable {
 
     public void setTaskType(String taskType) {
         this.taskType = taskType;
+    }
+
+    public String getInspectionRouteId() {
+        return inspectionRouteId;
+    }
+
+    public void setInspectionRouteId(String inspectionRouteId) {
+        this.inspectionRouteId = inspectionRouteId;
     }
 }

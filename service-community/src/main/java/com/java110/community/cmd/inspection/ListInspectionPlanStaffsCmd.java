@@ -1,4 +1,4 @@
-package com.java110.community.cmd.inspectionPlanStaff;
+package com.java110.community.cmd.inspection;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
@@ -8,6 +8,7 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.inspection.InspectionPlanStaffDto;
 import com.java110.intf.community.IInspectionPlanStaffInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.api.inspectionPlanStaff.ApiInspectionPlanStaffDataVo;
 import com.java110.vo.api.inspectionPlanStaff.ApiInspectionPlanStaffVo;
@@ -18,7 +19,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "inspectionPlanStaff.listInspectionPlanStaffs")
+@Java110Cmd(serviceCode = "inspection.listInspectionPlanStaffs")
 public class ListInspectionPlanStaffsCmd extends Cmd {
 
 
@@ -28,6 +29,8 @@ public class ListInspectionPlanStaffsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "小区信息不能为空");
+
     }
 
     @Override
