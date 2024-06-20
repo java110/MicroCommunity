@@ -57,6 +57,8 @@ public class ApiFeeDetailDataVo extends Vo {
 
     private String note;
 
+
+    private String openInvoice; // todo 默认 未开票
     public String getPrimeRate() {
         return primeRate;
     }
@@ -295,5 +297,13 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getOpenInvoice() {
+        return openInvoice;
+    }
+
+    public void setOpenInvoice(String openInvoice) {
+        this.openInvoice = openInvoice;
     }
 }
