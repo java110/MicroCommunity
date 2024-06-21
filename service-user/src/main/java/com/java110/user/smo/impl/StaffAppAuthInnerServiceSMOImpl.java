@@ -7,7 +7,10 @@ import com.java110.dto.user.StaffAppAuthDto;
 import com.java110.intf.user.IStaffAppAuthInnerServiceSMO;
 import com.java110.po.user.StaffAppAuthPo;
 import com.java110.user.dao.IStaffAppAuthServiceDao;
+import com.java110.utils.util.Base64Convert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +42,17 @@ public class StaffAppAuthInnerServiceSMOImpl extends BaseServiceSMO implements I
     @Override
     public int updateStaffAppAuth(@RequestBody StaffAppAuthPo staffAppAuthPo) {
         int saveFlag = 1;
+
+        if (!StringUtil.isEmpty(staffAppAuthPo.getOpenName())) {
+            String nickName = "未获取";
+            try {
+                nickName = Base64Convert.byteToBase64(staffAppAuthPo.getOpenName().getBytes("UTF-8"));
+            } catch (Exception e) {
+            }
+
+            staffAppAuthPo.setOpenName(nickName);
+        }
+
         staffAppAuthServiceDaoImpl.updateStaffAppAuthInfo(BeanConvertUtil.beanCovertMap(staffAppAuthPo));
         return saveFlag;
     }
@@ -64,6 +78,22 @@ public class StaffAppAuthInnerServiceSMOImpl extends BaseServiceSMO implements I
 
         List<StaffAppAuthDto> staffAppAuths = BeanConvertUtil.covertBeanList(staffAppAuthServiceDaoImpl.getStaffAppAuthInfo(BeanConvertUtil.beanCovertMap(staffAppAuthDto)), StaffAppAuthDto.class);
 
+        if (ListUtil.isNull(staffAppAuths)) {
+            return staffAppAuths;
+        }
+
+        for (StaffAppAuthDto tmpStaffAppAuthDto : staffAppAuths) {
+            if (StringUtil.isEmpty(tmpStaffAppAuthDto.getOpenName())) {
+                continue;
+            }
+
+            String nickName = "未获取";
+            try {
+                nickName = new String(Base64Convert.base64ToByte(tmpStaffAppAuthDto.getOpenName()), "UTF-8");
+            } catch (Exception e) {
+            }
+            tmpStaffAppAuthDto.setOpenName(nickName);
+        }
         return staffAppAuths;
     }
 
