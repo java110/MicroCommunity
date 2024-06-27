@@ -68,9 +68,9 @@ public class OaWorkTaskToStaffAdapt extends DatabusAdaptImpl {
             return;
         }
 
-        if (WorkTaskDto.STATE_WAIT.equals(workTaskDto)) {
+        if (WorkTaskDto.STATE_WAIT.equals(workTaskDtos.get(0).getState())) {
             todoStaff(workTaskDto, workPoolDtos.get(0), workTypeDtos.get(0));
-        } else if (WorkTaskDto.STATE_COMPLETE.equals(workTaskDto)) {
+        } else if (WorkTaskDto.STATE_COMPLETE.equals(workTaskDtos.get(0).getState())) {
             todoStartStaff(workTaskDto, workPoolDtos.get(0), workTypeDtos.get(0));
         }
     }
