@@ -3,6 +3,7 @@ package com.java110.user.cmd.owner;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.Environment;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -16,9 +17,12 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerPo;
+import com.java110.user.cmd.question.ListUserQuestionAnswerCmd;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -79,6 +83,22 @@ public class DeleteOwnerMemberCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         Environment.isDevEnv();
+
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setUserId(userId);
+        ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+
+        if (ListUtil.isNull(ownerAppUserDtos)) {
+            throw new CmdException("业主不存在");
+        }
+
+        if (StringUtil.isEmpty(ownerAppUserDtos.get(0).getMemberId())) {
+            throw new CmdException("业主不存在");
+        }
+
         Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含memberId");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
 
@@ -86,6 +106,7 @@ public class DeleteOwnerMemberCmd extends Cmd {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setMemberId(reqJson.getString("memberId"));
         ownerDto.setCommunityId(reqJson.getString("communityId"));
+        ownerDto.setOwnerId(ownerAppUserDtos.get(0).getMemberId());
         ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING,
                 OwnerDto.OWNER_TYPE_CD_TEMP, OwnerDto.OWNER_TYPE_CD_OTHER});
 
