@@ -59,6 +59,12 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
     public final static String APP_AUTH_TOKEN = "APP_AUTH_TOKEN";
 
     /**
+     * 格式化
+     */
+    public final static String ALIPAY_SERVICE = "ALIPAY_SERVICE";
+
+
+    /**
      * 签名类型
      */
     public final static String SIGN_TYPE = "RSA2";
@@ -72,7 +78,8 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
                 CommunitySettingFactory.getValue(communityId, "APP_PRIVATE_KEY"),
                 "json", "UTF-8", CommunitySettingFactory.getValue(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
         AlipayTradePayRequest request = new AlipayTradePayRequest();
-        if (!StringUtil.isEmpty(CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN))) {
+        String aliPayService = CommunitySettingFactory.getValue(communityId,ALIPAY_SERVICE);
+        if ("ON".equals(aliPayService)) {
             request.putOtherTextParam("app_auth_token", CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN));
         }
         JSONObject bizContent = new JSONObject();
@@ -105,7 +112,8 @@ public class QrCodeAliPaymentAdapt implements IQrCodePaymentSMO {
                 "json", "UTF-8",
                 CommunitySettingFactory.getValue(communityId, "ALIPAY_PUBLIC_KEY"), "RSA2");
         AlipayTradeQueryRequest request = new AlipayTradeQueryRequest();
-        if (!StringUtil.isEmpty(CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN))) {
+        String aliPayService = CommunitySettingFactory.getValue(communityId,ALIPAY_SERVICE);
+        if ("ON".equals(aliPayService)) {
             request.putOtherTextParam("app_auth_token", CommunitySettingFactory.getValue(communityId, APP_AUTH_TOKEN));
         }
         request.setBizContent("{" +
