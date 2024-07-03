@@ -25,9 +25,14 @@ import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.parking.ParkingCouponCarDto;
 import com.java110.dto.parking.ParkingCouponShopDto;
+import com.java110.dto.shop.ShopDto;
+import com.java110.dto.shop.StoreShopDto;
 import com.java110.intf.acct.IParkingCouponCarV1InnerServiceSMO;
 import com.java110.intf.acct.IParkingCouponShopV1InnerServiceSMO;
 import com.java110.intf.acct.IParkingCouponV1InnerServiceSMO;
+import com.java110.intf.mall.IShopInnerServiceSMO;
+import com.java110.intf.shore.IShoreShopV1InnerServiceSMO;
+import com.java110.intf.store.IStoreShopV1InnerServiceSMO;
 import com.java110.po.parking.ParkingCouponCarPo;
 import com.java110.po.parking.ParkingCouponShopPo;
 import com.java110.utils.cache.CommonCache;
@@ -38,6 +43,7 @@ import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,6 +107,9 @@ public class SaveParkingCouponCarCmd extends Cmd {
     @Autowired
     private IParkingCouponShopV1InnerServiceSMO parkingCouponShopV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IStoreShopV1InnerServiceSMO shopInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "couponShopId", "请求报文中未包含couponShopId");
@@ -109,9 +118,18 @@ public class SaveParkingCouponCarCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "giveWay", "请求报文中未包含giveWay");
         Assert.hasKeyAndValue(reqJson, "code", "请求报文中未包含临时票据");
 
+
+        StoreShopDto shopDto = new StoreShopDto();
+        shopDto.setShopId(reqJson.getString("shopId"));
+        List<ShopDto> shopDtos = shopInnerServiceSMOImpl.queryStoreShops(shopDto);
+
+        if (ListUtil.isNull(shopDtos)) {
+            throw new CmdException("店铺不存在");
+        }
+
         String codeKey = reqJson.getString("shopId") + reqJson.getString("code");
 
-        String checkCode = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,"CHECK_PARKING_COUPON_QRCODE_CODE");
+        String checkCode = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, "CHECK_PARKING_COUPON_QRCODE_CODE");
 
         if ("OFF".equals(checkCode)) {
             return;
@@ -160,7 +178,7 @@ public class SaveParkingCouponCarCmd extends Cmd {
                 throw new CmdException("优惠券递减失败");
             }
         } finally {
-            DistributedLock.releaseDistributedLock(key,requestId);
+            DistributedLock.releaseDistributedLock(key, requestId);
         }
 
         ParkingCouponCarPo parkingCouponCarPo = BeanConvertUtil.covertBean(reqJson, ParkingCouponCarPo.class);
