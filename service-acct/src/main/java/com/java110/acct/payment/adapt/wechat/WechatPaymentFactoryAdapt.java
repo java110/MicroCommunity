@@ -233,6 +233,9 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
                     paymentOrderDto.getOrderId(),
                     paymentPoolValueDtos.get(0).getCommunityId());
             payAmount = payAmount - deductionIntegralDto.getMoney();
+            if (payAmount <= 0) {
+                throw new IllegalArgumentException("积分金额大于支付金额");
+            }
         }
 
         //这里防止 小数点不是 2位 比如 3位之类的 微信平台不支持
