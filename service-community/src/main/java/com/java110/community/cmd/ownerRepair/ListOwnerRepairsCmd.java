@@ -64,9 +64,10 @@ public class ListOwnerRepairsCmd extends Cmd {
         }
         //todo PC电话报修、PC工单池、H5工单池
         //todo 手机端员工单工单池 只返回未处理状态的数据
-        if (!StringUtil.isEmpty(ownerRepairDto.getReqSource()) && ownerRepairDto.getReqSource().equals("mobile")) {
-            ownerRepairDto.setState(RepairDto.STATE_WAIT);
-        }
+        //todo 这个应该显示全部才对，之前的兄弟写的不合适 add by wuxw
+//        if (!StringUtil.isEmpty(ownerRepairDto.getReqSource()) && ownerRepairDto.getReqSource().equals("mobile")) {
+//            ownerRepairDto.setState(RepairDto.STATE_WAIT);
+//        }
         //todo pc电话报修模块 只返回PC员工登记和手机端员工登记的数据
         if (!StringUtil.isEmpty(ownerRepairDto.getReqSource()) && ownerRepairDto.getReqSource().equals("pc_mobile")) {
             String[] repair_channel = {RepairDto.REPAIR_CHANNEL_STAFF, RepairDto.REPAIR_CHANNEL_TEL};
