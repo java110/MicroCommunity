@@ -97,7 +97,7 @@ public class SaveParkingSpaceApplyCmd extends Cmd {
         }
         //还需到owner表中校验在不在,不是业主则不能申请
         OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setOwnerId(parkingSpaceApplyPo.getApplyPersonId());
+        ownerDto.setMemberId(parkingSpaceApplyPo.getApplyPersonId());
         List<OwnerDto> ownerDtos = buildingOwnerV1InnerServiceSMOImpl.queryBuildingOwners(ownerDto);
         if (ListUtil.isNull(ownerDtos)) {
             throw new CmdException("不是本小区业主不能申请车位！");
