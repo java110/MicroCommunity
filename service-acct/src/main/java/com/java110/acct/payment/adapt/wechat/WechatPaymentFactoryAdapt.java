@@ -404,8 +404,6 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
         deductionIntegralImpl.deduction(paymentOrderDto.getOrderId());
 
 
-
-
         String giftIntegralDtoStr = CommonCache.getAndRemoveValue("integral_share_acct_" + paymentOrderDto.getOrderId());
 
         if (StringUtil.isEmpty(giftIntegralDtoStr)) {
@@ -417,27 +415,37 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
             return 1;
         }
 
-        //todo 添加分账商家
-        JSONArray params = wechatIntegralShareAcct.addReceivers(giftIntegralDto);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2*60*1000);
+                    //todo 添加分账商家
+                    JSONArray params = wechatIntegralShareAcct.addReceivers(giftIntegralDto);
 
 
-        //todo 申请分账
-        JSONObject applyResult = wechatIntegralShareAcct.applyProfileShare(paymentOrderDto, giftIntegralDto, params);
+                    //todo 申请分账
+                    JSONObject applyResult = wechatIntegralShareAcct.applyProfileShare(paymentOrderDto, giftIntegralDto, params);
 
-        if (applyResult.containsKey("result_code") && "SUCCESS".equals(applyResult.getString("result_code"))) {
-            JSONObject finishParam = new JSONObject();
-            finishParam.put("out_order_no", applyResult.getString("order_id"));
-            //完结分账 单次分账
-            //finishProfileShare(storeOrderDto, smallWeChatDto, finishParam);
-        } else {
-            throw new IllegalArgumentException("分账失败:" + applyResult.toJSONString());
-        }
+                    if (applyResult.containsKey("result_code") && "SUCCESS".equals(applyResult.getString("result_code"))) {
+                        JSONObject finishParam = new JSONObject();
+                        finishParam.put("out_order_no", applyResult.getString("order_id"));
+                        //完结分账 单次分账
+                        //finishProfileShare(storeOrderDto, smallWeChatDto, finishParam);
+                    } else {
+                        throw new IllegalArgumentException("分账失败:" + applyResult.toJSONString());
+                    }
 
-        // 删除接收方
-        wechatIntegralShareAcct.deleteReceivers(giftIntegralDto);
+                    // 删除接收方
+                    wechatIntegralShareAcct.deleteReceivers(giftIntegralDto);
 
-        // todo 给用户赠送积分
-        wechatIntegralShareAcct.sendIntegral(giftIntegralDto);
+                    // todo 给用户赠送积分
+                    wechatIntegralShareAcct.sendIntegral(giftIntegralDto);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
 
         return 1;
