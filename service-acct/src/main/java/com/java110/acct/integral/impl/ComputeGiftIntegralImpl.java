@@ -5,6 +5,7 @@ import com.java110.acct.integral.IComputeGiftIntegral;
 import com.java110.dto.integral.GiftIntegralDto;
 import com.java110.dto.integral.IntegralRuleConfigDto;
 import com.java110.dto.integral.IntegralRuleFeeDto;
+import com.java110.dto.mall.MallConfigDto;
 import com.java110.intf.acct.IIntegralRuleConfigV1InnerServiceSMO;
 import com.java110.intf.acct.IIntegralRuleFeeV1InnerServiceSMO;
 import com.java110.intf.job.IMallInnerServiceSMO;
@@ -76,12 +77,18 @@ public class ComputeGiftIntegralImpl implements IComputeGiftIntegral {
 
         double money = mallInnerServiceSMOImpl.computeIntegralMoney(quantity);
 
+        MallConfigDto mallConfigDto = new MallConfigDto();
+        mallConfigDto = mallInnerServiceSMOImpl.getMallConfig(mallConfigDto);
+
+
 
         return new GiftIntegralDto(quantity, money, communityId,
                 integralRuleFeeDtos.get(0).getRuleId(),
                 integralRuleConfigDtos.get(0).getRuleName(),
                 integralRuleConfigDtos.get(0).getConfigId(),
-                integralRuleConfigDtos.get(0).getConfigName()
+                integralRuleConfigDtos.get(0).getConfigName(),
+                mallConfigDto.getPlatformMchId(),
+                mallConfigDto.getPlatformMchName()
                 );
     }
 

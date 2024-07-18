@@ -14,7 +14,7 @@ public class GiftIntegralDto implements Serializable {
     }
 
     public GiftIntegralDto(int integral, double money,String communityId,
-                           String ruleId,String ruleName,String configId,String configName
+                           String ruleId,String ruleName,String configId,String configName,String platformMchId,String platformMchName
     ) {
         this.integral = integral;
         this.money = money;
@@ -23,6 +23,8 @@ public class GiftIntegralDto implements Serializable {
         this.ruleName = ruleName;
         this.configId = configId;
         this.configName = configName;
+        this.platformMchId = platformMchId;
+        this.platformMchName = platformMchName;
     }
 
     private int integral;

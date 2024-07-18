@@ -6,6 +6,7 @@ import com.java110.dto.IotDataDto;
 import com.java110.dto.MallDataDto;
 import com.java110.dto.integral.DeductionIntegralDto;
 import com.java110.dto.integral.GiftIntegralDto;
+import com.java110.dto.mall.MallConfigDto;
 import com.java110.dto.user.UserDto;
 import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -60,4 +61,7 @@ public interface IMallInnerServiceSMO {
 
     @RequestMapping(value = "/userIntegralToCommunity", method = RequestMethod.POST)
     ResultVo userIntegralToCommunity(@RequestBody DeductionIntegralDto deductionIntegralDto);
+
+    @RequestMapping(value = "/getMallConfig", method = RequestMethod.POST)
+    MallConfigDto getMallConfig(@RequestBody MallConfigDto mallConfigDto);
 }

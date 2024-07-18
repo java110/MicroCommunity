@@ -106,6 +106,7 @@ public class WechatIntegralShareAcct {
             paramMap.put("mch_id", MappingCache.getValue(DOMAIN_WECHAT_PAY, WECHAT_SERVICE_MCH_ID));  //服务商商户号
             //paramMap.put("sub_appid", smallWeChatDto.getAppId());//起调小程序appid
             paramMap.put("sub_mch_id", giftIntegralDto.getMchId());//起调小程序的商户号
+
         }
         paramMap.put("receiver", paramIn.toJSONString());
         paramMap.put("sign", PayUtil.createSignSha256(paramMap, giftIntegralDto.getMchKey()));

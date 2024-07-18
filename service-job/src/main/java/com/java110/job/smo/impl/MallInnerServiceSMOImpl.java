@@ -7,12 +7,14 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.MallDataDto;
 import com.java110.dto.integral.DeductionIntegralDto;
 import com.java110.dto.integral.GiftIntegralDto;
+import com.java110.dto.mall.MallConfigDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IMallInnerServiceSMO;
 import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
 import com.java110.job.mall.ISendMall;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,6 +176,27 @@ public class MallInnerServiceSMOImpl extends BaseServiceSMO implements IMallInne
         ResultVo resultVo = sendMallImpl.post("/mall/api/common.openCommonApi", paramIn);
 
         return resultVo;
+    }
+
+    @Override
+    public MallConfigDto getMallConfig(MallConfigDto mallConfigDto) {
+        String mallSwitch = MappingCache.getValue(MALL_DOMAIN, "MALL_SWITCH");
+
+        if (!"ON".equals(mallSwitch)) {
+            return mallConfigDto;
+        }
+
+
+        JSONObject paramIn = BeanConvertUtil.beanCovertJson(mallConfigDto);
+
+        paramIn.put("mallApiCode", "getMallConfig");
+        ResultVo resultVo = sendMallImpl.post("/mall/api/common.openCommonApi", paramIn);
+
+        if(resultVo.getCode() != 0){
+            throw new IllegalArgumentException(resultVo.getMsg());
+        }
+        mallConfigDto = BeanConvertUtil.covertBean(resultVo.getData(),MallConfigDto.class);
+        return mallConfigDto;
     }
 
 }
