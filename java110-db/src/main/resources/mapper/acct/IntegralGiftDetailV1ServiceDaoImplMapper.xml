@@ -40,8 +40,8 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="userNameLike !=null and userNameLike != ''">
+            and t.user_name concat('%', #{userNameLike},'%')
         </if>
 
         <if test="configId !=null and configId != ''">
@@ -132,8 +132,8 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
-        <if test="userName !=null and userName != ''">
-            and t.user_name= #{userName}
+        <if test="userNameLike !=null and userNameLike != ''">
+            and t.user_name concat('%', #{userNameLike},'%')
         </if>
 
         <if test="configId !=null and configId != ''">

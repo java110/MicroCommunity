@@ -21,6 +21,9 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
     private String detailId;
 
     private String userName;
+    private String userNameLike;
+
+
 
     private String configId;
 
@@ -136,5 +139,13 @@ public class IntegralGiftDetailDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getUserNameLike() {
+        return userNameLike;
+    }
+
+    public void setUserNameLike(String userNameLike) {
+        this.userNameLike = userNameLike;
     }
 }
