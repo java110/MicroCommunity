@@ -11,6 +11,8 @@ import com.java110.intf.user.IUserQuestionAnswerV1InnerServiceSMO;
 import com.java110.po.questionAnswer.QuestionAnswerPo;
 import com.java110.po.user.UserQuestionAnswerPo;
 import com.java110.user.bmo.question.IQuestionAnswerBMO;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,7 @@ public class QuestionAnswerBMOImpl implements IQuestionAnswerBMO {
     @Override
     public void saveUserQuestionAnswer(QuestionAnswerPo questionAnswerPo, JSONArray roomIds) {
 
-        if (roomIds == null || roomIds.size() < 1) {
+        if (ListUtil.isNull(roomIds)) {
             return;
         }
 
@@ -63,7 +65,7 @@ public class QuestionAnswerBMOImpl implements IQuestionAnswerBMO {
         roomDto.setRoomIds(roomIdStrs.toArray(new String[roomIdStrs.size()]));
         List<RoomDto> roomDtos = roomV1InnerServiceSMOImpl.queryRooms(roomDto);
 
-        if (roomDtos == null || roomDtos.size() < 1) {
+        if (ListUtil.isNull(roomDtos)) {
             return;
         }
 
@@ -72,7 +74,7 @@ public class QuestionAnswerBMOImpl implements IQuestionAnswerBMO {
         ownerRoomRelDto.setRoomIds(roomIdStrs.toArray(new String[roomIdStrs.size()]));
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
             return;
         }
 
@@ -88,9 +90,18 @@ public class QuestionAnswerBMOImpl implements IQuestionAnswerBMO {
         List<UserQuestionAnswerPo> userQuestionAnswerPos = new ArrayList<>();
         UserQuestionAnswerPo userQuestionAnswerPo = null;
         for (RoomDto tmpRoomDto : roomDtos) {
+            if(StringUtil.isEmpty(tmpRoomDto.getOwnerId())){
+                continue;
+            }
+            if(StringUtil.isEmpty(tmpRoomDto.getLink())){
+                continue;
+            }
+            if(StringUtil.isEmpty(tmpRoomDto.getOwnerName())){
+                continue;
+            }
             userQuestionAnswerPo = new UserQuestionAnswerPo();
             userQuestionAnswerPo.setLink(tmpRoomDto.getLink());
-            userQuestionAnswerPo.setOwnerId(tmpRoomDto.getLink());
+            userQuestionAnswerPo.setOwnerId(tmpRoomDto.getOwnerId());
             userQuestionAnswerPo.setCommunityId(tmpRoomDto.getCommunityId());
             userQuestionAnswerPo.setOwnerName(tmpRoomDto.getOwnerName());
             userQuestionAnswerPo.setQaId(questionAnswerPo.getQaId());
