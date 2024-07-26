@@ -22,11 +22,13 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IEquipmentAccountV1InnerServiceSMO;
 import com.java110.intf.common.IEquipmentOperatingLogV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.machine.EquipmentAccountPo;
 import com.java110.po.machine.EquipmentOperatingLogPo;
+import com.java110.po.user.UserPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -37,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -96,14 +99,14 @@ public class SaveEquipmentAccountCmd extends Cmd {
             equipmentOperatingLogPo.setOperatingDescriptor("设备初始添加入库");
             String currentUserId = reqJson.getString("userId");
             System.out.println("currentUserId"+currentUserId);
-//            if (!StringUtil.isEmpty(currentUserId)){
-//                UserPo userDto =  new UserPo();
-//                userDto.setUserId(currentUserId);
-//                UserPo userPo = userV1InnerServiceSMO.queryUserByUserId(userDto);
-//                equipmentOperatingLogPo.setUserName(userPo.getName());
-//                equipmentOperatingLogPo.setUserId(currentUserId);
-//                equipmentOperatingLogPo.setUseTel(userPo.getTel());
-//            }
+            if (!StringUtil.isEmpty(currentUserId)){
+                UserDto userDto =  new UserDto();
+                userDto.setUserId(currentUserId);
+                List<UserDto> userDtos = userV1InnerServiceSMO.queryUsers(userDto);
+                equipmentOperatingLogPo.setUserName(userDtos.get(0).getName());
+                equipmentOperatingLogPo.setUserId(currentUserId);
+                equipmentOperatingLogPo.setUseTel(userDtos.get(0).getTel());
+            }
             equipmentOperatingLogV1InnerServiceSMOImpl.saveEquipmentOperatingLog(equipmentOperatingLogPo);
         }
         if (flag < 1) {
