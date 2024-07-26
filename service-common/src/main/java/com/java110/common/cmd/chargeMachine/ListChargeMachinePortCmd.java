@@ -21,6 +21,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.intf.common.IChargeMachinePortV1InnerServiceSMO;
+import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,7 +53,7 @@ public class ListChargeMachinePortCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListChargeMachinePortCmd.class);
     @Autowired
-    private IChargeMachinePortV1InnerServiceSMO chargeMachinePortV1InnerServiceSMOImpl;
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -64,36 +65,13 @@ public class ListChargeMachinePortCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        ChargeMachinePortDto chargeMachinePortDto = BeanConvertUtil.covertBean(reqJson, ChargeMachinePortDto.class);
 
-        int count = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePortsCount(chargeMachinePortDto);
-
-        List<ChargeMachinePortDto> chargeMachinePortDtos = null;
-
-        if (count > 0) {
-            chargeMachinePortDtos = chargeMachinePortV1InnerServiceSMOImpl.queryChargeMachinePorts(chargeMachinePortDto);
-
-            //调用 第三方查询 插槽状态
-           // queryPortState(chargeMachinePortDtos);
-        } else {
-            chargeMachinePortDtos = new ArrayList<>();
-        }
-
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMachinePortDtos);
-
+        reqJson.put("iotApiCode", "listChargeMachinePortBmoImpl");
+        ResultVo resultVo = iotInnerServiceSMOImpl.postIot(reqJson);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
-//    private void queryPortState(List<ChargeMachinePortDto> chargeMachinePortDtos) {
-//        if (chargeMachinePortDtos == null || chargeMachinePortDtos.size() < 1) {
-//            return;
-//
-//        }
-//
-//        for (ChargeMachinePortDto chargeMachinePortDto : chargeMachinePortDtos) {
-//            chargeMachinePortDto.setStateName("空闲");
-//        }
-//    }
+
 }

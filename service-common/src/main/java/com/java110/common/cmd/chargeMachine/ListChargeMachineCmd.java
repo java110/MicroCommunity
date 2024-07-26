@@ -25,6 +25,7 @@ import com.java110.dto.charge.ChargeRuleFeeDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.common.IChargeMachineV1InnerServiceSMO;
 import com.java110.intf.common.IChargeRuleFeeV1InnerServiceSMO;
+import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.exception.CmdException;
@@ -58,16 +59,7 @@ public class ListChargeMachineCmd extends Cmd {
 
     private static Logger logger = LoggerFactory.getLogger(ListChargeMachineCmd.class);
     @Autowired
-    private IChargeMachineV1InnerServiceSMO chargeMachineV1InnerServiceSMOImpl;
-
-    @Autowired
-    private ISmallWeChatInnerServiceSMO smallWeChatInnerServiceSMOImpl;
-
-    @Autowired
-    private IChargeRuleFeeV1InnerServiceSMO chargeRuleFeeV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IChargeCore chargeCoreImpl;
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -78,82 +70,10 @@ public class ListChargeMachineCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        ChargeMachineDto chargeMachineDto = BeanConvertUtil.covertBean(reqJson, ChargeMachineDto.class);
-
-        int count = chargeMachineV1InnerServiceSMOImpl.queryChargeMachinesCount(chargeMachineDto);
-
-        List<ChargeMachineDto> chargeMachineDtos = null;
-
-        if (count > 0) {
-            chargeMachineDtos = chargeMachineV1InnerServiceSMOImpl.queryChargeMachines(chargeMachineDto);
-            freshQrCodeUrl(chargeMachineDtos);
-
-            // todo  查询设备是否在线
-            queryMachineState(chargeMachineDtos);
-
-            // todo 刷入算费规则
-            queryChargeRuleFee(chargeMachineDtos);
-        } else {
-            chargeMachineDtos = new ArrayList<>();
-        }
-
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMachineDtos);
-
+        reqJson.put("iotApiCode", "listChargeMachineBmoImpl");
+        ResultVo resultVo = iotInnerServiceSMOImpl.postIot(reqJson);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
-    }
-
-    private void queryChargeRuleFee(List<ChargeMachineDto> chargeMachineDtos) {
-        if (chargeMachineDtos == null || chargeMachineDtos.size() != 1) {
-            return;
-        }
-
-        ChargeRuleFeeDto chargeRuleFeeDto = new ChargeRuleFeeDto();
-        chargeRuleFeeDto.setRuleId(chargeMachineDtos.get(0).getRuleId());
-        chargeRuleFeeDto.setCommunityId(chargeMachineDtos.get(0).getCommunityId());
-        List<ChargeRuleFeeDto> fees = chargeRuleFeeV1InnerServiceSMOImpl.queryChargeRuleFees(chargeRuleFeeDto);
-
-        chargeMachineDtos.get(0).setFees(fees);
-
-    }
-
-    private void queryMachineState(List<ChargeMachineDto> chargeMachineDtos) {
-
-        if (chargeMachineDtos == null || chargeMachineDtos.size() < 1 || chargeMachineDtos.size() > 10) {
-            return;
-        }
-
-        chargeCoreImpl.queryChargeMachineState(chargeMachineDtos);
-    }
-
-    /**
-     * 充电桩二维码
-     *
-     * @param chargeMachineDtos
-     */
-    private void freshQrCodeUrl(List<ChargeMachineDto> chargeMachineDtos) {
-
-        if (chargeMachineDtos == null || chargeMachineDtos.size() < 1) {
-            return;
-        }
-
-        SmallWeChatDto smallWeChatDto = new SmallWeChatDto();
-        smallWeChatDto.setObjId(chargeMachineDtos.get(0).getCommunityId());
-        smallWeChatDto.setWeChatType(SmallWeChatDto.WECHAT_TYPE_PUBLIC);
-        List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
-        String appId = "";
-        if (smallWeChatDtos != null && smallWeChatDtos.size() > 0) {
-            appId = smallWeChatDtos.get(0).getAppId();
-        }
-        String ownerUrl = UrlCache.getOwnerUrl();
-
-        for (ChargeMachineDto chargeMachineDto : chargeMachineDtos) {
-            chargeMachineDto.setQrCode(ownerUrl + "/#/pages/machine/machineToCharge?machineId="
-                    + chargeMachineDto.getMachineId()
-                    + "&communityId=" + chargeMachineDto.getCommunityId()
-                    + "&wAppId=" + appId
-            );
-        }
     }
 }

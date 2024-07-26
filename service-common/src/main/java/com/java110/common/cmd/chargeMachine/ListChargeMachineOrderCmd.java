@@ -17,18 +17,24 @@ package com.java110.common.cmd.chargeMachine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IChargeMachineOrderV1InnerServiceSMO;
+import com.java110.intf.job.IIotInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.charge.ChargeMachineOrderDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -48,9 +54,12 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "chargeMachine.listChargeMachineOrder")
 public class ListChargeMachineOrderCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListChargeMachineOrderCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListChargeMachineOrderCmd.class);
     @Autowired
-    private IChargeMachineOrderV1InnerServiceSMO chargeMachineOrderV1InnerServiceSMOImpl;
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
+
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -61,22 +70,18 @@ public class ListChargeMachineOrderCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           ChargeMachineOrderDto chargeMachineOrderDto = BeanConvertUtil.covertBean(reqJson, ChargeMachineOrderDto.class);
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
 
-           int count = chargeMachineOrderV1InnerServiceSMOImpl.queryChargeMachineOrdersCount(chargeMachineOrderDto);
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
-           List<ChargeMachineOrderDto> chargeMachineOrderDtos = null;
+        Assert.listOnlyOne(userDtos, "用户不存在");
+        reqJson.put("personTel", userDtos.get(0).getTel());
+        reqJson.put("iotApiCode", "listChargeMachineOrderBmoImpl");
+        ResultVo resultVo = iotInnerServiceSMOImpl.postIot(reqJson);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           if (count > 0) {
-               chargeMachineOrderDtos = chargeMachineOrderV1InnerServiceSMOImpl.queryChargeMachineOrders(chargeMachineOrderDto);
-           } else {
-               chargeMachineOrderDtos = new ArrayList<>();
-           }
-
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, chargeMachineOrderDtos);
-
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
-
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }
