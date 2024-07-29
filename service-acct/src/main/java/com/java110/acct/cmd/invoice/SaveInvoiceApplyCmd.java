@@ -56,6 +56,7 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -214,6 +215,14 @@ public class SaveInvoiceApplyCmd extends Cmd {
         }
         InvoiceApplyItemPo invoiceApplyItemPo = null;
         for (FeeDetailDto tmpFeeDetailDto : feeDetailDtos) {
+            //todo 判断不能提前开票，也就是startTime 不能大于当年 12月31日
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.MONTH, 1);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+            calendar.add(Calendar.YEAR, 1);
+            if (tmpFeeDetailDto.getStartTime().getTime() > calendar.getTime().getTime()) {
+                throw new CmdException("不能预开明年的票");
+            }
             invoiceAmount = invoiceAmount.add(new BigDecimal(tmpFeeDetailDto.getReceivedAmount()));
             invoiceApplyItemPo = new InvoiceApplyItemPo();
             invoiceApplyItemPo.setApplyId(invoiceApplyPo.getApplyId());
