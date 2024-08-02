@@ -210,7 +210,7 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
                 feeCollectionDetailPo.setCollectionWay(FeeCollectionOrderDto.COLLECTION_WAY_SMS);
                 break;
             case FeeCollectionOrderDto.COLLECTION_WAY_WECHAT:
-                if(StringUtil.isEmpty(reportOweFeeDo.getOwnerId())  || "-1".equals(reportOweFeeDo.getOwnerId())){
+                if (StringUtil.isEmpty(reportOweFeeDo.getOwnerId()) || "-1".equals(reportOweFeeDo.getOwnerId())) {
                     return;
                 }
                 if (!StringUtil.isEmpty(reportOweFeeDo.getOwnerId())) {
@@ -297,7 +297,7 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
             oweUrl = FeeDto.PAYER_OBJ_TYPE_ROOM.equals(reportOweFeeDo.getPayerObjType()) ? oweRoomUrl : oweCarUrl;
             String[] roomName = new String[]{};
             if ("3333".equals(reportOweFeeDo.getPayerObjType())) {
-                roomName = itemDto.getPayerObjName().split("-",3);
+                roomName = itemDto.getPayerObjName().split("-", 3);
             }
             for (OwnerAppUserDto appUserDto : ownerAppUserDtos) {
                 try {
@@ -328,9 +328,9 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
 
                     if (!StringUtil.isEmpty(oweUrl)) {
                         if (miniprogram == null) {
-                            templateMessage.setUrl(oweUrl + itemDto.getPayerObjId() + "&wAppId=" + weChatDto.getAppId());
+                            templateMessage.setUrl(oweUrl + itemDto.getPayerObjId() + "&communityId=" + appUserDto.getCommunityId() + "&wAppId=" + weChatDto.getAppId());
                         } else {
-                            miniprogram.setPagepath(oweUrl.split("@@")[1] + itemDto.getPayerObjId() + "&wAppId=" + weChatDto.getAppId());
+                            miniprogram.setPagepath(oweUrl.split("@@")[1] + itemDto.getPayerObjId() + "&communityId=" + appUserDto.getCommunityId() + "&wAppId=" + weChatDto.getAppId());
                             templateMessage.setMiniprogram(miniprogram);
                         }
                     }
@@ -388,11 +388,11 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
             param.put("date2", DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B));
             param.put("mount", reportOweFeeDo.getAmountOwed());
             paramIn = param;
-        }else if(SendSmsFactory.SMS_COMPANY_YIDONG.equals(smsConfigDto1.getSmsType())){
-            paramIn = "尊敬的业主"+ reportOweFeeDo.getOwnerName()+"，您"+reportOweFeeDo.getPayerObjName()+"的"+itemDtos.get(0).getFeeName()
-                    +"，账单日期"+DateUtil.getFormatTimeString(itemDtos.get(0).getStartTime(), DateUtil.DATE_FORMATE_STRING_B)
-                    +"至"+DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B)
-                    +"，缴费金额："+reportOweFeeDo.getAmountOwed()+"元，请及时缴费";
+        } else if (SendSmsFactory.SMS_COMPANY_YIDONG.equals(smsConfigDto1.getSmsType())) {
+            paramIn = "尊敬的业主" + reportOweFeeDo.getOwnerName() + "，您" + reportOweFeeDo.getPayerObjName() + "的" + itemDtos.get(0).getFeeName()
+                    + "，账单日期" + DateUtil.getFormatTimeString(itemDtos.get(0).getStartTime(), DateUtil.DATE_FORMATE_STRING_B)
+                    + "至" + DateUtil.getFormatTimeString(endTime, DateUtil.DATE_FORMATE_STRING_B)
+                    + "，缴费金额：" + reportOweFeeDo.getAmountOwed() + "元，请及时缴费";
         } else {
             paramIn = new String[]{
                     reportOweFeeDo.getOwnerName(),
@@ -469,8 +469,8 @@ public class FeeCollectionPushMessageTemplate extends TaskSystemQuartz {
         }
         String url = sendTemplate + accessToken;
 
-        String oweRoomUrl = UrlCache.getOwnerUrl()+MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
-        String oweCarUrl = UrlCache.getOwnerUrl()+MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
+        String oweRoomUrl = UrlCache.getOwnerUrl() + MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_FEE_PAGE);
+        String oweCarUrl = UrlCache.getOwnerUrl() + MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.OWE_CAR_FEE_PAGE);
         Miniprogram miniprogram = null;
         if (oweRoomUrl.contains("@@")) {
             miniprogram = new Miniprogram();
