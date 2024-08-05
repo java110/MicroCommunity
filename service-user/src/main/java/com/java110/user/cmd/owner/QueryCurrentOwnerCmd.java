@@ -74,7 +74,7 @@ public class QueryCurrentOwnerCmd extends Cmd {
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
         ownerAppUserDto.setUserId(userId);
         ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
-        ownerAppUserDto.setMemberId(reqJson.getString("memberId"));
+        //ownerAppUserDto.setMemberId(reqJson.getString("memberId"));
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
         if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
