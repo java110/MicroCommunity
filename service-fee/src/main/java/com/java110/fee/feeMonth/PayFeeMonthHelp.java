@@ -177,7 +177,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
         // todo 处理 开始时间和结束时间
         Date startTime = DateUtil.timeToDate(feeDto.getEndTime());
-        Date endTime = DateUtil.timeToDate(deadlineTime);
+        Date endTime = DateUtil.deadTimeToDate(deadlineTime);
 
         BigDecimal receivableAmount = new BigDecimal(feePrice);
 

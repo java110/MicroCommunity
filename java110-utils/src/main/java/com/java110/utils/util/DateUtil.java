@@ -817,6 +817,22 @@ public class DateUtil {
         return calendar.getTime();
     }
 
+    /**
+     * 除去 小时 分 秒
+     *
+     * deadtime 本来就少了一秒
+     *
+     * @param time
+     * @return
+     */
+    public static Date deadTimeToDate(Date time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        calendar.add(Calendar.SECOND,1);
+        setTimeToMidnight(calendar);
+        return calendar.getTime();
+    }
+
     public static boolean sameMonthDay(Date startDate, Date endDate) {
         Calendar startCalendar = Calendar.getInstance();
         startCalendar.setTime(startDate);
