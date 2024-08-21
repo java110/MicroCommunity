@@ -39,10 +39,7 @@ import com.java110.po.parking.ParkingSpaceApplyPo;
 import com.java110.po.payFee.PayFeeDetailDiscountPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -254,6 +251,9 @@ public class PayFeeConfirmCmd extends Cmd {
 
     private void dealAccount(JSONObject paramObj) {
         JSONArray accountDtos = paramObj.getJSONArray("selectUserAccount");
+        if(ListUtil.isNull(accountDtos)){
+            return;
+        }
         AccountDto accountDto = null;
         String accountRemark = "";
         String pointRemark = "";
@@ -345,6 +345,9 @@ public class PayFeeConfirmCmd extends Cmd {
         //FeeDto feeInfo = (FeeDto) paramObj.get("feeInfo");
         CouponUserDto couponUserDto = null;
         JSONArray couponUserDtos = paramObj.getJSONArray("couponUserDtos");
+        if(ListUtil.isNull(couponUserDtos)){
+            return ;
+        }
         CouponUserDto couponUser = null;
         for (int accountIndex = 0; accountIndex < couponUserDtos.size(); accountIndex++) {
             couponUser = BeanConvertUtil.covertBean(couponUserDtos.getJSONObject(accountIndex), CouponUserDto.class);
@@ -387,6 +390,9 @@ public class PayFeeConfirmCmd extends Cmd {
             return;
         }
         JSONArray computeDiscountDtos = paramObj.getJSONArray("computeDiscountDtos");
+        if(ListUtil.isNull(computeDiscountDtos)){
+            return;
+        }
         ComputeDiscountDto computeDiscountDto = null;
         for (int accountIndex = 0; accountIndex < computeDiscountDtos.size(); accountIndex++) {
             computeDiscountDto = BeanConvertUtil.covertBean(computeDiscountDtos.getJSONObject(accountIndex), ComputeDiscountDto.class);
