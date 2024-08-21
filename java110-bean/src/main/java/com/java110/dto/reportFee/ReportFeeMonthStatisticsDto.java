@@ -56,6 +56,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
 
     private String ownerName;
+    private String ownerTel;
     private String ownerId;
     private String detailId;
     private String builtUpArea;
@@ -1190,5 +1191,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String getOwnerTel() {
+        return ownerTel;
+    }
+
+    public void setOwnerTel(String ownerTel) {
+        this.ownerTel = ownerTel;
     }
 }

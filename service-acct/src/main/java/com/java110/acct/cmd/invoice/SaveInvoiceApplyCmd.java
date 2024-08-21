@@ -230,7 +230,7 @@ public class SaveInvoiceApplyCmd extends Cmd {
             invoiceApplyItemPo.setItemAmount(tmpFeeDetailDto.getReceivedAmount());
             invoiceApplyItemPo.setItemId(GenerateCodeFactory.getGeneratorId("11"));
             invoiceApplyItemPo.setItemName(tmpFeeDetailDto.getFeeName());
-            invoiceApplyItemPo.setRemark(tmpFeeDetailDto.getFeeName()
+            invoiceApplyItemPo.setRemark(tmpFeeDetailDto.getPayerObjName()+tmpFeeDetailDto.getFeeName()
                     + "("
                     + DateUtil.getFormatTimeStringB(tmpFeeDetailDto.getStartTime())
                     + "~"

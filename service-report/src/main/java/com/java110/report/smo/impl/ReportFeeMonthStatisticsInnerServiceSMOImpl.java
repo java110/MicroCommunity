@@ -288,9 +288,9 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
             reportFeeMonthStatisticsDto.setPage((page - 1) * reportFeeMonthStatisticsDto.getRow());
         }
 
-        List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticss = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetail(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+        List<ReportFeeMonthStatisticsDto> infos = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetail(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
 
-        return reportFeeMonthStatisticss;
+        return infos;
     }
 
     @Override
