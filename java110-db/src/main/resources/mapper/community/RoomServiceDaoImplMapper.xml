@@ -787,14 +787,14 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
-        <!--order by f.seq,u.unit_num,CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED) asc-->
-        order by t.create_time desc
-        <if test="page != -1 and page != null">
-            limit #{page},#{row}
-        </if>
-    </select>
+       order by f.seq,u.unit_num,CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED) asc
+    <!-- order by t.create_time desc-->
+    <if test="page != -1 and page != null">
+        limit #{page},#{row}
+    </if>
+</select>
 
-    <!-- 根据业主查询房屋信息 -->
+<!-- 根据业主查询房屋信息 -->
     <select id="getRoomInfoByOwner" parameterType="Map" resultType="Map">
         SELECT
         t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd
