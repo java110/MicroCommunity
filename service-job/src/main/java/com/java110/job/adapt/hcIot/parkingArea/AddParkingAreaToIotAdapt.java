@@ -40,7 +40,7 @@ import java.util.List;
  *
  * @desc add by 吴学文 18:58
  */
-@Component(value = "addParkingAreaToIotAdapt")
+//@Component(value = "addParkingAreaToIotAdapt")
 public class AddParkingAreaToIotAdapt extends DatabusAdaptImpl {
 
     @Autowired

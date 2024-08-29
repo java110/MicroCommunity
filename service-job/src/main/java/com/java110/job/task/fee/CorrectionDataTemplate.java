@@ -27,6 +27,7 @@ import com.java110.po.log.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ExceptionUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -146,9 +147,10 @@ public class CorrectionDataTemplate extends TaskSystemQuartz {
             try {
                 feeDto.setPage(page);
                 feeDto.setRow(new Double(DEFAULT_ROW).intValue());
+                feeDto.setState(FeeDto.STATE_DOING);
                 List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
                 //没有关联费用
-                if (feeDtos == null || feeDtos.size() < 1) {
+                if (ListUtil.isNull(feeDtos)) {
                     continue;
                 }
                 for (FeeDto tmpFeeDto : feeDtos) {
