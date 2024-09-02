@@ -29,6 +29,7 @@ import com.java110.intf.store.IResourceStoreInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.purchaseApply.ApiPurchaseApplyDataVo;
 import com.java110.vo.api.purchaseApply.ApiPurchaseApplyVo;
@@ -137,7 +138,7 @@ public class ListPurchaseApplysCmd extends Cmd {
         for (ApiPurchaseApplyDataVo apiPurchaseApplyDataVo : purchaseApplys) {
             List<PurchaseApplyDetailVo> applyDetailList = apiPurchaseApplyDataVo.getPurchaseApplyDetailVo();
             //todo 如果没有物品直接 跳过
-            if (applyDetailList == null || applyDetailList.size() < 1) {
+            if (ListUtil.isNull(applyDetailList)) {
                 continue;
             }
             StringBuffer resNames = new StringBuffer();
