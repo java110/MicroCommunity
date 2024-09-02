@@ -73,7 +73,7 @@ public class SmsInnerServiceSMOImpl extends BaseServiceSMO implements ISmsInnerS
             smsDto.setSuccess(true);
             smsDto.setMsg("校验成功");
             //将验证码清除
-            CommonCache.setValue(smsDto.getTel() + SendSmsFactory.VALIDATE_CODE, "", 0);
+            CommonCache.removeValue(smsDto.getTel() + SendSmsFactory.VALIDATE_CODE);
             return smsDto;
         }
         smsDto.setSuccess(false);

@@ -383,6 +383,9 @@ public class PurchaseApplyUserInnerServiceSMOImpl extends BaseServiceSMO impleme
         }
         for (Task task : taskList) {
             String userId = task.getAssignee();
+            if(StringUtil.isEmpty(userId)){
+                continue;
+            }
             List<UserDto> users = userInnerServiceSMOImpl.getUserInfo(new String[]{userId});
 
             if (users == null || users.size() == 0) {
