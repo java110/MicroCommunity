@@ -145,30 +145,14 @@ public class ListPurchaseApplysCmd extends Cmd {
             BigDecimal purchaseTotalPrice = new BigDecimal(0);
             Integer cursor = 0;
             for (PurchaseApplyDetailVo purchaseApplyDetailVo : applyDetailList) {
-                ResourceStoreDto resourceStoreDto = new ResourceStoreDto();
-                resourceStoreDto.setResId(purchaseApplyDetailVo.getResId());
-                List<ResourceStoreDto> resourceStoreDtos = resourceStoreInnerServiceSMOImpl.queryResourceStores(resourceStoreDto);
-
-                if (resourceStoreDtos == null || resourceStoreDtos.size() < 1) {
-                    continue;
-                }
-                purchaseApplyDetailVo.setTimes(resourceStoreDtos.get(0).getTimes());
                 //todo 是否是固定物品
-                apiPurchaseApplyDataVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
-                apiPurchaseApplyDataVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
-                purchaseApplyDetailVo.setIsFixed(resourceStoreDtos.get(0).getIsFixed());
-                purchaseApplyDetailVo.setIsFixedName(resourceStoreDtos.get(0).getIsFixedName());
-                //todo 获取仓库名称
-                String shName = resourceStoreDtos.get(0).getShName();
-                String shId = resourceStoreDtos.get(0).getShId();
-                purchaseApplyDetailVo.setShName(shName);
-                purchaseApplyDetailVo.setShId(shId);
-                apiPurchaseApplyDataVo.setShId(shId);
+                apiPurchaseApplyDataVo.setIsFixed(purchaseApplyDetailVo.getIsFixed());
+
                 cursor++;
-                if(!StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())){
+                if (!StringUtil.isEmpty(purchaseApplyDetailVo.getSpecName())) {
                     resNames.append(cursor + "：" + purchaseApplyDetailVo.getResName() + "(" + purchaseApplyDetailVo.getSpecName() + ")      ");
-                }else{
-                    resNames.append(cursor+":"+purchaseApplyDetailVo.getResName());
+                } else {
+                    resNames.append(cursor + ":" + purchaseApplyDetailVo.getResName());
                 }
                 BigDecimal price = new BigDecimal(purchaseApplyDetailVo.getPrice());
                 BigDecimal quantity = new BigDecimal(purchaseApplyDetailVo.getQuantity());

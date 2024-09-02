@@ -349,14 +349,21 @@
         r.price,r.price standardPrice,rstime.stock,rst.name rstName,rst1.name parentRstName,rss.spec_name
         specName,rs.supplier_name supplierName,
         td1.name unitCodeName,
-        td2.name miniUnitCodeName
+        td2.name miniUnitCodeName,
+        r.sh_id shId,
+        sh.sh_name shName,
+        r.is_fixed isFixed,
+        td3.name isFixedName
         from
         purchase_apply_detail p
         inner join resource_store r on p.res_id = r.res_id and r.status_cd = '0'
+        left join storehouse sh on r.sh_id = sh.sh_id and sh.status_cd = '0'
         left join t_dict td1 on r.unit_code = td1.status_cd and td1.table_name = 'resource_store' and td1.table_columns
         = 'unit_code'
         left join t_dict td2 on r.mini_unit_code = td2.status_cd and td2.table_name = 'resource_store' and
         td2.table_columns = 'unit_code'
+        left join t_dict td3 on r.is_fixed = td3.status_cd and td3.table_name = 'resource_store' and
+        td3.table_columns = 'is_fixed'
         LEFT JOIN resource_supplier rs on p.rs_id=rs.rs_id
         LEFT JOIN resource_store_type rst on r.rst_id=rst.rst_id
         LEFT JOIN resource_store_type rst1 on r.parent_rst_id=rst1.rst_id
