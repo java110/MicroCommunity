@@ -133,6 +133,7 @@ public class FeeReceiptApi {
                                                   @RequestParam(value = "qendTime", required = false) String qendTime,
                                                   @RequestParam(value = "feeId", required = false) String feeId,
                                                   @RequestParam(value = "receiptCode", required = false) String receiptCode,
+
                                                   @RequestParam(value = "page") int page,
                                                   @RequestParam(value = "row") int row,
                                                   @RequestHeader(value = "user_id") String userId) {
@@ -275,6 +276,7 @@ public class FeeReceiptApi {
                                                         @RequestParam(value = "receiptIds", required = false) String receiptIds,
                                                         @RequestParam(value = "detailIds", required = false) String detailIds,
                                                         @RequestParam(value = "orderBy", required = false) String orderBy,
+                                                        @RequestParam(value = "mergeFee", required = false) String mergeFee,
                                                         @RequestParam(value = "page") int page,
                                                         @RequestParam(value = "row") int row) {
         FeeReceiptDetailDto feeReceiptDetailDto = new FeeReceiptDetailDto();
@@ -289,7 +291,7 @@ public class FeeReceiptApi {
         if (!StringUtil.isEmpty(detailIds)) {
             feeReceiptDetailDto.setDetailIds(detailIds.split(","));
         }
-        return getFeeReceiptDetailBMOImpl.get(feeReceiptDetailDto);
+        return getFeeReceiptDetailBMOImpl.get(feeReceiptDetailDto,mergeFee);
     }
 
 }

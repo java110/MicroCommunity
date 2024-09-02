@@ -10,7 +10,7 @@ public interface IGetFeeReceiptDetailBMO {
      * @param  feeReceiptDetailDto
      * @return
      */
-    ResponseEntity<String> get(FeeReceiptDetailDto feeReceiptDetailDto);
+    ResponseEntity<String> get(FeeReceiptDetailDto feeReceiptDetailDto,String mergeFee);
 
 
 }

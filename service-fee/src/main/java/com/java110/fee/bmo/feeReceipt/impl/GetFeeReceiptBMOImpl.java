@@ -11,14 +11,15 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.fee.IFeeReceiptInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service("getFeeReceiptBMOImpl")
 public class GetFeeReceiptBMOImpl implements IGetFeeReceiptBMO {
@@ -45,26 +46,26 @@ public class GetFeeReceiptBMOImpl implements IGetFeeReceiptBMO {
         int count = feeReceiptInnerServiceSMOImpl.queryFeeReceiptsCount(feeReceiptDto);
 
         List<FeeReceiptDto> feeReceiptDtos = null;
-        List<FeeReceiptDto> feeReceiptList = new ArrayList<>();
         if (count > 0) {
             feeReceiptDtos = feeReceiptInnerServiceSMOImpl.queryFeeReceipts(feeReceiptDto);
             for (FeeReceiptDto feeReceipt : feeReceiptDtos) {
                 feeReceipt.setStoreName(feeReceiptDto.getStoreName());
-                feeReceiptList.add(feeReceipt);
             }
             //输入房屋信息
             freshRoomInfo(feeReceiptDtos);
         } else {
             feeReceiptDtos = new ArrayList<>();
-            feeReceiptList.addAll(feeReceiptDtos);
         }
 
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) feeReceiptDto.getRow()), count, feeReceiptList);
+
+
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) feeReceiptDto.getRow()), count, feeReceiptDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         return responseEntity;
     }
+
 
     /**
      * 刷入房屋信息
