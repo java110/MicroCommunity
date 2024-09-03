@@ -46,6 +46,8 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     private String discountPrice;
 
+    private String payerObjId;
+
 
 
     public String getArea() {
@@ -239,5 +241,13 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     public void setDiscountPrice(String discountPrice) {
         this.discountPrice = discountPrice;
+    }
+
+    public String getPayerObjId() {
+        return payerObjId;
+    }
+
+    public void setPayerObjId(String payerObjId) {
+        this.payerObjId = payerObjId;
     }
 }

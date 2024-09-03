@@ -39,7 +39,7 @@
         startTime,t.status_cd,t.status_cd statusCd,t.end_time,t.end_time endTime,t.community_id,t.community_id
         communityId,t.receipt_id,t.receipt_id receiptId,t.fee_id,t.fee_id feeId,t.cycle,t.square_price squarePrice,
         pfd.remark,pf.fee_flag feeFlag,mw.pre_degrees preDegrees,mw.cur_degrees curDegrees,d.name primeRate,
-        pfc.units,pfd.pay_order_id payOrderId
+        pfc.units,pfd.pay_order_id payOrderId,pf.payer_obj_id payerObjId
         from fee_receipt_detail t
         left join pay_fee_detail pfd on t.detail_id = pfd.detail_id and pfd.status_cd = '0' and t.community_id =
         pfd.community_id

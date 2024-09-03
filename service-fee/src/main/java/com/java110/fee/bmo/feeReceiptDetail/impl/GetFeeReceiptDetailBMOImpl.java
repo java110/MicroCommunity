@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service("getFeeReceiptDetailBMOImpl")
@@ -134,6 +135,7 @@ public class GetFeeReceiptDetailBMOImpl implements IGetFeeReceiptDetailBMO {
 
     /**
      * 合并一次性费用
+     *
      * @param nOnceFeeReceiptDetailDtos
      * @param feeReceiptDetailDto
      */
@@ -153,7 +155,7 @@ public class GetFeeReceiptDetailBMOImpl implements IGetFeeReceiptDetailBMO {
                 continue;
             }
 
-            if (!nFeeReceiptDetailDto.getPayOrderId().equals(feeReceiptDetailDto.getPayOrderId())) {
+            if (!nFeeReceiptDetailDto.getPayerObjId().equals(feeReceiptDetailDto.getPayerObjId())) {
                 continue;
             }
 
@@ -173,7 +175,10 @@ public class GetFeeReceiptDetailBMOImpl implements IGetFeeReceiptDetailBMO {
         }
 
         nOnceFeeReceiptDetailDto.setEndTime(feeReceiptDetailDto.getEndTime());
-
+        BigDecimal amount = new BigDecimal(nOnceFeeReceiptDetailDto.getAmount());
+        amount = amount.add(new BigDecimal(feeReceiptDetailDto.getAmount()));
+        nOnceFeeReceiptDetailDto.setAmount(amount.doubleValue() + "");
+        nOnceFeeReceiptDetailDto.setCurDegrees(feeReceiptDetailDto.getCurDegrees());
     }
 
 }
