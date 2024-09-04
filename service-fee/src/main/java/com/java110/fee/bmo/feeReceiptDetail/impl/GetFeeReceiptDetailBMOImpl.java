@@ -164,12 +164,12 @@ public class GetFeeReceiptDetailBMOImpl implements IGetFeeReceiptDetailBMO {
 
 
             Date endTime = DateUtil.getDateFromStringB(nFeeReceiptDetailDto.getEndTime());
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(endTime);
-            calendar.add(Calendar.SECOND,1);
-            endTime = calendar.getTime();
             Date startTime = DateUtil.getDateFromStringB(feeReceiptDetailDto.getStartTime());
-            if (endTime.getTime() != startTime.getTime()) {
+            long millisecondsBetween = startTime.getTime() - endTime.getTime();
+            // 将毫秒差转换为天数
+            long daysBetween = millisecondsBetween / (1000 * 60 * 60 * 24);
+            // 判断天数差是否在0到3之间（包括0和3）
+            if (daysBetween < -3 || daysBetween > 3) {
                 continue;
             }
 
