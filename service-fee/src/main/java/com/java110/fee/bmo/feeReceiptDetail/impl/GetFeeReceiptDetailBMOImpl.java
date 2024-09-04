@@ -99,12 +99,15 @@ public class GetFeeReceiptDetailBMOImpl implements IGetFeeReceiptDetailBMO {
         List<FeeReceiptDetailDto> cycleFeeReceiptDetailDtos = new ArrayList<>();
         List<FeeReceiptDetailDto> onceFeeReceiptDetailDtos = new ArrayList<>();
 
+//        for (FeeReceiptDetailDto feeReceiptDetailDto : feeReceiptDetailDtos) {
+//            if (FeeDto.FEE_FLAG_ONCE.equals(feeReceiptDetailDto.getFeeFlag())) {
+//                onceFeeReceiptDetailDtos.add(feeReceiptDetailDto);
+//                continue;
+//            }
+//            cycleFeeReceiptDetailDtos.add(feeReceiptDetailDto);
+//        }
         for (FeeReceiptDetailDto feeReceiptDetailDto : feeReceiptDetailDtos) {
-            if (FeeDto.FEE_FLAG_ONCE.equals(feeReceiptDetailDto.getFeeFlag())) {
-                onceFeeReceiptDetailDtos.add(feeReceiptDetailDto);
-                continue;
-            }
-            cycleFeeReceiptDetailDtos.add(feeReceiptDetailDto);
+            onceFeeReceiptDetailDtos.add(feeReceiptDetailDto);
         }
         // todo not exists once fee
         if (ListUtil.isNull(onceFeeReceiptDetailDtos)) {
