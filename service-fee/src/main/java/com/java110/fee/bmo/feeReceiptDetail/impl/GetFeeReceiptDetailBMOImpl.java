@@ -9,6 +9,7 @@ import com.java110.intf.fee.IFeeReceiptDetailInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeDetailDiscountInnerServiceSMO;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -154,7 +155,12 @@ public class GetFeeReceiptDetailBMOImpl implements IGetFeeReceiptDetailBMO {
                 continue;
             }
 
-            if (!nFeeReceiptDetailDto.getSquarePrice().equals(feeReceiptDetailDto.getSquarePrice())) {
+            if (!StringUtil.isEmpty(nFeeReceiptDetailDto.getSquarePrice())
+                    && !nFeeReceiptDetailDto.getSquarePrice().equals(feeReceiptDetailDto.getSquarePrice())) {
+                continue;
+            }
+
+            if(StringUtil.isEmpty(nFeeReceiptDetailDto.getSquarePrice()) && !StringUtil.isEmpty(feeReceiptDetailDto.getSquarePrice())){
                 continue;
             }
 
