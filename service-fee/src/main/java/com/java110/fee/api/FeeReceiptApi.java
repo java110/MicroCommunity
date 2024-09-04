@@ -291,7 +291,13 @@ public class FeeReceiptApi {
         if (!StringUtil.isEmpty(detailIds)) {
             feeReceiptDetailDto.setDetailIds(detailIds.split(","));
         }
-        return getFeeReceiptDetailBMOImpl.get(feeReceiptDetailDto,mergeFee);
+
+        try {
+            return getFeeReceiptDetailBMOImpl.get(feeReceiptDetailDto, mergeFee);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 }
