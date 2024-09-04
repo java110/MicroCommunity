@@ -164,6 +164,10 @@ public class GetFeeReceiptDetailBMOImpl implements IGetFeeReceiptDetailBMO {
 
 
             Date endTime = DateUtil.getDateFromStringB(nFeeReceiptDetailDto.getEndTime());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(endTime);
+            calendar.add(Calendar.SECOND,1);
+            endTime = calendar.getTime();
             Date startTime = DateUtil.getDateFromStringB(feeReceiptDetailDto.getStartTime());
             if (endTime.getTime() != startTime.getTime()) {
                 continue;
