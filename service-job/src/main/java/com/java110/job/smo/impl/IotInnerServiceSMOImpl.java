@@ -1,14 +1,20 @@
 package com.java110.job.smo.impl;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.IotDataDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IIotInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
+import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +39,9 @@ public class IotInnerServiceSMOImpl extends BaseServiceSMO implements IIotInnerS
 
     @Autowired
     private ISendIot sendIotImpl;
+
+    @Autowired
+    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
 
 
     @Override
@@ -75,6 +84,42 @@ public class IotInnerServiceSMOImpl extends BaseServiceSMO implements IIotInnerS
         paramIn.put("passwd", userDto.getPassword());
         paramIn.put("userName", userDto.getName());
         paramIn.put("address", userDto.getAddress());
+
+        //todo 查询 房屋认证信息也同步到物联网
+
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setUserId(userDto.getUserId());
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+        JSONArray appUsers = new JSONArray();
+        JSONObject appUser = null;
+        if(!ListUtil.isNull(ownerAppUserDtos)){
+            for(OwnerAppUserDto tmpOwnerAppUserDto:ownerAppUserDtos){
+                if(StringUtil.isEmpty(tmpOwnerAppUserDto.getMemberId())){
+                    continue;
+                }
+                if(tmpOwnerAppUserDto.getMemberId().startsWith("-")){
+                    continue;
+                }
+
+                if(StringUtil.isEmpty(tmpOwnerAppUserDto.getRoomId())){
+                    continue;
+                }
+
+                if(StringUtil.isEmpty(tmpOwnerAppUserDto.getRoomName())){
+                    continue;
+                }
+
+                appUser = new JSONObject();
+                appUser.put("ownerId",tmpOwnerAppUserDto.getMemberId());
+                appUser.put("ownerName",tmpOwnerAppUserDto.getAppUserName());
+                appUser.put("roomId",tmpOwnerAppUserDto.getRoomId());
+                appUser.put("roomName",tmpOwnerAppUserDto.getRoomName());
+                appUser.put("communityId",tmpOwnerAppUserDto.getCommunityId());
+                appUser.put("communityName",tmpOwnerAppUserDto.getCommunityName());
+                appUsers.add(appUser);
+            }
+            paramIn.put("appUsers", appUsers);
+        }
 
         ResultVo resultVo = sendIotImpl.post("/iot/api/owner.transforOwnerUser", paramIn);
 
