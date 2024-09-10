@@ -25,10 +25,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.SMOException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
-import com.java110.utils.util.ValidatorUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,10 +113,10 @@ public class UserLoginCmd extends Cmd {
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
 
         //todo 验证码登录，判断是否是否业主，并且是否绑定关系 如果没有 自动绑定关系
-        if (userDtos == null || userDtos.size() < 1) {
+        if (ListUtil.isNull(userDtos)) {
             userDtos = ifOwnerLoginByPhone(reqJson, context);
         }
-        if (userDtos == null || userDtos.size() < 1) {
+        if (ListUtil.isNull(userDtos)) {
             throw new SMOException(errorInfo);
         }
 

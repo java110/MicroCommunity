@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.IotDataDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.job.adapt.hcIotNew.http.ISendIot;
 import com.java110.utils.cache.MappingCache;
@@ -55,6 +56,28 @@ public class IotInnerServiceSMOImpl extends BaseServiceSMO implements IIotInnerS
         JSONObject paramIn = iotDataDto.getData();
         paramIn.put("iotApiCode", iotDataDto.getIotApiCode());
         ResultVo resultVo = sendIotImpl.post("/iot/api/common.openCommonApi", paramIn);
+        return resultVo;
+    }
+
+
+    @Override
+    public ResultVo sendUserInfo(@RequestBody UserDto userDto) {
+
+        String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
+
+        if (!"ON".equals(iotSwitch)) {
+            return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+        }
+
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("userId", userDto.getUserId());
+        paramIn.put("tel", userDto.getTel());
+        paramIn.put("passwd", userDto.getPassword());
+        paramIn.put("userName", userDto.getName());
+        paramIn.put("address", userDto.getAddress());
+
+        ResultVo resultVo = sendIotImpl.post("/iot/api/owner.transforOwnerUser", paramIn);
+
         return resultVo;
     }
 

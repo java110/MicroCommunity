@@ -23,6 +23,7 @@ import com.java110.intf.common.ISmsInnerServiceSMO;
 import com.java110.intf.common.ISystemInfoV1InnerServiceSMO;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
+import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.job.IMallInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.owner.OwnerAppUserPo;
@@ -84,6 +85,9 @@ public class OwnerUserLoginCmd extends Cmd {
     private IMallInnerServiceSMO mallInnerServiceSMOImpl;
 
     @Autowired
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
+
+    @Autowired
     private IRoomInnerServiceSMO roomInnerServiceSMOImpl;
 
     @Override
@@ -133,6 +137,9 @@ public class OwnerUserLoginCmd extends Cmd {
 
         //todo 1.2 同步物业用户资料给商城
         mallInnerServiceSMOImpl.sendUserInfo(userDtos.get(0));
+
+        //todo 1.3 同步物业用户资料给物联网
+        iotInnerServiceSMOImpl.sendUserInfo(userDtos.get(0));
 
         // todo  2.0 校验 业主用户绑定表是否存在记录
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
