@@ -26,6 +26,11 @@ public class ImportOwnerRoomDto implements Serializable {
     private String userId;
     private String roomState;
 
+    private String personType;
+    private String personRole;
+    private String concactPerson;
+    private String concactLink;
+
 
     public String getFloorNum() {
         return floorNum;
@@ -186,5 +191,37 @@ public class ImportOwnerRoomDto implements Serializable {
 
     public void setRoomState(String roomState) {
         this.roomState = roomState;
+    }
+
+    public String getPersonType() {
+        return personType;
+    }
+
+    public void setPersonType(String personType) {
+        this.personType = personType;
+    }
+
+    public String getPersonRole() {
+        return personRole;
+    }
+
+    public void setPersonRole(String personRole) {
+        this.personRole = personRole;
+    }
+
+    public String getConcactPerson() {
+        return concactPerson;
+    }
+
+    public void setConcactPerson(String concactPerson) {
+        this.concactPerson = concactPerson;
+    }
+
+    public String getConcactLink() {
+        return concactLink;
+    }
+
+    public void setConcactLink(String concactLink) {
+        this.concactLink = concactLink;
     }
 }

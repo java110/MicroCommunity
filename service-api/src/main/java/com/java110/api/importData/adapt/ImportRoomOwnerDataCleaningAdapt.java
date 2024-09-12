@@ -1,6 +1,8 @@
 package com.java110.api.importData.adapt;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.importData.DefaultImportDataAdapt;
+import com.java110.api.importData.IImportDataCleaningAdapt;
 import com.java110.dto.importData.ImportOwnerRoomDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.room.RoomDto;
@@ -8,8 +10,6 @@ import com.java110.dto.system.ComponentValidateResult;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.ImportExcelUtils;
 import com.java110.utils.util.StringUtil;
-import com.java110.api.importData.DefaultImportDataAdapt;
-import com.java110.api.importData.IImportDataCleaningAdapt;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Service;
@@ -79,6 +79,9 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
                 Assert.hasValue(os[14], (osIndex + 1) + "行手机号不能为空");
                 //Assert.hasValue(os[15], (osIndex + 1) + "行身份证不能为空");
                 Assert.hasValue(os[16], (osIndex + 1) + "行业主类型不能为空");
+                Assert.hasValue(os[17], (osIndex + 1) + "行人员类型不能为空");
+                Assert.hasValue(os[18], (osIndex + 1) + "行人员角色不能为空");
+                Assert.hasValue(os[19], (osIndex + 1) + "行联系人不能为空");
             }
 
             importOwnerRoomDto = new ImportOwnerRoomDto();
@@ -106,6 +109,12 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
                 String idCard = StringUtil.isNullOrNone(os[15]) ? "" : os[15].toString().trim();
                 importOwnerRoomDto.setIdCard(idCard);
                 importOwnerRoomDto.setOwnerTypeCd(os[16].toString().trim());
+                importOwnerRoomDto.setPersonType(os[17].toString().trim());
+                importOwnerRoomDto.setPersonRole(os[18].toString().trim());
+                importOwnerRoomDto.setConcactPerson(os[19].toString().trim());
+            }
+            if (os.length > 20 && !StringUtil.isNullOrNone(os[20])) {
+                importOwnerRoomDto.setConcactLink(os[20].toString().trim());
             }
 
 
@@ -227,3 +236,4 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
         }
     }
 }
+

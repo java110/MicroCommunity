@@ -3,6 +3,7 @@ package com.java110.user.cmd.owner;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.DataFlowContext;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
@@ -22,11 +23,14 @@ import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.BusinessTypeConstant;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -58,12 +62,12 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\n" +
+        reqBody = "{\n" +
                 "\t\"memberId\": 123123123,\n" +
                 "\t\"ownerPhoto\": \"\",\n" +
                 "\t\"communityId\": \"2022121921870161\"\n" +
                 "}",
-        resBody="{\"code\":0,\"msg\":\"成功\"}"
+        resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
 @Java110Cmd(serviceCode = "owner.uploadOwnerPhoto")
 public class UploadOwnerPhotoCmd extends Cmd {
@@ -89,93 +93,63 @@ public class UploadOwnerPhotoCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.jsonObjectHaveKey(reqJson, "memberId", "请求报文中未包含ownerId");
-        Assert.jsonObjectHaveKey(reqJson, "photo", "请求报文中未包含photo");
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求报文中未包含communityId");
+        Assert.hasKeyAndValue(reqJson, "photo", "请求报文中未包含photo");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
     }
 
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        if (reqJson.containsKey("photo") && !StringUtils.isEmpty(reqJson.getString("photo"))) {
-            FileDto fileDto = new FileDto();
-            fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-            fileDto.setFileName(fileDto.getFileId());
-            fileDto.setContext(reqJson.getString("photo"));
-            fileDto.setSuffix("jpeg");
-            fileDto.setCommunityId(reqJson.getString("communityId"));
-            String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
-            reqJson.put("ownerPhotoId", fileDto.getFileId());
-            reqJson.put("fileSaveName", fileName);
 
-            editOwnerPhoto(reqJson);
+        String userId = CmdContextUtils.getUserId(context);
 
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setUserId(userId);
+        ownerAppUserDto.setCommunityId(reqJson.getString("communityId"));
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+
+        if (ListUtil.isNull(ownerAppUserDtos)) {
+            throw new CmdException("未绑定业主");
         }
+
+        String memberId = "";
+        for (OwnerAppUserDto tmpOwnerAppUserDto : ownerAppUserDtos) {
+            if ("-1".equals(tmpOwnerAppUserDto.getMemberId())) {
+                continue;
+            }
+            memberId = tmpOwnerAppUserDto.getMemberId();
+        }
+        if (StringUtil.isEmpty(memberId)) {
+            throw new CmdException("还没有认证房屋，请先认证房屋");
+        }
+
+        FileDto fileDto = new FileDto();
+        fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+        fileDto.setFileName(fileDto.getFileId());
+        fileDto.setContext(reqJson.getString("photo"));
+        fileDto.setSuffix("jpeg");
+        fileDto.setCommunityId(reqJson.getString("communityId"));
+        String fileName = fileInnerServiceSMOImpl.saveFile(fileDto);
+        reqJson.put("ownerPhotoId", fileDto.getFileId());
+        reqJson.put("fileSaveName", fileName);
+
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+        String faceUrl = imgUrl + fileName;
+
+
         //添加小区楼
-        editOwner(reqJson);
-    }
-
-    public void editOwnerPhoto(JSONObject paramInJson) {
-
-        FileRelDto fileRelDto = new FileRelDto();
-        fileRelDto.setRelTypeCd("10000");
-        fileRelDto.setObjId(paramInJson.getString("memberId"));
-        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-        if (ListUtil.isNull(fileRelDtos)) {
-            JSONObject businessUnit = new JSONObject();
-            businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fileRelId));
-            businessUnit.put("relTypeCd", "10000");
-            businessUnit.put("saveWay", "table");
-            businessUnit.put("objId", paramInJson.getString("memberId"));
-            businessUnit.put("fileRealName", paramInJson.getString("fileSaveName"));
-            businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-            fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
-            return;
-        }
-
-        JSONObject businessUnit = new JSONObject();
-        businessUnit.putAll(BeanConvertUtil.beanCovertMap(fileRelDtos.get(0)));
-        businessUnit.put("fileRealName", paramInJson.getString("fileSaveName"));
-        businessUnit.put("fileSaveName", paramInJson.getString("fileSaveName"));
-        FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-        fileRelInnerServiceSMOImpl.updateFileRel(fileRelPo);
-
-
-    }
-
-    public void editOwner(JSONObject paramInJson) {
-
         OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setMemberId(paramInJson.getString("memberId"));
+        ownerDto.setMemberId(memberId);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 
         Assert.listOnlyOne(ownerDtos, "未查询到业主信息或查询到多条");
 
-        JSONObject businessOwner = new JSONObject();
-        businessOwner.putAll(BeanConvertUtil.beanCovertMap(ownerDtos.get(0)));
-        businessOwner.putAll(paramInJson);
-
-        if (paramInJson.containsKey("wxPhoto")) {
-            businessOwner.put("link", paramInJson.getString("wxPhoto"));
-        }
-        businessOwner.put("state", ownerDtos.get(0).getState());
-        OwnerPo ownerPo = BeanConvertUtil.covertBean(businessOwner, OwnerPo.class);
+        OwnerPo ownerPo = new OwnerPo();
+        ownerPo.setMemberId(memberId);
+        ownerPo.setFaceUrl(faceUrl);
         int flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
-        if(flag < 1){
+        if (flag < 1) {
             throw new CmdException("修改业主");
-        }
-        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
-        ownerAppUserDto.setMemberId(paramInJson.getString("ownerId"));
-        //查询app用户表
-        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        if (ownerAppUserDtos != null && ownerAppUserDtos.size() > 0) {
-            for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
-                OwnerAppUserPo ownerAppUserPo = BeanConvertUtil.covertBean(ownerAppUser, OwnerAppUserPo.class);
-                ownerAppUserPo.setLink(paramInJson.getString("link"));
-                ownerAppUserPo.setIdCard(paramInJson.getString("idCard"));
-                ownerAppUserV1InnerServiceSMOImpl.updateOwnerAppUser(ownerAppUserPo);
-            }
         }
     }
 

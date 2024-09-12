@@ -29,6 +29,7 @@ import com.java110.utils.constant.UserLevelConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,7 +166,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         OwnerPo ownerPo = null;
 
         int flag = 0;
-        if (ownerDtos == null || ownerDtos.size() < 1) {
+        if (ListUtil.isNull(ownerDtos)) {
             ownerPo = new OwnerPo();
             ownerPo.setState(OwnerDto.STATE_FINISH);
             ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
@@ -181,6 +182,10 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             ownerPo.setMemberId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ownerId));
             ownerPo.setRemark("房产导入");
             ownerPo.setUserId(importOwnerRoomDto.getUserId());
+            ownerPo.setPersonType(importOwnerRoomDto.getPersonType());
+            ownerPo.setPersonRole(importOwnerRoomDto.getPersonRole());
+            ownerPo.setConcactPerson(importOwnerRoomDto.getConcactPerson());
+            ownerPo.setConcactLink(importOwnerRoomDto.getConcactLink());
             flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
 
             if (flag < 1) {
@@ -202,6 +207,10 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
             ownerPo.setMemberId(ownerDtos.get(0).getMemberId());
             ownerPo.setRemark("房产导入");
             ownerPo.setUserId(importOwnerRoomDto.getUserId());
+            ownerPo.setPersonType(importOwnerRoomDto.getPersonType());
+            ownerPo.setPersonRole(importOwnerRoomDto.getPersonRole());
+            ownerPo.setConcactPerson(importOwnerRoomDto.getConcactPerson());
+            ownerPo.setConcactLink(importOwnerRoomDto.getConcactLink());
             flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
             if (flag < 1) {
                 throw new IllegalArgumentException("导入业主失败");
@@ -225,7 +234,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
         String ownerId = "";
         int flag = 0;
-        if (ownerDtos == null || ownerDtos.size() < 1) {
+        if (ListUtil.isNull(ownerDtos)) {
             ownerId = doSaveOwnerInfo(importOwnerRoomDto);
         } else {
             ownerId = ownerDtos.get(0).getOwnerId();
@@ -237,7 +246,7 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         ownerRoomRelDto.setRoomId(roomId);
         ownerRoomRelDto.setOwnerId(ownerId);
         List<OwnerRoomRelDto> roomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-        if (roomRelDtos != null && roomRelDtos.size() > 0) {
+        if (!ListUtil.isNull(roomRelDtos)) {
             return;
         }
 
@@ -275,6 +284,10 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         ownerPo.setMemberId(ownerPo.getOwnerId());
         ownerPo.setRemark("房产导入");
         ownerPo.setUserId(importOwnerRoomDto.getUserId());
+        ownerPo.setPersonType(importOwnerRoomDto.getPersonType());
+        ownerPo.setPersonRole(importOwnerRoomDto.getPersonRole());
+        ownerPo.setConcactPerson(importOwnerRoomDto.getConcactPerson());
+        ownerPo.setConcactLink(importOwnerRoomDto.getConcactLink());
         flag = ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);
         if (flag < 1) {
             throw new IllegalArgumentException("导入业主失败");
@@ -298,6 +311,10 @@ public class ImportOwnerRoomInnerServiceSMOImpl extends BaseServiceSMO implement
         ownerPo.setMemberId(ownerPo.getOwnerId());
         ownerPo.setRemark("房产导入");
         ownerPo.setUserId(importOwnerRoomDto.getUserId());
+        ownerPo.setPersonType(importOwnerRoomDto.getPersonType());
+        ownerPo.setPersonRole(importOwnerRoomDto.getPersonRole());
+        ownerPo.setConcactPerson(importOwnerRoomDto.getConcactPerson());
+        ownerPo.setConcactLink(importOwnerRoomDto.getConcactLink());
         flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
         if (flag < 1) {
             throw new IllegalArgumentException("导入业主失败");
