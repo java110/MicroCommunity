@@ -42,7 +42,7 @@ public class SearchOwnerMemberBMOImpl implements ISearchOwnerMemberBMO {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setLink(searchDataDto.getTel());
         ownerDto.setCommunityId(searchDataDto.getCommunityId());
-        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER,OwnerDto.OWNER_TYPE_CD_RENTING});
+        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER});
         List<OwnerDto> tmpOwnerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
         if(tmpOwnerDtos == null || tmpOwnerDtos.size() < 1){
             return ;
@@ -56,7 +56,7 @@ public class SearchOwnerMemberBMOImpl implements ISearchOwnerMemberBMO {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setNameLike(searchDataDto.getSearchValue());
         ownerDto.setCommunityId(searchDataDto.getCommunityId());
-        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER,OwnerDto.OWNER_TYPE_CD_RENTING,OwnerDto.OWNER_TYPE_CD_TEMP,OwnerDto.OWNER_TYPE_CD_OTHER});
+        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER});
         List<OwnerDto> tmpOwnerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
         if(tmpOwnerDtos == null || tmpOwnerDtos.size() < 1){
             return ;

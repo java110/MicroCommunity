@@ -114,7 +114,7 @@ public class DeleteOwnerCmd extends Cmd {
         OwnerDto ownerDto = new OwnerDto();
         ownerDto.setOwnerId(reqJson.getString("memberId"));
         ownerDto.setCommunityId(reqJson.getString("communityId"));
-        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING});
+        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER});
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         if (ownerDtos != null && ownerDtos.size() > 0) {
             throw new IllegalArgumentException("请先删除业主下的成员");

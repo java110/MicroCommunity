@@ -65,11 +65,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         }
 
         Map ownerInfo = BeanConvertUtil.beanCovertMap(ownerDto);
-        ownerInfo.put("communityId", ownerDto.getCommunityId());
-        ownerInfo.put("ownerTypeCd", OwnerTypeConstant.OWNER);
-        // ownerInfo.put("ownerIds", getOwnerIds(communityMemberDtos));
-        //ownerInfo.put("ownerTypeCd", ownerDto.getOwnerTypeCd());
-        // ownerInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
 
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(ownerInfo), OwnerDto.class);
 
@@ -90,47 +85,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
             refreshOwner(owner, users, ownerAttrDtos);
         }
 
-        updateOwnerPhone(owners);
         return owners;
-    }
-
-    private boolean updateOwnerPhone(List<OwnerDto> owners) {
-        if (owners.size() > 50) {
-            return true;
-        }
-
-        List<String> memberIds = new ArrayList<>();
-
-        for (OwnerDto tmpOwnerDto : owners) {
-            memberIds.add(tmpOwnerDto.getMemberId());
-        }
-
-        FileRelDto fileRelDto = new FileRelDto();
-        //fileRelDto.setObjId(owners.get(0).getMemberId());
-        fileRelDto.setObjIds(memberIds.toArray(new String[memberIds.size()]));
-        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-
-        if (fileRelDtos == null || fileRelDtos.size() < 1) {
-            return true;
-        }
-
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
-
-        for (OwnerDto tmpOwnerDto : owners) {
-            for (FileRelDto tmpFileRelDto : fileRelDtos) {
-                if (!tmpOwnerDto.getMemberId().equals(tmpFileRelDto.getObjId())) {
-                    continue;
-                }
-
-                if (tmpFileRelDto.getFileSaveName().startsWith("http")) {
-                    tmpOwnerDto.setUrl(tmpFileRelDto.getFileSaveName());
-                } else {
-                    tmpOwnerDto.setUrl(imgUrl + tmpFileRelDto.getFileSaveName());
-                }
-            }
-        }
-
-        return false;
     }
 
     @Override
@@ -143,7 +98,7 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         }
 
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerServiceDaoImpl.getOwnerInfo(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
-        if (owners == null || owners.size() == 0) {
+        if (ListUtil.isNull(owners)) {
             return owners;
         }
 
@@ -160,7 +115,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
             refreshOwner(owner, users, ownerAttrDtos);
         }
 
-        updateOwnerPhone(owners);
         return owners;
     }
 
@@ -200,21 +154,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     /**
      * 获取批量userId
      *
-     * @param communityMemberDtos 小区楼信息
-     * @return 批量userIds 信息
-     */
-    private String[] getOwnerIds(List<CommunityMemberDto> communityMemberDtos) {
-        List<String> ownerIds = new ArrayList<String>();
-        for (CommunityMemberDto communityMemberDto : communityMemberDtos) {
-            ownerIds.add(communityMemberDto.getMemberId());
-        }
-
-        return ownerIds.toArray(new String[ownerIds.size()]);
-    }
-
-    /**
-     * 获取批量userId
-     *
      * @param owners 小区楼信息
      * @return 批量userIds 信息
      */
@@ -246,11 +185,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
     public int queryOwnersCount(@RequestBody OwnerDto ownerDto) {
 
         Map ownerInfo = BeanConvertUtil.beanCovertMap(ownerDto);
-        ownerInfo.put("communityId", ownerDto.getCommunityId());
-        ownerInfo.put("ownerTypeCd", OwnerTypeConstant.OWNER);
-        // ownerInfo.put("ownerIds", getOwnerIds(communityMemberDtos));
-        //ownerInfo.put("ownerTypeCd", ownerDto.getOwnerTypeCd());
-        ownerInfo.put("statusCd", StatusConstant.STATUS_CD_VALID);
 
         return ownerServiceDaoImpl.getOwnerInfoCount(ownerInfo);
 
@@ -297,7 +231,6 @@ public class OwnerInnerServiceSMOImpl extends BaseServiceSMO implements IOwnerIn
         for (OwnerDto owner : owners) {
             refreshOwner(owner, users, ownerAttrDtos);
         }
-        updateOwnerPhone(owners);
         return owners;
     }
 

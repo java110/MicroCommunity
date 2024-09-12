@@ -139,10 +139,11 @@ public class AuditAuthOwnerCmd extends Cmd {
         ownerDto.setLink(ownerAppUserDto.getLink());
         ownerDto.setCommunityId(ownerAppUserDto.getCommunityId());
         ownerDto.setOwnerTypeCds(new String[]{
-                OwnerDto.OWNER_TYPE_CD_MEMBER,
-                OwnerDto.OWNER_TYPE_CD_RENTING,
-                OwnerDto.OWNER_TYPE_CD_OTHER,
-                OwnerDto.OWNER_TYPE_CD_TEMP
+                OwnerDto.OWNER_TYPE_CD_MEMBER
+//                ,
+//                OwnerDto.OWNER_TYPE_CD_RENTING,
+//                OwnerDto.OWNER_TYPE_CD_OTHER,
+//                OwnerDto.OWNER_TYPE_CD_TEMP
         });
         List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
 

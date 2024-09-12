@@ -10,8 +10,6 @@ import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
 import com.java110.dto.account.AccountDto;
-import com.java110.dto.file.FileDto;
-import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
@@ -19,7 +17,6 @@ import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.*;
 import com.java110.po.account.AccountPo;
-import com.java110.po.file.FileRelPo;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.po.owner.OwnerAttrPo;
 import com.java110.po.owner.OwnerPo;
@@ -30,7 +27,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -38,7 +34,7 @@ import java.util.List;
 @Java110CmdDoc(title = "修改业主",
         description = "第三方系统，比如招商系统同步业主信息",
         httpMethod = "post",
-        url = "http://{ip}:{port}/app/owner.editOwner",
+        url = "http://{ip}:{port}/app/owner.editOwnerMember",
         resource = "userDoc",
         author = "吴学文",
         serviceCode = "owner.editOwner",
@@ -79,8 +75,8 @@ import java.util.List;
                 "}",
         resBody = "{\"code\":0,\"msg\":\"成功\"}"
 )
-@Java110Cmd(serviceCode = "owner.editOwner")
-public class EditOwnerCmd extends Cmd {
+@Java110Cmd(serviceCode = "owner.editOwnerMember")
+public class EditOwnerMemberCmd extends Cmd {
 
     @Autowired
     private IOwnerInnerServiceSMO ownerInnerServiceSMOImpl;
@@ -241,7 +237,7 @@ public class EditOwnerCmd extends Cmd {
         ownerAppUserDto.setMemberId(reqJson.getString("memberId"));
         //todo 查询app用户表
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+        if (ListUtil.isNull(ownerAppUserDtos)) {
             return;
         }
         for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {

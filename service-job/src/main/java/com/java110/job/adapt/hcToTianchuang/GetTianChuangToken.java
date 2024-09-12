@@ -20,7 +20,6 @@ import com.java110.core.annotation.Java110Synchronized;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;

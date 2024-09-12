@@ -5,28 +5,16 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.room.RoomDto;
-import com.java110.dto.community.CommunityDto;
-import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.intf.common.IMachineInnerServiceSMO;
-import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
-import com.java110.intf.community.IUnitInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
-import com.java110.job.adapt.hcIotNew.http.ISendIot;
+import com.java110.job.adapt.hcIot.http.ISendIot;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import com.java110.vo.api.machine.ApiMachineDataVo;
-import com.java110.vo.api.machine.ApiMachineVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "owner.listOwnerMachines")

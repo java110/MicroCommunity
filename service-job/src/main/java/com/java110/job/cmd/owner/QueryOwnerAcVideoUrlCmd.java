@@ -9,7 +9,7 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
-import com.java110.job.adapt.hcIotNew.http.ISendIot;
+import com.java110.job.adapt.hcIot.http.ISendIot;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.ListUtil;

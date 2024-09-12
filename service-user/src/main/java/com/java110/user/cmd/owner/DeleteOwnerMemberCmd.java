@@ -107,8 +107,7 @@ public class DeleteOwnerMemberCmd extends Cmd {
         ownerDto.setMemberId(reqJson.getString("memberId"));
         ownerDto.setCommunityId(reqJson.getString("communityId"));
         ownerDto.setOwnerId(ownerAppUserDtos.get(0).getMemberId());
-        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER, OwnerDto.OWNER_TYPE_CD_RENTING,
-                OwnerDto.OWNER_TYPE_CD_TEMP, OwnerDto.OWNER_TYPE_CD_OTHER});
+        ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER});
 
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
 

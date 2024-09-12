@@ -2,6 +2,7 @@ package com.java110.user.cmd.owner;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -20,6 +21,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.ApiOwnerDataVo;
 import com.java110.vo.api.ApiOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,50 +116,29 @@ public class QueryOwnersCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
         Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
         Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
-        //Assert.jsonObjectHaveKey(reqJson, "ownerTypeCd", "请求中未包含ownerTypeCd信息");
         Assert.isInteger(reqJson.getString("page"), "不是有效数字");
         Assert.isInteger(reqJson.getString("row"), "不是有效数字");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
+        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
         //todo 根据房屋查询时 先用 房屋信息查询 业主ID
         freshRoomId(reqJson);
-
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
 
-        //todo 根据成员查询
-        queryByOwnerMember(reqJson, ownerDto);
-
-
-        if (reqJson.containsKey("name") && !StringUtil.isEmpty(reqJson.getString("name"))) {
-            queryByCondition(reqJson, cmdDataFlowContext);
-            return;
-        }
         int row = reqJson.getInteger("row");
-        ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
         //查询总记录数
         int total = ownerInnerServiceSMOImpl.queryOwnersCount(ownerDto);
-        apiOwnerVo.setTotal(total);
-        List<OwnerDto> ownerDtos = new ArrayList<>();
+        List<OwnerDto> ownerDtos = null;
         if (total > 0) {
-            List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
+            ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
             // 查询统计数据
-            ownerDtoList = queryOwnerStatisticsBMOImpl.query(ownerDtoList);
-            List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", reqJson.getString("userId"));
-            for (OwnerDto tmpOwnerDto : ownerDtoList) {
-                //查询照片
-                FileRelDto fileRelDto = new FileRelDto();
-                fileRelDto.setObjId(tmpOwnerDto.getMemberId());
-                fileRelDto.setRelTypeCd("10000"); //业主照片
-                List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-                if (!ListUtil.isNull(fileRelDtos)) {
-                    List<String> urls = new ArrayList<>();
-                    for (FileRelDto fileRel : fileRelDtos) {
-                        urls.add(fileRel.getFileRealName());
-                    }
-                    tmpOwnerDto.setUrls(urls);
-                }
+            ownerDtos = queryOwnerStatisticsBMOImpl.query(ownerDtos);
+            List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
+            for (OwnerDto tmpOwnerDto : ownerDtos) {
                 //对业主身份证号隐藏处理
                 String idCard = tmpOwnerDto.getIdCard();
                 if (mark.size() == 0 && idCard != null && !idCard.equals("") && idCard.length() > 16) {
@@ -170,55 +151,12 @@ public class QueryOwnersCmd extends Cmd {
                     link = link.substring(0, 3) + "****" + link.substring(7);
                     tmpOwnerDto.setLink(link);
                 }
-                ownerDtos.add(tmpOwnerDto);
             }
-            apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
+        }else{
+            ownerDtos = new ArrayList<>();
         }
-        apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerDtos);
         cmdDataFlowContext.setResponseEntity(responseEntity);
-    }
-
-    /**
-     * 根据 成员查询
-     *
-     * @param reqJson
-     * @param ownerDto
-     */
-    private void queryByOwnerMember(JSONObject reqJson, OwnerDto ownerDto) {
-
-        if (!reqJson.containsKey("memberName") && !reqJson.containsKey("memberLink")) {
-            return;
-        }
-
-        String memberName = reqJson.getString("memberName");
-        String memberLink = reqJson.getString("memberLink");
-
-        if (StringUtil.isEmpty(memberName) && StringUtil.isEmpty(memberLink)) {
-            return;
-        }
-
-        OwnerDto tmpOwnerMemberDto = new OwnerDto();
-        tmpOwnerMemberDto.setNameLike(memberName);
-        tmpOwnerMemberDto.setLink(memberLink);
-        tmpOwnerMemberDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER,
-                OwnerDto.OWNER_TYPE_CD_OTHER,
-                OwnerDto.OWNER_TYPE_CD_TEMP,
-                OwnerDto.OWNER_TYPE_CD_RENTING
-        });
-        List<OwnerDto> ownerMembers = ownerInnerServiceSMOImpl.queryOwnerMembers(tmpOwnerMemberDto);
-
-        if (ListUtil.isNull(ownerMembers)) {
-            ownerDto.setOwnerId("-1"); // 写入-1 查询不到数据
-            return;
-        }
-
-        List<String> ownerIds = new ArrayList<>();
-        for (OwnerDto tmpOwnerMember : ownerMembers) {
-            ownerIds.add(tmpOwnerMember.getOwnerId());
-        }
-
-        ownerDto.setOwnerIds(ownerIds.toArray(new String[ownerIds.size()]));
     }
 
     private void freshRoomId(JSONObject reqJson) {
@@ -246,53 +184,7 @@ public class QueryOwnersCmd extends Cmd {
         reqJson.put("roomId", roomDtos.get(0).getRoomId());
     }
 
-    /**
-     * 根据条件查询
-     *
-     * @param reqJson            查询信息
-     * @param cmdDataFlowContext 上下文
-     */
-    private void queryByCondition(JSONObject reqJson, ICmdDataFlowContext cmdDataFlowContext) {
-        //获取当前用户id
-        String ownerTypeCd = reqJson.getString("ownerTypeCd");
-        OwnerDto tmpOwnerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
-        if (!StringUtil.isEmpty(ownerTypeCd) && ownerTypeCd.contains(",")) {
-            tmpOwnerDto.setOwnerTypeCd("");
-            tmpOwnerDto.setOwnerTypeCds(ownerTypeCd.split(","));
-        }
-        String userId = reqJson.getString("userId");
-        int row = reqJson.getInteger("row");
-        ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
-        int total = ownerInnerServiceSMOImpl.queryOwnerCountByCondition(tmpOwnerDto);
-        apiOwnerVo.setTotal(total);
-        List<OwnerDto> ownerDtos = new ArrayList<>();
-        if (total > 0) {
-            List<OwnerDto> ownerDtoList = ownerInnerServiceSMOImpl.queryOwnersByCondition(tmpOwnerDto);
-            // 查询统计数据
-            ownerDtoList = queryOwnerStatisticsBMOImpl.query(ownerDtoList);
 
-            List<Map> mark = getPrivilegeOwnerList("/roomCreateFee", userId);
-            for (OwnerDto ownerDto : ownerDtoList) {
-                //对业主身份证号隐藏处理
-                String idCard = ownerDto.getIdCard();
-                if (mark.size() == 0 && !StringUtil.isEmpty(idCard) && idCard.length() > 16) {
-                    idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
-                    ownerDto.setIdCard(idCard);
-                }
-                //对业主手机号隐藏处理
-                String link = ownerDto.getLink();
-                if (mark.size() == 0 && !StringUtil.isEmpty(link) && link.length() == 11) {
-                    link = link.substring(0, 3) + "****" + link.substring(7);
-                    ownerDto.setLink(link);
-                }
-                ownerDtos.add(ownerDto);
-            }
-            apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtos, ApiOwnerDataVo.class));
-        }
-        apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
-        cmdDataFlowContext.setResponseEntity(responseEntity);
-    }
 
     /**
      * 脱敏处理

@@ -128,11 +128,6 @@ public class ReportPayFeeDetailAdapt implements IExportDataAdapt {
                 row.createCell(1).setCellValue(dataObj.getString("payerObjName"));
             }
             endDate = DateUtil.getDateFromStringB(dataObj.getString("endTime"));
-            //todo 如果不是一次性费用结束时间建1
-            if (!StringUtil.isEmpty(dataObj.getString("feeFlag"))
-                    && !FeeDto.FEE_FLAG_ONCE.equals(dataObj.getString("feeFlag"))) {
-                endDate = DateUtil.stepDay(endDate, -1);
-            }
 
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
             row.createCell(3).setCellValue(dataObj.getString("feeTypeCdName"));

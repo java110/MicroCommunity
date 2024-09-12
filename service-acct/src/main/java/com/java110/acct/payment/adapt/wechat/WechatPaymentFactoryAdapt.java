@@ -216,6 +216,9 @@ public class WechatPaymentFactoryAdapt implements IPaymentFactoryAdapt {
     ) throws Exception {
 
         //String systemName = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, WechatConstant.PAY_GOOD_NAME);
+        if(!StringUtil.isNumber(paymentOrderDto.getCycles())){
+            paymentOrderDto.setCycles("1");
+        }
 
         //todo 计算赠送积分
         GiftIntegralDto giftIntegralDto = computeGiftIntegralImpl.gift(payAmount, Integer.parseInt(paymentOrderDto.getCycles()),

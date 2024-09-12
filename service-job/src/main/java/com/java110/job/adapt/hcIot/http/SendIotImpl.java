@@ -1,13 +1,12 @@
-package com.java110.job.mall;
+package com.java110.job.adapt.hcIot.http;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.log.LoggerFactory;
-import com.java110.db.dao.impl.QueryServiceDAOImpl;
 import com.java110.dto.machine.MachineTranslateErrorDto;
 import com.java110.intf.common.IMachineTranslateErrorInnerServiceSMO;
+import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.po.machine.MachineTranslateErrorPo;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
@@ -15,28 +14,19 @@ import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Service
-public class SendMallImpl implements ISendMall {
-    private final static Logger logger = LoggerFactory.getLogger(SendMallImpl.class);
+public class SendIotImpl implements ISendIot {
 
-    public static final String GET_TOKEN_URL = "/mall/api/login.pcUserLogin";
-    private static final String DEFAULT_MALL_URL = "https://mall.homecommunity.cn";
-    public static final String MALL_DOMAIN = "MALL"; // 物联网域
-
-    public static final String MALL_TOKEN = "MALL_ACCESS_TOKEN";
-    private static final String MALL_URL = "MALL_URL";
+    public static final String GET_TOKEN_URL = "/iot/api/login.pcUserLogin";
+    private static final String DEFAULT_IOT_URL = "https://things.homecommunity.cn";
+    public static final String IOT_DOMAIN = "IOT"; // 物联网域
 
 
     @Autowired
@@ -48,19 +38,9 @@ public class SendMallImpl implements ISendMall {
 
     @Override
     public ResultVo get(String url) {
-        url = getUrl(url);
-        HttpHeaders header = getHeaders(url, "", HttpMethod.GET);
+        HttpHeaders header = getHeaders(url, "", HttpMethod.POST);
         HttpEntity<String> httpEntity = new HttpEntity<String>("", header);
-        ResponseEntity<String> tokenRes = null;
-        try {
-            tokenRes = outRestTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
-        } catch (HttpStatusCodeException e) {
-            logger.error("调用异常", e);
-            return new ResultVo(ResultVo.CODE_ERROR, e.getResponseBodyAsString());
-        } catch (Exception e) {
-            logger.error("调用异常", e);
-            return new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
-        }
+        ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
         String body = tokenRes.getBody();
         JSONObject paramOut = JSONObject.parseObject(body);
@@ -73,38 +53,31 @@ public class SendMallImpl implements ISendMall {
         url = getUrl(url);
         HttpHeaders header = getHeaders(url, paramIn.toJSONString(), HttpMethod.POST);
         HttpEntity<String> httpEntity = new HttpEntity<String>(paramIn.toJSONString(), header);
-        ResponseEntity<String> tokenRes = null;
-        try {
-            tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-        } catch (HttpStatusCodeException e) {
-            logger.error("调用异常", e);
-            return new ResultVo(ResultVo.CODE_ERROR, e.getResponseBodyAsString());
-        } catch (Exception e) {
-            logger.error("调用异常", e);
-            return new ResultVo(ResultVo.CODE_ERROR, e.getMessage());
-        }
+        ResponseEntity<String> tokenRes = outRestTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+
         String body = tokenRes.getBody();
         JSONObject paramOut = JSONObject.parseObject(body);
 
-        if (paramOut.getIntValue("code") != ResultVo.CODE_OK) {
-            saveTranslateError(paramIn.getString("communityId"), paramIn.toJSONString(), body, url);
+        if(paramOut.getIntValue("code") != ResultVo.CODE_OK){
+            saveTranslateError(paramIn.getString("communityId"),paramIn.toJSONString(),body,url);
         }
 
-        int total = 1;
+        int total =1;
         int records = 1;
-        if (paramOut.containsKey("total")) {
+        if(paramOut.containsKey("total")){
             total = paramOut.getIntValue("total");
         }
 
-        if (paramOut.containsKey("records")) {
+        if(paramOut.containsKey("records")){
             records = paramOut.getIntValue("records");
         }
 
-        return new ResultVo(records, total, paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.get("data"));
+        return new ResultVo(records,total,paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.get("data"));
     }
 
 
-    public void saveTranslateError(String communityId, String reqJson, String resJson, String url) {
+
+    public void saveTranslateError(String communityId,String reqJson, String resJson, String url) {
         MachineTranslateErrorPo machineTranslateErrorPo = new MachineTranslateErrorPo();
         machineTranslateErrorPo.setLogId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_logId));
         machineTranslateErrorPo.setCommunityId(communityId);
@@ -126,7 +99,7 @@ public class SendMallImpl implements ISendMall {
      */
     private HttpHeaders getHeaders(String url, String param, HttpMethod method) {
         HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.APP_ID.toLowerCase(), MappingCache.getValue(MALL_DOMAIN, "APP_ID"));
+        header.add(CommonConstant.APP_ID.toLowerCase(), MappingCache.getValue(IOT_DOMAIN, "APP_ID"));
         header.add(CommonConstant.USER_ID.toLowerCase(), CommonConstant.ORDER_DEFAULT_USER_ID);
         header.add(CommonConstant.TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
         header.add(CommonConstant.REQUEST_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
@@ -136,21 +109,21 @@ public class SendMallImpl implements ISendMall {
     }
 
     public String getToken(boolean refreshAccessToken) {
-        String token = CommonCache.getValue(MALL_TOKEN);
+        String token = CommonCache.getValue(IotConstant.HC_TOKEN);
         if (!StringUtil.isEmpty(token) && !refreshAccessToken) {
             return token;
         }
 
         String url = getUrl(GET_TOKEN_URL);
 
-        String userName = MappingCache.getValue(MALL_DOMAIN, "MALL_USERNAME");
-        String password = MappingCache.getValue(MALL_DOMAIN, "MALL_PASSWORD");
+        String userName = MappingCache.getValue(IOT_DOMAIN, "IOT_USERNAME");
+        String password = MappingCache.getValue(IOT_DOMAIN, "IOT_PASSWORD");
         JSONObject param = new JSONObject();
         param.put("username", userName);
         param.put("passwd", password);
 
         HttpHeaders header = new HttpHeaders();
-        header.add(CommonConstant.APP_ID.toLowerCase(), MappingCache.getValue(MALL_DOMAIN, "APP_ID"));
+        header.add(CommonConstant.APP_ID.toLowerCase(), MappingCache.getValue(IOT_DOMAIN, "APP_ID"));
         header.add(CommonConstant.USER_ID.toLowerCase(), CommonConstant.ORDER_DEFAULT_USER_ID);
         header.add(CommonConstant.TRANSACTION_ID.toLowerCase(), UUID.randomUUID().toString());
         header.add(CommonConstant.REQUEST_TIME.toLowerCase(), DateUtil.getDefaultFormateTimeString(new Date()));
@@ -171,16 +144,16 @@ public class SendMallImpl implements ISendMall {
         token = tokenObj.getString("token");
         int expiresIn = 30 * 60; //todo 30分钟
 
-        CommonCache.setValue(MALL_TOKEN, token, expiresIn - 200);
+        CommonCache.setValue(IotConstant.HC_TOKEN, token, expiresIn - 200);
 
         return token;
     }
 
     private static String getUrl(String param) {
-        String url = MappingCache.getValue(MALL_DOMAIN, MALL_URL);
+        String url = MappingCache.getValue(IOT_DOMAIN, IotConstant.IOT_URL);
 
         if (StringUtil.isEmpty(url)) {
-            return DEFAULT_MALL_URL + param;
+            return DEFAULT_IOT_URL + param;
         }
 
         return url + param;
@@ -198,7 +171,7 @@ public class SendMallImpl implements ISendMall {
         String appId = headers.getFirst(CommonConstant.APP_ID);
         String transactionId = headers.getFirst(CommonConstant.TRANSACTION_ID);
         String requestTime = headers.getFirst(CommonConstant.REQUEST_TIME);
-        String securityCode = MappingCache.getValue(MALL_DOMAIN, "APP_SECRET");
+        String securityCode = MappingCache.getValue(IOT_DOMAIN, "APP_SECRET");
 
         if (StringUtil.isEmpty(securityCode)) {
             return;

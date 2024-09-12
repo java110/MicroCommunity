@@ -10,7 +10,6 @@ import com.java110.dto.visit.VisitDto;
 import com.java110.intf.community.IParkingSpaceInnerServiceSMO;
 import com.java110.intf.community.IVisitInnerServiceSMO;
 import com.java110.intf.user.ICarBlackWhiteV1InnerServiceSMO;
-import com.java110.job.adapt.hcIot.asyn.IIotSendAsyn;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.car.CarBlackWhitePo;
 import com.java110.po.parking.ParkingSpacePo;
@@ -41,8 +40,6 @@ public class ReleaseParkingSpaceTemplate extends TaskSystemQuartz {
     @Autowired
     private ICarBlackWhiteV1InnerServiceSMO carBlackWhiteV1InnerServiceSMOImpl;
 
-    @Autowired
-    private IIotSendAsyn hcCarBlackWhiteAsynImpl;
 
     private static Logger logger = LoggerFactory.getLogger(ReleaseParkingSpaceTemplate.class);
 
@@ -114,15 +111,15 @@ public class ReleaseParkingSpaceTemplate extends TaskSystemQuartz {
                 carBlackWhitePo.setStatusCd("1");
                 carBlackWhiteV1InnerServiceSMOImpl.deleteCarBlackWhite(carBlackWhitePo);
                 //向第三方物联网推送删除白名单信息
-                JSONObject postParameters = new JSONObject();
-                postParameters.put("extBwId", carBlackWhiteDtos.get(0).getBwId());
-                postParameters.put("carNum", carBlackWhiteDtos.get(0).getCarNum());
-                postParameters.put("extPaId", carBlackWhiteDtos.get(0).getPaId());
-                postParameters.put("extCommunityId", carBlackWhiteDtos.get(0).getCommunityId());
-                postParameters.put("startTime", carBlackWhiteDtos.get(0).getStartTime());
-                postParameters.put("endTime", carBlackWhiteDtos.get(0).getEndTime());
-                postParameters.put("blackWhite", carBlackWhiteDtos.get(0).getBlackWhite());
-                hcCarBlackWhiteAsynImpl.deleteCarBlackWhite(postParameters);
+//                JSONObject postParameters = new JSONObject();
+//                postParameters.put("extBwId", carBlackWhiteDtos.get(0).getBwId());
+//                postParameters.put("carNum", carBlackWhiteDtos.get(0).getCarNum());
+//                postParameters.put("extPaId", carBlackWhiteDtos.get(0).getPaId());
+//                postParameters.put("extCommunityId", carBlackWhiteDtos.get(0).getCommunityId());
+//                postParameters.put("startTime", carBlackWhiteDtos.get(0).getStartTime());
+//                postParameters.put("endTime", carBlackWhiteDtos.get(0).getEndTime());
+//                postParameters.put("blackWhite", carBlackWhiteDtos.get(0).getBlackWhite());
+//                hcCarBlackWhiteAsynImpl.deleteCarBlackWhite(postParameters);
             }
         }
     }

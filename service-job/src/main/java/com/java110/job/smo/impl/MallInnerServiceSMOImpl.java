@@ -10,8 +10,6 @@ import com.java110.dto.integral.GiftIntegralDto;
 import com.java110.dto.mall.MallConfigDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IMallInnerServiceSMO;
-import com.java110.job.adapt.hcIot.IotConstant;
-import com.java110.job.adapt.hcIotNew.http.ISendIot;
 import com.java110.job.mall.ISendMall;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.BeanConvertUtil;

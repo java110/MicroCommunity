@@ -18,6 +18,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.ApiOwnerDataVo;
 import com.java110.vo.api.ApiOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,17 +57,17 @@ public class QueryOwnerMembersCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         String userId = context.getReqHeaders().get("user-id");
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
-        ownerDto.setOwnerTypeCds(new String[]{"1002", "1003", "1004", "1005"});
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_MEMBER);
 
         int row = reqJson.getInteger("row");
         //查询总记录数
         int total = ownerInnerServiceSMOImpl.queryOwnersMemberCount(ownerDto);
 
-        List<OwnerDto> ownerDtoList = null;
+        List<OwnerDto> ownerDtos = null;
         if (total > 0) {
-            ownerDtoList = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
+            ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
         } else {
-            ownerDtoList = new ArrayList<>();
+            ownerDtos = new ArrayList<>();
         }
         //查询是否有脱敏权限
         List<Map> privileges = null;
@@ -75,7 +76,7 @@ public class QueryOwnerMembersCmd extends Cmd {
         basePrivilegeDto.setUserId(userId);
         privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
         if (privileges == null || privileges.size() == 0) {
-            for (OwnerDto owner : ownerDtoList) {
+            for (OwnerDto owner : ownerDtos) {
                 String idCard = owner.getIdCard();
                 if (!StringUtil.isEmpty(idCard)) {
                     idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
@@ -88,28 +89,8 @@ public class QueryOwnerMembersCmd extends Cmd {
                 }
             }
         }
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
 
-        for (OwnerDto ownerdto : ownerDtoList) {
-            FileRelDto fileRelDto = new FileRelDto();
-            fileRelDto.setObjId(ownerdto.getMemberId());
-            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-            if (ListUtil.isNull(fileRelDtos)) {
-                continue;
-            }
-            ownerdto.setUrl(fileRelDtos.get(0).getFileSaveName());
-            if (fileRelDtos.get(0).getFileSaveName().startsWith("http")) {
-                ownerdto.setUrl(fileRelDtos.get(0).getFileSaveName());
-            } else {
-                ownerdto.setUrl(imgUrl + fileRelDtos.get(0).getFileSaveName());
-            }
-        }
-        ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
-        apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
-        apiOwnerVo.setTotal(total);
-        apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerDtos);
         context.setResponseEntity(responseEntity);
     }
 }

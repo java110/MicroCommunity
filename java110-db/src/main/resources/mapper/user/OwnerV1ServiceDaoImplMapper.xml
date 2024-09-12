@@ -6,9 +6,9 @@
     <!-- 保存业主信息信息 add by wuxw 2018-07-03 -->
     <insert id="saveOwnerInfo" parameterType="Map">
         insert into building_owner(id_card, sex, link, owner_type_cd, remark, owner_id, user_id, name, state,
-                                   community_id, age, member_id, address)
+                                   community_id, age, member_id, address,person_type,person_role,concact_person,concact_link,face_url)
         values (#{idCard}, #{sex}, #{link}, #{ownerTypeCd}, #{remark}, #{ownerId}, #{userId}, #{name}, #{state},
-                #{communityId}, #{age}, #{memberId}, #{address})
+                #{communityId}, #{age}, #{memberId}, #{address},#{personType},#{personRole},#{concactPerson},#{concactLink},#{faceUrl})
     </insert>
 
     <!-- 查询业主信息信息 add by wuxw 2018-07-03 -->
@@ -16,10 +16,27 @@
         select t.id_card,t.id_card idCard,t.sex,t.link,t.owner_type_cd,t.owner_type_cd
         ownerTypeCd,t.remark,t.status_cd,t.status_cd statusCd,t.owner_id,t.owner_id ownerId,t.user_id,t.user_id
         userId,t.name,t.state,t.community_id,t.community_id communityId,t.age,t.member_id,t.member_id memberId,
-        t.address from building_owner t
+        t.address ,t.person_type personType,t.person_role personRole,t.concact_person concactPerson,td.name ownerTypeName,
+        t.concact_link concactLink,t.face_url faceUrl,tdType.name personTypeName,tdRole.name personRoleName
+        from building_owner t
+        left join t_dict td on td.table_name = 'building_owner' and td.`table_columns` = 'owner_type_cd' and td.status_cd = t.owner_type_cd
+        left join t_dict tdType on tdType.table_name = 'building_owner' and tdType.`table_columns` = 'person_type' and tdType.status_cd = t.person_type
+        left join t_dict tdRole on tdRole.table_name = 'building_owner' and tdRole.`table_columns` = 'person_role' and tdRole.status_cd = t.person_role
         where 1 =1
         <if test="idCard !=null and idCard != ''">
             and t.id_card= #{idCard}
+        </if>
+        <if test="personType !=null and personType != ''">
+            and t.person_type= #{personType}
+        </if>
+        <if test="personRole !=null and personRole != ''">
+            and t.person_role= #{personRole}
+        </if>
+        <if test="concactPerson !=null and concactPerson != ''">
+            and t.concact_person= #{concactPerson}
+        </if>
+        <if test="concactLink !=null and concactLink != ''">
+            and t.concact_link= #{concactLink}
         </if>
         <if test="sex !=null and sex != ''">
             and t.sex= #{sex}
@@ -115,15 +132,31 @@
         <if test="state !=null and state != ''">
             ,t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            ,t.community_id= #{communityId}
-        </if>
+
         <if test="age != ''">
             ,t.age= #{age}
+        </if>
+        <if test="personType !=null and personType != ''">
+            , t.person_type= #{personType}
+        </if>
+        <if test="personRole !=null and personRole != ''">
+            , t.person_role= #{personRole}
+        </if>
+        <if test="concactPerson !=null and concactPerson != ''">
+            , t.concact_person= #{concactPerson}
+        </if>
+        <if test="concactLink !=null and concactLink != ''">
+            , t.concact_link= #{concactLink}
+        </if>
+        <if test="faceUrl !=null and faceUrl != ''">
+            , t.face_url= #{faceUrl}
         </if>
         where 1=1
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
     </update>
 
@@ -189,10 +222,23 @@
         <if test="memberId !=null and memberId != ''">
             and t.member_id= #{memberId}
         </if>
+        <if test="personType !=null and personType != ''">
+            and t.person_type= #{personType}
+        </if>
+        <if test="personRole !=null and personRole != ''">
+            and t.person_role= #{personRole}
+        </if>
+        <if test="concactPerson !=null and concactPerson != ''">
+            and t.concact_person= #{concactPerson}
+        </if>
+        <if test="concactLink !=null and concactLink != ''">
+            and t.concact_link= #{concactLink}
+        </if>
     </select>
 
     <select id="queryOwnersBindCount" parameterType="Map" resultType="Map">
-        select count(DISTINCT t.member_id) count from building_owner t
+        select count(DISTINCT t.member_id) count
+        from building_owner t
         left join owner_app_user oau on t.community_id = oau.community_id and t.member_id = oau.member_id and
         oau.status_cd = '0'
         where t.status_cd = '0'

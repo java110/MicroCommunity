@@ -99,7 +99,7 @@ public class QueryAppOwnerMembersCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
-        ownerDto.setOwnerTypeCds(new String[]{"1002", "1003", "1004", "1005"});
+        ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_MEMBER);
 
         int row = reqJson.getInteger("row");
         //查询总记录数
@@ -112,22 +112,7 @@ public class QueryAppOwnerMembersCmd extends Cmd {
             ownerDtoList = new ArrayList<>();
         }
 
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
 
-        for (OwnerDto ownerdto : ownerDtoList) {
-            FileRelDto fileRelDto = new FileRelDto();
-            fileRelDto.setObjId(ownerdto.getMemberId());
-            List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-            if (ListUtil.isNull(fileRelDtos)) {
-                continue;
-            }
-            ownerdto.setUrl(fileRelDtos.get(0).getFileSaveName());
-            if (fileRelDtos.get(0).getFileSaveName().startsWith("http")) {
-                ownerdto.setUrl(fileRelDtos.get(0).getFileSaveName());
-            } else {
-                ownerdto.setUrl(imgUrl + fileRelDtos.get(0).getFileSaveName());
-            }
-        }
         ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
         apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
         apiOwnerVo.setTotal(total);

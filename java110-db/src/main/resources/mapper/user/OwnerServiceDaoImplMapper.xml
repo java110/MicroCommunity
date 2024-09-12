@@ -125,34 +125,44 @@
         t.user_id,t.user_id userId,t.age,t.member_id,t.member_id memberId,t.owner_type_cd,
         t.owner_type_cd ownerTypeCd,t.create_time createTime,t.community_id,
         t.community_id communityId,t.id_card, t.id_card idCard,t.state,td.name ownerTypeName,
-        t.owner_flag,t.owner_flag ownerFlag,t.address
+        t.owner_flag,t.owner_flag ownerFlag,t.address,t.person_type personType,t.person_role personRole,
+        t.concact_person concactPerson, t.concact_link concactLink,t.face_url faceUrl,td.name ownerTypeName,
+        tdType.name personTypeName,tdRole.name personRoleName
         <if test="roomIds != null">
             , borr.room_id roomId
         </if>
-        from building_owner t,t_dict td
+        from building_owner t
+        left join t_dict td on td.table_name = 'building_owner' and td.`table_columns` = 'owner_type_cd' and td.status_cd = t.owner_type_cd
+        left join t_dict tdType on tdType.table_name = 'building_owner' and tdType.`table_columns` = 'person_type' and tdType.status_cd = t.person_type
+        left join t_dict tdRole on tdRole.table_name = 'building_owner' and tdRole.`table_columns` = 'person_role' and tdRole.status_cd = t.person_role
         <if test="roomId != null and roomId != ''">
-            ,building_owner_room_rel borr
+            left join building_owner_room_rel borr on borr.status_cd = '0' and t.owner_id = borr.owner_id
         </if>
         <if test="roomIds != null ">
-            ,building_owner_room_rel borr
+            left join building_owner_room_rel borr on t.owner_id = borr.owner_id and borr.status_cd = t.status_cd
         </if>
         where 1 = 1
         <if test="roomId != null and roomId != ''">
-            and t.owner_id = borr.owner_id
-            and borr.status_cd = t.status_cd
             and borr.room_id = #{roomId}
         </if>
         <if test="roomIds != null">
-            and t.owner_id = borr.owner_id
-            and borr.status_cd = t.status_cd
             and borr.room_id in
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        and td.table_name = 'building_owner'
-        and td.`table_columns` = 'owner_type_cd'
-        and td.status_cd = t.owner_type_cd
+        <if test="personType !=null and personType != ''">
+            and t.person_type= #{personType}
+        </if>
+        <if test="personRole !=null and personRole != ''">
+            and t.person_role= #{personRole}
+        </if>
+        <if test="concactPerson !=null and concactPerson != ''">
+            and t.concact_person= #{concactPerson}
+        </if>
+        <if test="concactLink !=null and concactLink != ''">
+            and t.concact_link= #{concactLink}
+        </if>
         <if test="sex !=null">
             and t.sex= #{sex}
         </if>
@@ -223,21 +233,18 @@
     <select id="getOwnerInfoCount" parameterType="Map" resultType="Map">
         select count(1) count
         from building_owner t
+        left join t_dict td on td.table_name = 'building_owner' and td.`table_columns` = 'owner_type_cd' and td.status_cd = t.owner_type_cd
         <if test="roomId != null and roomId != ''">
-            ,building_owner_room_rel borr
+            left join building_owner_room_rel borr on borr.status_cd = '0' and t.owner_id = borr.owner_id
         </if>
         <if test="roomIds != null ">
-            ,building_owner_room_rel borr
+            left join building_owner_room_rel borr on t.owner_id = borr.owner_id and borr.status_cd = t.status_cd
         </if>
-        where 1 =1
+        where 1 = 1
         <if test="roomId != null and roomId != ''">
-            and t.owner_id = borr.owner_id
-            and borr.status_cd = '0'
             and borr.room_id = #{roomId}
         </if>
         <if test="roomIds != null">
-            and t.owner_id = borr.owner_id
-            and borr.status_cd = '0'
             and borr.room_id in
             <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
                 #{item}
@@ -302,6 +309,18 @@
             <foreach collection="ownerTypeCds" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
+        </if>
+        <if test="personType !=null and personType != ''">
+            and t.person_type= #{personType}
+        </if>
+        <if test="personRole !=null and personRole != ''">
+            and t.person_role= #{personRole}
+        </if>
+        <if test="concactPerson !=null and concactPerson != ''">
+            and t.concact_person= #{concactPerson}
+        </if>
+        <if test="concactLink !=null and concactLink != ''">
+            and t.concact_link= #{concactLink}
         </if>
     </select>
 

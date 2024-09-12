@@ -10,8 +10,7 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
-import com.java110.job.adapt.hcIotNew.http.ISendIot;
-import com.java110.po.owner.OwnerAppUserPo;
+import com.java110.job.adapt.hcIot.http.ISendIot;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

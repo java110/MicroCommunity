@@ -20,7 +20,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.job.adapt.hcIotNew.http.ISendIot;
+import com.java110.job.adapt.hcIot.http.ISendIot;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.vo.ResultVo;

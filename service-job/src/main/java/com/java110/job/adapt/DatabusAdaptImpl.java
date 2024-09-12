@@ -29,7 +29,6 @@ import com.java110.dto.fee.TempCarPayOrderDto;
 import com.java110.dto.system.Business;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
-import com.java110.job.adapt.hcIot.GetToken;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,17 +49,7 @@ public abstract class DatabusAdaptImpl implements IDatabusAdapt {
     @Autowired
     private ISmallWechatAttrInnerServiceSMO smallWechatAttrInnerServiceSMOImpl;
 
-    /**
-     * 封装头信息
-     *
-     * @return
-     */
-    protected HttpHeaders getHeaders(RestTemplate outRestTemplate) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("access_token", GetToken.get(outRestTemplate, false));
-        //httpHeaders.add("Content-Type", "application/x-www-form-urlencoded");
-        return httpHeaders;
-    }
+
 
 
     /**

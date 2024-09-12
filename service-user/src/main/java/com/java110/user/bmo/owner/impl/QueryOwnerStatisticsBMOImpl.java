@@ -56,10 +56,12 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
             return ownerDtos;
         }
         List<String> ownerIds = new ArrayList<>();
+        List<String> memberIds = new ArrayList<>();
         List<String> ownerTels = new ArrayList<>();
         for(OwnerDto ownerDto : ownerDtos){
             ownerIds.add(ownerDto.getOwnerId());
             ownerTels.add(ownerDto.getLink());
+            memberIds.add(ownerDto.getMemberId());
         }
 
 
@@ -70,19 +72,19 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
         queryOwnerMemberCount(ownerIds,ownerDtos);
 
         // 查询 车辆数
-        queryCarCount(ownerIds,ownerDtos);
+        queryCarCount(memberIds,ownerDtos);
 
         // 查询 投诉数
-        queryComplaintCount(ownerTels,ownerDtos);
+        //queryComplaintCount(ownerTels,ownerDtos);
 
         // 查询 报修数
-        queryRepairCount(ownerTels,ownerDtos);
+        //queryRepairCount(ownerTels,ownerDtos);
 
         // 查询业主欠费
         queryOwnerOweFee(ownerIds,ownerDtos);
 
         // 查询业主合同
-        queryOwnerContractCount(ownerIds,ownerDtos);
+        //queryOwnerContractCount(ownerIds,ownerDtos);
 
         return ownerDtos;
     }
@@ -169,16 +171,16 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
 
     /**
      * 查询业主车辆数
-     * @param ownerIds
+     * @param memberIds
      * @param ownerDtos
      */
-    private void queryCarCount(List<String> ownerIds, List<OwnerDto> ownerDtos) {
+    private void queryCarCount(List<String> memberIds, List<OwnerDto> ownerDtos) {
 
-        List<Map> memberCounts = ownerCarV1InnerServiceSMOImpl.queryOwnerCarCountByOwnerIds(ownerIds);
+        List<Map> memberCounts = ownerCarV1InnerServiceSMOImpl.queryOwnerCarCountByOwnerIds(memberIds);
 
         for(OwnerDto ownerDto : ownerDtos) {
             for (Map count : memberCounts) {
-                if(ownerDto.getOwnerId().equals(count.get("ownerId"))){
+                if(ownerDto.getMemberId().equals(count.get("ownerId"))){
                     ownerDto.setCarCount(count.get("carCount").toString());
                 }
             }
@@ -195,6 +197,10 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
         List<Map> memberCounts = ownerV1InnerServiceSMOImpl.queryOwnerMembersCount(ownerIds);
 
         for(OwnerDto ownerDto : ownerDtos) {
+            if(OwnerDto.OWNER_TYPE_CD_MEMBER.equals(ownerDto.getOwnerTypeCd())){
+                ownerDto.setMemberCount("0");
+                continue;
+            }
             for (Map count : memberCounts) {
                 if(ownerDto.getOwnerId().equals(count.get("ownerId"))){
                     ownerDto.setMemberCount(count.get("memberCount").toString());

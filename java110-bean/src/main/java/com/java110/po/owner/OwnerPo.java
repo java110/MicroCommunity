@@ -29,6 +29,13 @@ public class OwnerPo implements Serializable {
     private String bId;
     private String ownerFlag;
 
+    private String personType;
+    private String personRole;
+    private String concactPerson;
+    private String concactLink;
+    private String faceUrl;
+
+
     public String getMemberId() {
         return memberId;
     }
@@ -155,5 +162,45 @@ public class OwnerPo implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPersonType() {
+        return personType;
+    }
+
+    public void setPersonType(String personType) {
+        this.personType = personType;
+    }
+
+    public String getPersonRole() {
+        return personRole;
+    }
+
+    public void setPersonRole(String personRole) {
+        this.personRole = personRole;
+    }
+
+    public String getConcactPerson() {
+        return concactPerson;
+    }
+
+    public void setConcactPerson(String concactPerson) {
+        this.concactPerson = concactPerson;
+    }
+
+    public String getConcactLink() {
+        return concactLink;
+    }
+
+    public void setConcactLink(String concactLink) {
+        this.concactLink = concactLink;
+    }
+
+    public String getFaceUrl() {
+        return faceUrl;
+    }
+
+    public void setFaceUrl(String faceUrl) {
+        this.faceUrl = faceUrl;
     }
 }

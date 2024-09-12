@@ -18,11 +18,17 @@ import java.util.List;
 public class OwnerDto extends PageDto implements Serializable {
 
     // 业主本人 1002 家庭成员
-    public static final String OWNER_TYPE_CD_OWNER = "1001"; //业主
-    public static final String OWNER_TYPE_CD_MEMBER = "1002"; //家庭成员
-    public static final String OWNER_TYPE_CD_RENTING = "1003"; //租客
-    public static final String OWNER_TYPE_CD_TEMP = "1004"; //临时人员
-    public static final String OWNER_TYPE_CD_OTHER = "1005"; //其他
+    public static final String OWNER_TYPE_CD_OWNER = "1001"; //户主
+    public static final String OWNER_TYPE_CD_MEMBER = "1002"; //户员
+
+    public static final String PERSON_TYPE_PERSON = "P"; // 个人
+    public static final String PERSON_TYPE_COMPANY = "C"; // 公司
+
+    public static final String PERSON_ROLE_OWNER = "1"; // 业主
+    public static final String PERSON_ROLE_RENT = "2"; // 租客
+    public static final String PERSON_ROLE_MEMBER = "3"; // 家庭成员
+    public static final String PERSON_ROLE_STAFF = "4"; // 员工
+    public static final String PERSON_ROLE_OTHER = "99"; // 其他
 
 
     public static final String OWNER_FLAG_TRUE = "T";//业主标识 T是真实业主 F 是虚拟业主
@@ -57,6 +63,9 @@ public class OwnerDto extends PageDto implements Serializable {
     private String ownerTypeCd;
     private String[] ownerTypeCds;
     private String ownerTypeName;
+    private String personTypeName;
+    private String personRoleName;
+
     private String roomNum;
     private String roomName;
     private String psId;
@@ -93,9 +102,6 @@ public class OwnerDto extends PageDto implements Serializable {
 
     private String msg;
 
-    private List<String> urls;
-
-    private String url;
 
     private String roomCount;
     private String memberCount;
@@ -115,6 +121,12 @@ public class OwnerDto extends PageDto implements Serializable {
     private String memberLike;
 
     private String acctAmount;
+
+    private String personType;
+    private String personRole;
+    private String concactPerson;
+    private String concactLink;
+    private String faceUrl;
 
 
     public String getSex() {
@@ -439,22 +451,6 @@ public class OwnerDto extends PageDto implements Serializable {
         this.address = address;
     }
 
-    public List<String> getUrls() {
-        return urls;
-    }
-
-    public void setUrls(List<String> urls) {
-        this.urls = urls;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getCommunityQrCode() {
         return communityQrCode;
     }
@@ -606,5 +602,61 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setAcctAmount(String acctAmount) {
         this.acctAmount = acctAmount;
+    }
+
+    public String getPersonType() {
+        return personType;
+    }
+
+    public void setPersonType(String personType) {
+        this.personType = personType;
+    }
+
+    public String getPersonRole() {
+        return personRole;
+    }
+
+    public void setPersonRole(String personRole) {
+        this.personRole = personRole;
+    }
+
+    public String getConcactPerson() {
+        return concactPerson;
+    }
+
+    public void setConcactPerson(String concactPerson) {
+        this.concactPerson = concactPerson;
+    }
+
+    public String getConcactLink() {
+        return concactLink;
+    }
+
+    public void setConcactLink(String concactLink) {
+        this.concactLink = concactLink;
+    }
+
+    public String getFaceUrl() {
+        return faceUrl;
+    }
+
+    public void setFaceUrl(String faceUrl) {
+        this.faceUrl = faceUrl;
+    }
+
+    public String getPersonTypeName() {
+        return personTypeName;
+    }
+
+    public void setPersonTypeName(String personTypeName) {
+        this.personTypeName = personTypeName;
+    }
+
+    public String getPersonRoleName() {
+        return personRoleName;
+    }
+
+    public void setPersonRoleName(String personRoleName) {
+        this.personRoleName = personRoleName;
     }
 }

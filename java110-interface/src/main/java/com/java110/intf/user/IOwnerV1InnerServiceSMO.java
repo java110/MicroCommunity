@@ -40,13 +40,13 @@ public interface IOwnerV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveOwner", method = RequestMethod.POST)
-    public int saveOwner(@RequestBody  OwnerPo ownerPo);
+    int saveOwner(@RequestBody  OwnerPo ownerPo);
 
     @RequestMapping(value = "/updateOwner", method = RequestMethod.POST)
-    public int updateOwner(@RequestBody  OwnerPo ownerPo);
+    int updateOwner(@RequestBody  OwnerPo ownerPo);
 
     @RequestMapping(value = "/deleteOwner", method = RequestMethod.POST)
-    public int deleteOwner(@RequestBody  OwnerPo ownerPo);
+    int deleteOwner(@RequestBody  OwnerPo ownerPo);
 
     /**
      * <p>查询小区楼信息</p>

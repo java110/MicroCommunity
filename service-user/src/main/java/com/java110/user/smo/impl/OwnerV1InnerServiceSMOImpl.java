@@ -130,8 +130,6 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
 
         List<OwnerDto> owners = BeanConvertUtil.covertBeanList(ownerV1ServiceDaoImpl.getOwnerInfo(BeanConvertUtil.beanCovertMap(ownerDto)), OwnerDto.class);
 
-        //todo 查询业主头像
-        getOwnerPhone(owners);
         return owners;
     }
 
@@ -155,42 +153,4 @@ public class OwnerV1InnerServiceSMOImpl extends BaseServiceSMO implements IOwner
         return result;
     }
 
-    private boolean getOwnerPhone(List<OwnerDto> owners) {
-        if (owners == null || owners.size() == 0 || owners.size() > 50) {
-            return true;
-        }
-
-        List<String> memberIds = new ArrayList<>();
-
-        for (OwnerDto tmpOwnerDto : owners) {
-            memberIds.add(tmpOwnerDto.getMemberId());
-        }
-
-        FileRelDto fileRelDto = new FileRelDto();
-        //fileRelDto.setObjId(owners.get(0).getMemberId());
-        fileRelDto.setObjIds(memberIds.toArray(new String[memberIds.size()]));
-        List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-
-        if (fileRelDtos == null || fileRelDtos.size() < 1) {
-            return true;
-        }
-
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
-
-        for (OwnerDto tmpOwnerDto : owners) {
-            for (FileRelDto tmpFileRelDto : fileRelDtos) {
-                if (!tmpOwnerDto.getMemberId().equals(tmpFileRelDto.getObjId())) {
-                    continue;
-                }
-
-                if (tmpFileRelDto.getFileSaveName().startsWith("http")) {
-                    tmpOwnerDto.setUrl(tmpFileRelDto.getFileSaveName());
-                } else {
-                    tmpOwnerDto.setUrl(imgUrl + tmpFileRelDto.getFileSaveName());
-                }
-            }
-        }
-
-        return false;
-    }
 }

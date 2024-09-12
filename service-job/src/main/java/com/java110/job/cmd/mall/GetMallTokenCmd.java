@@ -12,7 +12,6 @@ import com.java110.dto.user.UserDto;
 import com.java110.intf.store.IStoreUserV1InnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
-import com.java110.job.adapt.hcIot.IotConstant;
 import com.java110.job.mall.ISendMall;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
