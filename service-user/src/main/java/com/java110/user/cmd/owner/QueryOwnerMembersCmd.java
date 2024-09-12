@@ -75,17 +75,21 @@ public class QueryOwnerMembersCmd extends Cmd {
         basePrivilegeDto.setResource("/roomCreateFee");
         basePrivilegeDto.setUserId(userId);
         privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (privileges == null || privileges.size() == 0) {
+        if (ListUtil.isNull(privileges)) {
             for (OwnerDto owner : ownerDtos) {
-                String idCard = owner.getIdCard();
-                if (!StringUtil.isEmpty(idCard)) {
-                    idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
-                    owner.setIdCard(idCard);
-                }
-                String link = owner.getLink();
-                if (!StringUtil.isEmpty(link)) {
-                    link = link.substring(0, 3) + "****" + link.substring(7);
-                    owner.setLink(link);
+                try {
+                    String idCard = owner.getIdCard();
+                    if (!StringUtil.isEmpty(idCard)) {
+                        idCard = idCard.substring(0, 6) + "**********" + idCard.substring(16);
+                        owner.setIdCard(idCard);
+                    }
+                    String link = owner.getLink();
+                    if (!StringUtil.isEmpty(link)) {
+                        link = link.substring(0, 3) + "****" + link.substring(7);
+                        owner.setLink(link);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         }

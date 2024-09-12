@@ -14,6 +14,7 @@ import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class QueryCurrentOwnerCmd extends Cmd {
         //ownerAppUserDto.setMemberId(reqJson.getString("memberId"));
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
 
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+        if (ListUtil.isNull(ownerAppUserDtos)) {
             throw new CmdException("未绑定业主");
         }
 
