@@ -10,6 +10,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.community.ApiCommunityDataVo;
 import com.java110.vo.api.community.ApiCommunityVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +57,9 @@ public class GetCommunitysImpl implements IMallCommonApiBmo {
         } else {
             communitys = new ArrayList<>();
         }
-        ApiCommunityVo apiCommunityVo = new ApiCommunityVo();
-        apiCommunityVo.setTotal(count);
-        apiCommunityVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
-        apiCommunityVo.setCommunitys(communitys);
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiCommunityVo), HttpStatus.OK);
+        ResponseEntity<String> responseEntity =ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")),
+                count, communitys);
+
         context.setResponseEntity(responseEntity);
     }
 
