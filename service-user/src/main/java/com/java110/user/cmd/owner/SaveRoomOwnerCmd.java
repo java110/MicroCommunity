@@ -172,16 +172,13 @@ public class SaveRoomOwnerCmd extends Cmd {
         ownerPo.setAge(null);
         ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
 
+        ownerPo.setFaceUrl(reqJson.getString("ownerPhotoUrl"));
+
         int flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
         if (flag < 1) {
             throw new CmdException("保存业主失败");
         }
 
-        //todo 保存照片
-        photoSMOImpl.savePhoto(reqJson.getString("ownerPhoto"),
-                memberId,
-                reqJson.getString("communityId"),
-                "10000");
         //todo 保存属性
         dealOwnerAttr(reqJson, memberId);
 

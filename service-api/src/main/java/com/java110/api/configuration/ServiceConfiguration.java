@@ -2,14 +2,27 @@ package com.java110.api.configuration;
 
 import com.java110.api.filter.JwtFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.MultipartConfigElement;
 
 /**
  * Created by wuxw on 2018/5/2.
  */
 @Configuration
 public class ServiceConfiguration {
+
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        //文件最大
+        factory.setMaxFileSize(1024*1024*50); //KB,MB
+        /// 设置总上传数据总大小
+        factory.setMaxRequestSize(1024*1024*50);
+        return factory.createMultipartConfig();
+    }
     @Bean
     public FilterRegistrationBean jwtFilter() {
         StringBuffer exclusions = new StringBuffer();
