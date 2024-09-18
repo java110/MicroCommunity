@@ -178,6 +178,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
             parkingAreaDto.setNum(ownerCarDto.getAreaNum());
             parkingAreaDto.setTypeCd(ownerCarDto.getTypeCd());
+            parkingAreaDto.setCommunityId(result.getCommunityId());
             //查询停车场
             List<ParkingAreaDto> parkingAreaDtos = parkingAreaInnerServiceSMOImpl.queryParkingAreas(parkingAreaDto);
             //Assert.listOnlyOne(parkingAreaDtos, "查询停车场错误！");
@@ -196,6 +197,7 @@ public class ImportOwnerCarSMOImpl extends DefaultAbstractComponentSMO implement
             ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
             parkingSpaceDto.setNum(ownerCarDto.getNum());
             parkingSpaceDto.setPaId(paId);
+            parkingSpaceDto.setCommunityId(result.getCommunityId());
             //查询停车位
             List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
             String state = "";
