@@ -6,7 +6,9 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.IotDataDto;
 import com.java110.dto.report.QueryStatisticsDto;
+import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.report.statistics.IInoutStatistics;
 import com.java110.report.statistics.IOrderStatistics;
 import com.java110.utils.exception.CmdException;
@@ -25,6 +27,9 @@ public class QueryInoutDataReportCmd extends Cmd {
 
     @Autowired
     private IInoutStatistics inoutStatisticsImpl;
+
+    @Autowired
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -53,22 +58,34 @@ public class QueryInoutDataReportCmd extends Cmd {
         queryStatisticsDto.setStoreId(storeId);
         JSONArray datas = new JSONArray();
         JSONObject data = null;
+
+        IotDataDto iotDataDto = new IotDataDto();
+        iotDataDto.setData(reqJson);
+        iotDataDto.setIotApiCode("listMachineInoutBmoImpl");
+       ResultVo resultVo = iotInnerServiceSMOImpl.postIotData(iotDataDto);
+        int carInCount = 0;
+        int carOutCount = 0;
+        int personInCount = 0;
+       if(resultVo.getCode() == ResultVo.CODE_OK){
+          JSONObject paramOut = (JSONObject) resultVo.getData();
+           carInCount = paramOut.getIntValue("carInCount");
+           carOutCount = paramOut.getIntValue("carOutCount");
+           personInCount = paramOut.getIntValue("personInCount");
+       }
         // todo 查询 进场车辆数
-        double carInCount = inoutStatisticsImpl.getCarInCount(queryStatisticsDto);
+
         data = new JSONObject();
         data.put("name","进场车辆数");
         data.put("value", carInCount);
         datas.add(data);
 
         // todo 查询 出场车辆数
-        double carOutCount = inoutStatisticsImpl.getCarOutCount(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","出场车辆数");
         data.put("value", carOutCount);
         datas.add(data);
 
         // todo 查询 进场人员数
-        double personInCount = inoutStatisticsImpl.getPersonInCount(queryStatisticsDto);
         data = new JSONObject();
         data.put("name","进场人员数");
         data.put("value", personInCount);

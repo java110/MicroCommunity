@@ -5,6 +5,7 @@ import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.core.log.LoggerFactory;
 import com.java110.report.dao.IReportInoutStatisticsServiceDao;
 import com.java110.report.dao.IReportOrderStatisticsServiceDao;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class ReportInoutStatisticsServiceDaoImpl extends BaseServiceDao implemen
 
         List<Map> infos = sqlSessionTemplate.selectList("reportInoutStatisticsServiceDaoImpl.getCarInCount", info);
 
-        if (infos == null || infos.size() < 1) {
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
 
