@@ -100,7 +100,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
         feeDto.setState(FeeDto.STATE_DOING);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             throw new IllegalArgumentException("未包含欠费费用");
         }
 
@@ -180,7 +180,7 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
         }
 
         JSONArray feeIds = reqJson.getJSONArray("feeIds");
-        if (feeIds == null || feeIds.size() < 1) {
+        if (ListUtil.isNull(feeIds)) {
             return true;
         }
         boolean hasIn = false;
