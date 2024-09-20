@@ -25,6 +25,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.security.acl.Owner;
 import java.util.List;
 
 /**
@@ -92,11 +93,11 @@ public class AuditAuthOwnerCmd extends Cmd {
 
         String memberId = "";
         // todo 如果是业主
-        if(OwnerDto.OWNER_TYPE_CD_OWNER.equals(ownerAppUserDtos.get(0).getOwnerTypeCd())){
+        if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(ownerAppUserDtos.get(0).getOwnerTypeCd())) {
             memberId = bindOwner(ownerAppUserDtos.get(0));
-        }else {
+        } else {
             //todo 如果是成员
-            memberId = bindOwnerMember(ownerAppUserDtos.get(0),userId);
+            memberId = bindOwnerMember(ownerAppUserDtos.get(0), userId);
         }
 
 
@@ -119,16 +120,17 @@ public class AuditAuthOwnerCmd extends Cmd {
 
     /**
      * 绑定成员
+     *
      * @param ownerAppUserDto
      * @return
      */
-    private String bindOwnerMember(OwnerAppUserDto ownerAppUserDto,String userId) {
+    private String bindOwnerMember(OwnerAppUserDto ownerAppUserDto, String userId) {
         // todo 查看 房屋是否有业主，如果没有添加业主
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setRoomId(ownerAppUserDto.getRoomId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if(ListUtil.isNull(ownerRoomRelDtos)){
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
             throw new CmdException("房屋未绑定业主");
         }
 
@@ -147,8 +149,14 @@ public class AuditAuthOwnerCmd extends Cmd {
         });
         List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
 
-        if(!ListUtil.isNull(ownerDtos)){
+        if (!ListUtil.isNull(ownerDtos)) {
             return ownerDtos.get(0).getMemberId();
+        }
+
+        String personRole = OwnerDto.PERSON_ROLE_OWNER;
+
+        if (OwnerDto.OWNER_TYPE_CD_MEMBER.equals(ownerAppUserDto.getOwnerTypeCd())) {
+            personRole = OwnerDto.PERSON_ROLE_MEMBER;
         }
 
         OwnerPo ownerPo = new OwnerPo();
@@ -164,6 +172,8 @@ public class AuditAuthOwnerCmd extends Cmd {
         ownerPo.setIdCard(ownerAppUserDto.getIdCard());
         ownerPo.setState(OwnerDto.STATE_FINISH);
         ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
+        ownerPo.setPersonType(OwnerDto.PERSON_TYPE_PERSON);
+        ownerPo.setPersonRole(personRole);
         ownerPo.setAddress("无");
         ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
 
@@ -172,6 +182,7 @@ public class AuditAuthOwnerCmd extends Cmd {
 
     /**
      * 绑定业主
+     *
      * @param ownerAppUserDto
      * @return
      */
@@ -182,13 +193,13 @@ public class AuditAuthOwnerCmd extends Cmd {
         ownerRoomRelDto.setRoomId(ownerAppUserDto.getRoomId());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if(ListUtil.isNull(ownerRoomRelDtos)){
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
             throw new CmdException("房屋未绑定业主");
         }
 
         OwnerPo ownerPo = new OwnerPo();
         ownerPo.setLink(ownerAppUserDto.getLink());
-       // ownerPo.setName(ownerAppUserDto.getAppUserName());
+        // ownerPo.setName(ownerAppUserDto.getAppUserName());
         ownerPo.setMemberId(ownerRoomRelDtos.get(0).getOwnerId());
         ownerPo.setOwnerId(ownerRoomRelDtos.get(0).getOwnerId());
         ownerV1InnerServiceSMOImpl.updateOwner(ownerPo);

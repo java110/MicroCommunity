@@ -281,11 +281,11 @@ public class GenerateCodeFactory {
     private static String PLATFORM_CODE = "0001";
 
     public static String nextId(String idLength) {
-        return nextId(idLength,true);
+        return nextId(idLength, true);
     }
 
     @SuppressWarnings("finally")
-    public static String nextId(String idLength,boolean hasRandom) {
+    public static String nextId(String idLength, boolean hasRandom) {
         LOCK.lock();
         try {
             if (lastCount == ONE_STEP) {
@@ -294,8 +294,8 @@ public class GenerateCodeFactory {
             count = lastCount++;
         } finally {
             LOCK.unlock();
-            String id = (hasRandom?getRandom():"") + String.format(idLength, count);
-            id = id.replace("-","");
+            String id = (hasRandom ? getRandom() : "") + String.format(idLength, count);
+            id = id.replace("-", "");
             return id;
         }
     }
@@ -346,7 +346,7 @@ public class GenerateCodeFactory {
      * @throws GenerateCodeException
      */
     public static String getGeneratorId(String prefix) throws GenerateCodeException {
-        return getGeneratorId(prefix,false);
+        return getGeneratorId(prefix, false);
     }
 
     /**
@@ -355,19 +355,20 @@ public class GenerateCodeFactory {
      * @return
      * @throws GenerateCodeException
      */
-    public static String getGeneratorId(String prefix,boolean longId) throws GenerateCodeException {
+    public static String getGeneratorId(String prefix, boolean longId) throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
             //2+14+4+6
             //7920230518235714886
-            if(longId) {
+            if (longId) {
                 return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_DEFAULT) + nextId("%06d");
-            }else {
+            } else {
                 return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H) + nextId("%04d");
             }
         }
         //调用服务
         return getCode(prefix);
     }
+
     /**
      * pgId生成
      *
@@ -376,7 +377,7 @@ public class GenerateCodeFactory {
      */
     public static String getDetailId(String prefix) throws GenerateCodeException {
         if (!MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.KEY_NEED_INVOKE_GENERATE_ID))) {
-            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_O) + nextId("%06d",false);
+            return prefix + DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_O) + nextId("%06d", false);
         }
         //调用服务
         return getCode(prefix);
@@ -1021,4 +1022,9 @@ public class GenerateCodeFactory {
         return uuid.toString().replaceAll("-", "");
     }
 
+    public static String getLink() {
+        String time = DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_H);
+        time = time.substring(2);
+        return time + nextId("%04d",false);
+    }
 }
