@@ -46,6 +46,7 @@ import java.nio.charset.Charset;
         "com.java110.intf.user",
         "com.java110.intf.fee",
         "com.java110.intf.dev",
+        "com.java110.intf.job",
         "com.java110.intf.community"})
 public class ReportServiceApplicationStart {
 
