@@ -20,12 +20,14 @@ import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.job.adapt.hcIot.http.ISendIot;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ImageUtils;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -233,6 +235,9 @@ public class OwnerDataToIotImpl implements IOwnerDataToIot {
         String faceUrl = ownerDto.getFaceUrl();
         if(StringUtil.isEmpty(faceUrl)){
             return faceUrl;
+        }
+        if(faceUrl.startsWith("http")) {
+           return ImageUtils.getBase64ByImgUrl(faceUrl);
         }
         FileDto fileDto = new FileDto();
         fileDto.setFileId(faceUrl);
