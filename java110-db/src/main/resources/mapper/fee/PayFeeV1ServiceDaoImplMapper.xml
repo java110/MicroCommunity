@@ -75,8 +75,8 @@
     <update id="updatePayFeeInfo" parameterType="Map">
         update pay_fee t
         <set>
-            <if test="newBId != null and newBId != ''">
-                t.b_id = #{newBId},
+            <if test="statusCd != null and statusCd != ''">
+                t.status_cd = #{statusCd},
             </if>
             <if test="amount !=null and amount != ''">
                 t.amount= #{amount},
