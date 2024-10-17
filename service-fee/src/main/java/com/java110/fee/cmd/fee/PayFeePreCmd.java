@@ -192,8 +192,8 @@ public class PayFeePreCmd extends Cmd {
         //todo 计算应收
         BigDecimal receivableAmount = new BigDecimal(feePriceAll.get("feePrice").toString());
         BigDecimal cycles = new BigDecimal(Double.parseDouble(reqJson.getString("cycles")));
-        double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(2, BigDecimal.ROUND_HALF_EVEN).doubleValue();
-
+        double tmpReceivableAmount = cycles.multiply(receivableAmount).setScale(4, BigDecimal.ROUND_HALF_EVEN).doubleValue();
+        tmpReceivableAmount = MoneyUtil.computePriceScale(tmpReceivableAmount, feeDto.getScale(), Integer.parseInt(feeDto.getDecimalPlace()));
 
         JSONObject paramOut = new JSONObject();
         paramOut.put("receivableAmount", tmpReceivableAmount);

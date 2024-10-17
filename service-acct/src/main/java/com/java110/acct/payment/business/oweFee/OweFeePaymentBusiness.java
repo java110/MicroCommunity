@@ -21,10 +21,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ListUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -125,6 +122,8 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
                 //todo  考虑 负数金额 可能用于红冲
                 if (tmpFeeDto.getFeeTotalPrice() != 0 && "Y".equals(tmpFeeDto.getPayOnline())) {
                     tmpFeeDtos.add(tmpFeeDto);
+                    //todo 处理小数点
+                    tmpFeeDto.setFeeTotalPrice(MoneyUtil.computePriceScale(tmpFeeDto.getFeeTotalPrice(), tmpFeeDto.getScale(), Integer.parseInt(tmpFeeDto.getDecimalPlace())));
                     feeTotalPrice = new BigDecimal(tmpFeeDto.getFeeTotalPrice());
                     tmpMoney = tmpMoney.add(feeTotalPrice);
                 }
