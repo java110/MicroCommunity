@@ -26,6 +26,9 @@
         left join t_dict td on ci.state = td.status_cd and td.table_columns='state' and td.table_name = 'car_inout'
         left join t_dict td1 on t.pay_type = td1.status_cd and td1.table_columns='pay_type' and td1.table_name = 'car_inout_payment'
         where 1 =1
+        <if test="carNum !=null and carNum != ''">
+            and ci.car_num= #{carNum}
+        </if>
         <if test="realCharge !=null and realCharge != ''">
             and t.real_charge= #{realCharge}
         </if>
@@ -111,6 +114,9 @@
         left join car_inout ci on t.inout_id = ci.inout_id and ci.status_cd = '0' and t.community_id = ci.community_id
 
         where 1 =1
+        <if test="carNum !=null and carNum != ''">
+            and ci.car_num= #{carNum}
+        </if>
         <if test="realCharge !=null and realCharge != ''">
             and t.real_charge= #{realCharge}
         </if>
