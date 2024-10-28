@@ -2369,11 +2369,12 @@
         <if test="createTime != null and createTime !=''">
             and r.create_time = #{createTime}
         </if>
-        group by r.staff_id,r.state
+        group by r.staff_id,u.name,r.state,u.score
     </select>
 
     <select id="queryRepairForStaff" parameterType="Map" resultType="Map">
-        SELECT r.staff_id staffId,u.name staffName,r.state,td.name stateName FROM r_repair_user r
+        SELECT r.staff_id staffId,u.name staffName,r.state,td.name stateName
+        FROM r_repair_user r
         inner join u_user u on u.user_id = r.staff_id and u.status_cd = '0'
         left join t_dict td on r.state = td.status_cd and td.table_name = 'r_repair_user' and td.table_columns = 'state'
         WHERE r.state!='10005' AND r.state!='10009' AND r.state!='11000' AND
@@ -2400,7 +2401,7 @@
         <if test="finishEndTime != null and finishEndTime !=''">
             and r.end_time &lt;= #{finishEndTime}
         </if>
-        group by r.staff_id
+        group by r.staff_id,u.name,r.state,td.name
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>

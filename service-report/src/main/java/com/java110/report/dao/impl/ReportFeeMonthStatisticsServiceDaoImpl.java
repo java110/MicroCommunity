@@ -53,9 +53,9 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public List<Map> getReportFeeMonthStatisticsInfo(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getReportFeeMonthStatisticsInfo", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
 
@@ -90,21 +90,21 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
 
     @Override
     public double getReceivedAmountByMonth(Map info) {
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getReceivedAmountByMonth", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getReceivedAmountByMonth", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Double.parseDouble(businessReportFeeMonthStatisticsInfos.get(0).get("total").toString());
+        return Double.parseDouble(infos.get(0).get("total").toString());
     }
 
     @Override
     public List<Map> queryRoomAndParkingSpace(Map info) {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryRoomAndParkingSpace", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryRoomAndParkingSpace", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     /**
@@ -132,54 +132,54 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public int queryReportFeeMonthStatisticssCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeMonthStatisticssCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeMonthStatisticssCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public int queryReportFeeSummaryCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryReportFeeSummary(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummary", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummary", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public int queryReportFeeSummaryDetailCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryDetailCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryDetailCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryReportFeeSummaryDetail(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryDetail", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryDetail", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
 
@@ -188,132 +188,132 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public Map queryReportFeeSummaryMajor(Map info) {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryMajor", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFeeSummaryMajor", info);
 
-        return businessReportFeeMonthStatisticsInfos.get(0);
+        return infos.get(0);
     }
 
     @Override
     public int queryReportFloorUnitFeeSummaryCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryReportFloorUnitFeeSummary(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummary", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummary", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public int queryReportFloorUnitFeeSummaryDetailCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryDetailCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryDetailCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryReportFloorUnitFeeSummaryDetail(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryDetail", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryDetail", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public Map queryReportFloorUnitFeeSummaryMajor(Map info) {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryMajor", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryReportFloorUnitFeeSummaryMajor", info);
 
-        return businessReportFeeMonthStatisticsInfos.get(0);
+        return infos.get(0);
     }
 
     @Override
     public int queryFeeBreakdownCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryFeeBreakdown(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdown", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdown", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public int queryFeeBreakdownDetailCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownDetailCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownDetailCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryFeeBreakdownDetail(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownDetail", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownDetail", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public Map queryFeeBreakdownMajor(Map info) {
         logger.debug("查询费用queryFeeBreakdownMajor 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownMajor", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeBreakdownMajor", info);
 
-        return businessReportFeeMonthStatisticsInfos.get(0);
+        return infos.get(0);
     }
 
     @Override
     public int queryFeeDetailCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeDetailCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeDetailCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryFeeDetail(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeDetail", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeDetail", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
 
@@ -342,108 +342,108 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public Map queryOweFeeDetailMajor(Map info) {
         logger.debug("查询费用queryOweFeeDetailMajor 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetailMajor", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetailMajor", info);
 
-        return businessReportFeeMonthStatisticsInfos.get(0);
+        return infos.get(0);
     }
 
     @Override
     public int queryHuaningOweFeeCount(Map info) {
         logger.debug("查询queryHuaningOweFeeCount数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryHuaningOweFee(Map info) {
         logger.debug("查询queryHuaningOweFee 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFee", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFee", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public int queryHuaningPayFeeCount(Map info) {
         logger.debug("查询queryHuaningPayFeeCount数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public int queryHuaningOweFeeCounts(Map info) {
         logger.debug("查询queryHuaningOweFeeCounts数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCounts", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeCounts", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryHuaningPayFee(Map info) {
         logger.debug("查询queryHuaningPayFee 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public int queryHuaningPayFeeCounts(Map info) {
         logger.debug("查询queryHuaningPayFeeCounts数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCounts", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeCounts", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public int queryHuaningPayFeeTwoCount(Map info) {
         logger.debug("查询queryHuaningPayFeeTwoCount数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwoCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwoCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryHuaningPayFeeTwo(Map info) {
         logger.debug("查询queryHuaningPayFeeTwo 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwo", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public int queryHuaningOweFeeDetailCount(Map info) {
         logger.debug("查询queryHuaningOweFeeDetailCount数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetailCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetailCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
@@ -481,30 +481,30 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public List<Map> queryFeeAccountDetailSum(Map info) {
         logger.debug("查询账户抵扣金额大计入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeAccountDetailSum", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFeeAccountDetailSum", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public List<Map> queryAllPayFeeDetail(Map info) throws DAOException {
         logger.debug("查询费用总数月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllPayFeeDetail", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllPayFeeDetail", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public int queryDeadlineFeeCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryDeadlineFeeCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryDeadlineFeeCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
@@ -520,48 +520,48 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public List<Map> queryPayFeeDetailDiscount(Map info) {
         logger.debug("查询优惠金额 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailDiscount", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailDiscount", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public int queryPrePaymentNewCount(Map info) {
         logger.debug("查询费用月统计数据 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPrePaymentNewCount", info);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPrePaymentNewCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportFeeMonthStatisticsInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryPrePayment(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPrePayment", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPrePayment", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public List<Map> queryPrePaymentCount(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPrePaymentCount", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPrePaymentCount", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public List<Map> queryDeadlinePaymentCount(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryDeadlinePaymentCount", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryDeadlinePaymentCount", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
 
@@ -569,39 +569,39 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     public List<Map> queryOwePaymentCount(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryOwePaymentCount", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryOwePaymentCount", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public List<Map> queryFinishOweFee(Map info) throws DAOException {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFinishOweFee", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryFinishOweFee", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public List<Map> queryAllPaymentCount(Map info) {
         logger.debug("查询费用月统计信息 入参 info : {}", info);
 
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllPaymentCount", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllPaymentCount", info);
 
-        return businessReportFeeMonthStatisticsInfos;
+        return infos;
     }
 
     @Override
     public List<Map> queryAllFeeDetail(Map info) {
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllFeeDetail", info);
-        return businessReportFeeMonthStatisticsInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryAllFeeDetail", info);
+        return infos;
     }
 
     @Override
     public List<Map> queryPayFeeDetailSum(Map info) {
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailSum", info);
-        return businessReportFeeMonthStatisticsInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryPayFeeDetailSum", info);
+        return infos;
     }
 
     /**
@@ -623,44 +623,44 @@ public class ReportFeeMonthStatisticsServiceDaoImpl extends BaseServiceDao imple
     @Override
     public List<Map> getRepairUserInfo(Map info) {
         logger.debug("查询报修配置信息 入参 info : {}", info);
-        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getRepairInfo", info);
-        return businessRepairUserInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getRepairInfo", info);
+        return infos;
     }
 
     @Override
     public List<Map> getRepairWithOutPage(Map info) {
         logger.debug("查询报修配置信息 入参 info : {}", info);
-        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getRepairWithOutPage", info);
-        return businessRepairUserInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getRepairWithOutPage", info);
+        return infos;
     }
 
     @Override
     public List<Map> getRepairStaff(Map info) {
         logger.debug("查询报修配置信息 入参 info : {}", info);
-        List<Map> businessRepairUserInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryRepairForStaff", info);
-        return businessRepairUserInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.queryRepairForStaff", info);
+        return infos;
     }
 
     @Override
     public Map getReceivableInformation(Map beanCovertMap) {
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getReceivableInformation", beanCovertMap);
-        if (businessReportFeeMonthStatisticsInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getReceivableInformation", beanCovertMap);
+        if (infos.size() < 1) {
             return null;
         }
 
-        return businessReportFeeMonthStatisticsInfos.get(0);
+        return infos.get(0);
     }
 
     @Override
     public List<Map> getFloorReceivableInformation(Map beanCovertMap) {
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getFloorReceivableInformation", beanCovertMap);
-        return businessReportFeeMonthStatisticsInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getFloorReceivableInformation", beanCovertMap);
+        return infos;
     }
 
     @Override
     public List<Map> getFeeConfigReceivableInformation(Map beanCovertMap) {
-        List<Map> businessReportFeeMonthStatisticsInfos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getFeeConfigReceivableInformation", beanCovertMap);
-        return businessReportFeeMonthStatisticsInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportFeeMonthStatisticsServiceDaoImpl.getFeeConfigReceivableInformation", beanCovertMap);
+        return infos;
     }
 
     @Override
