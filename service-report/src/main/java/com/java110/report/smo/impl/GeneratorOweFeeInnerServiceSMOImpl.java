@@ -139,26 +139,6 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         reportFeeDto.put("communityId", communityId);
 
         reportOweFeeServiceDaoImpl.deleteReportOweFeeInfo(reportFeeDto);
-//        List<Map> feeDtos = reportOweFeeServiceDaoImpl.queryInvalidOweFee(reportFeeDto);
-//
-//        List<String> feeIds = new ArrayList<>();
-//        for (Map feeDto : feeDtos) {
-//            if (!feeDto.containsKey("feeId") || StringUtil.isNullOrNone(feeDto.get("feeId"))) {
-//                continue;
-//            }
-//
-//            feeIds.add(feeDto.get("feeId").toString());
-//
-//            if (feeIds.size() >= 50) {
-//                reportFeeDto.put("feeIds", feeIds);
-//                reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
-//                feeIds = new ArrayList<>();
-//            }
-//        }
-//        reportFeeDto.put("feeIds", feeIds);
-//        if (feeIds.size() > 0) {
-//            reportOweFeeServiceDaoImpl.deleteInvalidFee(reportFeeDto);
-//        }
     }
 
 
@@ -177,7 +157,7 @@ public class GeneratorOweFeeInnerServiceSMOImpl implements IGeneratorOweFeeInner
         List<ReportFeeDto> feeDtos = reportFeeServiceDaoImpl.getFees(feeDto);
 
         //没有关联费用
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             return;
         }
         for (ReportFeeDto tmpFeeDto : feeDtos) {
