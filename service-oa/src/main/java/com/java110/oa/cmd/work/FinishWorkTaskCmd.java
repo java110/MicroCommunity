@@ -175,6 +175,10 @@ public class FinishWorkTaskCmd extends Cmd {
             preStaffName = workEventDtos.get(0).getStaffName();
 
         }
+        WorkTaskItemDto workTaskItemDto = new WorkTaskItemDto();
+        workTaskItemDto.setItemId(reqJson.getString("itemId"));
+        workTaskItemDto.setCommunityId(workTaskDto.getCommunityId());
+        List<WorkTaskItemDto> workTaskItemDtos = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItems(workTaskItemDto);
 
         //todo 保存事件
         WorkEventPo workEventPo = new WorkEventPo();
@@ -189,10 +193,14 @@ public class FinishWorkTaskCmd extends Cmd {
         workEventPo.setStoreId(workTaskDto.getStoreId());
         workEventPo.setTaskId(workTaskDto.getTaskId());
         workEventPo.setItemId(reqJson.getString("itemId"));
+        workEventPo.setContentId("-1");
+        if (!ListUtil.isNull(workTaskItemDtos)) {
+            workEventPo.setContentId(workTaskItemDtos.get(0).getContentId());
+        }
         workEventV1InnerServiceSMOImpl.saveWorkEvent(workEventPo);
 
         // todo 查询 任务明细是否处理完成
-        WorkTaskItemDto workTaskItemDto = new WorkTaskItemDto();
+        workTaskItemDto = new WorkTaskItemDto();
         workTaskItemDto.setTaskId(workTaskDto.getTaskId());
         workTaskItemDto.setCommunityId(workTaskDto.getCommunityId());
         workTaskItemDto.setState(WorkTaskDto.STATE_WAIT);
@@ -217,7 +225,7 @@ public class FinishWorkTaskCmd extends Cmd {
         WorkTaskDto tmpWorkTaskDto = new WorkTaskDto();
         tmpWorkTaskDto.setWorkId(workTaskDto.getWorkId());
         tmpWorkTaskDto.setStoreId(workTaskDto.getStoreId());
-        tmpWorkTaskDto.setStates(new String[]{WorkTaskDto.STATE_WAIT,WorkTaskDto.STATE_DOING});
+        tmpWorkTaskDto.setStates(new String[]{WorkTaskDto.STATE_WAIT, WorkTaskDto.STATE_DOING});
         int waitCount = workTaskV1InnerServiceSMOImpl.queryWorkTasksCount(tmpWorkTaskDto);
         WorkPoolPo workPoolPo = new WorkPoolPo();
         workPoolPo.setWorkId(workTaskDto.getWorkId());
@@ -269,6 +277,7 @@ public class FinishWorkTaskCmd extends Cmd {
         workEventPo.setStoreId(workTaskDto.getStoreId());
         workEventPo.setTaskId(workTaskDto.getTaskId());
         workEventPo.setItemId("-1");
+        workEventPo.setContentId("-1");
         workEventV1InnerServiceSMOImpl.saveWorkEvent(workEventPo);
     }
 }

@@ -8,9 +8,9 @@
     <!-- 保存工作单内容信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkPoolContentInfo" parameterType="Map">
         insert into work_pool_content(
-        content_id,community_id,store_id,work_id,content
+        content_id,community_id,store_id,work_id,content,seq_num
         ) values (
-        #{contentId},#{communityId},#{storeId},#{workId},#{content}
+        #{contentId},#{communityId},#{storeId},#{workId},#{content},#{seqNum}
         )
     </insert>
 
@@ -18,7 +18,7 @@
     <!-- 查询工作单内容信息 add by wuxw 2018-07-03 -->
     <select id="getWorkPoolContentInfo" parameterType="Map" resultType="Map">
         select t.content_id,t.content_id contentId,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.content
+        communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.content,t.seq_num seqNum
         from work_pool_content t
         where 1 =1
         <if test="contentId !=null and contentId != ''">
@@ -39,7 +39,7 @@
         <if test="content !=null and content != ''">
             and t.content= #{content}
         </if>
-        order by t.create_time desc
+        order by t.seq_num
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -57,7 +57,9 @@
         <if test="content !=null and content != ''">
             , t.content= #{content}
         </if>
-
+        <if test="seqNum !=null and seqNum != ''">
+            , t.seq_num= #{seqNum}
+        </if>
         where 1=1
         <if test="contentId !=null and contentId != ''">
             and t.content_id= #{contentId}

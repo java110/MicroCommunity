@@ -350,6 +350,7 @@ public class UpdateWorkPoolCmd extends Cmd {
             workPoolContentPo.setWorkId(workPoolPo.getWorkId());
             workPoolContentPo.setCommunityId(reqJson.getString("communityId"));
             workPoolContentPo.setStoreId(reqJson.getString("storeId"));
+            workPoolContentPo.setSeqNum(cIndex + 1);
             workPoolContentV1InnerServiceSMOImpl.saveWorkPoolContent(workPoolContentPo);
         }
     }

@@ -24,6 +24,8 @@ public class WorkPoolContentDto extends PageDto implements Serializable {
     private String workId;
     private String content;
 
+    private int seqNum;
+
 
     private Date createTime;
 
@@ -87,5 +89,11 @@ public class WorkPoolContentDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
+    public int getSeqNum() {
+        return seqNum;
+    }
 
+    public void setSeqNum(int seqNum) {
+        this.seqNum = seqNum;
+    }
 }

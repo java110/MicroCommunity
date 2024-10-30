@@ -35,6 +35,7 @@ public class WorkPoolContentPo implements Serializable {
     private String workId;
     private String content;
 
+    private int seqNum;
 
 
 
@@ -86,5 +87,11 @@ public class WorkPoolContentPo implements Serializable {
         this.content = content;
     }
 
+    public int getSeqNum() {
+        return seqNum;
+    }
 
+    public void setSeqNum(int seqNum) {
+        this.seqNum = seqNum;
+    }
 }

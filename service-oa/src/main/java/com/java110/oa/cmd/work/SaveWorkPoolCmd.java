@@ -330,6 +330,7 @@ public class SaveWorkPoolCmd extends Cmd {
             workPoolContentPo.setWorkId(workPoolPo.getWorkId());
             workPoolContentPo.setCommunityId(reqJson.getString("communityId"));
             workPoolContentPo.setStoreId(reqJson.getString("storeId"));
+            workPoolContentPo.setSeqNum(cIndex + 1);
             content.put("contentId", workPoolContentPo.getContentId());
             workPoolContentV1InnerServiceSMOImpl.saveWorkPoolContent(workPoolContentPo);
         }
