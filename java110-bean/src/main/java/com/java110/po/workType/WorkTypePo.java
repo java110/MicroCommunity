@@ -30,6 +30,8 @@ public class WorkTypePo implements Serializable {
 
     private String typeName;
     private String remark;
+
+    private String deduction;
     private String statusCd = "0";
     private String communityId;
     private String storeId;
@@ -92,5 +94,11 @@ public class WorkTypePo implements Serializable {
         this.wtId = wtId;
     }
 
+    public String getDeduction() {
+        return deduction;
+    }
 
+    public void setDeduction(String deduction) {
+        this.deduction = deduction;
+    }
 }

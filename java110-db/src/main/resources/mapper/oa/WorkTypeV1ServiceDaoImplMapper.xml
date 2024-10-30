@@ -5,14 +5,14 @@
 
     <!-- 保存工作类型信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkTypeInfo" parameterType="Map">
-        insert into work_type(type_name, remark, community_id, store_id, sms_way, wt_id)
-        values (#{typeName}, #{remark}, #{communityId}, #{storeId}, #{smsWay}, #{wtId})
+        insert into work_type(type_name,deduction, remark, community_id, store_id, sms_way, wt_id)
+        values (#{typeName},#{deduction}, #{remark}, #{communityId}, #{storeId}, #{smsWay}, #{wtId})
     </insert>
 
     <!-- 查询工作类型信息 add by wuxw 2018-07-03 -->
     <select id="getWorkTypeInfo" parameterType="Map" resultType="Map">
         select t.type_name,t.type_name typeName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
-        communityId,t.store_id,t.store_id storeId,t.sms_way smsWay,t.wt_id,t.wt_id wtId,t.create_time createTime
+        communityId,t.store_id,t.store_id storeId,t.sms_way smsWay,t.wt_id,t.wt_id wtId,t.create_time createTime,t.deduction
         from work_type t
         where 1 =1
         <if test="typeName !=null and typeName != ''">
@@ -57,6 +57,10 @@
         <if test="smsWay !=null and smsWay != ''">
             , t.sms_way= #{smsWay}
         </if>
+        <if test="deduction !=null and deduction != ''">
+            , t.deduction= #{deduction}
+        </if>
+
         where 1=1
         <if test="wtId !=null and wtId != ''">
             and t.wt_id= #{wtId}

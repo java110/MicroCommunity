@@ -22,6 +22,7 @@ public class WorkTypeDto extends PageDto implements Serializable {
     private String remark;
     private String communityId;
     private String storeId;
+    private String deduction;
     private String smsWay;
     private String wtId;
 
@@ -94,5 +95,13 @@ public class WorkTypeDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getDeduction() {
+        return deduction;
+    }
+
+    public void setDeduction(String deduction) {
+        this.deduction = deduction;
     }
 }
