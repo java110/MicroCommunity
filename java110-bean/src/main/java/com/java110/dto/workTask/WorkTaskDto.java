@@ -23,6 +23,8 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
     private String staffName;
     private String startTime;
     private String state;
+
+    private String[] states;
     private String stateName;
     private String endTime;
 
@@ -225,5 +227,13 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
     public void setOrgStaffName(String orgStaffName) {
         this.orgStaffName = orgStaffName;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }

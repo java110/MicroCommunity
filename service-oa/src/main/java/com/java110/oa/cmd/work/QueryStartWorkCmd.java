@@ -107,6 +107,7 @@ public class QueryStartWorkCmd extends Cmd {
         }
 
         workPoolDtos.get(0).setContent(workPoolContentDtos.get(0).getContent());
+        workPoolDtos.get(0).setContents(workPoolContentDtos);
 
         WorkPoolFileDto workPoolFileDto = new WorkPoolFileDto();
         workPoolFileDto.setWorkId(workPoolDtos.get(0).getWorkId());

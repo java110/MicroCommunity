@@ -40,6 +40,8 @@ public class WorkEventPo implements Serializable {
     private String workId;
     private String staffId;
 
+    private String itemId;
+
     public String getEventId() {
         return eventId;
     }
@@ -128,5 +130,11 @@ public class WorkEventPo implements Serializable {
         this.staffId = staffId;
     }
 
+    public String getItemId() {
+        return itemId;
+    }
 
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
 }

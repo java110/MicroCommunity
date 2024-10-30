@@ -40,6 +40,9 @@ public class WorkEventDto extends PageDto implements Serializable {
     private String orderByDesc;
 
 
+    private String itemId;
+
+
     public String getEventId() {
         return eventId;
     }
@@ -183,5 +186,13 @@ public class WorkEventDto extends PageDto implements Serializable {
 
     public void setOrderByDesc(String orderByDesc) {
         this.orderByDesc = orderByDesc;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 }

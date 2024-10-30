@@ -116,7 +116,7 @@ public class ListWorkPoolCmd extends Cmd {
             return;
         }
 
-        if (workPoolDtos.size() != 1) {
+        if (workPoolDtos.size() > 1) {
             return;
         }
 
@@ -131,6 +131,8 @@ public class ListWorkPoolCmd extends Cmd {
 
         workPoolDtos.get(0).setContent(workPoolContentDtos.get(0).getContent());
 
+        workPoolDtos.get(0).setContents(workPoolContentDtos);
+
         WorkPoolFileDto workPoolFileDto = new WorkPoolFileDto();
         workPoolFileDto.setWorkId(workPoolDtos.get(0).getWorkId());
         workPoolFileDto.setFileType(WorkPoolFileDto.FILE_TYPE_START);
@@ -142,7 +144,7 @@ public class ListWorkPoolCmd extends Cmd {
 
         String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
 
-        workPoolDtos.get(0).setPathUrl(imgUrl +workPoolFileDtos.get(0).getPathUrl());
+        workPoolDtos.get(0).setPathUrl(imgUrl + workPoolFileDtos.get(0).getPathUrl());
     }
 
     private void queryTaskAndCopy(List<WorkPoolDto> workPoolDtos) {

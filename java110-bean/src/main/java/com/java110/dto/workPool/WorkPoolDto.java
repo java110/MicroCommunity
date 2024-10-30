@@ -1,9 +1,11 @@
 package com.java110.dto.workPool;
 
 import com.java110.dto.PageDto;
+import com.java110.dto.workPoolContent.WorkPoolContentDto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -78,6 +80,8 @@ public class WorkPoolDto extends PageDto implements Serializable {
     private String periodDay;
 
     private String periodWorkday;
+
+    private List<WorkPoolContentDto> contents;
 
     public String getWorkCycle() {
         return workCycle;
@@ -351,4 +355,11 @@ public class WorkPoolDto extends PageDto implements Serializable {
         this.periodWorkday = periodWorkday;
     }
 
+    public List<WorkPoolContentDto> getContents() {
+        return contents;
+    }
+
+    public void setContents(List<WorkPoolContentDto> contents) {
+        this.contents = contents;
+    }
 }

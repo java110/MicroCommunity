@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class WorkPoolContentDto extends PageDto implements Serializable {
 
+    public static final String STATE_WAIT = "W";
+
+    public static final String STATE_COMPLETE = "C";
     private String contentId;
     private String communityId;
     private String storeId;
@@ -83,4 +86,6 @@ public class WorkPoolContentDto extends PageDto implements Serializable {
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
+
+
 }

@@ -12,15 +12,14 @@ import com.java110.dto.workEvent.WorkEventDto;
 import com.java110.dto.workPool.WorkPoolDto;
 import com.java110.dto.workPoolFile.WorkPoolFileDto;
 import com.java110.dto.workTask.WorkTaskDto;
-import com.java110.intf.oa.IWorkEventV1InnerServiceSMO;
-import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
-import com.java110.intf.oa.IWorkPoolV1InnerServiceSMO;
-import com.java110.intf.oa.IWorkTaskV1InnerServiceSMO;
+import com.java110.dto.workTaskItem.WorkTaskItemDto;
+import com.java110.intf.oa.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.workEvent.WorkEventPo;
 import com.java110.po.workPool.WorkPoolPo;
 import com.java110.po.workPoolFile.WorkPoolFilePo;
 import com.java110.po.workTask.WorkTaskPo;
+import com.java110.po.workTaskItem.WorkTaskItemPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -39,6 +38,9 @@ public class FinishWorkTaskCmd extends Cmd {
     private IWorkTaskV1InnerServiceSMO workTaskV1InnerServiceSMOImpl;
 
     @Autowired
+    private IWorkTaskItemV1InnerServiceSMO workTaskItemV1InnerServiceSMOImpl;
+
+    @Autowired
     private IWorkEventV1InnerServiceSMO workEventV1InnerServiceSMOImpl;
 
     @Autowired
@@ -54,6 +56,7 @@ public class FinishWorkTaskCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         Assert.hasKeyAndValue(reqJson, "taskId", "未包含任务");
+        Assert.hasKeyAndValue(reqJson, "itemId", "未包含内容");
         Assert.hasKeyAndValue(reqJson, "auditCode", "未包含状态");
         Assert.hasKeyAndValue(reqJson, "auditMessage", "未包含说明");
 
@@ -108,6 +111,7 @@ public class FinishWorkTaskCmd extends Cmd {
         workPoolFilePo.setTaskId(workTaskDtos.get(0).getTaskId());
         workPoolFilePo.setPathUrl(reqJson.getString("pathUrl"));
         workPoolFilePo.setStoreId(workTaskDtos.get(0).getStoreId());
+        workPoolFilePo.setItemId(reqJson.getString("itemId"));
         workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
 
     }
@@ -124,20 +128,30 @@ public class FinishWorkTaskCmd extends Cmd {
 
         String taskTimeout = "N";
         //todo 工单已经超时
-        if(endTime.before(DateUtil.getCurrentDate())){
+        if (endTime.before(DateUtil.getCurrentDate())) {
             taskTimeout = "Y";
         }
+
+        String orderState = WorkPoolDto.STATE_DOING;
+
 
         //todo 完成任务
 
         WorkTaskPo workTaskPo = new WorkTaskPo();
-        workTaskPo.setState(WorkPoolDto.STATE_COMPLETE);
+        workTaskPo.setState(orderState);
         workTaskPo.setTaskId(workTaskDto.getTaskId());
         workTaskPo.setStoreId(workTaskDto.getStoreId());
-        workTaskPo.setFinishTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-        workTaskPo.setTaskTimeout(taskTimeout);
+//        workTaskPo.setFinishTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+//        workTaskPo.setTaskTimeout(taskTimeout);
         workTaskV1InnerServiceSMOImpl.updateWorkTask(workTaskPo);
 
+        WorkTaskItemPo workTaskItemPo = new WorkTaskItemPo();
+        workTaskItemPo.setItemId(reqJson.getString("itemId"));
+        workTaskItemPo.setState(WorkTaskDto.STATE_COMPLETE);
+        workTaskItemPo.setTaskId(workTaskDto.getTaskId());
+        workTaskItemPo.setFinishTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+
+        workTaskItemV1InnerServiceSMOImpl.updateWorkTaskItem(workTaskItemPo);
 
         //todo 查询 工作单
         WorkPoolDto workPoolDto = new WorkPoolDto();
@@ -174,14 +188,36 @@ public class FinishWorkTaskCmd extends Cmd {
         workEventPo.setStaffName(workTaskDto.getStaffName());
         workEventPo.setStoreId(workTaskDto.getStoreId());
         workEventPo.setTaskId(workTaskDto.getTaskId());
+        workEventPo.setItemId(reqJson.getString("itemId"));
         workEventV1InnerServiceSMOImpl.saveWorkEvent(workEventPo);
+
+        // todo 查询 任务明细是否处理完成
+        WorkTaskItemDto workTaskItemDto = new WorkTaskItemDto();
+        workTaskItemDto.setTaskId(workTaskDto.getTaskId());
+        workTaskItemDto.setCommunityId(workTaskDto.getCommunityId());
+        workTaskItemDto.setState(WorkTaskDto.STATE_WAIT);
+        int count = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItemsCount(workTaskItemDto);
+        if (count > 0) {
+            WorkPoolPo workPoolPo = new WorkPoolPo();
+            workPoolPo.setWorkId(workTaskDto.getWorkId());
+            workPoolPo.setState(WorkPoolDto.STATE_DOING);
+            workPoolV1InnerServiceSMOImpl.updateWorkPool(workPoolPo);
+            return;
+        }
+
+        workTaskPo = new WorkTaskPo();
+        workTaskPo.setTaskId(workTaskDto.getTaskId());
+        workTaskPo.setState(WorkTaskDto.STATE_COMPLETE);
+        workTaskPo.setFinishTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        workTaskPo.setTaskTimeout(taskTimeout);
+        workTaskV1InnerServiceSMOImpl.updateWorkTask(workTaskPo);
 
         //todo 查询 工单任务
 
         WorkTaskDto tmpWorkTaskDto = new WorkTaskDto();
         tmpWorkTaskDto.setWorkId(workTaskDto.getWorkId());
         tmpWorkTaskDto.setStoreId(workTaskDto.getStoreId());
-        tmpWorkTaskDto.setState(WorkTaskDto.STATE_WAIT);
+        tmpWorkTaskDto.setStates(new String[]{WorkTaskDto.STATE_WAIT,WorkTaskDto.STATE_DOING});
         int waitCount = workTaskV1InnerServiceSMOImpl.queryWorkTasksCount(tmpWorkTaskDto);
         WorkPoolPo workPoolPo = new WorkPoolPo();
         workPoolPo.setWorkId(workTaskDto.getWorkId());
@@ -232,6 +268,7 @@ public class FinishWorkTaskCmd extends Cmd {
         workEventPo.setStaffName(workTaskDto.getStaffName());
         workEventPo.setStoreId(workTaskDto.getStoreId());
         workEventPo.setTaskId(workTaskDto.getTaskId());
+        workEventPo.setItemId("-1");
         workEventV1InnerServiceSMOImpl.saveWorkEvent(workEventPo);
     }
 }

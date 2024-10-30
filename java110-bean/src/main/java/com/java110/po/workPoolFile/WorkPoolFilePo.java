@@ -38,6 +38,8 @@ public class WorkPoolFilePo implements Serializable {
     private String taskId;
     private String fileType;
 
+    private String itemId;
+
 
     public String getPathUrl() {
         return pathUrl;
@@ -101,5 +103,13 @@ public class WorkPoolFilePo implements Serializable {
 
     public void setFileType(String fileType) {
         this.fileType = fileType;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 }

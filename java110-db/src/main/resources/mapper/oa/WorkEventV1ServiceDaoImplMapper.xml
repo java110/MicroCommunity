@@ -8,9 +8,9 @@
     <!-- 保存工作单事件信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkEventInfo" parameterType="Map">
         insert into work_event(
-        event_id,pre_staff_name,pre_staff_id,staff_name,remark,community_id,store_id,task_id,work_id,staff_id
+        event_id,pre_staff_name,pre_staff_id,staff_name,remark,community_id,store_id,task_id,work_id,staff_id,item_id
         ) values (
-        #{eventId},#{preStaffName},#{preStaffId},#{staffName},#{remark},#{communityId},#{storeId},#{taskId},#{workId},#{staffId}
+        #{eventId},#{preStaffName},#{preStaffId},#{staffName},#{remark},#{communityId},#{storeId},#{taskId},#{workId},#{staffId},#{itemId}
         )
     </insert>
 
@@ -21,7 +21,8 @@
         preStaffName,t.pre_staff_id,t.pre_staff_id preStaffId,t.staff_name,t.staff_name
         staffName,t.remark,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
         communityId,t.store_id,t.store_id storeId,t.task_id,t.task_id taskId,t.work_id,t.work_id
-        workId,t.staff_id,t.staff_id staffId,t.create_time createTime,wt.start_time startTime,wt.end_time endTime
+        workId,t.staff_id,t.staff_id staffId,t.create_time createTime,wt.start_time startTime,wt.end_time endTime,
+        t.item_id itemId
         from work_event t
         left join work_task wt on t.task_id = wt.task_id
         where 1 =1
@@ -60,6 +61,9 @@
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
         </if>
         <if test="queryStartTime !=null and queryStartTime != ''">
             and t.create_time &gt; #{queryStartTime}
@@ -116,6 +120,9 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
 
     </update>
 
@@ -159,6 +166,9 @@
         </if>
         <if test="staffId !=null and staffId != ''">
             and t.staff_id= #{staffId}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
         </if>
         <if test="queryStartTime !=null and queryStartTime != ''">
             and t.create_time &gt; #{queryStartTime}

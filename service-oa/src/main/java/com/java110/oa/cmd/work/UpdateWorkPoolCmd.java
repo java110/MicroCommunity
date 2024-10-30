@@ -28,6 +28,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.dto.workCopy.WorkCopyDto;
 import com.java110.dto.workCycle.WorkCycleDto;
 import com.java110.dto.workPool.WorkPoolDto;
+import com.java110.dto.workPoolContent.WorkPoolContentDto;
 import com.java110.dto.workPoolFile.WorkPoolFileDto;
 import com.java110.dto.workTask.WorkTaskDto;
 import com.java110.intf.oa.*;
@@ -113,6 +114,16 @@ public class UpdateWorkPoolCmd extends Cmd {
         JSONArray staffs = reqJson.getJSONArray("staffs");
         if (staffs == null || staffs.isEmpty()) {
             throw new CmdException("未包含处理人");
+        }
+
+        if (!reqJson.containsKey("contents")) {
+            throw new CmdException("未包含工作单内容");
+        }
+
+        JSONArray contents = reqJson.getJSONArray("contents");
+
+        if (ListUtil.isNull(contents)) {
+            throw new CmdException("内容为空");
         }
 
         if (WorkPoolDto.WORK_CYCLE_ONE.equals(reqJson.getString("workCycle"))) {
@@ -329,13 +340,17 @@ public class UpdateWorkPoolCmd extends Cmd {
         workPoolContentPo.setWorkId(workPoolPo.getWorkId());
         workPoolContentPo.setStoreId(workPoolPo.getStoreId());
         workPoolContentV1InnerServiceSMOImpl.deleteWorkPoolContent(workPoolContentPo);
-
-        workPoolContentPo = new WorkPoolContentPo();
-        workPoolContentPo.setContentId(GenerateCodeFactory.getGeneratorId("11"));
-        workPoolContentPo.setContent(reqJson.getString("content"));
-        workPoolContentPo.setWorkId(workPoolPo.getWorkId());
-        workPoolContentPo.setCommunityId(reqJson.getString("communityId"));
-        workPoolContentPo.setStoreId(reqJson.getString("storeId"));
-        workPoolContentV1InnerServiceSMOImpl.saveWorkPoolContent(workPoolContentPo);
+        JSONArray contents = reqJson.getJSONArray("contents");
+        JSONObject content = null;
+        for(int cIndex = 0;cIndex < contents.size();cIndex ++) {
+            content = contents.getJSONObject(cIndex);
+            workPoolContentPo = new WorkPoolContentPo();
+            workPoolContentPo.setContentId(GenerateCodeFactory.getGeneratorId("11"));
+            workPoolContentPo.setContent(content.getString("content"));
+            workPoolContentPo.setWorkId(workPoolPo.getWorkId());
+            workPoolContentPo.setCommunityId(reqJson.getString("communityId"));
+            workPoolContentPo.setStoreId(reqJson.getString("storeId"));
+            workPoolContentV1InnerServiceSMOImpl.saveWorkPoolContent(workPoolContentPo);
+        }
     }
 }

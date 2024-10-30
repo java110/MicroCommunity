@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="workTaskItemV1ServiceDaoImpl">
+
+
+    <!-- 保存工作任务明细信息 add by wuxw 2018-07-03 -->
+    <insert id="saveWorkTaskItemInfo" parameterType="Map">
+        insert into work_task_item(
+        deduction_person_id,finish_time,deduction_person_name,deduction_money,content_id,store_id,work_id,deduction_reason,item_id,state,community_id,task_id
+        ) values (
+        #{deductionPersonId},#{finishTime},#{deductionPersonName},#{deductionMoney},#{contentId},#{storeId},#{workId},#{deductionReason},#{itemId},#{state},#{communityId},#{taskId}
+        )
+    </insert>
+
+
+    <!-- 查询工作任务明细信息 add by wuxw 2018-07-03 -->
+    <select id="getWorkTaskItemInfo" parameterType="Map" resultType="Map">
+        select t.deduction_person_id deductionPersonId,t.finish_time finishTime,t.deduction_person_name
+        deductionPersonName,t.deduction_money deductionMoney,t.content_id contentId,t.status_cd statusCd,t.store_id
+        storeId,t.work_id workId,t.deduction_reason deductionReason,t.item_id itemId,t.state,t.community_id
+        communityId,t.task_id taskId,wpc.content
+        from work_task_item t
+        left join work_pool_content wpc on t.content_id = wpc.content_id and wpc.status_cd = '0'
+        where 1 =1
+        <if test="deductionPersonId !=null and deductionPersonId != ''">
+            and t.deduction_person_id= #{deductionPersonId}
+        </if>
+        <if test="finishTime !=null and finishTime != ''">
+            and t.finish_time= #{finishTime}
+        </if>
+        <if test="deductionPersonName !=null and deductionPersonName != ''">
+            and t.deduction_person_name= #{deductionPersonName}
+        </if>
+        <if test="deductionMoney !=null and deductionMoney != ''">
+            and t.deduction_money= #{deductionMoney}
+        </if>
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="deductionReason !=null and deductionReason != ''">
+            and t.deduction_reason= #{deductionReason}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改工作任务明细信息 add by wuxw 2018-07-03 -->
+    <update id="updateWorkTaskItemInfo" parameterType="Map">
+        update work_task_item t set t.status_cd = #{statusCd}
+
+        <if test="deductionPersonId !=null and deductionPersonId != ''">
+            , t.deduction_person_id= #{deductionPersonId}
+        </if>
+        <if test="finishTime !=null and finishTime != ''">
+            , t.finish_time= #{finishTime}
+        </if>
+        <if test="deductionPersonName !=null and deductionPersonName != ''">
+            , t.deduction_person_name= #{deductionPersonName}
+        </if>
+        <if test="deductionMoney !=null and deductionMoney != ''">
+            , t.deduction_money= #{deductionMoney}
+        </if>
+
+        <if test="workId !=null and workId != ''">
+            , t.work_id= #{workId}
+        </if>
+        <if test="deductionReason !=null and deductionReason != ''">
+            , t.deduction_reason= #{deductionReason}
+        </if>
+        <if test="state !=null and state != ''">
+            , t.state= #{state}
+        </if>
+
+
+        where 1=1
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+
+    </update>
+
+    <!-- 查询工作任务明细数量 add by wuxw 2018-07-03 -->
+    <select id="queryWorkTaskItemsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from work_task_item t
+        where 1 =1
+        <if test="deductionPersonId !=null and deductionPersonId != ''">
+            and t.deduction_person_id= #{deductionPersonId}
+        </if>
+        <if test="finishTime !=null and finishTime != ''">
+            and t.finish_time= #{finishTime}
+        </if>
+        <if test="deductionPersonName !=null and deductionPersonName != ''">
+            and t.deduction_person_name= #{deductionPersonName}
+        </if>
+        <if test="deductionMoney !=null and deductionMoney != ''">
+            and t.deduction_money= #{deductionMoney}
+        </if>
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
+        </if>
+        <if test="deductionReason !=null and deductionReason != ''">
+            and t.deduction_reason= #{deductionReason}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
+        </if>
+        <if test="state !=null and state != ''">
+            and t.state= #{state}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="taskId !=null and taskId != ''">
+            and t.task_id= #{taskId}
+        </if>
+
+
+    </select>
+
+</mapper>

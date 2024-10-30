@@ -5,8 +5,8 @@
 
     <!-- 保存工作单文件信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkPoolFileInfo" parameterType="Map">
-        insert into work_pool_file(path_url, community_id, store_id, work_id, file_id, task_id, file_type)
-        values (#{pathUrl}, #{communityId}, #{storeId}, #{workId}, #{fileId}, #{taskId}, #{fileType})
+        insert into work_pool_file(path_url, community_id, store_id, work_id, file_id, task_id, file_type,item_id)
+        values (#{pathUrl}, #{communityId}, #{storeId}, #{workId}, #{fileId}, #{taskId}, #{fileType},#{itemId})
     </insert>
 
     <!-- 查询工作单文件信息 add by wuxw 2018-07-03 -->
@@ -14,7 +14,7 @@
         select t.path_url,t.path_url pathUrl,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id
         communityId,t.store_id,t.store_id storeId,t.work_id,t.work_id workId,t.file_id,t.file_id fileId,t.task_id
         taskId,
-        t.file_type fileType,wt.staff_name staffName
+        t.file_type fileType,wt.staff_name staffName,t.item_id itemId
         from work_pool_file t
         left join work_task wt on t.task_id = wt.task_id and wt.status_cd = '0'
         where 1 =1
@@ -41,6 +41,9 @@
         </if>
         <if test="fileType !=null and fileType != ''">
             and t.file_type= #{fileType}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
         </if>
         <if test="staffNameLike !=null and staffNameLike != ''">
             and wt.staff_name like concat('%', #{staffNameLike},'%')
@@ -116,6 +119,9 @@
         </if>
         <if test="fileType !=null and fileType != ''">
             and t.file_type= #{fileType}
+        </if>
+        <if test="itemId !=null and itemId != ''">
+            and t.item_id= #{itemId}
         </if>
         <if test="staffNameLike !=null and staffNameLike != ''">
             and wt.staff_name like concat('%', #{staffNameLike},'%')

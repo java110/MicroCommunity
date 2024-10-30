@@ -28,6 +28,7 @@ import com.java110.dto.user.UserDto;
 import com.java110.dto.workCopy.WorkCopyDto;
 import com.java110.dto.workCycle.WorkCycleDto;
 import com.java110.dto.workPool.WorkPoolDto;
+import com.java110.dto.workPoolContent.WorkPoolContentDto;
 import com.java110.dto.workPoolFile.WorkPoolFileDto;
 import com.java110.dto.workTask.WorkTaskDto;
 import com.java110.intf.oa.*;
@@ -38,6 +39,7 @@ import com.java110.po.workPool.WorkPoolPo;
 import com.java110.po.workPoolContent.WorkPoolContentPo;
 import com.java110.po.workPoolFile.WorkPoolFilePo;
 import com.java110.po.workTask.WorkTaskPo;
+import com.java110.po.workTaskItem.WorkTaskItemPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
@@ -86,6 +88,9 @@ public class SaveWorkPoolCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IWorkTaskItemV1InnerServiceSMO workTaskItemV1InnerServiceSMOImpl;
+
     /**
      * {"workName":"关于扫雪任务","workTypes":[],"wtId":"102023122586210045",
      * "workCycle":"1001","startTime":"2023-12-26 14:20:17","endTime":"2023-12-27 14:20:17",
@@ -112,9 +117,20 @@ public class SaveWorkPoolCmd extends Cmd {
             throw new CmdException("未包含处理人");
         }
         JSONArray staffs = reqJson.getJSONArray("staffs");
-        if (staffs == null || staffs.isEmpty()) {
+        if (ListUtil.isNull(staffs)) {
             throw new CmdException("未包含处理人");
         }
+
+        if (!reqJson.containsKey("contents")) {
+            throw new CmdException("未包含工作单内容");
+        }
+
+        JSONArray contents = reqJson.getJSONArray("contents");
+
+        if (ListUtil.isNull(contents)) {
+            throw new CmdException("内容为空");
+        }
+
         if (WorkPoolDto.WORK_CYCLE_ONE.equals(reqJson.getString("workCycle"))) {
             return;
         }
@@ -172,6 +188,9 @@ public class SaveWorkPoolCmd extends Cmd {
             Date sTime = DateUtil.getDateFromStringA(startTime);
             endTime = DateUtil.getAddHoursStringA(sTime, reqJson.getIntValue("hours"));
         }
+
+        JSONArray contents = reqJson.getJSONArray("contents");
+
         for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
             WorkTaskPo workTaskPo = new WorkTaskPo();
             workTaskPo.setWorkId(workPoolPo.getWorkId());
@@ -189,6 +208,21 @@ public class SaveWorkPoolCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
             }
+            JSONObject content = null;
+            for (int cIndex = 0; cIndex < contents.size(); cIndex++) {
+                content = contents.getJSONObject(cIndex);
+                WorkTaskItemPo workTaskItemPo = new WorkTaskItemPo();
+                workTaskItemPo.setDeductionMoney("0");
+                workTaskItemPo.setContentId(content.getString("contentId"));
+                workTaskItemPo.setStoreId(workPoolPo.getStoreId());
+                workTaskItemPo.setWorkId(workPoolPo.getWorkId());
+                workTaskItemPo.setItemId(GenerateCodeFactory.getGeneratorId("11"));
+                workTaskItemPo.setState(WorkTaskDto.STATE_WAIT);
+                workTaskItemPo.setCommunityId(workPoolPo.getCommunityId());
+                workTaskItemPo.setTaskId(workTaskPo.getTaskId());
+                workTaskItemV1InnerServiceSMOImpl.saveWorkTaskItem(workTaskItemPo);
+            }
+
             if (StringUtil.isEmpty(reqJson.getString("pathUrl"))) {
                 continue;
             }
@@ -285,12 +319,19 @@ public class SaveWorkPoolCmd extends Cmd {
      * @param userDto
      */
     private void saveContent(WorkPoolPo workPoolPo, JSONObject reqJson, UserDto userDto) {
-        WorkPoolContentPo workPoolContentPo = new WorkPoolContentPo();
-        workPoolContentPo.setContentId(GenerateCodeFactory.getGeneratorId("11"));
-        workPoolContentPo.setContent(reqJson.getString("content"));
-        workPoolContentPo.setWorkId(workPoolPo.getWorkId());
-        workPoolContentPo.setCommunityId(reqJson.getString("communityId"));
-        workPoolContentPo.setStoreId(reqJson.getString("storeId"));
-        workPoolContentV1InnerServiceSMOImpl.saveWorkPoolContent(workPoolContentPo);
+
+        JSONArray contents = reqJson.getJSONArray("contents");
+        JSONObject content = null;
+        for (int cIndex = 0; cIndex < contents.size(); cIndex++) {
+            content = contents.getJSONObject(cIndex);
+            WorkPoolContentPo workPoolContentPo = new WorkPoolContentPo();
+            workPoolContentPo.setContentId(GenerateCodeFactory.getGeneratorId("11"));
+            workPoolContentPo.setContent(content.getString("content"));
+            workPoolContentPo.setWorkId(workPoolPo.getWorkId());
+            workPoolContentPo.setCommunityId(reqJson.getString("communityId"));
+            workPoolContentPo.setStoreId(reqJson.getString("storeId"));
+            content.put("contentId", workPoolContentPo.getContentId());
+            workPoolContentV1InnerServiceSMOImpl.saveWorkPoolContent(workPoolContentPo);
+        }
     }
 }

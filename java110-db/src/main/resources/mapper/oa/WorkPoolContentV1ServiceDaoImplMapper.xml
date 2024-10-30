@@ -57,6 +57,7 @@
         <if test="content !=null and content != ''">
             , t.content= #{content}
         </if>
+
         where 1=1
         <if test="contentId !=null and contentId != ''">
             and t.content_id= #{contentId}
@@ -70,6 +71,8 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+
+
 
     </update>
 
@@ -93,6 +96,7 @@
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
         </if>
+
         <if test="content !=null and content != ''">
             and t.content= #{content}
         </if>
