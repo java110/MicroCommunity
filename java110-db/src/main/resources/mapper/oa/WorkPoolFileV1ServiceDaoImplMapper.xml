@@ -5,8 +5,8 @@
 
     <!-- 保存工作单文件信息 add by wuxw 2018-07-03 -->
     <insert id="saveWorkPoolFileInfo" parameterType="Map">
-        insert into work_pool_file(path_url, community_id, store_id, work_id, file_id, task_id, file_type,item_id)
-        values (#{pathUrl}, #{communityId}, #{storeId}, #{workId}, #{fileId}, #{taskId}, #{fileType},#{itemId})
+        insert into work_pool_file(path_url, community_id, store_id, work_id, file_id, task_id, file_type,item_id,content_id)
+        values (#{pathUrl}, #{communityId}, #{storeId}, #{workId}, #{fileId}, #{taskId}, #{fileType},#{itemId},#{contentId})
     </insert>
 
     <!-- 查询工作单文件信息 add by wuxw 2018-07-03 -->
@@ -44,6 +44,9 @@
         </if>
         <if test="itemId !=null and itemId != ''">
             and t.item_id= #{itemId}
+        </if>
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
         </if>
         <if test="staffNameLike !=null and staffNameLike != ''">
             and wt.staff_name like concat('%', #{staffNameLike},'%')
@@ -88,6 +91,9 @@
         <if test="workId !=null and workId != ''">
             and t.work_id= #{workId}
         </if>
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
+        </if>
     </update>
 
     <!-- 查询工作单文件数量 add by wuxw 2018-07-03 -->
@@ -122,6 +128,9 @@
         </if>
         <if test="itemId !=null and itemId != ''">
             and t.item_id= #{itemId}
+        </if>
+        <if test="contentId !=null and contentId != ''">
+            and t.content_id= #{contentId}
         </if>
         <if test="staffNameLike !=null and staffNameLike != ''">
             and wt.staff_name like concat('%', #{staffNameLike},'%')

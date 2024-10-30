@@ -234,6 +234,8 @@ public class SaveWorkPoolCmd extends Cmd {
             workPoolFilePo.setTaskId(workTaskPo.getTaskId());
             workPoolFilePo.setPathUrl(reqJson.getString("pathUrl"));
             workPoolFilePo.setStoreId(workPoolPo.getStoreId());
+            workPoolFilePo.setItemId("-1");
+            workPoolFilePo.setContentId("-1");
             workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
         }
     }
