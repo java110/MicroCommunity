@@ -36,6 +36,7 @@ import com.java110.utils.constant.BusinessTypeConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -119,9 +120,22 @@ public class UpdateAdvertCmd extends Cmd {
         AdvertPo advert = BeanConvertUtil.covertBean(reqJson, AdvertPo.class);
         advert.setState(advertDtos.get(0).getState());
         int flag = advertV1InnerServiceSMOImpl.updateAdvert(advert);
+
         if(flag < 1){
             throw new CmdException("保存失败");
         }
+
+        if(reqJson.containsKey("photos")){
+            return;
+        }
+
+        JSONArray photos = reqJson.getJSONArray("photos");
+
+        if(ListUtil.isNull(photos)){
+            return;
+        }
+
+
         AdvertItemDto advertItemDto = new AdvertItemDto();
         advertItemDto.setAdvertId(reqJson.getString("advertId"));
         advertItemDto.setItemTypeCds(new String[]{"8888", "9999"});
@@ -149,7 +163,6 @@ public class UpdateAdvertCmd extends Cmd {
 
 
         if (hasKeyAndValue(reqJson, "photos") && reqJson.getJSONArray("photos").size() > 0) {
-            JSONArray photos = reqJson.getJSONArray("photos");
             for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
                 addAdvertItemPhoto(reqJson, context, photos.getString(_photoIndex));
                 addAdvertFileRel(reqJson, context, "40000");
