@@ -29,6 +29,10 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
     private String communityId;
     private String taskId;
 
+    private String staffName;
+
+    private String remark;
+
 
     private Date createTime;
 
@@ -146,5 +150,21 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
