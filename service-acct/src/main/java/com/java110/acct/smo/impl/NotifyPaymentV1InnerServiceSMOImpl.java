@@ -25,7 +25,7 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.log.LogSystemErrorDto;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
-import com.java110.dto.paymentPool.PaymentPoolDto;
+import com.java110.dto.payment.PaymentPoolDto;
 import com.java110.intf.acct.INotifyPaymentV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolV1InnerServiceSMO;
 import com.java110.po.log.LogSystemErrorPo;

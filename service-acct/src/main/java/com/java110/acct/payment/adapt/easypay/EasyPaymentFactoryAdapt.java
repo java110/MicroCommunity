@@ -2,9 +2,6 @@ package com.java110.acct.payment.adapt.easypay;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IPaymentFactoryAdapt;
-import com.java110.acct.payment.adapt.bbgpay.EncryptDecryptFactory;
-import com.java110.acct.payment.adapt.bbgpay.lib.GmUtil;
-import com.java110.acct.payment.adapt.bbgpay.lib.JsonUtil;
 import com.java110.acct.payment.adapt.easypay.utils.HttpConnectUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.factory.GenerateCodeFactory;
@@ -14,7 +11,7 @@ import com.java110.dto.app.AppDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
-import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.dto.payment.PaymentPoolValueDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
@@ -36,7 +33,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.*;
 
 /**

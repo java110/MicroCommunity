@@ -3,7 +3,6 @@ package com.java110.user.api;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.activities.ActivitiesBeautifulStaffDto;
 import com.java110.dto.activities.ActivitiesRuleDto;
-import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.po.activities.ActivitiesBeautifulStaffPo;
 import com.java110.po.activities.ActivitiesRulePo;
 import com.java110.user.bmo.activitiesBeautifulStaff.IDeleteActivitiesBeautifulStaffBMO;

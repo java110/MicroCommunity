@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.dto.questionAnswer.QuestionAnswerDto;
+import com.java110.dto.question.QuestionAnswerDto;
 import com.java110.intf.user.IQuestionAnswerInnerServiceSMO;
 import com.java110.intf.user.IUserQuestionAnswerInnerServiceSMO;
 import com.java110.intf.user.IUserQuestionAnswerValueInnerServiceSMO;

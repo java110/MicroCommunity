@@ -8,7 +8,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.payFeeRule.PayFeeRuleDto;
+import com.java110.dto.payFee.PayFeeRuleDto;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeRuleV1InnerServiceSMO;

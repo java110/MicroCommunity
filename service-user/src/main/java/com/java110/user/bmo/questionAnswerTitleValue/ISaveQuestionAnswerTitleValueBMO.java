@@ -1,6 +1,6 @@
 package com.java110.user.bmo.questionAnswerTitleValue;
 
-import com.java110.po.questionAnswer.QuestionAnswerTitleValuePo;
+import com.java110.po.question.QuestionAnswerTitleValuePo;
 import org.springframework.http.ResponseEntity;
 public interface ISaveQuestionAnswerTitleValueBMO {
 

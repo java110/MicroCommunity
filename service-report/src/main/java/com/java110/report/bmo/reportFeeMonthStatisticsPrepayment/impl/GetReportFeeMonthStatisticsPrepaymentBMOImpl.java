@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportFeeMonthStatisticsPrepayment.impl;
 
-import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentDto;
+import com.java110.dto.reportFee.ReportFeeMonthStatisticsPrepaymentDto;
 import com.java110.intf.report.IQueryPayFeeDetailInnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsPrepaymentInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatisticsPrepayment.IGetReportFeeMonthStatisticsPrepaymentBMO;

@@ -1,7 +1,6 @@
 package com.java110.dto.complaint;
 
 import com.java110.dto.PageDto;
-import com.java110.dto.complaintTypeUser.ComplaintTypeUserDto;
 import com.java110.vo.api.junkRequirement.PhotoVo;
 
 import java.io.Serializable;

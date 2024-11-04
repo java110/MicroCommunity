@@ -16,7 +16,7 @@
 package com.java110.user.smo.impl;
 
 
-import com.java110.dto.questionAnswer.QuestionAnswerDto;
+import com.java110.dto.question.QuestionAnswerDto;
 import com.java110.user.dao.IUserQuestionAnswerV1ServiceDao;
 import com.java110.intf.user.IUserQuestionAnswerV1InnerServiceSMO;
 import com.java110.dto.user.UserQuestionAnswerDto;

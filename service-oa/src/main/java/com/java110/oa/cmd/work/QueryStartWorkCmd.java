@@ -6,11 +6,11 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.workCopy.WorkCopyDto;
-import com.java110.dto.workPool.WorkPoolDto;
-import com.java110.dto.workPoolContent.WorkPoolContentDto;
-import com.java110.dto.workPoolFile.WorkPoolFileDto;
-import com.java110.dto.workTask.WorkTaskDto;
+import com.java110.dto.work.WorkCopyDto;
+import com.java110.dto.work.WorkPoolDto;
+import com.java110.dto.work.WorkPoolContentDto;
+import com.java110.dto.work.WorkPoolFileDto;
+import com.java110.dto.work.WorkTaskDto;
 import com.java110.intf.oa.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
@@ -58,7 +58,7 @@ public class QueryStartWorkCmd extends Cmd {
         WorkPoolDto workPoolDto = BeanConvertUtil.covertBean(reqJson, WorkPoolDto.class);
 
         String userId = CmdContextUtils.getUserId(context);
-        workPoolDto.setCreateUserId(userId);
+        //workPoolDto.setCreateUserId(userId);
 
         int count = workPoolV1InnerServiceSMOImpl.queryWorkPoolsCount(workPoolDto);
 

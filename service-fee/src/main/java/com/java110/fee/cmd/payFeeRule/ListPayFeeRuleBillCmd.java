@@ -27,7 +27,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.payFeeRuleBill.PayFeeRuleBillDto;
+import com.java110.dto.payFee.PayFeeRuleBillDto;
 
 import java.math.BigDecimal;
 import java.util.List;

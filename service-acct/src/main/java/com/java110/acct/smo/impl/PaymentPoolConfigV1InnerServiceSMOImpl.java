@@ -18,17 +18,15 @@ package com.java110.acct.smo.impl;
 
 import com.java110.acct.dao.IPaymentPoolConfigV1ServiceDao;
 import com.java110.intf.acct.IPaymentPoolConfigV1InnerServiceSMO;
-import com.java110.dto.paymentPoolConfig.PaymentPoolConfigDto;
-import com.java110.po.paymentPoolConfig.PaymentPoolConfigPo;
+import com.java110.dto.payment.PaymentPoolConfigDto;
+import com.java110.po.payment.PaymentPoolConfigPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

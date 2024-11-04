@@ -2,7 +2,7 @@ package com.java110.user.bmo.question;
 
 
 import com.alibaba.fastjson.JSONArray;
-import com.java110.po.questionAnswer.QuestionAnswerPo;
+import com.java110.po.question.QuestionAnswerPo;
 
 public interface IQuestionAnswerBMO {
     /**

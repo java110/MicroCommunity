@@ -1,16 +1,13 @@
 package com.java110.acct.payment.adapt.bbgpay;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.payment.IRefundMoneyAdapt;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
-import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.GenerateCodeFactory;
-import com.java110.core.factory.PlutusFactory;
 import com.java110.core.log.LoggerFactory;
-import com.java110.dto.paymentPool.PaymentPoolDto;
-import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.dto.payment.PaymentPoolDto;
+import com.java110.dto.payment.PaymentPoolValueDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.intf.acct.IOnlinePayRefundV1InnerServiceSMO;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;
@@ -18,9 +15,7 @@ import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
-import com.java110.utils.util.PayUtil;
 import com.java110.vo.ResultVo;
-import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -21,18 +21,15 @@ import com.java110.dto.data.DatabusDataDto;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.oa.dao.IWorkTaskV1ServiceDao;
 import com.java110.intf.oa.IWorkTaskV1InnerServiceSMO;
-import com.java110.dto.workTask.WorkTaskDto;
-import com.java110.po.workTask.WorkTaskPo;
+import com.java110.dto.work.WorkTaskDto;
+import com.java110.po.workPool.WorkTaskPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

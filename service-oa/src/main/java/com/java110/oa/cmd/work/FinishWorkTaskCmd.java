@@ -8,18 +8,18 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.workEvent.WorkEventDto;
-import com.java110.dto.workPool.WorkPoolDto;
-import com.java110.dto.workPoolFile.WorkPoolFileDto;
-import com.java110.dto.workTask.WorkTaskDto;
-import com.java110.dto.workTaskItem.WorkTaskItemDto;
+import com.java110.dto.work.WorkEventDto;
+import com.java110.dto.work.WorkPoolDto;
+import com.java110.dto.work.WorkPoolFileDto;
+import com.java110.dto.work.WorkTaskDto;
+import com.java110.dto.work.WorkTaskItemDto;
 import com.java110.intf.oa.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
-import com.java110.po.workEvent.WorkEventPo;
+import com.java110.po.workPool.WorkEventPo;
 import com.java110.po.workPool.WorkPoolPo;
-import com.java110.po.workPoolFile.WorkPoolFilePo;
-import com.java110.po.workTask.WorkTaskPo;
-import com.java110.po.workTaskItem.WorkTaskItemPo;
+import com.java110.po.workPool.WorkPoolFilePo;
+import com.java110.po.workPool.WorkTaskPo;
+import com.java110.po.workPool.WorkTaskItemPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
@@ -202,6 +202,7 @@ public class FinishWorkTaskCmd extends Cmd {
         workEventPo.setTaskId(workTaskDto.getTaskId());
         workEventPo.setItemId(reqJson.getString("itemId"));
         workEventPo.setContentId(orgWorkTaskItemDto.getContentId());
+        workEventPo.setEventType(WorkEventDto.EVENT_TYPE_COMPLETE);
 
         workEventV1InnerServiceSMOImpl.saveWorkEvent(workEventPo);
 
@@ -284,6 +285,7 @@ public class FinishWorkTaskCmd extends Cmd {
         workEventPo.setTaskId(workTaskDto.getTaskId());
         workEventPo.setItemId("-1");
         workEventPo.setContentId("-1");
+        workEventPo.setEventType(WorkEventDto.EVENT_TYPE_TRANSFOR);
         workEventV1InnerServiceSMOImpl.saveWorkEvent(workEventPo);
     }
 }

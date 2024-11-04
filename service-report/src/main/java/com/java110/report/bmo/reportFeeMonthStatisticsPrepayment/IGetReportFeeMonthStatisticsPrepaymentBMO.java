@@ -1,6 +1,6 @@
 package com.java110.report.bmo.reportFeeMonthStatisticsPrepayment;
 
-import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentDto;
+import com.java110.dto.reportFee.ReportFeeMonthStatisticsPrepaymentDto;
 import org.springframework.http.ResponseEntity;
 
 public interface IGetReportFeeMonthStatisticsPrepaymentBMO {

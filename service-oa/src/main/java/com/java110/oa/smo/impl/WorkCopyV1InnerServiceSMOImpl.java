@@ -18,17 +18,15 @@ package com.java110.oa.smo.impl;
 
 import com.java110.oa.dao.IWorkCopyV1ServiceDao;
 import com.java110.intf.oa.IWorkCopyV1InnerServiceSMO;
-import com.java110.dto.workCopy.WorkCopyDto;
-import com.java110.po.workCopy.WorkCopyPo;
+import com.java110.dto.work.WorkCopyDto;
+import com.java110.po.workPool.WorkCopyPo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -8,7 +8,7 @@ import com.java110.dto.user.UserQuestionAnswerDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.user.IUserQuestionAnswerV1InnerServiceSMO;
-import com.java110.po.questionAnswer.QuestionAnswerPo;
+import com.java110.po.question.QuestionAnswerPo;
 import com.java110.po.user.UserQuestionAnswerPo;
 import com.java110.user.bmo.question.IQuestionAnswerBMO;
 import com.java110.utils.util.ListUtil;

@@ -1,7 +1,7 @@
 package com.java110.user.bmo.questionAnswer.impl;
 
 import com.java110.dto.file.FileRelDto;
-import com.java110.dto.questionAnswer.QuestionAnswerDto;
+import com.java110.dto.question.QuestionAnswerDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.user.IQuestionAnswerInnerServiceSMO;
 import com.java110.user.bmo.questionAnswer.IGetQuestionAnswerBMO;

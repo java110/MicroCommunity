@@ -21,10 +21,10 @@
         select t.deduction_person_id deductionPersonId,t.finish_time finishTime,t.deduction_person_name
         deductionPersonName,t.deduction_money deductionMoney,t.content_id contentId,t.status_cd statusCd,t.store_id
         storeId,t.work_id workId,t.deduction_reason deductionReason,t.item_id itemId,t.state,t.community_id
-        communityId,t.task_id taskId,wpc.content,GROUP_CONCAT(we.staff_name) staffName,GROUP_CONCAT(we.remark) remark
+        communityId,t.task_id taskId,wpc.content,we.staff_name staffName,we.remark
         from work_task_item t
         left join work_pool_content wpc on t.content_id = wpc.content_id and wpc.status_cd = '0'
-        left join work_event we on t.item_id = we.item_id and we.status_cd = '0'
+        left join work_event we on t.item_id = we.item_id and we.status_cd = '0' and we.event_type = '1001'
         where 1 =1
         <if test="deductionPersonId !=null and deductionPersonId != ''">
             and t.deduction_person_id= #{deductionPersonId}
@@ -65,9 +65,6 @@
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
         </if>
-        group by t.deduction_person_id ,t.finish_time ,t.deduction_person_name,
-        t.deduction_money ,t.content_id ,t.store_id ,t.work_id ,t.deduction_reason ,t.item_id ,
-        t.state,t.community_id,t.task_id ,wpc.content,wpc.seq_num
         order by wpc.seq_num
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}

@@ -16,8 +16,8 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.invoiceEvent.InvoiceEventDto;
-import com.java110.po.invoiceEvent.InvoiceEventPo;
+import com.java110.dto.invoice.InvoiceEventDto;
+import com.java110.po.invoice.InvoiceEventPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -6,7 +6,7 @@ import com.java110.acct.smo.IQrCodePaymentSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.factory.PlutusFactory;
-import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.dto.payment.PaymentPoolValueDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;

@@ -16,7 +16,6 @@
 package com.java110.user.dao;
 
 
-import com.java110.dto.questionAnswer.QuestionAnswerDto;
 import com.java110.utils.exception.DAOException;
 
 

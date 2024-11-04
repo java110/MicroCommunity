@@ -9,7 +9,7 @@ import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.dto.payment.PaymentOrderDto;
-import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.dto.payment.PaymentPoolValueDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.intf.acct.IOnlinePayV1InnerServiceSMO;

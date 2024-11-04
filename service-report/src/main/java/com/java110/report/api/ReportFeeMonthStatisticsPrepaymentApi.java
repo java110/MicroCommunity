@@ -1,6 +1,6 @@
 package com.java110.report.api;
 
-import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentDto;
+import com.java110.dto.reportFee.ReportFeeMonthStatisticsPrepaymentDto;
 import com.java110.report.bmo.reportFeeMonthStatisticsPrepayment.IGetReportFeeMonthStatisticsPrepaymentBMO;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;

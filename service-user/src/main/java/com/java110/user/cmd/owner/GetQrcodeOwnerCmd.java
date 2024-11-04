@@ -7,7 +7,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.SendSmsFactory;
 import com.java110.dto.owner.OwnerDto;
-import com.java110.dto.payFeeQrcode.PayFeeQrcodeDto;
+import com.java110.dto.payFee.PayFeeQrcodeDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
 import com.java110.intf.fee.IPayFeeQrcodeV1InnerServiceSMO;

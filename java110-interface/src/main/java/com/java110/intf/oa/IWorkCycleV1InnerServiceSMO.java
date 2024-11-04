@@ -16,8 +16,8 @@
 package com.java110.intf.oa;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.workCycle.WorkCycleDto;
-import com.java110.po.workCycle.WorkCyclePo;
+import com.java110.dto.work.WorkCycleDto;
+import com.java110.po.workPool.WorkCyclePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

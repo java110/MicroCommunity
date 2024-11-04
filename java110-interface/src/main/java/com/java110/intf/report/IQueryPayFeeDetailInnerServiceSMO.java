@@ -2,7 +2,7 @@ package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
-import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentDto;
+import com.java110.dto.reportFee.ReportFeeMonthStatisticsPrepaymentDto;
 import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;

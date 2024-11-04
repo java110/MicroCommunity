@@ -1,7 +1,7 @@
 package com.java110.job.adapt.fee;
 
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.ReportFeeMonthStatisticsPrepaymentDto.ReportFeeMonthStatisticsPrepaymentDto;
+import com.java110.dto.reportFee.ReportFeeMonthStatisticsPrepaymentDto;
 import com.java110.dto.fee.FeeDetailDto;
 import com.java110.dto.payFee.ReturnPayFeeDto;
 import com.java110.dto.system.Business;
@@ -9,7 +9,7 @@ import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IReturnPayFeeInnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsPrepaymentInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.po.ReportFeeMonthStatisticsPrepaymentPo.ReportFeeMonthStatisticsPrepaymentPo;
+import com.java110.po.reportFee.ReportFeeMonthStatisticsPrepaymentPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;

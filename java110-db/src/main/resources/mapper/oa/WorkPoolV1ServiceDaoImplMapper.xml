@@ -22,7 +22,7 @@
         statusCd,t.store_id,t.store_id storeId,t.work_name,t.work_name workName,t.work_id,t.work_id
         workId,t.wt_id,t.wt_id wtId,t.create_user_tel,t.create_user_tel createUserTel,t.start_time,t.start_time
         startTime,t.end_time,t.end_time endTime,t.state,t.community_id,t.community_id communityId,t.create_time createTime,
-        td.`name` stateName,wt.type_name typeName
+        td.`name` stateName,wt.type_name typeName,wt.deduction
         from work_pool t
         left join work_type wt on t.wt_id = wt.wt_id
         left join t_dict td on t.state = td.status_cd and td.table_name = 'work_pool' and td.table_columns = 'state'

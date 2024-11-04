@@ -28,7 +28,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.intf.fee.*;
 import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
-import com.java110.po.payFeeSub.PayFeeSubPo;
+import com.java110.po.payFee.PayFeeSubPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;

@@ -5,7 +5,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.report.IGeneratorFeeMonthStatisticsPrepaymentInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
-import com.java110.po.ReportFeeMonthStatisticsPrepaymentPo.ReportFeeMonthStatisticsPrepaymentPo;
+import com.java110.po.reportFee.ReportFeeMonthStatisticsPrepaymentPo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package com.java110.acct.payment;
 
-import com.java110.dto.paymentPool.PaymentPoolDto;
+import com.java110.dto.payment.PaymentPoolDto;
 import com.java110.dto.wechat.OnlinePayDto;
 import com.java110.vo.ResultVo;
 

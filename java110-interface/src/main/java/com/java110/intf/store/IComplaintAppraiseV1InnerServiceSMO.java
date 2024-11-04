@@ -16,8 +16,8 @@
 package com.java110.intf.store;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.complaintAppraise.ComplaintAppraiseDto;
-import com.java110.po.complaintAppraise.ComplaintAppraisePo;
+import com.java110.dto.complaint.ComplaintAppraiseDto;
+import com.java110.po.complaint.ComplaintAppraisePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

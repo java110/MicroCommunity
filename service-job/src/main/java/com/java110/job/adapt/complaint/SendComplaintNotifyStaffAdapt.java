@@ -1,20 +1,17 @@
 package com.java110.job.adapt.complaint;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.complaint.ComplaintDto;
-import com.java110.dto.complaintType.ComplaintTypeDto;
-import com.java110.dto.complaintTypeUser.ComplaintTypeUserDto;
+import com.java110.dto.complaint.ComplaintTypeDto;
+import com.java110.dto.complaint.ComplaintTypeUserDto;
 import com.java110.dto.system.Business;
 import com.java110.intf.store.IComplaintTypeUserV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintTypeV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
-import com.java110.job.adapt.Repair.MachineReturnRepairAdapt;
 import com.java110.job.msgNotify.IMsgNotify;
 import com.java110.job.msgNotify.MsgNotifyFactory;
-import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.ListUtil;

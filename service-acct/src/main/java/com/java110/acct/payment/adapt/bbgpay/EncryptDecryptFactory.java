@@ -3,8 +3,7 @@ package com.java110.acct.payment.adapt.bbgpay;
 import com.java110.acct.payment.adapt.bbgpay.lib.GmUtil;
 import com.java110.acct.payment.adapt.bbgpay.lib.HttpRequestUtil;
 import com.java110.acct.payment.adapt.bbgpay.lib.JsonUtil;
-import com.java110.core.factory.CommunitySettingFactory;
-import com.java110.dto.paymentPoolValue.PaymentPoolValueDto;
+import com.java110.dto.payment.PaymentPoolValueDto;
 
 import java.util.HashMap;
 import java.util.List;

@@ -16,8 +16,8 @@
 package com.java110.intf.acct;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.paymentAdapt.PaymentAdaptDto;
-import com.java110.po.paymentAdapt.PaymentAdaptPo;
+import com.java110.dto.payment.PaymentAdaptDto;
+import com.java110.po.payment.PaymentAdaptPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

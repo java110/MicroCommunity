@@ -21,16 +21,14 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.file.FileRelDto;
 import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import com.java110.vo.api.machineRecord.ApiMachineRecordDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.workPoolFile.WorkPoolFileDto;
+import com.java110.dto.work.WorkPoolFileDto;
 
 import java.util.List;
 import java.util.ArrayList;

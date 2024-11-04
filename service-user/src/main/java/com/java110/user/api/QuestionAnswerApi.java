@@ -2,12 +2,12 @@ package com.java110.user.api;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.dto.questionAnswer.QuestionAnswerDto;
-import com.java110.dto.questionAnswer.QuestionAnswerTitleDto;
-import com.java110.dto.questionAnswer.QuestionAnswerTitleValueDto;
-import com.java110.po.questionAnswer.QuestionAnswerPo;
-import com.java110.po.questionAnswer.QuestionAnswerTitlePo;
-import com.java110.po.questionAnswer.QuestionAnswerTitleValuePo;
+import com.java110.dto.question.QuestionAnswerDto;
+import com.java110.dto.question.QuestionAnswerTitleDto;
+import com.java110.dto.question.QuestionAnswerTitleValueDto;
+import com.java110.po.question.QuestionAnswerPo;
+import com.java110.po.question.QuestionAnswerTitlePo;
+import com.java110.po.question.QuestionAnswerTitleValuePo;
 import com.java110.user.bmo.questionAnswer.IDeleteQuestionAnswerBMO;
 import com.java110.user.bmo.questionAnswer.IGetQuestionAnswerBMO;
 import com.java110.user.bmo.questionAnswer.ISaveQuestionAnswerBMO;

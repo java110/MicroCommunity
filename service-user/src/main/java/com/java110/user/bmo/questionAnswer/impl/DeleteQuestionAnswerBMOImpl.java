@@ -2,7 +2,7 @@ package com.java110.user.bmo.questionAnswer.impl;
 
 import com.java110.core.annotation.Java110Transactional;
 import com.java110.intf.user.IQuestionAnswerInnerServiceSMO;
-import com.java110.po.questionAnswer.QuestionAnswerPo;
+import com.java110.po.question.QuestionAnswerPo;
 import com.java110.user.bmo.questionAnswer.IDeleteQuestionAnswerBMO;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;

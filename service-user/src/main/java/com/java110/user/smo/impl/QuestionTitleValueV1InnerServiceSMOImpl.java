@@ -18,17 +18,15 @@ package com.java110.user.smo.impl;
 
 import com.java110.user.dao.IQuestionTitleValueV1ServiceDao;
 import com.java110.intf.user.IQuestionTitleValueV1InnerServiceSMO;
-import com.java110.dto.questionTitleValue.QuestionTitleValueDto;
-import com.java110.po.questionTitleValue.QuestionTitleValuePo;
+import com.java110.dto.question.QuestionTitleValueDto;
+import com.java110.po.question.QuestionTitleValuePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
-import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

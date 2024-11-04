@@ -16,8 +16,8 @@
 package com.java110.intf.user;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.questionTitle.QuestionTitleDto;
-import com.java110.po.questionTitle.QuestionTitlePo;
+import com.java110.dto.question.QuestionTitleDto;
+import com.java110.po.question.QuestionTitlePo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

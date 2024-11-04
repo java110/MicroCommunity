@@ -5,7 +5,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.questionAnswer.QuestionAnswerDto;
+import com.java110.dto.question.QuestionAnswerDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.user.UserQuestionAnswerDto;
 import com.java110.intf.user.IUserQuestionAnswerV1InnerServiceSMO;

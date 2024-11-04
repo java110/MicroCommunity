@@ -16,8 +16,8 @@
 package com.java110.intf.oa;
 
 import com.java110.config.feign.FeignConfiguration;
-import com.java110.dto.workPoolContent.WorkPoolContentDto;
-import com.java110.po.workPoolContent.WorkPoolContentPo;
+import com.java110.dto.work.WorkPoolContentDto;
+import com.java110.po.workPool.WorkPoolContentPo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

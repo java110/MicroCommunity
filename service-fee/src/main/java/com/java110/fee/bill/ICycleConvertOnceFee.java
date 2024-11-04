@@ -1,7 +1,7 @@
 package com.java110.fee.bill;
 
 import com.java110.po.fee.PayFeePo;
-import com.java110.po.payFeeRule.PayFeeRulePo;
+import com.java110.po.payFee.PayFeeRulePo;
 
 import java.util.List;
 
