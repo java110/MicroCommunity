@@ -30,6 +30,8 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
 
     private String remark;
 
+    private String pathUrl;
+
 
     private Date createTime;
 
@@ -163,5 +165,13 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getPathUrl() {
+        return pathUrl;
+    }
+
+    public void setPathUrl(String pathUrl) {
+        this.pathUrl = pathUrl;
     }
 }

@@ -20,9 +20,13 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.work.WorkPoolFileDto;
 import com.java110.intf.oa.IWorkTaskItemV1InnerServiceSMO;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.work.WorkTaskItemDto;
@@ -67,6 +71,15 @@ public class ListWorkTaskItemCmd extends Cmd {
 
            if (count > 0) {
                workTaskItemDtos = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItems(workTaskItemDto);
+               String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
+               for (WorkTaskItemDto tmpWorkTaskItemDto : workTaskItemDtos) {
+                   if(StringUtil.isEmpty(tmpWorkTaskItemDto.getPathUrl())){
+                       continue;
+                   }
+                   tmpWorkTaskItemDto.setPathUrl(imgUrl + tmpWorkTaskItemDto.getPathUrl());
+               }
+
            } else {
                workTaskItemDtos = new ArrayList<>();
            }
