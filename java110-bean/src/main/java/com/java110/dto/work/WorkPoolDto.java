@@ -35,6 +35,7 @@ public class WorkPoolDto extends PageDto implements Serializable {
     private String startTime;
     private String endTime;
     private String state;
+    private String[] states;
 
     private String stateName;
 
@@ -371,5 +372,13 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setDeduction(String deduction) {
         this.deduction = deduction;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }

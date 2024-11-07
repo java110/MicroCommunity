@@ -230,6 +230,12 @@
         <if test="wtId !=null and wtId != ''">
             and t.wt_id= #{wtId}
         </if>
+        <if test="states != null">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
 
         <if test="queryStartTime !=null and queryStartTime !=''">
             and wtk.create_time &gt;= #{queryStartTime}
@@ -289,7 +295,12 @@
         <if test="wtId !=null and wtId != ''">
             and t.wt_id= #{wtId}
         </if>
-
+        <if test="states != null">
+            and t.state in
+            <foreach collection="states" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="queryStartTime !=null and queryStartTime !=''">
             and wtk.create_time &gt;= #{queryStartTime}
         </if>

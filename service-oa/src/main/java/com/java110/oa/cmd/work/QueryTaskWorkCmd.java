@@ -13,6 +13,7 @@ import com.java110.intf.oa.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,11 @@ public class QueryTaskWorkCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         WorkPoolDto workPoolDto = BeanConvertUtil.covertBean(reqJson, WorkPoolDto.class);
+        if(!StringUtil.isEmpty(workPoolDto.getState()) && workPoolDto.getState().contains(",")){
+
+            workPoolDto.setStates(workPoolDto.getState().split(","));
+            workPoolDto.setState("");
+        }
         String userId = CmdContextUtils.getUserId(context);
         workPoolDto.setStaffId(userId);
         int count = workPoolV1InnerServiceSMOImpl.queryTaskWorkPoolsCount(workPoolDto);

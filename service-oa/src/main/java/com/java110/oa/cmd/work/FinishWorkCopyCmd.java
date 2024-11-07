@@ -85,14 +85,16 @@ public class FinishWorkCopyCmd extends Cmd {
 
         Assert.listOnlyOne(userDtos, "用户不存在");
         String deductionMoney = "0.00";
-        if (reqJson.containsKey("deductionMoney") && StringUtil.isEmpty(reqJson.getString("deductionMoney"))) {
+        String deductionReason = reqJson.getString("deductionReason");
+        if (reqJson.containsKey("deductionMoney") && !StringUtil.isEmpty(reqJson.getString("deductionMoney"))) {
             deductionMoney = reqJson.getString("deductionMoney");
+            deductionReason += (" 扣款 " + deductionMoney + "元");
         }
 
         WorkTaskItemPo workTaskItemPo = new WorkTaskItemPo();
         workTaskItemPo.setItemId(reqJson.getString("itemId"));
         workTaskItemPo.setDeductionMoney(deductionMoney);
-        workTaskItemPo.setDeductionReason(reqJson.getString("deductionReason"));
+        workTaskItemPo.setDeductionReason(deductionReason);
         workTaskItemPo.setDeductionPersonId(userDtos.get(0).getUserId());
         workTaskItemPo.setDeductionPersonName(userDtos.get(0).getName());
         workTaskItemPo.setState(WorkTaskItemDto.STATE_COPY_COMPLETE);

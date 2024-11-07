@@ -104,12 +104,12 @@ public class SaveWorkPoolCmd extends Cmd {
      */
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "wtId", "请求报文中未包含wtId");
-        Assert.hasKeyAndValue(reqJson, "workName", "请求报文中未包含workName");
-        Assert.hasKeyAndValue(reqJson, "workCycle", "请求报文中未包含workCycle");
-        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
-        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区");
+        Assert.hasKeyAndValue(reqJson, "wtId", "请求报文中未包含工作类型");
+        Assert.hasKeyAndValue(reqJson, "workName", "请求报文中未包含标题");
+        Assert.hasKeyAndValue(reqJson, "workCycle", "请求报文中未包含工单标识");
+        Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
+        Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含完成时间");
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
         reqJson.put("storeId", storeId);
         if (!reqJson.containsKey("staffs")) {
