@@ -16,13 +16,16 @@ import com.java110.intf.store.IStoreInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserLoginInnerServiceSMO;
 import com.java110.po.user.UserLoginPo;
+import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.CommonConstant;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -97,6 +100,7 @@ public class PcUserLoginCmd extends Cmd {
         Assert.jsonObjectHaveKey(paramIn, "passwd", "用户登录，未包含passwd节点，请检查" + paramIn);
 
 
+
         AuthenticationFactory.checkLoginErrorCount(reqJson.getString("username"));
     }
 
@@ -111,12 +115,12 @@ public class PcUserLoginCmd extends Cmd {
         userDto.setPassword(paramInJson.getString("passwd"));
         userDto.setLevelCds(new String[]{UserDto.LEVEL_CD_ADMIN, UserDto.LEVEL_CD_STAFF});
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
-        if (userDtos == null || userDtos.size() < 1) {
+        if (ListUtil.isNull(userDtos)) {
             userDto.setName("");
             userDto.setTel(paramInJson.getString("username"));
             userDtos = userInnerServiceSMOImpl.getUsers(userDto);
         }
-        if (userDtos == null || userDtos.size() < 1) {
+        if (ListUtil.isNull(userDtos)) {
             responseEntity = new ResponseEntity<String>("用户或密码错误", HttpStatus.UNAUTHORIZED);
             AuthenticationFactory.userLoginError(paramInJson.getString("username"));
             cmdDataFlowContext.setResponseEntity(responseEntity);
@@ -128,7 +132,7 @@ public class PcUserLoginCmd extends Cmd {
         storeUserDto.setUserId(userDtos.get(0).getUserId());
         List<StoreUserDto> storeUserDtos = storeInnerServiceSMOImpl.getStoreUserInfo(storeUserDto);
 
-        if (storeUserDtos != null && storeUserDtos.size() > 0) {
+        if (!ListUtil.isNull(storeUserDtos)) {
             String state = storeUserDtos.get(0).getState();
             if ("48002".equals(state)) {
                 responseEntity = new ResponseEntity<String>("当前商户限制登录，请联系管理员", HttpStatus.UNAUTHORIZED);

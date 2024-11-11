@@ -721,6 +721,11 @@ public class AuthenticationFactory {
      * @param userName 登录账号
      */
     public static void checkLoginErrorCount(String userName) {
+        String env = MappingCache.getValue(MappingConstant.ENV_DOMAIN, "HC_ENV");
+
+        if ("DEV".equals(env) || "TEST".equals(env)) {
+            return;
+        }
         String count = CommonCache.getValue(USER_ERROR_COUNT + userName);
         int countNum = 0;
         if (!StringUtil.isEmpty(count)) {
