@@ -82,7 +82,6 @@ public class UpdateWorkPoolCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "workId", "workId不能为空");
         Assert.hasKeyAndValue(reqJson, "wtId", "请求报文中未包含wtId");
-        Assert.hasKeyAndValue(reqJson, "workName", "请求报文中未包含workName");
         Assert.hasKeyAndValue(reqJson, "workCycle", "请求报文中未包含workCycle");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含startTime");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含endTime");
@@ -151,6 +150,11 @@ public class UpdateWorkPoolCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
         Assert.listOnlyOne(userDtos, "用户未登录");
+
+        String workName = reqJson.getString("workName");
+        if(StringUtil.isEmpty(workName)){
+            reqJson.put("workName",userDtos.get(0).getName()+"发起的工作单");
+        }
 
         WorkPoolPo workPoolPo = BeanConvertUtil.covertBean(reqJson, WorkPoolPo.class);
         int flag = workPoolV1InnerServiceSMOImpl.updateWorkPool(workPoolPo);

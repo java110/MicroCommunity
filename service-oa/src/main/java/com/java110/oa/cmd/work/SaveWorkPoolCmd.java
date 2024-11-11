@@ -106,7 +106,6 @@ public class SaveWorkPoolCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区");
         Assert.hasKeyAndValue(reqJson, "wtId", "请求报文中未包含工作类型");
-        Assert.hasKeyAndValue(reqJson, "workName", "请求报文中未包含标题");
         Assert.hasKeyAndValue(reqJson, "workCycle", "请求报文中未包含工单标识");
         Assert.hasKeyAndValue(reqJson, "startTime", "请求报文中未包含开始时间");
         Assert.hasKeyAndValue(reqJson, "endTime", "请求报文中未包含完成时间");
@@ -158,6 +157,10 @@ public class SaveWorkPoolCmd extends Cmd {
         userDto.setUserId(userId);
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
+        String workName = reqJson.getString("workName");
+        if(StringUtil.isEmpty(workName)){
+            reqJson.put("workName",userDtos.get(0).getName()+"发起的工作单");
+        }
         WorkPoolPo workPoolPo = BeanConvertUtil.covertBean(reqJson, WorkPoolPo.class);
         workPoolPo.setWorkId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         workPoolPo.setCreateUserId(userDtos.get(0).getUserId());
