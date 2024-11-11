@@ -56,6 +56,7 @@ public class WorkPoolDto extends PageDto implements Serializable {
     private String content;
 
     private String pathUrl;
+    private String url;
 
     private String taskId;
 
@@ -380,5 +381,13 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

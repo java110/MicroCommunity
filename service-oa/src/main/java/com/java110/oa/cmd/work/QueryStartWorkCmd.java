@@ -12,6 +12,8 @@ import com.java110.dto.work.WorkPoolContentDto;
 import com.java110.dto.work.WorkPoolFileDto;
 import com.java110.dto.work.WorkTaskDto;
 import com.java110.intf.oa.*;
+import com.java110.utils.cache.MappingCache;
+import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
@@ -119,6 +121,17 @@ public class QueryStartWorkCmd extends Cmd {
         }
 
         workPoolDtos.get(0).setPathUrl(workPoolFileDtos.get(0).getPathUrl());
+
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
+        if (workPoolFileDtos.get(0).getPathUrl().startsWith("http")) {
+            workPoolDtos.get(0).setUrl(workPoolFileDtos.get(0).getPathUrl());
+            return;
+        }
+
+        workPoolDtos.get(0).setUrl(imgUrl + workPoolFileDtos.get(0).getPathUrl());
+
+
     }
 
     private void queryTaskAndCopy(List<WorkPoolDto> workPoolDtos) {

@@ -25,19 +25,10 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.user.UserDto;
-import com.java110.dto.work.WorkCopyDto;
-import com.java110.dto.work.WorkCycleDto;
-import com.java110.dto.work.WorkPoolDto;
-import com.java110.dto.work.WorkPoolFileDto;
-import com.java110.dto.work.WorkTaskDto;
+import com.java110.dto.work.*;
 import com.java110.intf.oa.*;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
-import com.java110.po.workPool.WorkCopyPo;
-import com.java110.po.workPool.WorkCyclePo;
-import com.java110.po.workPool.WorkPoolPo;
-import com.java110.po.workPool.WorkPoolContentPo;
-import com.java110.po.workPool.WorkPoolFilePo;
-import com.java110.po.workPool.WorkTaskPo;
+import com.java110.po.workPool.*;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
@@ -83,6 +74,9 @@ public class UpdateWorkPoolCmd extends Cmd {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkTaskItemV1InnerServiceSMO workTaskItemV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -195,10 +189,16 @@ public class UpdateWorkPoolCmd extends Cmd {
         workTaskPo.setStoreId(workPoolPo.getStoreId());
         workTaskV1InnerServiceSMOImpl.deleteWorkTask(workTaskPo);
 
+        WorkTaskItemPo workTaskItemPo = new WorkTaskItemPo();
+        workTaskItemPo.setWorkId(workPoolPo.getWorkId());
+        workTaskItemPo.setStoreId(workPoolPo.getStoreId());
+        workTaskItemV1InnerServiceSMOImpl.deleteWorkTaskItem(workTaskItemPo);
+
         WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
         workPoolFilePo.setWorkId(workPoolPo.getWorkId());
         workPoolFilePo.setStoreId(workPoolPo.getStoreId());
         workPoolFileV1InnerServiceSMOImpl.deleteWorkPoolFile(workPoolFilePo);
+        JSONArray contents = reqJson.getJSONArray("contents");
 
         for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
             workTaskPo = new WorkTaskPo();
@@ -217,6 +217,20 @@ public class UpdateWorkPoolCmd extends Cmd {
 
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
+            }
+            JSONObject content = null;
+            for (int cIndex = 0; cIndex < contents.size(); cIndex++) {
+                content = contents.getJSONObject(cIndex);
+                workTaskItemPo = new WorkTaskItemPo();
+                workTaskItemPo.setDeductionMoney("0");
+                workTaskItemPo.setContentId(content.getString("contentId"));
+                workTaskItemPo.setStoreId(workPoolPo.getStoreId());
+                workTaskItemPo.setWorkId(workPoolPo.getWorkId());
+                workTaskItemPo.setItemId(GenerateCodeFactory.getGeneratorId("11"));
+                workTaskItemPo.setState(WorkTaskDto.STATE_WAIT);
+                workTaskItemPo.setCommunityId(workPoolPo.getCommunityId());
+                workTaskItemPo.setTaskId(workTaskPo.getTaskId());
+                workTaskItemV1InnerServiceSMOImpl.saveWorkTaskItem(workTaskItemPo);
             }
 
             if (StringUtil.isEmpty(reqJson.getString("pathUrl"))) {

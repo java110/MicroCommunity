@@ -92,9 +92,7 @@
             , t.deduction_money= #{deductionMoney}
         </if>
 
-        <if test="workId !=null and workId != ''">
-            , t.work_id= #{workId}
-        </if>
+
         <if test="deductionReason !=null and deductionReason != ''">
             , t.deduction_reason= #{deductionReason}
         </if>
@@ -118,6 +116,9 @@
         </if>
         <if test="taskId !=null and taskId != ''">
             and t.task_id= #{taskId}
+        </if>
+        <if test="workId !=null and workId != ''">
+            and t.work_id= #{workId}
         </if>
 
     </update>
