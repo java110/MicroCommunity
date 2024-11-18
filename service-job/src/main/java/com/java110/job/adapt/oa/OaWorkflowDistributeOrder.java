@@ -152,7 +152,7 @@ public class OaWorkflowDistributeOrder extends DatabusAdaptImpl {
         JSONObject content = new JSONObject();
         content.put("flowName", oaWorkflowDtos.get(0).getFlowName());
         content.put("create_user_name", formDatas.get(0).get("create_user_name").toString());
-        content.put("create_time", formDatas.get(0).get("create_time").toString());
+        content.put("create_time", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         content.put("date", DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
         content.put("orderId", oaWorkflowDataPo.getBusinessKey());
 

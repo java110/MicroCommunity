@@ -162,6 +162,7 @@ public class GetOaWorkflowFormBMOImpl implements IGetOaWorkflowFormBMO {
      * @return
      */
     @Override
+    @Java110Transactional
     public ResponseEntity<String> saveOaWorkflowFormData(JSONObject reqJson) {
         OaWorkflowFormDto oaWorkflowFormDto = new OaWorkflowFormDto();
         oaWorkflowFormDto.setFlowId(reqJson.get("flowId").toString());
