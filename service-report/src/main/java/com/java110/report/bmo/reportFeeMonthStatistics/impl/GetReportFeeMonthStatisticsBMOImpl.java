@@ -20,6 +20,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.IGetReportFeeMonthStatisticsBMO;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -371,7 +372,7 @@ public class GetReportFeeMonthStatisticsBMOImpl implements IGetReportFeeMonthSta
         if (count > 0) {
             reportFeeMonthStatisticsDtos = reportFeeMonthStatisticsInnerServiceSMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
             ReportFeeMonthStatisticsDto tmpReportFeeMonthStatisticsDto = reportFeeMonthStatisticsInnerServiceSMOImpl.queryOweFeeDetailMajor(reportFeeMonthStatisticsDto);
-            if (reportFeeMonthStatisticsDtos != null && reportFeeMonthStatisticsDtos.size() > 0) {
+            if (!ListUtil.isNull(reportFeeMonthStatisticsDtos)) {
                 for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto1 : reportFeeMonthStatisticsDtos) {
 //                    reportFeeMonthStatisticsDto1.setAllReceivableAmount(tmpReportFeeMonthStatisticsDto.getAllReceivableAmount());
 //                    reportFeeMonthStatisticsDto1.setAllReceivedAmount(tmpReportFeeMonthStatisticsDto.getAllReceivedAmount());

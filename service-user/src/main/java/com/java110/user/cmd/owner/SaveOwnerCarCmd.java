@@ -23,10 +23,7 @@ import com.java110.po.owner.OwnerCarAttrPo;
 import com.java110.po.parking.ParkingSpacePo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -72,6 +69,17 @@ public class SaveOwnerCarCmd extends Cmd {
             Assert.isDate(reqJson.getString("endTime"),DateUtil.DATE_FORMATE_STRING_B,"结束时间格式错误");
         }
 
+        String startTime = reqJson.getString("startTime");
+        String endTime = reqJson.getString("endTime");
+        if(StringUtil.isEmpty(startTime)){
+            startTime = DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B);
+            reqJson.put("startTime",startTime);
+        }
+        if(StringUtil.isEmpty(endTime)){
+            endTime = "2050-01-01";
+            reqJson.put("endTime",endTime);
+        }
+
         //检查车位是否是空闲状态
         ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
         parkingSpaceDto.setPsId(reqJson.getString("psId"));
@@ -79,7 +87,7 @@ public class SaveOwnerCarCmd extends Cmd {
         Assert.listOnlyOne(parkingSpaceDtos, "查询车位错误！");
         //获取车位状态
         String state = parkingSpaceDtos.get(0).getState();
-        if (StringUtil.isEmpty(state) || !state.equals("F")) {
+        if (StringUtil.isEmpty(state) || !ParkingSpaceDto.STATE_FREE.equals(state)) {
             throw new IllegalArgumentException("该车位不是空闲状态！");
         }
 
@@ -115,7 +123,7 @@ public class SaveOwnerCarCmd extends Cmd {
         carInoutDto.setCarNum(reqJson.getString("carNum"));
         carInoutDto.setStates(new String[]{CarInoutDto.STATE_PAY, CarInoutDto.STATE_IN, CarInoutDto.STATE_REPAY});
         List<CarInoutDto> carInoutDtos = carInoutInnerServiceSMOImpl.queryCarInouts(carInoutDto);
-        if (carInoutDtos != null && carInoutDtos.size() > 0) {
+        if (!ListUtil.isNull(carInoutDtos)) {
             throw new CmdException("车辆在场，请出场后再办理月租车");
         }
     }
@@ -127,10 +135,6 @@ public class SaveOwnerCarCmd extends Cmd {
             reqJson.put("leaseType", OwnerCarDto.LEASE_TYPE_MONTH);
         }
 
-        if (!OwnerCarDto.LEASE_TYPE_MONTH.equals(reqJson.getString("leaseType"))) {
-            reqJson.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
-            reqJson.put("endTime", "2050-01-01");
-        }
         JSONObject businessOwnerCar = new JSONObject();
         businessOwnerCar.putAll(reqJson);
         businessOwnerCar.put("memberId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_carId));

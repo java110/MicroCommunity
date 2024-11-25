@@ -90,10 +90,10 @@ public class EditOwnerCarCmd extends Cmd {
             reqJson.put("leaseType", OwnerCarDto.LEASE_TYPE_MONTH);
         }
 
-        if (!OwnerCarDto.LEASE_TYPE_MONTH.equals(reqJson.getString("leaseType"))) {
-            reqJson.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
-            reqJson.put("endTime", "2037-01-01");
-        }
+//        if (!OwnerCarDto.LEASE_TYPE_MONTH.equals(reqJson.getString("leaseType"))) {
+//            reqJson.put("startTime", DateUtil.getFormatTimeString(new Date(), DateUtil.DATE_FORMATE_STRING_B));
+//            reqJson.put("endTime", "2050-01-01");
+//        }
 
         OwnerCarPo ownerCarPo = BeanConvertUtil.covertBean(reqJson, OwnerCarPo.class);
         int flag = ownerCarV1InnerServiceSMOImpl.updateOwnerCar(ownerCarPo);
