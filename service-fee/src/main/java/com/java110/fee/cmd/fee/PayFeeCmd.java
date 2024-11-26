@@ -601,7 +601,7 @@ public class PayFeeCmd extends Cmd {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(paramObj.getString("communityId"));
         ownerCarDto.setCarId(feeDtos.get(0).getPayerObjId());
-        ownerCarDto.setCarTypeCd("1001"); //业主车辆
+        //ownerCarDto.setCarTypeCd("1001"); //业主车辆
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
         if (ListUtil.isNull(ownerCarDtos)) {
