@@ -71,10 +71,10 @@ public class CouponPropertyPoolDetailV1ServiceDaoImpl extends BaseServiceDao imp
     public List<Map> getCouponPropertyPoolDetailInfo(Map info) throws DAOException {
         logger.debug("查询 getCouponPropertyPoolDetailInfo 入参 info : {}",info);
 
-        List<Map> businessCouponPropertyPoolDetailInfos
+        List<Map> infos
                 = sqlSessionTemplate.selectList("couponPropertyPoolDetailV1ServiceDaoImpl.getCouponPropertyPoolDetailInfo",info);
 
-        return businessCouponPropertyPoolDetailInfos;
+        return infos;
     }
 
 
@@ -101,12 +101,12 @@ public class CouponPropertyPoolDetailV1ServiceDaoImpl extends BaseServiceDao imp
     public int queryCouponPropertyPoolDetailsCount(Map info) {
         logger.debug("查询 queryCouponPropertyPoolDetailsCount 入参 info : {}",info);
 
-        List<Map> businessCouponPropertyPoolDetailInfos = sqlSessionTemplate.selectList("couponPropertyPoolDetailV1ServiceDaoImpl.queryCouponPropertyPoolDetailsCount", info);
-        if (businessCouponPropertyPoolDetailInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("couponPropertyPoolDetailV1ServiceDaoImpl.queryCouponPropertyPoolDetailsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessCouponPropertyPoolDetailInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
