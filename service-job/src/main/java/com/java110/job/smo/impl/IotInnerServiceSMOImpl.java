@@ -134,7 +134,7 @@ public class IotInnerServiceSMOImpl extends BaseServiceSMO implements IIotInnerS
             return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
         }
         JSONObject paramIn = BeanConvertUtil.beanCovertJson(couponPropertyUserPo);
-        paramIn.put("iotApiCode", "sendChargeCoupon");
+        paramIn.put("iotApiCode", "sendChargeCouponBmoImpl");
         ResultVo resultVo = sendIotImpl.post("/iot/api/common.openCommonApi", paramIn);
 
         return resultVo;
