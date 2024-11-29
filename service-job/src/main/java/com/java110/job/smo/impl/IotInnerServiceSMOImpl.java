@@ -127,7 +127,7 @@ public class IotInnerServiceSMOImpl extends BaseServiceSMO implements IIotInnerS
     }
 
     @Override
-    public ResultVo sendChargeCoupon(CouponPropertyUserPo couponPropertyUserPo) {
+    public ResultVo sendChargeCoupon(@RequestBody  CouponPropertyUserPo couponPropertyUserPo) {
         String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
 
         if (!"ON".equals(iotSwitch)) {
