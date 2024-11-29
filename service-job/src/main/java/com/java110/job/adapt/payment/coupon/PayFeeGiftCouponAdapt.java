@@ -310,6 +310,7 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
             // todo 充点券 同步物联网
             if(CouponPropertyUserDto.TO_TYPE_CHARGE.equals(couponPropertyPoolDtos.get(0).getToType())){
                 // todo 优惠券写到物联网系统
+                couponPropertyUserPo.setValue(couponPropertyPoolConfigDtos.get(0).getColumnValue());
                 iotInnerServiceSMOImpl.sendChargeCoupon(couponPropertyUserPo);
             }else{
                 couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
