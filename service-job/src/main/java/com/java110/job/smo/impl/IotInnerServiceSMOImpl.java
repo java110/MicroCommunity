@@ -11,7 +11,9 @@ import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.job.adapt.hcIot.http.ISendIot;
+import com.java110.po.coupon.CouponPropertyUserPo;
 import com.java110.utils.cache.MappingCache;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -120,6 +122,20 @@ public class IotInnerServiceSMOImpl extends BaseServiceSMO implements IIotInnerS
         }
 
         ResultVo resultVo = sendIotImpl.post("/iot/api/owner.transforOwnerUser", paramIn);
+
+        return resultVo;
+    }
+
+    @Override
+    public ResultVo sendChargeCoupon(CouponPropertyUserPo couponPropertyUserPo) {
+        String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
+
+        if (!"ON".equals(iotSwitch)) {
+            return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+        }
+        JSONObject paramIn = BeanConvertUtil.beanCovertJson(couponPropertyUserPo);
+        paramIn.put("iotApiCode", "sendChargeCoupon");
+        ResultVo resultVo = sendIotImpl.post("/iot/api/common.openCommonApi", paramIn);
 
         return resultVo;
     }

@@ -16,6 +16,7 @@ import com.java110.intf.acct.ICouponPropertyPoolConfigV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponPropertyPoolDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponPropertyPoolV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponPropertyUserV1InnerServiceSMO;
+import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
 import com.java110.po.coupon.CouponPropertyPoolPo;
 import com.java110.po.coupon.CouponPropertyPoolDetailPo;
@@ -24,6 +25,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -76,6 +78,9 @@ public class GiftCouponPropertyCmd extends Cmd{
     @Autowired
     private ICouponPropertyUserV1InnerServiceSMO couponPropertyUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
+
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -93,7 +98,7 @@ public class GiftCouponPropertyCmd extends Cmd{
         ownerDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
 
-        if(ownerDtos == null || ownerDtos.size()< 1){
+        if(ListUtil.isNull(ownerDtos)){
             throw new CmdException("根据手机号未查询到业主");
         }
 
@@ -106,7 +111,7 @@ public class GiftCouponPropertyCmd extends Cmd{
             couponPropertyPoolDto.setCppId(reqJson.getString("cppId"));
             List<CouponPropertyPoolDto> couponPropertyPoolDtos = couponPropertyPoolV1InnerServiceSMOImpl.queryCouponPropertyPools(couponPropertyPoolDto);
 
-            if (couponPropertyPoolDtos == null || couponPropertyPoolDtos.size() < 1) {
+            if (ListUtil.isNull(couponPropertyPoolDtos)) {
                 return;
             }
 
@@ -152,7 +157,6 @@ public class GiftCouponPropertyCmd extends Cmd{
             if(flag < 1){
                 throw new CmdException("赠送失败");
             }
-
             //用户账户写入优惠券
             CouponPropertyUserPo couponPropertyUserPo = new CouponPropertyUserPo();
             couponPropertyUserPo.setCommunityId(couponPropertyPoolDtos.get(0).getCommunityId());
@@ -168,10 +172,12 @@ public class GiftCouponPropertyCmd extends Cmd{
             couponPropertyUserPo.setTel(ownerDtos.get(0).getLink());
             couponPropertyUserPo.setValue(value);
             couponPropertyUserPo.setStartTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
-            flag = couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
-
-            if(flag < 1){
-                throw new CmdException("保存赠送业主记录失败");
+            // todo 充点券 同步物联网
+            if(CouponPropertyUserDto.TO_TYPE_CHARGE.equals(couponPropertyPoolDtos.get(0).getToType())){
+                // todo 优惠券写到物联网系统
+                iotInnerServiceSMOImpl.sendChargeCoupon(couponPropertyUserPo);
+            }else{
+                couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
             }
         } finally {
             DistributedLock.releaseDistributedLock(requestId, key);

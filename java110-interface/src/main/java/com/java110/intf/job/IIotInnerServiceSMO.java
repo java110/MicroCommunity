@@ -9,6 +9,7 @@ import com.java110.dto.machine.CarInoutDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.system.Business;
 import com.java110.dto.user.UserDto;
+import com.java110.po.coupon.CouponPropertyUserPo;
 import com.java110.vo.ResultVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,4 +52,6 @@ public interface IIotInnerServiceSMO {
 
     @RequestMapping(value = "/sendUserInfo", method = RequestMethod.POST)
     ResultVo  sendUserInfo(@RequestBody UserDto userDto);
+    @RequestMapping(value = "/sendChargeCoupon", method = RequestMethod.POST)
+    ResultVo  sendChargeCoupon(@RequestBody CouponPropertyUserPo couponPropertyUserPo);
 }

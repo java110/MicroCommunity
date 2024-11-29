@@ -21,6 +21,7 @@ import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeDetailInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
+import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.job.adapt.DatabusAdaptImpl;
 import com.java110.po.coupon.CouponPropertyPoolPo;
 import com.java110.po.coupon.CouponPropertyPoolDetailPo;
@@ -83,6 +84,9 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
 
     @Autowired
     private ICouponPropertyUserV1InnerServiceSMO couponPropertyUserV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
 
 
     @Autowired
@@ -303,7 +307,13 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
             couponPropertyUserPo.setTel(FeeAttrDto.getFeeAttrValue(feeDto, FeeAttrDto.SPEC_CD_OWNER_LINK));
             couponPropertyUserPo.setValue(value);
             couponPropertyUserPo.setStartTime(startTime);
-            couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
+            // todo 充点券 同步物联网
+            if(CouponPropertyUserDto.TO_TYPE_CHARGE.equals(couponPropertyPoolDtos.get(0).getToType())){
+                // todo 优惠券写到物联网系统
+                iotInnerServiceSMOImpl.sendChargeCoupon(couponPropertyUserPo);
+            }else{
+                couponPropertyUserV1InnerServiceSMOImpl.saveCouponPropertyUser(couponPropertyUserPo);
+            }
             //这里更新功能 关闭 因为优惠券有有效期 如果 修改显然不合适 modify by  2022-11-24 wuxw
 //            }else{
 //                couponPropertyUserPo.setCouponId(couponPropertyUserDtos.get(0).getCouponId());
