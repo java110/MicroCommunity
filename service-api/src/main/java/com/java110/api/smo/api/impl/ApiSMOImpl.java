@@ -5,13 +5,14 @@ import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.IApiServiceSMO;
 import com.java110.api.smo.api.IApiSMO;
 import com.java110.core.context.IPageData;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.system.ComponentValidateResult;
+import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,9 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
 
     @Autowired
     private IApiServiceSMO apiServiceSMOImpl;
+
+    @Autowired
+    private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
     private final static Logger logger = LoggerFactory.getLogger(ApiSMOImpl.class);
 
@@ -51,6 +55,7 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
         }
 
         JSONObject storeInfo = JSONObject.parseObject(responseEntity.getBody().toString());
+        //todo 说明是业主直接返回
         if (!storeInfo.containsKey("storeId")) {
             return new ComponentValidateResult("", "", "", pd.getUserId(), pd.getUserName());
         }
@@ -64,7 +69,7 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
         JSONObject paramIn = JSONObject.parseObject(pd.getReqData());
 
         //开发者和运营不校验小区
-        if(StoreDto.STORE_TYPE_ADMIN.equals(storeTypeCd) || StoreDto.STORE_TYPE_DEV.equals(storeTypeCd)){
+        if (StoreDto.STORE_TYPE_ADMIN.equals(storeTypeCd) || StoreDto.STORE_TYPE_DEV.equals(storeTypeCd)) {
             return new ComponentValidateResult(storeId, storeTypeCd, "", pd.getUserId(), pd.getUserName());
         }
 
@@ -84,18 +89,17 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
         IPageData pd = (IPageData) request.getAttribute(CommonConstant.CONTEXT_PAGE_DATA);
 
 
+        //todo 校验员工时 是否有访问小区的权限
         ComponentValidateResult result = this.validateStoreStaffCommunityRelationship(pd, restTemplate);
+        //todo 如果 登录用户不为空 则将 前段传递的user-id 重写
         if (!StringUtil.isEmpty(result.getLoginUserId())) {
             headers.remove("user-id");
             headers.remove("user_id");
             headers.put("user-id", result.getUserId());
             headers.put("user_id", result.getUserId());
-            headers.put("login-user-id",result.getLoginUserId());
-//            if (!StringUtil.isEmpty(result.getUserName())) {
-//                headers.put("user-name", URLEncoder.encode(result.getUserName(), "UTF-8"));
-//            }
+            headers.put("login-user-id", result.getLoginUserId());
         }
-
+        // todo 如果 商户不为空则 商户ID写入只头信息中 这里的商户ID 可以是物业ID 或者商家ID
         if (!StringUtil.isEmpty(result.getStoreId())) {
             headers.remove("store-id");
             headers.put("store-id", result.getStoreId());
@@ -108,6 +112,7 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
             headers.put("user-id", "-1");
         }
         headers.put("store-id", result.getStoreId());
+        // todo 应用是否有接口权限校验
         ResponseEntity<String> responseEntity = apiServiceSMOImpl.service(body, headers);
         return responseEntity;
     }

@@ -1,7 +1,7 @@
 package com.java110.api.components.configMenu;
 
-import com.java110.core.context.IPageData;
 import com.java110.api.smo.configMenu.IConfigMenuBindingSMO;
+import com.java110.core.context.IPageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

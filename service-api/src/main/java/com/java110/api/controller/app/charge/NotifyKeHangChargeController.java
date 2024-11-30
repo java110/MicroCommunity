@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 科航充电桩 充电完成回调
+ *
+ */
 @RestController
 @RequestMapping(path = "/app/charge/kehang")
 public class NotifyKeHangChargeController extends BaseController {

@@ -2,16 +2,14 @@ package com.java110.api.smo.login.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.login.IPropertyAppLoginSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.AuthenticationFactory;
-import com.java110.api.smo.AppAbstractComponentSMO;
-import com.java110.api.smo.login.IPropertyAppLoginSMO;
-import com.java110.utils.constant.ServiceConstant;
+import com.java110.core.log.LoggerFactory;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -60,11 +58,9 @@ public class PropertyAppLoginSMOImpl extends DefaultAbstractComponentSMO impleme
         }
 
         JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
-
         if (userInfo.containsKey("code") && 0 != userInfo.getIntValue("code")) {
             return responseEntity;
         }
-
         //根据用户查询商户信息
         String userId = userInfo.getString("userId");
 
@@ -86,6 +82,7 @@ public class PropertyAppLoginSMOImpl extends DefaultAbstractComponentSMO impleme
         userInfo.put("storeTypeCd", storeInfo.getString("storeTypeCd"));
         JSONObject paramOut = new JSONObject();
         paramOut.put("result", 0);
+
         paramOut.put("code", 0);
         paramOut.put("msg", "成功");
         paramOut.put("userInfo", userInfo);

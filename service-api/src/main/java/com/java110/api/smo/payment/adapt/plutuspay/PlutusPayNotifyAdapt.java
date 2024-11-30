@@ -24,6 +24,7 @@ import com.java110.api.smo.payment.adapt.IPayNotifyAdapt;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.PlutusFactory;
 import com.java110.core.factory.WechatFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,7 +32,6 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.PayUtil;
 import org.bouncycastle.util.encoders.Base64;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -93,7 +93,7 @@ public class PlutusPayNotifyAdapt extends DefaultAbstractComponentSMO implements
         }
         String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(),"PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature),publicKey);
+        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature),publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");

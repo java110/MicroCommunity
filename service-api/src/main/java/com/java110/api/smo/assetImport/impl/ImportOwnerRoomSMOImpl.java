@@ -187,7 +187,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             }
 
             if (!hasOwnerType) {
-                throw new IllegalArgumentException((roomIndex + 1) + "行一个房屋必须要有业主存在 才能hasSpecialCharacters 写家庭成员和房屋租客 和临时人员，并且业主要写在 其他之前");
+                throw new IllegalArgumentException((roomIndex + 1) + "行一个房屋必须要有业主存在 才能 写家庭成员和房屋租客 和临时人员，并且业主要写在 其他之前");
             }
         }
     }
@@ -228,7 +228,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             if (os.length > 12 && !StringUtil.isNullOrNone(os[12])) {
                 Assert.hasValue(os[12], (osIndex + 1) + "行业主名称不能为空");
                 Assert.hasValue(os[13], (osIndex + 1) + "行性别不能为空");
-                // Assert.hasValue(os[14], (osIndex + 1) + "行年龄不能为空");
+               // Assert.hasValue(os[14], (osIndex + 1) + "行年龄不能为空");
                 Assert.hasValue(os[14], (osIndex + 1) + "行手机号不能为空");
                 //Assert.hasValue(os[15], (osIndex + 1) + "行身份证不能为空");
                 Assert.hasValue(os[16], (osIndex + 1) + "行业主类型不能为空");
@@ -253,7 +253,7 @@ public class ImportOwnerRoomSMOImpl extends DefaultAbstractComponentSMO implemen
             if (os.length > 12 && !StringUtil.isNullOrNone(os[12])) {
                 importOwnerRoomDto.setOwnerName(os[12].toString().trim());
                 importOwnerRoomDto.setSex("男".equals(os[13].toString().trim()) ? "0" : "1");
-                // String age = StringUtil.isNullOrNone(os[14]) ? CommonUtil.getAgeByCertId(os[16].toString().trim()) : os[14].toString().trim();
+               // String age = StringUtil.isNullOrNone(os[14]) ? CommonUtil.getAgeByCertId(os[16].toString().trim()) : os[14].toString().trim();
                 importOwnerRoomDto.setAge("1");
                 importOwnerRoomDto.setTel(os[14].toString().trim());
                 String idCard = StringUtil.isNullOrNone(os[15])?"": os[15].toString().trim();

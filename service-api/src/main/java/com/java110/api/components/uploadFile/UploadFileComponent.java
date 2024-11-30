@@ -15,8 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Component("uploadFile")
 public class UploadFileComponent {
 
+
     @Autowired
     private IAddFileSMO addFileSMOImpl;
+
+
 
     /**
      * 上传图片
@@ -45,5 +48,4 @@ public class UploadFileComponent {
                 pd.getSessionId(), pd.getAppId(), pd.getHeaders());
         return addFileSMOImpl.savePhotoFile(newPd);
     }
-
 }

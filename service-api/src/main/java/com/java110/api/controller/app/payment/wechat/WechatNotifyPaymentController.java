@@ -5,7 +5,6 @@ import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.intf.acct.INotifyPaymentV1InnerServiceSMO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +26,12 @@ public class WechatNotifyPaymentController {
      * @throws Exception
      */
     @RequestMapping(path = "/wechat/{appId}/{paymentPoolId}", method = RequestMethod.POST)
-    public ResponseEntity<String> notify(@RequestBody String postInfo, @PathVariable String appId, @PathVariable String paymentPoolId, HttpServletRequest request) {
+    public ResponseEntity<String> notify(@RequestBody String postInfo, @PathVariable String appId,
+                                         @PathVariable String paymentPoolId,HttpServletRequest request) {
 
         logger.debug("微信支付回调报文" + postInfo);
 
-        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId, postInfo, "", paymentPoolId));
+        return notifyPaymentV1InnerServiceSMOImpl.notifyPayment(new NotifyPaymentOrderDto(appId,postInfo,"",paymentPoolId));
 
     }
 
@@ -42,11 +42,11 @@ public class WechatNotifyPaymentController {
      * @throws Exception
      */
     @RequestMapping(path = "/nativeWechat/{appId}/{paymentPoolId}", method = RequestMethod.POST)
-    public ResponseEntity<String> nativeNotify(@RequestBody String postInfo, @PathVariable String appId, @PathVariable String paymentPoolId, HttpServletRequest request) {
+    public ResponseEntity<String> nativeNotify(@RequestBody String postInfo, @PathVariable String appId,@PathVariable String paymentPoolId, HttpServletRequest request) {
 
         logger.debug("微信支付回调报文" + postInfo);
 
-        return notifyPaymentV1InnerServiceSMOImpl.nativeNotifyPayment(new NotifyPaymentOrderDto(appId, postInfo, "", paymentPoolId));
+        return notifyPaymentV1InnerServiceSMOImpl.nativeNotifyPayment(new NotifyPaymentOrderDto(appId,postInfo,"",paymentPoolId));
 
     }
 }

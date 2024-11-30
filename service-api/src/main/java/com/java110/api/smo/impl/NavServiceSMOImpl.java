@@ -1,19 +1,13 @@
 package com.java110.api.smo.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.component.BaseComponentSMO;
-import com.java110.core.context.IPageData;
-import com.java110.api.smo.ICommunityServiceSMO;
 import com.java110.api.smo.INavServiceSMO;
+import com.java110.core.context.IPageData;
+import com.java110.core.log.LoggerFactory;
 import com.java110.utils.cache.MappingCache;
-import com.java110.utils.constant.ServiceConstant;
-import com.java110.utils.constant.StateConstant;
-import com.java110.utils.util.CommonUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -33,9 +27,6 @@ public class NavServiceSMOImpl extends DefaultAbstractComponentSMO implements IN
     @Autowired
     private RestTemplate restTemplate;
 
-
-    @Autowired
-    private ICommunityServiceSMO communityServiceSMOImpl;
 
     /**
      * 用户退出
@@ -93,40 +84,5 @@ public class NavServiceSMOImpl extends DefaultAbstractComponentSMO implements IN
     }
 
 
-    @Override
-    public ResponseEntity<String> listMyCommunity(IPageData pd) {
-        ResponseEntity<String> responseEntity = communityServiceSMOImpl.listMyCommunity(pd);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            return responseEntity;
-        }
 
-        JSONArray communitys = JSONArray.parseArray(responseEntity.getBody());
-
-        JSONArray newCommunitys = new JSONArray();
-
-        //只返回小区ID和小区名称 并且是在用的
-        JSONObject tempCommunity = null;
-        JSONObject newCommunity = null;
-        for (int communityIndex = 0; communityIndex < communitys.size(); communityIndex++) {
-            tempCommunity = communitys.getJSONObject(communityIndex);
-
-            if (!StateConstant.AGREE_AUDIT.equals(tempCommunity.getString("auditStatusCd"))) {
-                continue;
-            }
-            newCommunity = new JSONObject();
-            newCommunity.put("communityId", tempCommunity.getString("communityId"));
-            newCommunity.put("name", tempCommunity.getString("name"));
-            newCommunitys.add(newCommunity);
-        }
-        responseEntity = new ResponseEntity<String>(newCommunitys.toJSONString(), HttpStatus.OK);
-        return responseEntity;
-    }
-
-    public ICommunityServiceSMO getCommunityServiceSMOImpl() {
-        return communityServiceSMOImpl;
-    }
-
-    public void setCommunityServiceSMOImpl(ICommunityServiceSMO communityServiceSMOImpl) {
-        this.communityServiceSMOImpl = communityServiceSMOImpl;
-    }
 }

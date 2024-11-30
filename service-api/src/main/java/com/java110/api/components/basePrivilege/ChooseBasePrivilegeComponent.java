@@ -1,8 +1,8 @@
 package com.java110.api.components.basePrivilege;
 
 
-import com.java110.core.context.IPageData;
 import com.java110.api.smo.basePrivilege.IListBasePrivilegesSMO;
+import com.java110.core.context.IPageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;

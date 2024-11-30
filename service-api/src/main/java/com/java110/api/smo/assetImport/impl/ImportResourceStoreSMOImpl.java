@@ -122,7 +122,7 @@ public class ImportResourceStoreSMOImpl extends DefaultAbstractComponentSMO impl
             resourceStoreDto.setRstName(os[9].toString());
             resourceStoreDto.setIsFixed(os[10].toString());
 
-            if (os.length > 11) {
+            if (os.length > 11 && !StringUtil.isNullOrNone(os[11])) {
                 resourceStoreDto.setRemark(os[11].toString());
             }
             resourceStoreDtos.add(resourceStoreDto);

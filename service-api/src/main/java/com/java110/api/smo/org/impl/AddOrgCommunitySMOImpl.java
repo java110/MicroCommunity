@@ -2,9 +2,9 @@ package com.java110.api.smo.org.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.org.IAddOrgCommunitySMO;
 import com.java110.core.context.IPageData;
 import com.java110.dto.system.ComponentValidateResult;
-import com.java110.api.smo.org.IAddOrgCommunitySMO;
 import com.java110.utils.util.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;

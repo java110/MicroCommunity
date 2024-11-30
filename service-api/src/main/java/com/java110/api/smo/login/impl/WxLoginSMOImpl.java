@@ -2,14 +2,15 @@ package com.java110.api.smo.login.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.java110.core.context.IPageData;
-import com.java110.core.context.PageData;
-import com.java110.core.factory.AuthenticationFactory;
-import com.java110.dto.owner.OwnerAppUserDto;
-import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.api.properties.WechatAuthProperties;
 import com.java110.api.smo.AppAbstractComponentSMO;
 import com.java110.api.smo.login.IWxLoginSMO;
+import com.java110.core.context.IPageData;
+import com.java110.core.context.PageData;
+import com.java110.core.factory.AuthenticationFactory;
+import com.java110.core.log.LoggerFactory;
+import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.wechat.SmallWeChatDto;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
@@ -17,7 +18,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -99,7 +99,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         }
 
         String openId = responseObj.getString("openid");
-        //String sessionKey = responseObj.getString("session_key");
+        String sessionKey = responseObj.getString("session_key");
 
         //responseEntity = super.getUserInfoByOpenId(pd, restTemplate, openId);
         OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
@@ -109,7 +109,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
         if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
             //将openId放到redis 缓存，给前段下发临时票据
             paramOut.put("openId", openId);
-           // paramOut.put("sessionKey", sessionKey);
+            paramOut.put("sessionKey", sessionKey);
             paramOut.put("msg", "还没有注册请先注册");
             responseEntity = new ResponseEntity<String>(paramOut.toJSONString(), HttpStatus.UNAUTHORIZED);
 
@@ -128,7 +128,7 @@ public class WxLoginSMOImpl extends AppAbstractComponentSMO implements IWxLoginS
             paramOut.put("result", 0);
             paramOut.put("userInfo", userInfo);
             paramOut.put("token", token);
-            //paramOut.put("sessionKey", sessionKey);
+            paramOut.put("sessionKey", sessionKey);
             pd.setToken(token);
             responseEntity = new ResponseEntity<String>(paramOut.toJSONString(), HttpStatus.OK);
         } catch (Exception e) {

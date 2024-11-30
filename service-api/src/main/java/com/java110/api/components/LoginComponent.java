@@ -1,9 +1,9 @@
 package com.java110.api.components;
 
 
-import com.java110.core.context.IPageData;
 import com.java110.api.smo.login.ILoginServiceSMO;
 import com.java110.api.smo.sys.ISysServiceSMO;
+import com.java110.core.context.IPageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +30,7 @@ public class LoginComponent {
         try {
                 responseEntity = loginServiceSMOImpl.doLogin(pd);
         } catch (Exception e) {
+            e.printStackTrace();
             responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;

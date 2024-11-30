@@ -2,12 +2,12 @@ package com.java110.api.smo.file.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.file.IUploadVedioSMO;
 import com.java110.config.properties.code.Java110Properties;
 import com.java110.core.client.CosUploadTemplate;
 import com.java110.core.client.FtpUploadTemplate;
 import com.java110.core.client.OssUploadTemplate;
 import com.java110.core.context.IPageData;
-import com.java110.api.smo.file.IUploadVedioSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.COSUtil;
@@ -28,13 +28,14 @@ import java.io.IOException;
  */
 @Service("uploadVedioSMOImpl")
 public class UploadVedioSMOImpl extends DefaultAbstractComponentSMO implements IUploadVedioSMO {
+
     private static final String ROOT_PATH = "hc/";
+
     @Autowired
     private RestTemplate restTemplate;
 
     @Autowired
     private Java110Properties java110Properties;
-
     @Autowired
     private FtpUploadTemplate ftpUploadTemplate;
 

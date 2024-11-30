@@ -2,10 +2,10 @@ package com.java110.api.smo.file.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
+import com.java110.api.smo.file.IAddFileSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.file.FileDto;
-import com.java110.api.smo.file.IAddFileSMO;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -34,6 +34,8 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
     @Autowired
     private IFileInnerServiceSMO fileInnerServiceSMOImpl;
+
+
 
     @Override
     public ResponseEntity<String> saveFile(IPageData pd, MultipartFile uploadFile) throws IOException {
@@ -77,7 +79,7 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
     public ResponseEntity<String> savePhotoFile(IPageData pd) {
 
         String images = pd.getReqData();
-        JSONObject imageObj = JSONObject.parseObject(images);
+        JSONObject imageObj=JSONObject.parseObject(images);
         JSONObject paramIn = new JSONObject();
         paramIn.put("context", imageObj.getString("uploadFile"));
         paramIn.put("fileName", "upload.jpg");
@@ -97,7 +99,7 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 
         JSONObject outParam = new JSONObject();
         outParam.put("fileId", fileName);
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN,"IMG_PATH");
         outParam.put("url", imgUrl + fileName);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(outParam.toJSONString(), HttpStatus.OK);
@@ -109,6 +111,8 @@ public class AddFileSMOImpl extends DefaultAbstractComponentSMO implements IAddF
 //                HttpMethod.POST);
         return responseEntity;
     }
+
+
 
     public RestTemplate getRestTemplate() {
         return restTemplate;

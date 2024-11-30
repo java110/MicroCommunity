@@ -1,6 +1,7 @@
 package com.java110.api.smo.assetImport.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.api.importData.IImportDataCleaningAdapt;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.assetImport.IAssetImportSMO;
 import com.java110.core.context.IPageData;
@@ -15,7 +16,6 @@ import com.java110.po.log.AssetImportLogPo;
 import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
-import com.java110.api.importData.IImportDataCleaningAdapt;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -110,8 +110,8 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
      * @param datas 数据
      */
     private ResponseEntity<String> saveLogAndImportData(IPageData pd,
-                                                 List datas,
-                                                 ComponentValidateResult result, String logType) {
+                                                        List datas,
+                                                        ComponentValidateResult result, String logType) {
         ResponseEntity<String> responseEntity = null;
 
         String logId = GenerateCodeFactory.getGeneratorId("10");
@@ -162,7 +162,6 @@ public class AssetImportSMOImpl extends DefaultAbstractComponentSMO implements I
         }
         return ResultVo.error("导入失败");
     }
-
 
 
 }

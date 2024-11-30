@@ -358,7 +358,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
             squarePrice = feeObj.getString("squarePrice");
 
             //动态费用单价就去动态单价
-            if (feeObj.containsKey("computingFormula") && "9009".equals(feeObj.getString("computingFormula"))) {
+            if(feeObj.containsKey("computingFormula") && "9009".equals(feeObj.getString("computingFormula"))){
                 squarePrice = feeObj.getString("mwPrice");
             }
 
@@ -369,13 +369,7 @@ public class ExportFeeManualCollectionSMOImpl extends DefaultAbstractComponentSM
             cell1.setCellValue(squarePrice);
             cell1.setCellStyle(cellStyle);
             cell2 = row.createCell(2);
-            if (feeObj.containsKey("curDegrees")) {
-                double totalDegrees = feeObj.getDouble("curDegrees") - feeObj.getDouble("preDegrees");
-                BigDecimal degreesDec = new BigDecimal(totalDegrees).setScale(2, BigDecimal.ROUND_HALF_UP);
-                cell2.setCellValue(degreesDec.doubleValue());
-            } else {
-                cell2.setCellValue(room.getString("builtUpArea"));
-            }
+            cell2.setCellValue(room.getString("builtUpArea"));
             cell2.setCellStyle(cellStyle);
             cell3 = row.createCell(3);
             if (feeObj.containsKey("curDegrees")) {

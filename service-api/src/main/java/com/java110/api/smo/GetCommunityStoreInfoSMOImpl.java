@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.cache.Java110RedisConfig;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.SecureInvocation;
-import com.java110.core.factory.CallApiServiceFactory;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.util.Assert;
@@ -35,17 +34,17 @@ public class GetCommunityStoreInfoSMOImpl extends DefaultAbstractComponentSMO im
             throw new IllegalArgumentException(responseEntity.getBody());
         }
 
-        if (!StringUtil.isJsonObject(responseEntity.getBody())) {
-            // return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, responseEntity.getBody());
+        if(!StringUtil.isJsonObject(responseEntity.getBody())){
+            //return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, responseEntity.getBody());
             throw new IllegalArgumentException(responseEntity.getBody());
         }
 
         JSONObject paramJson = JSONObject.parseObject(responseEntity.getBody());
-        if (paramJson.containsKey("code") && paramJson.getIntValue("code") != 0) {
+        if(paramJson.containsKey("code") && paramJson.getIntValue("code") != 0){
             throw new IllegalArgumentException(paramJson.getString("msg"));
         }
 
-        return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, responseEntity.getBody());
+        return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, responseEntity.getBody(),responseEntity.getBody());
     }
 
     @Override
@@ -64,7 +63,7 @@ public class GetCommunityStoreInfoSMOImpl extends DefaultAbstractComponentSMO im
             throw new IllegalArgumentException(responseEntity.getBody());
         }
         JSONObject paramOut = JSONObject.parseObject(responseEntity.getBody());
-        if (paramOut.containsKey("code") && ResultVo.CODE_OK != paramOut.getIntValue("code")) {
+        if(paramOut.containsKey("code") && ResultVo.CODE_OK != paramOut.getIntValue("code")){
             throw new IllegalArgumentException(paramOut.getString("msg"));
         }
         return new ResultVo(paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.get("data"));
@@ -98,8 +97,8 @@ public class GetCommunityStoreInfoSMOImpl extends DefaultAbstractComponentSMO im
 
         JSONArray privileges = data.getJSONArray("privileges");
 
-        if (!SecureInvocation.secure(this.getClass())) {
-            return new ResultVo(ResultVo.CODE_OK, privileges.toJSONString(), ResultVo.EMPTY_ARRAY);
+        if(!SecureInvocation.secure(this.getClass())){
+            return new ResultVo(ResultVo.CODE_OK,privileges.toJSONString(),ResultVo.EMPTY_ARRAY);
         }
 
         return new ResultVo(responseEntity.getStatusCode() == HttpStatus.OK ? ResultVo.CODE_OK : ResultVo.CODE_ERROR, privileges.toJSONString());

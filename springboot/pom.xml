@@ -172,6 +172,17 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>com.java110</groupId>
+            <artifactId>service-api</artifactId>
+            <version>${hc.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>java110-service</artifactId>
+                    <groupId>com.java110</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
@@ -184,10 +195,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-
-
-
-
     </dependencies>
 
 

@@ -2,7 +2,6 @@ package com.java110.api.components.assetImport;
 
 import com.java110.api.smo.assetExport.IExportRoomSMO;
 import com.java110.api.smo.assetImport.IImportCustomCreateFeeSMO;
-import com.java110.api.smo.assetImport.IImportRoomFeeSMO;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.log.LoggerFactory;

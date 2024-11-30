@@ -1,12 +1,10 @@
 package com.java110.api.controller.app.payment;
 
-import com.java110.api.controller.app.PaymentController;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.payment.NotifyPaymentOrderDto;
 import com.java110.intf.acct.INotifyPaymentV1InnerServiceSMO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

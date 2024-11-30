@@ -17,10 +17,10 @@ package com.java110.api.controller.component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
-import com.java110.core.base.controller.BaseController;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.language.Java110Lang;
+import com.java110.core.log.LoggerFactory;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.factory.ApplicationContextFactory;
@@ -29,7 +29,6 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,6 +104,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
             logger.error("调用api异常", e);
             responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("调用api异常", e);
             String msg = "";
             if (e instanceof InvocationTargetException) {
@@ -113,7 +113,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
                     msg = targetEx.getMessage();
                 }
             } else {
-                msg ="调用异常";
+                msg = e.getMessage();
             }
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
@@ -174,9 +174,11 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
         } catch (SMOException e) {
             /*MultiValueMap<String, String> headers = new HttpHeaders();
             headers.add("code", e.getResult().getCode());*/
+            e.printStackTrace();
             logger.error("调用组件异常", e);
             responseEntity = new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("调用组件异常", e);
             String msg = "";
             if (e instanceof InvocationTargetException) {
@@ -185,6 +187,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
                     msg = targetEx.getMessage();
                 }
             } else {
+                //msg = e.getMessage();
                 msg ="调用异常";
             }
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -258,7 +261,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
                     msg = targetEx.getMessage();
                 }
             } else {
-                msg ="调用异常";
+                msg = e.getMessage();
             }
             responseEntity = new ResponseEntity<>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {
@@ -321,7 +324,7 @@ public class CallComponentController extends DefaultAbstractComponentSMO {
                     msg = targetEx.getMessage();
                 }
             } else {
-                msg ="调用异常";
+                msg = e.getMessage();
             }
             responseEntity = new ResponseEntity<Object>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
         } finally {

@@ -3,7 +3,6 @@ package com.java110.api.smo;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.context.IPageData;
 import com.java110.vo.ResultVo;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public interface IGetCommunityStoreInfoSMO {

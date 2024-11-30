@@ -83,6 +83,7 @@ import java.util.concurrent.TimeUnit;
         "com.java110.user",
         "com.java110.doc",
         "com.java110.scm",
+        "com.java110.api",
         "com.java110.boot"
 },
         exclude = {LiquibaseAutoConfiguration.class,

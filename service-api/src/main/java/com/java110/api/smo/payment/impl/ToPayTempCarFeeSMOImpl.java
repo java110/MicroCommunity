@@ -9,6 +9,7 @@ import com.java110.api.smo.payment.adapt.IPayAdapt;
 import com.java110.core.context.IPageData;
 import com.java110.core.context.PageData;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.core.log.LoggerFactory;
 import com.java110.dto.owner.OwnerCarOpenUserDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.wechat.SmallWeChatDto;
@@ -26,7 +27,6 @@ import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -54,13 +54,13 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
     @Autowired
     private IOwnerCarOpenUserV1InnerServiceSMO ownerCarOpenUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
+
     @Override
     public ResponseEntity<String> toPay(IPageData pd) {
         return super.businessProcess(pd);
     }
-
-    @Autowired
-    private IParkingAreaV1InnerServiceSMO parkingAreaV1InnerServiceSMOImpl;
 
 
     @Override
@@ -80,6 +80,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
 
         ResponseEntity responseEntity = null;
 
+
         //根据paId 查询communityId
         ParkingAreaDto parkingAreaDto = new ParkingAreaDto();
         parkingAreaDto.setPaId(paramIn.getString("paId"));
@@ -87,6 +88,8 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
 
         Assert.listOnlyOne(parkingAreaDtos,"停车场不存在");
         paramIn.put("communityId",parkingAreaDtos.get(0).getCommunityId());
+
+
         SmallWeChatDto smallWeChatDto = getSmallWechat(pd, paramIn);
 
         if (smallWeChatDto == null) { //从配置文件中获取 小程序配置信息
@@ -100,7 +103,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         List<String> couponIds = new ArrayList<String>();
         if (couponList != null && couponList.size() > 0) {
             for (int couponIndex = 0; couponIndex < couponList.size(); couponIndex++) {
-                couponIds.add(couponList.getJSONObject(couponIndex).getString("couponId"));
+                couponIds.add(couponList.getString(couponIndex));
             }
         }
         //查询用户ID
@@ -163,7 +166,7 @@ public class ToPayTempCarFeeSMOImpl extends AppAbstractComponentSMO implements I
         OwnerCarOpenUserPo ownerCarOpenUserPo = new OwnerCarOpenUserPo();
         ownerCarOpenUserPo.setCarNum(paramIn.getString("carNum"));
         ownerCarOpenUserPo.setNickname("未获取");
-        ownerCarOpenUserPo.setHeadimgurl("为获取");
+        ownerCarOpenUserPo.setHeadimgurl("未获取");
         ownerCarOpenUserPo.setOpenId(openId);
         ownerCarOpenUserPo.setOpenType(OwnerCarOpenUserDto.OPEN_TYPE_WECHAT);
         ownerCarOpenUserPo.setOpenUserId(GenerateCodeFactory.getGeneratorId("10"));

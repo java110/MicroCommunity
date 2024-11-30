@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(path = "/app/smartMeter/notify")
-public class NotifySmartMeterController extends BaseController{
+public class NotifySmartMeterController extends BaseController {
 
     private final static Logger logger = LoggerFactory.getLogger(NotifySmartMeterController.class);
 
@@ -71,12 +71,12 @@ public class NotifySmartMeterController extends BaseController{
      */
     @RequestMapping(path = "/{implBean}/{appId}", method = RequestMethod.POST)
     public ResponseEntity<String> notify(
-                                          @PathVariable String implBean,
-                                          @PathVariable String appId,
-                                          @RequestBody String postInfo,
-                                          HttpServletRequest request) {
+            @PathVariable String implBean,
+            @PathVariable String appId,
+            @RequestBody String postInfo,
+            HttpServletRequest request) {
 
-        return notifySmartWeterV1InnerServiceSMOImpl.notifySmartMater(new NotifyMeterWaterOrderDto(appId,postInfo,implBean));
+        return notifySmartWeterV1InnerServiceSMOImpl.notifySmartMater(new NotifyMeterWaterOrderDto(appId, postInfo, implBean));
 
     }
 

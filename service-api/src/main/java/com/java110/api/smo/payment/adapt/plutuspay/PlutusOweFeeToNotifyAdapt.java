@@ -97,7 +97,7 @@ public class PlutusOweFeeToNotifyAdapt extends DefaultAbstractComponentSMO imple
         }
         String publicKey = CommunitySettingFactory.getRemark(smallWeChatDto.getObjId(), "PLUTUS_PUBLIC_KEY");
         //验签
-        Boolean verify = PlutusFactory.verify256(content, org.bouncycastle.util.encoders.Base64.decode(signature), publicKey);
+        Boolean verify = PlutusFactory.verify256(content, Base64.decode(signature), publicKey);
         //验签成功
         if (!verify) {
             throw new IllegalArgumentException("支付失败签名失败");

@@ -30,7 +30,6 @@ import org.springframework.web.client.RestTemplate;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +63,6 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     public static final String REPORT_YEAR_COLLECTION = "reportYearCollection";
     public static final String REPORT_LIST_OWE_FEE = "listOweFee";
     public static final String REPORT_REPAIR_DETAIL = "reportRepairDetail";
-    public static final String REPORT_PREPAYMENT_DETAIL = "reportPrePaymentDetail";
-    public static final String REPORT_COLLECT_FEES = "reportCollectFees";
     public static final String REPORT_PAY_FEE_MANAGE = "reportPayFeeManage";
     public static final String REPORT_QUESTION_ANSWER_DETAIL = "reportQuestionAnswerDetail";
     public static final String REPORT_PRE_PAYMENT_FEE = "reportPrePaymentFee";
@@ -82,7 +79,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
     public static final String RESOURCE_STAFF_FEE_MANAGE = "staffFeeManage";
     public static final String REPORT_PAY_FEE_DEPOSIT = "reportPayFeeDeposit";
     public static final String INSPECTION_TASK_DETAILS = "inspectionTaskDetails";
-
+    public static final String EXPORT_EXCEL = "exportExcel";
     @Autowired
     private RestTemplate restTemplate;
 
@@ -102,7 +99,6 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             pdHeaders.put("user_id", result.getUserId());
             pdHeaders.put("login-user-id", result.getLoginUserId());
         }
-
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "communityId", "请求中未包含小区");
         Assert.hasKeyAndValue(JSONObject.parseObject(pd.getReqData()), "pagePath", "请求中未包含页面");
 
@@ -144,12 +140,6 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
                 break;
             case REPORT_REPAIR_DETAIL:
                 reportRepairDetail(pd, result, workbook);
-                break;
-            case REPORT_PREPAYMENT_DETAIL:
-                reportPrepaymentDetail(pd, result, workbook);
-                break;
-            case REPORT_COLLECT_FEES:
-                reportCollectFees(pd, result, workbook);
                 break;
             case REPORT_PAY_FEE_MANAGE:
                 reportPayFeeManage(pd, result, workbook);
@@ -198,6 +188,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
                 break;
             case INSPECTION_TASK_DETAILS:
                 inspectionTaskDetails(pd, result, workbook);
+
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         MultiValueMap headers = new HttpHeaders();
@@ -221,6 +212,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         // 保存数据
         return new ResponseEntity<Object>(context, headers, HttpStatus.OK);
     }
+
 
     private void reportListOweFee(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
@@ -454,111 +446,6 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(6).setCellValue(dataObj.getString("returnAmount"));
             row.createCell(7).setCellValue(dataObj.getString("statementAmount"));
             row.createCell(8).setCellValue(dataObj.getString("score"));
-        }
-    }
-
-    private void reportPrepaymentDetail(IPageData pd, ComponentValidateResult result, Workbook workbook) {
-        Sheet sheet = workbook.createSheet("账单明细表");
-        Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("报表ID");
-        row.createCell(1).setCellValue("付费对象");
-        row.createCell(2).setCellValue("业主");
-        row.createCell(3).setCellValue("费用项");
-        row.createCell(4).setCellValue("费用类型");
-        row.createCell(5).setCellValue("费用状态");
-        row.createCell(6).setCellValue("支付方式");
-        row.createCell(7).setCellValue("费用开始时间");
-        row.createCell(8).setCellValue("费用结束时间");
-        row.createCell(9).setCellValue("缴费时间");
-        row.createCell(10).setCellValue("应缴金额(元)");
-        row.createCell(11).setCellValue("应收金额(元)");
-        row.createCell(12).setCellValue("实收金额(元)");
-        row.createCell(13).setCellValue("欠费金额(元)");
-        row.createCell(14).setCellValue("优惠金额(元)");
-        row.createCell(15).setCellValue("减免金额(元)");
-        row.createCell(16).setCellValue("赠送金额(元)");
-        row.createCell(17).setCellValue("滞纳金(元)");
-        row.createCell(18).setCellValue("空置房打折(元)");
-        row.createCell(19).setCellValue("空置房减免(元)");
-        row.createCell(20).setCellValue("面积(平方米)");
-
-        //查询预付期缴费明细
-        JSONArray prepayments = this.getReportPrepaymentDetail(pd, result);
-        if (prepayments == null || prepayments.size() == 0) {
-            return;
-        }
-        JSONObject dataObj = null;
-        for (int roomIndex = 0; roomIndex < prepayments.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex + 1);
-            dataObj = prepayments.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(dataObj.getString("prepaymentId"));
-            row.createCell(1).setCellValue(dataObj.getString("objName"));
-            row.createCell(2).setCellValue(dataObj.getString("ownerName"));
-            row.createCell(3).setCellValue(dataObj.getString("feeName"));
-            row.createCell(4).setCellValue(dataObj.getString("feeTypeCdName"));
-            row.createCell(5).setCellValue(dataObj.getString("prepaymentStateName"));
-            if (!StringUtil.isEmpty(dataObj.getString("primeRate"))) {
-                row.createCell(6).setCellValue(dataObj.getString("primeRate"));
-            } else {
-                row.createCell(6).setCellValue("--");
-            }
-            row.createCell(7).setCellValue(dataObj.getString("feeBeginTime"));
-            row.createCell(8).setCellValue(dataObj.getString("feeFinishTime"));
-            if (!StringUtil.isEmpty(dataObj.getString("payTime"))) {
-                row.createCell(9).setCellValue(dataObj.getString("payTime"));
-            } else {
-                row.createCell(9).setCellValue("--");
-            }
-            row.createCell(10).setCellValue(dataObj.getString("payableAmount"));
-            row.createCell(11).setCellValue(dataObj.getString("prepaymentReceivableAmount"));
-            row.createCell(12).setCellValue(dataObj.getString("prepaymentReceivedAmount"));
-            row.createCell(13).setCellValue(dataObj.getString("oweAmount"));
-            row.createCell(14).setCellValue(dataObj.getString("preferentialAmount"));
-            row.createCell(15).setCellValue(dataObj.getString("deductionAmount"));
-            row.createCell(16).setCellValue(dataObj.getString("giftAmount"));
-            row.createCell(17).setCellValue(dataObj.getString("lateFee"));
-            row.createCell(18).setCellValue(dataObj.getString("vacantHousingDiscount"));
-            row.createCell(19).setCellValue(dataObj.getString("vacantHousingReduction"));
-            row.createCell(20).setCellValue(dataObj.getString("builtUpArea"));
-        }
-    }
-
-    private void reportCollectFees(IPageData pd, ComponentValidateResult result, Workbook workbook){
-        Sheet sheet = workbook.createSheet("收费状况表");
-        Row row = sheet.createRow(0);
-        row.createCell(0).setCellValue("费用项");
-        row.createCell(1).setCellValue("费用类型");
-        row.createCell(2).setCellValue("应缴金额(元)");
-        row.createCell(3).setCellValue("应收金额(元)");
-        row.createCell(4).setCellValue("实收金额(元)");
-        row.createCell(5).setCellValue("欠费金额(元)");
-        row.createCell(6).setCellValue("优惠金额(元)");
-        row.createCell(7).setCellValue("减免金额(元)");
-        row.createCell(8).setCellValue("赠送金额(元)");
-        row.createCell(9).setCellValue("滞纳金(元)");
-        row.createCell(10).setCellValue("空置房打折(元)");
-        row.createCell(11).setCellValue("空置房减免(元)");
-        //查询预付期缴费明细
-        JSONArray prepayments = this.getReportCollectFees(pd, result);
-        if (prepayments == null || prepayments.size() == 0) {
-            return;
-        }
-        JSONObject dataObj = null;
-        for (int roomIndex = 0; roomIndex < prepayments.size(); roomIndex++) {
-            row = sheet.createRow(roomIndex + 1);
-            dataObj = prepayments.getJSONObject(roomIndex);
-            row.createCell(0).setCellValue(dataObj.getString("feeName"));
-            row.createCell(1).setCellValue(dataObj.getString("feeTypeCdName"));
-            row.createCell(2).setCellValue(dataObj.getString("allPayableAmount"));
-            row.createCell(3).setCellValue(dataObj.getString("allReceivableAmount"));
-            row.createCell(4).setCellValue(dataObj.getString("allReceivedAmount"));
-            row.createCell(5).setCellValue(dataObj.getString("allOweAmount"));
-            row.createCell(6).setCellValue(dataObj.getString("allPreferentialAmount"));
-            row.createCell(7).setCellValue(dataObj.getString("allDeductionAmount"));
-            row.createCell(8).setCellValue(dataObj.getString("allGiftAmount"));
-            row.createCell(9).setCellValue(dataObj.getString("allLateFee"));
-            row.createCell(10).setCellValue(dataObj.getString("allVacantHousingDiscount"));
-            row.createCell(11).setCellValue(dataObj.getString("allVacantHousingReduction"));
         }
     }
 
@@ -1090,6 +977,7 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         }
     }
 
+
     private void resourceStoreUseRecordManage(IPageData pd, ComponentValidateResult result, Workbook workbook) {
         Sheet sheet = workbook.createSheet("物品使用记录");
         Row row = sheet.createRow(0);
@@ -1306,52 +1194,6 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             return null;
         }
         return savedRepairInfoResults.getJSONArray("data");
-    }
-
-    private JSONArray getReportPrepaymentDetail(IPageData pd, ComponentValidateResult result) {
-        String apiUrl = "";
-        ResponseEntity<String> responseEntity = null;
-        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
-        reqJson.put("page", 1);
-        reqJson.put("row", 10000);
-        apiUrl = "/reportFeeMonthStatisticsPrepayment/queryPayFeePrepaymentDetail" + mapToUrlParam(reqJson);
-        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
-            return null;
-        }
-        JSONObject savedPrepaymentInfoResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
-        //获取限制条数的值
-        int number = Integer.parseInt(MappingCache.getValue(DOMAIN_COMMON, EXPORT_NUMBER));
-        if (savedPrepaymentInfoResults.getJSONArray("data").size() > number) {
-            throw new IllegalArgumentException("导出数据超过限制条数" + number + "条，无法继续导出操作！");
-        }
-        if (!savedPrepaymentInfoResults.containsKey("data")) {
-            return null;
-        }
-        return savedPrepaymentInfoResults.getJSONArray("data");
-    }
-
-    private JSONArray getReportCollectFees(IPageData pd, ComponentValidateResult result) {
-        String apiUrl = "";
-        ResponseEntity<String> responseEntity = null;
-        JSONObject reqJson = JSONObject.parseObject(pd.getReqData());
-        reqJson.put("page", 1);
-        reqJson.put("row", 10000);
-        apiUrl = "/reportFeeMonthStatisticsPrepayment/queryReportCollectFees" + mapToUrlParam(reqJson);
-        responseEntity = this.callCenterService(restTemplate, pd, "", apiUrl, HttpMethod.GET);
-        if (responseEntity.getStatusCode() != HttpStatus.OK) { //跳过 保存单元信息
-            return null;
-        }
-        JSONObject savedCollectFeeInfoResults = JSONObject.parseObject(responseEntity.getBody(), Feature.OrderedField);
-        //获取限制条数的值
-        int number = Integer.parseInt(MappingCache.getValue(DOMAIN_COMMON, EXPORT_NUMBER));
-        if (savedCollectFeeInfoResults.getJSONArray("data").size() > number) {
-            throw new IllegalArgumentException("导出数据超过限制条数" + number + "条，无法继续导出操作！");
-        }
-        if (!savedCollectFeeInfoResults.containsKey("data")) {
-            return null;
-        }
-        return savedCollectFeeInfoResults.getJSONArray("data");
     }
 
     private JSONArray getReportPayFeeManage(IPageData pd, ComponentValidateResult result) {
@@ -1772,30 +1614,38 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(0).setCellValue("费用编号");
         row.createCell(1).setCellValue("房号");
         row.createCell(2).setCellValue("业主");
-        row.createCell(3).setCellValue("面积");
-        row.createCell(4).setCellValue("费用项");
-        row.createCell(5).setCellValue("费用开始时间");
-        row.createCell(6).setCellValue("更新时间");
-        row.createCell(7).setCellValue("欠费时长（天）");
-        row.createCell(8).setCellValue("欠费金额");
+        row.createCell(3).setCellValue("业主电话");
+        row.createCell(4).setCellValue("面积");
+        row.createCell(5).setCellValue("费用项");
+        row.createCell(6).setCellValue("费用开始时间");
+        row.createCell(7).setCellValue("更新时间");
+        row.createCell(8).setCellValue("欠费时长（天）");
+        row.createCell(9).setCellValue("欠费时长（月）");
+        row.createCell(10).setCellValue("欠费金额");
+
         //查询楼栋信息
         JSONArray rooms = this.getReportOweFeeDetail(pd, result);
         if (rooms == null || rooms.size() == 0) {
             return;
         }
         JSONObject dataObj = null;
+        BigDecimal monthDec = null;
         for (int roomIndex = 0; roomIndex < rooms.size(); roomIndex++) {
             row = sheet.createRow(roomIndex + 1);
             dataObj = rooms.getJSONObject(roomIndex);
             row.createCell(0).setCellValue(roomIndex + 1);
             row.createCell(1).setCellValue(dataObj.getString("objName"));
             row.createCell(2).setCellValue(dataObj.getString("ownerName"));
-            row.createCell(3).setCellValue(dataObj.getString("builtUpArea"));
-            row.createCell(4).setCellValue(dataObj.getString("feeName"));
-            row.createCell(5).setCellValue(dataObj.getString("feeCreateTime"));
-            row.createCell(6).setCellValue(dataObj.getString("updateTime"));
-            row.createCell(7).setCellValue(dataObj.getString("oweDay"));
-            row.createCell(8).setCellValue(dataObj.getString("oweAmount"));
+            row.createCell(3).setCellValue(dataObj.getString("ownerTel"));
+            row.createCell(4).setCellValue(dataObj.getString("builtUpArea"));
+            row.createCell(5).setCellValue(dataObj.getString("feeName"));
+            row.createCell(6).setCellValue(dataObj.getString("feeCreateTime"));
+            row.createCell(7).setCellValue(dataObj.getString("updateTime"));
+            row.createCell(8).setCellValue(dataObj.getString("oweDay"));
+            monthDec = new BigDecimal(dataObj.getString("oweDay"));
+            monthDec = monthDec.divide(new BigDecimal("30"), 2, BigDecimal.ROUND_HALF_UP);
+            row.createCell(9).setCellValue(monthDec.doubleValue());
+            row.createCell(10).setCellValue(dataObj.getString("oweAmount"));
         }
     }
 

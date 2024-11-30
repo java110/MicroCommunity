@@ -213,7 +213,7 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             if (!ImportCustomCreateFeeDto.TYPE_ROOM.equals(importCustomCreateFeeDto.getObjType())) {
                 continue;
             }
-            objNames = importCustomCreateFeeDto.getObjName().split("-");
+            objNames = importCustomCreateFeeDto.getObjName().split("-",3);
             if (objNames.length != 3) {
                 continue;
             }
@@ -237,7 +237,13 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
         ownerDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
         for (ImportCustomCreateFeeDto importRoomFee : importCustomCreateFeeDtos) {
+            if(StringUtil.isEmpty(importRoomFee.getPayObjId())){
+                continue;
+            }
             for (OwnerDto tmpOwnerDto : ownerDtos) {
+                if(StringUtil.isEmpty(tmpOwnerDto.getRoomId())){
+                    continue;
+                }
                 if (importRoomFee.getPayObjId().equals(tmpOwnerDto.getRoomId())) {
                     importRoomFee.setOwnerId(tmpOwnerDto.getOwnerId());
                     importRoomFee.setOwnerName(tmpOwnerDto.getName());
@@ -307,7 +313,6 @@ public class ImportCustomCreateFeeSMOImpl extends DefaultAbstractComponentSMO im
             feeAttrPo.setValue(importRoomFee.getObjName());
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPos.add(feeAttrPo);
-
 
             if (!StringUtil.isEmpty(importRoomFee.getOwnerId())) {
                 feeAttrPo = new FeeAttrPo();

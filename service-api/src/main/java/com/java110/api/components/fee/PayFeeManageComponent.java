@@ -1,9 +1,8 @@
 package com.java110.api.components.fee;
 
 
-import com.java110.core.context.IPageData;
-import com.java110.api.smo.fee.IFeeTypeSMO;
 import com.java110.api.smo.fee.IListPayFeeSMO;
+import com.java110.core.context.IPageData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,18 +21,7 @@ public class PayFeeManageComponent {
     @Autowired
     private IListPayFeeSMO listPayFeeSMOImpl;
 
-    @Autowired
-    private IFeeTypeSMO feeTypeSMOImpl;
 
-    /**
-     * 查询费用类型
-     *
-     * @param pd
-     * @return
-     */
-    public ResponseEntity<String> listFeeType(IPageData pd) {
-        return feeTypeSMOImpl.list(pd);
-    }
 
     /**
      * 查询应用列表
