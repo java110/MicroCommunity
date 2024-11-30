@@ -7,6 +7,7 @@ import com.java110.api.smo.IApiServiceSMO;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.context.ApiDataFlow;
 import com.java110.core.context.DataFlow;
+import com.java110.core.context.Environment;
 import com.java110.core.event.service.api.ServiceDataFlowEventPublishing;
 import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.DataFlowFactory;
@@ -26,6 +27,7 @@ import com.java110.utils.constant.KafkaConstant;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.*;
+import com.java110.utils.factory.ApplicationContextFactory;
 import com.java110.utils.kafka.KafkaFactory;
 import com.java110.utils.log.LoggerEngine;
 import com.java110.utils.util.BootReplaceUtil;
@@ -424,6 +426,12 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         ResponseEntity responseEntity = null;
         //配置c_service 时请注意 如果是以out 开头的调用外部的地址
+        RestTemplate restTemplate ;
+        if (Environment.isStartBootWay()) {
+            restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
+        } else {
+            restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        }
 
         try {
             if (CommonConstant.HTTP_METHOD_GET.equals(service.getMethod())) {
@@ -439,9 +447,9 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
                 requestUrl = BootReplaceUtil.replaceServiceName(requestUrl);
 
-                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
             } else if (CommonConstant.HTTP_METHOD_PUT.equals(service.getMethod())) {
-                responseEntity = outRestTemplate.exchange(service.getUrl(), HttpMethod.PUT, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(service.getUrl(), HttpMethod.PUT, httpEntity, String.class);
             } else if (CommonConstant.HTTP_METHOD_DELETE.equals(service.getMethod())) {
                 String requestUrl = dataFlow.getRequestHeaders().get("REQUEST_URL");
                 if (!StringUtil.isNullOrNone(requestUrl)) {
@@ -452,11 +460,11 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                         requestUrl = service.getUrl() + "?" + param;
                     }
                 }
-                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.DELETE, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.DELETE, httpEntity, String.class);
             } else {
 
                 String requestUrl = BootReplaceUtil.replaceServiceName(service.getUrl());
-                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
             }
         } catch (HttpStatusCodeException e) { //这里spring 框架 在4XX 或 5XX 时抛出 HttpServerErrorException 异常，需要重新封装一下
             responseEntity = new ResponseEntity<String>(e.getResponseBodyAsString(), e.getStatusCode());
@@ -481,7 +489,16 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         String serviceCode = appService.getServiceCode();
         serviceCode = serviceCode.startsWith("/") ? serviceCode : ("/" + serviceCode);
 
-        String requestUrl = "http://127.0.0.1:8008" + serviceCode;
+        //String requestUrl = "http://127.0.0.1:8008" + serviceCode;
+        String requestUrl = serviceCode;
+        RestTemplate restTemplate ;
+        if (Environment.isStartBootWay()) {
+            requestUrl = Environment.BOOT_PATH + requestUrl;
+            restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
+        } else {
+            requestUrl = appService.getUrl() + requestUrl;
+            restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        }
 
         ResponseEntity responseEntity = null;
         if (!StringUtil.isNullOrNone(orgRequestUrl)) {
@@ -490,13 +507,13 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         }
         try {
             if (CommonConstant.HTTP_METHOD_GET.equals(appService.getMethod())) {
-                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
             } else if (CommonConstant.HTTP_METHOD_PUT.equals(appService.getMethod())) {
-                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.PUT, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.PUT, httpEntity, String.class);
             } else if (CommonConstant.HTTP_METHOD_DELETE.equals(appService.getMethod())) {
-                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.DELETE, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.DELETE, httpEntity, String.class);
             } else {
-                responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
             }
             HttpHeaders headers = responseEntity.getHeaders();
             String oId = "-1";
@@ -584,7 +601,8 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         serviceCode = serviceCode.startsWith("/") ? serviceCode : ("/" + serviceCode);
 
         //todo 组装调用微服务的地址
-        String requestUrl = "http://127.0.0.1:8008/cmd" + serviceCode;
+        //String requestUrl = "http://127.0.0.1:8008/cmd" + serviceCode;
+        String requestUrl = "/cmd" + serviceCode;
         //
         ResponseEntity responseEntity = null;
         //todo url 带了地址这里 拼接
@@ -595,7 +613,15 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         try {
             //todo http的方式调用微服务，相应的java类可以到相应微服务下的cmd下根据serviceCode 的寻找
             //todo 这里会调用到 java110-service 模块下的 CmdApi 类，这个类各个微服务都会集成
-            responseEntity = outRestTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
+            if (Environment.isStartBootWay()) {
+                requestUrl = Environment.BOOT_PATH + requestUrl;
+                restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
+            } else {
+                requestUrl = appService.getUrl() + requestUrl;
+                restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+                responseEntity = restTemplate.exchange(requestUrl, HttpMethod.POST, httpEntity, String.class);
+            }
             HttpHeaders headers = responseEntity.getHeaders();
             String oId = "-1";
             if (headers.containsKey(OrderDto.O_ID)) {

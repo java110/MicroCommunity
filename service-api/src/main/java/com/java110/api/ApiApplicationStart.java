@@ -17,6 +17,7 @@ package com.java110.api;
 
 import com.java110.core.annotation.Java110ListenerDiscovery;
 import com.java110.core.client.OutRestTemplate;
+import com.java110.core.context.Environment;
 import com.java110.core.trace.Java110FeignClientInterceptor;
 import com.java110.core.trace.Java110RestTemplateInterceptor;
 import com.java110.core.client.RestTemplate;
@@ -197,6 +198,7 @@ public class ApiApplicationStart {
             ApplicationContext context = SpringApplication.run(ApiApplicationStart.class, args);
             //服务启动加载
             ServiceStartInit.initSystemConfig(context);
+            Environment.setSystemStartWay(Environment.SPRING_CLOUD);
             //服务启动完成
             ServiceStartInit.printStartSuccessInfo();
         } catch (Throwable e) {

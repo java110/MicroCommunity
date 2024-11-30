@@ -39,6 +39,9 @@ public class Environment {
 
     private static String systemStartWay = "CLOUD"; // 环境是spring boot cloud
 
+    public static final String BOOT_PATH = "http://127.0.0.1:8008";
+
+
     /**
      * 环境变量
      *
