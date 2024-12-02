@@ -113,7 +113,7 @@ public interface IComputeFeeSMO {
      * @param startDate 开始时间
      * @return 新的日期
      */
-    Date getTargetEndTime(double month, Date startDate);
+    Date getTargetEndTime(double month, Date startDate,boolean mulOneSec);
 
 
     /**

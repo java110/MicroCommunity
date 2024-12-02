@@ -192,7 +192,7 @@ public class ListFeeCmd extends Cmd {
             unitDto.setFloorId(floor.getFloorId());
             unitDto.setUnitNum(unitNum);
             List<UnitDto> unitDtos = unitInnerServiceSMOImpl.queryUnits(unitDto);
-            if (unitDtos == null || unitDtos.size() < 1) {
+            if (ListUtil.isNull(unitDtos)) {
                 continue;
             }
             for (UnitDto unit : unitDtos) {

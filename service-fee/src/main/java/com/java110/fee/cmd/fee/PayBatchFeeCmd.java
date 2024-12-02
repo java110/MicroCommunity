@@ -291,7 +291,7 @@ public class PayBatchFeeCmd extends Cmd {
                 receivedAmount = receivedAmount.add(new BigDecimal(payFeeDataDto.getAccountAmount()));
             }
             cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
-            targetEndTime = computeFeeSMOImpl.getTargetEndTime(cycles.doubleValue(), endCalender.getTime());
+            targetEndTime = computeFeeSMOImpl.getTargetEndTime(cycles.doubleValue(), endCalender.getTime(),true);
             receivableAmount = payFeeDataDto.getReceivedAmount();
             //处理 可能还存在 实收手工减免的情况
         } else if (PayFeeDataDto.TEMP_CYCLE_CUSTOM_END_TIME.equals(payFeeDataDto.getTempCycle())) { //todo 这里按缴费结束时间缴费

@@ -784,7 +784,7 @@ public class PayFeeCmd extends Cmd {
             endCalender.setTime(endTime);
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
-            targetEndTime = computeFeeSMOImpl.getTargetEndTime(cycles.doubleValue(),endCalender.getTime());
+            targetEndTime = computeFeeSMOImpl.getTargetEndTime(cycles.doubleValue(),endCalender.getTime(),true);
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
             //处理 可能还存在 实收手工减免的情况

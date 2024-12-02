@@ -1723,13 +1723,15 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 round = Math.floor(mulMonth / paymentCycle);
             }
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-            targetEndDate = getTargetEndTime(round * paymentCycle, startDate);//目标结束时间
+            targetEndDate = getTargetEndTime(round * paymentCycle, startDate,false);//目标结束时间
 
             //todo 如果 到了 预付期 产生下个周期的费用
             if (DateUtil.getFormatTimeStringB(targetEndDate).equals(DateUtil.getFormatTimeStringB(endDate))
                     && DateUtil.getCurrentDate().getTime() > preEndTime.getTime()
             ) {
-                targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate);//目标结束时间
+                targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate,true);//目标结束时间
+            }else{
+                targetEndDate = getTargetEndTime(round * paymentCycle, startDate,true);//目标结束时间
             }
 
             //todo 费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
@@ -1757,70 +1759,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
 
-//    /**
-//     * 计算 两个时间点月份
-//     *
-//     * @param fromDate 开始时间
-//     * @param toDate   结束时间
-//     * @return
-//     */
-//
-//    public double dayCompareOld(Date fromDate, Date toDate) {
-//        double resMonth = 0.0;
-//        Calendar from = Calendar.getInstance();
-//        from.setTime(fromDate);
-//        Calendar to = Calendar.getInstance();
-//        to.setTime(toDate);
-//        //比较月份差 可能有整数 也会负数
-//        int result = to.get(Calendar.MONTH) - from.get(Calendar.MONTH);
-//        //比较年差
-//        int month = (to.get(Calendar.YEAR) - from.get(Calendar.YEAR)) * 12;
-//
-//        //真实 相差月份
-//        result = result + month;
-//
-//        //开始时间  2021-06-01  2021-08-05   result = 2    2021-08-01
-//        Calendar newFrom = Calendar.getInstance();
-//        newFrom.setTime(fromDate);
-//        newFrom.add(Calendar.MONTH, result);
-//        //如果加月份后 大于了当前时间 默认加 月份 -1 情况 12-19  21-01-10
-//        //这个是神的逻辑一定好好理解
-//        if (newFrom.getTime().getTime() > toDate.getTime()) {
-//            newFrom.setTime(fromDate);
-//            result = result - 1;
-//            newFrom.add(Calendar.MONTH, result);
-//        }
-//
-//        // t1 2021-08-01   t2 2021-08-05
-//        long t1 = newFrom.getTime().getTime();
-//        long t2 = to.getTime().getTime();
-//        //相差毫秒
-//        double days = (t2 - t1) * 1.00 / (24 * 60 * 60 * 1000);
-//        BigDecimal tmpDays = new BigDecimal(days); //相差天数
-//        BigDecimal monthDay = null;
-//        Calendar newFromMaxDay = Calendar.getInstance();
-//        newFromMaxDay.set(newFrom.get(Calendar.YEAR), newFrom.get(Calendar.MONTH), 1, 0, 0, 0);
-//        newFromMaxDay.add(Calendar.MONTH, 1); //下个月1号
-//        //在当前月中 这块有问题
-//        if (toDate.getTime() < newFromMaxDay.getTime().getTime()) {
-//            monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
-//            return tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).doubleValue();
-//        }
-//        // 上月天数
-//        days = (newFromMaxDay.getTimeInMillis() - t1) * 1.00 / (24 * 60 * 60 * 1000);
-//        tmpDays = new BigDecimal(days);
-//        monthDay = new BigDecimal(newFrom.getActualMaximum(Calendar.DAY_OF_MONTH));
-//        BigDecimal preRresMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP);
-//
-//        //下月天数
-//        days = (t2 - newFromMaxDay.getTimeInMillis()) * 1.00 / (24 * 60 * 60 * 1000);
-//        tmpDays = new BigDecimal(days);
-//        monthDay = new BigDecimal(newFromMaxDay.getActualMaximum(Calendar.DAY_OF_MONTH));
-//        resMonth = tmpDays.divide(monthDay, 4, BigDecimal.ROUND_HALF_UP).add(new BigDecimal(result)).add(preRresMonth).doubleValue();
-//        return resMonth;
-//    }
-
-
     //手机端缴费处理
     public Map getOwnerPhoneFee(Map feeAmount) {
         feeAmount.put("feePrice", new BigDecimal(1.00 / 100));
@@ -1845,7 +1783,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
     @Override
-    public Date getTargetEndTime(double month, Date startDate) {
+    public Date getTargetEndTime(double month, Date startDate,boolean mulOneSec) {
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(startDate);
 
@@ -1853,13 +1791,17 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         endDate.add(Calendar.MONTH, intMonth.intValue());
         double doubleMonth = month - intMonth;
         if (doubleMonth <= 0) {
-            endDate.add(Calendar.SECOND, -1);
+            if(mulOneSec) {
+                endDate.add(Calendar.SECOND, -1);
+            }
             return endDate.getTime();
         }
         int futureDay = endDate.getActualMaximum(Calendar.DAY_OF_MONTH);
         Double hour = doubleMonth * futureDay * 24;
         endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
-        endDate.add(Calendar.SECOND, -1);
+        if(mulOneSec) {
+            endDate.add(Calendar.SECOND, -1);
+        }
         return endDate.getTime();
     }
 
@@ -2031,7 +1973,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         }
 
         Date endTime = feeDto.getEndTime();
-        Date date = getTargetEndTime(cycle, endTime);
+        Date date = getTargetEndTime(cycle, endTime,true);
         feeDto.setDeadlineTime(date);
         dealRentRate(feeDto);
 
