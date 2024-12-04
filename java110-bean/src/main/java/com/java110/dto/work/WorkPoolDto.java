@@ -41,6 +41,10 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     private String communityId;
 
+    private String staffName;
+
+    private String copyName;
+
     private String curStaffName;
 
     private String curCopyName;
@@ -389,5 +393,21 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getCopyName() {
+        return copyName;
+    }
+
+    public void setCopyName(String copyName) {
+        this.copyName = copyName;
     }
 }

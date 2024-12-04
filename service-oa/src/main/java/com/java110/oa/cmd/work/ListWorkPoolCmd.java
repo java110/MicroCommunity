@@ -162,14 +162,16 @@ public class ListWorkPoolCmd extends Cmd {
         List<WorkTaskDto> workTaskDtos = workTaskV1InnerServiceSMOImpl.queryWorkTasks(workTaskDto);
 
         String curStaffName = "";
+        String staffName;
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curStaffName = "";
+            staffName = "";
             for (WorkTaskDto tmpWorkTaskDto : workTaskDtos) {
-                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkTaskDto.getState())) {
+                if (!workPoolDto.getWorkId().equals(tmpWorkTaskDto.getWorkId())) {
                     continue;
                 }
-
-                if (!workPoolDto.getWorkId().equals(tmpWorkTaskDto.getWorkId())) {
+                staffName = tmpWorkTaskDto.getStaffName();
+                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkTaskDto.getState())) {
                     continue;
                 }
 
@@ -181,6 +183,7 @@ public class ListWorkPoolCmd extends Cmd {
             }
 
             workPoolDto.setCurStaffName(curStaffName);
+            workPoolDto.setStaffName(staffName);
         }
 
         WorkCopyDto workCopyDto = new WorkCopyDto();
@@ -188,14 +191,18 @@ public class ListWorkPoolCmd extends Cmd {
         List<WorkCopyDto> workCopyDtos = workCopyV1InnerServiceSMOImpl.queryWorkCopys(workCopyDto);
 
         String curCopyName = "";
+        String copyName ;
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curCopyName = "";
+            copyName= "";
             for (WorkCopyDto tmpWorkCopyDto : workCopyDtos) {
-                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkCopyDto.getState())) {
-                    continue;
-                }
+
 
                 if (!workPoolDto.getWorkId().equals(tmpWorkCopyDto.getWorkId())) {
+                    continue;
+                }
+                copyName = tmpWorkCopyDto.getStaffName();
+                if (!WorkTaskDto.STATE_WAIT.equals(tmpWorkCopyDto.getState())) {
                     continue;
                 }
 
@@ -207,6 +214,7 @@ public class ListWorkPoolCmd extends Cmd {
             }
 
             workPoolDto.setCurCopyName(curCopyName);
+            workPoolDto.setCopyName(copyName);
         }
 
     }
