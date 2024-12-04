@@ -175,6 +175,10 @@ public class ImportOwnerCarQueueDataAdapt extends DefaultImportData implements I
             ownerPo.setState(OwnerDto.STATE_FINISH);
             ownerPo.setAddress("无");
             ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
+            ownerPo.setPersonType(OwnerDto.PERSON_TYPE_PERSON);
+            ownerPo.setPersonRole(OwnerDto.PERSON_ROLE_OWNER);
+            ownerPo.setConcactPerson(ownerCarDto.getOwnerName());
+            ownerPo.setConcactLink(ownerCarDto.getLink());
             int flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
             if (flag < 1) {
                 throw new IllegalArgumentException("保存业主失败");
