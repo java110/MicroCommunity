@@ -134,26 +134,5 @@ public class AccountApi {
         return getAccountBMOImpl.getDetail(accountDto);
     }
 
-    /**
-     * 业主账户预存
-     *
-     * @param reqJson 小区ID
-     * @return
-     * @serviceCode /account/ownerPrestoreAccount
-     * @path /app/account/ownerPrestoreAccount
-     */
-    @RequestMapping(value = "/ownerPrestoreAccount", method = RequestMethod.POST)
-    public ResponseEntity<String> queryAccountDetail(@RequestBody JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
-        Assert.hasKeyAndValue(reqJson, "ownerId", "业主不能为空");
-        Assert.hasKeyAndValue(reqJson, "amount", "金额不能为空");
-        Assert.hasKeyAndValue(reqJson, "acctType", "账户类型不能为空");
-        Assert.hasKeyAndValue(reqJson, "primeRate", "未包含支付方式");
 
-        AccountDetailPo accountDetailPo = new AccountDetailPo();
-        accountDetailPo.setRemark(reqJson.getString("remark"));
-        accountDetailPo.setObjId(reqJson.getString("ownerId"));
-        accountDetailPo.setAmount(reqJson.getString("amount"));
-        return ownerPrestoreAccountBMOImpl.prestore(accountDetailPo, reqJson);
-    }
 }

@@ -54,9 +54,9 @@ public class AccountDetailServiceDaoImpl extends BaseServiceDao implements IAcco
 
         logger.debug("查询账户交易信息 入参 info : {}", info);
 
-        List<Map> businessAccountDetailInfos = sqlSessionTemplate.selectList("accountDetailServiceDaoImpl.getBusinessAccountDetailInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("accountDetailServiceDaoImpl.getBusinessAccountDetailInfo", info);
 
-        return businessAccountDetailInfos;
+        return infos;
     }
 
 
@@ -89,9 +89,9 @@ public class AccountDetailServiceDaoImpl extends BaseServiceDao implements IAcco
     public List<Map> getAccountDetailInfo(Map info) throws DAOException {
         logger.debug("查询账户交易信息 入参 info : {}", info);
 
-        List<Map> businessAccountDetailInfos = sqlSessionTemplate.selectList("accountDetailServiceDaoImpl.getAccountDetailInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("accountDetailServiceDaoImpl.getAccountDetailInfo", info);
 
-        return businessAccountDetailInfos;
+        return infos;
     }
 
 
@@ -122,12 +122,12 @@ public class AccountDetailServiceDaoImpl extends BaseServiceDao implements IAcco
     public int queryAccountDetailsCount(Map info) {
         logger.debug("查询账户交易数据 入参 info : {}", info);
 
-        List<Map> businessAccountDetailInfos = sqlSessionTemplate.selectList("accountDetailServiceDaoImpl.queryAccountDetailsCount", info);
-        if (businessAccountDetailInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("accountDetailServiceDaoImpl.queryAccountDetailsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessAccountDetailInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
