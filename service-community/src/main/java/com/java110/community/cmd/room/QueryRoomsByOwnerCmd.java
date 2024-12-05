@@ -82,15 +82,8 @@ public class QueryRoomsByOwnerCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
+        hasRoomNum(reqJson, roomDto);
 
-        if (reqJson.containsKey("roomNum") && !StringUtil.isEmpty(reqJson.getString("roomNum"))) {
-            String[] roomNums = reqJson.getString("roomNum").split("-");
-            if (roomNums != null && roomNums.length == 3) {
-                roomDto.setFloorNum(roomNums[0]);
-                roomDto.setUnitNum(roomNums[1]);
-                roomDto.setRoomNum(roomNums[2]);
-            }
-        }
         ApiRoomVo apiRoomVo = new ApiRoomVo();
         List<RoomDto> roomDtoList = roomInnerServiceSMOImpl.queryRoomsByOwner(roomDto);
         roomDtoList = queryRoomStatisticsBMOImpl.queryRoomOweFee(roomDtoList);
@@ -101,5 +94,28 @@ public class QueryRoomsByOwnerCmd extends Cmd {
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiRoomVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 判断是否存在房屋编号
+     * @param reqJson
+     * @param roomDto
+     */
+    private void hasRoomNum(JSONObject reqJson, RoomDto roomDto) {
+        if (!reqJson.containsKey("roomNum")) {
+            return;
+        }
+        String roomNum = reqJson.getString("roomNum");
+        if (StringUtil.isEmpty(roomNum)) {
+            return;
+        }
+        String[] roomNums = reqJson.getString("roomNum").split("-");
+
+        if (roomNums != null && roomNums.length == 3) {
+            roomDto.setFloorNum(roomNums[0]);
+            roomDto.setUnitNum(roomNums[1]);
+            roomDto.setRoomNum(roomNums[2]);
+        }
+
     }
 }

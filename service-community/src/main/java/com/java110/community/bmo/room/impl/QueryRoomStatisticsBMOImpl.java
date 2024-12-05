@@ -9,6 +9,7 @@ import com.java110.intf.store.IContractRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,7 +99,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
     @Override
     public List<RoomDto> queryRoomOweFee(List<RoomDto> roomDtos) {
-        if (roomDtos == null || roomDtos.size() < 1) {
+        if (ListUtil.isNull(roomDtos)) {
             return roomDtos;
         }
         List<String> roomIds = new ArrayList<>();
@@ -139,7 +140,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
     }
 
     private void queryRoomOweFee(List<String> roomIds, List<RoomDto> roomDtos) {
-        if (roomIds == null || roomIds.size() < 1) {
+        if (ListUtil.isNull(roomIds)) {
             return;
         }
         Map info = new HashMap();
@@ -149,12 +150,14 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
         for (RoomDto roomDto : roomDtos) {
             for (Map count : repairCounts) {
-                if (!StringUtil.isEmpty(roomDto.getRoomId()) && !StringUtil.isEmpty(count.get("roomId").toString())) {
-                    if (roomDto.getRoomId().equals(count.get("roomId").toString())) {
-                        roomDto.setRoomOweFee(count.get("oweFee").toString());
-                    }
-                } else {
+                if (StringUtil.isEmpty(roomDto.getRoomId())) {
                     continue;
+                }
+                if (StringUtil.isEmpty(count.get("roomId").toString())) {
+                    continue;
+                }
+                if (roomDto.getRoomId().equals(count.get("roomId").toString())) {
+                    roomDto.setRoomOweFee(count.get("oweFee").toString());
                 }
             }
         }
@@ -176,7 +179,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         List<Map> repairCounts = reportOweFeeInnerServiceSMOImpl.queryOweFeesByOwnerIds(info);
 
         for (RoomDto roomDto : roomDtos) {
-            if(StringUtil.isEmpty(roomDto.getOwnerId())){
+            if (StringUtil.isEmpty(roomDto.getOwnerId())) {
                 continue;
             }
             for (Map count : repairCounts) {
@@ -264,7 +267,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         List<Map> memberCounts = ownerCarV1InnerServiceSMOImpl.queryOwnerCarCountByOwnerIds(ownerIds);
 
         for (RoomDto roomDto : roomDtos) {
-            if(StringUtil.isEmpty(roomDto.getOwnerId())){
+            if (StringUtil.isEmpty(roomDto.getOwnerId())) {
                 continue;
             }
             for (Map count : memberCounts) {
@@ -293,7 +296,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         List<Map> memberCounts = ownerV1InnerServiceSMOImpl.queryOwnerMembersCount(ownerIds);
 
         for (RoomDto roomDto : roomDtos) {
-            if(StringUtil.isEmpty(roomDto.getOwnerId())){
+            if (StringUtil.isEmpty(roomDto.getOwnerId())) {
                 continue;
             }
             for (Map count : memberCounts) {
