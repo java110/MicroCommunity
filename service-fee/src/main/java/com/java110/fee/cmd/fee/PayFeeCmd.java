@@ -250,29 +250,13 @@ public class PayFeeCmd extends Cmd {
             payFeeDetailPo.setCashierId(userDtos.get(0).getUserId());
             payFeeDetailPo.setCashierName(userDtos.get(0).getName());
             payFeeDetailPo.setOpenInvoice("N");
-            if (!StringUtil.isEmpty(paramObj.getString("cashAmount")) && !StringUtil.isEmpty(paramObj.getString("integralAmount"))) {
-                BigDecimal cashAmount = new BigDecimal(paramObj.getString("cashAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
-                BigDecimal integralAmount = new BigDecimal(paramObj.getString("integralAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
-                if (!StringUtil.isEmpty(payFeeDetailPo.getRemark())) {
-                    payFeeDetailPo.setRemark(payFeeDetailPo.getRemark() + "，现金账户抵扣" + cashAmount + "元，积分账户抵扣" + integralAmount + "元");
-                } else {
-                    payFeeDetailPo.setRemark("现金账户抵扣" + cashAmount + "元，积分账户抵扣" + integralAmount + "元");
-                }
-            }
-            if (!StringUtil.isEmpty(paramObj.getString("cashAmount")) && StringUtil.isEmpty(paramObj.getString("integralAmount"))) {
+
+            if (!StringUtil.isEmpty(paramObj.getString("cashAmount"))) {
                 BigDecimal cashAmount = new BigDecimal(paramObj.getString("cashAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
                 if (!StringUtil.isEmpty(payFeeDetailPo.getRemark())) {
                     payFeeDetailPo.setRemark(payFeeDetailPo.getRemark() + "，现金账户抵扣" + cashAmount + "元");
                 } else {
                     payFeeDetailPo.setRemark("现金账户抵扣" + cashAmount + "元");
-                }
-            }
-            if (StringUtil.isEmpty(paramObj.getString("cashAmount")) && !StringUtil.isEmpty(paramObj.getString("integralAmount"))) {
-                BigDecimal integralAmount = new BigDecimal(paramObj.getString("integralAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
-                if (!StringUtil.isEmpty(payFeeDetailPo.getRemark())) {
-                    payFeeDetailPo.setRemark(payFeeDetailPo.getRemark() + "，积分账户抵扣" + integralAmount + "元");
-                } else {
-                    payFeeDetailPo.setRemark("积分账户抵扣" + integralAmount + "元");
                 }
             }
             int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(payFeeDetailPo);
@@ -332,94 +316,34 @@ public class PayFeeCmd extends Cmd {
             return;
         }
 
-        BigDecimal integralSum = new BigDecimal(0);
         BigDecimal cashSum = new BigDecimal(0);
 
         for (int columnIndex = 0; columnIndex < jsonArray.size(); columnIndex++) {
             JSONObject param = jsonArray.getJSONObject(columnIndex);
             //账户金额
             BigDecimal amount = new BigDecimal(param.getString("amount"));
-            if ("2004".equals(param.getString("acctType"))) { //积分账户
-                //获取最大抵扣积分
-                BigDecimal maximumNumber = new BigDecimal(param.getString("maximumNumber"));
-                //获取积分抵扣
-                BigDecimal deductionProportion = new BigDecimal(param.getString("deductionProportion"));
-                int flag = amount.compareTo(maximumNumber);
-                BigDecimal redepositAmount = new BigDecimal("0.00");
-                if (flag == 1) { //账户积分大于最大使用积分，就用最大使用积分抵扣
-                    redepositAmount = maximumNumber;
-                }
-                if (flag > -1) { //账户积分大于等于最大使用积分，就用最大使用积分抵扣
-                    redepositAmount = maximumNumber;
-                }
-                if (flag == -1) { //账户积分小于最大使用积分，就用账户积分抵扣
-                    redepositAmount = amount;
-                }
-                if (flag < 1) { //账户积分小于等于最大使用积分，就用账户积分抵扣
-                    redepositAmount = amount;
-                }
-                if (flag == 0) { //账户积分等于最大使用积分
-                    redepositAmount = amount;
-                }
-                //计算积分换算的金额
-                BigDecimal divide = redepositAmount.divide(deductionProportion);
-                BigDecimal receivedAmount = new BigDecimal(payFeeDetailPo.getReceivedAmount());
-                //计算实付金额
-                int flag2 = divide.compareTo(receivedAmount);
-                BigDecimal subtract = new BigDecimal("0.00");
-                //生成抵扣明细记录
-                if (flag2 == -1) { //积分换算金额小于实付金额
-                    subtract = receivedAmount.subtract(divide);
-                } else if (flag < 1) { //积分换算金额小于等于实付金额
-                    subtract = receivedAmount.subtract(divide);
-                }
-//                integralSum = integralSum.add(subtract);
-                payFeeDetailPo.setReceivedAmount(subtract.toString());
-                integralSum = integralSum.add(divide);
-                // todo 如果积分大于0
-                if (integralSum.doubleValue() > 0) {
-                    FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
-                    feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
-                    feeAccountDetailPo.setDetailId(payFeeDetailPo.getDetailId());
-                    feeAccountDetailPo.setCommunityId(payFeeDetailPo.getCommunityId());
-                    feeAccountDetailPo.setAmount(integralSum.doubleValue() + "");
-                    feeAccountDetailPo.setState("1003"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-                    feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
-                }
-            } else if (AccountDto.ACCT_TYPE_CASH.equals(param.getString("acctType"))) { //现金账户
-                //实收金额
-                BigDecimal receivedAmount = new BigDecimal(payFeeDetailPo.getReceivedAmount());
-                int flag = amount.compareTo(receivedAmount);
-                BigDecimal redepositAmount = new BigDecimal(0.00);
-                if (flag == 1) { //现金账户大于实收金额，就用实收金额
-                    redepositAmount = receivedAmount;
-                }
-                if (flag > -1) { //现金账户大于等于实收金额，就用实收金额
-                    redepositAmount = receivedAmount;
-                }
-                if (flag == -1) { //现金账户小于实收金额，就用现金账户
-                    redepositAmount = amount;
-                }
-                if (flag < 1) { //现金账户小于等于实收金额，就用现金账户
-                    redepositAmount = amount;
-                }
-                if (flag == 0) { //现金账户等于实收金额
-                    redepositAmount = amount;
-                }
-                cashSum = cashSum.add(redepositAmount);
 
+            //实收金额
+            BigDecimal receivedAmount = new BigDecimal(payFeeDetailPo.getReceivedAmount());
+            int flag = amount.compareTo(receivedAmount);
+            BigDecimal redepositAmount = new BigDecimal(0.00);
+            if (flag == 1) { //现金账户大于实收金额，就用实收金额
+                redepositAmount = receivedAmount;
             }
+            if (flag > -1) { //现金账户大于等于实收金额，就用实收金额
+                redepositAmount = receivedAmount;
+            }
+            if (flag == -1) { //现金账户小于实收金额，就用现金账户
+                redepositAmount = amount;
+            }
+            if (flag < 1) { //现金账户小于等于实收金额，就用现金账户
+                redepositAmount = amount;
+            }
+            if (flag == 0) { //现金账户等于实收金额
+                redepositAmount = amount;
+            }
+            cashSum = cashSum.add(redepositAmount);
 
-            // todo 如果积分大于0
-            if (integralSum.doubleValue() > 0) {
-                FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
-                feeAccountDetailPo.setFadId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_fadId));
-                feeAccountDetailPo.setDetailId(payFeeDetailPo.getDetailId());
-                feeAccountDetailPo.setCommunityId(payFeeDetailPo.getCommunityId());
-                feeAccountDetailPo.setAmount(integralSum.doubleValue() + "");
-                feeAccountDetailPo.setState("1003"); //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-                feeAccountDetailServiceSMOImpl.saveFeeAccountDetail(feeAccountDetailPo);
-            }
             if (cashSum.doubleValue() > 0) {
                 //生成抵扣明细记录
                 FeeAccountDetailPo feeAccountDetailPo = new FeeAccountDetailPo();
@@ -784,7 +708,7 @@ public class PayFeeCmd extends Cmd {
             endCalender.setTime(endTime);
             BigDecimal receivedAmount = new BigDecimal(Double.parseDouble(paramInJson.getString("receivedAmount")));
             cycles = receivedAmount.divide(feePrice, 4, BigDecimal.ROUND_HALF_EVEN);
-            targetEndTime = computeFeeSMOImpl.getTargetEndTime(cycles.doubleValue(),endCalender.getTime(),true);
+            targetEndTime = computeFeeSMOImpl.getTargetEndTime(cycles.doubleValue(), endCalender.getTime(), true);
             paramInJson.put("tmpCycles", cycles.doubleValue());
             businessFeeDetail.put("cycles", cycles.doubleValue());
             //处理 可能还存在 实收手工减免的情况
@@ -799,7 +723,7 @@ public class PayFeeCmd extends Cmd {
             }
         } else if (PayFeeDataDto.TEMP_CYCLE_CUSTOM_END_TIME.equals(paramInJson.getString("cycles"))) { //todo 这里按缴费结束时间缴费
             String custEndTime = paramInJson.getString("custEndTime");
-            if(!custEndTime.contains(":")){
+            if (!custEndTime.contains(":")) {
                 custEndTime += " 23:59:59";
             }
             targetEndTime = DateUtil.getDateFromStringA(custEndTime);
@@ -821,7 +745,7 @@ public class PayFeeCmd extends Cmd {
             }
         } else if ("-105".equals(paramInJson.getString("cycles"))) { //这里按自定义时间段
             String customEndTime = paramInJson.getString("customEndTime");
-            if(!customEndTime.contains(":")){
+            if (!customEndTime.contains(":")) {
                 customEndTime += " 23:59:59";
             }
             targetEndTime = DateUtil.getDateFromStringA(customEndTime);
@@ -903,7 +827,7 @@ public class PayFeeCmd extends Cmd {
                 businessFee.put("state", FeeDto.STATE_FINISH);
                 businessFee.put("endTime", maxEndTime);
             }
-        }else{
+        } else {
             businessFee.put("state", FeeDto.STATE_FINISH);
         }
         return businessFee;
@@ -924,13 +848,6 @@ public class PayFeeCmd extends Cmd {
             BigDecimal receivedAmount = new BigDecimal(paramObj.getString("receivedAmount")); //实收款（扣款金额）
             BigDecimal redepositAmount = new BigDecimal("0.00");//抵扣金额
             JSONObject param = jsonArray.getJSONObject(columnIndex);
-            if (!StringUtil.isEmpty(param.getString("acctType")) && param.getString("acctType").equals("2004")) { //积分账户
-                //获取抵扣比例
-                BigDecimal deductionProportion = new BigDecimal(param.getString("deductionProportion"));
-                //计算实收款所扣的积分
-                BigDecimal multiply = receivedAmount.multiply(deductionProportion);
-                receivedAmount = multiply;
-            }
             //账户金额
             BigDecimal amount = new BigDecimal(param.getString("amount"));
             int flag = amount.compareTo(receivedAmount);
@@ -938,69 +855,6 @@ public class PayFeeCmd extends Cmd {
                 redepositAmount = amount;//抵扣金额
             } else {
                 redepositAmount = receivedAmount;//抵扣金额
-            }
-            if ("2004".equals(param.getString("acctType"))) {
-                //获取最大抵扣积分
-                BigDecimal maximumNumber = new BigDecimal(param.getString("maximumNumber"));
-                //获取积分抵扣
-                BigDecimal deductionProportion = new BigDecimal(param.getString("deductionProportion"));
-                int flag2 = amount.compareTo(maximumNumber);
-                if (flag2 == 1) { //账户积分大于最大使用积分，就用最大使用积分抵扣
-                    int flag3 = maximumNumber.compareTo(receivedAmount);
-                    if (flag3 == 1) { //如果最大使用积分大于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else if (flag3 > -1) {//如果最大使用积分大于等于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else {
-                        redepositAmount = maximumNumber;
-                    }
-                }
-                if (flag2 > -1) { //账户积分大于等于最大使用积分，就用最大使用积分抵扣
-                    int flag3 = maximumNumber.compareTo(receivedAmount);
-                    if (flag3 == 1) { //如果最大使用积分大于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else if (flag3 > -1) {//如果最大使用积分大于等于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else {
-                        redepositAmount = maximumNumber;
-                    }
-                }
-                if (flag2 == -1) { //账户积分小于最大使用积分，就用账户积分抵扣
-                    int flag3 = amount.compareTo(receivedAmount);
-                    if (flag3 == 1) { //如果积分账户大于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else if (flag3 > -1) {//如果积分账户大于等于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else {
-                        redepositAmount = amount;
-                    }
-                }
-                if (flag2 < 1) { //账户积分小于等于最大使用积分，就用账户积分抵扣
-                    int flag3 = amount.compareTo(receivedAmount);
-                    if (flag3 == 1) { //如果积分账户大于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else if (flag3 > -1) {//如果积分账户大于等于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else {
-                        redepositAmount = amount;
-                    }
-                }
-                if (flag2 == 0) { //账户积分等于最大使用积分
-                    int flag3 = amount.compareTo(receivedAmount);
-                    if (flag3 == 1) { //如果积分账户大于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else if (flag3 > -1) {//如果积分账户大于等于实收金额抵扣积分，就把实收金额抵扣积分赋值给抵扣积分
-                        redepositAmount = receivedAmount;
-                    } else {
-                        redepositAmount = amount;
-                    }
-                }
-                //计算积分换算的金额
-                BigDecimal divide = redepositAmount.divide(deductionProportion);
-                BigDecimal divide1 = receivedAmount.divide(deductionProportion);
-                //计算还需支付的金额
-                BigDecimal subtract = divide1.subtract(divide);
-                paramObj.put("receivedAmount", subtract);
             }
             String acctId = param.getString("acctId");
             if (StringUtil.isEmpty(acctId)) {
@@ -1011,7 +865,7 @@ public class PayFeeCmd extends Cmd {
             //查询账户金额
             accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
             Assert.listOnlyOne(accountDtos, "查询账户金额错误！");
-            if (accountDtos != null && accountDtos.size() > 0) {
+            if (!ListUtil.isNull(accountDtos)) {
                 AccountDto accountDto1 = accountDtos.get(0);
                 BigDecimal accountDto1Amount = new BigDecimal(accountDto1.getAmount());
                 if (accountDto1Amount.compareTo(redepositAmount) == -1) {
@@ -1104,16 +958,8 @@ public class PayFeeCmd extends Cmd {
         tmpPayFeeDetailPo.setState(FeeDetailDto.STATE_OWE);
         tmpPayFeeDetailPo.setOpenInvoice("N");
         tmpPayFeeDetailPo.setRemark("按缴费时间段缴费,这部分费用按欠费的方式重新生成，请在" + payObjNameRemark + "上查看");
-        if (!StringUtil.isEmpty(reqJson.getString("cashAmount")) && !StringUtil.isEmpty(reqJson.getString("integralAmount"))) {
-            BigDecimal cashAmount = new BigDecimal(reqJson.getString("cashAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            BigDecimal integralAmount = new BigDecimal(reqJson.getString("integralAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            if (!StringUtil.isEmpty(tmpPayFeeDetailPo.getRemark())) {
-                tmpPayFeeDetailPo.setRemark(tmpPayFeeDetailPo.getRemark() + "，现金账户抵扣" + cashAmount + "元，积分账户抵扣" + integralAmount + "元");
-            } else {
-                tmpPayFeeDetailPo.setRemark("现金账户抵扣" + cashAmount + "元，积分账户抵扣" + integralAmount + "元");
-            }
-        }
-        if (!StringUtil.isEmpty(reqJson.getString("cashAmount")) && StringUtil.isEmpty(reqJson.getString("integralAmount"))) {
+
+        if (!StringUtil.isEmpty(reqJson.getString("cashAmount"))) {
             BigDecimal cashAmount = new BigDecimal(reqJson.getString("cashAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
             if (!StringUtil.isEmpty(tmpPayFeeDetailPo.getRemark())) {
                 tmpPayFeeDetailPo.setRemark(tmpPayFeeDetailPo.getRemark() + "，现金账户抵扣" + cashAmount + "元");
@@ -1121,14 +967,7 @@ public class PayFeeCmd extends Cmd {
                 tmpPayFeeDetailPo.setRemark("现金账户抵扣" + cashAmount + "元");
             }
         }
-        if (StringUtil.isEmpty(reqJson.getString("cashAmount")) && !StringUtil.isEmpty(reqJson.getString("integralAmount"))) {
-            BigDecimal integralAmount = new BigDecimal(reqJson.getString("integralAmount")).setScale(2, BigDecimal.ROUND_HALF_UP);
-            if (!StringUtil.isEmpty(tmpPayFeeDetailPo.getRemark())) {
-                tmpPayFeeDetailPo.setRemark(tmpPayFeeDetailPo.getRemark() + "，积分账户抵扣" + integralAmount + "元");
-            } else {
-                tmpPayFeeDetailPo.setRemark("积分账户抵扣" + integralAmount + "元");
-            }
-        }
+
         int flag = payFeeDetailNewV1InnerServiceSMOImpl.savePayFeeDetailNew(tmpPayFeeDetailPo);
 
         if (flag < 1) {

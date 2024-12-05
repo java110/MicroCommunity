@@ -9,6 +9,7 @@ import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.account.AccountDto;
 import com.java110.dto.app.AppDto;
 import com.java110.dto.community.CommunityDto;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.log.LogSystemErrorDto;
 import com.java110.dto.store.StoreUserDto;
@@ -23,9 +24,7 @@ import com.java110.po.log.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.constant.ServiceCodeConstant;
 import com.java110.utils.exception.SMOException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ExceptionUtil;
+import com.java110.utils.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -88,14 +87,17 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
         AccountDto accountDto = new AccountDto();
         accountDto.setPartId(communityDto.getCommunityId());
         accountDto.setHasMoney("1");
-        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH);
+        accountDto.setAcctTypes(new String[]{AccountDto.ACCT_TYPE_PROPERTY_FEE, AccountDto.ACCT_TYPE_METER});
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
-        if (accountDtos == null || accountDtos.size() < 1) {
+        if (ListUtil.isNull(accountDtos)) {
             return;
         }
 
         for (AccountDto tmpAccountDto : accountDtos) {
+            if (StringUtil.isEmpty(tmpAccountDto.getRoomId())) {
+                continue;
+            }
             try {
                 doPayFee(tmpAccountDto);
             } catch (Exception e) {
@@ -112,14 +114,21 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
 
     private void doPayFee(AccountDto tmpAccountDto) {
 
+        String[] feeTypeCds = null;
+        if (AccountDto.ACCT_TYPE_METER.equals(tmpAccountDto.getAcctType())) {
+            feeTypeCds = new String[]{FeeConfigDto.FEE_TYPE_CD_METER, FeeConfigDto.FEE_TYPE_CD_WATER, FeeConfigDto.FEE_TYPE_CD_GAS};
+        } else if (AccountDto.ACCT_TYPE_PROPERTY_FEE.equals(tmpAccountDto.getAcctType())) {
+            feeTypeCds = new String[]{FeeConfigDto.FEE_TYPE_CD_PROPERTY};
+        }
         // 查询业主的费用
         FeeDto feeDto = new FeeDto();
         feeDto.setCommunityId(tmpAccountDto.getPartId());
-        feeDto.setOwnerId(tmpAccountDto.getObjId());
+        feeDto.setPayerObjId(tmpAccountDto.getRoomId());
         feeDto.setState(FeeDto.STATE_DOING);
+        feeDto.setFeeTypeCds(feeTypeCds);
         feeDto.setDeductFrom("Y");
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             return;
         }
         StoreUserDto storeUserDto = new StoreUserDto();
@@ -127,7 +136,7 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
         storeUserDto.setRelCd(StoreUserDto.REL_CD_MANAGER);
         List<StoreUserDto> storeUserDtos = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDto);
 
-        Assert.listOnlyOne(storeUserDtos,"没有扣款的用户");
+        Assert.listOnlyOne(storeUserDtos, "没有扣款的用户");
 
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
         for (FeeDto tmpFeeDto : feeDtos) {
@@ -138,7 +147,7 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
             }
         }
 
-        if (tmpFeeDtos.size() < 1) {
+        if (tmpFeeDtos.isEmpty()) {
             return;
         }
         int flag = 0;
@@ -177,7 +186,7 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
                 param.put("fees", fees);
                 param.put("remark", "定时账户扣款缴费");
                 try {
-                    CallApiServiceFactory.postForApi(AppDto.JOB_APP_ID, param, ServiceCodeConstant.SERVICE_CODE_PAY_OWE_FEE, JSONObject.class,storeUserDtos.get(0).getUserId());
+                    CallApiServiceFactory.postForApi(AppDto.JOB_APP_ID, param, ServiceCodeConstant.SERVICE_CODE_PAY_OWE_FEE, JSONObject.class, storeUserDtos.get(0).getUserId());
                 } catch (SMOException e) {
                     logger.error("缴费失败", e);
                     accountDetailPo = new AccountDetailPo();
@@ -201,13 +210,6 @@ public class AccountDeductionPayFeeTemplate extends TaskSystemQuartz {
                 logger.error("生成费用失败", e);
             }
         }
-
-
-        //feeId: _item,
-        //                                startTime: _oweFeeItem.endTime,
-        //                                endTime: _oweFeeItem.deadlineTime,
-        //                                receivedAmount: _oweFeeItem.feePrice,
-        //                                primeRate:$that.owePayFeeOrderInfo.primeRate
 
     }
 

@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -105,20 +106,27 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
                 break;
         }
 
-        if(ownerDto == null){
+        if (ownerDto == null) {
             return ResultVo.createResponseEntity(1, 1, ownerDto);
         }
         //todo 查询账户余额
         AccountDto accountDto = new AccountDto();
         accountDto.setObjId(ownerDto.getMemberId());
         accountDto.setPartId(communityId);
-        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH);
-        List<AccountDto> accountDtos =accountInnerServiceSMOImpl.queryAccounts(accountDto);
-        if(!ListUtil.isNull(accountDtos)){
-            ownerDto.setAcctAmount(accountDtos.get(0).getAmount());
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+        if (ListUtil.isNull(accountDtos)) {
+            return ResultVo.createResponseEntity(1, 1, ownerDto);
         }
+        BigDecimal accountDec = new BigDecimal("0");
+        for (AccountDto tmpAccountDto : accountDtos) {
+            accountDec = accountDec.add(new BigDecimal(tmpAccountDto.getAmount()));
+        }
+        accountDec = accountDec.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        ownerDto.setAcctAmount(accountDec.doubleValue() + "");
 
         return ResultVo.createResponseEntity(1, 1, ownerDto);
+
     }
 
     /**
@@ -199,7 +207,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         ownerDto.setName(searchValue);
         ownerDto.setOwnerTypeCds(new String[]{OwnerDto.OWNER_TYPE_CD_MEMBER});
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-        Assert.isNotNull(ownerDtos,"未找到成员信息，请换其他条件查询");
+        Assert.isNotNull(ownerDtos, "未找到成员信息，请换其他条件查询");
         //Assert.listOnlyOne(ownerDtos, "未找到成员信息或者查询到多条，请换其他条件查询");
         OwnerDto owner = queryByOwnerId(communityId, ownerDtos.get(0).getOwnerId());
         //查询是否有脱敏权限
@@ -470,7 +478,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-商铺 如 1-1");
         }
 
-        String[] values = searchValue.split("-",3);
+        String[] values = searchValue.split("-", 3);
 
         if (values.length != 2) {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-商铺 如 1-1");
@@ -530,7 +538,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-单元-房屋 如 1-1-1");
         }
 
-        String[] values = searchValue.split("-",3);
+        String[] values = searchValue.split("-", 3);
 
         if (values.length != 3) {
             throw new IllegalArgumentException("查询内容格式错误，请输入 楼栋-单元-房屋 如 1-1-1");
@@ -544,7 +552,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
 
         List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
         //Assert.listOnlyOne(roomDtos, "未找到房屋信息");
-        if(roomDtos == null || roomDtos.size() < 1){
+        if (roomDtos == null || roomDtos.size() < 1) {
             throw new IllegalArgumentException("未找到房屋信息");
         }
 
@@ -554,7 +562,7 @@ public class ComprehensiveQueryImpl implements IComprehensiveQuery {
         ownerDto.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
         //Assert.listOnlyOne(ownerDtos, "未找到业主信息");
-        if(ownerDtos == null || ownerDtos.size() < 1){
+        if (ownerDtos == null || ownerDtos.size() < 1) {
             throw new IllegalArgumentException("未找到业主信息");
         }
 

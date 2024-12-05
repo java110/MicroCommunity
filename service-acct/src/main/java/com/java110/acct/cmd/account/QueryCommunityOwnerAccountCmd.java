@@ -20,6 +20,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -115,7 +116,9 @@ public class QueryCommunityOwnerAccountCmd extends Cmd {
             OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
             ownerRoomRelDto.setRoomId(payerObjId);
             List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-            Assert.listOnlyOne(ownerRoomRelDtos, "查询业主房屋关系表错误！");
+            if(ListUtil.isNull(ownerRoomRelDtos)){
+                throw new CmdException("房屋未绑定业主关系");
+            }
             ownerId = ownerRoomRelDtos.get(0).getOwnerId();
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(payerObjType)) {
             OwnerCarDto ownerCarDto = new OwnerCarDto();
