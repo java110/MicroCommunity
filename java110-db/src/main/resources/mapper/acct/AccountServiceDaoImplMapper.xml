@@ -91,7 +91,7 @@
         select t.amount,t.acct_type,t.acct_type acctType,t.obj_id,t.obj_id objId,t.acct_id,t.acct_id
         acctId,t.status_cd,t.status_cd statusCd,t.acct_name,t.acct_name acctName,t.b_id,t.b_id bId,t.obj_type,t.obj_type
         objType,t.create_time createTime,td.`name` acctTypeName,t.part_id,t.part_id partId,t.link,t.room_id roomId,
-        t.room_name roomName,
+        t.room_name roomName
         <if test="objType !=null and objType == 6006">
             ,bo.id_card idCard
         </if>
