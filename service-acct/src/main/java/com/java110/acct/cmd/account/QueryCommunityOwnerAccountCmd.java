@@ -86,6 +86,11 @@ public class QueryCommunityOwnerAccountCmd extends Cmd {
         context.setResponseEntity(responseEntity);
     }
 
+    /**
+     * 判断参数中是否有feeId
+     * @param reqJson
+     * @param accountDto
+     */
     private void hasFeeId(JSONObject reqJson, AccountDto accountDto) {
 
         if (!reqJson.containsKey("feeId")) {

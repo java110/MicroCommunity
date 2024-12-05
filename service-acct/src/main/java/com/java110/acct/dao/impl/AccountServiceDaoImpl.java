@@ -26,18 +26,18 @@ public class AccountServiceDaoImpl extends BaseServiceDao implements IAccountSer
     /**
      * 账户信息封装
      *
-     * @param businessAccountInfo 账户信息 封装
+     * @param info 账户信息 封装
      * @throws DAOException DAO异常
      */
     @Override
-    public void saveBusinessAccountInfo(Map businessAccountInfo) throws DAOException {
-        businessAccountInfo.put("month", DateUtil.getCurrentMonth());
+    public void saveBusinessAccountInfo(Map info) throws DAOException {
+        info.put("month", DateUtil.getCurrentMonth());
         // 查询business_user 数据是否已经存在
-        logger.debug("保存账户信息 入参 businessAccountInfo : {}", businessAccountInfo);
-        int saveFlag = sqlSessionTemplate.insert("accountServiceDaoImpl.saveBusinessAccountInfo", businessAccountInfo);
+        logger.debug("保存账户信息 入参 businessAccountInfo : {}", info);
+        int saveFlag = sqlSessionTemplate.insert("accountServiceDaoImpl.saveBusinessAccountInfo", info);
 
         if (saveFlag < 1) {
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存账户数据失败：" + JSONObject.toJSONString(businessAccountInfo));
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "保存账户数据失败：" + JSONObject.toJSONString(info));
         }
     }
 
@@ -54,9 +54,9 @@ public class AccountServiceDaoImpl extends BaseServiceDao implements IAccountSer
 
         logger.debug("查询账户信息 入参 info : {}", info);
 
-        List<Map> businessAccountInfos = sqlSessionTemplate.selectList("accountServiceDaoImpl.getBusinessAccountInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("accountServiceDaoImpl.getBusinessAccountInfo", info);
 
-        return businessAccountInfos;
+        return infos;
     }
 
 
@@ -89,9 +89,9 @@ public class AccountServiceDaoImpl extends BaseServiceDao implements IAccountSer
     public List<Map> getAccountInfo(Map info) throws DAOException {
         logger.debug("查询账户信息 入参 info : {}", info);
 
-        List<Map> businessAccountInfos = sqlSessionTemplate.selectList("accountServiceDaoImpl.getAccountInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("accountServiceDaoImpl.getAccountInfo", info);
 
-        return businessAccountInfos;
+        return infos;
     }
 
 
@@ -122,12 +122,12 @@ public class AccountServiceDaoImpl extends BaseServiceDao implements IAccountSer
     public int queryAccountsCount(Map info) {
         logger.debug("查询账户数据 入参 info : {}", info);
 
-        List<Map> businessAccountInfos = sqlSessionTemplate.selectList("accountServiceDaoImpl.queryAccountsCount", info);
-        if (businessAccountInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("accountServiceDaoImpl.queryAccountsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessAccountInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     /**

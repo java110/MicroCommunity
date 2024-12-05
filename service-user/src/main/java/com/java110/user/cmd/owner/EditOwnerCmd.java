@@ -150,7 +150,7 @@ public class EditOwnerCmd extends Cmd {
         Assert.listOnlyOne(curOwners, "未查询到业主信息或查询到多条");
 
         OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setLink(curOwners.get(0).getLink());
+        ownerDto.setLink(link);
         ownerDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryAllOwners(ownerDto);
         if (ownerDtos != null && ownerDtos.size() > 1) {
