@@ -23,6 +23,7 @@ import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -120,7 +121,7 @@ public class CustomSendAcctCmd extends Cmd {
         }
 
         //todo 积分 需要补充一下数据
-        if(AccountDto.ACCT_TYPE_INTEGRAL.equals(reqJson.getString("acctType"))) {
+        if("2004".equals(reqJson.getString("acctType"))) {
             doGiftIntegral(accountDtos.get(0), reqJson, createUserId);
         }
 
@@ -163,7 +164,7 @@ public class CustomSendAcctCmd extends Cmd {
         tmpOwnerDto.setLink(reqJson.getString("link"));
         tmpOwnerDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(tmpOwnerDto);
-        if (ownerDtos != null && ownerDtos.size() > 0) {
+        if (!ListUtil.isNull(ownerDtos)) {
             reqJson.put("objId", ownerDtos.get(0).getMemberId());
             return ownerDtos.get(0).getName();
         }

@@ -13,6 +13,7 @@ import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.account.AccountPo;
 import com.java110.utils.lock.DistributedLock;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,7 +101,7 @@ public class GetAccountBMOImpl implements IGetAccountBMO {
         //先查询业主
         if (!StringUtil.isEmpty(ownerDto.getIdCard()) || !StringUtil.isEmpty(ownerDto.getLink())) {
             ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-            if (ownerDtos != null && ownerDtos.size() > 0) {
+            if (!ListUtil.isNull(ownerDtos)) {
                 accountDto.setAcctName("");
                 accountDto.setObjId(ownerDtos.get(0).getMemberId());
             }

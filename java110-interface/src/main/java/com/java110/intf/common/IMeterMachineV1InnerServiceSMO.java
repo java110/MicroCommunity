@@ -67,17 +67,7 @@ public interface IMeterMachineV1InnerServiceSMO {
     @RequestMapping(value = "/queryMeterMachinesCount", method = RequestMethod.POST)
     int queryMeterMachinesCount(@RequestBody MeterMachineDto meterMachineDto);
 
-    /**
-     * 查询<p>小区楼</p>总记录数
-     *
-     * @param meterMachineDto 数据对象分享
-     * @return 小区下的小区楼记录数
-     */
-    @RequestMapping(value = "/reChargeMeterMachines", method = RequestMethod.POST)
-    ResultVo reChargeMeterMachines(@RequestBody MeterMachineDto meterMachineDto);
 
-    @RequestMapping(value = "/requestReads", method = RequestMethod.POST)
-    ResultVo requestReads(@RequestBody List<MeterMachineDto> meterMachineDtos);
 
     @RequestMapping(value = "/settingMeterMachineRead", method = RequestMethod.POST)
     int settingMeterMachineRead(@RequestBody MeterMachinePo meterMachinePo);

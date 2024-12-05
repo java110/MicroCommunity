@@ -357,37 +357,37 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             }
             if ("1003".equals(param.getString("state"))) {
                 //积分账户抵扣比例
-                BigDecimal deductionProportion = new BigDecimal(CommunitySettingFactory.getValue(reqJson.getString("communityId"), DEDUCTION_PROPORTION));
-                BigDecimal returnAmount1 = new BigDecimal(returnAmount);
-                BigDecimal money = returnAmount1.multiply(deductionProportion);
-                accountDto.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL); //2004  积分账户
-                List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-                Assert.listOnlyOne(accountDtos, "查询业主积分账户错误！");
-                BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
-                BigDecimal newAmount = amount.add(money);
-                AccountPo accountPo = new AccountPo();
-                accountPo.setAcctId(accountDtos.get(0).getAcctId());
-                accountPo.setAmount(String.valueOf(newAmount));
-                int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
-                if (flag < 1) {
-                    throw new IllegalArgumentException("更新业主积分账户失败！");
-                }
-                AccountDetailPo accountDetailPo = new AccountDetailPo();
-                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-                accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
-                accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
-                accountDetailPo.setRelAcctId("-1");
-                accountDetailPo.setAmount(money.toString());
-                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
-                accountDetailPo.setObjId(ownerId);
-                accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
-                accountDetailPo.setbId("-1");
-                accountDetailPo.setRemark("积分账户退费");
-                accountDetailPo.setCreateTime(new Date());
-                int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
-                if (i < 1) {
-                    throw new IllegalArgumentException("保存业主积分账户明细失败！");
-                }
+//                BigDecimal deductionProportion = new BigDecimal(CommunitySettingFactory.getValue(reqJson.getString("communityId"), DEDUCTION_PROPORTION));
+//                BigDecimal returnAmount1 = new BigDecimal(returnAmount);
+//                BigDecimal money = returnAmount1.multiply(deductionProportion);
+//                accountDto.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL); //2004  积分账户
+//                List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+//                Assert.listOnlyOne(accountDtos, "查询业主积分账户错误！");
+//                BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
+//                BigDecimal newAmount = amount.add(money);
+//                AccountPo accountPo = new AccountPo();
+//                accountPo.setAcctId(accountDtos.get(0).getAcctId());
+//                accountPo.setAmount(String.valueOf(newAmount));
+//                int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
+//                if (flag < 1) {
+//                    throw new IllegalArgumentException("更新业主积分账户失败！");
+//                }
+//                AccountDetailPo accountDetailPo = new AccountDetailPo();
+//                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+//                accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
+//                accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
+//                accountDetailPo.setRelAcctId("-1");
+//                accountDetailPo.setAmount(money.toString());
+//                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
+//                accountDetailPo.setObjId(ownerId);
+//                accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+//                accountDetailPo.setbId("-1");
+//                accountDetailPo.setRemark("积分账户退费");
+//                accountDetailPo.setCreateTime(new Date());
+//                int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
+//                if (i < 1) {
+//                    throw new IllegalArgumentException("保存业主积分账户明细失败！");
+//                }
             }
 
 

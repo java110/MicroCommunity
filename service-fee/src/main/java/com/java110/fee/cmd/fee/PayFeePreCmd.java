@@ -296,7 +296,7 @@ public class PayFeePreCmd extends Cmd {
         accountDto.setAcctIds(acctIds.toArray(new String[acctIds.size()]));
         List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
 
-        if (accountDtos == null || accountDtos.size() < 1) {
+        if (ListUtil.isNull(accountDtos)) {
             reqJson.put("deductionAmount", 0.0);
             return 0.0;
         }
@@ -327,7 +327,7 @@ public class PayFeePreCmd extends Cmd {
                     dedAmount = dedAmount.subtract(amount);
                 }
                 money = money.add(cashMoney);
-            } else if (AccountDto.ACCT_TYPE_INTEGRAL.equals(tmpAccountDto.getAcctType()) && compare > 0) { //积分账户
+            } else if ("2004".equals(tmpAccountDto.getAcctType()) && compare > 0) { //积分账户
                 //积分账户最大使用积分
                 String maximumNumber = CommunitySettingFactory.getValue(reqJson.getString("communityId"), MAXIMUM_NUMBER);
                 BigDecimal maxNumber = new BigDecimal(maximumNumber);

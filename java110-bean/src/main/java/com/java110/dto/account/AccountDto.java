@@ -16,15 +16,11 @@ import java.util.Date;
 public class AccountDto extends PageDto implements Serializable {
 
     /**
-     * 2003	现金账户
-     * 2004	积分账户
-     * 2005	优惠券账户
-     * 2006	金币账户
+     * 账户类型，2003 通用账户 2004 物业费扣款账户 2005 水电费扣款账户
      */
     public static final String ACCT_TYPE_CASH = "2003";
-    public static final String ACCT_TYPE_INTEGRAL = "2004";
-    public static final String ACCT_TYPE_COUPON = "2005";
-    public static final String ACCT_TYPE_GOLD = "2006";
+    public static final String ACCT_TYPE_PROPERTY_FEE = "2004";
+    public static final String ACCT_TYPE_METER = "2005";
 
 
     //对象类型，6006 个人 7007 商户
@@ -55,6 +51,9 @@ public class AccountDto extends PageDto implements Serializable {
 
     //积分账户抵扣比例
     private String deductionProportion;
+
+    private String roomId;
+    private String roomName;
 
     public String getAmount() {
         return amount;
@@ -198,5 +197,21 @@ public class AccountDto extends PageDto implements Serializable {
 
     public void setAcctTypes(String[] acctTypes) {
         this.acctTypes = acctTypes;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

@@ -110,7 +110,7 @@ public class SaveStoreInfoCmd extends Cmd {
         if (StoreTypeConstant.STORE_TYPE_MALL.equals(businessStoreObj.getString("storeTypeCd"))) {
             //物品调拨流程
             addAccount(reqJson, AccountDto.ACCT_TYPE_CASH);
-            addAccount(reqJson, AccountDto.ACCT_TYPE_INTEGRAL);
+            //addAccount(reqJson, AccountDto.ACCT_TYPE_INTEGRAL);
 //            businesses.add(storeBMOImpl.addAccount(paramObj,AccountDto.ACCT_TYPE_GOLD));
         }
         //赋权

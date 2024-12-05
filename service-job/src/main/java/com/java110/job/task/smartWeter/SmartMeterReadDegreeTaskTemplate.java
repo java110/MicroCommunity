@@ -76,7 +76,7 @@ public class SmartMeterReadDegreeTaskTemplate extends TaskSystemQuartz {
         }
 
         try {
-            meterMachineV1InnerServiceSMOImpl.requestReads(tmpMeterMachineDtos);
+            //meterMachineV1InnerServiceSMOImpl.requestReads(tmpMeterMachineDtos);
         } catch (Exception e) {
             logger.error("抄表失败", e);
 

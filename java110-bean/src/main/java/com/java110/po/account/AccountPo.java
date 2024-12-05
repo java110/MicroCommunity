@@ -20,6 +20,9 @@ public class AccountPo implements Serializable {
 
     private String statusCd = "0";
 
+    private String roomId;
+    private String roomName;
+
     public String getAmount() {
         return amount;
     }
@@ -106,5 +109,21 @@ public class AccountPo implements Serializable {
 
     public void setoLink(String oLink) {
         this.oLink = oLink;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

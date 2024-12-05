@@ -339,7 +339,7 @@ public class PayFeeCmd extends Cmd {
             JSONObject param = jsonArray.getJSONObject(columnIndex);
             //账户金额
             BigDecimal amount = new BigDecimal(param.getString("amount"));
-            if (AccountDto.ACCT_TYPE_INTEGRAL.equals(param.getString("acctType"))) { //积分账户
+            if ("2004".equals(param.getString("acctType"))) { //积分账户
                 //获取最大抵扣积分
                 BigDecimal maximumNumber = new BigDecimal(param.getString("maximumNumber"));
                 //获取积分抵扣
