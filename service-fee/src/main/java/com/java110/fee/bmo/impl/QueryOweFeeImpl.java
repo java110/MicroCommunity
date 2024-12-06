@@ -23,6 +23,7 @@ import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.ListenerExecuteException;
 import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
+import com.java110.vo.api.feeConfig.ApiFeeConfigDataVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -92,6 +93,13 @@ public class QueryOweFeeImpl implements IQueryOweFee {
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
+                if (!StringUtil.isEmpty(tmpFeeDto.getAdditionalAmount())) {
+                    tmpFeeDto.setAdditionalAmount(Double.parseDouble(tmpFeeDto.getAdditionalAmount()) + "");
+                }
+                if (!StringUtil.isEmpty(tmpFeeDto.getSquarePrice())) {
+                    tmpFeeDto.setSquarePrice(Double.parseDouble(tmpFeeDto.getSquarePrice()) + "");
+                }
+
                 //todo 有目标结束时间,并且不是一次性费用
                 if (!StringUtil.isEmpty(feeDto.getTargetEndTime())
                         && !FeeDto.FEE_FLAG_ONCE.equals(tmpFeeDto.getFeeFlag())
@@ -182,7 +190,7 @@ public class QueryOweFeeImpl implements IQueryOweFee {
                 throw new ListenerExecuteException(ResponseConstant.RESULT_CODE_ERROR, "未查到房屋信息，查询多条数据");
             }
             roomDto = roomDtos.get(0);
-            feeDto.setPayerObjName(roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum() );
+            feeDto.setPayerObjName(roomDto.getFloorNum() + "-" + roomDto.getUnitNum() + "-" + roomDto.getRoomNum());
             feeDto.setBuiltUpArea(roomDto.getBuiltUpArea());
 
         } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {//车位相关
