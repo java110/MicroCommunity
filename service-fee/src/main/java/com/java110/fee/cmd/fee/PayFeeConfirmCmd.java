@@ -423,7 +423,7 @@ public class PayFeeConfirmCmd extends Cmd {
         feeDto.setFeeId(paramObj.getString("feeId"));
         feeDto.setCommunityId(paramObj.getString("communityId"));
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (feeDtos == null || feeDtos.size() < 1) {
+        if (ListUtil.isNull(feeDtos)) {
             return;
         }
         //为停车费单独处理
@@ -439,7 +439,7 @@ public class PayFeeConfirmCmd extends Cmd {
 
         Calendar endTimeCalendar = null;
         //车位费用续租
-        if (ownerCarDtos == null || ownerCarDtos.size() < 1) {
+        if (ListUtil.isNull(ownerCarDtos)) {
             return;
         }
         for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {

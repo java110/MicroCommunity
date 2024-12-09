@@ -26,10 +26,7 @@ import com.java110.dto.owner.OwnerCarDto;
 import com.java110.intf.user.IOwnerCarV1InnerServiceSMO;
 import com.java110.po.car.OwnerCarPo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +63,13 @@ public class EditOwnerCarCmd extends Cmd {
         Assert.jsonObjectHaveKey(reqJson, "carType", "请求报文中未包含carType");
         Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
 
+
+    }
+
+    @Override
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setMemberId(reqJson.getString("memberId"));
         ownerCarDto.setCommunityId(reqJson.getString("communityId"));
@@ -79,13 +83,6 @@ public class EditOwnerCarCmd extends Cmd {
         if (StringUtil.isEmpty(psId) || "-1".equals(psId)) {
             throw new IllegalArgumentException("车位已经被释放，不允许修改车辆信息");
         }
-
-    }
-
-    @Override
-    @Java110Transactional
-    public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
         if (!reqJson.containsKey("leaseType")) {
             reqJson.put("leaseType", OwnerCarDto.LEASE_TYPE_MONTH);
         }
@@ -101,7 +98,35 @@ public class EditOwnerCarCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("修改数据失败");
         }
-
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
+
+        if (OwnerCarDto.CAR_TYPE_MEMBER.equals(ownerCarDtos.get(0).getCarTypeCd())) {
+            return;
+        }
+
+        ownerCarDto = new OwnerCarDto();
+        ownerCarDto.setMemberId(reqJson.getString("memberId"));
+        ownerCarDto.setCommunityId(reqJson.getString("communityId"));
+        ownerCarDto.setCarId(reqJson.getString("carId"));
+        ownerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
+
+
+        // todo 修改成员车辆的开始时间和结束时间
+        OwnerCarDto tmpOwnerCarDto = new OwnerCarDto();
+        tmpOwnerCarDto.setCarId(ownerCarDtos.get(0).getCarId());
+        tmpOwnerCarDto.setCarTypeCd(OwnerCarDto.CAR_TYPE_MEMBER);
+        List<OwnerCarDto> memberOwnerCarDtos = ownerCarV1InnerServiceSMOImpl.queryOwnerCars(tmpOwnerCarDto);
+
+        if (ListUtil.isNull(memberOwnerCarDtos)) {
+            return;
+        }
+        OwnerCarPo memberOwnerCarPo = null;
+        for (OwnerCarDto mOwnerCarDto : memberOwnerCarDtos) {
+            memberOwnerCarPo = new OwnerCarPo();
+            memberOwnerCarPo.setMemberId(mOwnerCarDto.getMemberId());
+            memberOwnerCarPo.setStartTime(DateUtil.getFormatTimeStringA(ownerCarDtos.get(0).getStartTime()));
+            memberOwnerCarPo.setEndTime(DateUtil.getFormatTimeStringA(ownerCarDtos.get(0).getEndTime()));
+            ownerCarV1InnerServiceSMOImpl.updateOwnerCar(memberOwnerCarPo);
+        }
     }
 }
