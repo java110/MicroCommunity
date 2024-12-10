@@ -9,6 +9,8 @@ package com.java110.utils.util;
  * add by wuxw 2020/2/10
  **/
 
+import com.java110.utils.cache.MappingCache;
+
 import java.util.regex.Pattern;
 
 /**
@@ -93,6 +95,10 @@ public class ValidatorUtil {
     public static boolean isMobile(String mobile) {
         if (StringUtil.isEmpty(mobile)) {
             return false;
+        }
+        String telValidate = MappingCache.getValue("SYSTEM_SWITCH","TEL_VALIDATE");
+        if("OFF".equals(telValidate)){
+            return true;
         }
         return Pattern.matches(REGEX_MOBILE, mobile);
     }

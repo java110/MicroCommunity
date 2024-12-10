@@ -74,8 +74,13 @@ public class OweFeePaymentBusiness implements IPaymentBusiness {
     public PaymentOrderDto unified(ICmdDataFlowContext context, JSONObject reqJson) {
         String userId = context.getReqHeaders().get("user-id");
 
+
         String ownerId = reqJson.getString("ownerId");
         String roomId = reqJson.getString("roomId");
+
+        if (StringUtil.isEmpty(ownerId) && StringUtil.isEmpty(roomId)) {
+            throw new IllegalArgumentException("参数错误未包含业主或者房屋编号");
+        }
 
         String payObjType = "3333";
         if (reqJson.containsKey("payObjType")) {

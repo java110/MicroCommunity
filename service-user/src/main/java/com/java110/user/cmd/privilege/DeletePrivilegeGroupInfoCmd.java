@@ -17,13 +17,14 @@ import com.java110.po.privilege.PrivilegeRelPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "delete.privilegeGroup.info")
-public class DeletePrivilegeGroupInfoCmd extends Cmd{
+public class DeletePrivilegeGroupInfoCmd extends Cmd {
 
     @Autowired
     private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
@@ -42,7 +43,7 @@ public class DeletePrivilegeGroupInfoCmd extends Cmd{
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        Assert.hasKeyAndValue(reqJson,"pgId","角色不存在");
+        Assert.hasKeyAndValue(reqJson, "pgId", "角色不存在");
     }
 
     @Override
@@ -50,26 +51,26 @@ public class DeletePrivilegeGroupInfoCmd extends Cmd{
         PrivilegeUserDto privilegeUserDto = new PrivilegeUserDto();
         privilegeUserDto.setpId(reqJson.getString("pgId"));
         List<PrivilegeUserDto> privilegeUserDtos = privilegeUserV1InnerServiceSMOImpl.queryPrivilegeUsers(privilegeUserDto);
-        if(privilegeUserDtos != null && privilegeUserDtos.size() > 0){
+        if (!ListUtil.isNull(privilegeUserDtos)) {
             throw new IllegalArgumentException("该角色下有关联员工，请先删除关联员工！");
         }
-        PrivilegeGroupPo privilegeGroupPo = BeanConvertUtil.covertBean(reqJson,PrivilegeGroupPo.class);
+        PrivilegeGroupPo privilegeGroupPo = BeanConvertUtil.covertBean(reqJson, PrivilegeGroupPo.class);
         int flag = privilegeGroupV1InnerServiceSMOImpl.deletePrivilegeGroup(privilegeGroupPo);
-        if(flag  < 1){
+        if (flag < 1) {
             throw new CmdException("删除失败");
         }
         PrivilegeRelDto privilegeRelDto = new PrivilegeRelDto();
         privilegeRelDto.setPgId(reqJson.getString("pgId"));
         List<PrivilegeRelDto> privilegeRelDtos = privilegeRelV1InnerServiceSMOImpl.queryPrivilegeRels(privilegeRelDto);
-        if(privilegeRelDtos == null || privilegeRelDtos.size()<1){
-            return ;
+        if (privilegeRelDtos == null || privilegeRelDtos.size() < 1) {
+            return;
         }
         PrivilegeRelPo privilegeRelPo = null;
-        for(PrivilegeRelDto tmpPrivilegeDto: privilegeRelDtos){
+        for (PrivilegeRelDto tmpPrivilegeDto : privilegeRelDtos) {
             privilegeRelPo = new PrivilegeRelPo();
             privilegeRelPo.setRelId(tmpPrivilegeDto.getRelId());
             flag = privilegeRelV1InnerServiceSMOImpl.deletePrivilegeRel(privilegeRelPo);
-            if(flag <1){
+            if (flag < 1) {
                 throw new CmdException("删除失败");
             }
         }
