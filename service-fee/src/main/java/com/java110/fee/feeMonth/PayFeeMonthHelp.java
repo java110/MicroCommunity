@@ -53,34 +53,34 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         payFeeMonthOwnerDto.setObjId(feeDto.getPayerObjId());
         payFeeMonthOwnerDto.setObjFpcId("-1");
 
-        if(StringUtil.isEmpty(feeDto.getPayerObjId())){
+        if (StringUtil.isEmpty(feeDto.getPayerObjId())) {
             return payFeeMonthOwnerDto;
         }
 
         // 如果是房屋
-        if(FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())){
+        if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDto.getPayerObjType())) {
 
             RoomDto roomDto = new RoomDto();
             roomDto.setRoomId(feeDto.getPayerObjId());
             roomDto.setCommunityId(feeDto.getCommunityId());
             List<RoomDto> roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
-            if(!ListUtil.isNull(roomDtos)){
+            if (!ListUtil.isNull(roomDtos)) {
                 payFeeMonthOwnerDto.setObjFpcId(roomDtos.get(0).getFloorId());
             }
-        }else if(FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())){
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDto.getPayerObjType())) {
 
             OwnerCarDto ownerCarDto = new OwnerCarDto();
             ownerCarDto.setMemberId(feeDto.getPayerObjId());
             ownerCarDto.setCommunityId(feeDto.getCommunityId());
             List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-            if(!ListUtil.isNull(ownerCarDtos)){
+            if (!ListUtil.isNull(ownerCarDtos)) {
                 payFeeMonthOwnerDto.setObjFpcId(ownerCarDtos.get(0).getPaId());
             }
-        }else {
+        } else {
             ContractDto contractDto = new ContractDto();
             contractDto.setContractId(feeDto.getPayerObjId());
             List<ContractDto> contractDtos = contractInnerServiceSMOImpl.queryContracts(contractDto);
-            if(!ListUtil.isNull(contractDtos)){
+            if (!ListUtil.isNull(contractDtos)) {
                 payFeeMonthOwnerDto.setObjFpcId(contractDtos.get(0).getContractType());
             }
         }
@@ -212,17 +212,14 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
             calendar.setTime(startMonthDayTime);
             curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-            // todo 如果不是整月，则转换为按天计算
-//            if (curDay != curMonthMaxDay) {
-                //todo 周期性费用 日应收重新算
-                if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
-                    dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
-                }
-                // todo 计算 应收
-                curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
-//            } else { // todo 如果是整月 那就按月计算，以免 转换成天再 乘以天数后的误差
-//                curMonthReceivableAmount = receivableAmount;
-//            }
+
+            //todo 周期性费用 日应收重新算
+            if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+                dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
+            }
+            // todo 计算 应收
+            curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
+
             // todo 保存数据到pay_fee_detail_month
             toSavePayFeeDetailMonth(curMonthReceivableAmount.doubleValue(), 0, null, feeDto, payFeeMonthOwnerDto, payFeeDetailMonthPos, startMonthDayTime, deadlineTime);
 
@@ -291,13 +288,21 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         int curDay = 0;
         BigDecimal curMonthReceivableAmount = null;
         BigDecimal curMonthReceivedAmount = null;
+        int curMonthMaxDay = 30;
         while (firstMonthDayTime.getTime() < endTime.getTime()) {
             curDay = DateUtil.daysBetween(firstMonthDayTime, startMonthDayTime);
+            // todo 计算当月天数
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startMonthDayTime);
+            curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+            if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+                dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
+                dayReceivedAmount = receivedAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
+            }
             // todo 计算 应收
             curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
             // todo 计算 实收
             curMonthReceivedAmount = new BigDecimal(curDay).multiply(dayReceivedAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
-
             // todo 保存数据到pay_fee_detail_month
             toSavePayFeeDetailMonth(curMonthReceivableAmount.doubleValue(), curMonthReceivedAmount.doubleValue(), feeDetailDto, feeDto, payFeeMonthOwnerDto, payFeeDetailMonthPos, startMonthDayTime, endTime);
 
@@ -314,6 +319,14 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         }
 
         curDay = DateUtil.daysBetween(endTime, startMonthDayTime);
+        // todo 计算当月天数
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startMonthDayTime);
+        curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+        if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
+            dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
+            dayReceivedAmount = receivedAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
+        }
         // todo 计算 应收
         curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
         // todo 计算 实收
