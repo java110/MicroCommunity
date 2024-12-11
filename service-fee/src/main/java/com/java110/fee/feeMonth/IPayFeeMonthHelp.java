@@ -21,7 +21,7 @@ public interface IPayFeeMonthHelp {
      * @param feeDto
      * @param payFeeMonthOwnerDto
      */
-    void waitDispersedFeeDetail(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto);
+    void waitDispersedFeeDetail(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto,Double feePrice);
 
     /**
      * 处理欠费问题

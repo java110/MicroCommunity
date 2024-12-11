@@ -226,7 +226,7 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
     private void maxMonthDateToDeadlineTimeData(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice) {
 
         //todo 处理已经交过费的记录处理
-        payFeeMonthHelp.waitDispersedFeeDetail(feeDto, payFeeMonthOwnerDto);
+        payFeeMonthHelp.waitDispersedFeeDetail(feeDto, payFeeMonthOwnerDto, feePrice);
 
 
         //todo 处理 endTime 到 deadlineTime 的费用
