@@ -327,7 +327,8 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         curMonthMaxDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
         if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag())) {
             dayReceivableAmount = receivableAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
-            dayReceivedAmount = receivedAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
+            dayReceivedAmount = receivedAmount.divide(new BigDecimal(month+""), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
+            dayReceivedAmount = dayReceivedAmount.divide(new BigDecimal(curMonthMaxDay), 8, BigDecimal.ROUND_HALF_UP);// 日 实收
         }
         // todo 计算 应收
         curMonthReceivableAmount = new BigDecimal(curDay).multiply(dayReceivableAmount).setScale(4, BigDecimal.ROUND_HALF_UP);
