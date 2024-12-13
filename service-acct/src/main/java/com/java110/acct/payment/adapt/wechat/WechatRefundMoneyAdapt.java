@@ -18,6 +18,7 @@ import com.java110.intf.order.IOrderInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.OSSUtil;
 import com.java110.utils.util.PayUtil;
 import com.java110.utils.util.StringUtil;
@@ -96,7 +97,7 @@ public class WechatRefundMoneyAdapt implements IRefundMoneyAdapt {
         paymentPoolValueDto.setPpId(paymentPoolDto.getPpId());
         List<PaymentPoolValueDto> paymentPoolValueDtos = paymentPoolValueV1InnerServiceSMOImpl.queryPaymentPoolValues(paymentPoolValueDto);
 
-        if (paymentPoolValueDtos == null || paymentPoolValueDtos.isEmpty()) {
+        if (ListUtil.isNull(paymentPoolValueDtos)) {
             throw new IllegalArgumentException("配置错误,未配置参数");
         }
 
@@ -122,7 +123,7 @@ public class WechatRefundMoneyAdapt implements IRefundMoneyAdapt {
         onlinePayRefundDto.setState(OnlinePayDto.STATE_WT);
         List<OnlinePayRefundDto> onlinePayRefundDtos = onlinePayRefundV1InnerServiceSMOImpl.queryOnlinePayRefunds(onlinePayRefundDto);
         String tranNo = GenerateCodeFactory.getGeneratorId("11");
-        if (onlinePayRefundDtos != null && onlinePayRefundDtos.size() > 0) {
+        if (!ListUtil.isNull(onlinePayRefundDtos)) {
             tranNo = onlinePayRefundDtos.get(0).getRefundId();
         }
 
