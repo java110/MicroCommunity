@@ -204,7 +204,7 @@ public class SaveInvoiceApplyCmd extends Cmd {
         }
 
         FeeDetailDto feeDetailDto = new FeeDetailDto();
-        feeDetailDto.setDetailIds(detailIds.toArray(new String[detailIds.size()]));
+        feeDetailDto.setDetailIds((String[]) detailIds.toArray(new String[detailIds.size()]));
         feeDetailDto.setCommunityId(reqJson.getString("communityId"));
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
 
@@ -263,7 +263,7 @@ public class SaveInvoiceApplyCmd extends Cmd {
 
 
         AccountReceiptDto accountReceiptDto = new AccountReceiptDto();
-        accountReceiptDto.setArIds(arIds.toArray(new String[arIds.size()]));
+        accountReceiptDto.setArIds((String[]) arIds.toArray(new String[arIds.size()]));
         accountReceiptDto.setCommunityId(reqJson.getString("communityId"));
         List<AccountReceiptDto> accountReceiptDtos = accountReceiptV1InnerServiceSMOImpl.queryAccountReceipts(accountReceiptDto);
         if (accountReceiptDtos == null || accountReceiptDtos.isEmpty()) {
