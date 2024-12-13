@@ -139,7 +139,7 @@ public class UpdatePaymentPoolCmd extends Cmd {
         }
         JSONArray configIds = reqJson.getJSONArray("configIds");
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setConfigIds(configIds.toArray(new String[configIds.size()]));
+        feeConfigDto.setConfigIds((String[]) configIds.toArray(new String[configIds.size()]));
         feeConfigDto.setCommunityId(reqJson.getString("communityId"));
         List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
 
