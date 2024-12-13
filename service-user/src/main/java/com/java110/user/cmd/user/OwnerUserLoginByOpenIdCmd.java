@@ -75,12 +75,15 @@ public class OwnerUserLoginByOpenIdCmd extends Cmd {
     private ISystemInfoV1InnerServiceSMO systemInfoV1InnerServiceSMOImpl;
 
 
-
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "openId", "请求报文中未包含openId");
 
         //todo openId 转换
+        String openId = reqJson.getString("openId");
+        if ("null".equalsIgnoreCase(openId) || "undefined".equals(openId)) {
+            throw new CmdException("openId非法");
+        }
     }
 
     @Override
@@ -91,7 +94,7 @@ public class OwnerUserLoginByOpenIdCmd extends Cmd {
         userAttrDto.setValue(reqJson.getString("openId"));
         List<UserAttrDto> userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
 
-        if(ListUtil.isNull(userAttrDtos)){
+        if (ListUtil.isNull(userAttrDtos)) {
             throw new CmdException("未找到用户信息");
         }
 
