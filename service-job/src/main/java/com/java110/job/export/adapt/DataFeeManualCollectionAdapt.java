@@ -84,7 +84,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         feePrintSpecDto.setRow(1);
         List<FeePrintSpecDto> feePrintSpecDtos = feePrintSpecInnerServiceSMOImpl.queryFeePrintSpecs(feePrintSpecDto);
 
-        if (feePrintSpecDtos == null || feePrintSpecDtos.isEmpty()) {
+        if (ListUtil.isNull(feePrintSpecDtos)) {
             feePrintSpecDto = null;
         } else {
             feePrintSpecDto = feePrintSpecDtos.get(0);
@@ -106,7 +106,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
         }
         for (int roomIndex = 0; roomIndex < roomDtos.size(); roomIndex++) {
             //todo 有可能房屋下没有欠费
-            if (roomDtos.get(roomIndex).getFees() == null) {
+            if (ListUtil.isNull(roomDtos.get(roomIndex).getFees())) {
                 continue;
             }
             Map<String, Object> info = generatorRoomOweFee(sheet, workbook, roomDtos.get(roomIndex), line, totalPageHeight, patriarch, feePrintSpecDto);
@@ -367,7 +367,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
     private RoomDto getTmpRoomDtos(RoomDto tmpRoomDto, String configIds, JSONObject reqJson) {
         FeeDto tmpFeeDto = null;
         tmpFeeDto = new FeeDto();
-        tmpFeeDto.setArrearsEndTime(DateUtil.getCurrentDate());
+       // tmpFeeDto.setArrearsEndTime(DateUtil.getCurrentDate());
         tmpFeeDto.setState(FeeDto.STATE_DOING);
         tmpFeeDto.setPayerObjId(tmpRoomDto.getRoomId());
         tmpFeeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
