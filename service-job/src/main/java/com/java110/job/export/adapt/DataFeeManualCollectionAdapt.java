@@ -388,7 +388,7 @@ public class DataFeeManualCollectionAdapt implements IExportDataAdapt {
             if (!hasInTime(tempFeeDto, reqJson)) {
                 continue;
             }
-            if (tempFeeDto.getFeePrice() != 0) {
+            if (tempFeeDto.getFeeTotalPrice() != 0) {
                 tmpFeeDtos.add(tempFeeDto);
             }
         }
