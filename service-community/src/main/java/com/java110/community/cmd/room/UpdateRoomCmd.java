@@ -9,6 +9,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.unit.UnitDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.intf.community.*;
@@ -17,10 +18,7 @@ import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.room.RoomAttrPo;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -110,7 +108,7 @@ public class UpdateRoomCmd extends Cmd {
         }
         //获取房屋状态
         String state = reqJson.getString("state");
-        if (!StringUtil.isEmpty(state) && state.equals("2006")) { //已出租
+        if (RoomDto.STATE_SHOP_FIRE.equals(state)) { //已出租
             //获取起租时间
             Date startTime = null;
             Date endTime = null;
@@ -132,7 +130,7 @@ public class UpdateRoomCmd extends Cmd {
         unitDto.setUnitId(reqJson.getString("unitId"));
         //校验小区楼ID和小区是否有对应关系
         List<UnitDto> units = unitInnerServiceSMOImpl.queryUnitsByCommunityId(unitDto);
-        if (units == null || units.size() < 1) {
+        if (ListUtil.isNull(units)) {
             throw new IllegalArgumentException("传入单元ID不是该小区的单元");
         }
         Assert.judgeAttrValue(reqJson);
@@ -142,16 +140,10 @@ public class UpdateRoomCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         updateShellRoom(reqJson, cmdDataFlowContext);
-        String state = reqJson.getString("state");
-        if (!StringUtil.isEmpty(state) && state.equals("2006")) { //已出租
-            OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
-            ownerRoomRelDto.setRoomId(reqJson.getString("roomId"));
-            List<OwnerRoomRelDto> ownerRoomRelDtoList = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-            OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtoList.get(0), OwnerRoomRelPo.class);
-            ownerRoomRelPo.setStartTime(reqJson.getString("startTime"));
-            ownerRoomRelPo.setEndTime(reqJson.getString("endTime") + " 23:59:59");
-            ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
-        }
+
+        // todo 修改租期
+        modifyRoomRateTime(reqJson,cmdDataFlowContext);
+
         if (!reqJson.containsKey("attrs")) {
             return;
         }
@@ -185,6 +177,34 @@ public class UpdateRoomCmd extends Cmd {
             if (flag < 1) {
                 throw new CmdException("保存单元失败");
             }
+        }
+    }
+
+    /**
+     * 修改租期
+     * @param reqJson
+     * @param cmdDataFlowContext
+     */
+    private void modifyRoomRateTime(JSONObject reqJson, ICmdDataFlowContext cmdDataFlowContext) {
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setRoomId(reqJson.getString("roomId"));
+        List<OwnerRoomRelDto> ownerRoomRelDtoList = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        if(ListUtil.isNull(ownerRoomRelDtoList)){
+            return ;
+        }
+        String state = reqJson.getString("state");
+        if (RoomDto.STATE_SHOP_FIRE.equals(state)) { //已出租
+            OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtoList.get(0), OwnerRoomRelPo.class);
+            ownerRoomRelPo.setStartTime(reqJson.getString("startTime"));
+            ownerRoomRelPo.setEndTime(reqJson.getString("endTime") + " 23:59:59");
+            ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
+            return;
+        }
+        String endTime = reqJson.getString("endTime");
+        if(!StringUtil.isEmpty(endTime)){
+            OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtoList.get(0), OwnerRoomRelPo.class);
+            ownerRoomRelPo.setEndTime(endTime + " 23:59:59");
+            ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
         }
     }
 

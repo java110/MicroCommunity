@@ -17,10 +17,7 @@ import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.StatusConstant;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.ListUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -128,7 +125,7 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
             }
         }
 
-        if (roomAttrDtos == null || roomAttrDtos.size() == 0) {
+        if (ListUtil.isNull(roomAttrDtos)) {
             return;
         }
 
@@ -270,19 +267,12 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
     @Override
     public List<RoomDto> queryRoomsByOwner(@RequestBody RoomDto roomDto) {
 
-//        List<RoomDto> rooms = BeanConvertUtil.covertBeanList(roomServiceDaoImpl.getRoomInfoByOwner(BeanConvertUtil.beanCovertMap(roomDto)),
-//                RoomDto.class);
-//
-//        if (rooms == null || rooms.size() == 0) {
-//            return rooms;
-//        }
-
         OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
         ownerRoomRelDto.setOwnerId(roomDto.getOwnerId());
         ownerRoomRelDto.setOwnerNameLike(roomDto.getOwnerNameLike());
         ownerRoomRelDto.setStatusCd(roomDto.getStatusCd());
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
-        if (ownerRoomRelDtos == null || ownerRoomRelDtos.size() < 1) {
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
             return new ArrayList<>();
         }
 
@@ -296,7 +286,21 @@ public class RoomInnerServiceSMOImpl extends BaseServiceSMO implements IRoomInne
         tmpRoomDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
         tmpRoomDto.setRoomNum(roomDto.getRoomNum());
         tmpRoomDto.setCommunityId(roomDto.getCommunityId());
-        return queryRooms(tmpRoomDto);
+        List<RoomDto> roomDtos = queryRooms(tmpRoomDto);
+        if(ListUtil.isNull(roomDtos)){
+            return roomDtos;
+        }
+        for (OwnerRoomRelDto tmpOwnerRoomRelDto : ownerRoomRelDtos) {
+            for(RoomDto tRoomDto:roomDtos){
+                if(!tmpOwnerRoomRelDto.getRoomId().equals(tRoomDto.getRoomId())){
+                    continue;
+                }
+                tRoomDto.setStartTime(tmpOwnerRoomRelDto.getStartTime());
+                tRoomDto.setEndTime(tmpOwnerRoomRelDto.getEndTime());
+            }
+        }
+
+        return roomDtos;
 
     }
 

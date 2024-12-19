@@ -54,9 +54,9 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
 
         logger.debug("查询业主信息 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getBusinessOwnerInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getBusinessOwnerInfo", info);
 
-        return businessOwnerInfos;
+        return infos;
     }
 
 
@@ -89,9 +89,9 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
     public List<Map> getOwnerInfo(Map info) throws DAOException {
         logger.debug("查询业主信息 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getOwnerInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getOwnerInfo", info);
 
-        return businessOwnerInfos;
+        return infos;
     }
 
     /**
@@ -104,12 +104,12 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
     @Override
     public int getOwnerInfoCount(Map info) throws DAOException {
         logger.debug("查询业主信息 入参 info : {}", info);
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getOwnerInfoCount", info);
-        if (businessOwnerInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getOwnerInfoCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
@@ -140,12 +140,12 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
     public int queryOwnersCount(Map info) {
         logger.debug("查询业主数据 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersCount", info);
-        if (businessOwnerInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     /**
@@ -158,12 +158,12 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
     public int queryOwnersCountByCondition(Map info) {
         logger.debug("查询业主数据 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersCountByCondition", info);
-        if (businessOwnerInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersCountByCondition", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     /**
@@ -177,60 +177,60 @@ public class OwnerServiceDaoImpl extends BaseServiceDao implements IOwnerService
     public List<Map> getOwnerInfoByCondition(Map info) throws DAOException {
         logger.debug("查询业主信息 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getOwnerInfoByCondition", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.getOwnerInfoByCondition", info);
 
-        return businessOwnerInfos;
+        return infos;
     }
 
     @Override
     public int queryNoEnterRoomOwnerCount(Map info) {
         logger.debug("查询业主数据 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryNoEnterRoomOwnerCount", info);
-        if (businessOwnerInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryNoEnterRoomOwnerCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryOwnersByRoom(Map info) throws DAOException {
         logger.debug("queryOwnersByRoom 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersByRoom", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersByRoom", info);
 
-        return businessOwnerInfos;
+        return infos;
     }
 
     @Override
     public List<Map> queryOwnersByParkingSpace(Map info) throws DAOException {
         logger.debug("queryOwnersByParkingSpace 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersByParkingSpace", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnersByParkingSpace", info);
 
-        return businessOwnerInfos;
+        return infos;
     }
 
     @Override
     public int queryOwnerLogsCountByRoom(Map info) {
         logger.debug("查询业主数据 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnerLogsCountByRoom", info);
-        if (businessOwnerInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnerLogsCountByRoom", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryOwnerLogsByRoom(Map info) {
         logger.debug("queryOwnerLogsByRoom 入参 info : {}", info);
 
-        List<Map> businessOwnerInfos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnerLogsByRoom", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerServiceDaoImpl.queryOwnerLogsByRoom", info);
 
-        return businessOwnerInfos;
+        return infos;
     }
 
 

@@ -66,9 +66,9 @@ public class OwnerRoomRelV1ServiceDaoImpl extends BaseServiceDao implements IOwn
     public List<Map> getOwnerRoomRelInfo(Map info) throws DAOException {
         logger.debug("查询 getOwnerRoomRelInfo 入参 info : {}", info);
 
-        List<Map> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelV1ServiceDaoImpl.getOwnerRoomRelInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerRoomRelV1ServiceDaoImpl.getOwnerRoomRelInfo", info);
 
-        return businessOwnerRoomRelInfos;
+        return infos;
     }
 
 
@@ -97,12 +97,12 @@ public class OwnerRoomRelV1ServiceDaoImpl extends BaseServiceDao implements IOwn
     public int queryOwnerRoomRelsCount(Map info) {
         logger.debug("查询 queryOwnerRoomRelsCount 入参 info : {}", info);
 
-        List<Map> businessOwnerRoomRelInfos = sqlSessionTemplate.selectList("ownerRoomRelV1ServiceDaoImpl.queryOwnerRoomRelsCount", info);
-        if (businessOwnerRoomRelInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerRoomRelV1ServiceDaoImpl.queryOwnerRoomRelsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerRoomRelInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
