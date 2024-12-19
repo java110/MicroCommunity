@@ -221,7 +221,12 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
 
         for(OwnerDto ownerDto : ownerDtos) {
             for (Map count : ownerRoomCounts) {
-                if(!StringUtil.isEmpty(ownerDto.getOwnerId()) && !StringUtil.isEmpty(count.get("ownerId").toString()))
+                if(StringUtil.isEmpty(ownerDto.getOwnerId())){
+                    continue;
+                }
+                if(StringUtil.isEmpty(count.get("ownerId").toString())){
+                    continue;
+                }
                 if(ownerDto.getOwnerId().equals(count.get("ownerId").toString())){
                     ownerDto.setRoomCount(count.get("roomCount").toString());
                 }
