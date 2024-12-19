@@ -21,6 +21,7 @@ import com.java110.dto.parking.ParkingSpaceApplyDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.fee.bmo.fee.IFeeBMO;
+import com.java110.fee.bmo.fee.IFinishFeeNotify;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.acct.ICouponUserDetailV1InnerServiceSMO;
 import com.java110.intf.acct.ICouponUserV1InnerServiceSMO;
@@ -104,6 +105,9 @@ public class PayFeeConfirmCmd extends Cmd {
     @Autowired
     private IFeeAccountDetailServiceSMO feeAccountDetailServiceSMOImpl;
 
+    @Autowired
+    private IFinishFeeNotify finishFeeNotifyImpl;
+
     //默认序列
     protected static final int DEFAULT_SEQ = 1;
 
@@ -146,63 +150,14 @@ public class PayFeeConfirmCmd extends Cmd {
         feeBMOImpl.addFeePreDetail(paramObj);
         feeBMOImpl.modifyPreFee(paramObj);
 
-        dealOwnerCartEndTime(paramObj);
+        //todo 为停车费单独处理
+        finishFeeNotifyImpl.updateCarEndTime(paramObj.getString("feeId"), paramObj.getString("communityId"));
 
-        //判断是否有派单属性ID
-        FeeAttrDto feeAttrDto = new FeeAttrDto();
-        feeAttrDto.setCommunityId(paramObj.getString("communityId"));
-        feeAttrDto.setFeeId(paramObj.getString("feeId"));
-        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
-        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
-        //修改 派单状态
-        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
-            RepairPoolPo repairPoolPo = new RepairPoolPo();
-            repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
-            repairPoolPo.setCommunityId(paramObj.getString("communityId"));
-            repairPoolPo.setState(RepairDto.STATE_APPRAISE);
-            int flag = repairPoolNewV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
-            if (flag < 1) {
-                throw new CmdException("更新微信派单池信息失败");
-            }
-            RepairUserDto repairUserDto = new RepairUserDto();
-            repairUserDto.setRepairId(feeAttrDtos.get(0).getValue());
-            repairUserDto.setState(RepairUserDto.STATE_PAY_FEE);
-            //查询待支付状态的记录
-            List<RepairUserDto> repairUserDtoList = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
-            Assert.listOnlyOne(repairUserDtoList, "信息错误！");
-            RepairUserPo repairUserPo = new RepairUserPo();
-            repairUserPo.setRuId(repairUserDtoList.get(0).getRuId());
-            repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
-            //如果是待评价状态，就更新结束时间
-            repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            DecimalFormat df = new DecimalFormat("0.00");
-            BigDecimal payment_amount = new BigDecimal(paramObj.getString("receivableAmount"));
-            repairUserPo.setContext("已支付" + df.format(payment_amount) + "元");
-            flag = repairUserNewV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
-            if (flag < 1) {
-                throw new CmdException("更新微信派单池信息失败");
-            }
-            //新增待评价状态
-            RepairUserPo repairUser = new RepairUserPo();
-            repairUser.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
-            repairUser.setStartTime(repairUserPo.getEndTime());
-            repairUser.setState(RepairUserDto.STATE_EVALUATE);
-            repairUser.setContext("待评价");
-            repairUser.setCommunityId(paramObj.getString("communityId"));
-            repairUser.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            repairUser.setRepairId(repairUserDtoList.get(0).getRepairId());
-            repairUser.setStaffId(repairUserDtoList.get(0).getStaffId());
-            repairUser.setStaffName(repairUserDtoList.get(0).getStaffName());
-            repairUser.setPreStaffId(repairUserDtoList.get(0).getStaffId());
-            repairUser.setPreStaffName(repairUserDtoList.get(0).getStaffName());
-            repairUser.setPreRuId(repairUserDtoList.get(0).getRuId());
-            repairUser.setRepairEvent("auditUser");
-            repairUser.setbId("-1");
-            flag = repairUserNewV1InnerServiceSMOImpl.saveRepairUserNew(repairUser);
-            if (flag < 1) {
-                throw new CmdException("更新微信派单池信息失败");
-            }
-        }
+        //todo 修改报修单
+        finishFeeNotifyImpl.updateRepair(paramObj.getString("feeId"), paramObj.getString("communityId"), paramObj.getString("receivedAmount"));
+
+        //todo 租金延期房屋结束时间
+        finishFeeNotifyImpl.updateRoomEndTime(paramObj.getString("feeId"), paramObj.getString("communityId"));
 
         //查询 pay_fee_detail 是否缴费
         FeeDetailDto feeDetailDto = new FeeDetailDto();
@@ -215,7 +170,7 @@ public class PayFeeConfirmCmd extends Cmd {
             //List<ComputeDiscountDto> computeDiscountDtos = (List<ComputeDiscountDto>) paramObj.get("computeDiscountDtos");
             JSONArray computeDiscountDtos = paramObj.getJSONArray("computeDiscountDtos");
             ComputeDiscountDto computeDiscountDto = null;
-            if (computeDiscountDtos != null && computeDiscountDtos.size() > 0) {
+            if (!ListUtil.isNull(computeDiscountDtos)) {
                 for (int accountIndex = 0; accountIndex < computeDiscountDtos.size(); accountIndex++) {
                     computeDiscountDto = BeanConvertUtil.covertBean(computeDiscountDtos.getJSONObject(accountIndex), ComputeDiscountDto.class);
                     if (!StringUtil.isEmpty(computeDiscountDto.getArdId())) {
@@ -237,7 +192,7 @@ public class PayFeeConfirmCmd extends Cmd {
         parkingSpaceApplyDto.setFeeId(paramObj.getString("feeId"));
         parkingSpaceApplyDto.setState("2002");//审核中
         List<ParkingSpaceApplyDto> parkingSpaceApplyDtos = parkingSpaceApplyV1InnerServiceSMOImpl.queryParkingSpaceApplys(parkingSpaceApplyDto);
-        if (parkingSpaceApplyDtos != null && parkingSpaceApplyDtos.size() > 0) {
+        if (!ListUtil.isNull(parkingSpaceApplyDtos)) {
             ParkingSpaceApplyPo parkingSpaceApplyPo = new ParkingSpaceApplyPo();
             parkingSpaceApplyPo.setApplyId(parkingSpaceApplyDtos.get(0).getApplyId());
             parkingSpaceApplyPo.setState("3003");
@@ -417,49 +372,5 @@ public class PayFeeConfirmCmd extends Cmd {
         }
     }
 
-    private void dealOwnerCartEndTime(JSONObject paramObj) {
 
-        FeeDto feeDto = new FeeDto();
-        feeDto.setFeeId(paramObj.getString("feeId"));
-        feeDto.setCommunityId(paramObj.getString("communityId"));
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        if (ListUtil.isNull(feeDtos)) {
-            return;
-        }
-        //为停车费单独处理
-        if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDtos.get(0).getPayerObjType())) {
-            return;
-        }
-        Date feeEndTime = feeDtos.get(0).getEndTime();
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCommunityId(paramObj.getString("communityId"));
-        ownerCarDto.setCarId(feeDtos.get(0).getPayerObjId());
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-
-        Calendar endTimeCalendar = null;
-        //车位费用续租
-        if (ListUtil.isNull(ownerCarDtos)) {
-            return;
-        }
-        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
-            //后付费 或者信用期车辆 加一个月
-            if (FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())
-                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())) {
-                endTimeCalendar = Calendar.getInstance();
-                endTimeCalendar.setTime(feeEndTime);
-                endTimeCalendar.add(Calendar.MONTH, 1);
-                feeEndTime = endTimeCalendar.getTime();
-            }
-            if (tmpOwnerCarDto.getEndTime().getTime() < feeEndTime.getTime()) {
-                OwnerCarPo ownerCarPo = new OwnerCarPo();
-                ownerCarPo.setMemberId(tmpOwnerCarDto.getMemberId());
-                ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
-                int fage = ownerCarNewV1InnerServiceSMOImpl.updateOwnerCarNew(ownerCarPo);
-                if (fage < 1) {
-                    throw new CmdException("更新费用信息失败");
-                }
-            }
-        }
-    }
 }

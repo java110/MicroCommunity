@@ -201,6 +201,9 @@ public class PayOweFeeCmd extends Cmd {
 
             //todo 修改报修单
             finishFeeNotifyImpl.updateRepair(feeObj.getString("feeId"), feeObj.getString("communityId"), feeObj.getString("receivedAmount"));
+
+            //todo 租金延期房屋结束时间
+            finishFeeNotifyImpl.updateRoomEndTime(feeObj.getString("feeId"), feeObj.getString("communityId"));
         }
 
 

@@ -20,6 +20,7 @@ import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.user.UserDto;
+import com.java110.fee.bmo.fee.IFinishFeeNotify;
 import com.java110.fee.smo.impl.FeeReceiptInnerServiceSMOImpl;
 import com.java110.intf.acct.IAccountInnerServiceSMO;
 import com.java110.intf.community.*;
@@ -121,6 +122,9 @@ public class PayFeeCmd extends Cmd {
 
     @Autowired
     private IFeeDiscountInnerServiceSMO feeDiscountInnerServiceSMOImpl;
+
+    @Autowired
+    private IFinishFeeNotify finishFeeNotifyImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
@@ -278,13 +282,14 @@ public class PayFeeCmd extends Cmd {
         //todo 账户处理
         dealAccount(paramObj);
 
-
         //todo 为停车费单独处理
-        updateCarEndTime(paramObj);
+        finishFeeNotifyImpl.updateCarEndTime(paramObj.getString("feeId"), paramObj.getString("communityId"));
 
-        //todo 处理报修单
-        doDealRepairOrder(paramObj);
+        //todo 修改报修单
+        finishFeeNotifyImpl.updateRepair(paramObj.getString("feeId"), paramObj.getString("communityId"), paramObj.getString("receivedAmount"));
 
+        //todo 租金延期房屋结束时间
+        finishFeeNotifyImpl.updateRoomEndTime(paramObj.getString("feeId"), paramObj.getString("communityId"));
 
         //修改折扣申请状态，空置房折扣只能用一次
         String selectDiscount = paramObj.getString("selectDiscount");
@@ -415,212 +420,6 @@ public class PayFeeCmd extends Cmd {
         }
 
     }
-
-    /**
-     * 处理报修单
-     *
-     * @param paramObj
-     */
-    private void doDealRepairOrder(JSONObject paramObj) {
-        int flag;//判断是否有派单属性ID
-        FeeAttrDto feeAttrDto = new FeeAttrDto();
-        feeAttrDto.setCommunityId(paramObj.getString("communityId"));
-        feeAttrDto.setFeeId(paramObj.getString("feeId"));
-        feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
-        List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
-        //修改 派单状态
-        if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
-            RepairDto repairDto = new RepairDto();
-            repairDto.setRepairId(feeAttrDtos.get(0).getValue());
-            //查询报修记录
-            List<RepairDto> repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
-            Assert.listOnlyOne(repairDtos, "报修信息错误！");
-            //获取报修渠道
-            String repairChannel = repairDtos.get(0).getRepairChannel();
-            RepairPoolPo repairPoolPo = new RepairPoolPo();
-            repairPoolPo.setRepairId(feeAttrDtos.get(0).getValue());
-            repairPoolPo.setCommunityId(paramObj.getString("communityId"));
-            if (repairChannel.equals("Z")) { //如果是业主自主报修，状态就变成待评价
-                repairPoolPo.setState(RepairDto.STATE_APPRAISE);
-            } else { //如果是员工代客报修或电话报修，状态就变成待回访
-                repairPoolPo.setState(RepairDto.STATE_RETURN_VISIT);
-            }
-            flag = repairPoolNewV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
-            if (flag < 1) {
-                throw new CmdException("更新微信派单池信息失败");
-            }
-
-            repairDto = new RepairDto();
-            repairDto.setRepairId(feeAttrDtos.get(0).getValue());
-            //查询报修记录
-            repairDtos = repairInnerServiceSMO.queryRepairs(repairDto);
-
-            Assert.listOnlyOne(repairDtos, "报修信息错误！");
-            //获取报修渠道
-            repairChannel = repairDtos.get(0).getRepairChannel();
-            RepairUserDto repairUserDto = new RepairUserDto();
-            repairUserDto.setRepairId(feeAttrDtos.get(0).getValue());
-            repairUserDto.setState(RepairUserDto.STATE_PAY_FEE);
-            //查询待支付状态的记录
-            List<RepairUserDto> repairUserDtoList = repairUserInnerServiceSMO.queryRepairUsers(repairUserDto);
-            Assert.listOnlyOne(repairUserDtoList, "信息错误！");
-            RepairUserPo repairUserPo = new RepairUserPo();
-            repairUserPo.setRuId(repairUserDtoList.get(0).getRuId());
-            if ("Z".equals(repairChannel)) {  //如果业主是自主报修，状态就变成已支付，并新增一条待评价状态
-                repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
-                //如果是待评价状态，就更新结束时间
-                repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-                repairUserPo.setContext("已支付" + paramObj.getString("feePrice") + "元");
-                //新增待评价状态
-                RepairUserPo repairUser = new RepairUserPo();
-                repairUser.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
-                repairUser.setStartTime(repairUserPo.getEndTime());
-                repairUser.setState(RepairUserDto.STATE_EVALUATE);
-                repairUser.setContext("待评价");
-                repairUser.setCommunityId(paramObj.getString("communityId"));
-                repairUser.setCreateTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-                repairUser.setRepairId(repairUserDtoList.get(0).getRepairId());
-                repairUser.setStaffId(repairUserDtoList.get(0).getStaffId());
-                repairUser.setStaffName(repairUserDtoList.get(0).getStaffName());
-                repairUser.setPreStaffId(repairUserDtoList.get(0).getStaffId());
-                repairUser.setPreStaffName(repairUserDtoList.get(0).getStaffName());
-                repairUser.setPreRuId(repairUserDtoList.get(0).getRuId());
-                repairUser.setRepairEvent("auditUser");
-                flag = repairUserNewV1InnerServiceSMOImpl.saveRepairUserNew(repairUser);
-                if (flag < 1) {
-                    throw new CmdException("更新微信派单池信息失败");
-                }
-            } else {  //如果是员工代客报修或电话报修，状态就变成已支付
-                repairUserPo.setState(RepairUserDto.STATE_FINISH_PAY_FEE);
-                //如果是已支付状态，就更新结束时间
-                repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-                repairUserPo.setContext("已支付" + paramObj.getString("feePrice") + "元");
-            }
-            flag = repairUserNewV1InnerServiceSMOImpl.updateRepairUserNew(repairUserPo);
-            if (flag < 1) {
-                throw new CmdException("更新微信派单池信息失败");
-            }
-        }
-    }
-
-    /**
-     * 处理停车费
-     *
-     * @param paramObj
-     */
-    private void updateCarEndTime(JSONObject paramObj) {
-        int flag;
-        FeeDto feeDto = new FeeDto();
-        feeDto.setFeeId(paramObj.getString("feeId"));
-        feeDto.setCommunityId(paramObj.getString("communityId"));
-        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-
-        if (ListUtil.isNull(feeDtos)) {
-            return;
-        }
-        if (!FeeDto.PAYER_OBJ_TYPE_CAR.equals(feeDtos.get(0).getPayerObjType())) {
-            return;
-        }
-        Date feeEndTime = feeDtos.get(0).getEndTime();
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCommunityId(paramObj.getString("communityId"));
-        ownerCarDto.setCarId(feeDtos.get(0).getPayerObjId());
-        //ownerCarDto.setCarTypeCd("1001"); //业主车辆
-        List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-        if (ListUtil.isNull(ownerCarDtos)) {
-            return;
-        }
-        //获取车位id
-        String psId = ownerCarDtos.get(0).getPsId();
-        //获取车辆状态(1001 正常状态，2002 欠费状态  3003 车位释放)
-        boolean sonMotherParking = false;
-        String num = "";
-        String carState = ownerCarDtos.get(0).getState();
-        if (!StringUtil.isEmpty(psId) && "3003".equals(carState)) {
-            ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-            parkingSpaceDto.setPsId(psId);
-            List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-            Assert.listOnlyOne(parkingSpaceDtos, "查询车位信息错误！");
-            //获取车位状态(出售 S，出租 H ，空闲 F)
-            String state = parkingSpaceDtos.get(0).getState();
-            if (!StringUtil.isEmpty(state) && !state.equals("F")) {
-                throw new IllegalArgumentException("车位已被使用，不能再缴费！");
-            }
-
-            if (ParkingSpaceDto.TYPE_CD_SON_MOTHER.equals(parkingSpaceDtos.get(0).getTypeCd())
-                    && !parkingSpaceDtos.get(0).getTypeCd().contains(ParkingSpaceDto.NUM_MOTHER)
-            ) {
-                sonMotherParking = true;
-                num = parkingSpaceDtos.get(0).getNum();
-            }
-        }
-
-        // todo  字母车位，子车位缴费 母车位延期
-        if (sonMotherParking) {
-            queryMotherOwnerCars(num, ownerCarDtos, psId);
-        }
-
-
-        Calendar endTimeCalendar = null;
-        //车位费用续租
-        for (OwnerCarDto tmpOwnerCarDto : ownerCarDtos) {
-            //后付费 或者信用期车辆 加一个月
-            if (FeeConfigDto.PAYMENT_CD_AFTER.equals(feeDtos.get(0).getPaymentCd())
-                    || OwnerCarDto.CAR_TYPE_CREDIT.equals(tmpOwnerCarDto.getCarType())) {
-                endTimeCalendar = Calendar.getInstance();
-                endTimeCalendar.setTime(feeEndTime);
-                endTimeCalendar.add(Calendar.MONTH, 1);
-                feeEndTime = endTimeCalendar.getTime();
-            }
-            if (tmpOwnerCarDto.getEndTime().getTime() >= feeEndTime.getTime()) {
-                continue;
-            }
-            OwnerCarPo ownerCarPo = new OwnerCarPo();
-            ownerCarPo.setMemberId(tmpOwnerCarDto.getMemberId());
-            ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
-            flag = ownerCarNewV1InnerServiceSMOImpl.updateOwnerCarNew(ownerCarPo);
-            if (flag < 1) {
-                throw new CmdException("缴费失败");
-            }
-        }
-
-
-    }
-
-    /**
-     * 子母车位延期 母车位也需要延期
-     *
-     * @param num
-     * @param ownerCarDtos
-     */
-    private void queryMotherOwnerCars(String num, List<OwnerCarDto> ownerCarDtos, String paId) {
-
-        String sonMotherSwitch = CommonCache.getValue("SON_MOTHER_PARKING_AUTO_FEE");
-
-        if (!"ON".equals(sonMotherSwitch)) {
-            return;
-        }
-
-        ParkingSpaceDto parkingSpaceDto = new ParkingSpaceDto();
-        parkingSpaceDto.setNum(num + ParkingSpaceDto.NUM_MOTHER);
-        parkingSpaceDto.setPaId(paId);
-        List<ParkingSpaceDto> parkingSpaceDtos = parkingSpaceInnerServiceSMOImpl.queryParkingSpaces(parkingSpaceDto);
-        Assert.listOnlyOne(parkingSpaceDtos, "查询车位信息错误！");
-
-        OwnerCarDto ownerCarDto = new OwnerCarDto();
-        ownerCarDto.setCommunityId(parkingSpaceDtos.get(0).getCommunityId());
-        ownerCarDto.setPsId(parkingSpaceDtos.get(0).getPsId());
-        ownerCarDto.setCarTypeCd("1001"); //业主车辆
-        List<OwnerCarDto> tmpOwnerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
-
-        if (ownerCarDtos == null) {
-            ownerCarDtos = new ArrayList<>();
-        }
-
-        ownerCarDtos.addAll(tmpOwnerCarDtos);
-    }
-
 
     /**
      * 添加小区信息

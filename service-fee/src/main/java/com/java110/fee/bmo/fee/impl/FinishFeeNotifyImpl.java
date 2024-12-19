@@ -7,6 +7,7 @@ import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.fee.PayFeeDataDto;
 import com.java110.dto.owner.OwnerCarDto;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.parking.ParkingSpaceDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
@@ -17,15 +18,14 @@ import com.java110.intf.fee.IFeeAttrInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.fee.IOwnerCarNewV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
+import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.po.account.AccountDetailPo;
 import com.java110.po.car.OwnerCarPo;
+import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.owner.RepairPoolPo;
 import com.java110.po.owner.RepairUserPo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ListUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +67,9 @@ public class FinishFeeNotifyImpl implements IFinishFeeNotify {
     @Autowired
     private IAccountInnerServiceSMO accountInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMOImpl;
+
     @Override
     public void updateCarEndTime(String feeId, String communityId) {
         int flag;
@@ -85,7 +88,7 @@ public class FinishFeeNotifyImpl implements IFinishFeeNotify {
         OwnerCarDto ownerCarDto = new OwnerCarDto();
         ownerCarDto.setCommunityId(communityId);
         ownerCarDto.setCarId(feeDtos.get(0).getPayerObjId());
-        ownerCarDto.setCarTypeCd("1001"); //业主车辆
+        //ownerCarDto.setCarTypeCd("1001"); //业主车辆
         List<OwnerCarDto> ownerCarDtos = ownerCarInnerServiceSMOImpl.queryOwnerCars(ownerCarDto);
 
         if (ListUtil.isNull(ownerCarDtos)) {
@@ -124,12 +127,53 @@ public class FinishFeeNotifyImpl implements IFinishFeeNotify {
             }
             OwnerCarPo ownerCarPo = new OwnerCarPo();
             ownerCarPo.setMemberId(tmpOwnerCarDto.getMemberId());
-            ownerCarPo.setEndTime(DateUtil.getFormatTimeString(feeEndTime, DateUtil.DATE_FORMATE_STRING_A));
+            ownerCarPo.setEndTime(DateUtil.getFormatTimeStringA(feeEndTime));
             flag = ownerCarNewV1InnerServiceSMOImpl.updateOwnerCarNew(ownerCarPo);
             if (flag < 1) {
                 throw new CmdException("缴费失败");
             }
         }
+    }
+
+    @Override
+    public void updateRoomEndTime(String feeId, String communityId) {
+        FeeDto feeDto = new FeeDto();
+        feeDto.setFeeId(feeId);
+        feeDto.setCommunityId(communityId);
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        if (ListUtil.isNull(feeDtos)) {
+            return;
+        }
+        if (!FeeDto.PAYER_OBJ_TYPE_ROOM.equals(feeDtos.get(0).getPayerObjType())) {
+            return;
+        }
+        //todo 不是租金跳过
+        if(!FeeConfigDto.FEE_TYPE_CD_RENT.equals(feeDtos.get(0).getFeeTypeCd())){
+            return;
+        }
+
+        Date feeEndTime = feeDtos.get(0).getEndTime();
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setCommunityId(communityId);
+        ownerRoomRelDto.setRoomId(feeDtos.get(0).getPayerObjId());
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
+            return;
+        }
+        for(OwnerRoomRelDto tOwnerRoomRelDto: ownerRoomRelDtos){
+            if (tOwnerRoomRelDto.getEndTime().getTime() >= feeEndTime.getTime()) {
+                continue;
+            }
+            OwnerRoomRelPo ownerRoomRelPo = new OwnerRoomRelPo();
+            ownerRoomRelPo.setRelId(tOwnerRoomRelDto.getRelId());
+            ownerRoomRelPo.setEndTime(DateUtil.getFormatTimeStringA(feeEndTime));
+            ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
+        }
+
+
+
     }
 
     @Override

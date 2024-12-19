@@ -264,6 +264,8 @@ public class PayBatchFeeCmd extends Cmd {
         //todo 修改报修单
         finishFeeNotifyImpl.updateRepair(payFeeDataDto.getFeeId(), payFeeDataDto.getCommunityId(), payFeeDetailPo.getReceivedAmount());
 
+        //todo 租金延期房屋结束时间
+        finishFeeNotifyImpl.updateRoomEndTime(payFeeDataDto.getFeeId(), payFeeDataDto.getCommunityId());
     }
 
     /**

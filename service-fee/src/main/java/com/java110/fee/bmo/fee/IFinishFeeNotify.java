@@ -13,6 +13,13 @@ public interface IFinishFeeNotify {
     void updateCarEndTime(String feeId,String communityId);
 
     /**
+     * 修改 房屋结束时间
+     * @param feeId
+     * @param communityId
+     */
+    void updateRoomEndTime(String feeId, String communityId);
+
+    /**
      * 修改报修
      * @param feeId
      * @param communityId
@@ -35,4 +42,6 @@ public interface IFinishFeeNotify {
      * @param communityId
      */
     void withholdAccount(PayFeeDataDto payFeeDataDto, String feeId, String communityId);
+
+
 }
