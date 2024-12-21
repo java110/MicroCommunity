@@ -16,10 +16,7 @@ import com.java110.po.fee.FeeAttrPo;
 import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFee.PayFeeRulePo;
 import com.java110.po.payFee.PayFeeRuleBillPo;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -142,7 +139,7 @@ public class CycleConvertOnceFeeImpl implements ICycleConvertOnceFee {
     @Override
     public int rulesGeneratePayFees(List<PayFeeRulePo> payFeeRulePos) {
 
-        if (payFeeRulePos == null || payFeeRulePos.isEmpty()) {
+        if (ListUtil.isNull(payFeeRulePos)) {
             return 0;
         }
 

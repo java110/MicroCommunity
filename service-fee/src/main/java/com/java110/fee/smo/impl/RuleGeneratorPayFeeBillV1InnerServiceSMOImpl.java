@@ -25,6 +25,7 @@ import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
 import com.java110.intf.fee.IRuleGeneratorPayFeeBillV1InnerServiceSMO;
 import com.java110.po.fee.PayFeeConfigPo;
 import com.java110.po.fee.PayFeePo;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,7 +74,7 @@ public class RuleGeneratorPayFeeBillV1InnerServiceSMOImpl extends BaseServiceSMO
     @Override
     public String needGeneratorBillData(@RequestBody List<PayFeePo> feePos) {
 
-        if (feePos == null || feePos.isEmpty()) {
+        if (ListUtil.isNull(feePos)) {
             return BILL_NO;
         }
 
@@ -102,7 +103,7 @@ public class RuleGeneratorPayFeeBillV1InnerServiceSMOImpl extends BaseServiceSMO
         List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
 
         //todo 数据有问题 咱不处理
-        if (feeConfigDtos == null || feeConfigDtos.isEmpty()) {
+        if (ListUtil.isNull(feeConfigDtos)) {
             return BILL_NO;
         }
 

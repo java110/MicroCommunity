@@ -24,10 +24,7 @@ import com.java110.po.fee.PayFeePo;
 import com.java110.po.payFee.PayFeeBatchPo;
 import com.java110.utils.constant.CommonConstant;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -140,7 +137,7 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         ownerDto.setRoomId(roomDto.getRoomId());
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
 
-        if (ownerDtos != null && !ownerDtos.isEmpty()) {
+        if (ListUtil.isNull(ownerDtos)) {
             roomDto.setOwnerId(ownerDtos.get(0).getOwnerId());
             roomDto.setOwnerName(ownerDtos.get(0).getName());
             roomDto.setLink(ownerDtos.get(0).getLink());
