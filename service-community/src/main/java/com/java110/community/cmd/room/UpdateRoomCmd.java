@@ -203,7 +203,7 @@ public class UpdateRoomCmd extends Cmd {
         String endTime = reqJson.getString("endTime");
         if(!StringUtil.isEmpty(endTime)){
             OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtoList.get(0), OwnerRoomRelPo.class);
-            ownerRoomRelPo.setEndTime(endTime + " 23:59:59");
+            ownerRoomRelPo.setEndTime(endTime);
             ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
         }
     }
