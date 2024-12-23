@@ -148,7 +148,7 @@ public class UpdateRoomCmd extends Cmd {
             return;
         }
         JSONArray attrs = reqJson.getJSONArray("attrs");
-        if (attrs == null || attrs.size() < 1) {
+        if (ListUtil.isNull(attrs)) {
             return;
         }
         JSONObject attr = null;
@@ -196,7 +196,7 @@ public class UpdateRoomCmd extends Cmd {
         if (RoomDto.STATE_SHOP_FIRE.equals(state)) { //已出租
             OwnerRoomRelPo ownerRoomRelPo = BeanConvertUtil.covertBean(ownerRoomRelDtoList.get(0), OwnerRoomRelPo.class);
             ownerRoomRelPo.setStartTime(reqJson.getString("startTime"));
-            ownerRoomRelPo.setEndTime(reqJson.getString("endTime") + " 23:59:59");
+            ownerRoomRelPo.setEndTime(reqJson.getString("endTime"));
             ownerRoomRelInnerServiceSMOImpl.updateOwnerRoomRels(ownerRoomRelPo);
             return;
         }
