@@ -29,6 +29,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -128,7 +129,7 @@ public class RepairDispatchCmd extends Cmd {
             feeAttrDto.setSpecCd(FeeAttrDto.SPEC_CD_REPAIR);
             feeAttrDto.setValue(reqJson.getString("repairId"));
             List<FeeAttrDto> feeAttrDtos = feeAttrInnerServiceSMOImpl.queryFeeAttrs(feeAttrDto);
-            if (feeAttrDtos != null && feeAttrDtos.size() > 0) {
+            if (!ListUtil.isNull(feeAttrDtos)) {
                 FeeDto feeDto = new FeeDto();
                 feeDto.setCommunityId(reqJson.getString("communityId"));
                 feeDto.setFeeId(feeAttrDtos.get(0).getFeeId());
@@ -167,7 +168,7 @@ public class RepairDispatchCmd extends Cmd {
         repairUserDto.setStates(new String[]{RepairUserDto.STATE_DOING,RepairUserDto.STATE_EVALUATE});
         repairUserDto.setStaffId(reqJson.getString("userId"));
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        if (repairUserDtos != null && repairUserDtos.size() != 1) {
+        if (!ListUtil.isNull(repairUserDtos)) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
             context.setResponseEntity(responseEntity);
             return;
@@ -178,7 +179,7 @@ public class RepairDispatchCmd extends Cmd {
         repair.setCommunityId(reqJson.getString("communityId"));
         repair.setStates(new String[]{RepairUserDto.STATE_TRANSFER, RepairUserDto.STATE_CLOSE, RepairUserDto.STATE_STOP,RepairUserDto.STATE_EVALUATE});
         List<RepairUserDto> repairUsers = repairUserInnerServiceSMOImpl.queryRepairUsers(repair);
-        if (repairUsers == null || repairUsers.size() < 1) { //指派的不能退单
+        if (ListUtil.isNull(repairUsers)) { //指派的不能退单
             if (RepairDto.REPAIR_WAY_GRABBING.equals(repairDtos.get(0).getRepairWay())  
                     || RepairDto.REPAIR_WAY_TRAINING.equals(repairDtos.get(0).getRepairWay())) {  //抢单、轮训
                 modifyBusinessRepairDispatch(reqJson, RepairDto.STATE_WAIT);//维修单变成未派单
