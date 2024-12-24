@@ -32,6 +32,8 @@ public class ParkingCouponCarDto extends PageDto implements Serializable {
     private String typeCd;
     private String typeCdName;
     private String paId;
+
+    private String paNum;
     private String paName;
     private String startTime;
     private String shopId;
@@ -240,5 +242,13 @@ public class ParkingCouponCarDto extends PageDto implements Serializable {
 
     public void setGiveWayName(String giveWayName) {
         this.giveWayName = giveWayName;
+    }
+
+    public String getPaNum() {
+        return paNum;
+    }
+
+    public void setPaNum(String paNum) {
+        this.paNum = paNum;
     }
 }

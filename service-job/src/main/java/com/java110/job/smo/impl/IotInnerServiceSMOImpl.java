@@ -7,11 +7,13 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.IotDataDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.parking.ParkingCouponCarDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.job.adapt.hcIot.http.ISendIot;
 import com.java110.po.coupon.CouponPropertyUserPo;
+import com.java110.po.parking.ParkingCouponCarPo;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
@@ -135,6 +137,20 @@ public class IotInnerServiceSMOImpl extends BaseServiceSMO implements IIotInnerS
         }
         JSONObject paramIn = BeanConvertUtil.beanCovertJson(couponPropertyUserPo);
         paramIn.put("iotApiCode", "sendChargeCouponBmoImpl");
+        ResultVo resultVo = sendIotImpl.post("/iot/api/common.openCommonApi", paramIn);
+
+        return resultVo;
+    }
+
+    @Override
+    public ResultVo sendCarCoupon(@RequestBody ParkingCouponCarDto parkingCouponCarDto) {
+        String iotSwitch = MappingCache.getValue("IOT", "IOT_SWITCH");
+
+        if (!"ON".equals(iotSwitch)) {
+            return new ResultVo(ResultVo.CODE_OK, ResultVo.MSG_OK);
+        }
+        JSONObject paramIn = BeanConvertUtil.beanCovertJson(parkingCouponCarDto);
+        paramIn.put("iotApiCode", "sendCarCouponBmoImpl");
         ResultVo resultVo = sendIotImpl.post("/iot/api/common.openCommonApi", paramIn);
 
         return resultVo;

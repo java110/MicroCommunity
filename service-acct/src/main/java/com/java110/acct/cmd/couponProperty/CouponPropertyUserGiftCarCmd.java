@@ -21,6 +21,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.lock.DistributedLock;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -88,7 +89,7 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
         String userId = context.getReqHeaders().get("user-id");
 
         //前端车牌号输入问题处理 去除空格和小写
-        reqJson.put("carNum",reqJson.getString("carNum").trim().toUpperCase());
+        reqJson.put("carNum", reqJson.getString("carNum").trim().toUpperCase());
 
         //校验优惠券是否存在
         UserDto userDto = new UserDto();
@@ -104,7 +105,7 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
 
         List<CouponPropertyUserDto> couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
 
-        if (couponPropertyUserDtos == null || couponPropertyUserDtos.size() < 1) {
+        if (ListUtil.isNull(couponPropertyUserDtos)) {
             throw new CmdException("优惠券不存在");
         }
 
@@ -153,7 +154,7 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
 
             couponPropertyUserDtos = couponPropertyUserV1InnerServiceSMOImpl.queryCouponPropertyUsers(couponPropertyUserDto);
 
-            if (couponPropertyUserDtos == null || couponPropertyUserDtos.size() < 1) {
+            if (ListUtil.isNull(couponPropertyUserDtos)) {
                 throw new CmdException("优惠券不存在");
             }
 
@@ -182,7 +183,7 @@ public class CouponPropertyUserGiftCarCmd extends Cmd {
             DistributedLock.releaseDistributedLock(requestId, key);
         }
 
-        for(int giftIndex = 0; giftIndex < giftCount;giftIndex ++) {
+        for (int giftIndex = 0; giftIndex < giftCount; giftIndex++) {
             //保存核销记录
             String pccId = GenerateCodeFactory.getGeneratorId("11");
 
