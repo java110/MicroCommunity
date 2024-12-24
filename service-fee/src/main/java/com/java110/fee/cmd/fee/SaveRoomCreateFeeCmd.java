@@ -123,7 +123,7 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         roomDto.setRoomId(reqJson.getString("locationObjId"));
         roomDtos = roomInnerServiceSMOImpl.queryRooms(roomDto);
 
-        if (roomDtos == null || roomDtos.isEmpty()) {
+        if (ListUtil.isNull(roomDtos)) {
             throw new IllegalArgumentException("未查到需要付费的房屋或未绑定业主");
         }
         dealRoomFee(roomDtos.get(0), cmdDataFlowContext, reqJson, event);
@@ -137,7 +137,7 @@ public class SaveRoomCreateFeeCmd extends Cmd {
         ownerDto.setRoomId(roomDto.getRoomId());
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
 
-        if (ListUtil.isNull(ownerDtos)) {
+        if (!ListUtil.isNull(ownerDtos)) {
             roomDto.setOwnerId(ownerDtos.get(0).getOwnerId());
             roomDto.setOwnerName(ownerDtos.get(0).getName());
             roomDto.setLink(ownerDtos.get(0).getLink());
