@@ -30,10 +30,7 @@ import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.factory.ApplicationContextFactory;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.ExceptionUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +134,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
         feeDetailDto.setCommunityId(communityId);
         List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
 
-        if (feeDetailDtos == null || feeDetailDtos.size() < 1) {
+        if (ListUtil.isNull(feeDetailDtos)) {
             return;
         }
 
@@ -146,7 +143,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
         printerRuleFeeDto.setFeeId(feeDetailDtos.get(0).getConfigId());
         List<PrinterRuleFeeDto> printerRuleFeeDtos = printerRuleFeeV1InnerServiceSMOImpl.queryPrinterRuleFees(printerRuleFeeDto);
 
-        if (printerRuleFeeDtos == null || printerRuleFeeDtos.size() < 1) {
+        if (ListUtil.isNull(printerRuleFeeDtos)) {
             return;
         }
 
@@ -164,7 +161,7 @@ public class PayFeeReceiptAdapt extends DatabusAdaptImpl {
         printerRuleMachineDto.setCommunityId(communityId);
         printerRuleMachineDto.setRuleId(printerRuleFeeDtos.get(0).getRuleId());
         List<PrinterRuleMachineDto> printerRuleMachineDtos = printerRuleMachineV1InnerServiceSMOImpl.queryPrinterRuleMachines(printerRuleMachineDto);
-        if (printerRuleMachineDtos == null || printerRuleMachineDtos.size() < 1) {
+        if (ListUtil.isNull(printerRuleMachineDtos)) {
             return;
         }
 
