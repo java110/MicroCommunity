@@ -30,10 +30,7 @@ import com.java110.po.fee.PayFeeDetailPo;
 import com.java110.po.log.LogSystemErrorPo;
 import com.java110.service.smo.ISaveSystemErrorSMO;
 import com.java110.utils.lock.DistributedLock;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.ExceptionUtil;
+import com.java110.utils.util.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -161,7 +158,7 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
             couponRuleFeeDto.setCycle(payFeeDetailPo.getCycles());
             List<CouponRuleFeeDto> couponRuleFeeDtos = couponRuleFeeV1InnerServiceSMOImpl.queryCouponRuleFees(couponRuleFeeDto);
 
-            if (couponRuleFeeDtos == null || couponRuleFeeDtos.size() < 1) {
+            if (ListUtil.isNull(couponRuleFeeDtos)) {
                 return;
             }
 
@@ -174,7 +171,7 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
             couponRuleCppsDto.setRuleIds(ruleIds.toArray(new String[ruleIds.size()]));
             List<CouponRuleCppsDto> couponRuleCppsDtos = couponRuleCppsV1InnerServiceSMOImpl.queryCouponRuleCppss(couponRuleCppsDto);
 
-            if (couponRuleCppsDtos == null || couponRuleCppsDtos.size() < 1) {
+            if (ListUtil.isNull(couponRuleCppsDtos)) {
                 return;
             }
             //赠送优惠券
@@ -244,7 +241,7 @@ public class PayFeeGiftCouponAdapt extends DatabusAdaptImpl {
             couponPropertyPoolDto.setCppId(couponRuleCppsDto.getCppId());
             List<CouponPropertyPoolDto> couponPropertyPoolDtos = couponPropertyPoolV1InnerServiceSMOImpl.queryCouponPropertyPools(couponPropertyPoolDto);
 
-            if (couponPropertyPoolDtos == null || couponPropertyPoolDtos.size() < 1) {
+            if (ListUtil.isNull(couponPropertyPoolDtos)) {
                 return;
             }
 
