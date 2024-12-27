@@ -1,6 +1,10 @@
 package com.java110.core.event.cmd;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.context.CmdContextUtils;
+import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.dto.store.StoreDto;
+import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -22,6 +26,17 @@ public abstract class Cmd implements ServiceCmdListener {
     protected void validatePageInfo(JSONObject reqJson) {
         Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
         Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
+    }
+    /**
+     * 分页信息校验
+     *
+     * @param context
+     */
+    protected void validateAdmin(ICmdDataFlowContext context) {
+        String storeTypeCd = CmdContextUtils.getStoreTypeCd(context);
+        if(!StoreDto.STORE_TYPE_ADMIN.equals(storeTypeCd)){
+            throw new CmdException("该接口只能运营团队调用");
+        }
     }
 //
 //    @Override

@@ -226,6 +226,8 @@ public class CommonConstant {
     //SPAN-ID
     public static final String PARENT_SPAN_ID = "parent-span-id";
 
+    public static final String STORE_TYPE_CD = "store-type-cd";
+
 
     public static String getHttpMethodStr(HttpMethod httpMethod) {
         if (HttpMethod.GET == httpMethod) {

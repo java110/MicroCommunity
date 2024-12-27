@@ -55,12 +55,12 @@ public class SaveBuildingOwnerCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "memberId", "请求报文中未包含memberId");
-Assert.hasKeyAndValue(reqJson, "ownerId", "请求报文中未包含ownerId");
-Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
-Assert.hasKeyAndValue(reqJson, "sex", "请求报文中未包含sex");
-Assert.hasKeyAndValue(reqJson, "age", "请求报文中未包含age");
-Assert.hasKeyAndValue(reqJson, "link", "请求报文中未包含link");
-Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
+        Assert.hasKeyAndValue(reqJson, "ownerId", "请求报文中未包含ownerId");
+        Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
+        Assert.hasKeyAndValue(reqJson, "sex", "请求报文中未包含sex");
+        Assert.hasKeyAndValue(reqJson, "age", "请求报文中未包含age");
+        Assert.hasKeyAndValue(reqJson, "link", "请求报文中未包含link");
+        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
 
     }
 
@@ -68,7 +68,7 @@ Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含userId");
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-       OwnerPo OwnerPo = BeanConvertUtil.covertBean(reqJson, OwnerPo.class);
+        OwnerPo OwnerPo = BeanConvertUtil.covertBean(reqJson, OwnerPo.class);
         OwnerPo.setMemberId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
         int flag = buildingOwnerV1InnerServiceSMOImpl.saveBuildingOwner(OwnerPo);
 

@@ -138,6 +138,26 @@ public class CmdContextUtils {
         return "";
     }
 
+    /**
+     * 查询商户storeTypeCd
+     *
+     * @param context
+     * @return
+     */
+    public static final String getStoreTypeCd(ICmdDataFlowContext context) {
+        if (context == null) {
+            return "";
+        }
+
+        Map<String, String> headers = context.getReqHeaders();
+
+        if (headers.containsKey(CommonConstant.STORE_TYPE_CD)) {
+            return headers.get(CommonConstant.STORE_TYPE_CD);
+        }
+        return "";
+    }
+
+
     public static final String getLang(ICmdDataFlowContext context) {
         if (context == null) {
             return "";

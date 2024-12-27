@@ -28,6 +28,7 @@ public class ListCordersCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
+        super.validateAdmin(context);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.java110.user.cmd.user;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -105,6 +106,14 @@ public class UserStaffModifyCmd extends Cmd {
         //校验json 格式中是否包含 name,email,levelCd,tel
         Assert.jsonObjectHaveKey(reqJson, "name", "请求参数中未包含name 节点，请确认");
         Assert.jsonObjectHaveKey(reqJson, "tel", "请求参数中未包含tel 节点，请确认");
+        StoreUserDto storeUserDto = new StoreUserDto();
+        storeUserDto.setUserId(reqJson.getString("staffId"));
+        storeUserDto.setStoreId(CmdContextUtils.getStoreId(context));
+        List<StoreUserDto> storeUserDtos = storeUserV1InnerServiceSMOImpl.queryStoreUsers(storeUserDto);
+
+        if (ListUtil.isNull(storeUserDtos)) {
+            throw new CmdException("修改员工不是贵公司员工");
+        }
     }
 
     @Override
@@ -128,7 +137,7 @@ public class UserStaffModifyCmd extends Cmd {
             fileRelDto.setRelTypeCd("12000");
             fileRelDto.setObjId(reqJson.getString("userId"));
             List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-            if (fileRelDtos == null || fileRelDtos.size() == 0) {
+            if (ListUtil.isNull(fileRelDtos)) {
                 JSONObject businessUnit = new JSONObject();
                 businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_relId));
                 businessUnit.put("relTypeCd", "12000");
@@ -182,7 +191,7 @@ public class UserStaffModifyCmd extends Cmd {
         }
 
         //todo 修改身份证
-        updateStaffIdCard(users.get(0),paramObj);
+        updateStaffIdCard(users.get(0), paramObj);
 
         StoreUserDto storeUserDto = new StoreUserDto();
         storeUserDto.setUserId(userPo.getUserId());
@@ -225,6 +234,7 @@ public class UserStaffModifyCmd extends Cmd {
 
     /**
      * 修改员工身份证号
+     *
      * @param userDto
      * @param paramObj
      */
@@ -239,7 +249,7 @@ public class UserStaffModifyCmd extends Cmd {
         userAttrDto.setSpecCd(UserAttrDto.SPEC_ID_CARD);
         List<UserAttrDto> userAttrDtos = userAttrV1InnerServiceSMOImpl.queryUserAttrs(userAttrDto);
 
-        if(!ListUtil.isNull(userAttrDtos)){
+        if (!ListUtil.isNull(userAttrDtos)) {
             UserAttrPo userAttrPo = new UserAttrPo();
             userAttrPo.setAttrId(userAttrDtos.get(0).getAttrId());
             userAttrV1InnerServiceSMOImpl.deleteUserAttr(userAttrPo);

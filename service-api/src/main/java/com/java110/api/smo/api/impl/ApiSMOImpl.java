@@ -104,6 +104,10 @@ public class ApiSMOImpl extends DefaultAbstractComponentSMO implements IApiSMO {
             headers.remove("store-id");
             headers.put("store-id", result.getStoreId());
         }
+        if (!StringUtil.isEmpty(result.getStoreTypeCd())) {
+            headers.remove(CommonConstant.STORE_TYPE_CD);
+            headers.put(CommonConstant.STORE_TYPE_CD, result.getStoreTypeCd());
+        }
 
         if (!headers.containsKey("user_id")) {
             headers.put("user_id", "-1");
