@@ -52,9 +52,9 @@ public class InspectionPlanServiceDaoImpl extends BaseServiceDao implements IIns
 
         logger.debug("查询巡检计划信息 入参 info : {}",info);
 
-        List<Map> businessInspectionPlanInfos = sqlSessionTemplate.selectList("inspectionPlanServiceDaoImpl.getBusinessInspectionPlanInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionPlanServiceDaoImpl.getBusinessInspectionPlanInfo",info);
 
-        return businessInspectionPlanInfos;
+        return infos;
     }
 
 
@@ -85,9 +85,9 @@ public class InspectionPlanServiceDaoImpl extends BaseServiceDao implements IIns
     public List<Map> getInspectionPlanInfo(Map info) throws DAOException {
         logger.debug("查询巡检计划信息 入参 info : {}",info);
 
-        List<Map> businessInspectionPlanInfos = sqlSessionTemplate.selectList("inspectionPlanServiceDaoImpl.getInspectionPlanInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionPlanServiceDaoImpl.getInspectionPlanInfo",info);
 
-        return businessInspectionPlanInfos;
+        return infos;
     }
 
 
@@ -116,12 +116,12 @@ public class InspectionPlanServiceDaoImpl extends BaseServiceDao implements IIns
     public int queryInspectionPlansCount(Map info) {
         logger.debug("查询巡检计划数据 入参 info : {}",info);
 
-        List<Map> businessInspectionPlanInfos = sqlSessionTemplate.selectList("inspectionPlanServiceDaoImpl.queryInspectionPlansCount", info);
-        if (businessInspectionPlanInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionPlanServiceDaoImpl.queryInspectionPlansCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessInspectionPlanInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
