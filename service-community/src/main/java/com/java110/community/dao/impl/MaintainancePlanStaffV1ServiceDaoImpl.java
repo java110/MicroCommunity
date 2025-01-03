@@ -71,9 +71,9 @@ public class MaintainancePlanStaffV1ServiceDaoImpl extends BaseServiceDao implem
     public List<Map> getMaintainancePlanStaffInfo(Map info) throws DAOException {
         logger.debug("查询 getMaintainancePlanStaffInfo 入参 info : {}",info);
 
-        List<Map> businessMaintainancePlanStaffInfos = sqlSessionTemplate.selectList("maintainancePlanStaffV1ServiceDaoImpl.getMaintainancePlanStaffInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("maintainancePlanStaffV1ServiceDaoImpl.getMaintainancePlanStaffInfo",info);
 
-        return businessMaintainancePlanStaffInfos;
+        return infos;
     }
 
 
@@ -100,12 +100,12 @@ public class MaintainancePlanStaffV1ServiceDaoImpl extends BaseServiceDao implem
     public int queryMaintainancePlanStaffsCount(Map info) {
         logger.debug("查询 queryMaintainancePlanStaffsCount 入参 info : {}",info);
 
-        List<Map> businessMaintainancePlanStaffInfos = sqlSessionTemplate.selectList("maintainancePlanStaffV1ServiceDaoImpl.queryMaintainancePlanStaffsCount", info);
-        if (businessMaintainancePlanStaffInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("maintainancePlanStaffV1ServiceDaoImpl.queryMaintainancePlanStaffsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessMaintainancePlanStaffInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     /**
@@ -118,9 +118,9 @@ public class MaintainancePlanStaffV1ServiceDaoImpl extends BaseServiceDao implem
     public List<Map> queryMaintainancePlanStaffsGroupCount(Map info) throws DAOException {
         logger.debug("查询 queryMaintainancePlanStaffsGroupCount 入参 info : {}",info);
 
-        List<Map> businessMaintainancePlanStaffInfos = sqlSessionTemplate.selectList("maintainancePlanStaffV1ServiceDaoImpl.queryMaintainancePlanStaffsGroupCount",info);
+        List<Map> infos = sqlSessionTemplate.selectList("maintainancePlanStaffV1ServiceDaoImpl.queryMaintainancePlanStaffsGroupCount",info);
 
-        return businessMaintainancePlanStaffInfos;
+        return infos;
     }
 
 }

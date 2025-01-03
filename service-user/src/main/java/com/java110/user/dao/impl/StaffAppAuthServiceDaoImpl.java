@@ -55,9 +55,9 @@ public class StaffAppAuthServiceDaoImpl extends BaseServiceDao implements IStaff
     public List<Map> getStaffAppAuthInfo(Map info) throws DAOException {
         logger.debug("查询员工微信认证信息 入参 info : {}",info);
 
-        List<Map> businessStaffAppAuthInfos = sqlSessionTemplate.selectList("staffAppAuthServiceDaoImpl.getStaffAppAuthInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("staffAppAuthServiceDaoImpl.getStaffAppAuthInfo",info);
 
-        return businessStaffAppAuthInfos;
+        return infos;
     }
 
 
@@ -86,12 +86,12 @@ public class StaffAppAuthServiceDaoImpl extends BaseServiceDao implements IStaff
     public int queryStaffAppAuthsCount(Map info) {
         logger.debug("查询员工微信认证数据 入参 info : {}",info);
 
-        List<Map> businessStaffAppAuthInfos = sqlSessionTemplate.selectList("staffAppAuthServiceDaoImpl.queryStaffAppAuthsCount", info);
-        if (businessStaffAppAuthInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("staffAppAuthServiceDaoImpl.queryStaffAppAuthsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessStaffAppAuthInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 

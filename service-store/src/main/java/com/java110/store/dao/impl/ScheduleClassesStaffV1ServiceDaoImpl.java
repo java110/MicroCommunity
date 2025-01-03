@@ -71,9 +71,9 @@ public class ScheduleClassesStaffV1ServiceDaoImpl extends BaseServiceDao impleme
     public List<Map> getScheduleClassesStaffInfo(Map info) throws DAOException {
         logger.debug("查询 getScheduleClassesStaffInfo 入参 info : {}",info);
 
-        List<Map> businessScheduleClassesStaffInfos = sqlSessionTemplate.selectList("scheduleClassesStaffV1ServiceDaoImpl.getScheduleClassesStaffInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("scheduleClassesStaffV1ServiceDaoImpl.getScheduleClassesStaffInfo",info);
 
-        return businessScheduleClassesStaffInfos;
+        return infos;
     }
 
 
@@ -100,12 +100,12 @@ public class ScheduleClassesStaffV1ServiceDaoImpl extends BaseServiceDao impleme
     public int queryScheduleClassesStaffsCount(Map info) {
         logger.debug("查询 queryScheduleClassesStaffsCount 入参 info : {}",info);
 
-        List<Map> businessScheduleClassesStaffInfos = sqlSessionTemplate.selectList("scheduleClassesStaffV1ServiceDaoImpl.queryScheduleClassesStaffsCount", info);
-        if (businessScheduleClassesStaffInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("scheduleClassesStaffV1ServiceDaoImpl.queryScheduleClassesStaffsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessScheduleClassesStaffInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     /**
@@ -118,9 +118,9 @@ public class ScheduleClassesStaffV1ServiceDaoImpl extends BaseServiceDao impleme
     public List<Map> getGroupScheduleClassesStaffInfo(Map info) throws DAOException {
         logger.debug("查询 getGroupScheduleClassesStaffInfo 入参 info : {}",info);
 
-        List<Map> businessScheduleClassesStaffInfos = sqlSessionTemplate.selectList("scheduleClassesStaffV1ServiceDaoImpl.getGroupScheduleClassesStaffInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("scheduleClassesStaffV1ServiceDaoImpl.getGroupScheduleClassesStaffInfo",info);
 
-        return businessScheduleClassesStaffInfos;
+        return infos;
     }
 
 }

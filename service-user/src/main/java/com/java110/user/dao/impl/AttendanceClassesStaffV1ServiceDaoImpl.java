@@ -67,9 +67,9 @@ public class AttendanceClassesStaffV1ServiceDaoImpl extends BaseServiceDao imple
     public List<Map> getAttendanceClassesStaffInfo(Map info) throws DAOException {
         logger.debug("查询 getAttendanceClassesStaffInfo 入参 info : {}",info);
 
-        List<Map> businessAttendanceClassesStaffInfos = sqlSessionTemplate.selectList("attendanceClassesStaffV1ServiceDaoImpl.getAttendanceClassesStaffInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("attendanceClassesStaffV1ServiceDaoImpl.getAttendanceClassesStaffInfo",info);
 
-        return businessAttendanceClassesStaffInfos;
+        return infos;
     }
 
 
@@ -96,12 +96,12 @@ public class AttendanceClassesStaffV1ServiceDaoImpl extends BaseServiceDao imple
     public int queryAttendanceClassesStaffsCount(Map info) {
         logger.debug("查询 queryAttendanceClassesStaffsCount 入参 info : {}",info);
 
-        List<Map> businessAttendanceClassesStaffInfos = sqlSessionTemplate.selectList("attendanceClassesStaffV1ServiceDaoImpl.queryAttendanceClassesStaffsCount", info);
-        if (businessAttendanceClassesStaffInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("attendanceClassesStaffV1ServiceDaoImpl.queryAttendanceClassesStaffsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessAttendanceClassesStaffInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
