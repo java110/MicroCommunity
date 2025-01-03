@@ -17,6 +17,7 @@ import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import com.java110.vo.api.resourceOrder.ApiResourceOrderDataVo;
 import com.java110.vo.api.resourceOrder.ApiResourceOrderVo;
@@ -64,7 +65,7 @@ public class ListAuditOrdersCmd extends Cmd {
         oaWorkflowDto.setFlowType(OaWorkflowDto.FLOW_TYPE_PURCHASE_APPLY);
         List<OaWorkflowDto> oaWorkflowDtos = oaWorkflowInnerServiceSMOImpl.queryOaWorkflows(oaWorkflowDto);
 
-        if (oaWorkflowDtos == null || oaWorkflowDtos.size() < 1) {
+        if (ListUtil.isNull(oaWorkflowDtos)) {
             return;
         }
         List<String> flowIds = new ArrayList<>();

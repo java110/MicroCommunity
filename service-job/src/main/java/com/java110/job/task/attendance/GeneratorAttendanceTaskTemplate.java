@@ -23,6 +23,7 @@ import com.java110.po.attendance.AttendanceClassesTaskPo;
 import com.java110.po.attendance.AttendanceClassesTaskDetailPo;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -119,7 +120,7 @@ public class GeneratorAttendanceTaskTemplate extends TaskSystemQuartz {
         attendanceClassesStaffDto.setClassesId(tmpAttendanceClassesDto.getClassesId());
         attendanceClassesStaffDto.setStoreId(tmpStoreDto.getStoreId());
         List<AttendanceClassesStaffDto> attendanceClassesStaffs = attendanceClassesStaffV1InnerServiceSMOImpl.queryAttendanceClassesStaffs(attendanceClassesStaffDto);
-        if (attendanceClassesStaffs == null || attendanceClassesStaffs.size() < 1) {
+        if (ListUtil.isNull(attendanceClassesStaffs)) {
             return;
         }
 

@@ -38,7 +38,7 @@
             and t.name= #{name}
         </if>
         <if test="nameLike !=null and nameLike != ''">
-            and t.name like concat('%',#{name},'%')
+            and t.name like concat('%',#{nameLike},'%')
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}
@@ -115,7 +115,7 @@
             and t.name= #{name}
         </if>
         <if test="nameLike !=null and nameLike != ''">
-            and t.name like concat('%',#{name},'%')
+            and t.name like concat('%',#{nameLike},'%')
         </if>
         <if test="remark !=null and remark != ''">
             and t.remark= #{remark}

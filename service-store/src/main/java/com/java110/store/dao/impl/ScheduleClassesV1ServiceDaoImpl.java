@@ -71,9 +71,9 @@ public class ScheduleClassesV1ServiceDaoImpl extends BaseServiceDao implements I
     public List<Map> getScheduleClassesInfo(Map info) throws DAOException {
         logger.debug("查询 getScheduleClassesInfo 入参 info : {}",info);
 
-        List<Map> businessScheduleClassesInfos = sqlSessionTemplate.selectList("scheduleClassesV1ServiceDaoImpl.getScheduleClassesInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("scheduleClassesV1ServiceDaoImpl.getScheduleClassesInfo",info);
 
-        return businessScheduleClassesInfos;
+        return infos;
     }
 
 
@@ -100,12 +100,12 @@ public class ScheduleClassesV1ServiceDaoImpl extends BaseServiceDao implements I
     public int queryScheduleClassessCount(Map info) {
         logger.debug("查询 queryScheduleClassessCount 入参 info : {}",info);
 
-        List<Map> businessScheduleClassesInfos = sqlSessionTemplate.selectList("scheduleClassesV1ServiceDaoImpl.queryScheduleClassessCount", info);
-        if (businessScheduleClassesInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("scheduleClassesV1ServiceDaoImpl.queryScheduleClassessCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessScheduleClassesInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 

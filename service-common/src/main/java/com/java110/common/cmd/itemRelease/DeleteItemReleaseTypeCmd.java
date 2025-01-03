@@ -21,9 +21,15 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.itemRelease.ItemReleaseTypeDto;
+import com.java110.dto.oaWorkflow.OaWorkflowDto;
+import com.java110.dto.oaWorkflow.WorkflowModelDto;
 import com.java110.intf.common.IItemReleaseTypeV1InnerServiceSMO;
+import com.java110.intf.oa.IOaWorkflowInnerServiceSMO;
 import com.java110.po.itemRelease.ItemReleaseTypePo;
+import com.java110.po.oaWorkflow.OaWorkflowPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -31,6 +37,9 @@ import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
 @Java110CmdDoc(title = "删除物品放行类型",
         description = "删除物品放行类型，物品放行类型 比如大型物品 小型物品等",
         httpMethod = "post",
@@ -73,6 +82,9 @@ public class DeleteItemReleaseTypeCmd extends Cmd {
     @Autowired
     private IItemReleaseTypeV1InnerServiceSMO itemReleaseTypeV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IOaWorkflowInnerServiceSMO oaWorkflowInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "typeId", "typeId不能为空");
@@ -84,12 +96,30 @@ public class DeleteItemReleaseTypeCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
+        ItemReleaseTypeDto itemReleaseTypeDto = new ItemReleaseTypeDto();
+        itemReleaseTypeDto.setTypeId(reqJson.getString("typeId"));
+        itemReleaseTypeDto.setCommunityId(reqJson.getString("communityId"));
+        List<ItemReleaseTypeDto> itemReleaseTypeDtos = itemReleaseTypeV1InnerServiceSMOImpl.queryItemReleaseTypes(itemReleaseTypeDto);
+
+        Assert.listOnlyOne(itemReleaseTypeDtos,"类型不存在");
+
         ItemReleaseTypePo itemReleaseTypePo = BeanConvertUtil.covertBean(reqJson, ItemReleaseTypePo.class);
         int flag = itemReleaseTypeV1InnerServiceSMOImpl.deleteItemReleaseType(itemReleaseTypePo);
 
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        //todo 删除添加的流程
+
+        OaWorkflowPo oaWorkflowPo = new OaWorkflowPo();
+        oaWorkflowPo.setFlowId(itemReleaseTypeDtos.get(0).getFlowId());
+        oaWorkflowPo.setFlowType(OaWorkflowDto.FLOW_TYPE_ITEM_RELEASE);
+         flag = oaWorkflowInnerServiceSMOImpl.deleteOaWorkflow(oaWorkflowPo);
+        if (flag < 1) {
+            throw new CmdException("保存数据失败");
+        }
+
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

@@ -10,6 +10,7 @@ import com.java110.intf.dev.IDictV1InnerServiceSMO;
 import com.java110.intf.report.IBaseDataStatisticsInnerServiceSMO;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -191,7 +192,7 @@ public class ReportFeeDetailRoomAdapt implements IExportDataAdapt {
         }
         queryStatisticsDto.setObjIds(objIds.toArray(new String[objIds.size()]));
         List<Map> infos = reportFeeStatisticsInnerServiceSMOImpl.getObjFeeSummary(queryStatisticsDto);
-        if (infos == null || infos.size() < 1) {
+        if (ListUtil.isNull(infos)) {
             return datas;
         }
         BigDecimal oweFee = null;

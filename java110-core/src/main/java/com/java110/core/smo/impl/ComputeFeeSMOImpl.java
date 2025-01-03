@@ -1592,7 +1592,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
             CommunityDto communityDto = new CommunityDto();
             communityDto.setCommunityId(feeDto.getCommunityId());
             List<CommunityDto> communityDtos = communityInnerServiceSMOImpl.queryCommunitys(communityDto);
-            if (communityDtos == null || communityDtos.size() < 1) {
+            if (ListUtil.isNull(communityDtos)) {
                 value = value.replace("C", "0");
             } else {
                 value = value.replace("C", communityDtos.get(0).getCommunityArea());
@@ -1606,7 +1606,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         }
         if (value.contains("RL")) {
             List<RoomAttrDto> roomAttrDtos = roomDto.getRoomAttrDto();
-            if (roomAttrDtos != null && roomAttrDtos.size() > 0) {
+            if (!ListUtil.isNull(roomAttrDtos)) {
                 for (RoomAttrDto roomAttrDto : roomAttrDtos) {
                     value = value.replace("RL" + roomAttrDto.getSpecCd(), roomAttrDto.getValue());
                 }
@@ -1723,15 +1723,15 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
                 round = Math.floor(mulMonth / paymentCycle);
             }
             // 轮数 * 周期 * 30 + 开始时间 = 目标 到期时间
-            targetEndDate = getTargetEndTime(round * paymentCycle, startDate,false);//目标结束时间
+            targetEndDate = getTargetEndTime(round * paymentCycle, startDate, false);//目标结束时间
 
             //todo 如果 到了 预付期 产生下个周期的费用
             if (DateUtil.getFormatTimeStringB(targetEndDate).equals(DateUtil.getFormatTimeStringB(endDate))
                     && DateUtil.getCurrentDate().getTime() > preEndTime.getTime()
             ) {
-                targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate,true);//目标结束时间
-            }else{
-                targetEndDate = getTargetEndTime(round * paymentCycle, startDate,true);//目标结束时间
+                targetEndDate = getTargetEndTime((round + 1) * paymentCycle, startDate, true);//目标结束时间
+            } else {
+                targetEndDate = getTargetEndTime(round * paymentCycle, startDate, true);//目标结束时间
             }
 
             //todo 费用项的结束时间<缴费的结束时间  费用快结束了   取费用项的结束时间
@@ -1783,7 +1783,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
     }
 
     @Override
-    public Date getTargetEndTime(double month, Date startDate,boolean mulOneSec) {
+    public Date getTargetEndTime(double month, Date startDate, boolean mulOneSec) {
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(startDate);
 
@@ -1791,7 +1791,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         endDate.add(Calendar.MONTH, intMonth.intValue());
         double doubleMonth = month - intMonth;
         if (doubleMonth <= 0) {
-            if(mulOneSec) {
+            if (mulOneSec) {
                 endDate.add(Calendar.SECOND, -1);
             }
             return endDate.getTime();
@@ -1799,7 +1799,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         int futureDay = endDate.getActualMaximum(Calendar.DAY_OF_MONTH);
         Double hour = doubleMonth * futureDay * 24;
         endDate.add(Calendar.HOUR_OF_DAY, hour.intValue());
-        if(mulOneSec) {
+        if (mulOneSec) {
             endDate.add(Calendar.SECOND, -1);
         }
         return endDate.getTime();
@@ -1973,7 +1973,7 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         }
 
         Date endTime = feeDto.getEndTime();
-        Date date = getTargetEndTime(cycle, endTime,true);
+        Date date = getTargetEndTime(cycle, endTime, true);
         feeDto.setDeadlineTime(date);
         dealRentRate(feeDto);
 
@@ -1993,7 +1993,6 @@ public class ComputeFeeSMOImpl implements IComputeFeeSMO {
         dealRentRate(feeDto);
 
     }
-
 
 
     /**

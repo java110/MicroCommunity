@@ -29,6 +29,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -136,7 +137,7 @@ public class ScheduleClassesStaffV1InnerServiceSMOImpl extends BaseServiceSMO im
                     ), ScheduleClassesStaffDto.class);
 
             //这里 如果没有员工排班 那么就认为 员工一直在上班
-            if (scheduleClassesStaffs == null || scheduleClassesStaffs.size() < 1) {
+            if (ListUtil.isNull(scheduleClassesStaffs)) {
                 scheduleClassesStaffDto.setWork(true);
                 return scheduleClassesStaffDto;
             }
