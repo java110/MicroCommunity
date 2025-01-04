@@ -386,7 +386,7 @@
         left join building_unit bu on t.unit_id = bu.unit_id and bu.status_cd = '0'
         inner join pay_fee pf on pf.payer_obj_id = t.room_id and pf.payer_obj_type = '3333' and pf.status_cd = '0' and pf.state = '2008001'
         <if test="feeTypeCd != null and feeTypeCd != ''">
-            left join pay_fee_config pfc on t.config_id = pfc.config_id and pfc.status_cd = '0'
+            left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
         </if>
         where
         1=1
