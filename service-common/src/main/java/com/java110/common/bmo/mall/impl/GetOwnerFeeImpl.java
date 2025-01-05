@@ -1,21 +1,26 @@
 package com.java110.common.bmo.mall.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.mall.IMallCommonApiBmo;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.community.CommunityMemberDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.reportFee.ReportOweFeeDto;
+import com.java110.dto.store.StoreDto;
+import com.java110.intf.community.ICommunityMemberV1InnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
+import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.utils.cache.UrlCache;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.ListUtil;
-import com.java110.utils.util.MoneyUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +47,15 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
 
     @Autowired
     private IComputeFeeSMO computeFeeSMOImpl;
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityMemberV1InnerServiceSMO communityMemberV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
 
 
     @Override
@@ -102,7 +116,39 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
                 logger.error("可能费用资料有问题导致算费失败", e);
             }
         }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityId(communityId);
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        String communityName = "";
+        if (ListUtil.isNull(communityDtos)) {
+            throw new CmdException("未查询到小区");
+        }
+        CommunityMemberDto communityMemberDto = new CommunityMemberDto();
+        communityMemberDto.setCommunityId(communityId);
+        communityMemberDto.setMemberTypeCd(CommunityMemberDto.MEMBER_TYPE_PROPERTY);
 
-        context.setResponseEntity(ResultVo.createResponseEntity(tmpFeeDtos));
+        List<CommunityMemberDto> communityMemberDtos = communityMemberV1InnerServiceSMOImpl.queryCommunityMembers(communityMemberDto);
+        if (ListUtil.isNull(communityMemberDtos)) {
+            throw new CmdException("未查询到物业公司");
+        }
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(communityMemberDtos.get(0).getMemberId());
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+        if (ListUtil.isNull(storeDtos)) {
+            throw new CmdException("未查询到物业公司");
+        }
+
+        String ownerUrl = UrlCache.getOwnerUrl();
+
+        JSONObject data = new JSONObject();
+        data.put("communityId", communityId);
+        data.put("communityName", communityDtos.get(0).getName());
+        data.put("storeId", storeDtos.get(0).getStoreId());
+        data.put("storeName", storeDtos.get(0).getName());
+        data.put("communityTel", communityDtos.get(0).getTel());
+        data.put("qrCode", ownerUrl + "x");
+        data.put("fees", tmpFeeDtos);
+
+        context.setResponseEntity(ResultVo.createResponseEntity(data));
     }
 }
