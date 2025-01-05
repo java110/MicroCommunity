@@ -59,7 +59,7 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
      * @param reportOweFeeDto 数据对象分享
      * @return 小区下的小区楼记录数
      */
-    public int deleteInvalidFee(@RequestBody Map reportOweFeeDto){
+    public int deleteInvalidFee(@RequestBody Map reportOweFeeDto) {
         return reportOweFeeServiceDaoImpl.deleteInvalidFee(reportOweFeeDto);
     }
 
@@ -71,6 +71,23 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
     @Override
     public List<Map> queryOweFeesByRoomIds(@RequestBody Map info) {
         return reportOweFeeServiceDaoImpl.queryOweFeesByRoomIds(info);
+    }
+
+    @Override
+    public List<ReportOweFeeDto> queryOwnerOweFee(@RequestBody ReportOweFeeDto reportOweFeeDto) {
+        //校验是否传了 分页信息
+
+        int page = reportOweFeeDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            reportOweFeeDto.setPage((page - 1) * reportOweFeeDto.getRow());
+        }
+
+        List<ReportOweFeeDto> reportOweFees = BeanConvertUtil.covertBeanList(
+                reportOweFeeServiceDaoImpl.queryOwnerOweFee(BeanConvertUtil.beanCovertMap(reportOweFeeDto)),
+                ReportOweFeeDto.class);
+
+        return reportOweFees;
     }
 
     @Override
@@ -136,7 +153,6 @@ public class ReportOweFeeInnerServiceSMOImpl extends BaseServiceSMO implements I
         List<ReportOweFeeDto> reportOweFees = BeanConvertUtil.covertBeanList(reportOweFeeServiceDaoImpl.queryReportAllOweFeesByContract(BeanConvertUtil.beanCovertMap(reportOweFeeDto)), ReportOweFeeDto.class);
         return reportOweFees;
     }
-
 
 
     @Override

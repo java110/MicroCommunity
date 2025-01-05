@@ -105,4 +105,7 @@ public interface IReportOweFeeInnerServiceSMO {
 
     @RequestMapping(value = "/queryOweFeesByRoomIds", method = RequestMethod.POST)
     List<Map> queryOweFeesByRoomIds(@RequestBody Map info);
+
+    @RequestMapping(value = "/queryOwnerOweFee", method = RequestMethod.POST)
+    List<ReportOweFeeDto> queryOwnerOweFee(@RequestBody ReportOweFeeDto reportOweFeeDto);
 }

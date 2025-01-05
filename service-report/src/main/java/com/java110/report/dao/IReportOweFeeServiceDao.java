@@ -92,4 +92,6 @@ public interface IReportOweFeeServiceDao {
     List<Map> queryOweFeesByOwnerIds(Map info);
 
     List<Map> queryOweFeesByRoomIds(Map info);
+
+    List<Map> queryOwnerOweFee(Map info);
 }

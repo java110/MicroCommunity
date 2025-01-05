@@ -22,6 +22,7 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
     private String updateTime;
     private String oweId;
     private String ownerId;
+    private String[] ownerIds;
     private String feeId;
     private String[] feeIds;
     private String amountOwed;
@@ -281,5 +282,13 @@ public class ReportOweFeeDto extends PageDto implements Serializable {
 
     public void setFeeIds(String[] feeIds) {
         this.feeIds = feeIds;
+    }
+
+    public String[] getOwnerIds() {
+        return ownerIds;
+    }
+
+    public void setOwnerIds(String[] ownerIds) {
+        this.ownerIds = ownerIds;
     }
 }

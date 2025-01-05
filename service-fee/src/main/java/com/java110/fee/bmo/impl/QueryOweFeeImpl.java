@@ -78,7 +78,6 @@ public class QueryOweFeeImpl implements IQueryOweFee {
 
         //查询费用信息arrearsEndTime
         // todo 这里考虑预付期的费用 所以查询全量再用费用
-        //feeDto.setArrearsEndTime(DateUtil.getCurrentDate());
         feeDto.setState(FeeDto.STATE_DOING);
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 

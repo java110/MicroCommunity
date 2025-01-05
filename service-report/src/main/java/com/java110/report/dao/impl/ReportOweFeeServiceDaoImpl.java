@@ -51,9 +51,9 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
     public List<Map> getReportOweFeeInfo(Map info) throws DAOException {
         logger.debug("查询欠费统计信息 入参 info : {}", info);
 
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.getReportOweFeeInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.getReportOweFeeInfo", info);
 
-        return businessReportOweFeeInfos;
+        return infos;
     }
 
 
@@ -100,21 +100,21 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
     public int queryReportOweFeesCount(Map info) {
         logger.debug("查询欠费统计数据 入参 info : {}", info);
 
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportOweFeesCount", info);
-        if (businessReportOweFeeInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportOweFeesCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessReportOweFeeInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryReportAllOweFees(Map info) {
         logger.debug("queryReportAllOweFees 入参 info : {}", info);
 
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportAllOweFees", info);
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryReportAllOweFees", info);
 
-        return businessReportOweFeeInfos;
+        return infos;
     }
 
     @Override
@@ -147,17 +147,17 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
 
     @Override
     public double computeReportOweFeeTotalAmount(Map info) {
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.computeReportOweFeeTotalAmount", info);
-        if (businessReportOweFeeInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.computeReportOweFeeTotalAmount", info);
+        if (infos.size() < 1) {
             return 0;
         }
-        return Double.parseDouble(businessReportOweFeeInfos.get(0).get("total").toString());
+        return Double.parseDouble(infos.get(0).get("total").toString());
     }
 
     @Override
     public List<Map> computeReportOweFeeItemAmount(Map info) {
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.computeReportOweFeeItemAmount", info);
-        return businessReportOweFeeInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.computeReportOweFeeItemAmount", info);
+        return infos;
     }
 
     @Override
@@ -171,20 +171,26 @@ public class ReportOweFeeServiceDaoImpl extends BaseServiceDao implements IRepor
 
     @Override
     public List<Map> queryInvalidOweFee(Map info) {
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryInvalidOweFee", info);
-        return businessReportOweFeeInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryInvalidOweFee", info);
+        return infos;
     }
 
     @Override
     public List<Map> queryOweFeesByOwnerIds(Map info) {
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryOweFeesByOwnerIds", info);
-        return businessReportOweFeeInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryOweFeesByOwnerIds", info);
+        return infos;
     }
 
     @Override
     public List<Map> queryOweFeesByRoomIds(Map info) {
-        List<Map> businessReportOweFeeInfos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryOweFeesByRoomIds", info);
-        return businessReportOweFeeInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryOweFeesByRoomIds", info);
+        return infos;
+    }
+
+    @Override
+    public List<Map> queryOwnerOweFee(Map info) {
+        List<Map> infos = sqlSessionTemplate.selectList("reportOweFeeServiceDaoImpl.queryOwnerOweFee", info);
+        return infos;
     }
 
 
