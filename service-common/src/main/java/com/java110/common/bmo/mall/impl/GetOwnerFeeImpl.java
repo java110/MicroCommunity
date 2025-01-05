@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,7 +97,7 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
             throw new CmdException("未包含费用");
         }
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
-
+        BigDecimal oweMoney = new BigDecimal("0");
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
                 computeFeeSMOImpl.computeEveryOweFee(tmpFeeDto);//计算欠费金额
@@ -111,6 +112,7 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
 
                 if (tmpFeeDto.getFeeTotalPrice() != 0) {
                     tmpFeeDtos.add(tmpFeeDto);
+                    oweMoney = oweMoney.add(new BigDecimal(tmpFeeDto.getFeeTotalPrice()+""));
                 }
             } catch (Exception e) {
                 logger.error("可能费用资料有问题导致算费失败", e);
@@ -148,6 +150,7 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
         data.put("communityTel", communityDtos.get(0).getTel());
         data.put("qrCode", ownerUrl + "x");
         data.put("fees", tmpFeeDtos);
+        data.put("oweMoney",oweMoney.doubleValue());
 
         context.setResponseEntity(ResultVo.createResponseEntity(data));
     }
