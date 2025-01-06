@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.common.bmo.mall.IMallCommonApiBmo;
 import com.java110.core.context.ICmdDataFlowContext;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.core.smo.IComputeFeeSMO;
 import com.java110.dto.community.CommunityDto;
@@ -18,6 +19,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
 import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.UrlCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.*;
@@ -99,6 +101,7 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
             throw new CmdException("未包含费用");
         }
         List<FeeDto> tmpFeeDtos = new ArrayList<>();
+        List<String> feeIds = new ArrayList<>();
         BigDecimal oweMoney = new BigDecimal("0");
         for (FeeDto tmpFeeDto : feeDtos) {
             try {
@@ -114,6 +117,7 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
 
                 if (tmpFeeDto.getFeeTotalPrice() != 0) {
                     tmpFeeDtos.add(tmpFeeDto);
+                    feeIds.add(tmpFeeDto.getFeeId());
                     oweMoney = oweMoney.add(new BigDecimal(tmpFeeDto.getFeeTotalPrice()+""));
                 }
             } catch (Exception e) {
@@ -155,6 +159,19 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
         data.put("qrCode", ownerUrl + "x");
         data.put("fees", tmpFeeDtos);
         data.put("oweMoney",oweMoney.doubleValue());
+        String token = GenerateCodeFactory.getUUID();
+        JSONObject payData = new JSONObject();
+        payData.put("communityId", communityId);
+        payData.put("roomId", roomId);
+        payData.put("business", "oweFee");
+        payData.put("storeId", storeDtos.get(0).getStoreId());
+        payData.put("createUserId", storeDtos.get(0).getStoreId());
+        reqJson.put("money", oweMoney.doubleValue());
+        reqJson.put("feeIds", feeIds);
+
+        // redis 中 保存 请求参数
+        CommonCache.setValue("nativeQrcodePayment_" + token, payData.toJSONString(), CommonCache.PAY_DEFAULT_EXPIRE_TIME);
+        data.put("qrCode", UrlCache.getOwnerUrl() + "/#/pages/fee/qrCodeCashier?qrToken=" + token);
 
         context.setResponseEntity(ResultVo.createResponseEntity(data));
     }
