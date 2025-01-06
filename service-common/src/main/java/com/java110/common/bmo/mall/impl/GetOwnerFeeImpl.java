@@ -87,6 +87,8 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
         // todo 这里取一个房屋欠费即可
         String roomId = reportOweFeeDtos.get(0).getPayerObjId();
         String communityId = reportOweFeeDtos.get(0).getCommunityId();
+        String ownerName = reportOweFeeDtos.get(0).getOwnerName();
+        String roomName = reportOweFeeDtos.get(0).getPayerObjName();
 
         FeeDto feeDto = new FeeDto();
         feeDto.setState(FeeDto.STATE_DOING);
@@ -148,6 +150,8 @@ public class GetOwnerFeeImpl implements IMallCommonApiBmo {
         data.put("storeId", storeDtos.get(0).getStoreId());
         data.put("storeName", storeDtos.get(0).getName());
         data.put("communityTel", communityDtos.get(0).getTel());
+        data.put("ownerName", ownerName);
+        data.put("roomName",roomName);
         data.put("qrCode", ownerUrl + "x");
         data.put("fees", tmpFeeDtos);
         data.put("oweMoney",oweMoney.doubleValue());

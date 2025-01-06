@@ -168,6 +168,8 @@ public class PayFeeCmd extends Cmd {
 
         if (maxEndTime != null && endTime != null && !FeeDto.FEE_FLAG_ONCE.equals(feeDtos.get(0).getFeeFlag())) {
             Date newDate = DateUtil.stepMonth(endTime, reqJson.getDouble("cycles").intValue());
+            //todo 这里加一天 因为少一秒
+            maxEndTime = DateUtil.stepDay(maxEndTime, 1);
             if (newDate.getTime() > maxEndTime.getTime()) {
                 throw new IllegalArgumentException("缴费周期超过 缴费结束时间,请用按结束时间方式缴费");
             }

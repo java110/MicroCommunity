@@ -807,7 +807,8 @@
         oweId,t.fee_id,t.fee_id feeId,t.amount_owed,t.amount_owed amountOwed,t.payer_obj_name,t.payer_obj_name
         payerObjName,t.config_id,t.config_id configId,t.fee_name,t.fee_name
         feeName,t.end_time,t.end_time endTime,t.community_id,t.community_id
-        communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId
+        communityId,t.payer_obj_type,t.payer_obj_type payerObjType,t.payer_obj_id,t.payer_obj_id payerObjId,
+        t.owner_name ownerName,t.owner_tel ownerTel
         from report_owe_fee t
         where 1 =1
         and t.amount_owed &gt; 0
