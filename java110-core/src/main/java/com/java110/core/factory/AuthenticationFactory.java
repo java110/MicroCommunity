@@ -711,7 +711,7 @@ public class AuthenticationFactory {
 
         countNum += 1;
 
-        CommonCache.setValue(USER_ERROR_COUNT + userName, countNum + "", CommonCache.TOKEN_EXPIRE_TIME);
+        CommonCache.setValue(USER_ERROR_COUNT + userName, countNum + "", CommonCache.defaultExpireTime);
 
     }
 
