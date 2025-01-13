@@ -636,9 +636,8 @@
         group by a.payer_ob_id
         ) b
     </select>
-    <!-- 查询房屋费用明细表-->
-    <select id="getObjFeeSummary" parameterType="Map" resultType="Map">
-        select
+    <!-- 查询房屋费用明细表
+    select
         a.obj_id objId,a.fee_type_cd feeTypeCd,
         (
         select ifnull(sum(t.receivable_amount),0.0) hisOweFee
@@ -649,21 +648,33 @@
         and t.obj_id = a.obj_id
         and t.fee_type_cd = a.fee_type_cd
         and t.cur_month_time &lt; #{endDate}
+        and t.cur_month_time &gt;= #{startDate}
         ) oweFee,
         (
         select ifnull(sum(t.received_amount),0.0) receivedFee
-        from pay_fee_detail t
-        INNER JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
-        inner join pay_fee_config pfc1 on pfc1.config_id = pf.config_id and pfc1.status_cd = '0'
-        where pf.payer_obj_id = a.obj_id
-        and t.status_cd = '0'
+        from pay_fee_detail_month t
+        where  t.status_cd = '0'
+        and t.detail_id != '-1'
         and t.community_id= a.community_id
-        and pfc1.fee_type_cd = a.fee_type_cd
-        and t.create_time &gt; #{startDate}
-        and t.create_time &lt; #{endDate}
+        and t.obj_id = a.obj_id
+        and t.fee_type_cd = a.fee_type_cd
+        and t.cur_month_time &lt; #{endDate}
+        and t.cur_month_time &gt;= #{startDate}
         ) receivedFee
         from pay_fee_detail_month a
         where a.obj_id in
+    -->
+    <select id="getObjFeeSummary" parameterType="Map" resultType="Map">
+        select
+        a.obj_id objId,a.fee_type_cd feeTypeCd,
+        ifnull(sum(a.receivable_amount),0.0)-ifnull(sum(a.received_amount),0.0)- ifnull(sum(a.discount_amount),0.0) oweFee,
+        ifnull(sum(a.received_amount),0.0) receivedFee
+        from pay_fee_detail_month a
+        where
+        a.status_cd = '0'
+        and a.cur_month_time &lt; #{endDate}
+        and a.cur_month_time &gt;= #{startDate}
+        and a.obj_id in
         <foreach collection="objIds" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>
