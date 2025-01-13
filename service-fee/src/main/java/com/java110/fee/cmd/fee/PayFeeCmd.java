@@ -620,10 +620,10 @@ public class PayFeeCmd extends Cmd {
         // 周期性收费、缴费后，到期日期在费用项终止日期后，则设置缴费状态结束，设置结束日期为费用项终止日期
         if (!FeeFlagTypeConstant.ONETIME.equals(feeInfo.getFeeFlag())) {
             //这里 容错五天时间
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(maxEndTime);
-            calendar.add(Calendar.DAY_OF_MONTH, -5);
-            maxEndTime = calendar.getTime();
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.setTime(maxEndTime);
+//            calendar.add(Calendar.DAY_OF_MONTH, -5);
+//            maxEndTime = calendar.getTime();
             if (feeInfo.getEndTime().after(maxEndTime)) {
                 businessFee.put("state", FeeDto.STATE_FINISH);
                 businessFee.put("endTime", maxEndTime);
