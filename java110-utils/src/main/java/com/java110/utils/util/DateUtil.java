@@ -955,6 +955,13 @@ public class DateUtil {
         return getNextSecTime(tTime);
     }
 
+    public static Date getNextSecDateTime(Date time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        calendar.add(Calendar.SECOND, 1);
+        return calendar.getTime();
+    }
+
     public static String getNextSecTime(Date time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
