@@ -54,9 +54,9 @@ public class InspectionTaskDetailServiceDaoImpl extends BaseServiceDao implement
 
         logger.debug("查询巡检任务明细信息 入参 info : {}", info);
 
-        List<Map> businessInspectionTaskDetailInfos = sqlSessionTemplate.selectList("inspectionTaskDetailServiceDaoImpl.getBusinessInspectionTaskDetailInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionTaskDetailServiceDaoImpl.getBusinessInspectionTaskDetailInfo", info);
 
-        return businessInspectionTaskDetailInfos;
+        return infos;
     }
 
 
@@ -89,9 +89,9 @@ public class InspectionTaskDetailServiceDaoImpl extends BaseServiceDao implement
     public List<Map> getInspectionTaskDetailInfo(Map info) throws DAOException {
         logger.debug("查询巡检任务明细信息 入参 info : {}", info);
 
-        List<Map> businessInspectionTaskDetailInfos = sqlSessionTemplate.selectList("inspectionTaskDetailServiceDaoImpl.getInspectionTaskDetailInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionTaskDetailServiceDaoImpl.getInspectionTaskDetailInfo", info);
 
-        return businessInspectionTaskDetailInfos;
+        return infos;
     }
 
 
@@ -122,12 +122,12 @@ public class InspectionTaskDetailServiceDaoImpl extends BaseServiceDao implement
     public int queryInspectionTaskDetailsCount(Map info) {
         logger.debug("查询巡检任务明细数据 入参 info : {}", info);
 
-        List<Map> businessInspectionTaskDetailInfos = sqlSessionTemplate.selectList("inspectionTaskDetailServiceDaoImpl.queryInspectionTaskDetailsCount", info);
-        if (businessInspectionTaskDetailInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("inspectionTaskDetailServiceDaoImpl.queryInspectionTaskDetailsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessInspectionTaskDetailInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
