@@ -54,7 +54,7 @@ public class InspectionTaskDetailTemplate extends TaskSystemQuartz {
 
     //签到状态修改
     private void generatorTask(TaskDto taskDto, CommunityDto communityDto) {
-        //取出今天的日期
+        //取出三天前的日期
         Calendar cal = Calendar.getInstance(Locale.CHINA);
         cal.add(Calendar.DAY_OF_MONTH,-3);
         String today = new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
