@@ -18,6 +18,7 @@ import com.java110.store.bmo.contract.IDeleteContractBMO;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -176,7 +177,7 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
 
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
 
-        if (feeDtos != null && !feeDtos.isEmpty()) {
+        if (!ListUtil.isNull(feeDtos)) {
 
             throw new IllegalArgumentException("合同存在未结束的费用 请先处理");
 
