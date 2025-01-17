@@ -53,6 +53,11 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
      */
     @Java110Transactional
     public ResponseEntity<String> delete(ContractPo contractPo) {
+        // 校验合同费用
+        validateContractFee(contractPo);
+        deleteContractRoomRel(contractPo);
+        //删除流程信息
+        contractApplyUserInnerServiceSMOImpl.deleteTask(contractPo);
 
         int flag = contractInnerServiceSMOImpl.deleteContract(contractPo);
 
@@ -60,9 +65,7 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
             return ResultVo.createResponseEntity(ResultVo.CODE_ERROR, "保存失败");
         }
 
-        deleteContractRoomRel(contractPo);
-//删除流程信息
-        contractApplyUserInnerServiceSMOImpl.deleteTask(contractPo);
+
         return ResultVo.createResponseEntity(ResultVo.CODE_OK, "保存成功");
 
     }
@@ -156,5 +159,30 @@ public class DeleteContractBMOImpl implements IDeleteContractBMO {
         }
 
     }
+
+    /**
+     * 校验合同是否欠费校验
+     */
+
+    private void validateContractFee(ContractPo contractPo) {
+
+        FeeDto feeDto = new FeeDto();
+
+        feeDto.setPayerObjType(FeeDto.PAYER_OBJ_TYPE_CONTRACT);
+
+        feeDto.setPayerObjId(contractPo.getContractId());
+
+        feeDto.setState(FeeDto.STATE_DOING);
+
+        List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
+
+        if (feeDtos != null && !feeDtos.isEmpty()) {
+
+            throw new IllegalArgumentException("合同存在未结束的费用 请先处理");
+
+        }
+
+    }
+
 
 }

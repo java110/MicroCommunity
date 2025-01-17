@@ -84,9 +84,9 @@ public class ApplyRoomDiscountAdapt implements IExportDataAdapt {
             } else {
                 row.createCell(10).setCellValue("已使用");
             }
-            if (!StringUtil.isEmpty(applyRoomDiscountDto.getDiscountId()) && applyRoomDiscountDto.getReturnWay().equals("1002")) {
+            if (!StringUtil.isEmpty(applyRoomDiscountDto.getDiscountId()) && "1002".equals(applyRoomDiscountDto.getReturnWay())) {
                 row.createCell(11).setCellValue("账户余额");
-            } else if (!StringUtil.isEmpty(applyRoomDiscountDto.getDiscountId()) && !applyRoomDiscountDto.getReturnWay().equals("1002")) {
+            } else if (!StringUtil.isEmpty(applyRoomDiscountDto.getDiscountId()) && !"1002".equals(applyRoomDiscountDto.getReturnWay())) {
                 row.createCell(11).setCellValue("折扣");
             } else {
                 row.createCell(11).setCellValue("--");
