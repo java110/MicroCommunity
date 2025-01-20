@@ -21,4 +21,9 @@
         delete from owner_app_user where 1=1
         and community_id = #{communityId}
     </delete>
+    <delete id="deleteOwnerAccount" parameterType="Map">
+        delete from account where 1=1
+        and part_id = #{communityId}
+    </delete>
+
 </mapper>

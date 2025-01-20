@@ -5,6 +5,7 @@ import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.intf.user.IInitializeOwnerInnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.user.dao.IInitializeOwneServiceDao;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +51,7 @@ public class InitializeOwnerInnerServiceSMOImpl extends BaseServiceSMO implement
             ownerAppUserDto.setRow(DEFAULT_ROW);
             ownerAppUserDto.setCommunityId(communityId.get("communityId").toString());
             List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-            if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+            if (ListUtil.isNull(ownerAppUserDtos)) {
                 continue;
             }
             userIds = new ArrayList<>();
@@ -59,9 +60,10 @@ public class InitializeOwnerInnerServiceSMOImpl extends BaseServiceSMO implement
             }
             communityId.put("userIds", userIds.toArray(new String[userIds.size()]));
             initializeOwnerServiceDaoImpl.deleteUser(communityId);
-
         }
         initializeOwnerServiceDaoImpl.deleteOwnerAppUser(communityId);
+        // 删除业主账户
+        initializeOwnerServiceDaoImpl.deleteOwnerAccount(communityId);
         return deleteFast;
     }
 
