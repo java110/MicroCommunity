@@ -2,6 +2,7 @@ package com.java110.community.cmd.room;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -22,6 +23,7 @@ import com.java110.po.room.RoomPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -64,13 +66,14 @@ public class SaveOwnerShopsCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
+        String userId = CmdContextUtils.getUserId(context);
         int flag = 0;
         if (!reqJson.containsKey("ownerId")
                 || reqJson.getString("ownerId").startsWith("-")
                 || StringUtil.isEmpty(reqJson.getString("ownerId"))
         ) {
             OwnerPo ownerPo = new OwnerPo();
-            ownerPo.setUserId("-1");
+            ownerPo.setUserId(userId);
             ownerPo.setAge("1");
             ownerPo.setCommunityId(reqJson.getString("communityId"));
             ownerPo.setIdCard("");
@@ -82,6 +85,8 @@ public class SaveOwnerShopsCmd extends Cmd {
             ownerPo.setOwnerTypeCd(OwnerDto.OWNER_TYPE_CD_OWNER);
             ownerPo.setRemark(reqJson.getString("remark"));
             ownerPo.setState("2000");
+            ownerPo.setPersonType(OwnerDto.PERSON_TYPE_PERSON);
+            ownerPo.setPersonRole(OwnerDto.PERSON_ROLE_OWNER);
             flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
             if (flag < 1) {
                 throw new IllegalArgumentException("保存业主失败");
@@ -106,7 +111,7 @@ public class SaveOwnerShopsCmd extends Cmd {
         ownerRoomRelDto.setRoomId(reqJson.getString("roomId"));
         List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelInnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
 
-        if (ownerRoomRelDtos != null && ownerRoomRelDtos.size() > 0) {
+        if (!ListUtil.isNull(ownerRoomRelDtos)) {
             JSONObject businessUnit = new JSONObject();
             businessUnit.put("relId", ownerRoomRelDtos.get(0).getRelId());
             OwnerRoomRelPo roomPo = BeanConvertUtil.covertBean(businessUnit, OwnerRoomRelPo.class);
