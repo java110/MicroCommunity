@@ -24,6 +24,7 @@ import com.java110.po.importFee.ImportFeeDetailPo;
 import com.java110.po.importFee.ImportFeePo;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -160,7 +161,7 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
 
         List<ImportRoomFee> importRoomFees = ownerCarInnerServiceSMOImpl.freshCarIds(cars);
         for (ImportRoomFee tmpImportRoomFee : importRoomFees) {
-            if (StringUtil.isEmpty(tmpImportRoomFee.getRoomId())) {
+            if (StringUtil.isEmpty(tmpImportRoomFee.getCarId())) {
                 throw new IllegalArgumentException(tmpImportRoomFee.getCarNum() + "不存在");
             }
         }
@@ -186,8 +187,8 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
         }
         feeConfigDto.setComputingFormula(FeeConfigDto.COMPUTING_FORMULA_DYNAMIC);
         List<FeeConfigDto> feeConfigDtos = payFeeConfigV1InnerServiceSMOImpl.queryPayFeeConfigs(feeConfigDto);
-        if (feeConfigDtos == null || feeConfigDtos.size() < 1) {
-            throw new IllegalArgumentException("费用项不存在");
+        if (ListUtil.isNull(feeConfigDtos)) {
+            throw new IllegalArgumentException("费用项不存在,或者费用项公式不是动态费用");
         }
         payFeePo = new PayFeePo();
         payFeePo.setFeeId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_feeId, true));
