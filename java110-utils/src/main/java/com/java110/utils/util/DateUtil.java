@@ -980,4 +980,14 @@ public class DateUtil {
         calendar.add(Calendar.SECOND, -1);
         return getFormatTimeStringA(calendar.getTime());
     }
+    public static Date getPreSecTime(Date time,int month) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(time);
+        calendar.add(Calendar.MONTH,month);
+        calendar.add(Calendar.SECOND, -1);
+        return calendar.getTime();
+    }
+    public static String getPreSecTimeStr(Date time,int month) {
+        return getFormatTimeStringB(getPreSecTime(time,month));
+    }
 }

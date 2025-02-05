@@ -7,10 +7,13 @@ import com.java110.dto.report.QueryStatisticsDto;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.report.dao.IReportFeeStatisticsServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -257,6 +260,23 @@ public class ReportFeeStatisticsInnerServiceSMOImpl extends BaseServiceSMO imple
     @Override
     public List<Map> getObjOweFee(@RequestBody QueryStatisticsDto queryStatisticsDto) {
         List<Map> infos = reportFeeStatisticsServiceDaoImpl.getObjOweFee(BeanConvertUtil.beanCovertMap(queryStatisticsDto));
+        if(ListUtil.isNull(infos)){
+            return infos;
+        }
+        //  t.fee_type_cd feeTypeCd,t.obj_id payerObjId,t.fee_name feeName,
+        //        min(t.cur_month_time) endTime,max(t.cur_month_time) deadlineTime,max(t.deadline_time) maxDeadLineTime
+        //        sum(t.receivable_amount) amountOwed
+        for(Map info : infos){
+            Date deadlineTime = (Date) info.get("deadlineTime");
+            Date endTime = (Date) info.get("endTime");
+            deadlineTime = DateUtil.getPreSecTime(deadlineTime,1);
+            Date maxDeadLineTime = (Date) info.get("maxDeadLineTime");
+            if(deadlineTime.getTime() > maxDeadLineTime.getTime()){
+                deadlineTime = maxDeadLineTime;
+            }
+            info.put("deadlineTime",DateUtil.getFormatTimeStringB(deadlineTime));
+            info.put("endTime",DateUtil.getFormatTimeStringB(endTime));
+        }
         return infos;
     }
 

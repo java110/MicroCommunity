@@ -8,6 +8,7 @@ import com.java110.intf.dev.IDictV1InnerServiceSMO;
 import com.java110.intf.report.IReportFeeStatisticsInnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -52,17 +53,14 @@ public class DataReportOweStatisticsAdapt implements IExportDataAdapt {
         Sheet sheet = workbook.createSheet("欠费统计");
         Row row = sheet.createRow(0);
         row.createCell(0).setCellValue("楼栋");
-        row.createCell(1).setCellValue("户数");
-        row.createCell(2).setCellValue("收费户数");
-        row.createCell(3).setCellValue("欠费户数");
-        row.createCell(4).setCellValue("欠费");
+        row.createCell(1).setCellValue("欠费");
         DictDto dictDto = new DictDto();
         dictDto.setTableName("pay_fee_config");
         dictDto.setTableColumns("fee_type_cd_show");
         List<DictDto> dictDtos = dictV1InnerServiceSMOImpl.queryDicts(dictDto);
 
         for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
-            row.createCell(5 + dictIndex).setCellValue(dictDtos.get(dictIndex).getName());
+            row.createCell(2 + dictIndex).setCellValue(dictDtos.get(dictIndex).getName());
         }
 
         QueryStatisticsDto queryStatisticsDto = new QueryStatisticsDto();
@@ -87,6 +85,7 @@ public class DataReportOweStatisticsAdapt implements IExportDataAdapt {
 
     /**
      * 封装数据到Excel中
+     *
      * @param datas
      * @param sheet
      * @param dictDtos
@@ -99,24 +98,25 @@ public class DataReportOweStatisticsAdapt implements IExportDataAdapt {
             row = sheet.createRow(roomIndex + 1);
             dataObj = datas.get(roomIndex);
             row.createCell(0).setCellValue(dataObj.get("floorNum").toString());
-            row.createCell(1).setCellValue(dataObj.get("roomCount").toString());
-            row.createCell(2).setCellValue(dataObj.get("feeRoomCount").toString());
-            row.createCell(3).setCellValue(dataObj.get("oweRoomCount").toString());
-            row.createCell(4).setCellValue(dataObj.get("oweFee").toString());
+            row.createCell(1).setCellValue(dataObj.get("oweFee").toString());
 
             for (int dictIndex = 0; dictIndex < dictDtos.size(); dictIndex++) {
+                if (!dataObj.containsKey("oweFee" + dictDtos.get(dictIndex).getStatusCd())) {
+                    row.createCell(2 + dictIndex).setCellValue("0");
+                    continue;
+                }
                 oweFee = dataObj.get("oweFee" + dictDtos.get(dictIndex).getStatusCd()).toString();
                 if (StringUtil.isEmpty(oweFee)) {
                     oweFee = "0";
                 }
-                row.createCell(5 + dictIndex).setCellValue(oweFee);
+                row.createCell(2 + dictIndex).setCellValue(oweFee);
             }
         }
 
     }
 
     private List<Map> computeOweReceivedFee(List<Map> datas) {
-        if (datas == null || datas.size() < 1) {
+        if (ListUtil.isNull(datas)) {
             return new ArrayList<>();
         }
 
@@ -127,7 +127,7 @@ public class DataReportOweStatisticsAdapt implements IExportDataAdapt {
             }
         }
 
-        if (tmpDatas == null || tmpDatas.size() < 1) {
+        if (ListUtil.isNull(tmpDatas)) {
             return new ArrayList<>();
         }
 

@@ -12,6 +12,7 @@ import com.java110.dto.system.ComponentValidateResult;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -1617,15 +1618,15 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
         row.createCell(3).setCellValue("业主电话");
         row.createCell(4).setCellValue("面积");
         row.createCell(5).setCellValue("费用项");
-        row.createCell(6).setCellValue("费用开始时间");
-        row.createCell(7).setCellValue("更新时间");
+        row.createCell(6).setCellValue("开始时间");
+        row.createCell(7).setCellValue("结束时间");
         row.createCell(8).setCellValue("欠费时长（天）");
         row.createCell(9).setCellValue("欠费时长（月）");
         row.createCell(10).setCellValue("欠费金额");
 
         //查询楼栋信息
         JSONArray rooms = this.getReportOweFeeDetail(pd, result);
-        if (rooms == null || rooms.size() == 0) {
+        if (ListUtil.isNull(rooms)) {
             return;
         }
         JSONObject dataObj = null;
@@ -1639,8 +1640,8 @@ public class ExportReportFeeSMOImpl extends DefaultAbstractComponentSMO implemen
             row.createCell(3).setCellValue(dataObj.getString("ownerTel"));
             row.createCell(4).setCellValue(dataObj.getString("builtUpArea"));
             row.createCell(5).setCellValue(dataObj.getString("feeName"));
-            row.createCell(6).setCellValue(dataObj.getString("feeCreateTime"));
-            row.createCell(7).setCellValue(dataObj.getString("updateTime"));
+            row.createCell(6).setCellValue(dataObj.getString("startTime"));
+            row.createCell(7).setCellValue(dataObj.getString("endTime"));
             row.createCell(8).setCellValue(dataObj.getString("oweDay"));
             monthDec = new BigDecimal(dataObj.getString("oweDay"));
             monthDec = monthDec.divide(new BigDecimal("30"), 2, BigDecimal.ROUND_HALF_UP);

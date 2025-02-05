@@ -16,11 +16,14 @@ import com.java110.po.reportFee.ReportFeeMonthStatisticsPo;
 import com.java110.report.dao.IReportFeeMonthStatisticsServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
+import com.java110.utils.util.MoneyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -289,6 +292,24 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
         }
 
         List<ReportFeeMonthStatisticsDto> infos = BeanConvertUtil.covertBeanList(reportFeeMonthStatisticsServiceDaoImpl.queryOweFeeDetail(BeanConvertUtil.beanCovertMap(reportFeeMonthStatisticsDto)), ReportFeeMonthStatisticsDto.class);
+
+        if (ListUtil.isNull(infos)) {
+            return infos;
+        }
+        //t.obj_name objName,t.fee_name feeName,t.owner_name ownerName,t.link ownerTel,br.built_up_area builtUpArea,
+        //MIN(t.cur_month_time) startDate,MAX(t.cur_month_time) endDate,max(t.deadline_time) deadlineTime,SUM(t.receivable_amount) oweAmount
+        for (ReportFeeMonthStatisticsDto info : infos) {
+            Date endTime = DateUtil.getDateFromStringA(info.getEndTime());
+            Date startTime = DateUtil.getDateFromStringA(info.getStartTime());
+            endTime = DateUtil.getPreSecTime(endTime, 1);
+            Date deadLineTime = DateUtil.getDateFromStringB(info.getDeadlineTime());
+            if (endTime.getTime() > deadLineTime.getTime()) {
+                endTime = deadLineTime;
+            }
+            info.setEndTime(DateUtil.getFormatTimeStringB(endTime));
+            info.setStartTime(DateUtil.getFormatTimeStringB(startTime));
+            info.setOweAmount(MoneyUtil.computePriceScale(Double.parseDouble(info.getOweAmount())) + "");
+        }
 
         return infos;
     }
@@ -570,10 +591,10 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
 
     @Override
     public List<Map> queryHuaningPayFee(@RequestBody Map paramInfo) {
-        int page = (int)paramInfo.get("page");
+        int page = (int) paramInfo.get("page");
 
         if (page != PageDto.DEFAULT_PAGE) {
-            paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
+            paramInfo.put("page", (page - 1) * (int) paramInfo.get("row"));
         }
         List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFee(paramInfo);
         return deposits;
@@ -591,10 +612,10 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
 
     @Override
     public List<Map> queryHuaningPayFeeTwo(@RequestBody Map paramInfo) {
-        int page = (int)paramInfo.get("page");
+        int page = (int) paramInfo.get("page");
 
         if (page != PageDto.DEFAULT_PAGE) {
-            paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
+            paramInfo.put("page", (page - 1) * (int) paramInfo.get("row"));
         }
         List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningPayFeeTwo(paramInfo);
         return deposits;
@@ -607,10 +628,10 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
 
     @Override
     public List<Map> queryHuaningOweFeeDetail(@RequestBody Map paramInfo) {
-        int page = (int)paramInfo.get("page");
+        int page = (int) paramInfo.get("page");
 
         if (page != PageDto.DEFAULT_PAGE) {
-            paramInfo.put("page",(page - 1) * (int)paramInfo.get("row"));
+            paramInfo.put("page", (page - 1) * (int) paramInfo.get("row"));
         }
         List<Map> deposits = reportFeeMonthStatisticsServiceDaoImpl.queryHuaningOweFeeDetail(paramInfo);
         return deposits;
@@ -622,7 +643,6 @@ public class ReportFeeMonthStatisticsInnerServiceSMOImpl extends BaseServiceSMO 
                 OwnerDto.class);
         return deposits;
     }
-
 
 
     public IReportFeeMonthStatisticsServiceDao getReportFeeMonthStatisticsServiceDaoImpl() {

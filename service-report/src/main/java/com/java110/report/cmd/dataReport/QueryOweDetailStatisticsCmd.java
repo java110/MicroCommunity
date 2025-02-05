@@ -14,6 +14,7 @@ import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,7 +123,7 @@ public class QueryOweDetailStatisticsCmd extends Cmd {
         //todo 查询房屋 欠费信息 返回 payerObjId, feeTypeCd,feeName,endTime,deadlineTime,amountOwed
         List<Map> infos = feeStatisticsImpl.getObjOweFee(queryStatisticsDto);
 
-        if (infos == null || infos.size() < 1) {
+        if (ListUtil.isNull(infos)) {
             return datas;
         }
 
