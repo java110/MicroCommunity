@@ -114,6 +114,19 @@ public class UserStaffModifyCmd extends Cmd {
         if (ListUtil.isNull(storeUserDtos)) {
             throw new CmdException("修改员工不是贵公司员工");
         }
+
+        UserDto userDto = new UserDto();
+        userDto.setTel(reqJson.getString("tel"));
+        userDto.setUserFlag("1");
+        userDto.setLevelCd(UserDto.LEVEL_CD_STAFF); //员工
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+        if (!ListUtil.isNull(users)) {
+            for (UserDto user : users) {
+                if (!user.getUserId().equals(reqJson.getString("staffId"))) {
+                    throw new IllegalArgumentException("员工手机号不能重复，请重新输入");
+                }
+            }
+        }
     }
 
     @Override
@@ -168,19 +181,9 @@ public class UserStaffModifyCmd extends Cmd {
 
     private void modifyStaff(JSONObject paramObj) {
         UserPo userPo = BeanConvertUtil.covertBean(paramObj, UserPo.class);
+        userPo.setUserId(paramObj.getString("staffId"));
         //根据手机号查询用户
-        UserDto userDto = new UserDto();
-        userDto.setTel(userPo.getTel());
-        userDto.setUserFlag("1");
-        userDto.setLevelCd(UserDto.LEVEL_CD_STAFF); //员工
-        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
-        if (!ListUtil.isNull(users)) {
-            for (UserDto user : users) {
-                if (!user.getUserId().equals(userPo.getUserId())) {
-                    throw new IllegalArgumentException("员工手机号不能重复，请重新输入");
-                }
-            }
-        }
+
         if (paramObj.containsKey("email") && !StringUtil.isEmpty(paramObj.getString("email"))) {
             Assert.isEmail(paramObj, "email", "不是有效的邮箱格式");
         }
@@ -189,7 +192,9 @@ public class UserStaffModifyCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("保存用户异常");
         }
-
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userPo.getUserId());
+        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
         //todo 修改身份证
         updateStaffIdCard(users.get(0), paramObj);
 
