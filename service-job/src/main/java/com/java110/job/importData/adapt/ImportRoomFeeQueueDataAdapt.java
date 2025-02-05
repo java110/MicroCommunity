@@ -175,9 +175,9 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
         PayFeePo payFeePo = null;
         ImportFeeDetailPo importFeeDetailPo = null;
 
-        if (StringUtil.isEmpty(importRoomFee.getRoomId())) {
-            throw new IllegalArgumentException("收费对象不存在");
-        }
+//        if (StringUtil.isEmpty(importRoomFee.getRoomId())) {
+//            throw new IllegalArgumentException("收费对象不存在");
+//        }
         FeeConfigDto feeConfigDto = new FeeConfigDto();
         feeConfigDto.setCommunityId(importRoomFee.getCommunityId());
         if (!StringUtil.isEmpty(importRoomFee.getConfigId())) {
