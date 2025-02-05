@@ -229,7 +229,13 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
         feeAttrPo.setCommunityId(importRoomFee.getCommunityId());
         feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
         feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_PAY_OBJECT_NAME);
-        feeAttrPo.setValue(importRoomFee.getRoomName());
+        if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(importRoomFee.getObjType())) {
+            feeAttrPo.setValue(importRoomFee.getContractId());
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(importRoomFee.getObjType())) {
+            feeAttrPo.setValue(importRoomFee.getCarNum());
+        } else {
+            feeAttrPo.setValue(importRoomFee.getRoomName());
+        }
         feeAttrPo.setFeeId(payFeePo.getFeeId());
         feeAttrPos.add(feeAttrPo);
 
@@ -299,16 +305,35 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
         importFeeDetailPo.setEndTime(importRoomFee.getEndTime());
         importFeeDetailPo.setFeeId(payFeePo.getFeeId());
         importFeeDetailPo.setFeeName(importRoomFee.getFeeName());
-        importFeeDetailPo.setFloorNum(importRoomFee.getFloorNum());
-        importFeeDetailPo.setUnitNum(importRoomFee.getUnitNum());
-        importFeeDetailPo.setRoomNum(importRoomFee.getRoomNum());
-        importFeeDetailPo.setRoomId(importRoomFee.getRoomId());
-        importFeeDetailPo.setObjId(importRoomFee.getRoomId());
-        importFeeDetailPo.setObjType(FeeDto.PAYER_OBJ_TYPE_ROOM);
-        importFeeDetailPo.setObjName(!"0".equals(importRoomFee.getUnitNum())
-                ? importRoomFee.getFloorNum() + "栋" + importRoomFee.getUnitNum() + "单元" + importRoomFee.getRoomNum() + "室" :
-                importRoomFee.getFloorNum() + "栋" + importRoomFee.getRoomNum() + "室"
-        );
+
+        if (FeeDto.PAYER_OBJ_TYPE_CONTRACT.equals(importRoomFee.getObjType())) {
+            importFeeDetailPo.setFloorNum("无");
+            importFeeDetailPo.setUnitNum("无");
+            importFeeDetailPo.setRoomNum(importRoomFee.getContractId());
+            importFeeDetailPo.setRoomId(importRoomFee.getContractId());
+            importFeeDetailPo.setObjId(importRoomFee.getContractId());
+            importFeeDetailPo.setObjName(importRoomFee.getContractId());
+        } else if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(importRoomFee.getObjType())) {
+            importFeeDetailPo.setFloorNum("无");
+            importFeeDetailPo.setUnitNum("无");
+            importFeeDetailPo.setRoomNum(importRoomFee.getCarNum());
+            importFeeDetailPo.setRoomId(importRoomFee.getCarId());
+            importFeeDetailPo.setObjId(importRoomFee.getCarId());
+            importFeeDetailPo.setObjName(importRoomFee.getCarNum());
+        } else {
+            importFeeDetailPo.setFloorNum(importRoomFee.getFloorNum());
+            importFeeDetailPo.setUnitNum(importRoomFee.getUnitNum());
+            importFeeDetailPo.setRoomNum(importRoomFee.getRoomNum());
+            importFeeDetailPo.setRoomId(importRoomFee.getRoomId());
+            importFeeDetailPo.setObjId(importRoomFee.getRoomId());
+            importFeeDetailPo.setObjName(!"0".equals(importRoomFee.getUnitNum())
+                    ? importRoomFee.getFloorNum() + "栋" + importRoomFee.getUnitNum() + "单元" + importRoomFee.getRoomNum() + "室" :
+                    importRoomFee.getFloorNum() + "栋" + importRoomFee.getRoomNum() + "室"
+            );
+        }
+
+        importFeeDetailPo.setObjType(importRoomFee.getObjType());
+
         importFeeDetailPo.setStartTime(importRoomFee.getStartTime());
         importFeeDetailPo.setIfdId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_IfdId, true));
         importFeeDetailPo.setState("1000");
@@ -321,7 +346,7 @@ public class ImportRoomFeeQueueDataAdapt extends DefaultImportData implements II
 
         List<ImportFeeDto> importRoomFeess = importFeeInnerServiceSMOImpl.queryImportFees(importFeeDto);
 
-        if (importRoomFeess == null || importRoomFeess.size() < 1) {
+        if (ListUtil.isNull(importRoomFeess)) {
             //保存日志
             ImportFeePo importFeePo = new ImportFeePo();
             importFeePo.setCommunityId(importRoomFee.getCommunityId());
