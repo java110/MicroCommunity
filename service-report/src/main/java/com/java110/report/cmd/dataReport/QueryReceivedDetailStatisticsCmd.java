@@ -14,6 +14,7 @@ import com.java110.report.statistics.IBaseDataStatistics;
 import com.java110.report.statistics.IFeeStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.MoneyUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
@@ -96,7 +97,7 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
      * @return
      */
     private JSONArray computeRoomOweReceivedFee(List<RoomDto> rooms, QueryStatisticsDto queryStatisticsDto) {
-        if (rooms == null || rooms.size() < 1) {
+        if (ListUtil.isNull(rooms)) {
             return new JSONArray();
         }
 
@@ -119,7 +120,7 @@ public class QueryReceivedDetailStatisticsCmd extends Cmd {
         List<Map> infos = feeStatisticsImpl.getObjReceivedFee(queryStatisticsDto);
 
 
-        if (infos == null || infos.size() < 1) {
+        if (ListUtil.isNull(infos)) {
             return datas;
         }
 
