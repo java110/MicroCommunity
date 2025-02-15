@@ -212,10 +212,6 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
                 throw new IllegalArgumentException((roomIndex + 2) + "行房屋状态不是未销售状态，必须包含业主信息");
             }
 
-            // 如果是业主 跳过
-            if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())) {
-                continue;
-            }
             // 校验成员之前是否存在 业主角色
             hasOwnerType = false;
             for (int preRoomIndex = 0; preRoomIndex < roomIndex; preRoomIndex++) {
@@ -229,6 +225,16 @@ public class ImportRoomOwnerDataCleaningAdapt extends DefaultImportDataAdapt imp
                     break;
                 }
             }
+
+            if(hasOwnerType && OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())){
+                throw new IllegalArgumentException((roomIndex + 2) + "行一个房屋绑定多个业主");
+            }
+
+            // 如果是业主 跳过
+            if (OwnerDto.OWNER_TYPE_CD_OWNER.equals(importOwnerRoomDto.getOwnerTypeCd())) {
+                continue;
+            }
+
 
             if (!hasOwnerType) {
                 throw new IllegalArgumentException((roomIndex + 2) + "行一个房屋必须要有业主存在 才能 写家庭成员和房屋租客 和临时人员，并且业主要写在 其他之前");
