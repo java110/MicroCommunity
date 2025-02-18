@@ -388,7 +388,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
             content.put("payFeeRoom", paramIn.getString("payFeeRoom"));
             content.put("feeTypeCdName", paramIn.getString("feeTypeCdName"));
         } else {  //车辆
-            content.put("payFeeRoom", communityDto.getName() + "-" + paramIn.getString("num") + "-" + paramIn.getString("spaceNum"));
+            content.put("payFeeRoom", communityDto.getName() + "-" + paramIn.getString("carNum"));
             content.put("feeTypeCdName", paramIn.getString("feeTypeCdName") + "-" + paramIn.getString("carNum"));
         }
         content.put("payFeeTime", paramIn.getString("payFeeTime"));
