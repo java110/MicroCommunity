@@ -53,6 +53,7 @@ public class OwnerCarV1InnerServiceSMOImpl extends BaseServiceSMO implements IOw
     @Override
     @Java110Transactional
     public int saveOwnerCar(@RequestBody OwnerCarPo ownerCarPo) {
+        ownerCarPo.setCarNum(ownerCarPo.getCarNum().trim());
         int saveFlag = ownerCarV1ServiceDaoImpl.saveOwnerCarInfo(BeanConvertUtil.beanCovertMap(ownerCarPo));
         return saveFlag;
     }
