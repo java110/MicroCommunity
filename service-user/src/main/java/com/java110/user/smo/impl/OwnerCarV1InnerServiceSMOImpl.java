@@ -26,6 +26,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,7 +61,10 @@ public class OwnerCarV1InnerServiceSMOImpl extends BaseServiceSMO implements IOw
 
      @Override
     public int updateOwnerCar(@RequestBody  OwnerCarPo ownerCarPo) {
-        int saveFlag = ownerCarV1ServiceDaoImpl.updateOwnerCarInfo(BeanConvertUtil.beanCovertMap(ownerCarPo));
+        if(!StringUtil.isEmpty(ownerCarPo.getCarNum())) {
+            ownerCarPo.setCarNum(ownerCarPo.getCarNum().trim());
+        }
+         int saveFlag = ownerCarV1ServiceDaoImpl.updateOwnerCarInfo(BeanConvertUtil.beanCovertMap(ownerCarPo));
         return saveFlag;
     }
 
