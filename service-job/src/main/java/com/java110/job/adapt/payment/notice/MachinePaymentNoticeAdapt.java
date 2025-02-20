@@ -203,6 +203,9 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
         String name = communityDtos.get(0).getName();
         JSONObject paramIn = new JSONObject();
         paramIn.put("payFeeRoom", name + "-" + payerObjName);
+        if (FeeDto.PAYER_OBJ_TYPE_CAR.equals(payerObjType)) {
+            paramIn.put("payFeeRoom", name + "-" + carNum);
+        }
         paramIn.put("feeTypeCdName", feeTypeCdName);
         paramIn.put("feeName",feeDtos.get(0).getFeeName());
         paramIn.put("payFeeTime", startTime + "~" + endTime);
@@ -256,7 +259,7 @@ public class MachinePaymentNoticeAdapt extends DatabusAdaptImpl {
 
         //获取付费对象类型
         String payerObjType = paramIn.getString("payerObjType");
-        if (userDtos == null || userDtos.size() < 1) {
+        if (ListUtil.isNull(userDtos)) {
             return;
         }
         for (UserDto userDto : userDtos) {
