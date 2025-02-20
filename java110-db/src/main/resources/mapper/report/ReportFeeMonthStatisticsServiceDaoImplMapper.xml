@@ -1458,6 +1458,15 @@
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
         </if>
+        <if test="objNameLike !=null and objNameLike != ''">
+            and t.obj_name like concat('%', #{objNameLike},'%')
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name = #{ownerName}
+        </if>
+        <if test="ownerNameLike !=null and ownerNameLike != ''">
+            and t.owner_name like concat('%', #{ownerNameLike},'%')
+        </if>
         <if test="floorId !=null and floorId != ''">
             and t.obj_fpc_id = #{floorId}
         </if>
@@ -1470,6 +1479,7 @@
         <if test="objId !=null and objId != ''">
             and t.obj_id= #{objId}
         </if>
+
         <if test="feeName !=null and feeName != ''">
             and t.fee_name= #{feeName}
         </if>
@@ -1499,6 +1509,15 @@
         </if>
         <if test="objName !=null and objName != ''">
             and t.obj_name= #{objName}
+        </if>
+        <if test="objNameLike !=null and objNameLike != ''">
+            and t.obj_name like concat('%', #{objNameLike},'%')
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name = #{ownerName}
+        </if>
+        <if test="ownerNameLike !=null and ownerNameLike != ''">
+            and t.owner_name like concat('%', #{ownerNameLike},'%')
         </if>
         <if test="floorId !=null and floorId != ''">
             and t.obj_fpc_id = #{floorId}

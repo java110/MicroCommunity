@@ -22,6 +22,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String updateTime;
     private String remark;
     private String objName;
+    private String objNameLike;
     private String objNameNum;
     private String receivedAmount;
     private String payableAmount;
@@ -56,6 +57,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
 
     private String ownerName;
+    private String ownerNameLike;
+
     private String ownerTel;
     private String ownerId;
     private String detailId;
@@ -1150,9 +1153,10 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
         return fadAmount;
     }
 
-    public void setFadAmount(String fadAmount){
-            this.fadAmount = fadAmount;
+    public void setFadAmount(String fadAmount) {
+        this.fadAmount = fadAmount;
     }
+
     public String getAcctAmount() {
         return acctAmount;
     }
@@ -1199,5 +1203,21 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setOwnerTel(String ownerTel) {
         this.ownerTel = ownerTel;
+    }
+
+    public String getObjNameLike() {
+        return objNameLike;
+    }
+
+    public void setObjNameLike(String objNameLike) {
+        this.objNameLike = objNameLike;
+    }
+
+    public String getOwnerNameLike() {
+        return ownerNameLike;
+    }
+
+    public void setOwnerNameLike(String ownerNameLike) {
+        this.ownerNameLike = ownerNameLike;
     }
 }

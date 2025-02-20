@@ -258,6 +258,8 @@ public class ReportFeeMonthStatisticsApi {
                                                     @RequestParam(value = "startTime", required = false) String startTime,
                                                     @RequestParam(value = "endTime", required = false) String endTime,
                                                     @RequestParam(value = "objName", required = false) String objName,
+                                                    @RequestParam(value = "objNameLike", required = false) String objNameLike,
+                                                    @RequestParam(value = "ownerNameLike", required = false) String ownerNameLike,
                                                     @RequestParam(value = "feeTypeCd", required = false) String feeTypeCd,
                                                     @RequestParam(value = "page") int page,
                                                     @RequestParam(value = "row") int row) {
@@ -275,6 +277,8 @@ public class ReportFeeMonthStatisticsApi {
         reportFeeMonthStatisticsDto.setEndTime(endTime);
         reportFeeMonthStatisticsDto.setObjName(objName);
         reportFeeMonthStatisticsDto.setFeeTypeCd(feeTypeCd);
+        reportFeeMonthStatisticsDto.setObjNameLike(objNameLike);
+        reportFeeMonthStatisticsDto.setOwnerNameLike(ownerNameLike);
         return getReportFeeMonthStatisticsBMOImpl.queryOweFeeDetail(reportFeeMonthStatisticsDto);
     }
 
