@@ -23,6 +23,7 @@ import com.java110.po.purchase.PurchaseApplyPo;
 import com.java110.utils.exception.SMOException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.*;
@@ -479,7 +480,7 @@ public class OaWorkflowActivitiInnerServiceSMOImpl extends BaseServiceSMO implem
         List<OaWorkflowDataDto> oaWorkflowDataDtos = oaWorkflowDataInnerServiceSMOImpl.queryOaWorkflowDatas(oaWorkflowDataDto);
 
         OaWorkflowDataPo oaWorkflowDataPo = null;
-        if (oaWorkflowDataDtos == null || oaWorkflowDataDtos.size() < 1) {
+        if (ListUtil.isNull(oaWorkflowDataDtos)) {
             oaWorkflowDataPo = new OaWorkflowDataPo();
             oaWorkflowDataPo.setBusinessKey(reqJson.getString("id"));
             oaWorkflowDataPo.setFlowId(reqJson.getString("flowId"));

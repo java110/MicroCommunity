@@ -241,7 +241,7 @@ public class EditOwnerCmd extends Cmd {
         ownerAppUserDto.setMemberId(reqJson.getString("memberId"));
         //todo 查询app用户表
         List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
-        if (ownerAppUserDtos == null || ownerAppUserDtos.size() < 1) {
+        if (ListUtil.isNull(ownerAppUserDtos)) {
             return;
         }
         for (OwnerAppUserDto ownerAppUser : ownerAppUserDtos) {
