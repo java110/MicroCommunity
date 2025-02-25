@@ -16,6 +16,7 @@
 package com.java110.oa.smo.impl;
 
 
+import com.java110.dto.work.WorkCopyDto;
 import com.java110.oa.dao.IWorkTaskItemV1ServiceDao;
 import com.java110.intf.oa.IWorkTaskItemV1InnerServiceSMO;
 import com.java110.dto.work.WorkTaskItemDto;
@@ -82,6 +83,27 @@ public class WorkTaskItemV1InnerServiceSMOImpl extends BaseServiceSMO implements
 
     @Override
     public int queryWorkTaskItemsCount(@RequestBody WorkTaskItemDto workTaskItemDto) {
-        return workTaskItemV1ServiceDaoImpl.queryWorkTaskItemsCount(BeanConvertUtil.beanCovertMap(workTaskItemDto));    }
+        return workTaskItemV1ServiceDaoImpl.queryWorkTaskItemsCount(BeanConvertUtil.beanCovertMap(workTaskItemDto));
+    }
+
+    @Override
+    public int queryWorkDeductionCount(@RequestBody WorkTaskItemDto workCopyDto) {
+        return workTaskItemV1ServiceDaoImpl.queryWorkDeductionCount(BeanConvertUtil.beanCovertMap(workCopyDto));
+    }
+
+    @Override
+    public List<WorkTaskItemDto> queryWorkDeductions(@RequestBody WorkTaskItemDto workTaskItemDto) {
+        //校验是否传了 分页信息
+
+        int page = workTaskItemDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            workTaskItemDto.setPage((page - 1) * workTaskItemDto.getRow());
+        }
+
+        List<WorkTaskItemDto> workTaskItems = BeanConvertUtil.covertBeanList(workTaskItemV1ServiceDaoImpl.queryWorkDeductions(BeanConvertUtil.beanCovertMap(workTaskItemDto)), WorkTaskItemDto.class);
+
+        return workTaskItems;
+    }
 
 }

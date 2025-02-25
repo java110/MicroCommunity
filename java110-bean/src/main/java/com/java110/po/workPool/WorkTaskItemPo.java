@@ -17,6 +17,7 @@ package com.java110.po.workPool;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2024-10-31 00:45:24 mail: 928255095@qq.com
@@ -28,97 +29,132 @@ import java.util.Date;
 public class WorkTaskItemPo implements Serializable {
 
     private String deductionPersonId;
-private String finishTime;
-private String deductionPersonName;
-private String deductionMoney;
-private String contentId;
-private String statusCd = "0";
-private String storeId;
-private String workId;
-private String deductionReason;
-private String itemId;
-private String state;
-private String communityId;
-private String taskId;
-public String getDeductionPersonId() {
+    private String finishTime;
+    private String deductionPersonName;
+    private String deductionMoney;
+    private String contentId;
+    private String statusCd = "0";
+    private String storeId;
+    private String workId;
+    private String deductionReason;
+    private String itemId;
+    private String state;
+    private String communityId;
+    private String taskId;
+
+    private String score;
+
+
+    public String getDeductionPersonId() {
         return deductionPersonId;
     }
-public void setDeductionPersonId(String deductionPersonId) {
+
+    public void setDeductionPersonId(String deductionPersonId) {
         this.deductionPersonId = deductionPersonId;
     }
-public String getFinishTime() {
+
+    public String getFinishTime() {
         return finishTime;
     }
-public void setFinishTime(String finishTime) {
+
+    public void setFinishTime(String finishTime) {
         this.finishTime = finishTime;
     }
-public String getDeductionPersonName() {
+
+    public String getDeductionPersonName() {
         return deductionPersonName;
     }
-public void setDeductionPersonName(String deductionPersonName) {
+
+    public void setDeductionPersonName(String deductionPersonName) {
         this.deductionPersonName = deductionPersonName;
     }
-public String getDeductionMoney() {
+
+    public String getDeductionMoney() {
         return deductionMoney;
     }
-public void setDeductionMoney(String deductionMoney) {
+
+    public void setDeductionMoney(String deductionMoney) {
         this.deductionMoney = deductionMoney;
     }
-public String getContentId() {
+
+    public String getContentId() {
         return contentId;
     }
-public void setContentId(String contentId) {
+
+    public void setContentId(String contentId) {
         this.contentId = contentId;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getStoreId() {
+
+    public String getStoreId() {
         return storeId;
     }
-public void setStoreId(String storeId) {
+
+    public void setStoreId(String storeId) {
         this.storeId = storeId;
     }
-public String getWorkId() {
+
+    public String getWorkId() {
         return workId;
     }
-public void setWorkId(String workId) {
+
+    public void setWorkId(String workId) {
         this.workId = workId;
     }
-public String getDeductionReason() {
+
+    public String getDeductionReason() {
         return deductionReason;
     }
-public void setDeductionReason(String deductionReason) {
+
+    public void setDeductionReason(String deductionReason) {
         this.deductionReason = deductionReason;
     }
-public String getItemId() {
+
+    public String getItemId() {
         return itemId;
     }
-public void setItemId(String itemId) {
+
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getTaskId() {
+
+    public String getTaskId() {
         return taskId;
     }
-public void setTaskId(String taskId) {
+
+    public void setTaskId(String taskId) {
         this.taskId = taskId;
     }
 
 
+    public String getScore() {
+        return score;
+    }
 
+    public void setScore(String score) {
+        this.score = score;
+    }
 }

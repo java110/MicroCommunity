@@ -85,16 +85,21 @@ public class FinishWorkCopyCmd extends Cmd {
 
         Assert.listOnlyOne(userDtos, "用户不存在");
         String deductionMoney = "0.00";
+        String score= "10";
         String deductionReason = reqJson.getString("deductionReason");
         if (reqJson.containsKey("deductionMoney") && !StringUtil.isEmpty(reqJson.getString("deductionMoney"))) {
             deductionMoney = reqJson.getString("deductionMoney");
             deductionReason += (" 扣款 " + deductionMoney + "元");
+        }
+        if (reqJson.containsKey("score") && !StringUtil.isEmpty(reqJson.getString("score"))) {
+            score = reqJson.getString("score");
         }
 
         WorkTaskItemPo workTaskItemPo = new WorkTaskItemPo();
         workTaskItemPo.setItemId(reqJson.getString("itemId"));
         workTaskItemPo.setDeductionMoney(deductionMoney);
         workTaskItemPo.setDeductionReason(deductionReason);
+        workTaskItemPo.setScore(score);
         workTaskItemPo.setDeductionPersonId(userDtos.get(0).getUserId());
         workTaskItemPo.setDeductionPersonName(userDtos.get(0).getName());
         workTaskItemPo.setState(WorkTaskItemDto.STATE_COPY_COMPLETE);
@@ -119,7 +124,7 @@ public class FinishWorkCopyCmd extends Cmd {
 
         workTaskItemDto = new WorkTaskItemDto();
         workTaskItemDto.setTaskId(reqJson.getString("taskId"));
-        workTaskItemDto.setState(WorkTaskItemDto.STATE_COMPLETE);
+        workTaskItemDto.setStates(new String[]{WorkTaskItemDto.STATE_COMPLETE,WorkTaskItemDto.STATE_WAIT});
         int count = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItemsCount(workTaskItemDto);
 
         if (count > 0) {

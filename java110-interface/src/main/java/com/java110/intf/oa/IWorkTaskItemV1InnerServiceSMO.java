@@ -16,6 +16,7 @@
 package com.java110.intf.oa;
 
 import com.java110.config.feign.FeignConfiguration;
+import com.java110.dto.work.WorkCopyDto;
 import com.java110.dto.work.WorkTaskItemDto;
 import com.java110.po.workPool.WorkTaskItemPo;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -39,17 +40,16 @@ public interface IWorkTaskItemV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveWorkTaskItem", method = RequestMethod.POST)
-    public int saveWorkTaskItem(@RequestBody  WorkTaskItemPo workTaskItemPo);
+    int saveWorkTaskItem(@RequestBody WorkTaskItemPo workTaskItemPo);
 
     @RequestMapping(value = "/updateWorkTaskItem", method = RequestMethod.POST)
-    public int updateWorkTaskItem(@RequestBody  WorkTaskItemPo workTaskItemPo);
+    int updateWorkTaskItem(@RequestBody WorkTaskItemPo workTaskItemPo);
 
     @RequestMapping(value = "/deleteWorkTaskItem", method = RequestMethod.POST)
-    public int deleteWorkTaskItem(@RequestBody  WorkTaskItemPo workTaskItemPo);
+    int deleteWorkTaskItem(@RequestBody WorkTaskItemPo workTaskItemPo);
 
     /**
      * <p>查询小区楼信息</p>
-     *
      *
      * @param workTaskItemDto 数据对象分享
      * @return WorkTaskItemDto 对象数据
@@ -65,4 +65,10 @@ public interface IWorkTaskItemV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryWorkTaskItemsCount", method = RequestMethod.POST)
     int queryWorkTaskItemsCount(@RequestBody WorkTaskItemDto workTaskItemDto);
+
+    @RequestMapping(value = "/queryWorkDeductionCount", method = RequestMethod.POST)
+    int queryWorkDeductionCount(@RequestBody WorkTaskItemDto workCopyDto);
+
+    @RequestMapping(value = "/queryWorkDeductions", method = RequestMethod.POST)
+    List<WorkTaskItemDto> queryWorkDeductions(@RequestBody WorkTaskItemDto workCopyDto);
 }

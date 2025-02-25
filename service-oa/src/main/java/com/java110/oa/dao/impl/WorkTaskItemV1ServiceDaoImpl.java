@@ -108,5 +108,26 @@ public class WorkTaskItemV1ServiceDaoImpl extends BaseServiceDao implements IWor
         return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
+    @Override
+    public int queryWorkDeductionCount(Map info) {
+        logger.debug("查询 queryWorkDeductionCount 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("workTaskItemV1ServiceDaoImpl.queryWorkDeductionCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> queryWorkDeductions(Map info) {
+        logger.debug("查询 getWorkTaskItemInfo 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("workTaskItemV1ServiceDaoImpl.queryWorkDeductions",info);
+
+        return infos;
+    }
+
 
 }

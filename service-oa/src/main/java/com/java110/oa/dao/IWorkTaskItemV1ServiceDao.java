@@ -70,4 +70,7 @@ public interface IWorkTaskItemV1ServiceDao {
      */
     int queryWorkTaskItemsCount(Map info);
 
+    int queryWorkDeductionCount(Map info);
+
+    List<Map> queryWorkDeductions(Map info);
 }

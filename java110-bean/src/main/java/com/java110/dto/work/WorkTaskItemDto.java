@@ -16,6 +16,7 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
     private String deductionPersonId;
     private String finishTime;
     private String deductionPersonName;
+    private String deductionPersonNameLike;
     private String deductionMoney;
     private String contentId;
     private String storeId;
@@ -23,19 +24,30 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
     private String deductionReason;
     private String itemId;
     private String state;
+
+    private String[] states;
+    private String stateName;
     private String communityId;
     private String taskId;
 
     private String staffName;
+    private String staffNameLike;
 
     private String remark;
 
     private String pathUrl;
 
+    private String startTime;
+
+    private String endTime;
+
 
     private Date createTime;
 
     private String statusCd = "0";
+
+    private String score;
+
 
 
     public String getDeductionPersonId() {
@@ -173,5 +185,61 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
 
     public void setPathUrl(String pathUrl) {
         this.pathUrl = pathUrl;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getStateName() {
+        return stateName;
+    }
+
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
+    }
+
+    public String getStaffNameLike() {
+        return staffNameLike;
+    }
+
+    public void setStaffNameLike(String staffNameLike) {
+        this.staffNameLike = staffNameLike;
+    }
+
+    public String getDeductionPersonNameLike() {
+        return deductionPersonNameLike;
+    }
+
+    public void setDeductionPersonNameLike(String deductionPersonNameLike) {
+        this.deductionPersonNameLike = deductionPersonNameLike;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
+
+    public String[] getStates() {
+        return states;
+    }
+
+    public void setStates(String[] states) {
+        this.states = states;
     }
 }
