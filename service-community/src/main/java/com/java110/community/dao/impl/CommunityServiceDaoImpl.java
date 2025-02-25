@@ -108,15 +108,15 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
 
         logger.debug("查询小区信息 入参 info : {}", info);
 
-        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getBusinessCommunityInfo", info);
-        if (businessCommunityInfos == null) {
+        List<Map> infos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getBusinessCommunityInfo", info);
+        if (infos == null) {
             return null;
         }
-        if (businessCommunityInfos.size() > 1) {
-            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "根据条件查询有多条数据,数据异常，请检查：businessCommunityInfos，" + JSONObject.toJSONString(info));
+        if (infos.size() > 1) {
+            throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "根据条件查询有多条数据,数据异常，请检查：infos，" + JSONObject.toJSONString(info));
         }
 
-        return businessCommunityInfos.get(0);
+        return infos.get(0);
     }
 
     /**
@@ -218,15 +218,15 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
     public Map getCommunityInfo(Map info) throws DAOException {
         logger.debug("查询小区信息 入参 info : {}", info);
 
-        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityInfo", info);
-        if (businessCommunityInfos == null || businessCommunityInfos.size() == 0) {
+        List<Map> infos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityInfo", info);
+        if (infos == null || infos.size() == 0) {
             return null;
         }
-        if (businessCommunityInfos.size() > 1) {
+        if (infos.size() > 1) {
             throw new DAOException(ResponseConstant.RESULT_PARAM_ERROR, "根据条件查询有多条数据,数据异常，请检查：getCommunityInfo，" + JSONObject.toJSONString(info));
         }
 
-        return businessCommunityInfos.get(0);
+        return infos.get(0);
     }
 
     /**
@@ -445,9 +445,9 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
     public List<Map> getCommunityInfoNew(Map info) throws DAOException {
         logger.debug("查询小区信息 入参 info : {}", info);
 
-        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityInfoNew", info);
+        List<Map> infos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityInfoNew", info);
 
-        return businessCommunityInfos;
+        return infos;
     }
 
     /**
@@ -460,33 +460,33 @@ public class CommunityServiceDaoImpl extends BaseServiceDao implements ICommunit
     public int queryCommunitysCount(Map info) {
         logger.debug("查询小区数据 入参 info : {}", info);
 
-        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.queryCommunitysCount", info);
-        if (businessCommunityInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("communityServiceDaoImpl.queryCommunitysCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessCommunityInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public int getCommunityAttrsCount(Map info) {
         logger.debug("查询小区数据 入参 info : {}", info);
 
-        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityAttrsCount", info);
-        if (businessCommunityInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getCommunityAttrsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessCommunityInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> getStoreCommunitys(Map info) {
         logger.debug("查询小区信息 入参 info : {}", info);
 
-        List<Map> businessCommunityInfos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getStoreCommunitys", info);
+        List<Map> infos = sqlSessionTemplate.selectList("communityServiceDaoImpl.getStoreCommunitys", info);
 
-        return businessCommunityInfos;
+        return infos;
     }
 
     @Override

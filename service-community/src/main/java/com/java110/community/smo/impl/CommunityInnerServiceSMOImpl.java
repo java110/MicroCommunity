@@ -10,6 +10,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.po.community.CommunityAttrPo;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,7 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
     /**
      * 保存小区属性
+     *
      * @param communityAttrPo 数据对象分享
      * @return
      */
@@ -126,7 +128,7 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
 
         List<String> communityIds = new ArrayList<>();
 
-        if (communitys == null || communitys.size() < 1) {
+        if (ListUtil.isNull(communitys)) {
             return communitys;
         }
         for (CommunityDto tmpCommunityDto : communitys) {
@@ -136,10 +138,9 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
         info.put("communityIds", communityIds.toArray(new String[communityIds.size()]));
         List<CommunityAttrDto> communityAttrDtos = BeanConvertUtil.covertBeanList(communityServiceDaoImpl.getCommunityAttrs(info), CommunityAttrDto.class);
 
-        if (communityAttrDtos == null || communityAttrDtos.size() < 1) {
+        if (ListUtil.isNull(communityAttrDtos)) {
             return communitys;
         }
-
 
         for (CommunityDto tmpCommunityDto : communitys) {
             List<CommunityAttrDto> tmpCommunityAttrDtos = new ArrayList<>();
@@ -149,7 +150,6 @@ public class CommunityInnerServiceSMOImpl extends BaseServiceSMO implements ICom
                 }
             }
             tmpCommunityDto.setCommunityAttrDtos(tmpCommunityAttrDtos);
-
         }
 
         return communitys;
