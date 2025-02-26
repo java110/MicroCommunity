@@ -146,7 +146,6 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
         List<WorkPoolContentDto> workPoolContentDtos
                 = workPoolContentV1InnerServiceSMOImpl.queryWorkPoolContents(workPoolContentDto);
 
-        JSONObject content = null;
         for (WorkPoolContentDto tWorkPoolContentDto:workPoolContentDtos) {
             WorkTaskItemPo workTaskItemPo = new WorkTaskItemPo();
             workTaskItemPo.setDeductionMoney("0");

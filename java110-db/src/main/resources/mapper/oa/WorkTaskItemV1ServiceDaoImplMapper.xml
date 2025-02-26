@@ -18,7 +18,10 @@
     </insert>
 
 
-    <!-- 查询工作任务明细信息 add by wuxw 2018-07-03 -->
+    <!-- 查询工作任务明细信息 add by wuxw 2018-07-03
+            left join work_pool_content wpc on t.content_id = wpc.content_id and wpc.status_cd = '0'
+wpc.status_cd = '0' 删掉有可能前台做了修改
+    -->
     <select id="getWorkTaskItemInfo" parameterType="Map" resultType="Map">
         select t.deduction_person_id deductionPersonId,t.finish_time finishTime,t.deduction_person_name
         deductionPersonName,t.deduction_money deductionMoney,t.content_id contentId,t.status_cd statusCd,t.store_id
@@ -26,7 +29,7 @@
         communityId,t.task_id taskId,wpc.content,we.staff_name staffName,we.remark,t.create_time createTime,
         wpf.path_url pathUrl,t.score
         from work_task_item t
-        left join work_pool_content wpc on t.content_id = wpc.content_id and wpc.status_cd = '0'
+        left join work_pool_content wpc on t.content_id = wpc.content_id
         left join work_event we on t.item_id = we.item_id and we.status_cd = '0' and we.event_type = '1001'
         left join work_pool_file wpf on t.item_id = wpf.item_id and wpf.status_cd = '0'
         where 1 =1
