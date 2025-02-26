@@ -54,6 +54,10 @@ public class UnitDto extends PageDto implements Serializable {
     private String statusCd = "0";
     private String roomUnit;
 
+    private String communityName;
+
+
+
 
     public String getUnitId() {
         return unitId;
@@ -181,5 +185,13 @@ public class UnitDto extends PageDto implements Serializable {
 
     public void setFloorName(String floorName) {
         this.floorName = floorName;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

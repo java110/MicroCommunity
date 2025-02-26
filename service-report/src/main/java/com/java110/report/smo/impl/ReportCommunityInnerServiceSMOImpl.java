@@ -9,6 +9,7 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAttrDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.unit.UnitDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.intf.user.IOwnerAttrInnerServiceSMO;
 import com.java110.report.dao.IReportCommunityServiceDao;
@@ -66,6 +67,16 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
         List<RoomDto> roomDtos = BeanConvertUtil.covertBeanList(reportCommunityServiceDaoImpl.queryRoomsTree(BeanConvertUtil.beanCovertMap(roomDto)), RoomDto.class);
 
         return roomDtos;
+    }
+
+    @Override
+    public List<UnitDto> queryCommunityUnitTree(@RequestBody UnitDto unitDto) {
+        //校验是否传了 分页信息
+        List<UnitDto> unitDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.queryCommunityUnitTree(BeanConvertUtil.beanCovertMap(unitDto)),
+                UnitDto.class);
+
+        return unitDtos;
     }
 
     @Override
@@ -140,6 +151,8 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
                 RoomDto.class);
         return roomDtos;
     }
+
+
 
     @Override
     public int queryHisFeeCount(@RequestBody FeeDto feeDto) {

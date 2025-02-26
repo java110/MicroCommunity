@@ -10,6 +10,7 @@ import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class QueryRoomsTreeCmd extends Cmd {
 
         roomDtoList = reportCommunityInnerServiceSMOImpl.queryRoomsTree(roomDto);
         apiRoomVo.setTotal(0);
-        if (roomDtoList != null && roomDtoList.size() > 0) {
+        if (ListUtil.isNotNull(roomDtoList)) {
             apiRoomVo.setTotal(roomDtoList.size());
         }
 

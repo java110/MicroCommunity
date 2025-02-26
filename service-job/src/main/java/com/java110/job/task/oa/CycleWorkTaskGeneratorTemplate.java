@@ -1,20 +1,16 @@
 package com.java110.job.task.oa;
 
+import com.alibaba.fastjson.JSONObject;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.classes.ScheduleClassesStaffDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.task.TaskDto;
-import com.java110.dto.work.WorkCycleDto;
-import com.java110.dto.work.WorkPoolDto;
-import com.java110.dto.work.WorkPoolFileDto;
-import com.java110.dto.work.WorkTaskDto;
-import com.java110.intf.oa.IWorkCycleV1InnerServiceSMO;
-import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
-import com.java110.intf.oa.IWorkPoolV1InnerServiceSMO;
-import com.java110.intf.oa.IWorkTaskV1InnerServiceSMO;
+import com.java110.dto.work.*;
+import com.java110.intf.oa.*;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.workPool.WorkPoolFilePo;
+import com.java110.po.workPool.WorkTaskItemPo;
 import com.java110.po.workPool.WorkTaskPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.DateUtil;
@@ -44,6 +40,12 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkPoolContentV1InnerServiceSMO workPoolContentV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkTaskItemV1InnerServiceSMO workTaskItemV1InnerServiceSMOImpl;
 
     @Override
     protected void process(TaskDto taskDto) throws Exception {
@@ -87,7 +89,7 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
 
         WorkPoolDto workPoolDto = new WorkPoolDto();
         workPoolDto.setWorkId(tmpWorkCycleDto.getWorkId());
-        List<WorkPoolDto>workPoolDtos = workPoolV1InnerServiceSMOImpl.queryWorkPools(workPoolDto);
+        List<WorkPoolDto> workPoolDtos = workPoolV1InnerServiceSMOImpl.queryWorkPools(workPoolDto);
 
         if(ListUtil.isNull(workPoolDtos)){
             return;
@@ -98,7 +100,7 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
         startTimeCal.setTime(startTime);
 
         Calendar nowCal = Calendar.getInstance();
-        nowCal.set(Calendar.HOUR,startTimeCal.get(Calendar.HOUR));
+        nowCal.set(Calendar.HOUR_OF_DAY,startTimeCal.get(Calendar.HOUR_OF_DAY));
         nowCal.set(Calendar.MINUTE,startTimeCal.get(Calendar.MINUTE));
         nowCal.set(Calendar.SECOND,startTimeCal.get(Calendar.SECOND));
 
@@ -137,6 +139,25 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
 
         if (flag < 1) {
             throw new CmdException("保存数据失败");
+        }
+
+        WorkPoolContentDto workPoolContentDto = new WorkPoolContentDto();
+        workPoolContentDto.setWorkId(tmpWorkCycleDto.getWorkId());
+        List<WorkPoolContentDto> workPoolContentDtos
+                = workPoolContentV1InnerServiceSMOImpl.queryWorkPoolContents(workPoolContentDto);
+
+        JSONObject content = null;
+        for (WorkPoolContentDto tWorkPoolContentDto:workPoolContentDtos) {
+            WorkTaskItemPo workTaskItemPo = new WorkTaskItemPo();
+            workTaskItemPo.setDeductionMoney("0");
+            workTaskItemPo.setContentId(tWorkPoolContentDto.getContentId());
+            workTaskItemPo.setStoreId(tWorkPoolContentDto.getStoreId());
+            workTaskItemPo.setWorkId(tWorkPoolContentDto.getWorkId());
+            workTaskItemPo.setItemId(GenerateCodeFactory.getGeneratorId("11"));
+            workTaskItemPo.setState(WorkTaskDto.STATE_WAIT);
+            workTaskItemPo.setCommunityId(tWorkPoolContentDto.getCommunityId());
+            workTaskItemPo.setTaskId(workTaskPo.getTaskId());
+            workTaskItemV1InnerServiceSMOImpl.saveWorkTaskItem(workTaskItemPo);
         }
 
 

@@ -6,6 +6,7 @@ import com.java110.dto.room.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.unit.UnitDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -101,4 +102,7 @@ public interface IReportCommunityInnerServiceSMO {
 
     @RequestMapping(value = "/queryHisRooms", method = RequestMethod.POST)
     List<RoomDto> queryHisRooms(@RequestBody RoomDto roomDto);
+
+    @RequestMapping(value = "/queryCommunityUnitTree", method = RequestMethod.POST)
+    List<UnitDto> queryCommunityUnitTree(@RequestBody UnitDto unitDto);
 }

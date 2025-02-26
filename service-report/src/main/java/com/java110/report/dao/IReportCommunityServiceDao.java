@@ -82,6 +82,8 @@ public interface IReportCommunityServiceDao {
 
     List<Map>  queryRoomsTree(Map info);
 
+    List<Map> queryCommunityUnitTree(Map info);
+
     /**
      * 查询车辆变更记录
      * @param info
@@ -111,4 +113,6 @@ public interface IReportCommunityServiceDao {
     int queryHisRoomCount(Map info);
 
     List<Map> queryHisRooms(Map info);
+
+
 }

@@ -1,5 +1,7 @@
 package com.java110.utils.util;
 
+import com.java110.dto.room.RoomDto;
+
 import java.util.List;
 
 /**
@@ -27,6 +29,9 @@ public class ListUtil {
 
         return false;
     }
+    public static boolean isNotNull(List values) {
+        return !isNull(values);
+    }
 
     /**
      * 判断 list 是否只有一个结果集
@@ -47,4 +52,6 @@ public class ListUtil {
         return true;
 
     }
+
+
 }
