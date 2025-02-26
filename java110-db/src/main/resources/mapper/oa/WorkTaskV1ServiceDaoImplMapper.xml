@@ -45,7 +45,7 @@
             and t.start_time= #{startTime}
         </if>
         <if test="taskInsTime !=null and taskInsTime != ''">
-            and DATE_FORMAT(t.start_time,'%Y-%m-%d')= #{taskInsTime}
+            and DATE_FORMAT(t.create_time,'%Y-%m-%d')= #{taskInsTime}
         </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
