@@ -28,6 +28,9 @@ public class ApiCommunityDataVo implements Serializable {
     private String endTime;
     private String createTime;
 
+
+    private String storeId;
+
     private List<CommunityAttrDto> communityAttrDtos;
 
     public String getCommunityId() {
@@ -196,5 +199,13 @@ public class ApiCommunityDataVo implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 }

@@ -51,6 +51,8 @@ public class RoomDto extends PageDto implements Serializable {
     private String apartment;
     private String apartmentName;
     private String communityId;
+
+    private String communityName;
     private String floorId;
     private String[] floorIds;
     private String floorNum;
@@ -588,5 +590,13 @@ public class RoomDto extends PageDto implements Serializable {
 
     public void setLogEndTime(String logEndTime) {
         this.logEndTime = logEndTime;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

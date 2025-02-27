@@ -471,24 +471,16 @@
         select t.address,t.nearby_landmarks,t.nearby_landmarks nearbyLandmarks,
         t.city_code,t.city_code cityCode,t.name,t.status_cd,t.status_cd statusCd,t.tel,
         t.community_id,t.community_id communityId,t.b_id,t.b_id bId,t.map_y,t.map_y mapY,
-        t.map_x,t.map_x mapX,t.state,(CASE
-        WHEN t.state='1000'
-        THEN '待审核'
-        WHEN t.state = '1100'
-        THEN '审核完成'
-        ELSE
-        '审核拒绝'
-        END) stateName,ca.area_code areaCode,ca.area_name areaName,
+        t.map_x,t.map_x mapX,t.state,td.name stateName,ca.area_code areaCode,ca.area_name areaName,
         ca.parent_area_code parentAreaCode,ca.parent_area_name parentAreaName,
         t.community_area communityArea,t.pay_fee_month,t.pay_fee_month payFeeMonth,t.fee_price,t.fee_price
-        feePrice,t.qr_code qrCode,t.create_time createTime
-        from s_community t,city_area ca
-        <if test="memberId !=null and memberId !=''">
-            ,s_community_member cm
-        </if>
+        feePrice,t.qr_code qrCode,t.create_time createTime,s.name storeName,s.store_id storeId
+        from s_community t
+        left join city_area ca on t.city_code = ca.area_code and ca.status_cd = '0'
+        left join s_community_member cm on t.community_id = cm.community_id and cm.member_type_cd = '390001200002' and cm.status_cd = '0'
+        left join s_store s on cm.member_id = s.store_id and s.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 's_community' and td.table_columns = 'state'
         where t.status_cd = '0'
-        and t.city_code = ca.area_code
-        and ca.status_cd = '0'
         <if test="address !=null and address != ''">
             and t.address= #{address}
         </if>
@@ -551,14 +543,13 @@
 
     <!-- 查询小区数量 add by wuxw 2018-07-03 -->
     <select id="queryCommunitysCount" parameterType="Map" resultType="Map">
-        select count(DISTINCT(t.community_id)) count
-        from s_community t,city_area ca
-        <if test="memberId !=null and memberId !=''">
-            ,s_community_member cm
-        </if>
-        where 1 =1
-        and t.city_code = ca.area_code
-        and ca.status_cd = '0'
+        select count(1) count
+        from s_community t
+        left join city_area ca on t.city_code = ca.area_code and ca.status_cd = '0'
+        left join s_community_member cm on t.community_id = cm.community_id and cm.member_type_cd = '390001200002' and cm.status_cd = '0'
+        left join s_store s on cm.member_id = s.store_id and s.status_cd = '0'
+        left join t_dict td on t.state = td.status_cd and td.table_name = 's_community' and td.table_columns = 'state'
+        where t.status_cd = '0'
         <if test="address !=null and address != ''">
             and t.address= #{address}
         </if>

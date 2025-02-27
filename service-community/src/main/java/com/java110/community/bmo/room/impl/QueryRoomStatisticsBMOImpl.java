@@ -1,8 +1,10 @@
 package com.java110.community.bmo.room.impl;
 
 import com.java110.community.bmo.room.IQueryRoomStatisticsBMO;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.room.RoomDto;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
@@ -45,6 +47,9 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
     @Autowired
     private IContractRoomInnerServiceSMO contractRoomInnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
     @Override
     public List<RoomDto> query(List<RoomDto> roomDtos) {
@@ -121,6 +126,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         queryRoomOwner(roomIds, roomDtos);
         List<String> ownerIds = new ArrayList<>();
         List<String> ownerTels = new ArrayList<>();
+        List<String> communityIds = new ArrayList<>();
         for (RoomDto roomDto : roomDtos) {
             if (!StringUtil.isEmpty(roomDto.getOwnerId())) {
                 ownerIds.add(roomDto.getOwnerId());
@@ -128,7 +134,11 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
             if (!StringUtil.isEmpty(roomDto.getOwnerTel())) {
                 ownerTels.add(roomDto.getOwnerTel());
             }
+            communityIds.add(roomDto.getCommunityId());
         }
+
+        // 查询小区名称
+        queryCommunityName(communityIds,roomDtos);
 
         // 查询 家庭成员数
         queryOwnerMemberCount(ownerIds, roomDtos);
@@ -143,6 +153,26 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         queryRoomContract(roomIds, roomDtos);
 
         return roomDtos;
+    }
+
+    private void queryCommunityName(List<String> communityIds, List<RoomDto> roomDtos) {
+        if(ListUtil.isNull(communityIds)){
+            return ;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(ListUtil.isNull(communityDtos)){
+            return;
+        }
+        for (RoomDto tmpRoomDto : roomDtos) {
+            for (CommunityDto tCommunityDto : communityDtos) {
+                if (!tmpRoomDto.getCommunityId().equals(tCommunityDto.getCommunityId())) {
+                    continue;
+                }
+                tmpRoomDto.setCommunityName(tCommunityDto.getName());
+            }
+        }
     }
 
 
