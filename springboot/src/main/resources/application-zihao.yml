@@ -6,6 +6,10 @@ server:
 
 
 spring:
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 50MB
   profiles:
     active: share
   http:
