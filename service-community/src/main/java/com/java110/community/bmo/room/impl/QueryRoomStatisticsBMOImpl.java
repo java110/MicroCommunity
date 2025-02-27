@@ -1,6 +1,7 @@
 package com.java110.community.bmo.room.impl;
 
 import com.java110.community.bmo.room.IQueryRoomStatisticsBMO;
+import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
@@ -22,7 +23,7 @@ import java.util.Map;
 @Service
 public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
-    public static final int MAX_LINE_COUNT = 15;
+    public static final int MAX_LINE_COUNT = 30;
 
     @Autowired
     private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
@@ -48,7 +49,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
     @Override
     public List<RoomDto> query(List<RoomDto> roomDtos) {
 
-        if (roomDtos == null || roomDtos.size() < 1) {
+        if (ListUtil.isNull(roomDtos)) {
             return roomDtos;
         }
 
@@ -59,6 +60,8 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         List<String> roomIds = new ArrayList<>();
         List<String> ownerIds = new ArrayList<>();
         List<String> ownerTels = new ArrayList<>();
+
+
         for (RoomDto roomDto : roomDtos) {
             if (!StringUtil.isEmpty(roomDto.getOwnerId())) {
                 ownerIds.add(roomDto.getOwnerId());
@@ -69,6 +72,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
 
             roomIds.add(roomDto.getRoomId());
         }
+
 
         // 查询 家庭成员数
         queryOwnerMemberCount(ownerIds, roomDtos);
@@ -97,6 +101,77 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         return roomDtos;
     }
 
+
+    @Override
+    public List<RoomDto> querySimple(List<RoomDto> roomDtos) {
+        if (ListUtil.isNull(roomDtos)) {
+            return roomDtos;
+        }
+
+        //这里限制行数，以免影响系统性能
+        if (roomDtos.size() > MAX_LINE_COUNT) {
+            return roomDtos;
+        }
+        List<String> roomIds = new ArrayList<>();
+
+        for (RoomDto roomDto : roomDtos) {
+            roomIds.add(roomDto.getRoomId());
+        }
+        // 查询业主信息
+        queryRoomOwner(roomIds, roomDtos);
+        List<String> ownerIds = new ArrayList<>();
+        List<String> ownerTels = new ArrayList<>();
+        for (RoomDto roomDto : roomDtos) {
+            if (!StringUtil.isEmpty(roomDto.getOwnerId())) {
+                ownerIds.add(roomDto.getOwnerId());
+            }
+            if (!StringUtil.isEmpty(roomDto.getOwnerTel())) {
+                ownerTels.add(roomDto.getOwnerTel());
+            }
+        }
+
+        // 查询 家庭成员数
+        queryOwnerMemberCount(ownerIds, roomDtos);
+
+        // 查询 车辆数
+        queryCarCount(ownerIds, roomDtos);
+
+        // 查询 房屋数量
+        queryRoomCount(ownerIds, roomDtos);
+
+        // 查询房屋 合同
+        queryRoomContract(roomIds, roomDtos);
+
+        return roomDtos;
+    }
+
+
+    private void queryRoomOwner(List<String> roomIds, List<RoomDto> roomDtos) {
+        if (ListUtil.isNull(roomDtos)) {
+            return;
+        }
+
+        OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
+        ownerRoomRelDto.setRoomIds(roomIds.toArray(new String[roomIds.size()]));
+        List<OwnerRoomRelDto> ownerRoomRelDtos = ownerRoomRelV1InnerServiceSMOImpl.queryOwnerRoomRels(ownerRoomRelDto);
+        if (ListUtil.isNull(ownerRoomRelDtos)) {
+            return;
+        }
+        for (RoomDto tmpRoomDto : roomDtos) {
+            for (OwnerRoomRelDto tOwnerRoomRelDto : ownerRoomRelDtos) {
+                if (!tmpRoomDto.getRoomId().equals(tOwnerRoomRelDto.getRoomId())) {
+                    continue;
+                }
+                tmpRoomDto.setOwnerId(tOwnerRoomRelDto.getOwnerId());
+                tmpRoomDto.setOwnerName(tOwnerRoomRelDto.getOwnerName());
+                tmpRoomDto.setOwnerTel(tOwnerRoomRelDto.getLink());
+                tmpRoomDto.setStartTime(tOwnerRoomRelDto.getStartTime());
+                tmpRoomDto.setEndTime(tOwnerRoomRelDto.getEndTime());
+                tmpRoomDto.setLink(tOwnerRoomRelDto.getLink());
+            }
+        }
+    }
+
     @Override
     public List<RoomDto> queryRoomOweFee(List<RoomDto> roomDtos) {
         if (ListUtil.isNull(roomDtos)) {
@@ -111,6 +186,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
         return roomDtos;
     }
 
+
     /**
      * 查询
      *
@@ -118,7 +194,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryRoomContract(List<String> roomIds, List<RoomDto> roomDtos) {
-        if (roomDtos == null || roomDtos.size() < 1) {
+        if (ListUtil.isNull(roomDtos)) {
             return;
         }
         Map info = new HashMap();
@@ -231,7 +307,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryComplaintCount(List<String> ownerTels, List<RoomDto> roomDtos) {
-        if (ownerTels == null || ownerTels.size() < 1) {
+        if (ListUtil.isNull(ownerTels)) {
             return;
         }
 
@@ -289,7 +365,7 @@ public class QueryRoomStatisticsBMOImpl implements IQueryRoomStatisticsBMO {
      * @param roomDtos
      */
     private void queryOwnerMemberCount(List<String> ownerIds, List<RoomDto> roomDtos) {
-        if (ownerIds == null || ownerIds.size() < 1) {
+        if (ListUtil.isNull(ownerIds)) {
             return;
         }
 

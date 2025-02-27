@@ -6,11 +6,11 @@
     <!-- 保存小区房屋信息 add by wuxw 2018-07-03 -->
     <insert id="saveBusinessRoomInfo" parameterType="Map">
         insert into business_building_room(fee_coefficient, section, remark, user_id, room_id, layer, built_up_area,
-                                           operate, room_num, unit_id, b_id, apartment, state, community_id,
-                                           room_type, room_sub_type, room_rent, room_area)
+        operate, room_num, unit_id, b_id, apartment, state, community_id,
+        room_type, room_sub_type, room_rent, room_area)
         values (#{feeCoefficient}, #{section}, #{remark}, #{userId}, #{roomId}, #{layer}, #{builtUpArea}, #{operate},
-                #{roomNum}, #{unitId}, #{bId}, #{apartment}, #{state},
-                #{communityId}, #{roomType}, #{roomSubType}, #{roomRent}, #{roomArea})
+        #{roomNum}, #{unitId}, #{bId}, #{apartment}, #{state},
+        #{communityId}, #{roomType}, #{roomSubType}, #{roomRent}, #{roomArea})
     </insert>
 
     <!-- 查询小区房屋信息（Business） add by wuxw 2018-07-03 -->
@@ -321,7 +321,9 @@
         '0'
         left join t_dict td on t.state = td.status_cd and td.table_name = 'building_room' and td.table_columns = 'state'
         WHERE 1 =1
-        AND t.`community_id` = #{communityId}
+        <if test="communityId !=null and communityId != ''">
+            AND t.`community_id` = #{communityId}
+        </if>
         and t.status_cd ='0'
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}
@@ -340,6 +342,12 @@
         </if>
         <if test="roomId !=null and roomId != ''">
             and t.room_id= #{roomId}
+        </if>
+        <if test="roomIds != null">
+            and t.room_id in
+            <foreach collection="roomIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="layer !=null and layer != ''">
             and t.layer= #{layer}
@@ -703,7 +711,7 @@
         left join t_dict td1 on t.room_sub_type = td1.status_cd and td1.table_name = 'building_room' and
         td1.table_columns = 'room_sub_type'
         WHERE 1 =1
-        <if test="floorId !=null and floorId != ''">
+        <if test="communityId !=null and communityId != ''">
             AND t.`community_id` = #{communityId}
         </if>
         <if test="floorId !=null and floorId != ''">
@@ -784,17 +792,14 @@
                 #{item}
             </foreach>
         </if>
-        <if test="communityId !=null and communityId != ''">
-            and t.community_id= #{communityId}
+        order by f.seq,u.unit_num,CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED) asc
+        <!-- order by t.create_time desc-->
+        <if test="page != -1 and page != null">
+            limit #{page},#{row}
         </if>
-       order by f.seq,u.unit_num,CONVERT(t.layer,SIGNED),CONVERT(t.room_num,SIGNED) asc
-    <!-- order by t.create_time desc-->
-    <if test="page != -1 and page != null">
-        limit #{page},#{row}
-    </if>
-</select>
+    </select>
 
-<!-- 根据业主查询房屋信息 -->
+    <!-- 根据业主查询房屋信息 -->
     <select id="getRoomInfoByOwner" parameterType="Map" resultType="Map">
         SELECT
         t.fee_coefficient,t.fee_coefficient feeCoefficient,t.section,t.status_cd,t.status_cd

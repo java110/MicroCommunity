@@ -19,10 +19,7 @@ import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.exception.SMOException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.api.ApiRoomDataVo;
 import com.java110.vo.api.ApiRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -259,7 +256,7 @@ public class QueryRoomsCmd extends Cmd {
         floorDto.setFloorNum(reqJson.getString("floorNum"));
         floorDto.setCommunityId(reqJson.getString("communityId"));
         List<FloorDto> floorDtos = floorInnerServiceSMOImpl.queryFloors(floorDto);
-        if (floorDtos == null || floorDtos.isEmpty()) {
+        if (ListUtil.isNull(floorDtos)) {
             return;
         }
 

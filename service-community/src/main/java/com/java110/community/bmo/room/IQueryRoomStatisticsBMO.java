@@ -22,4 +22,6 @@ public interface IQueryRoomStatisticsBMO {
      * @return
      */
     List<RoomDto> queryRoomOweFee(List<RoomDto> roomDtos);
+
+    List<RoomDto> querySimple(List<RoomDto> roomDtos);
 }
