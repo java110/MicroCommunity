@@ -219,7 +219,7 @@ public class PayBatchFeeCmd extends Cmd {
          *         payFeeDetailPo.setPayableAmount(receivableAmount);
          */
         computeEndTimeCycleAmount(payFeeDataDto, payFeeDetailPo);
-        payFeeDetailPo.setAcctAmount(payFeeDataDto.getAcctAmount());
+        payFeeDetailPo.setAcctAmount(payFeeDataDto.getAccountAmount()+"");
 
         //todo 缓存收据编号
         CommonCache.setValue(payFeeDetailPo.getDetailId() + CommonCache.RECEIPT_CODE, receiptCode, CommonCache.DEFAULT_EXPIRETIME_TWO_MIN);
