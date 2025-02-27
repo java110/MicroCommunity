@@ -59,6 +59,12 @@ public class ApiFeeDetailDataVo extends Vo {
 
 
     private String openInvoice; // todo 默认 未开票
+
+    private String acctAmount;
+    private String discountAmount;
+    private String deductionAmount;
+    private String lateAmount;
+    private String giftAmount;
     public String getPrimeRate() {
         return primeRate;
     }
@@ -305,5 +311,45 @@ public class ApiFeeDetailDataVo extends Vo {
 
     public void setOpenInvoice(String openInvoice) {
         this.openInvoice = openInvoice;
+    }
+
+    public String getAcctAmount() {
+        return acctAmount;
+    }
+
+    public void setAcctAmount(String acctAmount) {
+        this.acctAmount = acctAmount;
+    }
+
+    public String getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(String discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public String getDeductionAmount() {
+        return deductionAmount;
+    }
+
+    public void setDeductionAmount(String deductionAmount) {
+        this.deductionAmount = deductionAmount;
+    }
+
+    public String getLateAmount() {
+        return lateAmount;
+    }
+
+    public void setLateAmount(String lateAmount) {
+        this.lateAmount = lateAmount;
+    }
+
+    public String getGiftAmount() {
+        return giftAmount;
+    }
+
+    public void setGiftAmount(String giftAmount) {
+        this.giftAmount = giftAmount;
     }
 }
