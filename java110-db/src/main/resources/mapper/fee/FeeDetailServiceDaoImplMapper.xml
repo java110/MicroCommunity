@@ -124,7 +124,8 @@
         curReadingTime,t.pay_order_id payOrderId,pfc.config_id configId,td.`name` primeRateName,pfao1.`value`
         payerObjName,
         t.cashier_id cashierId,t.cashier_name cashierName,pfc.fee_flag feeFlag,fr.receipt_code
-        receiptCode,t.open_invoice openInvoice
+        receiptCode,t.open_invoice openInvoice,t.acct_amount acctAmount,t.discount_amount discountAmount,t.deduction_amount deductionAmount,
+        t.late_amount lateAmount,t.gift_amount giftAmount
         from pay_fee_detail t
         left join pay_fee_attrs pfa on t.fee_id = pfa.fee_id and pfa.spec_cd = '390002'
         left join pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
