@@ -1,6 +1,9 @@
 package com.java110.user.bmo.owner.impl;
 
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerDto;
+import com.java110.dto.room.RoomDto;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
 import com.java110.intf.report.IReportOweFeeInnerServiceSMO;
@@ -45,6 +48,9 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
     @Autowired
     private IContractInnerServiceSMO contractInnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
     @Override
     public List<OwnerDto> query(List<OwnerDto> ownerDtos) {
 
@@ -65,6 +71,53 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
             memberIds.add(ownerDto.getMemberId());
         }
 
+
+        // 查询 房屋数量
+        queryRoomCount(ownerIds, ownerDtos);
+
+        // 查询 家庭成员数
+        queryOwnerMemberCount(ownerIds, ownerDtos);
+
+        // 查询 车辆数
+        queryCarCount(memberIds, ownerDtos);
+
+        // 查询 投诉数
+        //queryComplaintCount(ownerTels,ownerDtos);
+
+        // 查询 报修数
+        //queryRepairCount(ownerTels,ownerDtos);
+
+        // 查询业主欠费
+        queryOwnerOweFee(ownerIds, ownerDtos);
+
+        // 查询业主合同
+        //queryOwnerContractCount(ownerIds,ownerDtos);
+
+        return ownerDtos;
+    }
+
+    @Override
+    public List<OwnerDto> queryAdminData(List<OwnerDto> ownerDtos) {
+        if (ListUtil.isNull(ownerDtos)) {
+            return ownerDtos;
+        }
+
+        //这里限制行数，以免影响系统性能
+        if (ownerDtos.size() > MAX_LINE_COUNT) {
+            return ownerDtos;
+        }
+        List<String> ownerIds = new ArrayList<>();
+        List<String> memberIds = new ArrayList<>();
+        List<String> ownerTels = new ArrayList<>();
+        List<String> communityIds = new ArrayList<>();
+        for (OwnerDto ownerDto : ownerDtos) {
+            ownerIds.add(ownerDto.getOwnerId());
+            ownerTels.add(ownerDto.getLink());
+            memberIds.add(ownerDto.getMemberId());
+            communityIds.add(ownerDto.getCommunityId());
+        }
+// 查询小区名称
+        queryCommunityName(communityIds,ownerDtos);
 
         // 查询 房屋数量
         queryRoomCount(ownerIds, ownerDtos);
@@ -237,6 +290,26 @@ public class QueryOwnerStatisticsBMOImpl implements IQueryOwnerStatisticsBMO {
                 if (ownerDto.getOwnerId().equals(count.get("ownerId").toString())) {
                     ownerDto.setRoomCount(count.get("roomCount").toString());
                 }
+            }
+        }
+    }
+
+    private void queryCommunityName(List<String> communityIds, List<OwnerDto> ownerDtos) {
+        if(ListUtil.isNull(communityIds)){
+            return ;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(ListUtil.isNull(communityDtos)){
+            return;
+        }
+        for (OwnerDto tmpOwnerDto : ownerDtos) {
+            for (CommunityDto tCommunityDto : communityDtos) {
+                if (!tmpOwnerDto.getCommunityId().equals(tCommunityDto.getCommunityId())) {
+                    continue;
+                }
+                tmpOwnerDto.setCommunityName(tCommunityDto.getName());
             }
         }
     }

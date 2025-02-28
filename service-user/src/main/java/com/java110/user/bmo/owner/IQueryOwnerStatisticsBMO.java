@@ -15,4 +15,6 @@ public interface IQueryOwnerStatisticsBMO {
      * @return
      */
     List<OwnerDto> query(List<OwnerDto> ownerDtos);
+
+    List<OwnerDto> queryAdminData(List<OwnerDto> ownerDtos);
 }

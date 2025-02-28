@@ -38,6 +38,12 @@ public abstract class Cmd implements ServiceCmdListener {
             throw new CmdException("该接口只能运营团队调用");
         }
     }
+    protected void validateProperty(ICmdDataFlowContext context) {
+        String storeTypeCd = CmdContextUtils.getStoreTypeCd(context);
+        if(!StoreDto.STORE_TYPE_PROPERTY.equals(storeTypeCd)){
+            throw new CmdException("该接口只能物业团队调用");
+        }
+    }
 //
 //    @Override
 //

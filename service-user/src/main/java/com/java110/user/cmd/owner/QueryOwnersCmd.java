@@ -113,9 +113,10 @@ public class QueryOwnersCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        super.validateProperty(cmdDataFlowContext);
         Assert.jsonObjectHaveKey(reqJson, "page", "请求中未包含page信息");
         Assert.jsonObjectHaveKey(reqJson, "row", "请求中未包含row信息");
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求中未包含communityId信息");
         Assert.isInteger(reqJson.getString("page"), "不是有效数字");
         Assert.isInteger(reqJson.getString("row"), "不是有效数字");
     }
@@ -152,7 +153,7 @@ public class QueryOwnersCmd extends Cmd {
                     tmpOwnerDto.setLink(link);
                 }
             }
-        }else{
+        } else {
             ownerDtos = new ArrayList<>();
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerDtos);
@@ -183,7 +184,6 @@ public class QueryOwnersCmd extends Cmd {
         Assert.listOnlyOne(roomDtos, "未查询到房屋下业主信息");
         reqJson.put("roomId", roomDtos.get(0).getRoomId());
     }
-
 
 
     /**
