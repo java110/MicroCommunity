@@ -54,9 +54,9 @@ public class FeeDetailServiceDaoImpl extends BaseServiceDao implements IFeeDetai
 
         logger.debug("查询费用明细信息 入参 info : {}",info);
 
-        List<Map> businessFeeDetailInfos = sqlSessionTemplate.selectList("feeDetailServiceDaoImpl.getBusinessFeeDetailInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("feeDetailServiceDaoImpl.getBusinessFeeDetailInfo",info);
 
-        return businessFeeDetailInfos;
+        return infos;
     }
 
 
@@ -119,12 +119,12 @@ public class FeeDetailServiceDaoImpl extends BaseServiceDao implements IFeeDetai
     public int queryFeeDetailsCount(Map info) {
         logger.debug("查询费用明细数据 入参 info : {}",info);
 
-        List<Map> businessFeeDetailInfos = sqlSessionTemplate.selectList("feeDetailServiceDaoImpl.queryFeeDetailsCount", info);
-        if (businessFeeDetailInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("feeDetailServiceDaoImpl.queryFeeDetailsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessFeeDetailInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
