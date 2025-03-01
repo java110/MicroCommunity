@@ -31,8 +31,8 @@ import java.util.List;
 /**
  * 查询账户
  */
-@Java110Cmd(serviceCode = "account.queryCommunityOwnerAccount")
-public class QueryCommunityOwnerAccountCmd extends Cmd {
+@Java110Cmd(serviceCode = "account.queryAdminOwnerAccount")
+public class QueryAdminOwnerAccountCmd extends Cmd {
 
     @Autowired
     private IFeeInnerServiceSMO feeInnerServiceSMOImpl;
@@ -54,9 +54,8 @@ public class QueryCommunityOwnerAccountCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
+        super.validateAdmin(context);
     }
 
     @Override

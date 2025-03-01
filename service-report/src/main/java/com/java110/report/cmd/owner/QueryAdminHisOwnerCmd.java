@@ -5,7 +5,6 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.owner.OwnerCarDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
@@ -22,17 +21,16 @@ import java.util.List;
 /**
  * 查询业主变更记录
  */
-@Java110Cmd(serviceCode = "owner.queryHisOwner")
-public class QueryHisOwnerCmd extends Cmd {
+@Java110Cmd(serviceCode = "owner.queryAdminHisOwner")
+public class QueryAdminHisOwnerCmd extends Cmd {
 
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
-        super.validateProperty(context);
-
+        super.validateAdmin(context);
+        super.validatePageInfo(reqJson);
     }
 
     @Override

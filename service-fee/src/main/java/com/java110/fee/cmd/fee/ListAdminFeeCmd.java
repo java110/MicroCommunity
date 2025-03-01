@@ -47,6 +47,7 @@ public class ListAdminFeeCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         FeeDto feeDto = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
+        morePayerObjIds(reqJson,feeDto);
         List<ApiFeeDataVo> fees = new ArrayList<>();
         int count = feeInnerServiceSMOImpl.queryFeesCount(feeDto);
         if (count > 0) {
@@ -72,6 +73,20 @@ public class ListAdminFeeCmd extends Cmd {
         apiFeeVo.setFees(fees);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiFeeVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 处理 多对象 费用
+     *
+     * @param reqJson
+     * @param feeDto
+     */
+    private void morePayerObjIds(JSONObject reqJson, FeeDto feeDto) {
+        if (!reqJson.containsKey("payerObjIds") || StringUtil.isEmpty(reqJson.getString("payerObjIds"))) {
+            return;
+        }
+        String payerObjIds = reqJson.getString("payerObjIds");
+        feeDto.setPayerObjIds(payerObjIds.split(","));
     }
     private void freshFeeAttrs(List<ApiFeeDataVo> fees, List<FeeDto> feeDtos) {
         for (ApiFeeDataVo apiFeeDataVo : fees) {
