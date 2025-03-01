@@ -56,7 +56,6 @@ public class QueryAdminOwnerCarsCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         super.validateAdmin(cmdDataFlowContext);
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson,"ownerId","未包含业主ID");
     }
 
     @Override

@@ -4,6 +4,7 @@ package com.java110.report.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.fee.FeeDto;
 import com.java110.dto.owner.OwnerAttrDto;
@@ -77,6 +78,16 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
                 UnitDto.class);
 
         return unitDtos;
+    }
+
+    @Override
+    public List<ParkingAreaDto> queryCommunityParkingTree(@RequestBody ParkingAreaDto parkingAreaDto) {
+        //校验是否传了 分页信息
+        List<ParkingAreaDto> parkingAreaDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.queryCommunityParkingTree(BeanConvertUtil.beanCovertMap(parkingAreaDto)),
+                ParkingAreaDto.class);
+
+        return parkingAreaDtos;
     }
 
     @Override

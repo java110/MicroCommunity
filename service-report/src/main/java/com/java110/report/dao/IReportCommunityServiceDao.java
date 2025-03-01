@@ -115,4 +115,5 @@ public interface IReportCommunityServiceDao {
     List<Map> queryHisRooms(Map info);
 
 
+    List<Map> queryCommunityParkingTree(Map info);
 }

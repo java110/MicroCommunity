@@ -138,6 +138,15 @@ public class ReportCommunityServiceDaoImpl extends BaseServiceDao implements IRe
     }
 
     @Override
+    public List<Map> queryCommunityParkingTree(Map info) {
+        logger.debug("查询queryCommunityParkingTree信息 入参 info : {}", JSONObject.toJSONString(info));
+
+        List<Map> infos = sqlSessionTemplate.selectList("reportCommunityServiceDaoImpl.queryCommunityParkingTree", info);
+
+        return infos;
+    }
+
+    @Override
     public int queryHisOwnerCarCount(Map info) {
         logger.debug("查询车辆管理数据 入参 info : {}", info);
 

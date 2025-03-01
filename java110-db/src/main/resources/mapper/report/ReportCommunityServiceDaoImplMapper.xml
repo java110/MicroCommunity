@@ -293,6 +293,22 @@
         </if>
         order by f.seq ,CONVERT(t.unit_num, SIGNED)
     </select>
+
+    <select id="queryCommunityParkingTree" parameterType="Map" resultType="Map">
+        select s.community_id communityId,s.name communityName,t.num,t.pa_id paId
+        from parking_area t
+        left join s_community s on t.community_id = s.community_id and s.status_cd = '0'
+        where t.status_cd = '0'
+        and s.status_cd ='0'
+        <if test="communityIds !=null ">
+            and s.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.num
+    </select>
+
     <select id="queryHisOwnerCarCount" parameterType="Map" resultType="Map">
         select count(1) count
         from business_owner_car t
