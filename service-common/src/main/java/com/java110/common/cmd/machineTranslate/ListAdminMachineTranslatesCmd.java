@@ -20,8 +20,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "machineTranslate.listMachineTranslates")
-public class ListMachineTranslatesCmd extends Cmd {
+@Java110Cmd(serviceCode = "machineTranslate.listAdminMachineTranslates")
+public class ListAdminMachineTranslatesCmd extends Cmd {
 
     @Autowired
     private IMachineTranslateInnerServiceSMO machineTranslateInnerServiceSMOImpl;
@@ -30,8 +30,7 @@ public class ListMachineTranslatesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
-        Assert.jsonObjectHaveKey(reqJson,"communityId","请求报文中未包含小区信息");
+        super.validateAdmin(context);
     }
 
     @Override
