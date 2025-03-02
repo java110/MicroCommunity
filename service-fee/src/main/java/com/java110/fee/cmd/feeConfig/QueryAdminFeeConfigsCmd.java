@@ -21,8 +21,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "feeConfig.listFeeConfigs")
-public class ListFeeConfigsCmd extends Cmd {
+@Java110Cmd(serviceCode = "feeConfig.queryAdminFeeConfigs")
+public class QueryAdminFeeConfigsCmd extends Cmd {
 
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
@@ -30,8 +30,7 @@ public class ListFeeConfigsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(cmdDataFlowContext);
-        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区ID");
+        super.validateAdmin(cmdDataFlowContext);
     }
 
     @Override

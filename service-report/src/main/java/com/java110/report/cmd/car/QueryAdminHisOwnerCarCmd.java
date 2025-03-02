@@ -21,16 +21,16 @@ import java.util.List;
 /**
  * 查询车辆变更记录
  */
-@Java110Cmd(serviceCode = "car.queryHisOwnerCar")
-public class QueryHisOwnerCarCmd extends Cmd {
+@Java110Cmd(serviceCode = "car.queryAdminHisOwnerCar")
+public class QueryAdminHisOwnerCarCmd extends Cmd {
 
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
-        super.validateProperty(context);
+        super.validatePageInfo(reqJson);
+        super.validateAdmin(context);
     }
 
     @Override

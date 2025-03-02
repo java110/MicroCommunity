@@ -6,6 +6,7 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.dict.DictDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.unit.UnitDto;
@@ -117,7 +118,7 @@ public class QueryCommunityParkingTreeCmd extends Cmd {
         JSONObject leaseTypeInfo = null;
         for (DictDto tmpDictDto : dictDtos) {
             leaseTypeInfo = new JSONObject();
-            leaseTypeInfo.put("id", "l_" + tmpDictDto.getStatusCd());
+            leaseTypeInfo.put("id", "l_" + GenerateCodeFactory.getUUID());
             leaseTypeInfo.put("leaseType", tmpDictDto.getStatusCd());
             leaseTypeInfo.put("text", tmpDictDto.getName());
             leaseTypeInfo.put("icon", "/img/unit.png");
