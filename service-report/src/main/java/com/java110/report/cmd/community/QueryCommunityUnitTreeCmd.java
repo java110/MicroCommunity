@@ -82,10 +82,14 @@ public class QueryCommunityUnitTreeCmd extends Cmd {
         JSONArray floors = community.getJSONArray("children");
         JSONObject floorInfo = null;
         for (UnitDto tmpUnitDto : unitDtos) {
+            if(!community.getString("communityId").equals(tmpUnitDto.getCommunityId())){
+                continue;
+            }
             if (!hasInFloor(tmpUnitDto, floors)) {
                 floorInfo = new JSONObject();
                 floorInfo.put("id", "f_" + tmpUnitDto.getFloorId());
                 floorInfo.put("floorId", tmpUnitDto.getFloorId());
+                floorInfo.put("communityId", community.getString("communityId"));
                 floorInfo.put("text", tmpUnitDto.getFloorNum()+"栋");
                 floorInfo.put("icon", "/img/floor.png");
                 floorInfo.put("children", new JSONArray());
@@ -106,6 +110,12 @@ public class QueryCommunityUnitTreeCmd extends Cmd {
         JSONArray units = floor.getJSONArray("children");
         JSONObject unitInfo = null;
         for (UnitDto tmpUnitDto : unitDtos) {
+            if(!floor.getString("communityId").equals(tmpUnitDto.getCommunityId())){
+                continue;
+            }
+            if(!floor.getString("floorId").equals(tmpUnitDto.getFloorId())){
+                continue;
+            }
             if (!hasInUnit(tmpUnitDto, units)) {
                 unitInfo = new JSONObject();
                 unitInfo.put("id", "u_" + tmpUnitDto.getUnitId());

@@ -92,6 +92,9 @@ public class QueryCommunityRepairTreeCmd extends Cmd {
         JSONArray parkings = community.getJSONArray("children");
         JSONObject parkingInfo = null;
         for (RepairSettingDto tmpRepairSettingDto : repairSettingDtos) {
+            if(!community.getString("communityId").equals(tmpRepairSettingDto.getCommunityId())){
+                continue;
+            }
             if (!hasInRepairSetting(tmpRepairSettingDto, parkings)) {
                 parkingInfo = new JSONObject();
                 parkingInfo.put("id", "r_" + tmpRepairSettingDto.getRepairType());

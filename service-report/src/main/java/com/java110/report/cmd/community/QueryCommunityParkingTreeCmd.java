@@ -93,6 +93,9 @@ public class QueryCommunityParkingTreeCmd extends Cmd {
         JSONArray parkings = community.getJSONArray("children");
         JSONObject parkingInfo = null;
         for (ParkingAreaDto tmpParkingAreaDto : parkingAreaDtos) {
+            if(!community.getString("communityId").equals(tmpParkingAreaDto.getCommunityId())){
+                continue;
+            }
             if (!hasInParkingArea(tmpParkingAreaDto, parkings)) {
                 parkingInfo = new JSONObject();
                 parkingInfo.put("id", "p_" + tmpParkingAreaDto.getPaId());
