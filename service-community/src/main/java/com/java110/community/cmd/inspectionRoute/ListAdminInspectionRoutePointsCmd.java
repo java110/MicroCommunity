@@ -5,9 +5,9 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.room.RoomDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.inspection.InspectionRoutePointRelDto;
+import com.java110.dto.room.RoomDto;
 import com.java110.dto.unit.FloorAndUnitDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IInspectionRoutePointRelInnerServiceSMO;
@@ -25,8 +25,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "inspectionRoute.listInspectionRoutePoints")
-public class ListInspectionRoutePointsCmd extends Cmd {
+@Java110Cmd(serviceCode = "inspectionRoute.listAdminInspectionRoutePoints")
+public class ListAdminInspectionRoutePointsCmd extends Cmd {
 
     @Autowired
     private IInspectionRoutePointRelInnerServiceSMO inspectionRoutePointRelInnerServiceSMOImpl;
@@ -43,8 +43,7 @@ public class ListInspectionRoutePointsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+        super.validateAdmin(context);
     }
 
     @Override

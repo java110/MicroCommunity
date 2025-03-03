@@ -19,8 +19,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "inspectionRoute.listInspectionRoutes")
-public class ListInspectionRoutesCmd extends Cmd {
+@Java110Cmd(serviceCode = "inspectionRoute.listAdminInspectionRoutes")
+public class ListAdminInspectionRoutesCmd extends Cmd {
 
     @Autowired
     private IInspectionRouteInnerServiceSMO inspectionRouteInnerServiceSMOImpl;
@@ -28,8 +28,7 @@ public class ListInspectionRoutesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区ID不能为空");
+        super.validateAdmin(context);
     }
 
     @Override

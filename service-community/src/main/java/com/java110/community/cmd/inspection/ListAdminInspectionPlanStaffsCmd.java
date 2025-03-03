@@ -19,8 +19,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "inspection.listInspectionPlanStaffs")
-public class ListInspectionPlanStaffsCmd extends Cmd {
+@Java110Cmd(serviceCode = "inspection.listAdminInspectionPlanStaffs")
+public class ListAdminInspectionPlanStaffsCmd extends Cmd {
 
 
     @Autowired
@@ -29,8 +29,7 @@ public class ListInspectionPlanStaffsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
-        Assert.hasKeyAndValue(reqJson, "communityId", "小区信息不能为空");
+        super.validateAdmin(context);
 
     }
 

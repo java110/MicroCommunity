@@ -40,6 +40,8 @@ public class InspectionPlanDto extends PageDto implements Serializable {
     private String inspectionPlanId;
     private String state;
     private String communityId;
+
+    private String communityName;
     private String staffId;
     private Date createTime;
     private String statusCd = "0";
@@ -316,5 +318,13 @@ public class InspectionPlanDto extends PageDto implements Serializable {
 
     public void setStaffNameLike(String staffNameLike) {
         this.staffNameLike = staffNameLike;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

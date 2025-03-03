@@ -5,10 +5,11 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.inspection.InspectionPlanDto;
 import com.java110.dto.inspection.InspectionPlanStaffDto;
-import com.java110.dto.inspection.InspectionRouteDto;
-import com.java110.dto.org.OrgStaffRelDto;
+import com.java110.dto.repair.RepairDto;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionPlanStaffV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionPlanV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionRouteInnerServiceSMO;
@@ -18,18 +19,15 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
-import com.java110.vo.api.inspectionPlan.ApiInspectionPlanDataVo;
-import com.java110.vo.api.inspectionPlan.ApiInspectionPlanVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "inspectionPlan.listInspectionPlans")
-public class ListInspectionPlansCmd extends Cmd {
+@Java110Cmd(serviceCode = "inspectionPlan.listAdminInspectionPlans")
+public class ListAdminInspectionPlansCmd extends Cmd {
 
     @Autowired
     private IInspectionPlanV1InnerServiceSMO inspectionPlanV1InnerServiceSMOImpl;
@@ -43,11 +41,13 @@ public class ListInspectionPlansCmd extends Cmd {
     @Autowired
     private IInspectionPlanStaffV1InnerServiceSMO inspectionPlanStaffV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区ID");
-        super.validateProperty(context);
+        super.validateAdmin(context);
     }
 
     @Override
@@ -63,12 +63,44 @@ public class ListInspectionPlansCmd extends Cmd {
         } else {
             inspectionPlans = new ArrayList<>();
         }
+        refreshCommunityName(inspectionPlans);
+
 
         ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, inspectionPlans);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
         context.setResponseEntity(responseEntity);
+    }
+
+    private void refreshCommunityName(List<InspectionPlanDto> inspectionPlans) {
+
+        if(ListUtil.isNull(inspectionPlans)){
+            return;
+        }
+
+        List<String> communityIds = new ArrayList<>();
+        for (InspectionPlanDto inspectionPlanDto : inspectionPlans) {
+            communityIds.add(inspectionPlanDto.getCommunityId());
+        }
+
+        if(ListUtil.isNull(communityIds)){
+            return ;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(ListUtil.isNull(communityDtos)){
+            return;
+        }
+        for (InspectionPlanDto inspectionPlanDto : inspectionPlans) {
+            for (CommunityDto tCommunityDto : communityDtos) {
+                if (!inspectionPlanDto.getCommunityId().equals(tCommunityDto.getCommunityId())) {
+                    continue;
+                }
+                inspectionPlanDto.setCommunityName(tCommunityDto.getName());
+            }
+        }
     }
 
     /**
