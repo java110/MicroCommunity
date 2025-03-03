@@ -94,14 +94,10 @@ public class QueryRoomsCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
+        super.validateProperty(cmdDataFlowContext);
+        Assert.hasKeyAndValue(reqJson, "communityId", "请求中未包含communityId信息");
         //Assert.jsonObjectHaveKey(reqJson, "floorId", "请求中未包含floorId信息");
-        Assert.jsonObjectHaveKey(reqJson, "page", "请求报文中未包含page节点");
-        Assert.jsonObjectHaveKey(reqJson, "row", "请求报文中未包含row节点");
-
-        Assert.isInteger(reqJson.getString("page"), "page不是数字");
-        Assert.isInteger(reqJson.getString("row"), "row不是数字");
-        Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
+        super.validatePageInfo(reqJson);
         int row = Integer.parseInt(reqJson.getString("row"));
 
 
@@ -137,7 +133,7 @@ public class QueryRoomsCmd extends Cmd {
 
         //todo 处理状态
         String roomState = reqJson.getString("roomState");
-        if(!StringUtil.isEmpty(roomState)){
+        if (!StringUtil.isEmpty(roomState)) {
             roomDto.setStates(roomState.split(","));
         }
 

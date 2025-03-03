@@ -17,25 +17,23 @@ package com.java110.fee.cmd.oweFeeCallable;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.oweFeeCallable.OweFeeCallableDto;
 import com.java110.intf.fee.IOweFeeCallableV1InnerServiceSMO;
-import com.java110.po.oweFeeCallable.OweFeeCallablePo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.oweFeeCallable.OweFeeCallableDto;
-import java.util.List;
-import java.util.ArrayList;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -48,18 +46,17 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "oweFeeCallable.listOweFeeCallable")
-public class ListOweFeeCallableCmd extends Cmd {
+@Java110Cmd(serviceCode = "oweFeeCallable.listAdminOweFeeCallable")
+public class ListAdminOweFeeCallableCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListOweFeeCallableCmd.class);
+  private static Logger logger = LoggerFactory.getLogger(ListAdminOweFeeCallableCmd.class);
     @Autowired
     private IOweFeeCallableV1InnerServiceSMO oweFeeCallableV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        super.validateProperty(cmdDataFlowContext);
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
+        super.validateAdmin(cmdDataFlowContext);
     }
 
     @Override

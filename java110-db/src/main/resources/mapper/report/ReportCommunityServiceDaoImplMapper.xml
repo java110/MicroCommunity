@@ -271,7 +271,9 @@
         WHERE 1 = 1
           and t.status_cd = '0'
           and u.unit_id = #{unitId}
-          and t.community_id = #{communityId}
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
         order by CONVERT(t.layer, SIGNED), CONVERT(t.room_num, SIGNED)
     </select>
 

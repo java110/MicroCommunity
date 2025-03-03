@@ -12,7 +12,6 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
@@ -22,8 +21,8 @@ import java.util.List;
 /**
  * 查询押金
  */
-@Java110Cmd(serviceCode = "fee.queryFeeDeposit")
-public class QueryFeeDepositCmd extends Cmd {
+@Java110Cmd(serviceCode = "fee.queryAdminFeeDeposit")
+public class QueryAdminFeeDepositCmd extends Cmd {
 
     @Autowired
     private IPayFeeDetailV1InnerServiceSMO feeDetailV1InnerServiceSMOImpl;
@@ -31,8 +30,7 @@ public class QueryFeeDepositCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
-        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
+        super.validateAdmin(context);
     }
 
     @Override

@@ -19,22 +19,17 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-@Java110Cmd(serviceCode = "room.queryRoomsTree")
-public class QueryRoomsTreeCmd extends Cmd {
+@Java110Cmd(serviceCode = "room.queryAdminRoomsTree")
+public class QueryAdminRoomsTreeCmd extends Cmd {
 
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.jsonObjectHaveKey(reqJson, "communityId", "请求中未包含communityId信息");
         Assert.jsonObjectHaveKey(reqJson, "unitId", "请求中未包含单元信息");
-        Assert.jsonObjectHaveKey(reqJson, "page", "请求报文中未包含page节点");
-        Assert.jsonObjectHaveKey(reqJson, "row", "请求报文中未包含row节点");
-        Assert.isInteger(reqJson.getString("page"), "page不是数字");
-        Assert.isInteger(reqJson.getString("row"), "row不是数字");
-        Assert.hasLength(reqJson.getString("communityId"), "小区ID不能为空");
-        super.validateProperty(cmdDataFlowContext);
+        super.validatePageInfo(reqJson);
+        super.validateAdmin(cmdDataFlowContext);
     }
 
     @Override
