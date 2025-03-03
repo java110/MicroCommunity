@@ -231,7 +231,7 @@
             and t.wt_id= #{wtId}
         </if>
         <if test="states != null">
-            and t.state in
+            and wtk.state in
             <foreach collection="states" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
@@ -296,7 +296,7 @@
             and t.wt_id= #{wtId}
         </if>
         <if test="states != null">
-            and t.state in
+            and wtk.state in
             <foreach collection="states" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>

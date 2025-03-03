@@ -63,6 +63,7 @@ public class RepairDto extends PageDto implements Serializable {
     private List<String> states;
     private String stateName;
     private String communityId;
+    private String communityName;
     private String roomId;
     private String[] roomIds;
     private String repairTypeName;
@@ -579,5 +580,13 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setNotifyWay(String notifyWay) {
         this.notifyWay = notifyWay;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

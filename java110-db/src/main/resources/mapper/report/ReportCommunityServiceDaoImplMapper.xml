@@ -311,6 +311,22 @@
         order by t.num
     </select>
 
+    <!-- 查询报修数-->
+    <select id="queryCommunityRepairTree" parameterType="Map" resultType="Map">
+        select s.community_id communityId,s.name communityName,t.repair_type repairType,t.repair_type_name repairTypeName
+        from r_repair_setting t
+        left join s_community s on t.community_id = s.community_id and s.status_cd = '0'
+        where t.status_cd = '0'
+        and s.status_cd = '0'
+        <if test="communityIds !=null ">
+            and s.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.repair_type_name
+    </select>
+
     <select id="queryHisOwnerCarCount" parameterType="Map" resultType="Map">
         select count(1) count
         from business_owner_car t

@@ -5,11 +5,13 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
@@ -45,6 +47,9 @@ public class ListAdminOwnerRepairsCmd extends Cmd {
 
     @Autowired
     private IOwnerV1InnerServiceSMO ownerV1InnerServiceSMOImpl;
+
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -100,11 +105,43 @@ public class ListAdminOwnerRepairsCmd extends Cmd {
                 ownerRepairs.add(repairDto);
             }
             refreshRepair(ownerRepairs);
+
+            refreshCommunityName(ownerRepairs);
         } else {
             ownerRepairs = new ArrayList<>();
         }
         ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerRepairs);
         context.setResponseEntity(responseEntity);
+    }
+
+    private void refreshCommunityName(List<RepairDto> ownerRepairs) {
+
+        if(ListUtil.isNull(ownerRepairs)){
+            return;
+        }
+
+        List<String> communityIds = new ArrayList<>();
+        for (RepairDto repairDto : ownerRepairs) {
+            communityIds.add(repairDto.getCommunityId());
+        }
+
+        if(ListUtil.isNull(communityIds)){
+            return ;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(ListUtil.isNull(communityDtos)){
+            return;
+        }
+        for (RepairDto tmpRepairDto : ownerRepairs) {
+            for (CommunityDto tCommunityDto : communityDtos) {
+                if (!tmpRepairDto.getCommunityId().equals(tCommunityDto.getCommunityId())) {
+                    continue;
+                }
+                tmpRepairDto.setCommunityName(tCommunityDto.getName());
+            }
+        }
     }
 
     private void ifHasTime(RepairDto ownerRepairDto) {

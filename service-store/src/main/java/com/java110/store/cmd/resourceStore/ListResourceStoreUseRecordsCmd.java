@@ -25,6 +25,7 @@ import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IResourceStoreUseRecordInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.resource.ResourceStoreUseRecordDto;
@@ -49,9 +50,9 @@ import org.slf4j.LoggerFactory;
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
 @Java110Cmd(serviceCode = "resourceStore.listResourceStoreUseRecords")
-public class ListResourceStoreUseRecordCmd extends Cmd {
+public class ListResourceStoreUseRecordsCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListResourceStoreUseRecordCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListResourceStoreUseRecordsCmd.class);
 
     @Autowired
     private IResourceStoreUseRecordInnerServiceSMO resourceStoreUseRecordInnerServiceSMOImpl;
@@ -62,6 +63,7 @@ public class ListResourceStoreUseRecordCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        super.validateProperty(cmdDataFlowContext);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class ListResourceStoreUseRecordCmd extends Cmd {
         basePrivilegeDto.setResource("/allResourceStoreUseRecord");
         basePrivilegeDto.setUserId(reqJson.getString("userId"));
         List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        if (privileges.size() == 0) {
+        if (ListUtil.isNull(privileges)) {
             resourceStoreUseRecordDto.setUserId(reqJson.getString("userId"));
             resourceStoreUseRecordDto.setUserName(reqJson.getString("userName"));
         } else {

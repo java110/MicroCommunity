@@ -24,8 +24,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "ownerRepair.listRepairStaffs")
-public class ListRepairStaffsCmd extends Cmd {
+@Java110Cmd(serviceCode = "ownerRepair.listAdminRepairStaffs")
+public class ListAdminRepairStaffsCmd extends Cmd {
 
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
@@ -39,7 +39,7 @@ public class ListRepairStaffsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
+        super.validateAdmin(context);
     }
 
     @Override

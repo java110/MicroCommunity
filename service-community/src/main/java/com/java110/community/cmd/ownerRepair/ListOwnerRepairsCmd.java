@@ -48,6 +48,7 @@ public class ListOwnerRepairsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
+        super.validateProperty(context);
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区信息");
     }
 

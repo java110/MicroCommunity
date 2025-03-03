@@ -21,6 +21,7 @@ public class RepairSettingDto extends PageDto implements Serializable {
     private String repairType;
     private String remark;
     private String communityId;
+    private String communityName;
     private String repairWay;
     private String repairWayName;
     private String settingId;
@@ -179,5 +180,13 @@ public class RepairSettingDto extends PageDto implements Serializable {
 
     public void setNotifyWay(String notifyWay) {
         this.notifyWay = notifyWay;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }
