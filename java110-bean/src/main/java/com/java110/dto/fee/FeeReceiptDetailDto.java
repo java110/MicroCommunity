@@ -50,6 +50,8 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     private String payerObjId;
 
+    private String receivableAmount;
+
 
 
     public String getArea() {
@@ -259,5 +261,13 @@ public class FeeReceiptDetailDto extends PageDto implements Serializable {
 
     public void setAcctAmount(String acctAmount) {
         this.acctAmount = acctAmount;
+    }
+
+    public String getReceivableAmount() {
+        return receivableAmount;
+    }
+
+    public void setReceivableAmount(String receivableAmount) {
+        this.receivableAmount = receivableAmount;
     }
 }
