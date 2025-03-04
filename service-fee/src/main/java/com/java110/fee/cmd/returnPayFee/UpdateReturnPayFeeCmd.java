@@ -269,7 +269,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             payFeeDetailDiscountDto.setCommunityId(feeDto1.getCommunityId());
             payFeeDetailDiscountDto.setDetailId(reqJson.getString("detailId"));
             List<PayFeeDetailDiscountDto> payFeeDetailDiscountDtos = payFeeDetailDiscountInnerServiceSMOImpl.queryPayFeeDetailDiscounts(payFeeDetailDiscountDto);
-            if (payFeeDetailDiscountDtos != null && payFeeDetailDiscountDtos.size() > 0) {
+            if (!ListUtil.isNull(payFeeDetailDiscountDtos)) {
                 JSONObject discountJson = new JSONObject();
                 discountJson.put("discountId", payFeeDetailDiscountDtos.get(0).getDiscountId());
                 discountJson.put("discountPrice", unum(payFeeDetailDiscountDtos.get(0).getDiscountPrice()));
@@ -299,11 +299,22 @@ public class UpdateReturnPayFeeCmd extends Cmd {
     }
 
     private void returnAccount(JSONObject reqJson) {
-        String feeAccountDetailDtoList = reqJson.getString("feeAccountDetailDtoList");
-        JSONArray feeAccountDetails = JSONArray.parseArray(feeAccountDetailDtoList);
-        if (feeAccountDetails == null || feeAccountDetails.size() < 1) {
+        FeeDetailDto feeDetailDto = new FeeDetailDto();
+        feeDetailDto.setDetailId(reqJson.getString("detailId"));
+        List<FeeDetailDto> feeDetailDtos = feeDetailInnerServiceSMOImpl.queryFeeDetails(feeDetailDto);
+        if (ListUtil.isNull(feeDetailDtos)) {
             return;
         }
+
+        String acctAmountStr = feeDetailDtos.get(0).getAcctAmount();
+        if (!StringUtil.isNumber(acctAmountStr)) {
+            return;
+        }
+        double acctAmount = Double.parseDouble(acctAmountStr);
+        if (acctAmount <= 0) {
+            return;
+        }
+
         String ownerId = "";
         if (FeeDto.PAYER_OBJ_TYPE_ROOM.equals(reqJson.getString("payerObjType"))) { //房屋
             OwnerRoomRelDto ownerRoomRelDto = new OwnerRoomRelDto();
@@ -318,80 +329,42 @@ public class UpdateReturnPayFeeCmd extends Cmd {
             Assert.listOnlyOne(ownerCarDtos, "查询业主车辆错误！");
             ownerId = ownerCarDtos.get(0).getOwnerId();
         }
-        for (int index = 0; index < feeAccountDetails.size(); index++) {
-            JSONObject param = feeAccountDetails.getJSONObject(index);
-            AccountDto accountDto = new AccountDto();
-            accountDto.setObjId(ownerId);
-            String returnAmount = param.getString("amount");
-            //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
-            if ("1002".equals(param.getString("state"))) {
-                accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH); //2003  现金账户
-                List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-                Assert.listOnlyOne(accountDtos, "查询业主现金账户错误！");
-                BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
-                BigDecimal money = new BigDecimal(returnAmount);
-                BigDecimal newAmount = amount.add(money);
-                AccountPo accountPo = new AccountPo();
-                accountPo.setAcctId(accountDtos.get(0).getAcctId());
-                accountPo.setAmount(String.valueOf(newAmount));
-                int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
-                if (flag < 1) {
-                    throw new IllegalArgumentException("更新业主现金账户失败！");
-                }
-                AccountDetailPo accountDetailPo = new AccountDetailPo();
-                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-                accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
-                accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
-                accountDetailPo.setRelAcctId("-1");
-                accountDetailPo.setAmount(returnAmount);
-                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
-                accountDetailPo.setObjId(ownerId);
-                accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
-                accountDetailPo.setbId("-1");
-                accountDetailPo.setRemark("现金账户退费");
-                accountDetailPo.setCreateTime(new Date());
-                int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
-                if (i < 1) {
-                    throw new IllegalArgumentException("保存业主现金账户明细失败！");
-                }
-            }
-            if ("1003".equals(param.getString("state"))) {
-                //积分账户抵扣比例
-//                BigDecimal deductionProportion = new BigDecimal(CommunitySettingFactory.getValue(reqJson.getString("communityId"), DEDUCTION_PROPORTION));
-//                BigDecimal returnAmount1 = new BigDecimal(returnAmount);
-//                BigDecimal money = returnAmount1.multiply(deductionProportion);
-//                accountDto.setAcctType(AccountDto.ACCT_TYPE_INTEGRAL); //2004  积分账户
-//                List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
-//                Assert.listOnlyOne(accountDtos, "查询业主积分账户错误！");
-//                BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
-//                BigDecimal newAmount = amount.add(money);
-//                AccountPo accountPo = new AccountPo();
-//                accountPo.setAcctId(accountDtos.get(0).getAcctId());
-//                accountPo.setAmount(String.valueOf(newAmount));
-//                int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
-//                if (flag < 1) {
-//                    throw new IllegalArgumentException("更新业主积分账户失败！");
-//                }
-//                AccountDetailPo accountDetailPo = new AccountDetailPo();
-//                accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
-//                accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
-//                accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
-//                accountDetailPo.setRelAcctId("-1");
-//                accountDetailPo.setAmount(money.toString());
-//                accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
-//                accountDetailPo.setObjId(ownerId);
-//                accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
-//                accountDetailPo.setbId("-1");
-//                accountDetailPo.setRemark("积分账户退费");
-//                accountDetailPo.setCreateTime(new Date());
-//                int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
-//                if (i < 1) {
-//                    throw new IllegalArgumentException("保存业主积分账户明细失败！");
-//                }
-            }
 
+        AccountDto accountDto = new AccountDto();
+        accountDto.setObjId(ownerId);
+        //1001 无抵扣 1002 现金账户抵扣 1003 积分账户抵扣 1004 优惠券抵扣
 
+        accountDto.setAcctType(AccountDto.ACCT_TYPE_CASH); //2003  现金账户
+        List<AccountDto> accountDtos = accountInnerServiceSMOImpl.queryAccounts(accountDto);
+        Assert.listOnlyOne(accountDtos, "查询业主现金账户错误！");
+        BigDecimal amount = new BigDecimal(accountDtos.get(0).getAmount());
+        BigDecimal money = new BigDecimal(acctAmount + "");
+        BigDecimal newAmount = amount.add(money);
+        AccountPo accountPo = new AccountPo();
+        accountPo.setAcctId(accountDtos.get(0).getAcctId());
+        accountPo.setAmount(String.valueOf(newAmount));
+        int flag = accountInnerServiceSMOImpl.updateAccount(accountPo);
+        if (flag < 1) {
+            throw new IllegalArgumentException("更新业主现金账户失败！");
         }
+        AccountDetailPo accountDetailPo = new AccountDetailPo();
+        accountDetailPo.setDetailId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_detailId));
+        accountDetailPo.setAcctId(accountDtos.get(0).getAcctId());
+        accountDetailPo.setDetailType("1001"); //1001 转入 2002 转出
+        accountDetailPo.setRelAcctId("-1");
+        accountDetailPo.setAmount(acctAmount + "");
+        accountDetailPo.setObjType("6006"); //6006 个人 7007 商户
+        accountDetailPo.setObjId(ownerId);
+        accountDetailPo.setOrderId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_orderId));
+        accountDetailPo.setbId("-1");
+        accountDetailPo.setRemark("现金账户退费");
+        accountDetailPo.setCreateTime(new Date());
+        int i = accountDetailInnerServiceSMOImpl.saveAccountDetails(accountDetailPo);
+        if (i < 1) {
+            throw new IllegalArgumentException("保存业主现金账户明细失败！");
+        }
+
+
     }
 
     private void returnCoupon(JSONObject reqJson, List<FeeDto> feeDtos) {
