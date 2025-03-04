@@ -307,7 +307,7 @@ public class UpdateReturnPayFeeCmd extends Cmd {
         }
 
         String acctAmountStr = feeDetailDtos.get(0).getAcctAmount();
-        if (!StringUtil.isNumber(acctAmountStr)) {
+        if (StringUtil.isEmpty(acctAmountStr)) {
             return;
         }
         double acctAmount = Double.parseDouble(acctAmountStr);
