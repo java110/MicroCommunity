@@ -5,8 +5,8 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.inspection.InspectionTaskDto;
-import com.java110.intf.community.IInspectionTaskV1InnerServiceSMO;
+import com.java110.dto.inspection.InspectionTaskDetailDto;
+import com.java110.intf.community.IInspectionTaskDetailV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -20,36 +20,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 查询巡检点对应的巡检任务
+ * 查询巡检明细
  */
-@Java110Cmd(serviceCode = "inspection.queryRouteInspectionTask")
-public class QueryRouteInspectionTaskCmd extends Cmd {
+@Java110Cmd(serviceCode = "inspection.queryAdminInspectionTaskDetail")
+public class QueryAdminInspectionTaskDetailCmd extends Cmd {
 
     @Autowired
-    private IInspectionTaskV1InnerServiceSMO inspectionTaskV1InnerServiceSMOImpl;
+    private IInspectionTaskDetailV1InnerServiceSMO inspectionTaskDetailV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
-        Assert.hasKeyAndValue(reqJson, "inspectionRouteId", "未包含巡检点");
-        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
+        super.validateAdmin(context);
+        Assert.hasKeyAndValue(reqJson, "taskId", "未包含任务ID");
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        InspectionTaskDto inspectionTaskDto = BeanConvertUtil.covertBean(reqJson, InspectionTaskDto.class);
-
-        int count = inspectionTaskV1InnerServiceSMOImpl.queryRouteInspectionTasksCount(inspectionTaskDto);
-
-        List<InspectionTaskDto> inspectionTaskDtos = null;
-
+        InspectionTaskDetailDto inspectionTaskDetailDto = BeanConvertUtil.covertBean(reqJson, InspectionTaskDetailDto.class);
+        int count = inspectionTaskDetailV1InnerServiceSMOImpl.queryInspectionTaskDetailsCount(inspectionTaskDetailDto);
+        List<InspectionTaskDetailDto> inspectionTaskDetails = null;
         if (count > 0) {
-            inspectionTaskDtos = BeanConvertUtil.covertBeanList(inspectionTaskV1InnerServiceSMOImpl.queryRouteInspectionTasks(inspectionTaskDto), InspectionTaskDto.class);
+            inspectionTaskDetails = BeanConvertUtil.covertBeanList(
+                    inspectionTaskDetailV1InnerServiceSMOImpl.queryInspectionTaskDetails(inspectionTaskDetailDto),
+                    InspectionTaskDetailDto.class);
         } else {
-            inspectionTaskDtos = new ArrayList<>();
+            inspectionTaskDetails = new ArrayList<>();
         }
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, inspectionTaskDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, inspectionTaskDetails);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

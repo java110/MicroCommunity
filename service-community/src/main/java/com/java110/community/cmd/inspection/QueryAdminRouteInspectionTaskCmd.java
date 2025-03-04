@@ -22,8 +22,8 @@ import java.util.List;
 /**
  * 查询巡检点对应的巡检任务
  */
-@Java110Cmd(serviceCode = "inspection.queryRouteInspectionTask")
-public class QueryRouteInspectionTaskCmd extends Cmd {
+@Java110Cmd(serviceCode = "inspection.queryAdminRouteInspectionTask")
+public class QueryAdminRouteInspectionTaskCmd extends Cmd {
 
     @Autowired
     private IInspectionTaskV1InnerServiceSMO inspectionTaskV1InnerServiceSMOImpl;
@@ -31,9 +31,8 @@ public class QueryRouteInspectionTaskCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
+        super.validateAdmin(context);
         Assert.hasKeyAndValue(reqJson, "inspectionRouteId", "未包含巡检点");
-        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
     }
 
     @Override

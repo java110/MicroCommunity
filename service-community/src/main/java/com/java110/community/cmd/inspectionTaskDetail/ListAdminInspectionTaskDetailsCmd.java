@@ -24,8 +24,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "inspectionTaskDetail.listInspectionTaskDetails")
-public class ListInspectionTaskDetailsCmd extends Cmd {
+@Java110Cmd(serviceCode = "inspectionTaskDetail.listAdminInspectionTaskDetails")
+public class ListAdminInspectionTaskDetailsCmd extends Cmd {
 
     @Autowired
     private IInspectionTaskDetailInnerServiceSMO inspectionTaskDetailInnerServiceSMOImpl;
@@ -36,9 +36,7 @@ public class ListInspectionTaskDetailsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-
+        super.validateAdmin(context);
     }
 
     @Override
