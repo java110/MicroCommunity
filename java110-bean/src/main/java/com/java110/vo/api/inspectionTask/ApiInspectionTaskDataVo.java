@@ -18,6 +18,7 @@ public class ApiInspectionTaskDataVo implements Serializable {
     private String inspectionPlanName;
     private String planUserName;
     private String communityId;
+    private String communityName;
     private String bId;
     private String actUserId;
     private String taskId;
@@ -223,5 +224,13 @@ public class ApiInspectionTaskDataVo implements Serializable {
 
     public void setInspectionRouteId(String inspectionRouteId) {
         this.inspectionRouteId = inspectionRouteId;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

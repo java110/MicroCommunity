@@ -326,6 +326,24 @@
         </if>
         order by t.repair_type_name
     </select>
+    <select id="queryCommunityInspectionTree" parameterType="Map" resultType="Map">
+        select s.community_id communityId,s.`name` communityName,ip.inspection_plan_id inspectionPlanId,
+        ip.inspection_plan_name inspectionPlanName ,t.staff_id staffId,t.staff_name staffName
+        from inspection_plan_staff t
+        left join inspection_plan ip on t.inspection_plan_id = ip.inspection_plan_id and ip.status_cd = '0'
+        left join s_community s on t.community_id = s.community_id and s.status_cd = '0'
+        where t.status_cd = '0'
+        and ip.status_cd = '0'
+        and s.status_cd = '0'
+        <if test="communityIds !=null ">
+            and s.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by ip.create_time desc
+    </select>
+
 
     <select id="queryHisOwnerCarCount" parameterType="Map" resultType="Map">
         select count(1) count

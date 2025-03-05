@@ -20,11 +20,15 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.inspection.InspectionTaskDto;
+import com.java110.dto.repair.RepairDto;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.inspectionTask.ApiInspectionTaskDataVo;
 import com.java110.vo.api.inspectionTask.ApiInspectionTaskVo;
@@ -55,6 +59,9 @@ public class ListAdminInspectionTasksCmd extends Cmd {
     @Autowired
     private IInspectionTaskInnerServiceSMO inspectionTaskInnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -84,6 +91,8 @@ public class ListAdminInspectionTasksCmd extends Cmd {
             inspectionTasks = new ArrayList<>();
         }
 
+        refreshCommunityName(inspectionTasks);
+
         ApiInspectionTaskVo apiInspectionTaskVo = new ApiInspectionTaskVo();
 
         apiInspectionTaskVo.setTotal(count);
@@ -94,5 +103,35 @@ public class ListAdminInspectionTasksCmd extends Cmd {
 
         cmdDataFlowContext.setResponseEntity(responseEntity);
 
+    }
+
+    private void refreshCommunityName(List<ApiInspectionTaskDataVo> inspectionTasks) {
+
+        if(ListUtil.isNull(inspectionTasks)){
+            return;
+        }
+
+        List<String> communityIds = new ArrayList<>();
+        for (ApiInspectionTaskDataVo apiInspectionTaskDataVo : inspectionTasks) {
+            communityIds.add(apiInspectionTaskDataVo.getCommunityId());
+        }
+
+        if(ListUtil.isNull(communityIds)){
+            return ;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(ListUtil.isNull(communityDtos)){
+            return;
+        }
+        for (ApiInspectionTaskDataVo apiInspectionTaskDataVo : inspectionTasks) {
+            for (CommunityDto tCommunityDto : communityDtos) {
+                if (!apiInspectionTaskDataVo.getCommunityId().equals(tCommunityDto.getCommunityId())) {
+                    continue;
+                }
+                apiInspectionTaskDataVo.setCommunityName(tCommunityDto.getName());
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.java110.intf.report;
 
 import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.inspection.InspectionPlanDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.repair.RepairSettingDto;
 import com.java110.dto.room.RoomDto;
@@ -113,4 +114,7 @@ public interface IReportCommunityInnerServiceSMO {
 
     @RequestMapping(value = "/queryCommunityRepairTree", method = RequestMethod.POST)
     List<RepairSettingDto> queryCommunityRepairTree(@RequestBody RepairSettingDto repairSettingDto);
+
+    @RequestMapping(value = "/queryCommunityInspectionTree", method = RequestMethod.POST)
+    List<InspectionPlanDto> queryCommunityInspectionTree(@RequestBody InspectionPlanDto inspectionPlanDto);
 }
