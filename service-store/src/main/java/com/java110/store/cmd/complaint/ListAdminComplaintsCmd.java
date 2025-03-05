@@ -59,6 +59,7 @@ public class ListAdminComplaintsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
+        complaintDto.setStoreId("");
         int count = complaintV1InnerServiceSMOImpl.queryComplaintsCount(complaintDto);
         List<ComplaintDto> complaintDtos = null;
         if (count > 0) {
