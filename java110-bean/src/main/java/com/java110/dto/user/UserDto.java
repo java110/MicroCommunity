@@ -96,6 +96,9 @@ public class UserDto extends PageDto implements Serializable {
 
     private List<String> urls;
 
+    private String ownerCount;
+
+    private String createTime;
 
 
 
@@ -417,5 +420,21 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public String getOwnerCount() {
+        return ownerCount;
+    }
+
+    public void setOwnerCount(String ownerCount) {
+        this.ownerCount = ownerCount;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

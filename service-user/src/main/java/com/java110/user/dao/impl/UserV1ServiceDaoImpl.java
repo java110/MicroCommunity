@@ -71,9 +71,9 @@ public class UserV1ServiceDaoImpl extends BaseServiceDao implements IUserV1Servi
     public List<Map> getUserInfo(Map info) throws DAOException {
         logger.debug("查询 getUserInfo 入参 info : {}",info);
 
-        List<Map> businessUserInfos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.getUserInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.getUserInfo",info);
 
-        return businessUserInfos;
+        return infos;
     }
 
 
@@ -100,33 +100,54 @@ public class UserV1ServiceDaoImpl extends BaseServiceDao implements IUserV1Servi
     public int queryUsersCount(Map info) {
         logger.debug("查询 queryUsersCount 入参 info : {}",info);
 
-        List<Map> businessUserInfos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.queryUsersCount", info);
-        if (businessUserInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.queryUsersCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessUserInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public int queryStaffsNoInOrgCount(Map info) {
         logger.debug("查询 queryStaffsNoInOrgCount 入参 info : {}",info);
 
-        List<Map> businessUserInfos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.queryStaffsNoInOrgCount", info);
-        if (businessUserInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.queryStaffsNoInOrgCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessUserInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryStaffsNoInOrg(Map info) {
         logger.debug("查询 queryStaffsNoInOrg 入参 info : {}",info);
 
-        List<Map> businessUserInfos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.queryStaffsNoInOrg",info);
+        List<Map> infos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.queryStaffsNoInOrg",info);
 
-        return businessUserInfos;
+        return infos;
+    }
+
+    @Override
+    public int getSystemUserCount(Map info) {
+        logger.debug("查询 getSystemUserCount 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.getSystemUserCount", info);
+        if (infos.size() < 1) {
+            return 0;
+        }
+
+        return Integer.parseInt(infos.get(0).get("count").toString());
+    }
+
+    @Override
+    public List<Map> getSystemUsers(Map info) {
+        logger.debug("查询 getSystemUsers 入参 info : {}",info);
+
+        List<Map> infos = sqlSessionTemplate.selectList("userV1ServiceDaoImpl.getSystemUsers",info);
+
+        return infos;
     }
 
 

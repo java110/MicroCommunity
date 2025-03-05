@@ -144,4 +144,25 @@ public class UserV1InnerServiceSMOImpl extends BaseServiceSMO implements IUserV1
         return key;
     }
 
+    @Override
+    public int getSystemUserCount(@RequestBody UserDto userDto) {
+        return userV1ServiceDaoImpl.getSystemUserCount(BeanConvertUtil.beanCovertMap(userDto));
+
+    }
+
+    @Override
+    public List<UserDto> getSystemUsers(@RequestBody UserDto userDto) {
+        //校验是否传了 分页信息
+
+        int page = userDto.getPage();
+
+        if (page != PageDto.DEFAULT_PAGE) {
+            userDto.setPage((page - 1) * userDto.getRow());
+        }
+
+        List<UserDto> users = BeanConvertUtil.covertBeanList(userV1ServiceDaoImpl.getSystemUsers(BeanConvertUtil.beanCovertMap(userDto)), UserDto.class);
+
+        return users;
+    }
+
 }

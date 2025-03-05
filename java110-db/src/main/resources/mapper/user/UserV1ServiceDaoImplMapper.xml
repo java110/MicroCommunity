@@ -203,4 +203,60 @@
             limit #{page}, #{row}
         </if>
     </select>
+    <select id="getSystemUserCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from u_user t
+        where t.status_cd = '0'
+        and t.level_cd != '00'
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="levelCd !=null and levelCd != ''">
+            and t.level_cd= #{levelCd}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and t.name like concat('%', #{nameLike},'%')
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="email !=null and email != ''">
+            and t.email= #{email}
+        </if>
+    </select>
+
+    <select id="getSystemUsers" parameterType="Map" resultType="Map">
+        select t.user_id userId,t.`name` userName,t.email,t.address,t.tel,t.create_time createTime,t.level_cd levelCd,
+        count(oau.app_user_id) ownerCount
+        from u_user t
+        left join owner_app_user oau on t.user_id = oau.user_id and oau.status_cd = '0'
+        where t.status_cd = '0'
+        and t.level_cd != '00'
+        <if test="userId !=null and userId != ''">
+            and t.user_id= #{userId}
+        </if>
+        <if test="levelCd !=null and levelCd != ''">
+            and t.level_cd= #{levelCd}
+        </if>
+        <if test="name !=null and name != ''">
+            and t.name= #{name}
+        </if>
+        <if test="nameLike !=null and nameLike != ''">
+            and t.name like concat('%', #{nameLike},'%')
+        </if>
+        <if test="tel !=null and tel != ''">
+            and t.tel= #{tel}
+        </if>
+        <if test="email !=null and email != ''">
+            and t.email= #{email}
+        </if>
+        group by t.user_id ,t.`name` ,t.email,t.address,t.tel,t.create_time ,t.level_cd
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+    </select>
 </mapper>

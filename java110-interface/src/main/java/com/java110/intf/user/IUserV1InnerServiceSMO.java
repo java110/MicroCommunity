@@ -95,4 +95,10 @@ public interface IUserV1InnerServiceSMO {
      */
     @RequestMapping(value = "/generatorUserIdQrCode", method = RequestMethod.POST)
     String generatorUserIdQrCode(@RequestBody String userId);
+
+    @RequestMapping(value = "/getSystemUserCount", method = RequestMethod.POST)
+    int getSystemUserCount(@RequestBody UserDto userDto);
+
+    @RequestMapping(value = "/getSystemUsers", method = RequestMethod.POST)
+    List<UserDto> getSystemUsers(@RequestBody UserDto userDto);
 }
