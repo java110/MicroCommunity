@@ -18,8 +18,9 @@
     <!-- 查询用户属性信息 add by wuxw 2018-07-03 -->
     <select id="getUserAttrInfo" parameterType="Map" resultType="Map">
         select t.attr_id,t.attr_id attrId,t.spec_cd,t.spec_cd specCd,t.status_cd,t.status_cd
-        statusCd,t.id,t.user_id,t.user_id userId,t.value
+        statusCd,t.id,t.user_id,t.user_id userId,t.value,td.name specCdName
         from u_user_attr t
+        left join t_dict td on t.spec_cd = td.status_cd and td.table_name = 'u_user' and td.table_columns = 'spec_cd'
         where 1 =1
         <if test="attrId !=null and attrId != ''">
             and t.attr_id= #{attrId}

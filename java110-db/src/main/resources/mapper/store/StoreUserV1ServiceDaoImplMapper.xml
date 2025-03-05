@@ -18,9 +18,10 @@
     <!-- 查询商户用户关系信息 add by wuxw 2018-07-03 -->
     <select id="getStoreUserInfo" parameterType="Map" resultType="Map">
         select t.status_cd,t.status_cd statusCd,t.store_user_id,t.store_user_id storeUserId,t.store_id,t.store_id
-        storeId,t.user_id,t.user_id userId,t.rel_cd,t.rel_cd relCd,uu.tel,uu.name
+        storeId,t.user_id,t.user_id userId,t.rel_cd,t.rel_cd relCd,uu.tel,uu.name,s.name storeName
         from s_store_user t
         left join u_user uu on t.user_id = uu.user_id
+        left join s_store s on t.store_id = s.store_id and s.status_cd = '0'
         where 1 =1
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}

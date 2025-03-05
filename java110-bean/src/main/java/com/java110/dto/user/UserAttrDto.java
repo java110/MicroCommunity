@@ -18,6 +18,7 @@ public class UserAttrDto extends PageDto implements Serializable {
     private String attrId;
     private String userId;
     private String specCd;
+    private String specCdName;
     private String value;
     private String createTime;
     private String statusCd;
@@ -68,5 +69,13 @@ public class UserAttrDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getSpecCdName() {
+        return specCdName;
+    }
+
+    public void setSpecCdName(String specCdName) {
+        this.specCdName = specCdName;
     }
 }

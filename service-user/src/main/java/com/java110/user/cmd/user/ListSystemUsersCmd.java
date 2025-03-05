@@ -35,7 +35,8 @@ public class ListSystemUsersCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         UserDto userDto = BeanConvertUtil.covertBean(reqJson, UserDto.class);
-        userDto.setUserId("");
+        userDto.setUserId(reqJson.getString("systemUserId"));
+
 
         int count = userV1InnerServiceSMO.getSystemUserCount(userDto);
 

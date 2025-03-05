@@ -42,7 +42,7 @@ public class ListAdminAppUserOwnersCmd extends Cmd {
         //获取当前用户id
         String userId = reqJson.getString("userId");
         OwnerAppUserDto ownerAppUserDto = BeanConvertUtil.covertBean(reqJson, OwnerAppUserDto.class);
-        ownerAppUserDto.setUserId("");
+        ownerAppUserDto.setUserId(reqJson.getString("systemUserId"));
         int count = ownerAppUserInnerServiceSMOImpl.queryOwnerAppUsersCount(ownerAppUserDto);
         int row = reqJson.getIntValue("row");
 
