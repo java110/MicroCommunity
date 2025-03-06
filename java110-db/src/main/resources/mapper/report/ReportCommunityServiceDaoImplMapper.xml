@@ -277,6 +277,23 @@
         order by CONVERT(t.layer, SIGNED), CONVERT(t.room_num, SIGNED)
     </select>
 
+
+    <!-- 查询无效费用 add by wuxw 2018-07-03 -->
+    <select id="queryCommunityFloorTree" parameterType="Map" resultType="Map">
+        select s.community_id communityId,s.name communityName,t.floor_num floorNum,t.`name`,t.floor_id floorId
+        from  f_floor t
+        left join s_community s on t.community_id = s.community_id and s.status_cd = '0'
+        where t.status_cd = '0'
+        and s.status_cd = '0'
+        <if test="communityIds !=null ">
+            and s.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.seq
+    </select>
+
     <!-- 查询无效费用 add by wuxw 2018-07-03 -->
     <select id="queryCommunityUnitTree" parameterType="Map" resultType="Map">
         select s.community_id communityId,s.name communityName,f.floor_num floorNum,f.`name`,f.floor_id floorId,

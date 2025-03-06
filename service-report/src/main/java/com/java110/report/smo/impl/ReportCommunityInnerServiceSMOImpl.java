@@ -4,6 +4,7 @@ package com.java110.report.smo.impl;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
+import com.java110.dto.floor.FloorDto;
 import com.java110.dto.inspection.InspectionPlanDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.repair.RepairSettingDto;
@@ -110,6 +111,16 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
                 InspectionPlanDto.class);
 
         return inspectionPlanDtos;
+    }
+
+    @Override
+    public List<FloorDto> queryCommunityFloorTree(@RequestBody FloorDto floorDto) {
+        //校验是否传了 分页信息
+        List<FloorDto> floorDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.queryCommunityFloorTree(BeanConvertUtil.beanCovertMap(floorDto)),
+                FloorDto.class);
+
+        return floorDtos;
     }
 
     @Override

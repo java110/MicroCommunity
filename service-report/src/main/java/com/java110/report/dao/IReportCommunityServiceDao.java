@@ -120,4 +120,6 @@ public interface IReportCommunityServiceDao {
     List<Map> queryCommunityRepairTree(Map info);
 
     List<Map> queryCommunityInspectionTree(Map info);
+
+    List<Map> queryCommunityFloorTree(Map info);
 }

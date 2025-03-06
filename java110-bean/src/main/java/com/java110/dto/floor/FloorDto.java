@@ -27,6 +27,8 @@ public class FloorDto extends PageDto implements Serializable {
 
     private String communityId;
 
+    private String communityName;
+
     /**
      * 编号
      */
@@ -155,5 +157,13 @@ public class FloorDto extends PageDto implements Serializable {
 
     public void setSeq(int seq) {
         this.seq = seq;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }
