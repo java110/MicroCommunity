@@ -17,75 +17,75 @@ package com.java110.oa.cmd.work;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
+import com.java110.dto.work.WorkTaskItemDto;
+import com.java110.intf.oa.IWorkTaskItemV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.work.WorkPoolFileDto;
-
-import java.util.List;
-import java.util.ArrayList;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * 类表述：查询
- * 服务编码：workPoolFile.listWorkPoolFile
- * 请求路劲：/app/workPoolFile.ListWorkPoolFile
- * add by 吴学文 at 2023-12-25 15:57:07 mail: 928255095@qq.com
+ * 服务编码：workTaskItem.listWorkTaskItem
+ * 请求路劲：/app/workTaskItem.ListWorkTaskItem
+ * add by 吴学文 at 2024-10-31 00:45:24 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "work.listWorkPoolFile")
-public class ListWorkPoolFileCmd extends Cmd {
+@Java110Cmd(serviceCode = "task.listAdminWorkTaskItem")
+public class ListAdminWorkTaskItemCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListWorkPoolFileCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListAdminWorkTaskItemCmd.class);
     @Autowired
-    private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
+    private IWorkTaskItemV1InnerServiceSMO workTaskItemV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        super.validateProperty(cmdDataFlowContext);
-        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
-        reqJson.put("storeId", storeId);
+        super.validateAdmin(cmdDataFlowContext);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        WorkPoolFileDto workPoolFileDto = BeanConvertUtil.covertBean(reqJson, WorkPoolFileDto.class);
+        WorkTaskItemDto workTaskItemDto = BeanConvertUtil.covertBean(reqJson, WorkTaskItemDto.class);
+        workTaskItemDto.setStoreId("");
+        int count = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItemsCount(workTaskItemDto);
 
-        int count = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFilesCount(workPoolFileDto);
-
-        List<WorkPoolFileDto> workPoolFileDtos = null;
+        List<WorkTaskItemDto> workTaskItemDtos = null;
 
         if (count > 0) {
-            workPoolFileDtos = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFiles(workPoolFileDto);
+            workTaskItemDtos = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItems(workTaskItemDto);
+            String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
+            for (WorkTaskItemDto tmpWorkTaskItemDto : workTaskItemDtos) {
+                if (StringUtil.isEmpty(tmpWorkTaskItemDto.getPathUrl())) {
+                    continue;
+                }
+                tmpWorkTaskItemDto.setPathUrl(imgUrl + tmpWorkTaskItemDto.getPathUrl());
+            }
+
         } else {
-            workPoolFileDtos = new ArrayList<>();
+            workTaskItemDtos = new ArrayList<>();
         }
 
-        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
-
-        for (WorkPoolFileDto tmpWorkPoolFileDto : workPoolFileDtos) {
-            tmpWorkPoolFileDto.setPathUrl(imgUrl + tmpWorkPoolFileDto.getPathUrl());
-        }
-
-        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workPoolFileDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workTaskItemDtos);
 
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 

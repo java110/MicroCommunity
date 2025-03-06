@@ -55,6 +55,7 @@ public class ListWorkCycleCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        super.validateProperty(cmdDataFlowContext);
         String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
         reqJson.put("storeId",storeId);
     }

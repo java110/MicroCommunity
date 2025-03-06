@@ -21,22 +21,21 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.work.WorkPoolFileDto;
 import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.work.WorkPoolFileDto;
-
-import java.util.List;
-import java.util.ArrayList;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -49,26 +48,24 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "work.listWorkPoolFile")
-public class ListWorkPoolFileCmd extends Cmd {
+@Java110Cmd(serviceCode = "work.listAdminWorkPoolFile")
+public class ListAdminWorkPoolFileCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListWorkPoolFileCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListAdminWorkPoolFileCmd.class);
     @Autowired
     private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        super.validateProperty(cmdDataFlowContext);
-        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
-        reqJson.put("storeId", storeId);
+        super.validateAdmin(cmdDataFlowContext);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         WorkPoolFileDto workPoolFileDto = BeanConvertUtil.covertBean(reqJson, WorkPoolFileDto.class);
-
+        workPoolFileDto.setStoreId("");
         int count = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFilesCount(workPoolFileDto);
 
         List<WorkPoolFileDto> workPoolFileDtos = null;
