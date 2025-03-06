@@ -213,6 +213,8 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String discountSmallTypeFive;
     private String discountSmallTypeSix;
 
+    private String communityName;
+
     private String fadState;
     private String fadAmount;
 
@@ -1219,5 +1221,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setOwnerNameLike(String ownerNameLike) {
         this.ownerNameLike = ownerNameLike;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

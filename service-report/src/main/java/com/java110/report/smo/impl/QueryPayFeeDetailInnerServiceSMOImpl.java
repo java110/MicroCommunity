@@ -2,6 +2,8 @@ package com.java110.report.smo.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.dto.PageDto;
+import com.java110.dto.community.CommunityDto;
+import com.java110.dto.repair.RepairDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsPrepaymentDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsPrepaymentTotalDto;
 import com.java110.dto.fee.FeeConfigDto;
@@ -10,6 +12,7 @@ import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsTotalDto;
 import com.java110.dto.room.RoomDto;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.community.IRoomV1InnerServiceSMO;
@@ -67,6 +70,9 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
     @Autowired
     private IOwnerCarInnerServiceSMO ownerCarInnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
     /**
      * 查询缴费明细
      *
@@ -110,10 +116,40 @@ public class QueryPayFeeDetailInnerServiceSMOImpl implements IQueryPayFeeDetailI
 
         //todo 计算房屋面积 和车位信息
         computeRoomAndParkingSpace(reportFeeMonthStatisticsDtos);
+        refreshCommunityName(reportFeeMonthStatisticsDtos);
 
 
         resultVo = new ResultVo((int) Math.ceil((double) count / (double) reportFeeMonthStatisticsDto.getRow()), count, reportFeeMonthStatisticsDtos, reportFeeMonthStatisticsTotalDto);
         return resultVo;
+    }
+
+    private void refreshCommunityName(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {
+        if(ListUtil.isNull(reportFeeMonthStatisticsDtos)){
+            return;
+        }
+
+        List<String> communityIds = new ArrayList<>();
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            communityIds.add(reportFeeMonthStatisticsDto.getCommunityId());
+        }
+
+        if(ListUtil.isNull(communityIds)){
+            return ;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(ListUtil.isNull(communityDtos)){
+            return;
+        }
+        for (ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto : reportFeeMonthStatisticsDtos) {
+            for (CommunityDto tCommunityDto : communityDtos) {
+                if (!reportFeeMonthStatisticsDto.getCommunityId().equals(tCommunityDto.getCommunityId())) {
+                    continue;
+                }
+                reportFeeMonthStatisticsDto.setCommunityName(tCommunityDto.getName());
+            }
+        }
     }
 
     private void computeRoomAndParkingSpace(List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos) {

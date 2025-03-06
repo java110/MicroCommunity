@@ -1656,7 +1656,7 @@
         t.state,d3.name stateName,t.fee_id feeId,t.detail_id detailId,pf.payer_obj_id payerObjId,
         t.cashier_id cashierId,t.cashier_name cashierName,t.payable_amount payableAmount,pfc.fee_flag feeFlag,
         t.acct_amount acctAmount, t.discount_amount discountAmount, t.deduction_amount deductionAmount, t.late_amount lateAmount,
-        t.gift_amount giftAmount,t.remark
+        t.gift_amount giftAmount,t.remark,t.community_id communityId
         from pay_fee_detail t
         left JOIN pay_fee pf on t.fee_id = pf.fee_id and pf.status_cd = '0'
         left join pay_fee_config pfc on pf.config_id = pfc.config_id and pfc.status_cd = '0'
