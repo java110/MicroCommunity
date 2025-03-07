@@ -33,20 +33,11 @@ public class GetCommunityFeeSummaryCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区信息");
 
         Assert.hasKeyAndValue(reqJson, "startDate", "未包含开始日期");
         Assert.hasKeyAndValue(reqJson, "endDate", "未包含结束日期");
 
-        String storeId = CmdContextUtils.getStoreId(context);
-
-        StoreDto storeDto = new StoreDto();
-        storeDto.setStoreId(storeId);
-        storeDto.setStoreTypeCd(StoreDto.STORE_TYPE_ADMIN);
-        int count = storeInnerServiceSMOImpl.getStoreCount(storeDto);
-        if (count < 1) {
-            throw new CmdException("非法操作，请用系统管理员账户操作");
-        }
+        super.validateAdmin(context);
     }
 
     @Override

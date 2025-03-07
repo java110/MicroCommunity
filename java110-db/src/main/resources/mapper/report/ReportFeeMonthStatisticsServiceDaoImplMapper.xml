@@ -1492,7 +1492,7 @@
 
     <!-- 查询费用月统计信息 add by wuxw 2018-07-03 -->
     <select id="queryOweFeeDetail" parameterType="Map" resultType="Map">
-        select t.obj_name objName,t.fee_name feeName,t.owner_name ownerName,t.link ownerTel,br.built_up_area builtUpArea,
+        select t.obj_name objName,t.fee_name feeName,t.owner_name ownerName,t.link ownerTel,br.built_up_area builtUpArea,t.community_id communityId,
         MIN(t.cur_month_time) startTime,MAX(t.cur_month_time) endTime,max(t.deadline_time) deadlineTime,SUM(t.receivable_amount) oweAmount
         from pay_fee_detail_month t
         left join building_room br on t.obj_id = br.room_id and br.status_cd = '0'
@@ -1537,7 +1537,7 @@
         <if test="feeTypeCd != null and feeTypeCd != ''">
             and t.fee_type_cd = #{feeTypeCd}
         </if>
-        group by t.obj_name ,t.fee_name ,t.owner_name ,t.link ,br.built_up_area
+        group by t.obj_name ,t.fee_name ,t.owner_name ,t.link ,br.built_up_area,t.community_id
         order by t.obj_name
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
