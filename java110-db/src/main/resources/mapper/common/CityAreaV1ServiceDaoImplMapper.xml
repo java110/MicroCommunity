@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cityAreaV1ServiceDaoImpl">
+
+
+    <!-- 保存地区信息 add by wuxw 2018-07-03 -->
+    <insert id="saveCityAreaInfo" parameterType="Map">
+        insert into city_area(
+        area_code,area_name,area_level,lon,id,parent_area_code,parent_area_name,lat
+        ) values (
+        #{areaCode},#{areaName},#{areaLevel},#{lon},#{id},#{parentAreaCode},#{parentAreaName},#{lat}
+        )
+    </insert>
+
+
+    <!-- 查询地区信息 add by wuxw 2018-07-03 -->
+    <select id="getCityAreaInfo" parameterType="Map" resultType="Map">
+        select t.area_code areaCode,t.area_name areaName,t.area_level areaLevel,t.lon,t.status_cd
+        statusCd,t.id,t.parent_area_code parentAreaCode,t.parent_area_name parentAreaName,t.lat,t.create_time createTime
+        from city_area t
+        where 1 =1
+        <if test="areaCode !=null and areaCode != ''">
+            and t.area_code= #{areaCode}
+        </if>
+        <if test="areaName !=null and areaName != ''">
+            and t.area_name= #{areaName}
+        </if>
+        <if test="areaLevel !=null and areaLevel != ''">
+            and t.area_level= #{areaLevel}
+        </if>
+        <if test="lon !=null and lon != ''">
+            and t.lon= #{lon}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="parentAreaCode !=null and parentAreaCode != ''">
+            and t.parent_area_code= #{parentAreaCode}
+        </if>
+        <if test="parentAreaName !=null and parentAreaName != ''">
+            and t.parent_area_name= #{parentAreaName}
+        </if>
+        <if test="lat !=null and lat != ''">
+            and t.lat= #{lat}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改地区信息 add by wuxw 2018-07-03 -->
+    <update id="updateCityAreaInfo" parameterType="Map">
+        update city_area t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="areaCode !=null and areaCode != ''">
+            , t.area_code= #{areaCode}
+        </if>
+        <if test="areaName !=null and areaName != ''">
+            , t.area_name= #{areaName}
+        </if>
+        <if test="areaLevel !=null and areaLevel != ''">
+            , t.area_level= #{areaLevel}
+        </if>
+        <if test="lon !=null and lon != ''">
+            , t.lon= #{lon}
+        </if>
+        <if test="parentAreaCode !=null and parentAreaCode != ''">
+            , t.parent_area_code= #{parentAreaCode}
+        </if>
+        <if test="parentAreaName !=null and parentAreaName != ''">
+            , t.parent_area_name= #{parentAreaName}
+        </if>
+        <if test="lat !=null and lat != ''">
+            , t.lat= #{lat}
+        </if>
+        where 1=1
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+
+    </update>
+
+    <!-- 查询地区数量 add by wuxw 2018-07-03 -->
+    <select id="queryCityAreasCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from city_area t
+        where 1 =1
+        <if test="areaCode !=null and areaCode != ''">
+            and t.area_code= #{areaCode}
+        </if>
+        <if test="areaName !=null and areaName != ''">
+            and t.area_name= #{areaName}
+        </if>
+        <if test="areaLevel !=null and areaLevel != ''">
+            and t.area_level= #{areaLevel}
+        </if>
+        <if test="lon !=null and lon != ''">
+            and t.lon= #{lon}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="id !=null and id != ''">
+            and t.id= #{id}
+        </if>
+        <if test="parentAreaCode !=null and parentAreaCode != ''">
+            and t.parent_area_code= #{parentAreaCode}
+        </if>
+        <if test="parentAreaName !=null and parentAreaName != ''">
+            and t.parent_area_name= #{parentAreaName}
+        </if>
+        <if test="lat !=null and lat != ''">
+            and t.lat= #{lat}
+        </if>
+
+
+    </select>
+
+</mapper>

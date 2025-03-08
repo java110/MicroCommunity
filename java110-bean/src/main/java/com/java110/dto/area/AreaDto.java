@@ -15,7 +15,11 @@ import java.util.Date;
  **/
 public class AreaDto extends PageDto implements Serializable {
 
-    private int id;
+    public static final String AREA_LEVEL_ONE = "101"; // 一级
+    public static final String AREA_LEVEL_TWO = "202"; // 二级
+    public static final String AREA_LEVEL_THREE = "303"; // 三级
+
+    private String id;
     private String areaCode;
     private String[] areaCodes;
     private String areaName;
@@ -31,11 +35,11 @@ public class AreaDto extends PageDto implements Serializable {
     private String cityName;
 
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
