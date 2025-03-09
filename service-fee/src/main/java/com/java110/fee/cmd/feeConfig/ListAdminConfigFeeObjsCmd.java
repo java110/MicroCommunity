@@ -1,13 +1,13 @@
-package com.java110.report.cmd.fee;
+package com.java110.fee.cmd.feeConfig;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerDto;
-import com.java110.intf.report.IReportCommunityInnerServiceSMO;
+import com.java110.intf.fee.IPayFeeConfigV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -20,37 +20,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 查询费用变更记录
+ * 查询 费用对象
  */
-@Java110Cmd(serviceCode = "fee.queryHisFee")
-public class QueryHisFeeCmd extends Cmd {
+@Java110Cmd(serviceCode = "feeConfig.listAdminConfigFeeObjs")
+public class ListAdminConfigFeeObjsCmd extends Cmd {
 
     @Autowired
-    private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
+    private IPayFeeConfigV1InnerServiceSMO payFeeConfigV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
-        super.validateProperty(context);
-
-
+        Assert.hasKeyAndValue(reqJson, "configId", "未包含费用项");
+        super.validateAdmin(context);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        int row = reqJson.getInteger("row");
-        FeeDto feeDto = BeanConvertUtil.covertBean(reqJson, FeeDto.class);
+        FeeConfigDto feeConfigDto = BeanConvertUtil.covertBean(reqJson, FeeConfigDto.class);
 
-        int total = reportCommunityInnerServiceSMOImpl.queryHisFeeCount(feeDto);
-//        int count = 0;
+        int count = payFeeConfigV1InnerServiceSMOImpl.queryFeeObjsCount(feeConfigDto);
+
         List<FeeDto> feeDtos = null;
-        if (total > 0) {
-            feeDtos = reportCommunityInnerServiceSMOImpl.queryHisFees(feeDto);
+
+        if (count > 0) {
+            feeDtos = BeanConvertUtil.covertBeanList(payFeeConfigV1InnerServiceSMOImpl.queryFeeObjs(feeConfigDto), FeeDto.class);
         } else {
             feeDtos = new ArrayList<>();
         }
 
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, feeDtos);
+
+        ResponseEntity<String> responseEntity
+                = ResultVo.createResponseEntity(
+                (int) Math.ceil((double) count / (double) reqJson.getInteger("row")),
+                count,
+                feeDtos);
+
         context.setResponseEntity(responseEntity);
     }
 }

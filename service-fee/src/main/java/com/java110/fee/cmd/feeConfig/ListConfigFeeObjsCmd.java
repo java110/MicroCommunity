@@ -32,6 +32,7 @@ public class ListConfigFeeObjsCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区");
         Assert.hasKeyAndValue(reqJson, "configId", "未包含费用项");
+        super.validateProperty(context);
     }
 
     @Override

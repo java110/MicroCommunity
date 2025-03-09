@@ -6,7 +6,6 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.fee.FeeDto;
-import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
@@ -22,16 +21,16 @@ import java.util.List;
 /**
  * 查询费用变更记录
  */
-@Java110Cmd(serviceCode = "fee.queryHisFee")
-public class QueryHisFeeCmd extends Cmd {
+@Java110Cmd(serviceCode = "fee.queryAdminHisFee")
+public class QueryAdminHisFeeCmd extends Cmd {
 
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        Assert.hasKeyAndValue(reqJson,"communityId","未包含小区");
-        super.validateProperty(context);
+        super.validatePageInfo(reqJson);
+        super.validateAdmin(context);
 
 
     }
