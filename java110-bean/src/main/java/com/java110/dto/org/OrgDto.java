@@ -25,6 +25,9 @@ public class OrgDto extends PageDto implements Serializable {
     private String description;
     private String orgLevel;
     private String storeId;
+
+    private String storeTypeCd;
+
     private String orgId;
     private String[] orgIds;
     private String belongCommunityId;
@@ -171,5 +174,13 @@ public class OrgDto extends PageDto implements Serializable {
 
     public void setOrgIds(String[] orgIds) {
         this.orgIds = orgIds;
+    }
+
+    public String getStoreTypeCd() {
+        return storeTypeCd;
+    }
+
+    public void setStoreTypeCd(String storeTypeCd) {
+        this.storeTypeCd = storeTypeCd;
     }
 }

@@ -17,6 +17,7 @@ import com.java110.intf.user.IOrgV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,17 +46,17 @@ import java.util.Map;
                 @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
                 @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
-                @Java110ParamDoc(parentNodeName = "data",name = "allOrgName", type = "String", remark = "组织名称"),
-                @Java110ParamDoc(parentNodeName = "data",name = "id", type = "String", remark = "组织ID"),
-                @Java110ParamDoc(parentNodeName = "data",name = "children", type = "Array", remark = "子节点"),
-                @Java110ParamDoc(parentNodeName = "children",name = "allOrgName", type = "String", remark = "组织名称"),
-                @Java110ParamDoc(parentNodeName = "children",name = "id", type = "String", remark = "组织ID"),
+                @Java110ParamDoc(parentNodeName = "data", name = "allOrgName", type = "String", remark = "组织名称"),
+                @Java110ParamDoc(parentNodeName = "data", name = "id", type = "String", remark = "组织ID"),
+                @Java110ParamDoc(parentNodeName = "data", name = "children", type = "Array", remark = "子节点"),
+                @Java110ParamDoc(parentNodeName = "children", name = "allOrgName", type = "String", remark = "组织名称"),
+                @Java110ParamDoc(parentNodeName = "children", name = "id", type = "String", remark = "组织ID"),
         }
 )
 
 @Java110ExampleDoc(
-        reqBody="http://{ip}:{port}/app/org.listOrgTree",
-        resBody="{\"code\":0,\"data\":{\"allOrgName\":\"演示物业\",\"children\":[{\"allOrgName\":\"演示物业 / 软件部\",\"icon\":\"/img/org.png\",\"id\":\"102022091988250052\",\"parentId\":\"842022081548770433\",\"text\":\"软件部\"}],\"icon\":\"/img/org.png\",\"id\":\"842022081548770433\",\"parentId\":\"-1\",\"text\":\"演示物业\"},\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
+        reqBody = "http://{ip}:{port}/app/org.listOrgTree",
+        resBody = "{\"code\":0,\"data\":{\"allOrgName\":\"演示物业\",\"children\":[{\"allOrgName\":\"演示物业 / 软件部\",\"icon\":\"/img/org.png\",\"id\":\"102022091988250052\",\"parentId\":\"842022081548770433\",\"text\":\"软件部\"}],\"icon\":\"/img/org.png\",\"id\":\"842022081548770433\",\"parentId\":\"-1\",\"text\":\"演示物业\"},\"msg\":\"成功\",\"page\":0,\"records\":1,\"rows\":0,\"total\":1}"
 )
 
 @Java110Cmd(serviceCode = "org.listOrgTree")
@@ -113,12 +114,12 @@ public class ListOrgTreeCmd extends Cmd {
             basePrivilegeDto.setResource("/viewAllOrganization");
             basePrivilegeDto.setUserId(reqJson.getString("userId"));
             List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-            if (privileges.size() == 0) {
+            if (ListUtil.isNull(privileges)) {
                 //查询员工所属二级组织架构
                 OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
                 orgStaffRelDto.setStaffId(reqJson.getString("userId"));
                 List<OrgStaffRelDto> orgStaffRelDtos = iOrgStaffRelInnerServiceSMO.queryOrgInfoByStaffIdsNew(orgStaffRelDto);
-                if (orgStaffRelDtos.size() > 0) {
+                if (ListUtil.isNotNull(orgStaffRelDtos)) {
                     List<String> haveOrgList = new ArrayList<String>();
                     for (OrgStaffRelDto orgStaffRelDto1 : orgStaffRelDtos) {
                         OrgDto orgDto1 = new OrgDto();
@@ -163,7 +164,7 @@ public class ListOrgTreeCmd extends Cmd {
             }
         }
 
-        if (childs.size() < 1) {
+        if (ListUtil.isNull(childs)) {
             return;
         }
 
@@ -178,43 +179,40 @@ public class ListOrgTreeCmd extends Cmd {
 
         for (OrgDto orgDto : orgDtoList) {
             haveOrgList.add(orgDto.getOrgId());
-            if (!"1".equals(orgDto.getOrgLevel())) {
-                if ("2".equals(orgDto.getOrgLevel())) {
-                    //上级别
-                    OrgDto orgDto1 = new OrgDto();
-                    orgDto1.setOrgId(orgDto.getParentOrgId());
-                    List<OrgDto> orgDtoList1 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto1);
-                    for (OrgDto orgDto2 : orgDtoList1) {
-                        haveOrgList.add(orgDto2.getOrgId());
-                    }
-                    //同级别
-                    OrgDto orgDto2 = new OrgDto();
-                    orgDto2.setParentOrgId(orgDto.getOrgId());
-                    List<OrgDto> orgDtoList2 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto2);
-                    for (OrgDto orgDto3 : orgDtoList2) {
-                        haveOrgList.add(orgDto3.getOrgId());
-                    }
-                } else {
-                    OrgDto orgDto1 = new OrgDto();
-                    orgDto1.setOrgId(orgDto.getParentOrgId());
-                    List<OrgDto> orgDtoList1 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto1);
-                    findCompany(haveOrgList, orgDtoList1);
-
-                    //下一个级别
-                    if (!"2".equals(orgDto.getOrgLevel())) {
-                        OrgDto orgDto3 = new OrgDto();
-                        orgDto3.setParentOrgId(orgDto.getOrgId());
-                        List<OrgDto> orgDtoList2 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto3);
-                        for (OrgDto orgDto4 : orgDtoList2) {
-                            haveOrgList.add(orgDto4.getOrgId());
-                        }
-                    }
-
+            if (OrgDto.ORG_LEVEL_STORE.equals(orgDto.getOrgLevel())) {
+                continue;
+            }
+            if (OrgDto.ORG_LEVEL_COMPANY.equals(orgDto.getOrgLevel())) {
+                //上级别
+                OrgDto orgDto1 = new OrgDto();
+                orgDto1.setOrgId(orgDto.getParentOrgId());
+                List<OrgDto> orgDtoList1 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto1);
+                for (OrgDto orgDto2 : orgDtoList1) {
+                    haveOrgList.add(orgDto2.getOrgId());
                 }
+                //同级别
+                OrgDto orgDto2 = new OrgDto();
+                orgDto2.setParentOrgId(orgDto.getOrgId());
+                List<OrgDto> orgDtoList2 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto2);
+                for (OrgDto orgDto3 : orgDtoList2) {
+                    haveOrgList.add(orgDto3.getOrgId());
+                }
+            } else {
+                OrgDto orgDto1 = new OrgDto();
+                orgDto1.setOrgId(orgDto.getParentOrgId());
+                List<OrgDto> orgDtoList1 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto1);
+                findCompany(haveOrgList, orgDtoList1);
 
+                //下一个级别
+                if (!OrgDto.ORG_LEVEL_COMPANY.equals(orgDto.getOrgLevel())) {
+                    OrgDto orgDto3 = new OrgDto();
+                    orgDto3.setParentOrgId(orgDto.getOrgId());
+                    List<OrgDto> orgDtoList2 = orgV1InnerServiceSMOImpl.queryOrgs(orgDto3);
+                    for (OrgDto orgDto4 : orgDtoList2) {
+                        haveOrgList.add(orgDto4.getOrgId());
+                    }
+                }
             }
         }
-
-
     }
 }

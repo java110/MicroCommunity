@@ -47,10 +47,10 @@ import java.util.List;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "scheduleClasses.staffMonthScheduleClasses")
-public class StaffMonthScheduleClassesCmd extends Cmd {
+@Java110Cmd(serviceCode = "scheduleClasses.staffAdminMonthScheduleClasses")
+public class StaffAdminMonthScheduleClassesCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(StaffMonthScheduleClassesCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(StaffAdminMonthScheduleClassesCmd.class);
     @Autowired
     private IScheduleClassesStaffV1InnerServiceSMO scheduleClassesStaffV1InnerServiceSMOImpl;
 
@@ -64,13 +64,11 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "curDate", "未包含月 YYYY-MM");
-        super.validateProperty(cmdDataFlowContext);
+        super.validateAdmin(cmdDataFlowContext);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-
-        String storeId = cmdDataFlowContext.getReqHeaders().get("store-id");
 
         ScheduleClassesStaffDto scheduleClassesStaffDto = new ScheduleClassesStaffDto();
         scheduleClassesStaffDto.setStaffId(reqJson.getString("staffId"));
@@ -79,7 +77,6 @@ public class StaffMonthScheduleClassesCmd extends Cmd {
 
         scheduleClassesStaffDto.setPage(reqJson.getIntValue("page"));
         scheduleClassesStaffDto.setRow(reqJson.getIntValue("row"));
-        scheduleClassesStaffDto.setStoreId(storeId);
         scheduleClassesStaffDto.setOrgId(reqJson.getString("orgId"));
 
         int count = scheduleClassesStaffV1InnerServiceSMOImpl.queryScheduleClassesStaffsCount(scheduleClassesStaffDto);

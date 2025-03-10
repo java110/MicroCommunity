@@ -52,6 +52,7 @@ public class DeleteMaintainanceTaskDetailCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "taskDetailId", "taskDetailId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
+        super.validateProperty(cmdDataFlowContext);
 
     }
 

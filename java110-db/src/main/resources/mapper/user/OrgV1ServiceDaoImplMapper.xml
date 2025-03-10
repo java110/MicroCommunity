@@ -43,6 +43,10 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
+        <if test="storeTypeCd !=null and storeId = '800900000003'">
+            and t.store_id not in ('400000000000000001','400000000000000002')
+        </if>
+
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}
         </if>
@@ -115,8 +119,12 @@
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
+
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
+        </if>
+        <if test="storeTypeCd !=null and storeId = '800900000003'">
+            and t.store_id not in ('400000000000000001','400000000000000002')
         </if>
         <if test="orgId !=null and orgId != ''">
             and t.org_id= #{orgId}

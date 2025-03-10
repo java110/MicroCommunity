@@ -21,7 +21,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.privilege.BasePrivilegeDto;
-import com.java110.dto.resource.ResourceStoreDto;
+import com.java110.dto.purchase.PurchaseApplyDto;
 import com.java110.intf.common.IPurchaseApplyUserInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.store.IPurchaseApplyInnerServiceSMO;
@@ -34,18 +34,16 @@ import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.purchaseApply.ApiPurchaseApplyDataVo;
 import com.java110.vo.api.purchaseApply.ApiPurchaseApplyVo;
 import com.java110.vo.api.purchaseApply.PurchaseApplyDetailVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.purchase.PurchaseApplyDto;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 类表述：查询
@@ -57,10 +55,10 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "purchaseApply.listPurchaseApplys")
-public class ListPurchaseApplysCmd extends Cmd {
+@Java110Cmd(serviceCode = "purchaseApply.listAdminPurchaseApplys")
+public class ListAdminPurchaseApplysCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListPurchaseApplysCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListAdminPurchaseApplysCmd.class);
 
     @Autowired
     private IPurchaseApplyInnerServiceSMO purchaseApplyInnerServiceSMOImpl;
@@ -78,35 +76,16 @@ public class ListPurchaseApplysCmd extends Cmd {
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "resOrderType", "必填，请填写订单类型");
         super.validatePageInfo(reqJson);
-        super.validateProperty(cmdDataFlowContext);
+        super.validateAdmin(cmdDataFlowContext);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         PurchaseApplyDto purchaseApplyDto = BeanConvertUtil.covertBean(reqJson, PurchaseApplyDto.class);
+        purchaseApplyDto.setStoreId("");
         purchaseApplyDto.setUserName("");//解除与用户名相关问题
         //获取用户id
-        String userId = reqJson.getString("userId");
-        //采购申请、物品领用（管理员查看所有，员工查看当前用户相关）
-        //采购申请查看、采购待办查看、采购已办查看、物品领用查看、领用待办查看、领用已办查看（不用限制员工）
-        List<Map> privileges = new ArrayList<>();
-        if (purchaseApplyDto.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_ENTER)) {
-            //采购申请所有记录权限
-            BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-            basePrivilegeDto.setResource("/viewPurchaseApplyManage");
-            basePrivilegeDto.setUserId(userId);
-            privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        }
-        if (purchaseApplyDto.getResOrderType().equals(PurchaseApplyDto.RES_ORDER_TYPE_OUT)) {
-            //物品领用所有记录权限
-            BasePrivilegeDto basePrivilegeDto = new BasePrivilegeDto();
-            basePrivilegeDto.setResource("/viewAllItemUse");
-            basePrivilegeDto.setUserId(userId);
-            privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-        }
-        if (privileges.size() != 0 || (!StringUtil.isEmpty(reqJson.getString("applyOrderId")))) {
-            purchaseApplyDto.setUserId("");
-        }
+        purchaseApplyDto.setUserId("");
         if (!StringUtil.isEmpty(reqJson.getString("applyUserName"))) {
             purchaseApplyDto.setUserName(reqJson.getString("applyUserName"));
         }

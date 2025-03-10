@@ -5,8 +5,6 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.org.OrgDto;
-import com.java110.dto.org.OrgStaffRelDto;
 import com.java110.dto.privilege.PrivilegeUserDto;
 import com.java110.dto.privilege.RoleCommunityDto;
 import com.java110.intf.user.IOrgV1InnerServiceSMO;
@@ -15,7 +13,6 @@ import com.java110.intf.user.IRoleCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,8 +21,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-@Java110Cmd(serviceCode = "user.listStaffRoles")
-public class ListStaffRolesCmd extends Cmd {
+@Java110Cmd(serviceCode = "user.listAdminStaffRoles")
+public class ListAdminStaffRolesCmd extends Cmd {
 
     @Autowired
     private IPrivilegeUserV1InnerServiceSMO privilegeUserV1InnerServiceSMOImpl;
@@ -39,15 +36,15 @@ public class ListStaffRolesCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         Assert.hasKeyAndValue(reqJson, "staffId", "未包含 员工信息");
+        super.validateAdmin(context);
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
-        String storeId = context.getReqHeaders().get("store-id");
-        Assert.hasLength(storeId, "未包含商户信息");
 
         PrivilegeUserDto privilegeUserDto = BeanConvertUtil.covertBean(reqJson, PrivilegeUserDto.class);
+        privilegeUserDto.setStoreId("");
         privilegeUserDto.setUserId(reqJson.getString("staffId"));
         privilegeUserDto.setPrivilegeFlag(PrivilegeUserDto.PRIVILEGE_FLAG_GROUP);
         int count = privilegeUserV1InnerServiceSMOImpl.queryPrivilegeUsersCount(privilegeUserDto);
@@ -55,7 +52,7 @@ public class ListStaffRolesCmd extends Cmd {
         if (count > 0) {
             roles = privilegeUserV1InnerServiceSMOImpl.queryPrivilegeUsers(privilegeUserDto);
             for (PrivilegeUserDto privilegeUserDto1 : roles) {
-                RoleCommunityDto roleCommunityDto=new RoleCommunityDto();
+                RoleCommunityDto roleCommunityDto = new RoleCommunityDto();
                 roleCommunityDto.setRoleId(privilegeUserDto1.getpId());
                 roleCommunityDto.setRow(Integer.valueOf("999"));
                 List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitys(roleCommunityDto);
