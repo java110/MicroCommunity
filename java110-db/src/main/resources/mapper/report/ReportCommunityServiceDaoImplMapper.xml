@@ -361,6 +361,21 @@
         order by ip.create_time desc
     </select>
 
+    <select id="queryCommunityMachineTypeTree" parameterType="Map" resultType="Map">
+        select s.community_id communityId,s.name communityName,t.type_id typeId,t.parent_type_id parentTypeId,t.machine_type_name machineTypeName
+        from machine_type t
+        left join s_community s on t.community_id = s.community_id and s.status_cd = '0'
+        where t.status_cd = '0'
+        and s.status_cd = '0'
+        <if test="communityIds !=null ">
+            and s.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by t.seq
+    </select>
+
 
     <select id="queryHisOwnerCarCount" parameterType="Map" resultType="Map">
         select count(1) count

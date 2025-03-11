@@ -31,6 +31,8 @@ public class SmallWeChatDto extends PageDto implements Serializable {
     private String appSecret;
     private String name;
     private String objId;
+    private String communityId;
+    private String communityName;
     private String wechatId;
     private String weChatId;
     private String payPassword;
@@ -204,5 +206,21 @@ public class SmallWeChatDto extends PageDto implements Serializable {
 
     public void setMchName(String mchName) {
         this.mchName = mchName;
+    }
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

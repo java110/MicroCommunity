@@ -6,6 +6,7 @@ import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.floor.FloorDto;
 import com.java110.dto.inspection.InspectionPlanDto;
+import com.java110.dto.machine.MachineTypeDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.repair.RepairSettingDto;
 import com.java110.dto.room.RoomDto;
@@ -121,6 +122,16 @@ public class ReportCommunityInnerServiceSMOImpl extends BaseServiceSMO implement
                 FloorDto.class);
 
         return floorDtos;
+    }
+
+    @Override
+    public List<MachineTypeDto> queryCommunityMachineTypeTree(@RequestBody MachineTypeDto machineTypeDto) {
+        //校验是否传了 分页信息
+        List<MachineTypeDto> machineTypeDtos = BeanConvertUtil.covertBeanList(
+                reportCommunityServiceDaoImpl.queryCommunityMachineTypeTree(BeanConvertUtil.beanCovertMap(machineTypeDto)),
+                MachineTypeDto.class);
+
+        return machineTypeDtos;
     }
 
     @Override

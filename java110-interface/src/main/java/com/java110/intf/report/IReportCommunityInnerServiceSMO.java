@@ -4,6 +4,7 @@ import com.java110.config.feign.FeignConfiguration;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.floor.FloorDto;
 import com.java110.dto.inspection.InspectionPlanDto;
+import com.java110.dto.machine.MachineTypeDto;
 import com.java110.dto.parking.ParkingAreaDto;
 import com.java110.dto.repair.RepairSettingDto;
 import com.java110.dto.room.RoomDto;
@@ -121,4 +122,7 @@ public interface IReportCommunityInnerServiceSMO {
 
     @RequestMapping(value = "/queryCommunityFloorTree", method = RequestMethod.POST)
     List<FloorDto> queryCommunityFloorTree(@RequestBody FloorDto floorDto);
+
+    @RequestMapping(value = "/queryCommunityMachineTypeTree", method = RequestMethod.POST)
+    List<MachineTypeDto> queryCommunityMachineTypeTree(@RequestBody MachineTypeDto machineTypeDto);
 }

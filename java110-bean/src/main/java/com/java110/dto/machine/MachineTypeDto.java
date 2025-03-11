@@ -20,6 +20,7 @@ public class MachineTypeDto extends PageDto implements Serializable {
     private String parentTypeId;
     private String machineTypeCd;
     private String communityId;
+    private String communityName;
     private String isEnable;
     private String machineTypeCode;
     private String unit;
@@ -144,5 +145,13 @@ public class MachineTypeDto extends PageDto implements Serializable {
 
     public void setWarrantyDeadline(String warrantyDeadline) {
         this.warrantyDeadline = warrantyDeadline;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

@@ -27,9 +27,9 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -42,10 +42,10 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "smallWeChat.updateSmallWeChat")
-public class UpdateSmallWechatCmd extends Cmd {
+@Java110Cmd(serviceCode = "smallWeChat.updateAdminSmallWeChat")
+public class UpdateAdminSmallWechatCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(UpdateSmallWechatCmd.class);
+  private static Logger logger = LoggerFactory.getLogger(UpdateAdminSmallWechatCmd.class);
 
 
     @Autowired
@@ -53,7 +53,7 @@ public class UpdateSmallWechatCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        super.validateProperty(cmdDataFlowContext);
+        super.validateAdmin(cmdDataFlowContext);
         Assert.hasKeyAndValue(reqJson, "wechatId", "wechatId不能为空");
         Assert.hasKeyAndValue(reqJson, "name", "请求报文中未包含name");
         Assert.hasKeyAndValue(reqJson, "appId", "请求报文中未包含appId");

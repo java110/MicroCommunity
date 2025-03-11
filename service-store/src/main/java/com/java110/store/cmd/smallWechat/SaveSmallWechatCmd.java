@@ -69,7 +69,7 @@ public class SaveSmallWechatCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "payPassword", "请求报文中未包含payPassword");
         Assert.hasKeyAndValue(reqJson, "objId", "请求报文中未包含objId(小区id)");
         Assert.hasKeyAndValue(reqJson, "weChatType", "请求报文中未包含类型");
-
+        super.validateProperty(cmdDataFlowContext);
     }
 
     @Override

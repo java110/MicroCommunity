@@ -122,4 +122,6 @@ public interface IReportCommunityServiceDao {
     List<Map> queryCommunityInspectionTree(Map info);
 
     List<Map> queryCommunityFloorTree(Map info);
+
+    List<Map> queryCommunityMachineTypeTree(Map info);
 }
