@@ -2,6 +2,7 @@ package com.java110.job.msgNotify;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.java110.core.client.OutRestTemplate;
 import com.java110.core.factory.WechatFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.wechat.SmallWeChatDto;
@@ -278,7 +279,7 @@ public class WechatTemplateImpl implements IWechatTemplate {
         smallWeChatDto.setObjId(communityId);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
 
-        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
+        if (ListUtil.isNull(smallWeChatDtos)) {
             String appIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId");
             String appSecretCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret");
             String mchIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId");

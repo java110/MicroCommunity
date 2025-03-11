@@ -82,6 +82,7 @@ public class OutRestTemplate extends RestTemplate {
         return responseEntity;
     }
 
+
     @Override
     public <T> ResponseEntity<T> postForEntity(String url, @Nullable Object request,
                                                Class<T> responseType, Object... uriVariables) throws RestClientException {
@@ -112,6 +113,34 @@ public class OutRestTemplate extends RestTemplate {
     }
 
     @Override
+    public <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType, Object... uriVariables) throws RestClientException {
+        String errMsg = "";
+
+        ResponseEntity<T> responseEntity = null;
+        ResponseEntity tmpResponseEntity = null;
+        Date startTime = DateUtil.getCurrentDate();
+        try {
+            logger.debug("请求信息：url:{},method:{},uriVariables:{}", url, "POST", uriVariables);
+            responseEntity = super.getForEntity(url, responseType, uriVariables);
+            logger.debug("返回信息：responseEntity:{}", responseEntity);
+        } catch (HttpStatusCodeException e) {
+            errMsg = ExceptionUtil.getStackTrace(e);
+            throw e;
+        } finally {
+
+            if (responseEntity != null) {
+                tmpResponseEntity = new ResponseEntity(responseEntity.getBody(), responseEntity.getStatusCode());
+            } else {
+                tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.BAD_REQUEST);
+            }
+            //  saveLog(url, "POST", null, tmpResponseEntity, DateUtil.getCurrentDate().getTime() - startTime.getTime());
+
+            LogFactory.saveOutLog(url, "GET", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, "", tmpResponseEntity);
+        }
+        return responseEntity;
+    }
+
+    @Override
     public <T> T getForObject(String url, Class<T> responseType, Object... uriVariables) throws RestClientException {
         String errMsg = "";
         T resMsg;
@@ -126,7 +155,7 @@ public class OutRestTemplate extends RestTemplate {
         } finally {
               ResponseEntity  tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.OK);
             //  saveLog(url, "POST", null, tmpResponseEntity, DateUtil.getCurrentDate().getTime() - startTime.getTime());
-            LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, "", tmpResponseEntity);
+            LogFactory.saveOutLog(url, "GET", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, "", tmpResponseEntity);
         }
         return resMsg;
     }

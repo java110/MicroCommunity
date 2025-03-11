@@ -57,6 +57,13 @@ public class RestTemplate extends org.springframework.web.client.RestTemplate {
         return responseEntity;
     }
 
+    public <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType, Object... uriVariables) throws RestClientException {
+        logger.debug("请求信息：url:{},method:GET,uriVariables:{}", url, uriVariables);
+        ResponseEntity<T> responseEntity = super.getForEntity(url, responseType, uriVariables);
+        logger.debug("返回信息：responseEntity:{}", responseEntity);
+        return responseEntity;
+    }
+
     @Override
     public <T> T getForObject(String url, Class<T> responseType, Object... uriVariables) throws RestClientException {
 
