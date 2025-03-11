@@ -22,6 +22,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 
+import java.net.URI;
 import java.util.Date;
 
 /**
@@ -108,6 +109,26 @@ public class OutRestTemplate extends RestTemplate {
             LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, request.toString(), tmpResponseEntity);
         }
         return responseEntity;
+    }
+
+    @Override
+    public <T> T getForObject(String url, Class<T> responseType, Object... uriVariables) throws RestClientException {
+        String errMsg = "";
+        T resMsg;
+        Date startTime = DateUtil.getCurrentDate();
+        try {
+            logger.debug("请求信息：url:{},method:GET", url);
+             resMsg = super.getForObject(url, responseType,uriVariables);
+            logger.debug("返回信息：responseEntity:{}", resMsg);
+        } catch (HttpStatusCodeException e) {
+            errMsg = ExceptionUtil.getStackTrace(e);
+            throw e;
+        } finally {
+              ResponseEntity  tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.OK);
+            //  saveLog(url, "POST", null, tmpResponseEntity, DateUtil.getCurrentDate().getTime() - startTime.getTime());
+            LogFactory.saveOutLog(url, "POST", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, "", tmpResponseEntity);
+        }
+        return resMsg;
     }
 
 

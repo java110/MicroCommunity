@@ -6,9 +6,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestClientException;
+
+import java.net.URI;
 
 /**
  * @author wux
@@ -50,6 +53,15 @@ public class RestTemplate extends org.springframework.web.client.RestTemplate {
 
         logger.debug("请求信息：url:{},method:{},request:{},uriVariables:{}", url, request, uriVariables);
         ResponseEntity<T> responseEntity = super.postForEntity(url, request, responseType, uriVariables);
+        logger.debug("返回信息：responseEntity:{}", responseEntity);
+        return responseEntity;
+    }
+
+    @Override
+    public <T> T getForObject(String url, Class<T> responseType, Object... uriVariables) throws RestClientException {
+
+        logger.debug("请求信息：url:{},method:GET", url);
+        T responseEntity = super.getForObject(url, responseType,uriVariables);
         logger.debug("返回信息：responseEntity:{}", responseEntity);
         return responseEntity;
     }

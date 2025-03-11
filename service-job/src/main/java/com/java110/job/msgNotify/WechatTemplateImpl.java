@@ -10,6 +10,7 @@ import com.java110.utils.cache.CommonCache;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.WechatConstant;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
@@ -250,7 +251,7 @@ public class WechatTemplateImpl implements IWechatTemplate {
         smallWeChatDto.setObjId(communityId);
         List<SmallWeChatDto> smallWeChatDtos = smallWeChatInnerServiceSMOImpl.querySmallWeChats(smallWeChatDto);
 
-        if (smallWeChatDtos == null || smallWeChatDtos.size() < 1) {
+        if (ListUtil.isNull(smallWeChatDtos)) {
             String appIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appId");
             String appSecretCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "appSecret");
             String mchIdCache = MappingCache.getValue(WechatConstant.WECHAT_DOMAIN, "mchId");
