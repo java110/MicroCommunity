@@ -11,6 +11,7 @@ import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.intf.store.IScheduleClassesV1InnerServiceSMO;
 import com.java110.job.export.IExportDataAdapt;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -133,7 +134,7 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         scheduleClassesDto.setScheduleId(scheduleClassesStaffDto.getScheduleId());
         List<ScheduleClassesDto> scheduleClassesDtos = scheduleClassesV1InnerServiceSMOImpl.queryScheduleClassess(scheduleClassesDto);
         //这里 如果没有员工排班 那么就认为 员工一直在上班
-        if (scheduleClassesDtos == null || scheduleClassesDtos.size() < 1) {
+        if (ListUtil.isNull(scheduleClassesDtos)) {
             return;
         }
 
@@ -142,7 +143,7 @@ public class ReportStaffMonthScheduleClassesAdapt implements IExportDataAdapt {
         List<ScheduleClassesDayDto> scheduleClassesDayDtos = scheduleClassesDayV1InnerServiceSMOImpl.queryScheduleClassesDays(scheduleClassesDayDto);
 
         //设置问题 ，这里默认反馈在线
-        if (scheduleClassesDayDtos == null || scheduleClassesDayDtos.size() < 1) {
+        if (ListUtil.isNull(scheduleClassesDayDtos)) {
             return;
         }
 
