@@ -36,7 +36,7 @@ public class ListInspectionTaskDetailsCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
-        super.validateProperty(context);
+
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
 
     }
