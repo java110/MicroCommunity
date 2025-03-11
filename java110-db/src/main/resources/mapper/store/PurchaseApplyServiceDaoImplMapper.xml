@@ -278,7 +278,7 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
-        group by t.apply_order_id order by t.create_time desc
+        order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
         </if>
@@ -432,8 +432,8 @@
 
     <!-- 查询采购申请数量 add by wuxw 2018-07-03 -->
     <select id="queryPurchaseApplysCount" parameterType="Map" resultType="Map">
-        select count(1) count from
-        (select t.apply_order_id from purchase_apply t
+        select count(1) count
+        from purchase_apply t
         left join purchase_apply_detail de on t.apply_order_id = de.apply_order_id and de.status_cd = '0'
         left join resource_store rs on de.res_id = rs.res_id and rs.status_cd = '0'
         where 1 = 1
@@ -498,7 +498,6 @@
         <if test='urgentFlag !=null and urgentFlag == "1"'>
             and date_format(t.create_time,'%Y-%m') = date_format(now(),'%Y-%m')
         </if>
-        group by t.apply_order_id)A
     </select>
 
     <!-- 保存采购申请信息 add by wuxw 2018-07-03 -->
