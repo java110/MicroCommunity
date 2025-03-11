@@ -140,25 +140,5 @@ public class OutRestTemplate extends RestTemplate {
         return responseEntity;
     }
 
-    @Override
-    public <T> T getForObject(String url, Class<T> responseType, Object... uriVariables) throws RestClientException {
-        String errMsg = "";
-        T resMsg;
-        Date startTime = DateUtil.getCurrentDate();
-        try {
-            logger.debug("请求信息：url:{},method:GET", url);
-             resMsg = super.getForObject(url, responseType,uriVariables);
-            logger.debug("返回信息：responseEntity:{}", resMsg);
-        } catch (HttpStatusCodeException e) {
-            errMsg = ExceptionUtil.getStackTrace(e);
-            throw e;
-        } finally {
-              ResponseEntity  tmpResponseEntity = new ResponseEntity(errMsg, HttpStatus.OK);
-            //  saveLog(url, "POST", null, tmpResponseEntity, DateUtil.getCurrentDate().getTime() - startTime.getTime());
-            LogFactory.saveOutLog(url, "GET", DateUtil.getCurrentDate().getTime() - startTime.getTime(), null, "", tmpResponseEntity);
-        }
-        return resMsg;
-    }
-
 
 }

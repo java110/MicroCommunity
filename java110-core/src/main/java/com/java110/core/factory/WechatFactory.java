@@ -11,7 +11,10 @@ import com.java110.utils.util.StringUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -68,18 +71,25 @@ public class WechatFactory {
      * @return
      */
     private static String refreshAccessToken(String appId, String appSecure) {
-        String getAccessToken = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN,WechatConstant.GET_ACCESS_TOKEN_URL);
-        if(StringUtil.isEmpty(getAccessToken)){
+        String getAccessToken = MappingCache.getRemark(WechatConstant.WECHAT_DOMAIN, WechatConstant.GET_ACCESS_TOKEN_URL);
+        if (StringUtil.isEmpty(getAccessToken)) {
             getAccessToken = WechatConstant.GET_ACCESS_TOKEN;
         }
         String url = getAccessToken.replace("APPID", appId)
                 .replace("SECRET", appSecure);
         RestTemplate outRestTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
-        String response = outRestTemplate.getForObject(url, String.class);
+        if(outRestTemplate == null){
+            throw new IllegalArgumentException("查询token 失败");
+        }
+        ResponseEntity<String> responseEntity = outRestTemplate.getForEntity(url, String.class);
+        logger.debug("获取access_token 入参：" + url + " 返回参数" + responseEntity);
 
-        logger.debug("获取access_token 入参：" + url + " 返回参数" + response);
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("查询token 失败");
+        }
 
-        JSONObject responseObj = JSONObject.parseObject(response);
+        JSONObject responseObj = JSONObject.parseObject(responseEntity.getBody());
+
 
         if (responseObj.containsKey("access_token")) {
             String accessToken = responseObj.getString("access_token");
@@ -122,7 +132,7 @@ public class WechatFactory {
 
     public static String decryptS5(String sSrc, String encodingFormat, String sKey, String ivParameter) {
         try {
-        	Base64 base64 = new Base64();
+            Base64 base64 = new Base64();
             byte[] raw = base64.decode(sKey);
             SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
             IvParameterSpec iv = new IvParameterSpec(base64.decode(ivParameter));
