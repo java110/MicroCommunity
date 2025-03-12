@@ -9,6 +9,7 @@ import com.java110.dto.work.*;
 import com.java110.intf.oa.*;
 import com.java110.intf.store.IScheduleClassesStaffV1InnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
+import com.java110.po.workPool.WorkCopyPo;
 import com.java110.po.workPool.WorkPoolFilePo;
 import com.java110.po.workPool.WorkTaskItemPo;
 import com.java110.po.workPool.WorkTaskPo;
@@ -46,6 +47,9 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
 
     @Autowired
     private IWorkTaskItemV1InnerServiceSMO workTaskItemV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkCopyV1InnerServiceSMO workCopyV1InnerServiceSMOImpl;
 
     @Override
     protected void process(TaskDto taskDto) throws Exception {
@@ -181,6 +185,20 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
             workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
         }
 
+        // 将抄送状态修改为待处理
+        WorkCopyDto workCopyDto = new WorkCopyDto();
+        workCopyDto.setWorkId(tmpWorkCycleDto.getWorkId());
+        List<WorkCopyDto> workCopyDtos = workCopyV1InnerServiceSMOImpl.queryWorkCopys(workCopyDto);
+
+        if(ListUtil.isNull(workCopyDtos)){
+            return;
+        }
+
+        WorkCopyPo workCopyPo = new WorkCopyPo();
+        workCopyPo.setCopyId(workCopyDtos.get(0).getCopyId());
+        workCopyPo.setState(WorkCopyDto.STATE_DOING);
+        workCopyPo.setRemark("待处理");
+        workCopyV1InnerServiceSMOImpl.updateWorkCopy(workCopyPo);
 
     }
 

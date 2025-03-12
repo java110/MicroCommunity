@@ -39,7 +39,7 @@ public class QueryAdminStaffAppAuthCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         StaffAppAuthDto staffAppAuthDto = BeanConvertUtil.covertBean(reqJson, StaffAppAuthDto.class);
-        staffAppAuthDto.setStoreId("");
+        staffAppAuthDto.setStoreId(reqJson.getString("propertyStoreId"));
 
         UserDto userDto = new UserDto();
         userDto.setUserId(staffAppAuthDto.getStaffId());
