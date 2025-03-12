@@ -20,25 +20,28 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.community.CommunityDto;
 import com.java110.dto.payment.PaymentPoolConfigDto;
+import com.java110.dto.payment.PaymentPoolDto;
 import com.java110.dto.payment.PaymentPoolValueDto;
+import com.java110.dto.repair.RepairDto;
 import com.java110.intf.acct.IPaymentPoolConfigV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolV1InnerServiceSMO;
 import com.java110.intf.acct.IPaymentPoolValueV1InnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.payment.PaymentPoolDto;
-
-import java.util.List;
-import java.util.ArrayList;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -51,10 +54,10 @@ import org.slf4j.LoggerFactory;
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "payment.listPaymentPool")
-public class ListPaymentPoolCmd extends Cmd {
+@Java110Cmd(serviceCode = "payment.listAdminPayment")
+public class ListAdminPaymentCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(ListPaymentPoolCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListAdminPaymentCmd.class);
     @Autowired
     private IPaymentPoolV1InnerServiceSMO paymentPoolV1InnerServiceSMOImpl;
 
@@ -64,12 +67,13 @@ public class ListPaymentPoolCmd extends Cmd {
     @Autowired
     private IPaymentPoolConfigV1InnerServiceSMO paymentPoolConfigV1InnerServiceSMOImpl;
 
+    @Autowired
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        super.validateProperty(cmdDataFlowContext);
-        Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-
+        super.validateAdmin(cmdDataFlowContext);
 
     }
 
@@ -87,6 +91,7 @@ public class ListPaymentPoolCmd extends Cmd {
         } else {
             paymentPoolDtos = new ArrayList<>();
         }
+        refreshCommunityName(paymentPoolDtos);
 
         //todo 补充config 和value
         computeConfigAndValues(paymentPoolDtos);
@@ -98,9 +103,39 @@ public class ListPaymentPoolCmd extends Cmd {
         cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
+    private void refreshCommunityName(List<PaymentPoolDto> paymentPoolDtos) {
+
+        if(ListUtil.isNull(paymentPoolDtos)){
+            return;
+        }
+
+        List<String> communityIds = new ArrayList<>();
+        for (PaymentPoolDto paymentPoolDto : paymentPoolDtos) {
+            communityIds.add(paymentPoolDto.getCommunityId());
+        }
+
+        if(ListUtil.isNull(communityIds)){
+            return ;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(ListUtil.isNull(communityDtos)){
+            return;
+        }
+        for (PaymentPoolDto paymentPoolDto : paymentPoolDtos) {
+            for (CommunityDto tCommunityDto : communityDtos) {
+                if (!paymentPoolDto.getCommunityId().equals(tCommunityDto.getCommunityId())) {
+                    continue;
+                }
+                paymentPoolDto.setCommunityName(tCommunityDto.getName());
+            }
+        }
+    }
+
     private void computeConfigAndValues(List<PaymentPoolDto> paymentPoolDtos) {
 
-        if(paymentPoolDtos == null || paymentPoolDtos.isEmpty()){
+        if(ListUtil.isNull(paymentPoolDtos)){
             return;
         }
 

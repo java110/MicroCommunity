@@ -50,6 +50,7 @@ public class DeletePaymentPoolCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+        super.validateProperty(cmdDataFlowContext);
         Assert.hasKeyAndValue(reqJson, "ppId", "ppId不能为空");
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 

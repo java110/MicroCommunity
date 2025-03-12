@@ -73,6 +73,7 @@ public class SavePaymentPoolCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
+        super.validateProperty(cmdDataFlowContext);
         Assert.hasKeyAndValue(reqJson, "paymentName", "请求报文中未包含paymentName");
         Assert.hasKeyAndValue(reqJson, "paymentType", "请求报文中未包含paymentType");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");

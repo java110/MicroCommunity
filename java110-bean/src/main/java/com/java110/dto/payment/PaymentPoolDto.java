@@ -24,6 +24,8 @@ public class PaymentPoolDto extends PageDto implements Serializable {
     private String remark;
     private String state;
     private String communityId;
+
+    private String communityName;
     private String paymentName;
     private String ppId;
     private String paymentType;
@@ -182,5 +184,13 @@ public class PaymentPoolDto extends PageDto implements Serializable {
 
     public void setBeanRefund(String beanRefund) {
         this.beanRefund = beanRefund;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }
