@@ -75,6 +75,11 @@ public class SendIotImpl implements ISendIot {
         return new ResultVo(records,total,paramOut.getIntValue("code"), paramOut.getString("msg"), paramOut.get("data"));
     }
 
+    @Override
+    public ResultVo postAdmin(String iotApiCode, JSONObject paramIn) {
+        paramIn.put("iotApiCode",iotApiCode);
+        return post("/iot/api/common.openAdminApi",paramIn);
+    }
 
 
     public void saveTranslateError(String communityId,String reqJson, String resJson, String url) {

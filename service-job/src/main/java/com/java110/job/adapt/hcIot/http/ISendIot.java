@@ -16,6 +16,14 @@ public interface ISendIot {
      */
     ResultVo post(String url, JSONObject paramIn);
 
+    /**
+     * 调用物联网运营的通用接口
+     * @param iotApiCode
+     * @param paramIn
+     * @return
+     */
+    ResultVo postAdmin(String iotApiCode,JSONObject paramIn);
+
 
     /***
      * post 请求
