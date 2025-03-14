@@ -427,11 +427,11 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         ResponseEntity responseEntity = null;
         //配置c_service 时请注意 如果是以out 开头的调用外部的地址
         RestTemplate restTemplate ;
-        if (Environment.isStartBootWay()) {
+//        if (Environment.isStartBootWay()) {
             restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
-        } else {
-            restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
-        }
+//        } else {
+//            restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+//        }
 
         try {
             if (CommonConstant.HTTP_METHOD_GET.equals(service.getMethod())) {

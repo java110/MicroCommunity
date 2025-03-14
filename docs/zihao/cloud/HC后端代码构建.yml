@@ -14,7 +14,7 @@ job:
           package_name: hc_service-store
           path: 7181e197-c25a-4c35-8186-1432fe2359a6/service-store.jar
           dockerfile_name: service-store
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 7181e197-c25a-4c35-8186-1432fe2359a6/service-store.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"store\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 7181e197-c25a-4c35-8186-1432fe2359a6/service-store.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"store\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -27,12 +27,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-user/target/service-user.jar
           package_name: hc_service-user
           path: 2d2d45ba-248c-4207-acb9-14c26d5a787a/service-user.jar
           dockerfile_name: service-user
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 2d2d45ba-248c-4207-acb9-14c26d5a787a/service-user.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"user\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 2d2d45ba-248c-4207-acb9-14c26d5a787a/service-user.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"user\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -45,12 +45,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-acct/target/service-acct.jar
           package_name: hc_acct
           path: 6409b347-0236-4729-b99d-beb86ac1e446/service-acct.jar
           dockerfile_name: service-acct
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 6409b347-0236-4729-b99d-beb86ac1e446/service-acct.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"acct\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 6409b347-0236-4729-b99d-beb86ac1e446/service-acct.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"acct\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -63,12 +63,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-api/target/service-api.jar
           package_name: hc_api1
           path: fe0a2df1-680e-4926-8d36-98cbab8b3771/service-api.jar
           dockerfile_name: service-api
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \nADD fe0a2df1-680e-4926-8d36-98cbab8b3771/service-api.jar /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"api\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \nADD fe0a2df1-680e-4926-8d36-98cbab8b3771/service-api.jar /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"api\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -81,12 +81,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-community/target/service-community.jar
           package_name: hc_service-community
           path: 6004abc0-3cff-44f2-ab88-753df0229d34/service-community.jar
           dockerfile_name: service-community
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 6004abc0-3cff-44f2-ab88-753df0229d34/service-community.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"community\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 6004abc0-3cff-44f2-ab88-753df0229d34/service-community.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"community\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -99,12 +99,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-common/target/service-common.jar
           package_name: hc_service-common
           path: cbb59a88-f169-4997-9bec-0989e73300d8/service-common.jar
           dockerfile_name: service-common
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD cbb59a88-f169-4997-9bec-0989e73300d8/service-common.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\nRUN cd /usr/local/jdk1.8.0_144/jre/lib/fonts && wget https://homecommunity.oss-cn-beijing.aliyuncs.com/hc/simsun.ttc\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"common\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD cbb59a88-f169-4997-9bec-0989e73300d8/service-common.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\nRUN cd /usr/local/jdk1.8.0_144/jre/lib/fonts && wget https://homecommunity.oss-cn-beijing.aliyuncs.com/hc/simsun.ttc\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"common\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -117,12 +117,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-eureka/target/service-eureka.jar
           package_name: hc_eureka
           path: 413f2a1f-52fc-4a3e-a9df-b14a2ff65103/service-eureka.jar
           dockerfile_name: service-eureka
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 413f2a1f-52fc-4a3e-a9df-b14a2ff65103/service-eureka.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"eureka\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 413f2a1f-52fc-4a3e-a9df-b14a2ff65103/service-eureka.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"eureka\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -135,12 +135,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-fee/target/service-fee.jar
           package_name: hc_service-fee
           path: 1e414d4c-a923-4b26-90c8-012f37916fc8/service-fee.jar
           dockerfile_name: service-fee
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 1e414d4c-a923-4b26-90c8-012f37916fc8/service-fee.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"fee\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 1e414d4c-a923-4b26-90c8-012f37916fc8/service-fee.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"fee\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -153,12 +153,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-dev/target/service-dev.jar
           package_name: hc_service-dev
           path: d7778978-7e6a-4ec4-a56a-dad16301762c/service-dev.jar
           dockerfile_name: service-dev
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD d7778978-7e6a-4ec4-a56a-dad16301762c/service-dev.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"dev\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD d7778978-7e6a-4ec4-a56a-dad16301762c/service-dev.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"dev\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -171,12 +171,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-job/target/service-job.jar
           package_name: service-job
           path: a9393b0f-bb8e-45b5-b79e-64d36dae29f3/service-job.jar
           dockerfile_name: service-job
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD a9393b0f-bb8e-45b5-b79e-64d36dae29f3/service-job.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"job\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD a9393b0f-bb8e-45b5-b79e-64d36dae29f3/service-job.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"job\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -189,12 +189,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-oa/target/service-oa.jar
           package_name: hc_service-oa
           path: 460b7bda-7241-459d-8a1a-b659ce9421dd/service-oa.jar
           dockerfile_name: service-oa
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 460b7bda-7241-459d-8a1a-b659ce9421dd/service-oa.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"oa\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 460b7bda-7241-459d-8a1a-b659ce9421dd/service-oa.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"oa\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -207,12 +207,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-report/target/service-report.jar
           package_name: hc_service-report
           path: 62078ba6-d431-4626-a13a-e4ab30820b6a/service-report.jar
           dockerfile_name: service-report
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 62078ba6-d431-4626-a13a-e4ab30820b6a/service-report.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"report\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 62078ba6-d431-4626-a13a-e4ab30820b6a/service-report.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"report\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -225,12 +225,12 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
         - package_url: service-order/target/service-order.jar
           package_name: hc_service-order
           path: 5ad73839-3f5f-41a0-bf0b-0c017f1a18b3/service-order.jar
           dockerfile_name: service-order
-          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 5ad73839-3f5f-41a0-bf0b-0c017f1a18b3/service-order.jar /root \nADD ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"order\"]"
+          dockerfile: "# 指定源于一个基础镜像\nFROM registry.cn-beijing.aliyuncs.com/sxd/ubuntu-java8:1.0\n# 维护者/拥有者\nMAINTAINER xxx <xxx@xx.com>\n# 从宿主机上传文件 ，这里上传一个脚本，\n# 点击选择业务包上传\n# ADD bin/start_api.sh /root/\nADD 5ad73839-3f5f-41a0-bf0b-0c017f1a18b3/service-order.jar /root \nADD ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh /root \n\n# 容器内执行相应指令\nRUN chmod u+x /root/start_jar.sh\n# 运行命令\n# CMD <command>   or CMD [<command>]\n# 整个Dockerfile 中只能有一个,多个会被覆盖的\nCMD [\"/root/start_jar.sh\", \"order\"]"
           start_shell: |-
             #!/bin/bash
 
@@ -243,4 +243,4 @@ job:
 
             java -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
             # java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar -Dspring.profiles.active=$active $min_mem $max_mem /root/service-$1.jar
-          shell_path: ae979956-99b0-440e-9d04-05c70af1df25/start_jar.sh
+          shell_path: ae979956-ff34-440e-9d04-05c70af1df25/start_jar.sh
