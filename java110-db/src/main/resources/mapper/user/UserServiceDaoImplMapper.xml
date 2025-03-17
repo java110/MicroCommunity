@@ -530,7 +530,8 @@
     <select id="getStaffs" parameterType="Map" resultType="Map">
         select u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,su.rel_cd relCd,td.name relCdName,ua.value idCard,s.name storeName
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,su.rel_cd relCd,td.name relCdName,ua.value idCard,
+        s.name storeName,s.store_type_cd storeTypeCd
         <if test="orgId !=null and orgId != ''">
             ,uo.org_id orgId,uo.org_name,uo.org_name orgName,uosr.store_id storeId,uosr.rel_id relId
         </if>
@@ -591,7 +592,8 @@
             and uosr.status_cd =0
             GROUP BY u.user_id,u.name,u.email,u.address,u.location_cd,
             u.age,u.sex,u.tel,u.level_cd ,u.b_id,su.rel_cd ,td.name
-            ,uo.org_id,uo.org_name,uosr.store_id,uosr.rel_id,ua.value,s.name
+            ,uo.org_id,uo.org_name,uosr.store_id,uosr.rel_id,ua.value,
+            s.name,s.store_type_cd
         </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">

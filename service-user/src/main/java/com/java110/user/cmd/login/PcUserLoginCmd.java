@@ -3,6 +3,7 @@ package com.java110.user.cmd.login;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -10,6 +11,7 @@ import com.java110.core.factory.AuthenticationFactory;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.doc.annotation.*;
+import com.java110.dto.app.AppDto;
 import com.java110.dto.store.StoreUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.user.UserLoginDto;
@@ -100,27 +102,32 @@ public class PcUserLoginCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "passwd", "用户登录，未包含passwd节点，请检查");
 
         AuthenticationFactory.checkLoginErrorCount(reqJson.getString("username"));
+
+        String appId = CmdContextUtils.getAppId(cmdDataFlowContext);
+        if(AppDto.PROPERTY_APP.equals(appId)){
+            reqJson.put("passwd", AuthenticationFactory.passwdMd5(reqJson.getString("passwd")));
+        }
+
     }
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         ResponseEntity responseEntity = null;
-        JSONObject paramInJson = JSONObject.parseObject(cmdDataFlowContext.getReqData());
         //根据AppId 查询 是否有登录的服务，查询登录地址调用
         UserDto userDto = new UserDto();
-        userDto.setName(paramInJson.getString("username"));
-        userDto.setPassword(paramInJson.getString("passwd"));
+        userDto.setName(reqJson.getString("username"));
+        userDto.setPassword(reqJson.getString("passwd"));
         userDto.setLevelCds(new String[]{UserDto.LEVEL_CD_ADMIN, UserDto.LEVEL_CD_STAFF});
         List<UserDto> userDtos = userInnerServiceSMOImpl.getUsers(userDto);
         if (ListUtil.isNull(userDtos)) {
             userDto.setName("");
-            userDto.setTel(paramInJson.getString("username"));
+            userDto.setTel(reqJson.getString("username"));
             userDtos = userInnerServiceSMOImpl.getUsers(userDto);
         }
         if (ListUtil.isNull(userDtos)) {
             responseEntity = new ResponseEntity<String>("用户或密码错误", HttpStatus.UNAUTHORIZED);
-            AuthenticationFactory.userLoginError(paramInJson.getString("username"));
+            AuthenticationFactory.userLoginError(reqJson.getString("username"));
             cmdDataFlowContext.setResponseEntity(responseEntity);
             return;
         }

@@ -102,6 +102,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String storeName;
 
+    private String storeTypeCd;
+
 
 
     public String getUserId() {
@@ -446,5 +448,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+    public String getStoreTypeCd() {
+        return storeTypeCd;
+    }
+
+    public void setStoreTypeCd(String storeTypeCd) {
+        this.storeTypeCd = storeTypeCd;
     }
 }

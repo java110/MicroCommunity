@@ -24,6 +24,8 @@ public class AppDto extends PageDto implements Serializable {
     public static final String OWNER_APP_APP_ID = "992020061440050003"; // app微信支付
     public static final String JOB_APP_ID = "992021061746360004"; // 定时任务应用
 
+    public static final String PROPERTY_APP = "992020022270580001";// 物业员工app
+
 
     private String appId;
     private String[] appIds;

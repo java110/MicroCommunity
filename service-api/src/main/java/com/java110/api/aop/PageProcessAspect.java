@@ -203,9 +203,13 @@ public class PageProcessAspect {
 //        }
         String authorization = request.getHeader("Authorization");
 
-        if(StringUtil.isEmpty(token) && !StringUtil.isEmpty(authorization)){
+        if( StringUtil.isEmpty(authorization)){
+            return token;
+        }
+        if(authorization.length()> 7) {
             token = authorization.substring("Bearer ".length());
         }
+
         return token;
     }
 
