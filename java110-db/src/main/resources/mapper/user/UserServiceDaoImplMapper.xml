@@ -466,7 +466,7 @@
     <!-- 查询员工总量 -->
     <select id="getStaffCount" parameterType="Map" resultType="Map">
         <if test="orgIds != null and orgIds.length > 0">
-        select count(*) count from(
+            select count(*) count from(
         </if>
         select count(1) count
         from u_user u
@@ -475,14 +475,17 @@
             left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
             left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
         </if>
-        where u.level_cd = '01'
+        where su.status_cd = '0'
+        and u.status_cd = '0'
+        <if test="levelCd !=null and levelCd != ''">
+            and u.level_cd = #{levelCd}
+        </if>
         <if test="storeId !=null and storeId != ''">
             and su.store_id = #{storeId}
         </if>
         <if test="orgId !=null and orgId != ''">
             and uosr.org_id = #{orgId}
         </if>
-        and u.status_cd = '0'
         <if test="tel !=null and tel != ''">
             and u.tel= #{tel}
         </if>
@@ -527,27 +530,32 @@
     <select id="getStaffs" parameterType="Map" resultType="Map">
         select u.user_id, u.user_id userId,u.name,u.name
         userName,u.email,u.address,u.location_cd,u.location_cd locationCd,
-        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,su.rel_cd relCd,td.name relCdName,ua.value idCard
+        u.age,u.sex,u.tel,u.level_cd levelCd,u.b_id,su.rel_cd relCd,td.name relCdName,ua.value idCard,s.name storeName
         <if test="orgId !=null and orgId != ''">
             ,uo.org_id orgId,uo.org_name,uo.org_name orgName,uosr.store_id storeId,uosr.rel_id relId
         </if>
         from
         u_user u
         inner join s_store_user su on su.user_id = u.user_id
+        left join s_store s on su.store_id = s.store_id
         left join t_dict td on su.rel_cd = td.status_cd and td.table_name='s_store_user' and td.table_columns='rel_cd'
         left join u_user_attr ua on ua.user_id = u.user_id and ua.spec_cd = '100202406002' and ua.status_cd = '0'
         <if test="(orgId !=null and orgId != '')||(orgIds != null and orgIds.length > 0)">
             left join u_org_staff_rel uosr on u.user_id = uosr.staff_id and uosr.status_cd = '0'
             left join u_org uo on uosr.org_id = uo.org_id and uo.status_cd = '0'
         </if>
-        where u.level_cd = '01'
+        where su.status_cd = '0'
+        and u.status_cd = '0'
+        and s.status_cd = '0'
+        <if test="levelCd !=null and levelCd != ''">
+            and u.level_cd = #{levelCd}
+        </if>
         <if test="storeId !=null and storeId != ''">
             and su.store_id = #{storeId}
         </if>
         <if test="orgId !=null and orgId != ''">
             and uosr.org_id = #{orgId}
         </if>
-        and u.status_cd = '0'
         <if test="tel !=null and tel != ''">
             and u.tel= #{tel}
         </if>
@@ -583,7 +591,7 @@
             and uosr.status_cd =0
             GROUP BY u.user_id,u.name,u.email,u.address,u.location_cd,
             u.age,u.sex,u.tel,u.level_cd ,u.b_id,su.rel_cd ,td.name
-            ,uo.org_id,uo.org_name,uosr.store_id,uosr.rel_id,ua.value
+            ,uo.org_id,uo.org_name,uosr.store_id,uosr.rel_id,ua.value,s.name
         </if>
         order by u.create_time desc
         <if test="page != -1 and page != null ">
@@ -696,7 +704,7 @@
         where 1= 1
         <if test="openId != null and openId != ''">
             and u.user_id = ua.user_id
-            and ua.spec_cd  in ('100201911001','100201911003')
+            and ua.spec_cd in ('100201911001','100201911003')
             and ua.value = #{openId}
             and ua.status_cd = '0'
         </if>

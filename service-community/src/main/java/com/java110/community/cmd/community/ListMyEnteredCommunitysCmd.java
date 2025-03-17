@@ -17,6 +17,7 @@ import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.community.ApiCommunityDataVo;
 import com.java110.vo.api.community.ApiCommunityVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,6 +132,8 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
         apiCommunityVo.setTotal(count);
         apiCommunityVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));
         apiCommunityVo.setCommunitys(communitys);
+        apiCommunityVo.setCode(ResultVo.CODE_OK);
+        apiCommunityVo.setMsg(ResultVo.MSG_OK);
         ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiCommunityVo), HttpStatus.OK);
         context.setResponseEntity(responseEntity);
     }

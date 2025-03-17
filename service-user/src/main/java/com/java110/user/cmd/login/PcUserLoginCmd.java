@@ -1,5 +1,6 @@
 package com.java110.user.cmd.login;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
@@ -26,6 +27,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ListUtil;
+import com.java110.vo.ResultVo;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,30 +57,30 @@ import java.util.Map;
 
 @Java110ParamsDoc(
         headers = {
-                @Java110HeaderDoc(name="APP-ID",defaultValue = "通过dev账户分配应用",description = "应用APP-ID"),
-                @Java110HeaderDoc(name="TRANSACTION-ID",defaultValue = "uuid",description = "交易流水号"),
-                @Java110HeaderDoc(name="REQ-TIME",defaultValue = "20220917120915",description = "请求时间 YYYYMMDDhhmmss"),
-                @Java110HeaderDoc(name="JAVA110-LANG",defaultValue = "zh-cn",description = "语言中文"),
-                @Java110HeaderDoc(name="USER-ID",defaultValue = "-1",description = "调用用户ID 一般写-1"),
+                @Java110HeaderDoc(name = "APP-ID", defaultValue = "通过dev账户分配应用", description = "应用APP-ID"),
+                @Java110HeaderDoc(name = "TRANSACTION-ID", defaultValue = "uuid", description = "交易流水号"),
+                @Java110HeaderDoc(name = "REQ-TIME", defaultValue = "20220917120915", description = "请求时间 YYYYMMDDhhmmss"),
+                @Java110HeaderDoc(name = "JAVA110-LANG", defaultValue = "zh-cn", description = "语言中文"),
+                @Java110HeaderDoc(name = "USER-ID", defaultValue = "-1", description = "调用用户ID 一般写-1"),
         },
         params = {
-        @Java110ParamDoc(name = "username", length = 30, remark = "用户名，物业系统分配"),
-        @Java110ParamDoc(name = "passwd", length = 30, remark = "密码，物业系统分配"),
-})
+                @Java110ParamDoc(name = "username", length = 30, remark = "用户名，物业系统分配"),
+                @Java110ParamDoc(name = "passwd", length = 30, remark = "密码，物业系统分配"),
+        })
 
 @Java110ResponseDoc(
         params = {
                 @Java110ParamDoc(name = "code", type = "int", length = 11, defaultValue = "0", remark = "返回编号，0 成功 其他失败"),
                 @Java110ParamDoc(name = "msg", type = "String", length = 250, defaultValue = "成功", remark = "描述"),
                 @Java110ParamDoc(name = "data", type = "Object", remark = "有效数据"),
-                @Java110ParamDoc(parentNodeName = "data",name = "userId", type = "String", remark = "用户ID"),
-                @Java110ParamDoc(parentNodeName = "data",name = "token", type = "String", remark = "临时票据"),
+                @Java110ParamDoc(parentNodeName = "data", name = "userId", type = "String", remark = "用户ID"),
+                @Java110ParamDoc(parentNodeName = "data", name = "token", type = "String", remark = "临时票据"),
         }
 )
 
 @Java110ExampleDoc(
-        reqBody="{'username':'wuxw','passwd':'admin'}",
-        resBody="{'code':0,'msg':'成功','data':{'userId':'123123','token':'123213'}}"
+        reqBody = "{'username':'wuxw','passwd':'admin'}",
+        resBody = "{'code':0,'msg':'成功','data':{'userId':'123123','token':'123213'}}"
 )
 @Java110Cmd(serviceCode = "login.pcUserLogin")
 public class PcUserLoginCmd extends Cmd {
@@ -94,12 +96,8 @@ public class PcUserLoginCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        String paramIn = cmdDataFlowContext.getReqData();
-        Assert.isJsonObject(paramIn, "用户注册请求参数有误，不是有效的json格式 " + paramIn);
-        Assert.jsonObjectHaveKey(paramIn, "username", "用户登录，未包含username节点，请检查" + paramIn);
-        Assert.jsonObjectHaveKey(paramIn, "passwd", "用户登录，未包含passwd节点，请检查" + paramIn);
-
-
+        Assert.hasKeyAndValue(reqJson, "username", "用户登录，未包含username节点，请检查");
+        Assert.hasKeyAndValue(reqJson, "passwd", "用户登录，未包含passwd节点，请检查");
 
         AuthenticationFactory.checkLoginErrorCount(reqJson.getString("username"));
     }
@@ -140,32 +138,45 @@ public class PcUserLoginCmd extends Cmd {
                 return;
             }
         }
-
-
-        try {
-            Map userMap = new HashMap();
-            userMap.put(CommonConstant.LOGIN_USER_ID, userDtos.get(0).getUserId());
-            userMap.put(CommonConstant.LOGIN_USER_NAME, userDtos.get(0).getUserName());
-            String token = AuthenticationFactory.createAndSaveToken(userMap);
-            JSONObject userInfo = BeanConvertUtil.beanCovertJson(userDtos.get(0));
-            userInfo.remove("userPwd");
-            userInfo.put("token", token);
-            //记录登录日志
-            UserLoginPo userLoginPo = new UserLoginPo();
-            userLoginPo.setLoginId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_loginId));
-            userLoginPo.setLoginTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
-            userLoginPo.setPassword(userDtos.get(0).getPassword());
-            userLoginPo.setSource(UserLoginDto.SOURCE_WEB);
-            userLoginPo.setToken(token);
-            userLoginPo.setUserId(userInfo.getString("userId"));
-            userLoginPo.setUserName(userInfo.getString("userName"));
-            userLoginInnerServiceSMOImpl.saveUserLogin(userLoginPo);
-            responseEntity = new ResponseEntity<String>(userInfo.toJSONString(), HttpStatus.OK);
-            cmdDataFlowContext.setResponseEntity(responseEntity);
-        } catch (Exception e) {
-            logger.error("登录异常：", e);
-            throw new SMOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "系统内部错误，请联系管理员");
+        UserDto allUserDto = new UserDto();
+        allUserDto.setTel(userDtos.get(0).getTel());
+        userDtos = userInnerServiceSMOImpl.getStaffs(userDto);
+        if (userDtos.isEmpty()) {
+            throw new CmdException("用户不存在");
         }
+        JSONArray data = new JSONArray();
+        JSONObject userInfo = null;
+        for(UserDto aUserDto: userDtos) {
+            try {
+                Map userMap = new HashMap();
+                userMap.put(CommonConstant.LOGIN_USER_ID, aUserDto.getUserId());
+                userMap.put(CommonConstant.LOGIN_USER_NAME, aUserDto.getUserName());
+                String token = AuthenticationFactory.createAndSaveToken(userMap);
+                userInfo= BeanConvertUtil.beanCovertJson(aUserDto);
+                userInfo.remove("userPwd");
+                userInfo.put("token", token);
+                data.add(userInfo);
+            } catch (Exception e) {
+                logger.error("登录异常：", e);
+                throw new SMOException(ResponseConstant.RESULT_CODE_INNER_ERROR, "系统内部错误，请联系管理员");
+            }
+        }
+
+
+        //记录登录日志
+        UserLoginPo userLoginPo = new UserLoginPo();
+        userLoginPo.setLoginId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_loginId));
+        userLoginPo.setLoginTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
+        userLoginPo.setPassword("******");
+        userLoginPo.setSource(UserLoginDto.SOURCE_WEB);
+        userLoginPo.setToken(userInfo.getString("token"));
+        userLoginPo.setUserId(userInfo.getString("userId"));
+        userLoginPo.setUserName(userInfo.getString("userName"));
+        userLoginInnerServiceSMOImpl.saveUserLogin(userLoginPo);
+
+
+        responseEntity = ResultVo.createResponseEntity(data);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 
 }

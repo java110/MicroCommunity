@@ -100,6 +100,8 @@ public class UserDto extends PageDto implements Serializable {
 
     private String createTime;
 
+    private String storeName;
+
 
 
     public String getUserId() {
@@ -436,5 +438,13 @@ public class UserDto extends PageDto implements Serializable {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }

@@ -3,6 +3,7 @@ package com.java110.user.cmd.user;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -92,18 +93,17 @@ public class UserStaffAddCmd extends Cmd {
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
-        if (!reqJson.containsKey("storeId")) {
-            String storeId = context.getReqHeaders().get("store-id");
-            reqJson.put("storeId", storeId);
-        }
+        String storeId = CmdContextUtils.getStoreId(context);
+        Assert.hasLength(storeId, "用户未登录");
+
         //获取数据上下文对象
-        Assert.jsonObjectHaveKey(reqJson, "storeId", "请求参数中未包含storeId 节点，请确认");
         //判断员工手机号是否重复(员工可根据手机号登录平台)
         UserDto userDto = new UserDto();
         userDto.setTel(reqJson.getString("tel"));
         userDto.setUserFlag("1");
         userDto.setLevelCd("01"); //员工
-        List<UserDto> users = userInnerServiceSMOImpl.getUsers(userDto);
+        userDto.setStoreId(storeId);
+        List<UserDto> users = userInnerServiceSMOImpl.getStaffs(userDto);
         Assert.listIsNull(users, "员工手机号不能重复，请重新输入");
     }
 

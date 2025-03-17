@@ -1,5 +1,6 @@
 package com.java110.api.smo.login.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.api.smo.DefaultAbstractComponentSMO;
 import com.java110.api.smo.login.ILoginServiceSMO;
@@ -10,6 +11,7 @@ import com.java110.core.factory.ValidateCodeFactory;
 import com.java110.core.log.LoggerFactory;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +57,20 @@ public class LoginServiceSMOImpl extends DefaultAbstractComponentSMO implements 
 
         loginInfo.put("passwd", AuthenticationFactory.passwdMd5(loginInfo.getString("passwd")));
         responseEntity = this.callCenterService(restTemplate, pd, loginInfo.toJSONString(), "login.pcUserLogin", HttpMethod.POST);
-        if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            JSONObject userInfo = JSONObject.parseObject(responseEntity.getBody());
-            pd.setToken(userInfo.getString("token"));
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            return responseEntity;
+        }
+        JSONObject resultVo = JSONArray.parseObject(responseEntity.getBody());
+        if(resultVo.getIntValue("code") != 0){
+            return responseEntity;
+        }
+        JSONArray data = resultVo.getJSONArray("data");
+        if (ListUtil.isNull(data)) {
+            return responseEntity;
+        }
+        for (int userIndex = 0; userIndex < data.size(); userIndex++) {
+            JSONObject userInfo = data.getJSONObject(userIndex);
+           // pd.setToken(userInfo.getString("token"));
             //清理缓存
             clearUserCache(userInfo);
         }
@@ -74,7 +87,7 @@ public class LoginServiceSMOImpl extends DefaultAbstractComponentSMO implements 
         String storeId = "";
 
         String storeInfo = CommonCache.getValue("getStoreInfo" + Java110RedisConfig.GET_STORE_INFO_EXPIRE_TIME_KEY + "::" + userInfo.getString("userId"));
-        if(!StringUtil.isEmpty(storeInfo)){
+        if (!StringUtil.isEmpty(storeInfo)) {
             CommonCache.removeValue("getStoreInfo" + Java110RedisConfig.GET_STORE_INFO_EXPIRE_TIME_KEY + "::" + userInfo.getString("userId"));
             JSONObject storeObj = JSONObject.parseObject(storeInfo);
             storeId = storeObj.getJSONObject("msg").getString("storeId");
