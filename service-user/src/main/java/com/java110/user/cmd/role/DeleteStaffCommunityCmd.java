@@ -50,7 +50,6 @@ public class DeleteStaffCommunityCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "scId", "scId不能为空");
-Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
 
     }
 

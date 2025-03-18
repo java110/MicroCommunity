@@ -15,22 +15,32 @@
  */
 package com.java110.user.cmd.role;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.store.StoreDto;
+import com.java110.dto.user.UserDto;
+import com.java110.intf.store.IStoreV1InnerServiceSMO;
 import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
+import com.java110.po.privilege.RoleCommunityPo;
 import com.java110.po.staffCommunity.StaffCommunityPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：保存
@@ -52,14 +62,20 @@ public class SaveStaffCommunityCmd extends Cmd {
     @Autowired
     private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IStoreV1InnerServiceSMO storeV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "staffId", "请求报文中未包含staffId");
-        Assert.hasKeyAndValue(reqJson, "staffName", "请求报文中未包含staffName");
-        Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
-        Assert.hasKeyAndValue(reqJson, "communityName", "请求报文中未包含communityName");
-        Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含storeId");
-        Assert.hasKeyAndValue(reqJson, "storeName", "请求报文中未包含storeName");
+        Assert.hasKey(reqJson, "communitys", "未包含小区");
+        JSONArray communitys = reqJson.getJSONArray("communitys");
+        if (ListUtil.isNull(communitys)) {
+            throw new CmdException("未选择小区信息");
+        }
 
     }
 
@@ -67,12 +83,36 @@ public class SaveStaffCommunityCmd extends Cmd {
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        StaffCommunityPo staffCommunityPo = BeanConvertUtil.covertBean(reqJson, StaffCommunityPo.class);
-        staffCommunityPo.setScId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
-        int flag = staffCommunityV1InnerServiceSMOImpl.saveStaffCommunity(staffCommunityPo);
+        JSONArray communitys = reqJson.getJSONArray("communitys");
 
-        if (flag < 1) {
-            throw new CmdException("保存数据失败");
+        String storeId = CmdContextUtils.getStoreId(cmdDataFlowContext);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(reqJson.getString("staffId"));
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos, "员工不存在");
+
+        StoreDto storeDto = new StoreDto();
+        storeDto.setStoreId(storeId);
+        List<StoreDto> storeDtos = storeV1InnerServiceSMOImpl.queryStores(storeDto);
+        Assert.listOnlyOne(storeDtos, "商户不存在");
+
+        StaffCommunityPo staffCommunityPo = null;
+        for (int communityIndex = 0; communityIndex < communitys.size(); communityIndex++) {
+            staffCommunityPo = new StaffCommunityPo();
+            staffCommunityPo.setStaffName(userDtos.get(0).getName());
+            staffCommunityPo.setCommunityId(communitys.getJSONObject(communityIndex).getString("communityId"));
+            staffCommunityPo.setCommunityName(communitys.getJSONObject(communityIndex).getString("communityName"));
+            staffCommunityPo.setStoreName(storeDtos.get(0).getName());
+            staffCommunityPo.setStoreId(storeId);
+            staffCommunityPo.setScId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
+            staffCommunityPo.setStaffId(reqJson.getString("staffId"));
+
+            int flag = staffCommunityV1InnerServiceSMOImpl.saveStaffCommunity(staffCommunityPo);
+
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
