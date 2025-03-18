@@ -21,12 +21,5 @@ public interface IExportRoomSMO {
      */
     public ResponseEntity<Object> exportExcelData(IPageData pd) throws Exception;
 
-    /**
-     * 导入房屋资产excel数据
-     *
-     * @param pd 前台数据封装
-     * @return ResponseEntity
-     */
-     ResponseEntity<Object> exportRoomExcelData(IPageData pd) throws Exception;
      ResponseEntity<Object> exportCustomReportTableData(IPageData pd) throws Exception;
 }

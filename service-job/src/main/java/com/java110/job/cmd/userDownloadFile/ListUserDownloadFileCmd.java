@@ -20,9 +20,13 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.intf.job.IUserDownloadFileV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
+import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.PayUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.user.UserDownloadFileDto;
@@ -56,6 +60,7 @@ public class ListUserDownloadFileCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
+        Assert.hasKeyAndValue(reqJson, "communityId", "未包含小区编号");
     }
 
     @Override
@@ -70,10 +75,13 @@ public class ListUserDownloadFileCmd extends Cmd {
 
         List<UserDownloadFileDto> userDownloadFileDtos = null;
 
+        String date = DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate());
+        String token = "";
         if (count > 0) {
             userDownloadFileDtos = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFiles(userDownloadFileDto);
-            for(UserDownloadFileDto tmpUserDownloadFileDto: userDownloadFileDtos){
-                tmpUserDownloadFileDto.setDownloadUrl("/app/file/userfile/download/"+tmpUserDownloadFileDto.getDownloadId());
+            for (UserDownloadFileDto tmpUserDownloadFileDto : userDownloadFileDtos) {
+                token = tmpUserDownloadFileDto.getDownloadId() + date;
+                tmpUserDownloadFileDto.setDownloadUrl("/app/file/userfile/download/" + tmpUserDownloadFileDto.getDownloadId() + "/" + PayUtil.md5(token));
             }
         } else {
             userDownloadFileDtos = new ArrayList<>();

@@ -136,6 +136,7 @@ public class ServiceConfiguration {
         exclusions.append("/app/payment.getNativeQrcodePayment,");// 获取二维码信息
         exclusions.append("/app/fee.listOwnerTelOweFee,");// 根据手机号查询欠费
         exclusions.append("/app/mall.queryCommunityRecommend,");// 查询小区推荐
+        exclusions.append("/app/file/userfile/download/*,");// 下载文件
 
 
 

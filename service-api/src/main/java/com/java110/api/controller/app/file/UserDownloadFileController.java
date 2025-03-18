@@ -5,6 +5,8 @@ import com.java110.core.log.LoggerFactory;
 import com.java110.dto.user.UserDownloadFileDto;
 import com.java110.intf.job.IUserDownloadFileV1InnerServiceSMO;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.PayUtil;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,21 +35,30 @@ public class UserDownloadFileController {
     @Autowired
     private FileUploadTemplate fileUploadTemplate;
 
-
-    @RequestMapping(path = "/download/{downloadId}", method = RequestMethod.GET)
-    public void download(@PathVariable String downloadId, HttpServletRequest request, HttpServletResponse response) {
+    // /app/file/userfile/download/
+    @RequestMapping(path = "/download/{downloadId}/{token}", method = RequestMethod.GET)
+    public void download(@PathVariable String downloadId,
+                         @PathVariable String token,
+                         HttpServletRequest request, HttpServletResponse response) {
 
         logger.debug("用户开始下载文件" + downloadId);
 
-        String userId = request.getHeader("user-id");
 
         UserDownloadFileDto userDownloadFileDto = new UserDownloadFileDto();
         userDownloadFileDto.setDownloadId(downloadId);
-        userDownloadFileDto.setDownloadUserId(userId);
+        //userDownloadFileDto.setDownloadUserId(userId);
         List<UserDownloadFileDto> userDownloadFileDtos = userDownloadFileV1InnerServiceSMOImpl.queryUserDownloadFiles(userDownloadFileDto);
         Assert.listOnlyOne(userDownloadFileDtos, "文件不存在");
+
+        String date = DateUtil.getFormatTimeStringB(DateUtil.getCurrentDate());
+        String newToken = PayUtil.md5(userDownloadFileDtos.get(0).getDownloadId() + date);
+
+        if (!newToken.equals(token)) {
+            throw new IllegalArgumentException("token 失效请刷新页面重新下载");
+        }
+
         String tempUrl = userDownloadFileDtos.get(0).getTempUrl();
-        String fileName = userDownloadFileDtos.get(0).getFileTypeName()+tempUrl.substring(tempUrl.lastIndexOf("/"));
+        String fileName = userDownloadFileDtos.get(0).getFileTypeName() + tempUrl.substring(tempUrl.lastIndexOf("/"));
 
         response.setHeader("content-type", "application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
