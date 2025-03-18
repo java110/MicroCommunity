@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="staffCommunityV1ServiceDaoImpl">
+
+
+    <!-- 保存员工小区信息 add by wuxw 2018-07-03 -->
+    <insert id="saveStaffCommunityInfo" parameterType="Map">
+        insert into staff_community(
+        staff_name,community_name,store_name,community_id,store_id,sc_id,staff_id
+        ) values (
+        #{staffName},#{communityName},#{storeName},#{communityId},#{storeId},#{scId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询员工小区信息 add by wuxw 2018-07-03 -->
+    <select id="getStaffCommunityInfo" parameterType="Map" resultType="Map">
+        select t.staff_name staffName,t.community_name communityName,t.store_name storeName,t.status_cd
+        statusCd,t.community_id communityId,t.store_id storeId,t.sc_id scId,t.staff_id staffId,t.create_time createTime
+        from staff_community t
+        where 1 =1
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="storeName !=null and storeName != ''">
+            and t.store_name= #{storeName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="scId !=null and scId != ''">
+            and t.sc_id= #{scId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改员工小区信息 add by wuxw 2018-07-03 -->
+    <update id="updateStaffCommunityInfo" parameterType="Map">
+        update staff_community t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            , t.community_name= #{communityName}
+        </if>
+        <if test="storeName !=null and storeName != ''">
+            , t.store_name= #{storeName}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            , t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            , t.store_id= #{storeId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="scId !=null and scId != ''">
+            and t.sc_id= #{scId}
+        </if>
+
+    </update>
+
+    <!-- 查询员工小区数量 add by wuxw 2018-07-03 -->
+    <select id="queryStaffCommunitysCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from staff_community t
+        where 1 =1
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="communityName !=null and communityName != ''">
+            and t.community_name= #{communityName}
+        </if>
+        <if test="storeName !=null and storeName != ''">
+            and t.store_name= #{storeName}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="storeId !=null and storeId != ''">
+            and t.store_id= #{storeId}
+        </if>
+        <if test="scId !=null and scId != ''">
+            and t.sc_id= #{scId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>
