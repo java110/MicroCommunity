@@ -13,6 +13,7 @@ import com.java110.report.statistics.IInoutStatistics;
 import com.java110.report.statistics.IOrderStatistics;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -67,7 +68,7 @@ public class QueryInoutDataReportCmd extends Cmd {
         int carOutCount = 0;
         int personInCount = 0;
        if(resultVo.getCode() == ResultVo.CODE_OK){
-          JSONObject paramOut = (JSONObject) resultVo.getData();
+          JSONObject paramOut = BeanConvertUtil.beanCovertJson(resultVo.getData());
            carInCount = paramOut.getIntValue("carInCount");
            carOutCount = paramOut.getIntValue("carOutCount");
            personInCount = paramOut.getIntValue("personInCount");
