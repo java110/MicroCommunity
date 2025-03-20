@@ -6,6 +6,7 @@ import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.user.dao.IOwnerCarServiceDao;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,9 +55,9 @@ public class OwnerCarServiceDaoImpl extends BaseServiceDao implements IOwnerCarS
 
         logger.debug("查询车辆管理信息 入参 info : {}", info);
 
-        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.getBusinessOwnerCarInfo", info);
+        List<Map> infos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.getBusinessOwnerCarInfo", info);
 
-        return businessOwnerCarInfos;
+        return infos;
     }
 
 
@@ -122,24 +123,24 @@ public class OwnerCarServiceDaoImpl extends BaseServiceDao implements IOwnerCarS
     public int queryOwnerCarsCount(Map info) {
         logger.debug("查询车辆管理数据 入参 info : {}", info);
 
-        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.queryOwnerCarsCount", info);
-        if (businessOwnerCarInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.queryOwnerCarsCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerCarInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public long queryOwnerParkingSpaceCount(Map info) {
         logger.debug("查询车辆管理数据 入参 info : {}", info);
 
-        List<Map> businessOwnerCarInfos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.queryOwnerParkingSpaceCount", info);
-        if (businessOwnerCarInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("ownerCarServiceDaoImpl.queryOwnerParkingSpaceCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
 
-        return Integer.parseInt(businessOwnerCarInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 

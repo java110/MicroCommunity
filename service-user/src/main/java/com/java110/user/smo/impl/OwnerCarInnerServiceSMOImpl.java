@@ -13,6 +13,7 @@ import com.java110.user.dao.IOwnerCarAttrServiceDao;
 import com.java110.user.dao.IOwnerCarServiceDao;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -150,7 +151,7 @@ public class OwnerCarInnerServiceSMOImpl extends BaseServiceSMO implements IOwne
             carNums.add(importRoomFee.getCarNum());
         }
 
-        if (carNums.size() < 1) {
+        if (ListUtil.isNull(carNums)) {
             return tmpImportCarFees;
         }
         Map<String, Object> info = new HashMap<>();

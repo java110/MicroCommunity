@@ -163,6 +163,19 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
             workTaskItemV1InnerServiceSMOImpl.saveWorkTaskItem(workTaskItemPo);
         }
 
+        // 将抄送状态修改为待处理
+        WorkCopyDto workCopyDto = new WorkCopyDto();
+        workCopyDto.setWorkId(tmpWorkCycleDto.getWorkId());
+        List<WorkCopyDto> workCopyDtos = workCopyV1InnerServiceSMOImpl.queryWorkCopys(workCopyDto);
+
+        if(!ListUtil.isNull(workCopyDtos)){
+            WorkCopyPo workCopyPo = new WorkCopyPo();
+            workCopyPo.setCopyId(workCopyDtos.get(0).getCopyId());
+            workCopyPo.setState(WorkCopyDto.STATE_DOING);
+            workCopyPo.setRemark("待处理");
+            workCopyV1InnerServiceSMOImpl.updateWorkCopy(workCopyPo);
+        }
+
 
         WorkPoolFileDto workPoolFileDto = new WorkPoolFileDto();
         workPoolFileDto.setWorkId(tmpWorkCycleDto.getWorkId());
@@ -185,20 +198,9 @@ public class CycleWorkTaskGeneratorTemplate extends TaskSystemQuartz {
             workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
         }
 
-        // 将抄送状态修改为待处理
-        WorkCopyDto workCopyDto = new WorkCopyDto();
-        workCopyDto.setWorkId(tmpWorkCycleDto.getWorkId());
-        List<WorkCopyDto> workCopyDtos = workCopyV1InnerServiceSMOImpl.queryWorkCopys(workCopyDto);
 
-        if(ListUtil.isNull(workCopyDtos)){
-            return;
-        }
 
-        WorkCopyPo workCopyPo = new WorkCopyPo();
-        workCopyPo.setCopyId(workCopyDtos.get(0).getCopyId());
-        workCopyPo.setState(WorkCopyDto.STATE_DOING);
-        workCopyPo.setRemark("待处理");
-        workCopyV1InnerServiceSMOImpl.updateWorkCopy(workCopyPo);
+
 
     }
 
