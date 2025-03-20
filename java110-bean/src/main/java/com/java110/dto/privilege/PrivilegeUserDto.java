@@ -25,6 +25,8 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
     private String userName;
     private String roleName;
 
+    private String levelCd;
+
     private Date createTime;
     private String[] orgIds;
 
@@ -117,5 +119,13 @@ public class PrivilegeUserDto extends PageDto implements Serializable {
 
     public void setOrgIds(String[] orgIds) {
         this.orgIds = orgIds;
+    }
+
+    public String getLevelCd() {
+        return levelCd;
+    }
+
+    public void setLevelCd(String levelCd) {
+        this.levelCd = levelCd;
     }
 }

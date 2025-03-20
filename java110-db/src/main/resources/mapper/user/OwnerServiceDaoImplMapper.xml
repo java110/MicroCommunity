@@ -190,6 +190,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds != null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="idCard !=null and idCard != ''">
             and t.id_card = #{idCard}
         </if>
@@ -276,6 +282,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="communityIds != null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="idCard !=null and idCard != ''">
             and t.id_card = #{idCard}

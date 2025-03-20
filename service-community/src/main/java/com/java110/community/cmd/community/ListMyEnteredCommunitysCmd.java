@@ -2,11 +2,13 @@ package com.java110.community.cmd.community;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.privilege.RoleCommunityDto;
+import com.java110.dto.staffCommunity.StaffCommunityDto;
 import com.java110.dto.store.StoreDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
@@ -16,6 +18,7 @@ import com.java110.utils.constant.StateConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import com.java110.vo.api.community.ApiCommunityDataVo;
@@ -37,7 +40,7 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
     private IOrgStaffRelInnerServiceSMO orgStaffRelInnerServiceSMOImpl;
 
     @Autowired
-    private IRoleCommunityV1InnerServiceSMO roleCommunityV1InnerServiceSMOImpl;
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
 
     @Autowired
     private IOrgInnerServiceSMO orgInnerServiceSMOImpl;
@@ -51,12 +54,14 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
 
-        if (!reqJson.containsKey("storeId") || StringUtil.isEmpty(reqJson.getString("storeId"))) {
-            reqJson.put("storeId", cmdDataFlowContext.getReqHeaders().get("store-id"));
+        String storeId = reqJson.getString("storeId");
+        String userId = reqJson.getString("userId");
+        if (StringUtil.isEmpty(storeId)) {
+            reqJson.put("storeId", CmdContextUtils.getStoreId(cmdDataFlowContext));
         }
 
-        if (!reqJson.containsKey("userId") || StringUtil.isEmpty(reqJson.getString("userId"))) {
-            reqJson.put("userId", cmdDataFlowContext.getReqHeaders().get("user-id"));
+        if (StringUtil.isEmpty(userId)) {
+            reqJson.put("userId", CmdContextUtils.getUserId(cmdDataFlowContext));
         }
 
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含商户信息");
@@ -85,7 +90,8 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
 
         int count = 0;
         List<ApiCommunityDataVo> communitys = null;
-        if(UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())){
+        ApiCommunityDataVo tmpApiCommunityDataVo = null;
+        if (UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())) {
             CommunityDto communityDto = BeanConvertUtil.covertBean(reqJson, CommunityDto.class);
             communityDto.setMemberId(reqJson.getString("storeId"));
             communityDto.setAuditStatusCd(StateConstant.AGREE_AUDIT);
@@ -98,19 +104,21 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
             } else {
                 communitys = new ArrayList<>();
             }
-        }else{
-            RoleCommunityDto orgCommunityDto = BeanConvertUtil.covertBean(reqJson, RoleCommunityDto.class);
-            orgCommunityDto.setStaffId(userDtos.get(0).getUserId());
-            count = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysNameCount(orgCommunityDto);
+        } else {
+            StaffCommunityDto staffCommunityDto = BeanConvertUtil.covertBean(reqJson, StaffCommunityDto.class);
+            staffCommunityDto.setStaffId(userDtos.get(0).getUserId());
+            count = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunitysCount(staffCommunityDto);
             if (count > 0) {
-                List<RoleCommunityDto> roleCommunityDtos = roleCommunityV1InnerServiceSMOImpl.queryRoleCommunitysName(orgCommunityDto);
-                communitys = BeanConvertUtil.covertBeanList(roleCommunityDtos, ApiCommunityDataVo.class);
-                for (RoleCommunityDto tmpOrgCommunityDto : roleCommunityDtos) {
-                    for (ApiCommunityDataVo tmpApiCommunityDataVo : communitys) {
-                        if (tmpOrgCommunityDto.getCommunityId().equals(tmpApiCommunityDataVo.getCommunityId())) {
-                            tmpApiCommunityDataVo.setName(tmpOrgCommunityDto.getCommunityName());
-                        }
-                    }
+                List<StaffCommunityDto> staffCommunityDtos = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunitys(staffCommunityDto);
+                communitys = new ArrayList<>();
+                for (StaffCommunityDto tmpStaffCommunityDto : staffCommunityDtos) {
+                    tmpApiCommunityDataVo = new ApiCommunityDataVo();
+                    tmpApiCommunityDataVo.setCommunityId(tmpStaffCommunityDto.getCommunityId());
+                    tmpApiCommunityDataVo.setName(tmpStaffCommunityDto.getCommunityName());
+                    tmpApiCommunityDataVo.setStoreId(tmpStaffCommunityDto.getStoreId());
+                    tmpApiCommunityDataVo.setStoreName(tmpStaffCommunityDto.getStoreName());
+                    tmpApiCommunityDataVo.setState("1100");
+                    communitys.add(tmpApiCommunityDataVo);
                 }
             } else {
                 communitys = new ArrayList<>();
@@ -118,7 +126,7 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
 
         }
         //兼容 系统刚开始没有小区时
-        if (communitys.size() < 1 && (StoreDto.STORE_TYPE_ADMIN.equals(storeDtos.get(0).getStoreTypeCd()) || StoreDto.STORE_TYPE_DEV.equals(storeDtos.get(0).getStoreTypeCd()))) {
+        if (ListUtil.isNull(communitys) && (StoreDto.STORE_TYPE_ADMIN.equals(storeDtos.get(0).getStoreTypeCd()) || StoreDto.STORE_TYPE_DEV.equals(storeDtos.get(0).getStoreTypeCd()))) {
             ApiCommunityDataVo apiCommunityDataVo = new ApiCommunityDataVo();
             apiCommunityDataVo.setCommunityId("-1");
             apiCommunityDataVo.setName("默认小区");
@@ -127,7 +135,6 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
             communitys.add(apiCommunityDataVo);
         }
 
-        //if(communitys.size() < 1 && )
         ApiCommunityVo apiCommunityVo = new ApiCommunityVo();
         apiCommunityVo.setTotal(count);
         apiCommunityVo.setRecords((int) Math.ceil((double) count / (double) reqJson.getInteger("row")));

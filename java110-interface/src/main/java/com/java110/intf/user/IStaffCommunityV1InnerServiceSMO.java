@@ -64,4 +64,7 @@ public interface IStaffCommunityV1InnerServiceSMO {
      */
     @RequestMapping(value = "/queryStaffCommunitysCount", method = RequestMethod.POST)
     int queryStaffCommunitysCount(@RequestBody StaffCommunityDto staffCommunityDto);
+
+    @RequestMapping(value = "/queryStaffCommunityIds", method = RequestMethod.POST)
+    List<String> queryStaffCommunityIds(@RequestBody String staffId);
 }

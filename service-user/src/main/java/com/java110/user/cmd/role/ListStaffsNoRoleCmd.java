@@ -17,10 +17,12 @@ import com.java110.intf.user.IPrivilegeUserV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.listener.ListenerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +67,7 @@ public class ListStaffsNoRoleCmd extends Cmd {
         privilegeUserDto.setUserName(reqJson.getString("searchUserName"));
         privilegeUserDto.setPage(Integer.parseInt(reqJson.getString("page")));
         privilegeUserDto.setRow(Integer.parseInt(reqJson.getString("row")));
+        privilegeUserDto.setLevelCd(UserDto.LEVEL_CD_STAFF);
 
         // 判断是不是管理员，管理员反馈 物业 的所角色
         UserDto userDto = new UserDto();
@@ -79,12 +82,12 @@ public class ListStaffsNoRoleCmd extends Cmd {
             basePrivilegeDto.setResource("/viewAllOrganization");
             basePrivilegeDto.setUserId(userId);
             List<Map> privileges = menuInnerServiceSMOImpl.checkUserHasResource(basePrivilegeDto);
-            if (privileges.size() == 0) {
+            if (ListUtil.isNull(privileges)) {
                 //查询员工所属二级组织架构
                 OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
                 orgStaffRelDto.setStaffId(reqJson.getString("userId"));
                 List<OrgStaffRelDto> orgStaffRelDtos = iOrgStaffRelInnerServiceSMO.queryOrgInfoByStaffIdsNew(orgStaffRelDto);
-                if (orgStaffRelDtos.size() > 0) {
+                if (!ListUtil.isNull(orgStaffRelDtos)) {
                     List<String> haveOrgList = new ArrayList<String>();
                     for (OrgStaffRelDto orgStaffRelDto1 : orgStaffRelDtos) {
                         OrgDto orgDto1 = new OrgDto();

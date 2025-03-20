@@ -100,54 +100,54 @@ public class PrivilegeUserV1ServiceDaoImpl extends BaseServiceDao implements IPr
     public int queryPrivilegeUsersCount(Map info) {
         logger.debug("查询 queryPrivilegeUsersCount 入参 info : {}",info);
 
-        List<Map> businessPrivilegeUserInfos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryPrivilegeUsersCount", info);
-        if (businessPrivilegeUserInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryPrivilegeUsersCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessPrivilegeUserInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryPrivilegeUserInfos(Map info) {
         logger.debug("查询 getPrivilegeUserInfo 入参 info : {}",info);
 
-        List<Map> businessPrivilegeUserInfos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryPrivilegeUserInfos",info);
+        List<Map> infos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryPrivilegeUserInfos",info);
 
-        return businessPrivilegeUserInfos;
+        return infos;
     }
 
     @Override
     public int queryPrivilegeUserInfoCount(Map info) {
         logger.debug("查询 queryPrivilegeUsersCount 入参 info : {}",info);
 
-        List<Map> businessPrivilegeUserInfos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryPrivilegeUserInfoCount", info);
-        if (businessPrivilegeUserInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryPrivilegeUserInfoCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessPrivilegeUserInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public int queryStaffsNoRoleCount(Map info) {
         logger.debug("查询 queryStaffsNoRoleCount 入参 info : {}",info);
 
-        List<Map> businessPrivilegeUserInfos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryStaffsNoRoleCount", info);
-        if (businessPrivilegeUserInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryStaffsNoRoleCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessPrivilegeUserInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> queryStaffsNoRoleInfos(Map info) {
         logger.debug("查询 queryStaffsNoRoleInfos 入参 info : {}",info);
 
-        List<Map> businessPrivilegeUserInfos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryStaffsNoRoleInfos",info);
+        List<Map> infos = sqlSessionTemplate.selectList("privilegeUserV1ServiceDaoImpl.queryStaffsNoRoleInfos",info);
 
-        return businessPrivilegeUserInfos;
+        return infos;
     }
 
 

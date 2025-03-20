@@ -3,12 +3,14 @@ package com.java110.report.cmd.community;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.room.RoomDto;
 import com.java110.dto.unit.UnitDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
@@ -27,6 +29,10 @@ public class QueryCommunityUnitTreeCmd extends Cmd {
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         // must be administrator
@@ -39,7 +45,13 @@ public class QueryCommunityUnitTreeCmd extends Cmd {
         List<UnitDto> unitDtos = null;
 
         UnitDto unitDto = new UnitDto();
+        String staffId = CmdContextUtils.getUserId(context);
 
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            unitDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
 
         unitDtos = reportCommunityInnerServiceSMOImpl.queryCommunityUnitTree(unitDto);
         JSONArray communitys = new JSONArray();
@@ -82,7 +94,7 @@ public class QueryCommunityUnitTreeCmd extends Cmd {
         JSONArray floors = community.getJSONArray("children");
         JSONObject floorInfo = null;
         for (UnitDto tmpUnitDto : unitDtos) {
-            if(!community.getString("communityId").equals(tmpUnitDto.getCommunityId())){
+            if (!community.getString("communityId").equals(tmpUnitDto.getCommunityId())) {
                 continue;
             }
             if (!hasInFloor(tmpUnitDto, floors)) {
@@ -90,7 +102,7 @@ public class QueryCommunityUnitTreeCmd extends Cmd {
                 floorInfo.put("id", "f_" + tmpUnitDto.getFloorId());
                 floorInfo.put("floorId", tmpUnitDto.getFloorId());
                 floorInfo.put("communityId", community.getString("communityId"));
-                floorInfo.put("text", tmpUnitDto.getFloorNum()+"栋");
+                floorInfo.put("text", tmpUnitDto.getFloorNum() + "栋");
                 floorInfo.put("icon", "/img/floor.png");
                 floorInfo.put("children", new JSONArray());
                 floors.add(floorInfo);
@@ -110,17 +122,17 @@ public class QueryCommunityUnitTreeCmd extends Cmd {
         JSONArray units = floor.getJSONArray("children");
         JSONObject unitInfo = null;
         for (UnitDto tmpUnitDto : unitDtos) {
-            if(!floor.getString("communityId").equals(tmpUnitDto.getCommunityId())){
+            if (!floor.getString("communityId").equals(tmpUnitDto.getCommunityId())) {
                 continue;
             }
-            if(!floor.getString("floorId").equals(tmpUnitDto.getFloorId())){
+            if (!floor.getString("floorId").equals(tmpUnitDto.getFloorId())) {
                 continue;
             }
             if (!hasInUnit(tmpUnitDto, units)) {
                 unitInfo = new JSONObject();
                 unitInfo.put("id", "u_" + tmpUnitDto.getUnitId());
                 unitInfo.put("unitId", tmpUnitDto.getUnitId());
-                unitInfo.put("text", tmpUnitDto.getUnitNum()+"单元");
+                unitInfo.put("text", tmpUnitDto.getUnitNum() + "单元");
                 unitInfo.put("icon", "/img/unit.png");
                 units.add(unitInfo);
             }

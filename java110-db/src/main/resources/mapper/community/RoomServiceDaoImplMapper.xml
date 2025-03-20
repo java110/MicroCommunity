@@ -394,6 +394,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds != null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="floorNum !=null and floorNum != ''">
             and f.`floor_num`= #{floorNum}
         </if>
@@ -713,6 +719,12 @@
         WHERE 1 =1
         <if test="communityId !=null and communityId != ''">
             AND t.`community_id` = #{communityId}
+        </if>
+        <if test="communityIds != null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="floorId !=null and floorId != ''">
             and f.`floor_id`= #{floorId}

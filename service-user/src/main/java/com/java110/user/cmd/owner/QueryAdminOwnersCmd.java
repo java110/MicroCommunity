@@ -14,10 +14,12 @@ import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IMenuInnerServiceSMO;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.user.bmo.owner.IQueryOwnerStatisticsBMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class QueryAdminOwnersCmd extends Cmd {
     @Autowired
     private IQueryOwnerStatisticsBMO queryOwnerStatisticsBMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         super.validateAdmin(cmdDataFlowContext);
@@ -51,11 +56,18 @@ public class QueryAdminOwnersCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-        String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
 
         //todo 根据房屋查询时 先用 房屋信息查询 业主ID
         freshRoomId(reqJson);
         OwnerDto ownerDto = BeanConvertUtil.covertBean(reqJson, OwnerDto.class);
+
+        String staffId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            ownerDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
 
         int row = reqJson.getInteger("row");
         //查询总记录数

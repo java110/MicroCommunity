@@ -180,6 +180,9 @@
         <if test="userName !=null and userName != ''">
             and t.name like concat('%', #{userName},'%')
         </if>
+        <if test="levelCd !=null and levelCd != ''">
+            and t.level_cd = #{levelCd}
+        </if>
         and su.store_id = #{storeId}
         <if test="orgIds != null and orgIds.length > 0">
             and uosr.org_id in
@@ -210,6 +213,9 @@
         and pu.pu_id is null
         <if test="userName !=null and userName != ''">
             and t.name like concat('%', #{userName},'%')
+        </if>
+        <if test="levelCd !=null and levelCd != ''">
+            and t.level_cd = #{levelCd}
         </if>
         and su.store_id = #{storeId}
         <if test="orgIds != null and orgIds.length > 0">

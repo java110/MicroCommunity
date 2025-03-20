@@ -16,6 +16,9 @@
 package com.java110.user.smo.impl;
 
 
+import com.java110.dto.community.CommunityDto;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.user.dao.IStaffCommunityV1ServiceDao;
 import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.dto.staffCommunity.StaffCommunityDto;
@@ -24,6 +27,7 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.PageDto;
+import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,28 +49,31 @@ public class StaffCommunityV1InnerServiceSMOImpl extends BaseServiceSMO implemen
     @Autowired
     private IStaffCommunityV1ServiceDao staffCommunityV1ServiceDaoImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
 
     @Override
-    public int saveStaffCommunity(@RequestBody  StaffCommunityPo staffCommunityPo) {
+    public int saveStaffCommunity(@RequestBody StaffCommunityPo staffCommunityPo) {
         int saveFlag = staffCommunityV1ServiceDaoImpl.saveStaffCommunityInfo(BeanConvertUtil.beanCovertMap(staffCommunityPo));
         return saveFlag;
     }
 
-     @Override
-    public int updateStaffCommunity(@RequestBody  StaffCommunityPo staffCommunityPo) {
+    @Override
+    public int updateStaffCommunity(@RequestBody StaffCommunityPo staffCommunityPo) {
         int saveFlag = staffCommunityV1ServiceDaoImpl.updateStaffCommunityInfo(BeanConvertUtil.beanCovertMap(staffCommunityPo));
         return saveFlag;
     }
 
-     @Override
-    public int deleteStaffCommunity(@RequestBody  StaffCommunityPo staffCommunityPo) {
-       staffCommunityPo.setStatusCd("1");
-       int saveFlag = staffCommunityV1ServiceDaoImpl.updateStaffCommunityInfo(BeanConvertUtil.beanCovertMap(staffCommunityPo));
-       return saveFlag;
+    @Override
+    public int deleteStaffCommunity(@RequestBody StaffCommunityPo staffCommunityPo) {
+        staffCommunityPo.setStatusCd("1");
+        int saveFlag = staffCommunityV1ServiceDaoImpl.updateStaffCommunityInfo(BeanConvertUtil.beanCovertMap(staffCommunityPo));
+        return saveFlag;
     }
 
     @Override
-    public List<StaffCommunityDto> queryStaffCommunitys(@RequestBody  StaffCommunityDto staffCommunityDto) {
+    public List<StaffCommunityDto> queryStaffCommunitys(@RequestBody StaffCommunityDto staffCommunityDto) {
 
         //校验是否传了 分页信息
 
@@ -84,6 +91,35 @@ public class StaffCommunityV1InnerServiceSMOImpl extends BaseServiceSMO implemen
 
     @Override
     public int queryStaffCommunitysCount(@RequestBody StaffCommunityDto staffCommunityDto) {
-        return staffCommunityV1ServiceDaoImpl.queryStaffCommunitysCount(BeanConvertUtil.beanCovertMap(staffCommunityDto));    }
+        return staffCommunityV1ServiceDaoImpl.queryStaffCommunitysCount(BeanConvertUtil.beanCovertMap(staffCommunityDto));
+    }
+
+    @Override
+    public List<String> queryStaffCommunityIds(@RequestBody String staffId) {
+        List<String> communityIds = new ArrayList<>();
+        UserDto userDto = new UserDto();
+        userDto.setUserId(staffId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (ListUtil.isNull(userDtos)) {
+            communityIds.add("-1");
+            return communityIds;
+        }
+
+        if (UserDto.LEVEL_CD_ADMIN.equals(userDtos.get(0).getLevelCd())) {
+            return communityIds;
+        }
+
+        StaffCommunityDto staffCommunityDto = new StaffCommunityDto();
+        staffCommunityDto.setStaffId(staffId);
+        List<StaffCommunityDto> staffCommunityDtos = queryStaffCommunitys(staffCommunityDto);
+        if (ListUtil.isNull(userDtos)) {
+            communityIds.add("-1");
+            return communityIds;
+        }
+        for (StaffCommunityDto tStaffCommunityDto : staffCommunityDtos) {
+            communityIds.add(tStaffCommunityDto.getCommunityId());
+        }
+        return communityIds;
+    }
 
 }

@@ -102,6 +102,7 @@ public class QueryStaffInfosCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         UserDto userDto = BeanConvertUtil.covertBean(reqJson, UserDto.class);
+        userDto.setLevelCd(UserDto.LEVEL_CD_STAFF); // 这里只查员工不查管理员
         String userId = context.getReqHeaders().get("user-id");
         // 判断是不是管理员，管理员反馈 物业 的所角色
         UserDto userDto1 = new UserDto();
@@ -142,7 +143,7 @@ public class QueryStaffInfosCmd extends Cmd {
                 fileRelDto.setObjId(apiStaffDataVo.getUserId());
                 fileRelDto.setRelTypeCd("12000"); //员工图片
                 List<FileRelDto> fileRelDtos = fileRelInnerServiceSMOImpl.queryFileRels(fileRelDto);
-                if (fileRelDtos != null && fileRelDtos.size() > 0) {
+                if (!ListUtil.isNull(fileRelDtos)) {
                     List<String> urls = new ArrayList<>();
                     for (FileRelDto fileRel : fileRelDtos) {
                         urls.add(fileRel.getFileRealName());
@@ -165,7 +166,7 @@ public class QueryStaffInfosCmd extends Cmd {
     }
 
     private void refreshOrgs(List<ApiStaffDataVo> staffs, String storeId) {
-        if (staffs == null || staffs.size() < 1) {
+        if (ListUtil.isNull(staffs)) {
             return;
         }
         List<String> staffIds = new ArrayList<>();
@@ -175,14 +176,14 @@ public class QueryStaffInfosCmd extends Cmd {
         OrgDto orgDto = new OrgDto();
         orgDto.setStoreId(storeId);
         List<OrgDto> orgDtos = orgV1InnerServiceSMOImpl.queryOrgs(orgDto);
-        if (orgDtos == null || orgDtos.size() < 1) {
+        if (ListUtil.isNull(orgDtos)) {
             return;
         }
         OrgStaffRelDto orgStaffRelDto = new OrgStaffRelDto();
         orgStaffRelDto.setStaffIds(staffIds.toArray(new String[staffIds.size()]));
         orgStaffRelDto.setStoreId(storeId);
         List<OrgStaffRelDto> orgStaffRels = orgStaffRelV1InnerServiceSMOImpl.queryOrgStaffRels(orgStaffRelDto);
-        if (orgStaffRels == null || orgStaffRels.size() < 1) {
+        if (ListUtil.isNull(orgStaffRels)) {
             return;
         }
         for (ApiStaffDataVo apiStaffDataVo : staffs) {
@@ -193,7 +194,7 @@ public class QueryStaffInfosCmd extends Cmd {
                 OrgDto org = new OrgDto();
                 org.setOrgId(tmpOrgStaffRelDto.getOrgId());
                 List<OrgDto> orgs = orgV1InnerServiceSMOImpl.queryOrgs(org);
-                if (orgs == null || orgs.size() < 1) {
+                if (ListUtil.isNull(orgs)) {
                     continue;
                 }
                 apiStaffDataVo.setOrgId(tmpOrgStaffRelDto.getOrgId());

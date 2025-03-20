@@ -42,6 +42,7 @@ public class OwnerDto extends PageDto implements Serializable {
 
 
     private String communityId;
+    private String[] communityIds;
     private String communityName;
     private String sCommunityTel;
 
@@ -658,5 +659,13 @@ public class OwnerDto extends PageDto implements Serializable {
 
     public void setPersonRoleName(String personRoleName) {
         this.personRoleName = personRoleName;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }

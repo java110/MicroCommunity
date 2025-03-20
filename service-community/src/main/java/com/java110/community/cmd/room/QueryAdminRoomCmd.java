@@ -3,6 +3,7 @@ package com.java110.community.cmd.room;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.community.bmo.room.IQueryRoomStatisticsBMO;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -10,6 +11,7 @@ import com.java110.dto.owner.OwnerRoomRelDto;
 import com.java110.dto.room.RoomDto;
 import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelV1InnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
@@ -35,6 +37,9 @@ public class QueryAdminRoomCmd extends Cmd {
     @Autowired
     private IOwnerRoomRelV1InnerServiceSMO ownerRoomRelV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         super.validateAdmin(context);
@@ -52,6 +57,14 @@ public class QueryAdminRoomCmd extends Cmd {
 
         //todo 计算楼栋单元房屋编号
         computeFloorUnitRoomNum(reqJson, roomDto);
+
+        String staffId = CmdContextUtils.getUserId(context);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            roomDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
 
         int count = roomInnerServiceSMOImpl.queryRoomsCount(roomDto);
         List<RoomDto> roomDtos = null;

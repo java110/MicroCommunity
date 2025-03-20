@@ -43,7 +43,7 @@
         <if test="storeId !=null and storeId != ''">
             and t.store_id= #{storeId}
         </if>
-        <if test="storeTypeCd !=null and storeId = '800900000003'">
+        <if test="storeTypeCd == '800900000003'">
             and t.store_id not in ('400000000000000001','400000000000000002')
         </if>
 
