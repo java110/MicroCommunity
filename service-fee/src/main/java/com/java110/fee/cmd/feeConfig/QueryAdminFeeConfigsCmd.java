@@ -2,15 +2,18 @@ package com.java110.fee.cmd.feeConfig;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.PageDto;
 import com.java110.dto.fee.FeeConfigDto;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.api.feeConfig.ApiFeeConfigDataVo;
 import com.java110.vo.api.feeConfig.ApiFeeConfigVo;
@@ -27,6 +30,9 @@ public class QueryAdminFeeConfigsCmd extends Cmd {
     @Autowired
     private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
@@ -36,6 +42,15 @@ public class QueryAdminFeeConfigsCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
         FeeConfigDto feeConfigDto = BeanConvertUtil.covertBean(reqJson, FeeConfigDto.class);
+
+        String staffId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            feeConfigDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
+
         if (!StringUtil.isEmpty(reqJson.getString("isFlag")) && reqJson.getString("isFlag").equals("0")) {
             feeConfigDto.setPage(PageDto.DEFAULT_PAGE);
         }

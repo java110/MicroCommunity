@@ -69,9 +69,9 @@ public class EquipmentAccountV1ServiceDaoImpl extends BaseServiceDao implements 
     public List<Map> getEquipmentAccountInfo(Map info) throws DAOException {
         logger.debug("查询 getEquipmentAccountInfo 入参 info : {}",info);
 
-        List<Map> businessEquipmentAccountInfos = sqlSessionTemplate.selectList("equipmentAccountV1ServiceDaoImpl.getEquipmentAccountInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("equipmentAccountV1ServiceDaoImpl.getEquipmentAccountInfo",info);
 
-        return businessEquipmentAccountInfos;
+        return infos;
     }
 
 
@@ -98,12 +98,12 @@ public class EquipmentAccountV1ServiceDaoImpl extends BaseServiceDao implements 
     public int queryEquipmentAccountsCount(Map info) {
         logger.debug("查询 queryEquipmentAccountsCount 入参 info : {}",info);
 
-        List<Map> businessEquipmentAccountInfos = sqlSessionTemplate.selectList("equipmentAccountV1ServiceDaoImpl.queryEquipmentAccountsCount", info);
-        if (businessEquipmentAccountInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("equipmentAccountV1ServiceDaoImpl.queryEquipmentAccountsCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessEquipmentAccountInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 

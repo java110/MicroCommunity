@@ -176,6 +176,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" open="(" close=")"
+                     separator="," item="item">#{item}
+            </foreach>
+        </if>
         <if test="appTypeCd !=null and appTypeCd != ''">
             and t.app_type_cd= #{appTypeCd}
         </if>
@@ -302,6 +308,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" open="(" close=")"
+                     separator="," item="item">#{item}
+            </foreach>
         </if>
         <if test="appTypeCd !=null and appTypeCd != ''">
             and t.app_type_cd= #{appTypeCd}

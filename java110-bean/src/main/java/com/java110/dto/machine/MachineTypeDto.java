@@ -20,6 +20,7 @@ public class MachineTypeDto extends PageDto implements Serializable {
     private String parentTypeId;
     private String machineTypeCd;
     private String communityId;
+    private String[] communityIds;
     private String communityName;
     private String isEnable;
     private String machineTypeCode;
@@ -153,5 +154,13 @@ public class MachineTypeDto extends PageDto implements Serializable {
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }

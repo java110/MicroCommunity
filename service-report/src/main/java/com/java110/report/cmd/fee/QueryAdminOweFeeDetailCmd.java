@@ -2,6 +2,7 @@ package com.java110.report.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -10,6 +11,7 @@ import com.java110.dto.community.CommunityDto;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.report.IReportFeeMonthStatisticsInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.report.bmo.reportFeeMonthStatistics.impl.GetReportFeeMonthStatisticsBMOImpl;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
@@ -36,6 +38,9 @@ public class QueryAdminOweFeeDetailCmd extends Cmd {
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         super.validateAdmin(context);
@@ -45,6 +50,13 @@ public class QueryAdminOweFeeDetailCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         ReportFeeMonthStatisticsDto reportFeeMonthStatisticsDto = BeanConvertUtil.covertBean(reqJson, ReportFeeMonthStatisticsDto.class);
+        String staffId = CmdContextUtils.getUserId(context);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            reportFeeMonthStatisticsDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
         int count = reportFeeMonthStatisticsInnerServiceSMOImpl.queryOweFeeDetailCount(reportFeeMonthStatisticsDto);
         List<ReportFeeMonthStatisticsDto> reportFeeMonthStatisticsDtos = null;
         if (count > 0) {

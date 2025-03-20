@@ -51,6 +51,7 @@ public class QueryAdminRoomCmd extends Cmd {
 
         RoomDto roomDto = BeanConvertUtil.covertBean(reqJson, RoomDto.class);
 
+
         // 计算根据业主查询
         computeOwnerRoomIds(reqJson, roomDto);
 

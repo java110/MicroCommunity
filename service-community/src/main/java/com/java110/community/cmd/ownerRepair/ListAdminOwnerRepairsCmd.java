@@ -2,6 +2,7 @@ package com.java110.community.cmd.ownerRepair;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -15,6 +16,7 @@ import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
@@ -51,6 +53,9 @@ public class ListAdminOwnerRepairsCmd extends Cmd {
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
@@ -60,6 +65,15 @@ public class ListAdminOwnerRepairsCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         RepairDto ownerRepairDto = BeanConvertUtil.covertBean(reqJson, RepairDto.class);
+
+        String staffId = CmdContextUtils.getUserId(context);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            ownerRepairDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
+
         //todo 处理时间
         ifHasTime(ownerRepairDto);
         if (!StringUtil.isEmpty(ownerRepairDto.getRoomId()) && ownerRepairDto.getRoomId().contains(",")) {

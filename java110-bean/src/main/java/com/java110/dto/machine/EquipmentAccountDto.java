@@ -29,6 +29,7 @@ public class EquipmentAccountDto extends PageDto implements Serializable {
     private String model;
     private String state;
     private String communityId;
+    private String[] communityIds;
     private String brand;
     private String machineTypeCd;
     private String machineCode;
@@ -368,5 +369,13 @@ public class EquipmentAccountDto extends PageDto implements Serializable {
 
     public void setMachineNameLike(String machineNameLike) {
         this.machineNameLike = machineNameLike;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }

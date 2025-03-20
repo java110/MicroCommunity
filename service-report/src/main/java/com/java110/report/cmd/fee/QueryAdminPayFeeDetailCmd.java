@@ -2,14 +2,17 @@ package com.java110.report.cmd.fee;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.reportFee.ReportFeeMonthStatisticsDto;
 import com.java110.intf.report.IQueryPayFeeDetailInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +20,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
+import java.util.List;
 
 @Java110Cmd(serviceCode = "fee.queryAdminPayFeeDetail")
 public class QueryAdminPayFeeDetailCmd extends Cmd {
     @Autowired
     private IQueryPayFeeDetailInnerServiceSMO queryPayFeeDetailInnerServiceSMOImpl;
+
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         super.validatePageInfo(reqJson);
@@ -39,6 +47,13 @@ public class QueryAdminPayFeeDetailCmd extends Cmd {
 
         reportFeeMonthStatisticsDto.setFeeYear(DateUtil.getYear() + "");
         reportFeeMonthStatisticsDto.setFeeMonth(DateUtil.getMonth() + "");
+        String staffId = CmdContextUtils.getUserId(context);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            reportFeeMonthStatisticsDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
 
 
         ResultVo resultVo = queryPayFeeDetailInnerServiceSMOImpl.query(reportFeeMonthStatisticsDto);

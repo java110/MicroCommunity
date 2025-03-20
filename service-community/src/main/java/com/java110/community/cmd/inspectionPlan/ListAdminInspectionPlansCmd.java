@@ -2,6 +2,7 @@ package com.java110.community.cmd.inspectionPlan;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -14,6 +15,7 @@ import com.java110.intf.community.IInspectionPlanStaffV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionPlanV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionRouteInnerServiceSMO;
 import com.java110.intf.user.IOrgStaffRelInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -44,6 +46,10 @@ public class ListAdminInspectionPlansCmd extends Cmd {
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         super.validatePageInfo(reqJson);
@@ -53,7 +59,13 @@ public class ListAdminInspectionPlansCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
         InspectionPlanDto inspectionPlanDto = BeanConvertUtil.covertBean(reqJson, InspectionPlanDto.class);
+        String staffId = CmdContextUtils.getUserId(context);
 
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            inspectionPlanDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
         int count = inspectionPlanV1InnerServiceSMOImpl.queryInspectionPlansCount(inspectionPlanDto);
 
         List<InspectionPlanDto> inspectionPlans = null;

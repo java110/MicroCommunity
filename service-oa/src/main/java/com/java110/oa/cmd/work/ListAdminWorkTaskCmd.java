@@ -26,6 +26,7 @@ import com.java110.dto.repair.RepairDto;
 import com.java110.dto.work.WorkTaskDto;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.oa.IWorkTaskV1InnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
@@ -60,6 +61,10 @@ public class ListAdminWorkTaskCmd extends Cmd {
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
+
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -71,6 +76,14 @@ public class ListAdminWorkTaskCmd extends Cmd {
 
         WorkTaskDto workTaskDto = BeanConvertUtil.covertBean(reqJson, WorkTaskDto.class);
         workTaskDto.setStoreId("");
+
+        String staffId = CmdContextUtils.getUserId(cmdDataFlowContext);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            workTaskDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
 
         int count = workTaskV1InnerServiceSMOImpl.queryWorkTasksCount(workTaskDto);
 

@@ -2,6 +2,7 @@ package com.java110.store.cmd.complaint;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -14,6 +15,7 @@ import com.java110.intf.community.IRoomInnerServiceSMO;
 import com.java110.intf.store.IComplaintTypeUserV1InnerServiceSMO;
 import com.java110.intf.store.IComplaintV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerV1InnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -48,6 +50,8 @@ public class ListAdminComplaintsCmd extends Cmd {
     @Autowired
     private IComplaintTypeUserV1InnerServiceSMO complaintTypeUserV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
@@ -59,6 +63,14 @@ public class ListAdminComplaintsCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException {
 
         ComplaintDto complaintDto = BeanConvertUtil.covertBean(reqJson, ComplaintDto.class);
+        String staffId = CmdContextUtils.getUserId(context);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            complaintDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
+
         complaintDto.setStoreId("");
         int count = complaintV1InnerServiceSMOImpl.queryComplaintsCount(complaintDto);
         List<ComplaintDto> complaintDtos = null;

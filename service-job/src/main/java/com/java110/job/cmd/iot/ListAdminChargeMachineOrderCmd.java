@@ -7,11 +7,13 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.user.UserDto;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.job.adapt.hcIot.http.ISendIot;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +28,9 @@ public class ListAdminChargeMachineOrderCmd extends Cmd {
 
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -52,6 +57,14 @@ public class ListAdminChargeMachineOrderCmd extends Cmd {
 
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+        String staffId = CmdContextUtils.getUserId(context);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            String communityIdStr = String.join(", ", communityIds);
+            reqJson.put("communityIdStr",communityIdStr);
+        }
         ResultVo resultVo = sendIotImpl.postAdmin("listAdminChargeMachineOrderBmoImpl", reqJson);
 
         if (resultVo.getCode() != ResultVo.CODE_OK) {

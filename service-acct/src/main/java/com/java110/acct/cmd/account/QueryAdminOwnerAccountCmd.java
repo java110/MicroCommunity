@@ -3,6 +3,7 @@ package com.java110.acct.cmd.account;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.acct.bmo.account.IGetAccountBMO;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -17,6 +18,7 @@ import com.java110.intf.fee.IFeeInnerServiceSMO;
 import com.java110.intf.store.IContractInnerServiceSMO;
 import com.java110.intf.user.IOwnerCarInnerServiceSMO;
 import com.java110.intf.user.IOwnerRoomRelInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -52,6 +54,9 @@ public class QueryAdminOwnerAccountCmd extends Cmd {
     @Autowired
     private IGetAccountBMO getAccountBMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         super.validatePageInfo(reqJson);
@@ -62,6 +67,14 @@ public class QueryAdminOwnerAccountCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
 
         AccountDto accountDto = BeanConvertUtil.covertBean(reqJson, AccountDto.class);
+
+        String staffId = CmdContextUtils.getUserId(context);
+
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            accountDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
 
         hasFeeId(reqJson, accountDto);
         String ownerId = reqJson.getString("ownerId");

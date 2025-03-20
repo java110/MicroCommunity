@@ -26,6 +26,7 @@ public class FloorDto extends PageDto implements Serializable {
     private String[] floorIds;
 
     private String communityId;
+    private String[] communityIds;
 
     private String communityName;
 
@@ -165,5 +166,13 @@ public class FloorDto extends PageDto implements Serializable {
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }

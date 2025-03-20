@@ -3,11 +3,13 @@ package com.java110.report.cmd.community;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.floor.FloorDto;
 import com.java110.intf.report.IReportCommunityInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
@@ -26,6 +28,8 @@ public class QueryCommunityFloorTreeCmd extends Cmd {
     @Autowired
     private IReportCommunityInnerServiceSMO reportCommunityInnerServiceSMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         // must be administrator
@@ -38,7 +42,13 @@ public class QueryCommunityFloorTreeCmd extends Cmd {
         List<FloorDto> floorDtos = null;
 
         FloorDto floorDto = new FloorDto();
+        String staffId = CmdContextUtils.getUserId(context);
 
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            floorDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
 
         floorDtos = reportCommunityInnerServiceSMOImpl.queryCommunityFloorTree(floorDto);
         JSONArray communitys = new JSONArray();

@@ -37,6 +37,8 @@ public class AccountDto extends PageDto implements Serializable {
     private String acctName;
     private String objType;
     private String partId;
+
+    private String[] communityIds;
     private String hasMoney; // 1 标识有
     private String link;
     private String idCard;
@@ -213,5 +215,13 @@ public class AccountDto extends PageDto implements Serializable {
 
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }

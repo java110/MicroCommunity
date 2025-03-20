@@ -17,6 +17,7 @@ package com.java110.community.cmd.inspectionTask;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -25,6 +26,7 @@ import com.java110.dto.inspection.InspectionTaskDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.community.IInspectionTaskInnerServiceSMO;
+import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -62,6 +64,9 @@ public class ListAdminInspectionTasksCmd extends Cmd {
     @Autowired
     private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IStaffCommunityV1InnerServiceSMO staffCommunityV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
@@ -72,7 +77,13 @@ public class ListAdminInspectionTasksCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         InspectionTaskDto inspectionTaskDto = BeanConvertUtil.covertBean(reqJson, InspectionTaskDto.class);
+        String staffId = CmdContextUtils.getUserId(cmdDataFlowContext);
 
+        List<String> communityIds = staffCommunityV1InnerServiceSMOImpl.queryStaffCommunityIds(staffId);
+
+        if (!ListUtil.isNull(communityIds)) {
+            inspectionTaskDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        }
         if (reqJson.containsKey("moreState") && reqJson.getString("moreState").contains(",")) {
             inspectionTaskDto.setStates(reqJson.getString("moreState").split(","));
         }

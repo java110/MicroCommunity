@@ -27,6 +27,7 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
     private String finishTime;
     private String communityId;
+    private String[] communityIds;
     private String communityName;
     private String storeId;
     private String taskId;
@@ -241,5 +242,13 @@ public class WorkTaskDto extends WorkPoolDto implements Serializable {
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }

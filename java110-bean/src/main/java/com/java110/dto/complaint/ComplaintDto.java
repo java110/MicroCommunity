@@ -36,6 +36,7 @@ public class ComplaintDto extends PageDto implements Serializable {
     private String state;
     private String stateName;
     private String communityId;
+    private String[] communityIds;
 
     private String taskId;
 
@@ -302,5 +303,13 @@ public class ComplaintDto extends PageDto implements Serializable {
 
     public void setStaffs(List<ComplaintTypeUserDto> staffs) {
         this.staffs = staffs;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }

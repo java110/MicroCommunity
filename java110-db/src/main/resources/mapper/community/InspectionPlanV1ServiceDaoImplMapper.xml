@@ -228,6 +228,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="beforeTime !=null and beforeTime != ''">
             and t.before_time = #{beforeTime}
         </if>
@@ -288,6 +294,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="beforeTime !=null and beforeTime != ''">
             and t.before_time = #{beforeTime}
@@ -371,6 +383,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">
             limit #{page}, #{row}
@@ -432,6 +450,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="beforeTime !=null and beforeTime != ''">
             and t.before_time = #{beforeTime}
@@ -512,6 +536,12 @@
         </if>
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         order by t.create_time desc
         <if test="page != -1 and page != null ">

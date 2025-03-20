@@ -35,6 +35,7 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
     private String oweAmount;
     private String curOweAmount;
     private String communityId;
+    private String[] communityIds;
     private String feeCreateTime;
     private String feeStartTime;
     private String feeEndTime;
@@ -1229,5 +1230,13 @@ public class ReportFeeMonthStatisticsDto extends PageDto implements Serializable
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }

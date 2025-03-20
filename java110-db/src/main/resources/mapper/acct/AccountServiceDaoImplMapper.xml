@@ -150,6 +150,12 @@
         <if test="partId !=null and partId != ''">
             and t.part_id= #{partId}
         </if>
+        <if test="communityIds !=null ">
+            and t.part_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}
         </if>
@@ -252,6 +258,12 @@
         </if>
         <if test="partId !=null and partId != ''">
             and t.part_id= #{partId}
+        </if>
+        <if test="communityIds !=null ">
+            and t.part_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="link !=null and link != ''">
             and t.link= #{link}

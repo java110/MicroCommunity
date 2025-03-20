@@ -1449,6 +1449,12 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
         <if test="startTime !=null and startTime != ''">
             and t.cur_month_time &gt;= #{startTime}
         </if>
@@ -1500,6 +1506,12 @@
         and t.detail_id = '-1'
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
+        </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="startTime !=null and startTime != ''">
             and t.cur_month_time &gt;= #{startTime}
@@ -1619,6 +1631,13 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="primeRate != null and primeRate != ''">
             and t.prime_rate = #{primeRate}
         </if>
@@ -1697,6 +1716,13 @@
         <if test="communityId !=null and communityId != ''">
             and t.community_id= #{communityId}
         </if>
+        <if test="communityIds !=null">
+            and t.community_id in
+            <foreach collection="communityIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
         <if test="primeRate != null and primeRate != ''">
             and t.prime_rate = #{primeRate}
         </if>

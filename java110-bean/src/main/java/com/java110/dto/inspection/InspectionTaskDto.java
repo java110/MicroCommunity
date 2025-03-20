@@ -31,6 +31,7 @@ public class InspectionTaskDto extends PageDto implements Serializable {
     private String inspectionPlanName;
     private String planUserName;
     private String communityId;
+    private String[] communityIds;
     private String actUserId;
     private String taskId;
     private String state;
@@ -306,5 +307,13 @@ public class InspectionTaskDto extends PageDto implements Serializable {
 
     public void setInspectionRouteId(String inspectionRouteId) {
         this.inspectionRouteId = inspectionRouteId;
+    }
+
+    public String[] getCommunityIds() {
+        return communityIds;
+    }
+
+    public void setCommunityIds(String[] communityIds) {
+        this.communityIds = communityIds;
     }
 }
