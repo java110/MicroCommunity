@@ -5,17 +5,20 @@ import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.IotDataDto;
 import com.java110.dto.machine.MachineDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.intf.job.IIotInnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +43,9 @@ public class GetQRcodeCmd extends Cmd {
     @Autowired
     private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IIotInnerServiceSMO iotInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
@@ -56,37 +62,20 @@ public class GetQRcodeCmd extends Cmd {
         ownerDto.setMemberId(reqJson.getString("userId"));
         ownerDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
-        if (ownerDtos == null || ownerDtos.size() < 1) {
+        if (ListUtil.isNull(ownerDtos)) {
             throw new CmdException("没有权限开门");
         }
 
         //todo 校验设备到底在不在，不在就报错！！！
-        MachineDto machineDto = new MachineDto();
-        machineDto.setMachineCode(reqJson.getString("machineCode"));
-        machineDto.setCommunityId(reqJson.getString("communityId"));
-        List<MachineDto> machineDtos = machineV1InnerServiceSMOImpl.queryMachines(machineDto);
-        Assert.listOnlyOne(machineDtos, "设备不存在");
 
-        // todo 如果海康 调用海康平台，不然自己生成。
-        if (MachineDto.HM_HK.equals(machineDtos.get(0).getHmId())) {
-            ResultVo resultVo = dataBusInnerServiceSMOImpl.getQRcode(reqJson);
-            responseEntity = ResultVo.createResponseEntity(resultVo.getCode(), resultVo.getMsg(), resultVo.getData());
-            context.setResponseEntity(responseEntity);
-            return;
+        reqJson.put("link",ownerDtos.get(0).getLink());
+
+        ResultVo resultVo = iotInnerServiceSMOImpl.postIotData(new IotDataDto("getAccessControlQrcodeBmoImpl", reqJson));
+
+        if (resultVo.getCode() != ResultVo.CODE_OK) {
+            throw new CmdException(resultVo.getMsg());
         }
 
-        //todo 调用自己算法生成 haha
-        UserDto userDto = new UserDto();
-        userDto.setTel(ownerDtos.get(0).getLink());
-        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
-        String qrCode = "";
-        //todo 理论上这种 走不到 因为业主在手机端展示二维码，所以业主肯定认证过了
-        if (userDtos == null || userDtos.size() < 1) {
-            qrCode = userV1InnerServiceSMOImpl.generatorUserIdQrCode(reqJson.getString("userId"));
-        } else {
-            qrCode = userV1InnerServiceSMOImpl.generatorUserIdQrCode(userDtos.get(0).getUserId());
-        }
-
-        context.setResponseEntity(ResultVo.createResponseEntity(qrCode));
+        context.setResponseEntity(ResultVo.createResponseEntity(resultVo));
     }
 }
