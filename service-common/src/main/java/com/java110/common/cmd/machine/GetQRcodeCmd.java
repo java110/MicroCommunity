@@ -2,17 +2,20 @@ package com.java110.common.cmd.machine;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.IotDataDto;
 import com.java110.dto.machine.MachineDto;
+import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IMachineInnerServiceSMO;
 import com.java110.intf.common.IMachineV1InnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.job.IIotInnerServiceSMO;
+import com.java110.intf.user.IOwnerAppUserV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
@@ -46,10 +49,12 @@ public class GetQRcodeCmd extends Cmd {
     @Autowired
     private IIotInnerServiceSMO iotInnerServiceSMOImpl;
 
+    @Autowired
+    private IOwnerAppUserV1InnerServiceSMO ownerAppUserV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含小区信息");
-        Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含用户信息");
         Assert.hasKeyAndValue(reqJson, "machineCode", "请求报文中未包含设备信息");
     }
 
@@ -57,9 +62,23 @@ public class GetQRcodeCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
         ResponseEntity<String> responseEntity = null;
 
+        String userId = CmdContextUtils.getUserId(context);
+        OwnerAppUserDto ownerAppUserDto = new OwnerAppUserDto();
+        ownerAppUserDto.setUserId(userId);
+        List<OwnerAppUserDto> ownerAppUserDtos = ownerAppUserV1InnerServiceSMOImpl.queryOwnerAppUsers(ownerAppUserDto);
+
+        if(ListUtil.isNull(ownerAppUserDtos)){
+            throw new CmdException("未认证业主");
+        }
+
+        String memberId = ownerAppUserDtos.get(0).getMemberId();
+        if("-1".equals(memberId)){
+            throw new CmdException("未认证业主");
+        }
+
         //todo 如果是业主 限制开门次数
         OwnerDto ownerDto = new OwnerDto();
-        ownerDto.setMemberId(reqJson.getString("userId"));
+        ownerDto.setMemberId(memberId);
         ownerDto.setCommunityId(reqJson.getString("communityId"));
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwners(ownerDto);
         if (ListUtil.isNull(ownerDtos)) {
