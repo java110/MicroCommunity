@@ -12,7 +12,7 @@
     <!-- 查询优惠申请类型信息 add by wuxw 2018-07-03 -->
     <select id="getApplyRoomDiscountTypeInfo" parameterType="Map" resultType="Map">
         select t.apply_type,t.apply_type applyType,t.type_desc,t.type_desc typeDesc,t.type_name,t.type_name
-        typeName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId
+        typeName,t.status_cd,t.status_cd statusCd,t.community_id,t.community_id communityId,t.create_time createTime
         from apply_room_discount_type t
         where 1 =1
         <if test="applyType !=null and applyType != ''">

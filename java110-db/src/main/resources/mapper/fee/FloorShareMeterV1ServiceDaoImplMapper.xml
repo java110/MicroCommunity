@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="floorShareMeterV1ServiceDaoImpl">
+
+
+    <!-- 保存楼栋公摊表信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFloorShareMeterInfo" parameterType="Map">
+        insert into floor_share_meter(
+        floor_id,meter_num,meter_type,fsm_id,formula_value,community_id,cur_degree,share_type,floor_num,cur_reading_time
+        ) values (
+        #{floorId},#{meterNum},#{meterType},#{fsmId},#{formulaValue},#{communityId},#{curDegree},#{shareType},#{floorNum},#{curReadingTime}
+        )
+    </insert>
+
+
+    <!-- 查询楼栋公摊表信息 add by wuxw 2018-07-03 -->
+    <select id="getFloorShareMeterInfo" parameterType="Map" resultType="Map">
+        select t.floor_id floorId,t.meter_num meterNum,t.meter_type meterType,t.fsm_id fsmId,t.formula_value
+        formulaValue,t.status_cd statusCd,t.community_id communityId,t.cur_degree curDegree,t.share_type
+        shareType,t.floor_num floorNum,t.cur_reading_time curReadingTime,t.create_time createTime
+        from floor_share_meter t
+        where 1 =1
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="meterNum !=null and meterNum != ''">
+            and t.meter_num= #{meterNum}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            and t.meter_type= #{meterType}
+        </if>
+        <if test="fsmId !=null and fsmId != ''">
+            and t.fsm_id= #{fsmId}
+        </if>
+        <if test="formulaValue !=null and formulaValue != ''">
+            and t.formula_value= #{formulaValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="curDegree !=null and curDegree != ''">
+            and t.cur_degree= #{curDegree}
+        </if>
+        <if test="shareType !=null and shareType != ''">
+            and t.share_type= #{shareType}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and t.floor_num= #{floorNum}
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改楼栋公摊表信息 add by wuxw 2018-07-03 -->
+    <update id="updateFloorShareMeterInfo" parameterType="Map">
+        update floor_share_meter t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+
+        <if test="meterNum !=null and meterNum != ''">
+            , t.meter_num= #{meterNum}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            , t.meter_type= #{meterType}
+        </if>
+        <if test="formulaValue !=null and formulaValue != ''">
+            , t.formula_value= #{formulaValue}
+        </if>
+
+        <if test="curDegree !=null and curDegree != ''">
+            , t.cur_degree= #{curDegree}
+        </if>
+        <if test="shareType !=null and shareType != ''">
+            , t.share_type= #{shareType}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            , t.floor_num= #{floorNum}
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            , t.cur_reading_time= #{curReadingTime}
+        </if>
+        where 1=1
+        <if test="fsmId !=null and fsmId != ''">
+            and t.fsm_id= #{fsmId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+
+    </update>
+
+    <!-- 查询楼栋公摊表数量 add by wuxw 2018-07-03 -->
+    <select id="queryFloorShareMetersCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from floor_share_meter t
+        where 1 =1
+        <if test="floorId !=null and floorId != ''">
+            and t.floor_id= #{floorId}
+        </if>
+        <if test="meterNum !=null and meterNum != ''">
+            and t.meter_num= #{meterNum}
+        </if>
+        <if test="meterType !=null and meterType != ''">
+            and t.meter_type= #{meterType}
+        </if>
+        <if test="fsmId !=null and fsmId != ''">
+            and t.fsm_id= #{fsmId}
+        </if>
+        <if test="formulaValue !=null and formulaValue != ''">
+            and t.formula_value= #{formulaValue}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="curDegree !=null and curDegree != ''">
+            and t.cur_degree= #{curDegree}
+        </if>
+        <if test="shareType !=null and shareType != ''">
+            and t.share_type= #{shareType}
+        </if>
+        <if test="floorNum !=null and floorNum != ''">
+            and t.floor_num= #{floorNum}
+        </if>
+        <if test="curReadingTime !=null and curReadingTime != ''">
+            and t.cur_reading_time= #{curReadingTime}
+        </if>
+
+
+    </select>
+
+</mapper>

@@ -55,9 +55,9 @@ public class ApplyRoomDiscountTypeServiceDaoImpl extends BaseServiceDao implemen
     public List<Map> getApplyRoomDiscountTypeInfo(Map info) throws DAOException {
         logger.debug("查询优惠申请类型信息 入参 info : {}",info);
 
-        List<Map> businessApplyRoomDiscountTypeInfos = sqlSessionTemplate.selectList("applyRoomDiscountTypeServiceDaoImpl.getApplyRoomDiscountTypeInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("applyRoomDiscountTypeServiceDaoImpl.getApplyRoomDiscountTypeInfo",info);
 
-        return businessApplyRoomDiscountTypeInfos;
+        return infos;
     }
 
 
@@ -86,12 +86,12 @@ public class ApplyRoomDiscountTypeServiceDaoImpl extends BaseServiceDao implemen
     public int queryApplyRoomDiscountTypesCount(Map info) {
         logger.debug("查询优惠申请类型数据 入参 info : {}",info);
 
-        List<Map> businessApplyRoomDiscountTypeInfos = sqlSessionTemplate.selectList("applyRoomDiscountTypeServiceDaoImpl.queryApplyRoomDiscountTypesCount", info);
-        if (businessApplyRoomDiscountTypeInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("applyRoomDiscountTypeServiceDaoImpl.queryApplyRoomDiscountTypesCount", info);
+        if (infos.size() < 1) {
             return 0;
         }
 
-        return Integer.parseInt(businessApplyRoomDiscountTypeInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 

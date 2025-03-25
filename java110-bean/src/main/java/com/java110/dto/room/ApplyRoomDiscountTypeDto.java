@@ -1,6 +1,7 @@
 package com.java110.dto.room;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +16,9 @@ import java.util.Date;
 public class ApplyRoomDiscountTypeDto extends PageDto implements Serializable {
 
     private String applyType;
-private String typeDesc;
-private String typeName;
-private String communityId;
+    private String typeDesc;
+    private String typeName;
+    private String communityId;
 
 
     private Date createTime;
@@ -28,25 +29,32 @@ private String communityId;
     public String getApplyType() {
         return applyType;
     }
-public void setApplyType(String applyType) {
+
+    public void setApplyType(String applyType) {
         this.applyType = applyType;
     }
-public String getTypeDesc() {
+
+    public String getTypeDesc() {
         return typeDesc;
     }
-public void setTypeDesc(String typeDesc) {
+
+    public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
     }
-public String getTypeName() {
+
+    public String getTypeName() {
         return typeName;
     }
-public void setTypeName(String typeName) {
+
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
