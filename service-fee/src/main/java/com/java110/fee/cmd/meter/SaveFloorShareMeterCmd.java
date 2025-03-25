@@ -23,6 +23,7 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
 import com.java110.dto.floor.FloorDto;
+import com.java110.dto.floorShareMeter.FloorShareMeterDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
 import com.java110.intf.fee.IFloorShareMeterV1InnerServiceSMO;
 import com.java110.po.floorShareMeter.FloorShareMeterPo;

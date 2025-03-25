@@ -1,6 +1,7 @@
 package com.java110.dto.floorShareMeter;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,15 +16,17 @@ import java.util.Date;
 public class FloorShareMeterDto extends PageDto implements Serializable {
 
     private String floorId;
-private String meterNum;
-private String meterType;
-private String fsmId;
-private String formulaValue;
-private String communityId;
-private String curDegree;
-private String shareType;
-private String floorNum;
-private String curReadingTime;
+    private String meterNum;
+    private String meterType;
+    private String meterTypeName;
+    private String fsmId;
+    private String formulaValue;
+    private String communityId;
+    private String curDegree;
+    private String shareType;
+    private String shareTypeName;
+    private String floorNum;
+    private String curReadingTime;
 
 
     private Date createTime;
@@ -34,61 +37,80 @@ private String curReadingTime;
     public String getFloorId() {
         return floorId;
     }
-public void setFloorId(String floorId) {
+
+    public void setFloorId(String floorId) {
         this.floorId = floorId;
     }
-public String getMeterNum() {
+
+    public String getMeterNum() {
         return meterNum;
     }
-public void setMeterNum(String meterNum) {
+
+    public void setMeterNum(String meterNum) {
         this.meterNum = meterNum;
     }
-public String getMeterType() {
+
+    public String getMeterType() {
         return meterType;
     }
-public void setMeterType(String meterType) {
+
+    public void setMeterType(String meterType) {
         this.meterType = meterType;
     }
-public String getFsmId() {
+
+    public String getFsmId() {
         return fsmId;
     }
-public void setFsmId(String fsmId) {
+
+    public void setFsmId(String fsmId) {
         this.fsmId = fsmId;
     }
-public String getFormulaValue() {
+
+    public String getFormulaValue() {
         return formulaValue;
     }
-public void setFormulaValue(String formulaValue) {
+
+    public void setFormulaValue(String formulaValue) {
         this.formulaValue = formulaValue;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCurDegree() {
+
+    public String getCurDegree() {
         return curDegree;
     }
-public void setCurDegree(String curDegree) {
+
+    public void setCurDegree(String curDegree) {
         this.curDegree = curDegree;
     }
-public String getShareType() {
+
+    public String getShareType() {
         return shareType;
     }
-public void setShareType(String shareType) {
+
+    public void setShareType(String shareType) {
         this.shareType = shareType;
     }
-public String getFloorNum() {
+
+    public String getFloorNum() {
         return floorNum;
     }
-public void setFloorNum(String floorNum) {
+
+    public void setFloorNum(String floorNum) {
         this.floorNum = floorNum;
     }
-public String getCurReadingTime() {
+
+    public String getCurReadingTime() {
         return curReadingTime;
     }
-public void setCurReadingTime(String curReadingTime) {
+
+    public void setCurReadingTime(String curReadingTime) {
         this.curReadingTime = curReadingTime;
     }
 
@@ -107,5 +129,21 @@ public void setCurReadingTime(String curReadingTime) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getMeterTypeName() {
+        return meterTypeName;
+    }
+
+    public void setMeterTypeName(String meterTypeName) {
+        this.meterTypeName = meterTypeName;
+    }
+
+    public String getShareTypeName() {
+        return shareTypeName;
+    }
+
+    public void setShareTypeName(String shareTypeName) {
+        this.shareTypeName = shareTypeName;
     }
 }

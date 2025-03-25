@@ -19,8 +19,12 @@
     <select id="getFloorShareMeterInfo" parameterType="Map" resultType="Map">
         select t.floor_id floorId,t.meter_num meterNum,t.meter_type meterType,t.fsm_id fsmId,t.formula_value
         formulaValue,t.status_cd statusCd,t.community_id communityId,t.cur_degree curDegree,t.share_type
-        shareType,t.floor_num floorNum,t.cur_reading_time curReadingTime,t.create_time createTime
+        shareType,t.floor_num floorNum,t.cur_reading_time curReadingTime,t.create_time createTime,td.name meterTypeName,
+        td1.name shareTypeName
         from floor_share_meter t
+        left join t_dict td on t.meter_type = td.status_cd and td.table_name = 'floor_share_meter' and td.table_columns = 'meter_type'
+        left join t_dict td1 on t.share_type = td1.status_cd and td1.table_name = 'floor_share_meter' and td1.table_columns = 'share_type'
+
         where 1 =1
         <if test="floorId !=null and floorId != ''">
             and t.floor_id= #{floorId}
