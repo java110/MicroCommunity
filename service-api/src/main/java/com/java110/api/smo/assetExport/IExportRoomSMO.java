@@ -13,13 +13,7 @@ import org.springframework.http.ResponseEntity;
  **/
 public interface IExportRoomSMO {
 
-    /**
-     * 导入excel数据
-     *
-     * @param pd 前台数据封装
-     * @return ResponseEntity
-     */
-    public ResponseEntity<Object> exportExcelData(IPageData pd) throws Exception;
+
 
      ResponseEntity<Object> exportCustomReportTableData(IPageData pd) throws Exception;
 }

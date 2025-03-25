@@ -62,17 +62,7 @@ public class ImportRoomFeeComponent {
         return importRoomFeeSMOImpl.importTempData(pd);
     }
 
-    /**
-     * 添加应用数据
-     *
-     * @param pd 页面数据封装
-     * @return ResponseEntity 对象
-     */
-    public ResponseEntity<Object> exportData(IPageData pd) throws Exception {
-        IPageData newPd = PageData.newInstance().builder(pd.getUserId(), pd.getUserName(),pd.getToken(), pd.getReqData(), pd.getComponentCode(), pd.getComponentMethod(), "",
-                pd.getSessionId(), AppDto.WEB_APP_ID,pd.getHeaders());
-        return exportRoomSMOImpl.exportExcelData(newPd);
-    }
+
 
 
 }
