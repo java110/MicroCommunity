@@ -22,9 +22,11 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.fee.FeeConfigDto;
 import com.java110.dto.floor.FloorDto;
 import com.java110.dto.floorShareMeter.FloorShareMeterDto;
 import com.java110.intf.community.IFloorInnerServiceSMO;
+import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFloorShareMeterV1InnerServiceSMO;
 import com.java110.po.floorShareMeter.FloorShareMeterPo;
 import com.java110.utils.exception.CmdException;
@@ -61,12 +63,17 @@ public class SaveFloorShareMeterCmd extends Cmd {
     @Autowired
     private IFloorInnerServiceSMO floorInnerServiceSMOImpl;
 
+    @Autowired
+    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "floorId", "请求报文中未包含floorId");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         Assert.hasKeyAndValue(reqJson, "meterType", "请求报文中未包含meterType");
         Assert.hasKeyAndValue(reqJson, "shareType", "请求报文中未包含shareType");
+        Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含费用项");
+        Assert.hasKeyAndValue(reqJson, "sharePrice", "请求报文中未包含公摊单价");
         super.validateProperty(cmdDataFlowContext);
 
     }
@@ -74,6 +81,12 @@ public class SaveFloorShareMeterCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+
+
+        FeeConfigDto feeConfigDto = new FeeConfigDto();
+        feeConfigDto.setConfigId(reqJson.getString("configId"));
+        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
+        Assert.listOnlyOne(feeConfigDtos, "未包含费用项");
 
         FloorDto floorDto = new FloorDto();
         floorDto.setFloorId(reqJson.getString("floorId"));
@@ -87,6 +100,7 @@ public class SaveFloorShareMeterCmd extends Cmd {
         floorShareMeterPo.setCurDegree("0");
         floorShareMeterPo.setCurReadingTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         floorShareMeterPo.setFloorNum(floorDtos.get(0).getFloorNum());
+        floorShareMeterPo.setConfigName(feeConfigDtos.get(0).getFeeName());
         int flag = floorShareMeterV1InnerServiceSMOImpl.saveFloorShareMeter(floorShareMeterPo);
 
         if (flag < 1) {

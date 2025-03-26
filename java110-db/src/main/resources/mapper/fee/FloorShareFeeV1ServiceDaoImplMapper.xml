@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="floorShareFeeV1ServiceDaoImpl">
+
+
+    <!-- 保存公摊费用信息 add by wuxw 2018-07-03 -->
+    <insert id="saveFloorShareFeeInfo" parameterType="Map">
+        insert into floor_share_fee(
+        amount,owner_name,fsf_id,fsm_id,fee_name,remark,reading_id,fee_id,room_name,degrees
+        ) values (
+        #{amount},#{ownerName},#{fsfId},#{fsmId},#{feeName},#{remark},#{readingId},#{feeId},#{roomName},#{degrees}
+        )
+    </insert>
+    <insert id="saveFloorShareFees" parameterType="Map">
+        insert into floor_share_fee(
+        amount,owner_name,fsf_id,fsm_id,fee_name,remark,reading_id,fee_id,room_name,degrees
+        ) values
+        <foreach collection="floorShareFeePos" item="item" separator=",">
+            (
+            #{item.amount},#{item.ownerName},#{item.fsfId},#{item.fsmId},#{item.feeName},#{item.remark},#{item.readingId},#{item.feeId},#{item.roomName},#{item.degrees}
+            )
+        </foreach>
+    </insert>
+
+
+
+    <!-- 查询公摊费用信息 add by wuxw 2018-07-03 -->
+    <select id="getFloorShareFeeInfo" parameterType="Map" resultType="Map">
+        select t.amount,t.owner_name ownerName,t.fsf_id fsfId,t.fsm_id fsmId,t.fee_name feeName,t.remark,t.status_cd
+        statusCd,t.reading_id readingId,t.fee_id feeId,t.room_name roomName,t.degrees,t.create_time createTime
+        from floor_share_fee t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="fsfId !=null and fsfId != ''">
+            and t.fsf_id= #{fsfId}
+        </if>
+        <if test="fsmId !=null and fsmId != ''">
+            and t.fsm_id= #{fsmId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="readingId !=null and readingId != ''">
+            and t.reading_id= #{readingId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="degrees !=null and degrees != ''">
+            and t.degrees= #{degrees}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改公摊费用信息 add by wuxw 2018-07-03 -->
+    <update id="updateFloorShareFeeInfo" parameterType="Map">
+        update floor_share_fee t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="amount !=null and amount != ''">
+            , t.amount= #{amount}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            , t.owner_name= #{ownerName}
+        </if>
+        <if test="fsmId !=null and fsmId != ''">
+            , t.fsm_id= #{fsmId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            , t.fee_name= #{feeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="readingId !=null and readingId != ''">
+            , t.reading_id= #{readingId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            , t.fee_id= #{feeId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            , t.room_name= #{roomName}
+        </if>
+        <if test="degrees !=null and degrees != ''">
+            , t.degrees= #{degrees}
+        </if>
+        where 1=1
+        <if test="fsfId !=null and fsfId != ''">
+            and t.fsf_id= #{fsfId}
+        </if>
+
+    </update>
+
+    <!-- 查询公摊费用数量 add by wuxw 2018-07-03 -->
+    <select id="queryFloorShareFeesCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from floor_share_fee t
+        where 1 =1
+        <if test="amount !=null and amount != ''">
+            and t.amount= #{amount}
+        </if>
+        <if test="ownerName !=null and ownerName != ''">
+            and t.owner_name= #{ownerName}
+        </if>
+        <if test="fsfId !=null and fsfId != ''">
+            and t.fsf_id= #{fsfId}
+        </if>
+        <if test="fsmId !=null and fsmId != ''">
+            and t.fsm_id= #{fsmId}
+        </if>
+        <if test="feeName !=null and feeName != ''">
+            and t.fee_name= #{feeName}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="readingId !=null and readingId != ''">
+            and t.reading_id= #{readingId}
+        </if>
+        <if test="feeId !=null and feeId != ''">
+            and t.fee_id= #{feeId}
+        </if>
+        <if test="roomName !=null and roomName != ''">
+            and t.room_name= #{roomName}
+        </if>
+        <if test="degrees !=null and degrees != ''">
+            and t.degrees= #{degrees}
+        </if>
+
+
+    </select>
+
+</mapper>

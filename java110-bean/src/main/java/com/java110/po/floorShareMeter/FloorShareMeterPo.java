@@ -17,6 +17,7 @@ package com.java110.po.floorShareMeter;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2025-03-25 15:01:11 mail: 928255095@qq.com
@@ -28,83 +29,131 @@ import java.util.Date;
 public class FloorShareMeterPo implements Serializable {
 
     private String floorId;
-private String meterNum;
-private String meterType;
-private String fsmId;
-private String formulaValue;
-private String statusCd = "0";
-private String communityId;
-private String curDegree;
-private String shareType;
-private String floorNum;
-private String curReadingTime;
-public String getFloorId() {
+    private String meterNum;
+    private String meterType;
+    private String fsmId;
+    private String formulaValue;
+    private String statusCd = "0";
+    private String communityId;
+    private String curDegree;
+    private String shareType;
+    private String floorNum;
+    private String curReadingTime;
+
+    private String configId;
+    private String configName;
+
+    private String sharePrice;
+
+    public String getFloorId() {
         return floorId;
     }
-public void setFloorId(String floorId) {
+
+    public void setFloorId(String floorId) {
         this.floorId = floorId;
     }
-public String getMeterNum() {
+
+    public String getMeterNum() {
         return meterNum;
     }
-public void setMeterNum(String meterNum) {
+
+    public void setMeterNum(String meterNum) {
         this.meterNum = meterNum;
     }
-public String getMeterType() {
+
+    public String getMeterType() {
         return meterType;
     }
-public void setMeterType(String meterType) {
+
+    public void setMeterType(String meterType) {
         this.meterType = meterType;
     }
-public String getFsmId() {
+
+    public String getFsmId() {
         return fsmId;
     }
-public void setFsmId(String fsmId) {
+
+    public void setFsmId(String fsmId) {
         this.fsmId = fsmId;
     }
-public String getFormulaValue() {
+
+    public String getFormulaValue() {
         return formulaValue;
     }
-public void setFormulaValue(String formulaValue) {
+
+    public void setFormulaValue(String formulaValue) {
         this.formulaValue = formulaValue;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
-public String getCurDegree() {
+
+    public String getCurDegree() {
         return curDegree;
     }
-public void setCurDegree(String curDegree) {
+
+    public void setCurDegree(String curDegree) {
         this.curDegree = curDegree;
     }
-public String getShareType() {
+
+    public String getShareType() {
         return shareType;
     }
-public void setShareType(String shareType) {
+
+    public void setShareType(String shareType) {
         this.shareType = shareType;
     }
-public String getFloorNum() {
+
+    public String getFloorNum() {
         return floorNum;
     }
-public void setFloorNum(String floorNum) {
+
+    public void setFloorNum(String floorNum) {
         this.floorNum = floorNum;
     }
-public String getCurReadingTime() {
+
+    public String getCurReadingTime() {
         return curReadingTime;
     }
-public void setCurReadingTime(String curReadingTime) {
+
+    public void setCurReadingTime(String curReadingTime) {
         this.curReadingTime = curReadingTime;
     }
 
+    public String getConfigId() {
+        return configId;
+    }
 
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
 
+    public String getConfigName() {
+        return configName;
+    }
+
+    public void setConfigName(String configName) {
+        this.configName = configName;
+    }
+
+    public String getSharePrice() {
+        return sharePrice;
+    }
+
+    public void setSharePrice(String sharePrice) {
+        this.sharePrice = sharePrice;
+    }
 }

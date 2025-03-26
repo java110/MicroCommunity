@@ -15,6 +15,9 @@ import java.util.Date;
  **/
 public class FloorShareMeterDto extends PageDto implements Serializable {
 
+    public static final String SHARE_TYPE_ROOM_AREA = "1001";//1001 按面积 2002 按户 3003 自定义公式
+    public static final String SHARE_TYPE_ROOM_COUNT = "2002";//1001 按面积 2002 按户 3003 自定义公式
+
     private String floorId;
     private String meterNum;
     private String meterType;
@@ -27,6 +30,11 @@ public class FloorShareMeterDto extends PageDto implements Serializable {
     private String shareTypeName;
     private String floorNum;
     private String curReadingTime;
+
+    private String configId;
+    private String configName;
+
+    private String sharePrice;
 
 
     private Date createTime;
@@ -145,5 +153,29 @@ public class FloorShareMeterDto extends PageDto implements Serializable {
 
     public void setShareTypeName(String shareTypeName) {
         this.shareTypeName = shareTypeName;
+    }
+
+    public String getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+
+    public String getConfigName() {
+        return configName;
+    }
+
+    public void setConfigName(String configName) {
+        this.configName = configName;
+    }
+
+    public String getSharePrice() {
+        return sharePrice;
+    }
+
+    public void setSharePrice(String sharePrice) {
+        this.sharePrice = sharePrice;
     }
 }

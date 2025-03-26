@@ -17,6 +17,7 @@ package com.java110.po.floorShareReading;
 
 import java.io.Serializable;
 import java.util.Date;
+
 /**
  * 类表述： Po 数据模型实体对象 基本保持与数据库模型一直 用于 增加修改删除 等时的数据载体
  * add by 吴学文 at 2025-03-26 09:29:54 mail: 928255095@qq.com
@@ -28,97 +29,139 @@ import java.util.Date;
 public class FloorShareReadingPo implements Serializable {
 
     private String fsmId;
-private String remark;
-private String statusCd = "0";
-private String readingId;
-private String title;
-private String curReadingTime;
-private String createStaffName;
-private String curDegrees;
-private String preDegrees;
-private String auditStaffName;
-private String preReadingTime;
-private String state;
-private String communityId;
-public String getFsmId() {
+    private String remark;
+    private String statusCd = "0";
+    private String readingId;
+    private String title;
+    private String curReadingTime;
+    private String createStaffName;
+    private String curDegrees;
+    private String preDegrees;
+    private String auditStaffName;
+    private String preReadingTime;
+    private String state;
+
+    private String statsMsg;
+    private String shareMsg;
+    private String communityId;
+
+    public String getFsmId() {
         return fsmId;
     }
-public void setFsmId(String fsmId) {
+
+    public void setFsmId(String fsmId) {
         this.fsmId = fsmId;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getStatusCd() {
+
+    public String getStatusCd() {
         return statusCd;
     }
-public void setStatusCd(String statusCd) {
+
+    public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
     }
-public String getReadingId() {
+
+    public String getReadingId() {
         return readingId;
     }
-public void setReadingId(String readingId) {
+
+    public void setReadingId(String readingId) {
         this.readingId = readingId;
     }
-public String getTitle() {
+
+    public String getTitle() {
         return title;
     }
-public void setTitle(String title) {
+
+    public void setTitle(String title) {
         this.title = title;
     }
-public String getCurReadingTime() {
+
+    public String getCurReadingTime() {
         return curReadingTime;
     }
-public void setCurReadingTime(String curReadingTime) {
+
+    public void setCurReadingTime(String curReadingTime) {
         this.curReadingTime = curReadingTime;
     }
-public String getCreateStaffName() {
+
+    public String getCreateStaffName() {
         return createStaffName;
     }
-public void setCreateStaffName(String createStaffName) {
+
+    public void setCreateStaffName(String createStaffName) {
         this.createStaffName = createStaffName;
     }
-public String getCurDegrees() {
+
+    public String getCurDegrees() {
         return curDegrees;
     }
-public void setCurDegrees(String curDegrees) {
+
+    public void setCurDegrees(String curDegrees) {
         this.curDegrees = curDegrees;
     }
-public String getPreDegrees() {
+
+    public String getPreDegrees() {
         return preDegrees;
     }
-public void setPreDegrees(String preDegrees) {
+
+    public void setPreDegrees(String preDegrees) {
         this.preDegrees = preDegrees;
     }
-public String getAuditStaffName() {
+
+    public String getAuditStaffName() {
         return auditStaffName;
     }
-public void setAuditStaffName(String auditStaffName) {
+
+    public void setAuditStaffName(String auditStaffName) {
         this.auditStaffName = auditStaffName;
     }
-public String getPreReadingTime() {
+
+    public String getPreReadingTime() {
         return preReadingTime;
     }
-public void setPreReadingTime(String preReadingTime) {
+
+    public void setPreReadingTime(String preReadingTime) {
         this.preReadingTime = preReadingTime;
     }
-public String getState() {
+
+    public String getState() {
         return state;
     }
-public void setState(String state) {
+
+    public void setState(String state) {
         this.state = state;
     }
-public String getCommunityId() {
+
+    public String getCommunityId() {
         return communityId;
     }
-public void setCommunityId(String communityId) {
+
+    public void setCommunityId(String communityId) {
         this.communityId = communityId;
     }
 
+    public String getStatsMsg() {
+        return statsMsg;
+    }
 
+    public void setStatsMsg(String statsMsg) {
+        this.statsMsg = statsMsg;
+    }
 
+    public String getShareMsg() {
+        return shareMsg;
+    }
+
+    public void setShareMsg(String shareMsg) {
+        this.shareMsg = shareMsg;
+    }
 }

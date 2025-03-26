@@ -8,9 +8,11 @@
     <!-- 保存楼栋公摊表信息 add by wuxw 2018-07-03 -->
     <insert id="saveFloorShareMeterInfo" parameterType="Map">
         insert into floor_share_meter(
-        floor_id,meter_num,meter_type,fsm_id,formula_value,community_id,cur_degree,share_type,floor_num,cur_reading_time
+        floor_id,meter_num,meter_type,fsm_id,formula_value,community_id,cur_degree,share_type,floor_num,cur_reading_time,
+        config_id,config_name,share_price
         ) values (
-        #{floorId},#{meterNum},#{meterType},#{fsmId},#{formulaValue},#{communityId},#{curDegree},#{shareType},#{floorNum},#{curReadingTime}
+        #{floorId},#{meterNum},#{meterType},#{fsmId},#{formulaValue},#{communityId},#{curDegree},#{shareType},#{floorNum},#{curReadingTime},
+        #{configId},#{configName},#{sharePrice}
         )
     </insert>
 
@@ -20,7 +22,7 @@
         select t.floor_id floorId,t.meter_num meterNum,t.meter_type meterType,t.fsm_id fsmId,t.formula_value
         formulaValue,t.status_cd statusCd,t.community_id communityId,t.cur_degree curDegree,t.share_type
         shareType,t.floor_num floorNum,t.cur_reading_time curReadingTime,t.create_time createTime,td.name meterTypeName,
-        td1.name shareTypeName
+        td1.name shareTypeName,t.config_id configId,t.config_name configName,t.share_price sharePrice
         from floor_share_meter t
         left join t_dict td on t.meter_type = td.status_cd and td.table_name = 'floor_share_meter' and td.table_columns = 'meter_type'
         left join t_dict td1 on t.share_type = td1.status_cd and td1.table_name = 'floor_share_meter' and td1.table_columns = 'share_type'
@@ -91,6 +93,15 @@
         </if>
         <if test="curReadingTime !=null and curReadingTime != ''">
             , t.cur_reading_time= #{curReadingTime}
+        </if>
+        <if test="configId !=null and configId != ''">
+            , t.config_id= #{configId}
+        </if>
+        <if test="configName !=null and configName != ''">
+            , t.config_name= #{configName}
+        </if>
+        <if test="sharePrice !=null and sharePrice != ''">
+            , t.share_price= #{sharePrice}
         </if>
         where 1=1
         <if test="fsmId !=null and fsmId != ''">

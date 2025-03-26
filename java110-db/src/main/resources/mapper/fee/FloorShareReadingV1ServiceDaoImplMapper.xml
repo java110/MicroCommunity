@@ -8,9 +8,11 @@
     <!-- 保存楼栋抄表信息 add by wuxw 2018-07-03 -->
     <insert id="saveFloorShareReadingInfo" parameterType="Map">
         insert into floor_share_reading(
-        fsm_id,remark,reading_id,title,cur_reading_time,create_staff_name,cur_degrees,pre_degrees,audit_staff_name,pre_reading_time,state,community_id
+        fsm_id,remark,reading_id,title,cur_reading_time,create_staff_name,cur_degrees,
+        pre_degrees,audit_staff_name,pre_reading_time,state,community_id
         ) values (
-        #{fsmId},#{remark},#{readingId},#{title},#{curReadingTime},#{createStaffName},#{curDegrees},#{preDegrees},#{auditStaffName},#{preReadingTime},#{state},#{communityId}
+        #{fsmId},#{remark},#{readingId},#{title},#{curReadingTime},#{createStaffName},
+        #{curDegrees},#{preDegrees},#{auditStaffName},#{preReadingTime},#{state},#{communityId}
         )
     </insert>
 
@@ -20,7 +22,7 @@
         select t.fsm_id fsmId,t.remark,t.status_cd statusCd,t.reading_id readingId,t.title,t.cur_reading_time
         curReadingTime,t.create_staff_name createStaffName,t.cur_degrees curDegrees,t.pre_degrees
         preDegrees,t.audit_staff_name auditStaffName,t.pre_reading_time preReadingTime,t.state,t.community_id
-        communityId,t.create_time createTime
+        communityId,t.create_time createTime,t.state_msg stateMsg,t.share_msg shareMsg
         from floor_share_reading t
         where 1 =1
         <if test="fsmId !=null and fsmId != ''">
@@ -106,14 +108,20 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
+        <if test="stateMsg !=null and stateMsg != ''">
+            , t.state_msg= #{stateMsg}
         </if>
+        <if test="shareMsg !=null and shareMsg != ''">
+            , t.share_msg= #{shareMsg}
+        </if>
+
         where 1=1
         <if test="readingId !=null and readingId != ''">
             and t.reading_id= #{readingId}
         </if>
-
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
     </update>
 
     <!-- 查询楼栋抄表数量 add by wuxw 2018-07-03 -->

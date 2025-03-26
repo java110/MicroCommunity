@@ -29,6 +29,9 @@ public class DatabusDataDto extends PageDto implements Serializable {
     //todo 工作单通知适配器
     public static final String BUSINESS_TYPE_OA_WORK_TASK = "oaWorkTaskToStaff";
 
+    // 费用公摊
+    public static final String BUSINESS_TYPE_SHARE_READING = "floorShareReading";
+
     // 欠费催缴
     public static final String BUSINESS_TYPE_SEND_COMMUNITY_DATA_TO_IOT = "sendCommunityDataToIot";
 

@@ -17,73 +17,69 @@ package com.java110.fee.cmd.meter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
-import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.fee.FeeConfigDto;
-import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
-import com.java110.intf.fee.IFloorShareMeterV1InnerServiceSMO;
-import com.java110.po.floorShareMeter.FloorShareMeterPo;
+import com.java110.intf.fee.IFloorShareFeeV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.java110.dto.floorShareFee.FloorShareFeeDto;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 
 /**
- * 类表述：更新
- * 服务编码：floorShareMeter.updateFloorShareMeter
- * 请求路劲：/app/floorShareMeter.UpdateFloorShareMeter
- * add by 吴学文 at 2025-03-25 15:01:11 mail: 928255095@qq.com
+ * 类表述：查询
+ * 服务编码：floorShareFee.listFloorShareFee
+ * 请求路劲：/app/floorShareFee.ListFloorShareFee
+ * add by 吴学文 at 2025-03-26 16:25:43 mail: 928255095@qq.com
  * open source address: https://gitee.com/wuxw7/MicroCommunity
  * 官网：http://www.homecommunity.cn
  * 温馨提示：如果您对此文件进行修改 请不要删除原有作者及注释信息，请补充您的 修改的原因以及联系邮箱如下
  * // modify by 张三 at 2021-09-12 第10行在某种场景下存在某种bug 需要修复，注释10至20行 加入 20行至30行
  */
-@Java110Cmd(serviceCode = "meter.updateFloorShareMeter")
-public class UpdateFloorShareMeterCmd extends Cmd {
+@Java110Cmd(serviceCode = "meter.listFloorShareFee")
+public class ListFloorShareFeeCmd extends Cmd {
 
-    private static Logger logger = LoggerFactory.getLogger(UpdateFloorShareMeterCmd.class);
-
-
+    private static Logger logger = LoggerFactory.getLogger(ListFloorShareFeeCmd.class);
     @Autowired
-    private IFloorShareMeterV1InnerServiceSMO floorShareMeterV1InnerServiceSMOImpl;
-
-    @Autowired
-    private IFeeConfigInnerServiceSMO feeConfigInnerServiceSMOImpl;
+    private IFloorShareFeeV1InnerServiceSMO floorShareFeeV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
-        Assert.hasKeyAndValue(reqJson, "fsmId", "fsmId不能为空");
+        super.validatePageInfo(reqJson);
         Assert.hasKeyAndValue(reqJson, "communityId", "communityId不能为空");
-        Assert.hasKeyAndValue(reqJson, "configId", "请求报文中未包含费用项");
-        Assert.hasKeyAndValue(reqJson, "sharePrice", "请求报文中未包含公摊单价");
         super.validateProperty(cmdDataFlowContext);
-
     }
 
     @Override
-    @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
-        FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setConfigId(reqJson.getString("configId"));
-        List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-        Assert.listOnlyOne(feeConfigDtos, "未包含费用项");
 
-        FloorShareMeterPo floorShareMeterPo = BeanConvertUtil.covertBean(reqJson, FloorShareMeterPo.class);
-        floorShareMeterPo.setConfigName(feeConfigDtos.get(0).getFeeName());
-        int flag = floorShareMeterV1InnerServiceSMOImpl.updateFloorShareMeter(floorShareMeterPo);
+        FloorShareFeeDto floorShareFeeDto = BeanConvertUtil.covertBean(reqJson, FloorShareFeeDto.class);
 
-        if (flag < 1) {
-            throw new CmdException("更新数据失败");
+        int count = floorShareFeeV1InnerServiceSMOImpl.queryFloorShareFeesCount(floorShareFeeDto);
+
+        List<FloorShareFeeDto> floorShareFeeDtos = null;
+
+        if (count > 0) {
+            floorShareFeeDtos = floorShareFeeV1InnerServiceSMOImpl.queryFloorShareFees(floorShareFeeDto);
+        } else {
+            floorShareFeeDtos = new ArrayList<>();
         }
 
-        cmdDataFlowContext.setResponseEntity(ResultVo.success());
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, floorShareFeeDtos);
+
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
 }

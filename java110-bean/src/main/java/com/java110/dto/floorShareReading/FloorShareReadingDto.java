@@ -29,6 +29,8 @@ public class FloorShareReadingDto extends PageDto implements Serializable {
     private String auditStaffName;
     private String preReadingTime;
     private String state;
+    private String statsMsg;
+    private String shareMsg;
     private String communityId;
 
 
@@ -148,5 +150,21 @@ public class FloorShareReadingDto extends PageDto implements Serializable {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getStatsMsg() {
+        return statsMsg;
+    }
+
+    public void setStatsMsg(String statsMsg) {
+        this.statsMsg = statsMsg;
+    }
+
+    public String getShareMsg() {
+        return shareMsg;
+    }
+
+    public void setShareMsg(String shareMsg) {
+        this.shareMsg = shareMsg;
     }
 }
