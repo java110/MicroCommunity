@@ -21,15 +21,21 @@ import com.java110.core.annotation.Java110Transactional;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
+import com.java110.dto.floorShareReading.FloorShareReadingDto;
+import com.java110.intf.fee.IFloorShareMeterV1InnerServiceSMO;
 import com.java110.intf.fee.IFloorShareReadingV1InnerServiceSMO;
+import com.java110.po.floorShareMeter.FloorShareMeterPo;
 import com.java110.po.floorShareReading.FloorShareReadingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * 类表述：删除
@@ -48,6 +54,9 @@ public class DeleteFloorShareReadingCmd extends Cmd {
     @Autowired
     private IFloorShareReadingV1InnerServiceSMO floorShareReadingV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IFloorShareMeterV1InnerServiceSMO floorShareMeterV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "readingId", "readingId不能为空");
@@ -59,6 +68,14 @@ public class DeleteFloorShareReadingCmd extends Cmd {
     @Override
     @Java110Transactional
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
+        FloorShareReadingDto floorShareReadingDto = new FloorShareReadingDto();
+        floorShareReadingDto.setReadingId(reqJson.getString("readingId"));
+        floorShareReadingDto.setCommunityId(reqJson.getString("communityId"));
+        List<FloorShareReadingDto> floorShareReadingDtos
+                = floorShareReadingV1InnerServiceSMOImpl.queryFloorShareReadings(floorShareReadingDto);
+        if (ListUtil.isNull(floorShareReadingDtos)) {
+            throw new CmdException("记录不存在");
+        }
 
         FloorShareReadingPo floorShareReadingPo = BeanConvertUtil.covertBean(reqJson, FloorShareReadingPo.class);
         int flag = floorShareReadingV1InnerServiceSMOImpl.deleteFloorShareReading(floorShareReadingPo);
@@ -66,6 +83,13 @@ public class DeleteFloorShareReadingCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("删除数据失败");
         }
+
+        FloorShareMeterPo floorShareMeterPo = new FloorShareMeterPo();
+        floorShareMeterPo.setFsmId(floorShareReadingDtos.get(0).getFsmId());
+        floorShareMeterPo.setCurReadingTime(floorShareReadingDtos.get(0).getPreReadingTime());
+        floorShareMeterPo.setCurDegree(floorShareReadingDtos.get(0).getPreDegrees());
+        floorShareMeterPo.setCommunityId(floorShareReadingDtos.get(0).getCommunityId());
+        floorShareMeterV1InnerServiceSMOImpl.updateFloorShareMeter(floorShareMeterPo);
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }

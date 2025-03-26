@@ -24,9 +24,11 @@ import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.floorShareReading.FloorShareReadingDto;
+import com.java110.dto.user.UserDto;
 import com.java110.intf.fee.IFloorShareMeterV1InnerServiceSMO;
 import com.java110.intf.fee.IFloorShareReadingV1InnerServiceSMO;
 import com.java110.intf.job.IDataBusInnerServiceSMO;
+import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.floorShareMeter.FloorShareMeterPo;
 import com.java110.po.floorShareReading.FloorShareReadingPo;
 import com.java110.utils.exception.CmdException;
@@ -66,6 +68,9 @@ public class AuditFloorShareReadingCmd extends Cmd {
     @Autowired
     private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
+    @Autowired
+    private IUserV1InnerServiceSMO userV1InnerServiceSMOImpl;
+
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         Assert.hasKeyAndValue(reqJson, "readingId", "readingId不能为空");
@@ -79,6 +84,10 @@ public class AuditFloorShareReadingCmd extends Cmd {
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
         String userId = CmdContextUtils.getUserId(cmdDataFlowContext);
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        Assert.listOnlyOne(userDtos, "用户不存在");
 
         FloorShareReadingDto floorShareReadingDto = new FloorShareReadingDto();
         floorShareReadingDto.setReadingId(reqJson.getString("readingId"));
@@ -93,7 +102,11 @@ public class AuditFloorShareReadingCmd extends Cmd {
         FloorShareReadingPo floorShareReadingPo = new FloorShareReadingPo();
         floorShareReadingPo.setReadingId(reqJson.getString("readingId"));
         floorShareReadingPo.setState(state);
-        floorShareReadingPo.setStatsMsg("审核意见：" + reqJson.getString("auditRemark"));
+        floorShareReadingPo.setAuditStaffName(userDtos.get(0).getName());
+        floorShareReadingPo.setStateMsg("审核意见：" + reqJson.getString("auditRemark"));
+        if (FloorShareReadingDto.STATE_C.equals(state)) {
+            floorShareReadingPo.setShareMsg("开始公摊");
+        }
         int flag = floorShareReadingV1InnerServiceSMOImpl.updateFloorShareReading(floorShareReadingPo);
 
         if (flag < 1) {

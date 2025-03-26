@@ -174,7 +174,7 @@ public class FloorShareReadingAdapt extends DatabusAdaptImpl {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
 
         Assert.listOnlyOne(userDtos, "用户不存在");
-        payFeeBatchPo.setCreateUserName(userDtos.get(0).getUserName());
+        payFeeBatchPo.setCreateUserName(userDtos.get(0).getName());
         payFeeBatchPo.setState(PayFeeBatchDto.STATE_NORMAL);
         payFeeBatchPo.setMsg("正常");
         int flag = payFeeBatchV1InnerServiceSMOImpl.savePayFeeBatch(payFeeBatchPo);
@@ -224,6 +224,8 @@ public class FloorShareReadingAdapt extends DatabusAdaptImpl {
         feeAttrInnerServiceSMOImpl.saveFeeAttrs(feeAttrPos);
 
         floorShareFeeV1InnerServiceSMOImpl.saveFloorShareFees(floorShareFeePos);
+
+        modifyShareMsg(floorShareReadingDto,"公摊完成");
 
     }
 
@@ -367,7 +369,7 @@ public class FloorShareReadingAdapt extends DatabusAdaptImpl {
     private void modifyShareMsg(FloorShareReadingDto floorShareReadingDto, String shareMsg) {
         FloorShareReadingPo floorShareReadingPo = new FloorShareReadingPo();
         floorShareReadingPo.setReadingId(floorShareReadingDto.getReadingId());
-        floorShareReadingPo.setStatsMsg("公摊进度：" + shareMsg);
+        floorShareReadingPo.setShareMsg("公摊进度：" + shareMsg);
         floorShareReadingV1InnerServiceSMOImpl.updateFloorShareReading(floorShareReadingPo);
     }
 

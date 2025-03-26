@@ -34,6 +34,7 @@ import com.java110.po.floorShareReading.FloorShareReadingPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.DateUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +78,8 @@ public class SaveFloorShareReadingCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "curReadingTime", "请求报文中未包含curReadingTime");
         Assert.hasKeyAndValue(reqJson, "communityId", "请求报文中未包含communityId");
         super.validateProperty(cmdDataFlowContext);
+
+
 
     }
 

@@ -38,6 +38,9 @@
         <if test="ownerName !=null and ownerName != ''">
             and t.owner_name= #{ownerName}
         </if>
+        <if test="ownerNameLike !=null and ownerNameLike != ''">
+            and t.owner_name like concat('%',#{ownerNameLike},'%')
+        </if>
         <if test="fsfId !=null and fsfId != ''">
             and t.fsf_id= #{fsfId}
         </if>
@@ -123,6 +126,9 @@
         </if>
         <if test="ownerName !=null and ownerName != ''">
             and t.owner_name= #{ownerName}
+        </if>
+        <if test="ownerNameLike !=null and ownerNameLike != ''">
+            and t.owner_name like concat('%',#{ownerNameLike},'%')
         </if>
         <if test="fsfId !=null and fsfId != ''">
             and t.fsf_id= #{fsfId}

@@ -41,7 +41,7 @@ public class FloorShareReadingPo implements Serializable {
     private String preReadingTime;
     private String state;
 
-    private String statsMsg;
+    private String stateMsg;
     private String shareMsg;
     private String communityId;
 
@@ -149,12 +149,12 @@ public class FloorShareReadingPo implements Serializable {
         this.communityId = communityId;
     }
 
-    public String getStatsMsg() {
-        return statsMsg;
+    public String getStateMsg() {
+        return stateMsg;
     }
 
-    public void setStatsMsg(String statsMsg) {
-        this.statsMsg = statsMsg;
+    public void setStateMsg(String stateMsg) {
+        this.stateMsg = stateMsg;
     }
 
     public String getShareMsg() {

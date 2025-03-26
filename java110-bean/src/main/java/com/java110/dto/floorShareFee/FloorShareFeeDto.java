@@ -1,6 +1,7 @@
 package com.java110.dto.floorShareFee;
 
 import com.java110.dto.PageDto;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,15 +16,16 @@ import java.util.Date;
 public class FloorShareFeeDto extends PageDto implements Serializable {
 
     private String amount;
-private String ownerName;
-private String fsfId;
-private String fsmId;
-private String feeName;
-private String remark;
-private String readingId;
-private String feeId;
-private String roomName;
-private String degrees;
+    private String ownerName;
+    private String ownerNameLike;
+    private String fsfId;
+    private String fsmId;
+    private String feeName;
+    private String remark;
+    private String readingId;
+    private String feeId;
+    private String roomName;
+    private String degrees;
 
 
     private Date createTime;
@@ -34,61 +36,80 @@ private String degrees;
     public String getAmount() {
         return amount;
     }
-public void setAmount(String amount) {
+
+    public void setAmount(String amount) {
         this.amount = amount;
     }
-public String getOwnerName() {
+
+    public String getOwnerName() {
         return ownerName;
     }
-public void setOwnerName(String ownerName) {
+
+    public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-public String getFsfId() {
+
+    public String getFsfId() {
         return fsfId;
     }
-public void setFsfId(String fsfId) {
+
+    public void setFsfId(String fsfId) {
         this.fsfId = fsfId;
     }
-public String getFsmId() {
+
+    public String getFsmId() {
         return fsmId;
     }
-public void setFsmId(String fsmId) {
+
+    public void setFsmId(String fsmId) {
         this.fsmId = fsmId;
     }
-public String getFeeName() {
+
+    public String getFeeName() {
         return feeName;
     }
-public void setFeeName(String feeName) {
+
+    public void setFeeName(String feeName) {
         this.feeName = feeName;
     }
-public String getRemark() {
+
+    public String getRemark() {
         return remark;
     }
-public void setRemark(String remark) {
+
+    public void setRemark(String remark) {
         this.remark = remark;
     }
-public String getReadingId() {
+
+    public String getReadingId() {
         return readingId;
     }
-public void setReadingId(String readingId) {
+
+    public void setReadingId(String readingId) {
         this.readingId = readingId;
     }
-public String getFeeId() {
+
+    public String getFeeId() {
         return feeId;
     }
-public void setFeeId(String feeId) {
+
+    public void setFeeId(String feeId) {
         this.feeId = feeId;
     }
-public String getRoomName() {
+
+    public String getRoomName() {
         return roomName;
     }
-public void setRoomName(String roomName) {
+
+    public void setRoomName(String roomName) {
         this.roomName = roomName;
     }
-public String getDegrees() {
+
+    public String getDegrees() {
         return degrees;
     }
-public void setDegrees(String degrees) {
+
+    public void setDegrees(String degrees) {
         this.degrees = degrees;
     }
 
@@ -107,5 +128,13 @@ public void setDegrees(String degrees) {
 
     public void setStatusCd(String statusCd) {
         this.statusCd = statusCd;
+    }
+
+    public String getOwnerNameLike() {
+        return ownerNameLike;
+    }
+
+    public void setOwnerNameLike(String ownerNameLike) {
+        this.ownerNameLike = ownerNameLike;
     }
 }

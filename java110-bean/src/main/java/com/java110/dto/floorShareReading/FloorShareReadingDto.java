@@ -29,9 +29,11 @@ public class FloorShareReadingDto extends PageDto implements Serializable {
     private String auditStaffName;
     private String preReadingTime;
     private String state;
-    private String statsMsg;
+    private String stateMsg;
     private String shareMsg;
     private String communityId;
+    private String startTime;
+    private String endTime;
 
 
     private Date createTime;
@@ -152,12 +154,12 @@ public class FloorShareReadingDto extends PageDto implements Serializable {
         this.statusCd = statusCd;
     }
 
-    public String getStatsMsg() {
-        return statsMsg;
+    public String getStateMsg() {
+        return stateMsg;
     }
 
-    public void setStatsMsg(String statsMsg) {
-        this.statsMsg = statsMsg;
+    public void setStateMsg(String stateMsg) {
+        this.stateMsg = stateMsg;
     }
 
     public String getShareMsg() {
@@ -166,5 +168,21 @@ public class FloorShareReadingDto extends PageDto implements Serializable {
 
     public void setShareMsg(String shareMsg) {
         this.shareMsg = shareMsg;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
