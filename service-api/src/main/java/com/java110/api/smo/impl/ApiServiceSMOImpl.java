@@ -156,7 +156,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         String serviceCode = dataFlow.getRequestHeaders().get(CommonConstant.HTTP_SERVICE);
 
-        String logServiceCode = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingCache.LOG_SERVICE_CODE);
+        String logServiceCode = MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, MappingCache.LOG_SERVICE_CODE);
 
         //日志查询不记录
         if ("/transactionLog/queryTransactionLog".equals(serviceCode)
@@ -164,7 +164,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                 || "file.getFile".equals(serviceCode)
                 || "file.getFileByObjId".equals(serviceCode)
                 || "/machine/heartbeat".equals(serviceCode) // 心跳也不记录
-                ) {
+        ) {
             return;
         }
 
@@ -426,12 +426,12 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         ResponseEntity responseEntity = null;
         //配置c_service 时请注意 如果是以out 开头的调用外部的地址
-        RestTemplate restTemplate ;
-//        if (Environment.isStartBootWay()) {
+        RestTemplate restTemplate;
+        if (Environment.isStartBootWay()) {
             restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
-//        } else {
-//            restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
-//        }
+        } else {
+            restTemplate = ApplicationContextFactory.getBean("restTemplate", RestTemplate.class);
+        }
 
         try {
             if (CommonConstant.HTTP_METHOD_GET.equals(service.getMethod())) {
@@ -444,8 +444,9 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
                         requestUrl = service.getUrl() + "?" + param;
                     }
                 }
-
-                requestUrl = BootReplaceUtil.replaceServiceName(requestUrl);
+                if (Environment.isStartBootWay()) {
+                    requestUrl = BootReplaceUtil.replaceServiceName(requestUrl);
+                }
 
                 responseEntity = restTemplate.exchange(requestUrl, HttpMethod.GET, httpEntity, String.class);
             } else if (CommonConstant.HTTP_METHOD_PUT.equals(service.getMethod())) {
@@ -491,7 +492,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
         //String requestUrl = "http://127.0.0.1:8008" + serviceCode;
         String requestUrl = serviceCode;
-        RestTemplate restTemplate ;
+        RestTemplate restTemplate;
         if (Environment.isStartBootWay()) {
             requestUrl = Environment.BOOT_PATH + requestUrl;
             restTemplate = ApplicationContextFactory.getBean("outRestTemplate", RestTemplate.class);
@@ -565,6 +566,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
 
     /**
      * 开始调度微服务
+     *
      * @param appService
      * @param dataFlow
      * @param reqJson
@@ -574,7 +576,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
         HttpHeaders header = new HttpHeaders();
         //todo 对头信息重新包装
         for (String key : dataFlow.getRequestCurrentHeaders().keySet()) {
-            if("userName".equals(key) || "user-name".equals(key)){
+            if ("userName".equals(key) || "user-name".equals(key)) {
                 header.add(key, "-");
                 continue;
             }
@@ -665,7 +667,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
     private void saveLogMessage(String requestJson, String responseJson) {
 
         try {
-            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingConstant.KEY_LOG_ON_OFF))) {
+            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, MappingConstant.KEY_LOG_ON_OFF))) {
                 JSONObject log = new JSONObject();
                 log.put("request", requestJson);
                 log.put("response", responseJson);
@@ -683,7 +685,7 @@ public class ApiServiceSMOImpl extends LoggerEngine implements IApiServiceSMO {
      */
     private void saveCostTimeLogMessage(DataFlow dataFlow) {
         try {
-            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH,MappingConstant.KEY_COST_TIME_ON_OFF))) {
+            if (MappingConstant.VALUE_ON.equals(MappingCache.getValue(MappingConstant.DOMAIN_SYSTEM_SWITCH, MappingConstant.KEY_COST_TIME_ON_OFF))) {
                 List<DataFlowLinksCost> dataFlowLinksCosts = dataFlow.getLinksCostDates();
                 JSONObject costDate = new JSONObject();
                 JSONArray costDates = new JSONArray();

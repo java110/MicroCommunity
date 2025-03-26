@@ -123,7 +123,7 @@ public class FinishWorkCopyCmd extends Cmd {
         workEventV1InnerServiceSMOImpl.saveWorkEvent(workEventPo);
 
         workTaskItemDto = new WorkTaskItemDto();
-        workTaskItemDto.setTaskId(reqJson.getString("taskId"));
+        workTaskItemDto.setWorkId(workTaskItemDtos.get(0).getWorkId());
         workTaskItemDto.setStates(new String[]{WorkTaskItemDto.STATE_COMPLETE,WorkTaskItemDto.STATE_WAIT});
         int count = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItemsCount(workTaskItemDto);
 

@@ -70,10 +70,6 @@
     <!-- 修改楼栋公摊表信息 add by wuxw 2018-07-03 -->
     <update id="updateFloorShareMeterInfo" parameterType="Map">
         update floor_share_meter t set t.status_cd = #{statusCd}
-        <if test="newBId != null and newBId != ''">
-            ,t.b_id = #{newBId}
-        </if>
-
         <if test="meterNum !=null and meterNum != ''">
             , t.meter_num= #{meterNum}
         </if>
