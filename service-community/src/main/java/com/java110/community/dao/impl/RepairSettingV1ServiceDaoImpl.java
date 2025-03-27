@@ -21,6 +21,7 @@ import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
 import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.community.dao.IRepairSettingV1ServiceDao;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -71,9 +72,9 @@ public class RepairSettingV1ServiceDaoImpl extends BaseServiceDao implements IRe
     public List<Map> getRepairSettingInfo(Map info) throws DAOException {
         logger.debug("查询 getRepairSettingInfo 入参 info : {}",info);
 
-        List<Map> businessRepairSettingInfos = sqlSessionTemplate.selectList("repairSettingV1ServiceDaoImpl.getRepairSettingInfo",info);
+        List<Map> infos = sqlSessionTemplate.selectList("repairSettingV1ServiceDaoImpl.getRepairSettingInfo",info);
 
-        return businessRepairSettingInfos;
+        return infos;
     }
 
 
@@ -100,12 +101,12 @@ public class RepairSettingV1ServiceDaoImpl extends BaseServiceDao implements IRe
     public int queryRepairSettingsCount(Map info) {
         logger.debug("查询 queryRepairSettingsCount 入参 info : {}",info);
 
-        List<Map> businessRepairSettingInfos = sqlSessionTemplate.selectList("repairSettingV1ServiceDaoImpl.queryRepairSettingsCount", info);
-        if (businessRepairSettingInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("repairSettingV1ServiceDaoImpl.queryRepairSettingsCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
 
-        return Integer.parseInt(businessRepairSettingInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 

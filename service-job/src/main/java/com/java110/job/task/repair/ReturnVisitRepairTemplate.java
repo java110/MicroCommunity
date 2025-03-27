@@ -7,7 +7,7 @@ import com.java110.dto.repair.RepairSettingDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.task.TaskDto;
 import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairSettingInnerServiceSMO;
+import com.java110.intf.community.IRepairSettingV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.po.owner.RepairPoolPo;
@@ -16,6 +16,7 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.constant.StatusConstant;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -46,7 +47,8 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMO;
 
     @Autowired
-    private IRepairSettingInnerServiceSMO repairSettingInnerServiceSMO;
+    private IRepairSettingV1InnerServiceSMO repairSettingV1InnerServiceSMO;
+
 
     @Override
     protected void process(TaskDto taskDto) {
@@ -117,7 +119,7 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
             //查询报修工单信息
             RepairSettingDto repairSettingDto = new RepairSettingDto();
             repairSettingDto.setSettingId(repairDtos.get(0).getRepairType());
-            List<RepairSettingDto> repairSettingDtos = repairSettingInnerServiceSMO.queryRepairSettings(repairSettingDto);
+            List<RepairSettingDto> repairSettingDtos = repairSettingV1InnerServiceSMO.queryRepairSettings(repairSettingDto);
             if (repairSettingDtos == null || repairSettingDtos.size() != 1) {
                 return;
             }
@@ -171,14 +173,14 @@ public class ReturnVisitRepairTemplate extends TaskSystemQuartz {
             repairDto.setRepairId(tmpRepairDto.getRepairId());
             //查询报修信息
             List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(repairDto);
-            if (repairDtos == null || repairDtos.size() != 1) {
+            if (ListUtil.isNull(repairDtos)) {
                 return;
             }
             //查询报修工单信息
             RepairSettingDto repairSettingDto = new RepairSettingDto();
             repairSettingDto.setSettingId(repairDtos.get(0).getRepairType());
-            List<RepairSettingDto> repairSettingDtos = repairSettingInnerServiceSMO.queryRepairSettings(repairSettingDto);
-            if (repairSettingDtos == null || repairSettingDtos.size() != 1) {
+            List<RepairSettingDto> repairSettingDtos = repairSettingV1InnerServiceSMO.queryRepairSettings(repairSettingDto);
+            if (ListUtil.isNull(repairSettingDtos)) {
                 return;
             }
             //获取报修区域

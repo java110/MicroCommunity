@@ -19,7 +19,7 @@ import com.java110.dto.wechat.Data;
 import com.java110.dto.wechat.PropertyFeeTemplateMessage;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
-import com.java110.intf.community.IRepairSettingInnerServiceSMO;
+import com.java110.intf.community.IRepairSettingV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
 import com.java110.intf.store.ISmallWeChatInnerServiceSMO;
 import com.java110.intf.store.ISmallWechatAttrInnerServiceSMO;
@@ -82,7 +82,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
     private IOwnerAppUserInnerServiceSMO ownerAppUserInnerServiceSMO;
 
     @Autowired
-    private IRepairSettingInnerServiceSMO repairSettingInnerServiceSMO;
+    private IRepairSettingV1InnerServiceSMO repairSettingV1InnerServiceSMO;
 
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMO;
@@ -161,7 +161,7 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
         String repairType = repairDtos.get(0).getRepairType();
         RepairSettingDto repairSettingDto = new RepairSettingDto();
         repairSettingDto.setSettingId(repairType);
-        List<RepairSettingDto> repairSettingDtos = repairSettingInnerServiceSMO.queryRepairSettings(repairSettingDto);
+        List<RepairSettingDto> repairSettingDtos = repairSettingV1InnerServiceSMO.queryRepairSettings(repairSettingDto);
         Assert.listOnlyOne(repairSettingDtos, "信息错误");
         JSONObject paramIn = new JSONObject();
         if (RepairUserDto.STATE_BACK.equals(state)) {   //退单状态

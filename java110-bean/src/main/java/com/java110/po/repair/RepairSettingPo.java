@@ -19,6 +19,9 @@ public class RepairSettingPo implements Serializable {
 
     private String notifyWay;
 
+    private int doTime;
+    private int warningTime;
+
     public String getRepairTypeName() {
         return repairTypeName;
     }
@@ -129,5 +132,21 @@ public class RepairSettingPo implements Serializable {
 
     public void setNotifyWay(String notifyWay) {
         this.notifyWay = notifyWay;
+    }
+
+    public int getDoTime() {
+        return doTime;
+    }
+
+    public void setDoTime(int doTime) {
+        this.doTime = doTime;
+    }
+
+    public int getWarningTime() {
+        return warningTime;
+    }
+
+    public void setWarningTime(int warningTime) {
+        this.warningTime = warningTime;
     }
 }

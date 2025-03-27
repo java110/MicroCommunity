@@ -39,13 +39,13 @@ public interface IRepairSettingV1InnerServiceSMO {
 
 
     @RequestMapping(value = "/saveRepairSetting", method = RequestMethod.POST)
-    public int saveRepairSetting(@RequestBody RepairSettingPo repairSettingPo);
+     int saveRepairSetting(@RequestBody RepairSettingPo repairSettingPo);
 
     @RequestMapping(value = "/updateRepairSetting", method = RequestMethod.POST)
-    public int updateRepairSetting(@RequestBody  RepairSettingPo repairSettingPo);
+     int updateRepairSetting(@RequestBody  RepairSettingPo repairSettingPo);
 
     @RequestMapping(value = "/deleteRepairSetting", method = RequestMethod.POST)
-    public int deleteRepairSetting(@RequestBody  RepairSettingPo repairSettingPo);
+     int deleteRepairSetting(@RequestBody  RepairSettingPo repairSettingPo);
 
     /**
      * <p>查询小区楼信息</p>

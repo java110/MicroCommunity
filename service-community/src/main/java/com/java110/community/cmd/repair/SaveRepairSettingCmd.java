@@ -60,6 +60,8 @@ public class SaveRepairSettingCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "publicArea", "请求报文中未包含公共区域");
         Assert.hasKeyAndValue(reqJson, "payFeeFlag", "请求报文中未包含收费情况");
         Assert.hasKeyAndValue(reqJson, "returnVisitFlag", "请求报文中未包含回访设置");
+        Assert.hasKeyAndValue(reqJson, "doTime", "请求报文中未包含办理时长");
+        Assert.hasKeyAndValue(reqJson, "warning", "请求报文中未包含超时预警");
 
     }
 

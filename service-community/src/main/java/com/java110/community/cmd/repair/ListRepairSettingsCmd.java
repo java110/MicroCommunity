@@ -21,7 +21,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.repair.RepairSettingDto;
-import com.java110.intf.community.IRepairSettingInnerServiceSMO;
+import com.java110.intf.community.IRepairSettingV1InnerServiceSMO;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
@@ -51,7 +51,7 @@ public class ListRepairSettingsCmd extends Cmd {
     private static Logger logger = LoggerFactory.getLogger(ListRepairSettingsCmd.class);
 
     @Autowired
-    private IRepairSettingInnerServiceSMO repairSettingInnerServiceSMOImpl;
+    private IRepairSettingV1InnerServiceSMO repairSettingV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -64,12 +64,12 @@ public class ListRepairSettingsCmd extends Cmd {
 
         RepairSettingDto repairSettingDto = BeanConvertUtil.covertBean(reqJson, RepairSettingDto.class);
 
-        int count = repairSettingInnerServiceSMOImpl.queryRepairSettingsCount(repairSettingDto);
+        int count = repairSettingV1InnerServiceSMOImpl.queryRepairSettingsCount(repairSettingDto);
 
         List<RepairSettingDto> repairSettingDtos = null;
 
         if (count > 0) {
-            repairSettingDtos = repairSettingInnerServiceSMOImpl.queryRepairSettings(repairSettingDto);
+            repairSettingDtos = repairSettingV1InnerServiceSMOImpl.queryRepairSettings(repairSettingDto);
         } else {
             repairSettingDtos = new ArrayList<>();
         }

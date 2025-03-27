@@ -39,6 +39,9 @@ public class RepairSettingDto extends PageDto implements Serializable {
 
     private String notifyWay;
 
+    private int doTime;
+    private int warningTime;
+
     public String getRepairTypeName() {
         return repairTypeName;
     }
@@ -197,5 +200,21 @@ public class RepairSettingDto extends PageDto implements Serializable {
 
     public void setCommunityIds(String[] communityIds) {
         this.communityIds = communityIds;
+    }
+
+    public int getDoTime() {
+        return doTime;
+    }
+
+    public void setDoTime(int doTime) {
+        this.doTime = doTime;
+    }
+
+    public int getWarningTime() {
+        return warningTime;
+    }
+
+    public void setWarningTime(int warningTime) {
+        this.warningTime = warningTime;
     }
 }
