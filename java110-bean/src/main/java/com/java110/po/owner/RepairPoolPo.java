@@ -32,6 +32,10 @@ public class RepairPoolPo implements Serializable {
     private String repairFee;
     private String payType;
 
+    private String timeout;
+
+    private String finishTime;
+
     public String getRepairId() {
         return repairId;
     }
@@ -182,5 +186,21 @@ public class RepairPoolPo implements Serializable {
 
     public void setPayType(String payType) {
         this.payType = payType;
+    }
+
+    public String getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(String timeout) {
+        this.timeout = timeout;
+    }
+
+    public String getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
     }
 }

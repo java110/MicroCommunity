@@ -6,6 +6,7 @@ import com.java110.core.base.dao.BaseServiceDao;
 import com.java110.utils.constant.ResponseConstant;
 import com.java110.utils.exception.DAOException;
 import com.java110.utils.util.DateUtil;
+import com.java110.utils.util.ListUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,8 @@ public class RepairServiceDaoImpl extends BaseServiceDao implements IRepairServi
     @Override
     public List<Map> getBusinessRepairInfo(Map info) throws DAOException {
         logger.debug("查询报修信息信息 入参 info : {}", info);
-        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getBusinessRepairInfo", info);
-        return businessRepairInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getBusinessRepairInfo", info);
+        return infos;
     }
 
     /**
@@ -107,45 +108,45 @@ public class RepairServiceDaoImpl extends BaseServiceDao implements IRepairServi
     @Override
     public int queryRepairsCount(Map info) {
         logger.debug("查询报修信息数据 入参 info : {}", info);
-        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.queryRepairsCount", info);
-        if (businessRepairInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("repairServiceDaoImpl.queryRepairsCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
-        return Integer.parseInt(businessRepairInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
     @Override
     public List<Map> getStaffRepairInfo(Map info) throws DAOException {
         logger.debug("查询报修信息信息 入参 info : {}", info);
-        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getStaffRepairInfo", info);
-        return businessRepairInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getStaffRepairInfo", info);
+        return infos;
     }
 
     @Override
     public int queryStaffRepairsCount(Map info) {
         logger.debug("查询报修信息数据 入参 info : {}", info);
-        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.queryStaffRepairsCount", info);
-        if (businessRepairInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("repairServiceDaoImpl.queryStaffRepairsCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
-        return Integer.parseInt(businessRepairInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 
 
     @Override
     public List<Map> getStaffFinishRepairInfo(Map info) throws DAOException {
         logger.debug("查询报修信息信息 入参 info : {}", info);
-        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getStaffFinishRepairInfo", info);
-        return businessRepairInfos;
+        List<Map> infos = sqlSessionTemplate.selectList("repairServiceDaoImpl.getStaffFinishRepairInfo", info);
+        return infos;
     }
 
     @Override
     public int queryStaffFinishRepairsCount(Map info) {
         logger.debug("查询报修信息数据 入参 info : {}", info);
-        List<Map> businessRepairInfos = sqlSessionTemplate.selectList("repairServiceDaoImpl.queryStaffFinishRepairsCount", info);
-        if (businessRepairInfos.size() < 1) {
+        List<Map> infos = sqlSessionTemplate.selectList("repairServiceDaoImpl.queryStaffFinishRepairsCount", info);
+        if (ListUtil.isNull(infos)) {
             return 0;
         }
-        return Integer.parseInt(businessRepairInfos.get(0).get("count").toString());
+        return Integer.parseInt(infos.get(0).get("count").toString());
     }
 }

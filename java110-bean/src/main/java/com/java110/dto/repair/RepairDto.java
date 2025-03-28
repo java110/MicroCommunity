@@ -104,6 +104,15 @@ public class RepairDto extends PageDto implements Serializable {
     private List<String> repairChannels;
     private String payType;
 
+    private String doTime;
+    private String warningTime;
+
+    private String timeout;
+
+    private String timeoutFlag;
+
+    private String finishTime;
+
     //业主上传维修图片
     private List<PhotoVo> repairPhotos;
     //维修前图片
@@ -132,6 +141,8 @@ public class RepairDto extends PageDto implements Serializable {
     private String endTime;
 
     private String notifyWay;
+
+    private String submitHours;
 
 
     public String getRepairName() {
@@ -597,5 +608,53 @@ public class RepairDto extends PageDto implements Serializable {
 
     public void setCommunityIds(String[] communityIds) {
         this.communityIds = communityIds;
+    }
+
+    public String getDoTime() {
+        return doTime;
+    }
+
+    public void setDoTime(String doTime) {
+        this.doTime = doTime;
+    }
+
+    public String getWarningTime() {
+        return warningTime;
+    }
+
+    public void setWarningTime(String warningTime) {
+        this.warningTime = warningTime;
+    }
+
+    public String getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(String timeout) {
+        this.timeout = timeout;
+    }
+
+    public String getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(String finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public String getSubmitHours() {
+        return submitHours;
+    }
+
+    public void setSubmitHours(String submitHours) {
+        this.submitHours = submitHours;
+    }
+
+    public String getTimeoutFlag() {
+        return timeoutFlag;
+    }
+
+    public void setTimeoutFlag(String timeoutFlag) {
+        this.timeoutFlag = timeoutFlag;
     }
 }

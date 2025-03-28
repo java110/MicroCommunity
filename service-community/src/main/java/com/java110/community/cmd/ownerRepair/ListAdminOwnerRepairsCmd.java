@@ -20,10 +20,7 @@ import com.java110.intf.user.IStaffCommunityV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.ListUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import com.java110.vo.api.junkRequirement.PhotoVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "ownerRepair.listAdminOwnerRepairs")
@@ -83,49 +81,77 @@ public class ListAdminOwnerRepairsCmd extends Cmd {
         }
 
         int count = repairInnerServiceSMOImpl.queryRepairsCount(ownerRepairDto);
-        List<RepairDto> ownerRepairs = new ArrayList<>();
+        List<RepairDto> repairDtos;
         if (count > 0) {
-            List<RepairDto> repairDtos = repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto);
-            for (RepairDto repairDto : repairDtos) {
-                //获取综合评价得分
-                String appraiseScoreNumber = repairDto.getAppraiseScore();
-                Double appraiseScoreNum = 0.0;
-                if (!StringUtil.isEmpty(appraiseScoreNumber)) {
-                    appraiseScoreNum = Double.parseDouble(appraiseScoreNumber);
-                }
-                int appraiseScore = (int) Math.ceil(appraiseScoreNum);
-                //获取上门速度评分
-                String doorSpeedScoreNumber = repairDto.getDoorSpeedScore();
-                Double doorSpeedScoreNum = 0.0;
-                if (!StringUtil.isEmpty(doorSpeedScoreNumber)) {
-                    doorSpeedScoreNum = Double.parseDouble(doorSpeedScoreNumber);
-                }
-                int doorSpeedScore = (int) Math.ceil(doorSpeedScoreNum);
-                //获取维修员服务评分
-                String repairmanServiceScoreNumber = repairDto.getRepairmanServiceScore();
-                Double repairmanServiceScoreNum = 0.0;
-                if (!StringUtil.isEmpty(repairmanServiceScoreNumber)) {
-                    repairmanServiceScoreNum = Double.parseDouble(repairmanServiceScoreNumber);
-                }
-                int repairmanServiceScore = (int) Math.ceil(repairmanServiceScoreNum);
-                //取得平均分
-                double averageNumber = (appraiseScoreNum + doorSpeedScoreNum + repairmanServiceScoreNum) / 3.0;
-                BigDecimal averageNum = new BigDecimal(averageNumber);
-                Double average = averageNum.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                repairDto.setAppraiseScore(String.valueOf(appraiseScore));
-                repairDto.setDoorSpeedScore(String.valueOf(doorSpeedScore));
-                repairDto.setRepairmanServiceScore(String.valueOf(repairmanServiceScore));
-                repairDto.setAverage(String.valueOf(average));
-                ownerRepairs.add(repairDto);
-            }
-            refreshRepair(ownerRepairs);
+            repairDtos = repairInnerServiceSMOImpl.queryRepairs(ownerRepairDto);
+            computeRepairScore(repairDtos);
+            refreshRepair(repairDtos);
 
-            refreshCommunityName(ownerRepairs);
+            refreshCommunityName(repairDtos);
         } else {
-            ownerRepairs = new ArrayList<>();
+            repairDtos = new ArrayList<>();
         }
-        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, ownerRepairs);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, repairDtos);
         context.setResponseEntity(responseEntity);
+    }
+
+    /**
+     * 计算评分
+     *
+     * @param repairDtos
+     */
+    private void computeRepairScore(List<RepairDto> repairDtos) {
+        if (ListUtil.isNull(repairDtos)) {
+            return;
+        }
+        Date finishTime = null;
+        String submitHour;
+        Date timeout = null;
+        for (RepairDto repairDto : repairDtos) {
+            //获取综合评价得分
+            String appraiseScoreNumber = repairDto.getAppraiseScore();
+            Double appraiseScoreNum = 0.0;
+            if (!StringUtil.isEmpty(appraiseScoreNumber)) {
+                appraiseScoreNum = Double.parseDouble(appraiseScoreNumber);
+            }
+            int appraiseScore = (int) Math.ceil(appraiseScoreNum);
+            //获取上门速度评分
+            String doorSpeedScoreNumber = repairDto.getDoorSpeedScore();
+            Double doorSpeedScoreNum = 0.0;
+            if (!StringUtil.isEmpty(doorSpeedScoreNumber)) {
+                doorSpeedScoreNum = Double.parseDouble(doorSpeedScoreNumber);
+            }
+            int doorSpeedScore = (int) Math.ceil(doorSpeedScoreNum);
+            //获取维修员服务评分
+            String repairmanServiceScoreNumber = repairDto.getRepairmanServiceScore();
+            Double repairmanServiceScoreNum = 0.0;
+            if (!StringUtil.isEmpty(repairmanServiceScoreNumber)) {
+                repairmanServiceScoreNum = Double.parseDouble(repairmanServiceScoreNumber);
+            }
+            int repairmanServiceScore = (int) Math.ceil(repairmanServiceScoreNum);
+            //取得平均分
+            double averageNumber = (appraiseScoreNum + doorSpeedScoreNum + repairmanServiceScoreNum) / 3.0;
+            BigDecimal averageNum = new BigDecimal(averageNumber);
+            Double average = averageNum.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+            repairDto.setAppraiseScore(String.valueOf(appraiseScore));
+            repairDto.setDoorSpeedScore(String.valueOf(doorSpeedScore));
+            repairDto.setRepairmanServiceScore(String.valueOf(repairmanServiceScore));
+            repairDto.setAverage(String.valueOf(average));
+
+            // 计算提单时长
+            finishTime = DateUtil.getCurrentDate();
+            if (!StringUtil.isEmpty(repairDto.getFinishTime())) {
+                finishTime = DateUtil.getDateFromStringA(repairDto.getFinishTime());
+            } else {
+                timeout = DateUtil.getDateFromStringA(repairDto.getTimeout());
+                if (finishTime.getTime() > timeout.getTime()) {
+                    repairDto.setStateName(repairDto.getStateName() + "(超时)");
+                }
+            }
+            submitHour = DateUtil.calculateTimeDifference(repairDto.getCreateTime(), finishTime);
+            repairDto.setSubmitHours(submitHour);
+
+        }
     }
 
     private void refreshCommunityName(List<RepairDto> ownerRepairs) {

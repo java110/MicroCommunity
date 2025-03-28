@@ -8,9 +8,11 @@
     <!-- 保存费用明细信息 add by wuxw 2018-07-03 -->
     <insert id="saveRepairPoolNewInfo" parameterType="Map">
         insert into r_repair_pool(
-        repair_type,repair_obj_type,repair_id,pay_type,repair_name,repair_obj_id,appointment_time,repair_fee,context,tel,repair_channel,repair_materials,state,community_id,maintenance_type,repair_obj_name
+        repair_type,repair_obj_type,repair_id,pay_type,repair_name,repair_obj_id,appointment_time,repair_fee,context,
+        tel,repair_channel,repair_materials,state,community_id,maintenance_type,repair_obj_name,timeout,finish_time
         ) values (
-        #{repairType},#{repairObjType},#{repairId},#{payType},#{repairName},#{repairObjId},#{appointmentTime},#{repairFee},#{context},#{tel},#{repairChannel},#{repairMaterials},#{state},#{communityId},#{maintenanceType},#{repairObjName}
+        #{repairType},#{repairObjType},#{repairId},#{payType},#{repairName},#{repairObjId},#{appointmentTime},#{repairFee},#{context},
+        #{tel},#{repairChannel},#{repairMaterials},#{state},#{communityId},#{maintenanceType},#{repairObjName},#{timeout},#{finishTime}
         )
     </insert>
 
@@ -23,7 +25,7 @@
         repairObjId,t.appointment_time,t.appointment_time appointmentTime,t.repair_fee,t.repair_fee
         repairFee,t.context,t.tel,t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials
         repairMaterials,t.state,t.community_id,t.community_id communityId,t.maintenance_type,t.maintenance_type
-        maintenanceType,t.repair_obj_name,t.repair_obj_name repairObjName
+        maintenanceType,t.repair_obj_name,t.repair_obj_name repairObjName,t.timeout,t.finish_time finishTime
         from r_repair_pool t
         where 1 =1
         <if test="repairType !=null and repairType != ''">
@@ -127,18 +129,22 @@
         <if test="state !=null and state != ''">
             , t.state= #{state}
         </if>
-        <if test="communityId !=null and communityId != ''">
-            , t.community_id= #{communityId}
-        </if>
+
         <if test="maintenanceType !=null and maintenanceType != ''">
             , t.maintenance_type= #{maintenanceType}
         </if>
         <if test="repairObjName !=null and repairObjName != ''">
             , t.repair_obj_name= #{repairObjName}
         </if>
+        <if test="finishTime !=null and finishTime != ''">
+            , t.finish_time = #{finishTime}
+        </if>
         where 1=1
         <if test="repairId !=null and repairId != ''">
             and t.repair_id= #{repairId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
         </if>
 
     </update>

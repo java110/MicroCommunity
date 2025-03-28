@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
 
 /**
@@ -989,5 +990,28 @@ public class DateUtil {
     }
     public static String getPreSecTimeStr(Date time,int month) {
         return getFormatTimeStringB(getPreSecTime(time,month));
+    }
+    public static String calculateTimeDifference(Date start, Date end) {
+        Duration duration = Duration.between(start.toInstant(), end.toInstant());
+
+        long days = duration.toDays();
+        long hours = duration.toHours() % 24;
+        long minutes = duration.toMinutes() % 60;
+
+        StringBuilder result = new StringBuilder();
+
+        if (days > 0) {
+            result.append(days).append("天");
+        }
+
+        if (hours > 0) {
+            result.append(hours).append("时");
+        }
+
+        if (minutes > 0 || (days == 0 && hours == 0 && minutes == 0)) {
+            result.append(minutes).append("分");
+        }
+
+        return result.toString();
     }
 }

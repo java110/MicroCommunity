@@ -139,7 +139,9 @@
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id repairObjId,
         t.repair_obj_name repairObjName,rrv.visit_type visitType,rrv.context visitContext,a.appraise_score
         appraiseScore, a.door_speed_score doorSpeedScore,a.repairman_service_score repairmanServiceScore,
-        t.pay_type,t.pay_type payType,rs.repair_setting_type repairSettingType,rs.notify_way notifyWay,d1.name repairSettingTypeName,t.create_time createTime
+        t.pay_type,t.pay_type payType,rs.repair_setting_type repairSettingType,rs.notify_way notifyWay,
+        rs.do_time doTime,rs.warning_time warningTime,d1.name repairSettingTypeName,t.create_time createTime,
+        t.timeout,t.finish_time finishTime
         <if test="staffId != null and staffId != ''">
             ,rru.state repairDispatchState,rru.context repairDispatchContext,td.name repairDispatchStateName
         </if>
@@ -223,6 +225,9 @@
         </if>
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{startTime}
+        </if>
+        <if test="timeoutFlag !=null and timeoutFlag != ''">
+            and t.timeout &lt; now()
         </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
@@ -393,6 +398,9 @@
         <if test="endTime !=null and endTime != ''">
             and t.create_time &lt;= #{endTime}
         </if>
+        <if test="timeoutFlag !=null and timeoutFlag != ''">
+            and t.timeout &lt; now()
+        </if>
         <if test="bId !=null and bId != ''">
             and t.b_id= #{bId}
         </if>
@@ -432,7 +440,8 @@
         repairObjId,t.repair_obj_name repairObjName,t.repair_channel repairChannel,
         sru.ru_id startRuId,ru.ru_id ruId,ru.pre_ru_id preRuId,t.maintenance_type,t.maintenance_type maintenanceType,
         t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
-        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType,t.create_time
+        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType,t.create_time,
+        rs.do_time doTime,rs.warning_time warningTime,t.timeout,t.finish_time finishTime
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'
@@ -564,7 +573,8 @@
         t.repair_obj_type,t.repair_obj_id,t.repair_obj_name,t.repair_obj_type repairObjType,t.repair_obj_id
         repairObjId,t.repair_obj_name repairObjName,t.maintenance_type,t.maintenance_type maintenanceType,
         t.repair_channel,t.repair_channel repairChannel,t.repair_materials,t.repair_materials repairMaterials,
-        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType,t.create_time
+        t.repair_fee,t.repair_fee repairFee,t.pay_type,t.pay_type payType,t.create_time,
+        rs.do_time doTime,rs.warning_time warningTime,t.timeout,t.finish_time finishTime
         from r_repair_pool t
         left join t_dict d on t.state = d.status_cd and d.table_name = 'r_repair_pool' and d.table_columns = 'state'
         left join r_repair_setting rs on rs.repair_type = t.repair_type and rs.status_cd = '0'

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.annotation.Java110Transactional;
+import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
@@ -14,11 +15,13 @@ import com.java110.dto.fee.FeeDto;
 import com.java110.dto.file.FileDto;
 import com.java110.dto.file.FileRelDto;
 import com.java110.dto.repair.RepairDto;
+import com.java110.dto.repair.RepairSettingDto;
 import com.java110.dto.repair.RepairUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.intf.common.IFileInnerServiceSMO;
 import com.java110.intf.common.IFileRelInnerServiceSMO;
 import com.java110.intf.community.IRepairPoolV1InnerServiceSMO;
+import com.java110.intf.community.IRepairSettingV1InnerServiceSMO;
 import com.java110.intf.community.IRepairUserV1InnerServiceSMO;
 import com.java110.intf.fee.IFeeConfigInnerServiceSMO;
 import com.java110.intf.fee.IFeeInnerServiceSMO;
@@ -32,17 +35,16 @@ import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.FeeTypeConstant;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+
 /**
  * 业主提交报修 功能
  * 请求地址为/app/ownerRepair.saveOwnerRepair
@@ -82,8 +84,8 @@ import java.util.List;
 )
 
 @Java110ExampleDoc(
-        reqBody="{\"repairName\":\"测试\",\"repairType\":\"102022081592760001\",\"appointmentTime\":\"2022-11-26 15:18:00\",\"tel\":\"15239726115\",\"roomId\":\"752022090312040033\",\"photos\":[],\"context\":\"反反复复烦烦烦\",\"userId\":\"302022102708350644\",\"userName\":\"测试\",\"communityId\":\"2022032267510001\",\"bindDate\":\"2022-11-26\",\"bindTime\":\"15:18\",\"repairObjType\":\"004\",\"repairChannel\":\"Z\",\"repairObjId\":\"752022090312040033\",\"repairObjName\":\"1号楼1单元202室\"}",
-        resBody="{\"code\":0,\"msg\":\"成功\",\"page\":0,\"records\":0,\"rows\":0,\"total\":0}"
+        reqBody = "{\"repairName\":\"测试\",\"repairType\":\"102022081592760001\",\"appointmentTime\":\"2022-11-26 15:18:00\",\"tel\":\"15239726115\",\"roomId\":\"752022090312040033\",\"photos\":[],\"context\":\"反反复复烦烦烦\",\"userId\":\"302022102708350644\",\"userName\":\"测试\",\"communityId\":\"2022032267510001\",\"bindDate\":\"2022-11-26\",\"bindTime\":\"15:18\",\"repairObjType\":\"004\",\"repairChannel\":\"Z\",\"repairObjId\":\"752022090312040033\",\"repairObjName\":\"1号楼1单元202室\"}",
+        resBody = "{\"code\":0,\"msg\":\"成功\",\"page\":0,\"records\":0,\"rows\":0,\"total\":0}"
 )
 
 @Java110Cmd(serviceCode = "ownerRepair.saveOwnerRepair")
@@ -113,6 +115,9 @@ public class SaveOwnerRepairCmd extends Cmd {
     @Autowired
     private INotepadV1InnerServiceSMO notepadV1InnerServiceSMOImpl;
 
+    @Autowired
+    private IRepairSettingV1InnerServiceSMO repairSettingV1InnerServiceSMOImpl;
+
     //域
     public static final String DOMAIN_COMMON = "DOMAIN.COMMON";
 
@@ -132,8 +137,7 @@ public class SaveOwnerRepairCmd extends Cmd {
         Assert.hasKeyAndValue(reqJson, "context", "必填，请填写报修内容");
         Assert.hasKeyAndValue(reqJson, "communityId", "必填，请填写小区ID");
 
-        String userId = context.getReqHeaders().get("user-id");
-        Assert.hasLength(userId, "请填写提交用户ID");
+        String userId = CmdContextUtils.getUserId(context);
         UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         userDto.setPage(1);
@@ -143,22 +147,13 @@ public class SaveOwnerRepairCmd extends Cmd {
         reqJson.put("userId", userDtos.get(0).getUserId());
         reqJson.put("userName", userDtos.get(0).getName());
 
-    }
-
-    @Override
-    @Java110Transactional
-    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
-        //获取当前小区id
-        String communityId = reqJson.getString("communityId");
         //查询默认费用项
         FeeConfigDto feeConfigDto = new FeeConfigDto();
-        feeConfigDto.setCommunityId(communityId);
+        feeConfigDto.setCommunityId(reqJson.getString("communityId"));
         feeConfigDto.setFeeTypeCd(FeeTypeConstant.FEE_TYPE_REPAIR);
         feeConfigDto.setIsDefault(FeeConfigDto.DEFAULT_FEE_CONFIG);
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
-        if (feeConfigDtos.size() != 1) {
-            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "默认维修费用有多条或不存在！");
-            context.setResponseEntity(responseEntity);
+        if (ListUtil.isNull(feeConfigDtos)) {
             return;
         }
         FeeDto feeDto = new FeeDto();
@@ -167,18 +162,39 @@ public class SaveOwnerRepairCmd extends Cmd {
         feeDto.setState(FeeDto.STATE_DOING);
         //查询报修业主处理中的报修费
         List<FeeDto> feeDtos = feeInnerServiceSMOImpl.queryFees(feeDto);
-        //取出开关映射的值(报修业主未处理费用条数)
-        String repairFeeNumber = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN, REPAIR_FEE_NUMBER);
-        if (feeDtos != null && StringUtil.isInteger(repairFeeNumber) && feeDtos.size() >= Integer.parseInt(repairFeeNumber)) {
-            ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "该房屋存在" + Integer.parseInt(repairFeeNumber) + "条未处理的费用，请缴费后再进行报修！");
-            context.setResponseEntity(responseEntity);
+        if (ListUtil.isNull(feeDtos)) {
             return;
         }
-        JSONObject businessOwnerRepair = new JSONObject();
-        businessOwnerRepair.putAll(reqJson);
-        businessOwnerRepair.put("repairId", GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_repairId));
-        businessOwnerRepair.put("state", RepairDto.STATE_WAIT);
-        RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
+        //取出开关映射的值(报修业主未处理费用条数)
+        String repairFeeNumber = MappingCache.getValue(MappingConstant.REPAIR_DOMAIN, REPAIR_FEE_NUMBER);
+        if (!StringUtil.isInteger(repairFeeNumber)) {
+            return;
+        }
+        if (feeDtos.size() >= Integer.parseInt(repairFeeNumber)) {
+            throw new CmdException("该房屋存在" + Integer.parseInt(repairFeeNumber) + "条未处理的费用，请缴费后再进行报修！");
+        }
+
+    }
+
+    @Override
+    @Java110Transactional
+    public void doCmd(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
+
+        RepairSettingDto repairSettingDto = new RepairSettingDto();
+        repairSettingDto.setCommunityId(reqJson.getString("communityId"));
+        repairSettingDto.setRepairType(reqJson.getString("repairType"));
+        List<RepairSettingDto> repairSettingDtos = repairSettingV1InnerServiceSMOImpl.queryRepairSettings(repairSettingDto);
+        if (ListUtil.isNull(repairSettingDtos)) {
+            throw new CmdException("报销刘类型不存在");
+        }
+
+        RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(reqJson, RepairPoolPo.class);
+        repairPoolPo.setRepairId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_repairId));
+        repairPoolPo.setState(RepairDto.STATE_WAIT);
+        String appointmentTime = repairPoolPo.getAppointmentTime();
+        Date sAppTime = DateUtil.getDateFromStringA(appointmentTime);
+        String timeout = DateUtil.getAddHoursStringA(sAppTime, repairSettingDtos.get(0).getDoTime());
+        repairPoolPo.setTimeout(timeout);
         int flag = repairPoolV1InnerServiceSMOImpl.saveRepairPoolNew(repairPoolPo);
         if (flag < 1) {
             throw new CmdException("修改失败");
@@ -192,7 +208,7 @@ public class SaveOwnerRepairCmd extends Cmd {
         repairUserPo.setRepairEvent(RepairUserDto.REPAIR_EVENT_START_USER);
         repairUserPo.setStaffId(reqJson.getString("userId"));
         repairUserPo.setStaffName(reqJson.getString("userName"));
-        repairUserPo.setRepairId(businessOwnerRepair.getString("repairId"));
+        repairUserPo.setRepairId(repairPoolPo.getRepairId());
         repairUserPo.setState(RepairUserDto.STATE_SUBMIT);
         repairUserPo.setEndTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
@@ -200,33 +216,7 @@ public class SaveOwnerRepairCmd extends Cmd {
         if (flag < 1) {
             throw new CmdException("修改用户失败");
         }
-        if (reqJson.containsKey("photos") && !StringUtils.isEmpty(reqJson.getString("photos"))) {
-            JSONArray photos = reqJson.getJSONArray("photos");
-            for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
-                String _photo = photos.getString(_photoIndex);
-                if(_photo.length()> 512){
-                    FileDto fileDto = new FileDto();
-                    fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
-                    fileDto.setFileName(fileDto.getFileId());
-                    fileDto.setContext(_photo);
-                    fileDto.setSuffix("jpeg");
-                    fileDto.setCommunityId(reqJson.getString("communityId"));
-                    _photo = fileInnerServiceSMOImpl.saveFile(fileDto);
-                }
-                JSONObject businessUnit = new JSONObject();
-                businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId("12"));
-                businessUnit.put("relTypeCd", FileRelDto.REL_TYPE_CD_REPAIR);
-                businessUnit.put("saveWay", "ftp");
-                businessUnit.put("objId", businessOwnerRepair.getString("repairId"));
-                businessUnit.put("fileRealName", _photo.toString());
-                businessUnit.put("fileSaveName", _photo.toString());
-                FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
-                flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
-                if (flag < 1) {
-                    throw new CmdException("保存图片失败");
-                }
-            }
-        }
+        saveRepairPhoto(reqJson, repairPoolPo.getRepairId());
 
         if (StringUtil.jsonHasKayAndValue(reqJson, "noteId")) {
             NotepadPo notepadPo = new NotepadPo();
@@ -237,5 +227,38 @@ public class SaveOwnerRepairCmd extends Cmd {
                 throw new CmdException("修改业主反馈失败");
             }
         }
+    }
+
+    private void saveRepairPhoto(JSONObject reqJson, String repairId) {
+        int flag;
+        JSONArray photos = reqJson.getJSONArray("photos");
+        if (ListUtil.isNull(photos)) {
+            return;
+        }
+        for (int _photoIndex = 0; _photoIndex < photos.size(); _photoIndex++) {
+            String _photo = photos.getString(_photoIndex);
+            if (_photo.length() > 512) {
+                FileDto fileDto = new FileDto();
+                fileDto.setFileId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_file_id));
+                fileDto.setFileName(fileDto.getFileId());
+                fileDto.setContext(_photo);
+                fileDto.setSuffix("jpeg");
+                fileDto.setCommunityId(reqJson.getString("communityId"));
+                _photo = fileInnerServiceSMOImpl.saveFile(fileDto);
+            }
+            JSONObject businessUnit = new JSONObject();
+            businessUnit.put("fileRelId", GenerateCodeFactory.getGeneratorId("12"));
+            businessUnit.put("relTypeCd", FileRelDto.REL_TYPE_CD_REPAIR);
+            businessUnit.put("saveWay", "ftp");
+            businessUnit.put("objId", repairId);
+            businessUnit.put("fileRealName", _photo.toString());
+            businessUnit.put("fileSaveName", _photo.toString());
+            FileRelPo fileRelPo = BeanConvertUtil.covertBean(businessUnit, FileRelPo.class);
+            flag = fileRelInnerServiceSMOImpl.saveFileRel(fileRelPo);
+            if (flag < 1) {
+                throw new CmdException("保存图片失败");
+            }
+        }
+
     }
 }

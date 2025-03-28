@@ -627,8 +627,10 @@ public class RepairFinishCmd extends Cmd {
         JSONObject businessOwnerRepair = new JSONObject();
         businessOwnerRepair.putAll(BeanConvertUtil.beanCovertMap(repairDtos.get(0)));
         businessOwnerRepair.put("state", state);
+
         //计算 应收金额
         RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
+        repairPoolPo.setFinishTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         int flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
         if (flag < 1) {
             throw new CmdException("修改工单失败");

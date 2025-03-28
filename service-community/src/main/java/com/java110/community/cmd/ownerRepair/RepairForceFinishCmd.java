@@ -373,7 +373,7 @@ public class RepairForceFinishCmd extends Cmd {
                 }
             }
         }
-        if(maintenanceType.equals("1001") && !StringUtil.isEmpty(reqJson.getString("sign")) && reqJson.getString("sign").equals("1")){ //有偿服务
+        if (maintenanceType.equals("1001") && !StringUtil.isEmpty(reqJson.getString("sign")) && reqJson.getString("sign").equals("1")) { //有偿服务
             RepairUserPo repairUserPo = new RepairUserPo();
             repairUserPo.setRuId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_ruId));
             repairUserPo.setRepairId(reqJson.getString("repairId"));
@@ -441,6 +441,7 @@ public class RepairForceFinishCmd extends Cmd {
         businessOwnerRepair.put("maintenanceType", paramInJson.getString("maintenanceType"));
         //计算 应收金额
         RepairPoolPo repairPoolPo = BeanConvertUtil.covertBean(businessOwnerRepair, RepairPoolPo.class);
+        repairPoolPo.setFinishTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         int flag = repairPoolV1InnerServiceSMOImpl.updateRepairPoolNew(repairPoolPo);
         if (flag < 1) {
             throw new CmdException("修改工单失败");
