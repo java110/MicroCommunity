@@ -60,7 +60,9 @@ public class WorkPoolDto extends PageDto implements Serializable {
     private String content;
 
     private String pathUrl;
+    private List<String> pathUrls;
     private String url;
+    private List<String> urls;
 
     private String taskId;
 
@@ -409,5 +411,21 @@ public class WorkPoolDto extends PageDto implements Serializable {
 
     public void setCopyName(String copyName) {
         this.copyName = copyName;
+    }
+
+    public List<String> getPathUrls() {
+        return pathUrls;
+    }
+
+    public void setPathUrls(List<String> pathUrls) {
+        this.pathUrls = pathUrls;
+    }
+
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
     }
 }

@@ -119,17 +119,18 @@ public class QueryStartWorkCmd extends Cmd {
         if (ListUtil.isNull(workPoolFileDtos)) {
             return;
         }
-
-        workPoolDtos.get(0).setPathUrl(workPoolFileDtos.get(0).getPathUrl());
-
         String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
 
-        if (workPoolFileDtos.get(0).getPathUrl().startsWith("http")) {
-            workPoolDtos.get(0).setUrl(workPoolFileDtos.get(0).getPathUrl());
-            return;
+        List<String> pathUrls = new ArrayList<>();
+        for (WorkPoolFileDto tWorkPoolFileDto : workPoolFileDtos) {
+           if (tWorkPoolFileDto.getPathUrl().startsWith("http")) {
+               pathUrls.add(tWorkPoolFileDto.getPathUrl());
+           }else{
+               pathUrls.add(imgUrl + tWorkPoolFileDto.getPathUrl());
+           }
         }
 
-        workPoolDtos.get(0).setUrl(imgUrl + workPoolFileDtos.get(0).getPathUrl());
+        workPoolDtos.get(0).setPathUrls(pathUrls);
 
 
     }

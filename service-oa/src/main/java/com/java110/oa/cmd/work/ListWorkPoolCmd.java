@@ -21,10 +21,7 @@ import com.java110.core.context.CmdContextUtils;
 import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
-import com.java110.dto.work.WorkCopyDto;
-import com.java110.dto.work.WorkPoolContentDto;
-import com.java110.dto.work.WorkPoolFileDto;
-import com.java110.dto.work.WorkTaskDto;
+import com.java110.dto.work.*;
 import com.java110.intf.oa.*;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
@@ -33,7 +30,6 @@ import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.java110.dto.work.WorkPoolDto;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -143,9 +139,18 @@ public class ListWorkPoolCmd extends Cmd {
             return;
         }
 
+        List<String> pathUrls = null;
         String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
 
-        workPoolDtos.get(0).setPathUrl(imgUrl + workPoolFileDtos.get(0).getPathUrl());
+        pathUrls = new ArrayList<>();
+        for (WorkPoolFileDto tWorkPoolFileDto : workPoolFileDtos) {
+            if (tWorkPoolFileDto.getPathUrl().startsWith("http")) {
+                pathUrls.add(tWorkPoolFileDto.getPathUrl());
+            }else{
+                pathUrls.add(imgUrl + tWorkPoolFileDto.getPathUrl());
+            }
+        }
+        workPoolDtos.get(0).setPathUrls(pathUrls);
     }
 
     private void queryTaskAndCopy(List<WorkPoolDto> workPoolDtos) {
@@ -192,10 +197,10 @@ public class ListWorkPoolCmd extends Cmd {
         List<WorkCopyDto> workCopyDtos = workCopyV1InnerServiceSMOImpl.queryWorkCopys(workCopyDto);
 
         String curCopyName = "";
-        String copyName ;
+        String copyName;
         for (WorkPoolDto workPoolDto : workPoolDtos) {
             curCopyName = "";
-            copyName= "";
+            copyName = "";
             for (WorkCopyDto tmpWorkCopyDto : workCopyDtos) {
 
 

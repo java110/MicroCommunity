@@ -35,6 +35,7 @@ public class WorkPoolFileDto extends PageDto implements Serializable {
     private String queryEndTime;
 
     private String itemId;
+    private String[] itemIds;
 
     private String contentId;
     private Date createTime;
@@ -161,5 +162,13 @@ public class WorkPoolFileDto extends PageDto implements Serializable {
 
     public void setContentId(String contentId) {
         this.contentId = contentId;
+    }
+
+    public String[] getItemIds() {
+        return itemIds;
+    }
+
+    public void setItemIds(String[] itemIds) {
+        this.itemIds = itemIds;
     }
 }

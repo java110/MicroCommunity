@@ -158,8 +158,8 @@ public class SaveWorkPoolCmd extends Cmd {
         List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
         Assert.listOnlyOne(userDtos, "用户未登录");
         String workName = reqJson.getString("workName");
-        if(StringUtil.isEmpty(workName)){
-            reqJson.put("workName",userDtos.get(0).getName()+"发起的工作单");
+        if (StringUtil.isEmpty(workName)) {
+            reqJson.put("workName", userDtos.get(0).getName() + "发起的工作单");
         }
         WorkPoolPo workPoolPo = BeanConvertUtil.covertBean(reqJson, WorkPoolPo.class);
         workPoolPo.setWorkId(GenerateCodeFactory.getGeneratorId(CODE_PREFIX_ID));
@@ -173,6 +173,9 @@ public class SaveWorkPoolCmd extends Cmd {
         }
         //todo 保存 工作单内容
         saveContent(workPoolPo, reqJson, userDtos.get(0));
+
+        //todo 保存 提交附件
+        saveFile(workPoolPo,reqJson,userDtos.get(0));
         //todo 保存 抄送人
         saveCopyStaff(workPoolPo, reqJson, userDtos.get(0));
         //todo 保存周期
@@ -181,6 +184,8 @@ public class SaveWorkPoolCmd extends Cmd {
         saveWorkTask(workPoolPo, reqJson, userDtos.get(0));
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
+
+
 
     private void saveWorkTask(WorkPoolPo workPoolPo, JSONObject reqJson, UserDto userDto) {
         JSONArray staffs = reqJson.getJSONArray("staffs");
@@ -224,21 +229,6 @@ public class SaveWorkPoolCmd extends Cmd {
                 workTaskItemPo.setTaskId(workTaskPo.getTaskId());
                 workTaskItemV1InnerServiceSMOImpl.saveWorkTaskItem(workTaskItemPo);
             }
-
-            if (StringUtil.isEmpty(reqJson.getString("pathUrl"))) {
-                continue;
-            }
-            WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
-            workPoolFilePo.setCommunityId(workPoolPo.getCommunityId());
-            workPoolFilePo.setFileType(WorkPoolFileDto.FILE_TYPE_START);
-            workPoolFilePo.setFileId(GenerateCodeFactory.getGeneratorId("11"));
-            workPoolFilePo.setWorkId(workPoolPo.getWorkId());
-            workPoolFilePo.setTaskId(workTaskPo.getTaskId());
-            workPoolFilePo.setPathUrl(reqJson.getString("pathUrl"));
-            workPoolFilePo.setStoreId(workPoolPo.getStoreId());
-            workPoolFilePo.setItemId("-1");
-            workPoolFilePo.setContentId("-1");
-            workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
         }
     }
 
@@ -337,6 +327,27 @@ public class SaveWorkPoolCmd extends Cmd {
             workPoolContentPo.setSeqNum(cIndex + 1);
             content.put("contentId", workPoolContentPo.getContentId());
             workPoolContentV1InnerServiceSMOImpl.saveWorkPoolContent(workPoolContentPo);
+        }
+    }
+
+    private void saveFile(WorkPoolPo workPoolPo, JSONObject reqJson, UserDto userDto) {
+
+        JSONArray pathUrls = reqJson.getJSONArray("pathUrls");
+        if (ListUtil.isNull(pathUrls)) {
+            return;
+        }
+        for (int urlIndex = 0; urlIndex < pathUrls.size(); urlIndex++) {
+            WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
+            workPoolFilePo.setCommunityId(workPoolPo.getCommunityId());
+            workPoolFilePo.setFileType(WorkPoolFileDto.FILE_TYPE_START);
+            workPoolFilePo.setFileId(GenerateCodeFactory.getGeneratorId("11"));
+            workPoolFilePo.setWorkId(workPoolPo.getWorkId());
+            workPoolFilePo.setTaskId("-1");
+            workPoolFilePo.setPathUrl(pathUrls.getString(urlIndex));
+            workPoolFilePo.setStoreId(workPoolPo.getStoreId());
+            workPoolFilePo.setItemId("-1");
+            workPoolFilePo.setContentId("-1");
+            workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.java110.dto.work;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ClassName FloorDto
@@ -47,6 +48,8 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
     private String statusCd = "0";
 
     private String score;
+
+    private List<String> pathUrls;
 
 
 
@@ -241,5 +244,13 @@ public class WorkTaskItemDto extends WorkPoolContentDto implements Serializable 
 
     public void setStates(String[] states) {
         this.states = states;
+    }
+
+    public List<String> getPathUrls() {
+        return pathUrls;
+    }
+
+    public void setPathUrls(List<String> pathUrls) {
+        this.pathUrls = pathUrls;
     }
 }

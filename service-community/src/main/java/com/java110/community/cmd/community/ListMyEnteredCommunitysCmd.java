@@ -54,16 +54,9 @@ public class ListMyEnteredCommunitysCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
 
-        String storeId = reqJson.getString("storeId");
-        String userId = reqJson.getString("userId");
-        if (StringUtil.isEmpty(storeId)) {
-            reqJson.put("storeId", CmdContextUtils.getStoreId(cmdDataFlowContext));
-        }
 
-        if (StringUtil.isEmpty(userId)) {
-            reqJson.put("userId", CmdContextUtils.getUserId(cmdDataFlowContext));
-        }
-
+        reqJson.put("storeId", CmdContextUtils.getStoreId(cmdDataFlowContext));
+        reqJson.put("userId", CmdContextUtils.getUserId(cmdDataFlowContext));
         Assert.hasKeyAndValue(reqJson, "storeId", "请求报文中未包含商户信息");
         Assert.hasKeyAndValue(reqJson, "userId", "请求报文中未包含用户信息");
     }

@@ -21,17 +21,21 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.dto.work.WorkPoolFileDto;
+import com.java110.intf.oa.IWorkPoolFileV1InnerServiceSMO;
 import com.java110.intf.oa.IWorkTaskItemV1InnerServiceSMO;
 import com.java110.utils.cache.MappingCache;
 import com.java110.utils.constant.MappingConstant;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.java110.dto.work.WorkTaskItemDto;
+
 import java.util.List;
 import java.util.ArrayList;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.slf4j.Logger;
@@ -51,9 +55,12 @@ import org.slf4j.LoggerFactory;
 @Java110Cmd(serviceCode = "task.listWorkTaskItem")
 public class ListWorkTaskItemCmd extends Cmd {
 
-  private static Logger logger = LoggerFactory.getLogger(ListWorkTaskItemCmd.class);
+    private static Logger logger = LoggerFactory.getLogger(ListWorkTaskItemCmd.class);
     @Autowired
     private IWorkTaskItemV1InnerServiceSMO workTaskItemV1InnerServiceSMOImpl;
+
+    @Autowired
+    private IWorkPoolFileV1InnerServiceSMO workPoolFileV1InnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
@@ -64,31 +71,58 @@ public class ListWorkTaskItemCmd extends Cmd {
     @Override
     public void doCmd(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) throws CmdException {
 
-           WorkTaskItemDto workTaskItemDto = BeanConvertUtil.covertBean(reqJson, WorkTaskItemDto.class);
+        WorkTaskItemDto workTaskItemDto = BeanConvertUtil.covertBean(reqJson, WorkTaskItemDto.class);
 
-           int count = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItemsCount(workTaskItemDto);
+        int count = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItemsCount(workTaskItemDto);
 
-           List<WorkTaskItemDto> workTaskItemDtos = null;
+        List<WorkTaskItemDto> workTaskItemDtos = null;
 
-           if (count > 0) {
-               workTaskItemDtos = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItems(workTaskItemDto);
-               String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+        if (count > 0) {
+            workTaskItemDtos = workTaskItemV1InnerServiceSMOImpl.queryWorkTaskItems(workTaskItemDto);
 
-               for (WorkTaskItemDto tmpWorkTaskItemDto : workTaskItemDtos) {
-                   if(StringUtil.isEmpty(tmpWorkTaskItemDto.getPathUrl())){
-                       continue;
-                   }
-                   tmpWorkTaskItemDto.setPathUrl(imgUrl + tmpWorkTaskItemDto.getPathUrl());
-               }
+            queryTaskFile(workTaskItemDtos);
 
-           } else {
-               workTaskItemDtos = new ArrayList<>();
-           }
+        } else {
+            workTaskItemDtos = new ArrayList<>();
+        }
 
-           ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workTaskItemDtos);
+        ResultVo resultVo = new ResultVo((int) Math.ceil((double) count / (double) reqJson.getInteger("row")), count, workTaskItemDtos);
 
-           ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<String>(resultVo.toString(), HttpStatus.OK);
 
-           cmdDataFlowContext.setResponseEntity(responseEntity);
+        cmdDataFlowContext.setResponseEntity(responseEntity);
     }
+
+    private void queryTaskFile(List<WorkTaskItemDto> workTaskItemDtos) {
+        if (ListUtil.isNull(workTaskItemDtos)) {
+            return;
+        }
+        List<String> itemIds = new ArrayList<>();
+        for (WorkTaskItemDto workTaskItemDto : workTaskItemDtos) {
+            itemIds.add(workTaskItemDto.getItemId());
+        }
+
+        WorkPoolFileDto workPoolFileDto = new WorkPoolFileDto();
+        workPoolFileDto.setFileType(WorkPoolFileDto.FILE_TYPE_END);
+        workPoolFileDto.setItemIds(itemIds.toArray(new String[itemIds.size()]));
+        List<WorkPoolFileDto> workPoolFileDtos = workPoolFileV1InnerServiceSMOImpl.queryWorkPoolFiles(workPoolFileDto);
+        if (ListUtil.isNull(workPoolFileDtos)) {
+            return;
+        }
+        List<String> pathUrls = null;
+        String imgUrl = MappingCache.getValue(MappingConstant.FILE_DOMAIN, "IMG_PATH");
+
+        for (WorkTaskItemDto workTaskItemDto : workTaskItemDtos) {
+            pathUrls = new ArrayList<>();
+            for (WorkPoolFileDto tWorkPoolFileDto : workPoolFileDtos) {
+                if (!workTaskItemDto.getItemId().equals(tWorkPoolFileDto.getItemId())) {
+                    continue;
+                }
+                pathUrls.add(imgUrl + tWorkPoolFileDto.getPathUrl());
+            }
+            workTaskItemDto.setPathUrls(pathUrls);
+        }
+    }
+
+
 }

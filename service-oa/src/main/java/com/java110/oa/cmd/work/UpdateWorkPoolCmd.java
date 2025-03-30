@@ -166,6 +166,10 @@ public class UpdateWorkPoolCmd extends Cmd {
         //todo 保存 工作单内容
         updateContent(workPoolPo, reqJson, userDtos.get(0));
 
+        // todo 修改工作单附件
+        updateFile(workPoolPo, reqJson, userDtos.get(0));
+
+
         //todo 保存 抄送人
         updateCopyStaff(workPoolPo, reqJson, userDtos.get(0));
 
@@ -177,6 +181,7 @@ public class UpdateWorkPoolCmd extends Cmd {
 
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
+
 
     private void updateWorkTask(WorkPoolPo workPoolPo, JSONObject reqJson, UserDto userDto) {
         JSONArray staffs = reqJson.getJSONArray("staffs");
@@ -198,10 +203,6 @@ public class UpdateWorkPoolCmd extends Cmd {
         workTaskItemPo.setStoreId(workPoolPo.getStoreId());
         workTaskItemV1InnerServiceSMOImpl.deleteWorkTaskItem(workTaskItemPo);
 
-        WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
-        workPoolFilePo.setWorkId(workPoolPo.getWorkId());
-        workPoolFilePo.setStoreId(workPoolPo.getStoreId());
-        workPoolFileV1InnerServiceSMOImpl.deleteWorkPoolFile(workPoolFilePo);
         JSONArray contents = reqJson.getJSONArray("contents");
 
         for (int staffIndex = 0; staffIndex < staffs.size(); staffIndex++) {
@@ -236,20 +237,6 @@ public class UpdateWorkPoolCmd extends Cmd {
                 workTaskItemPo.setTaskId(workTaskPo.getTaskId());
                 workTaskItemV1InnerServiceSMOImpl.saveWorkTaskItem(workTaskItemPo);
             }
-
-            if (StringUtil.isEmpty(reqJson.getString("pathUrl"))) {
-                continue;
-            }
-
-            workPoolFilePo = new WorkPoolFilePo();
-            workPoolFilePo.setCommunityId(workPoolPo.getCommunityId());
-            workPoolFilePo.setFileType(WorkPoolFileDto.FILE_TYPE_START);
-            workPoolFilePo.setFileId(GenerateCodeFactory.getGeneratorId("11"));
-            workPoolFilePo.setWorkId(workPoolPo.getWorkId());
-            workPoolFilePo.setTaskId(workTaskPo.getTaskId());
-            workPoolFilePo.setPathUrl(reqJson.getString("pathUrl"));
-            workPoolFilePo.setStoreId(workPoolPo.getStoreId());
-            workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
         }
     }
 
@@ -371,4 +358,31 @@ public class UpdateWorkPoolCmd extends Cmd {
             workPoolContentV1InnerServiceSMOImpl.saveWorkPoolContent(workPoolContentPo);
         }
     }
+
+    private void updateFile(WorkPoolPo workPoolPo, JSONObject reqJson, UserDto userDto) {
+        JSONArray pathUrls = reqJson.getJSONArray("pathUrls");
+        if (ListUtil.isNull(pathUrls)) {
+            return;
+        }
+
+        WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
+        workPoolFilePo.setWorkId(workPoolPo.getWorkId());
+        workPoolFilePo.setStoreId(workPoolPo.getStoreId());
+        workPoolFileV1InnerServiceSMOImpl.deleteWorkPoolFile(workPoolFilePo);
+
+        for (int urlIndex = 0; urlIndex < pathUrls.size(); urlIndex++) {
+            workPoolFilePo = new WorkPoolFilePo();
+            workPoolFilePo.setCommunityId(workPoolPo.getCommunityId());
+            workPoolFilePo.setFileType(WorkPoolFileDto.FILE_TYPE_START);
+            workPoolFilePo.setFileId(GenerateCodeFactory.getGeneratorId("11"));
+            workPoolFilePo.setWorkId(workPoolPo.getWorkId());
+            workPoolFilePo.setTaskId("-1");
+            workPoolFilePo.setPathUrl(pathUrls.getString(urlIndex));
+            workPoolFilePo.setStoreId(workPoolPo.getStoreId());
+            workPoolFilePo.setItemId("-1");
+            workPoolFilePo.setContentId("-1");
+            workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
+        }
+    }
+
 }

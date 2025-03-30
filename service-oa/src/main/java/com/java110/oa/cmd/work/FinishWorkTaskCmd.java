@@ -1,5 +1,6 @@
 package com.java110.oa.cmd.work;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.java110.core.annotation.Java110Cmd;
 import com.java110.core.context.CmdContextUtils;
@@ -102,28 +103,27 @@ public class FinishWorkTaskCmd extends Cmd {
             doFinish(reqJson, workTaskDtos.get(0), workTaskItemDtos.get(0));
         }
 
-        if (!reqJson.containsKey("pathUrl")) {
+
+        JSONArray pathUrls = reqJson.getJSONArray("pathUrls");
+        if (ListUtil.isNull(pathUrls)) {
             return;
         }
 
-        String pathUrl = reqJson.getString("pathUrl");
-        if (StringUtil.isEmpty(pathUrl)) {
-            return;
+        for (int urlIndex = 0; urlIndex < pathUrls.size(); urlIndex++) {
+            WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
+            workPoolFilePo.setCommunityId(workTaskDtos.get(0).getCommunityId());
+            workPoolFilePo.setFileType(WorkPoolFileDto.FILE_TYPE_END);
+            workPoolFilePo.setFileId(GenerateCodeFactory.getGeneratorId("11"));
+            workPoolFilePo.setWorkId(workTaskDtos.get(0).getWorkId());
+            workPoolFilePo.setTaskId(workTaskDtos.get(0).getTaskId());
+            workPoolFilePo.setPathUrl(pathUrls.getString(urlIndex));
+            workPoolFilePo.setStoreId(workTaskDtos.get(0).getStoreId());
+            workPoolFilePo.setItemId(reqJson.getString("itemId"));
+
+            workPoolFilePo.setContentId(workTaskItemDtos.get(0).getContentId());
+
+            workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
         }
-
-        WorkPoolFilePo workPoolFilePo = new WorkPoolFilePo();
-        workPoolFilePo.setCommunityId(workTaskDtos.get(0).getCommunityId());
-        workPoolFilePo.setFileType(WorkPoolFileDto.FILE_TYPE_END);
-        workPoolFilePo.setFileId(GenerateCodeFactory.getGeneratorId("11"));
-        workPoolFilePo.setWorkId(workTaskDtos.get(0).getWorkId());
-        workPoolFilePo.setTaskId(workTaskDtos.get(0).getTaskId());
-        workPoolFilePo.setPathUrl(reqJson.getString("pathUrl"));
-        workPoolFilePo.setStoreId(workTaskDtos.get(0).getStoreId());
-        workPoolFilePo.setItemId(reqJson.getString("itemId"));
-
-        workPoolFilePo.setContentId(workTaskItemDtos.get(0).getContentId());
-
-        workPoolFileV1InnerServiceSMOImpl.saveWorkPoolFile(workPoolFilePo);
 
     }
 
