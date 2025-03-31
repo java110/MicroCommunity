@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repairEventV1ServiceDaoImpl">
+
+
+    <!-- 保存报修事件信息 add by wuxw 2018-07-03 -->
+    <insert id="saveRepairEventInfo" parameterType="Map">
+        insert into r_repair_event(
+        event_id,staff_name,repair_id,remark,event_type,community_id,staff_id
+        ) values (
+        #{eventId},#{staffName},#{repairId},#{remark},#{eventType},#{communityId},#{staffId}
+        )
+    </insert>
+
+
+    <!-- 查询报修事件信息 add by wuxw 2018-07-03 -->
+    <select id="getRepairEventInfo" parameterType="Map" resultType="Map">
+        select t.event_id eventId,t.staff_name staffName,t.repair_id repairId,t.remark,t.status_cd statusCd,t.event_type
+        eventType,t.community_id communityId,t.staff_id staffId,t.create_time createTime,td.name eventTypeName
+        from r_repair_event t
+        LEFT JOIN t_dict td on t.acct_type = td.status_cd and td.table_name = 'r_repair_event' and td.table_columns = 'event_type'
+        where 1 =1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="eventType !=null and eventType != ''">
+            and t.event_type= #{eventType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+        order by t.create_time desc
+        <if test="page != -1 and page != null ">
+            limit #{page}, #{row}
+        </if>
+
+    </select>
+
+
+    <!-- 修改报修事件信息 add by wuxw 2018-07-03 -->
+    <update id="updateRepairEventInfo" parameterType="Map">
+        update r_repair_event t set t.status_cd = #{statusCd}
+        <if test="newBId != null and newBId != ''">
+            ,t.b_id = #{newBId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            , t.staff_name= #{staffName}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            , t.repair_id= #{repairId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            , t.remark= #{remark}
+        </if>
+        <if test="eventType !=null and eventType != ''">
+            , t.event_type= #{eventType}
+        </if>
+
+        <if test="staffId !=null and staffId != ''">
+            , t.staff_id= #{staffId}
+        </if>
+        where 1=1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+
+    </update>
+
+    <!-- 查询报修事件数量 add by wuxw 2018-07-03 -->
+    <select id="queryRepairEventsCount" parameterType="Map" resultType="Map">
+        select count(1) count
+        from r_repair_event t
+        where 1 =1
+        <if test="eventId !=null and eventId != ''">
+            and t.event_id= #{eventId}
+        </if>
+        <if test="staffName !=null and staffName != ''">
+            and t.staff_name= #{staffName}
+        </if>
+        <if test="repairId !=null and repairId != ''">
+            and t.repair_id= #{repairId}
+        </if>
+        <if test="remark !=null and remark != ''">
+            and t.remark= #{remark}
+        </if>
+        <if test="statusCd !=null and statusCd != ''">
+            and t.status_cd= #{statusCd}
+        </if>
+        <if test="eventType !=null and eventType != ''">
+            and t.event_type= #{eventType}
+        </if>
+        <if test="communityId !=null and communityId != ''">
+            and t.community_id= #{communityId}
+        </if>
+        <if test="staffId !=null and staffId != ''">
+            and t.staff_id= #{staffId}
+        </if>
+
+
+    </select>
+
+</mapper>
