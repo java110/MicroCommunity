@@ -15,6 +15,12 @@ import java.util.Date;
  **/
 public class RepairEventDto extends PageDto implements Serializable {
 
+    /**
+     * 1001	催单
+     * 2002	消息通知
+     */
+    public static final String EVENT_TYPE_URGE = "1001"; //催单
+    public static final String EVENT_TYPE_MSG = "2002"; //消息通知
     private String eventId;
     private String staffName;
     private String repairId;

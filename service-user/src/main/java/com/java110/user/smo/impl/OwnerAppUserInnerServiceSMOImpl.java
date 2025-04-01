@@ -5,17 +5,21 @@ import com.java110.core.base.smo.BaseServiceSMO;
 import com.java110.dto.PageDto;
 import com.java110.dto.community.CommunityDto;
 import com.java110.dto.owner.OwnerAppUserDto;
+import com.java110.dto.owner.OwnerDto;
 import com.java110.intf.community.ICommunityInnerServiceSMO;
+import com.java110.intf.community.ICommunityV1InnerServiceSMO;
 import com.java110.intf.user.IOwnerAppUserInnerServiceSMO;
 import com.java110.intf.user.IUserInnerServiceSMO;
 import com.java110.po.owner.OwnerAppUserPo;
 import com.java110.user.dao.IOwnerAppUserServiceDao;
 import com.java110.utils.util.BeanConvertUtil;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +41,7 @@ public class OwnerAppUserInnerServiceSMOImpl extends BaseServiceSMO implements I
     private IUserInnerServiceSMO userInnerServiceSMOImpl;
 
     @Autowired
-    private ICommunityInnerServiceSMO iCommunityInnerServiceSMO;
+    private ICommunityV1InnerServiceSMO communityV1InnerServiceSMOImpl;
 
     @Override
     public List<OwnerAppUserDto> queryOwnerAppUsers(@RequestBody OwnerAppUserDto ownerAppUserDto) {
@@ -51,19 +55,41 @@ public class OwnerAppUserInnerServiceSMOImpl extends BaseServiceSMO implements I
         }
 
         List<OwnerAppUserDto> ownerAppUsers = BeanConvertUtil.covertBeanList(ownerAppUserServiceDaoImpl.getOwnerAppUserInfo(BeanConvertUtil.beanCovertMap(ownerAppUserDto)), OwnerAppUserDto.class);
-        for (OwnerAppUserDto ownerAppUserDto1 : ownerAppUsers) {
-            if (StringUtil.isEmpty(ownerAppUserDto1.getCommunityId()) || "-1".equals(ownerAppUserDto1.getCommunityId())) {
-                continue;
-            }
-            CommunityDto communityDto = new CommunityDto();
-            communityDto.setCommunityId(ownerAppUserDto1.getCommunityId());
-            List<CommunityDto> communityDtoList = iCommunityInnerServiceSMO.queryCommunitys(communityDto);
-            if (communityDtoList != null && communityDtoList.size() > 0) {
-                ownerAppUserDto1.setsCommunityTel(communityDtoList.get(0).getTel());
-            }
-        }
+        queryCommunityTel(ownerAppUsers);
 
         return ownerAppUsers;
+    }
+
+    private void queryCommunityTel(List<OwnerAppUserDto> ownerAppUsers) {
+
+        if(ListUtil.isNull(ownerAppUsers)){
+            return ;
+        }
+        List<String> communityIds = new ArrayList<>();
+        for (OwnerAppUserDto ownerAppUserDto : ownerAppUsers) {
+            if (StringUtil.isEmpty(ownerAppUserDto.getCommunityId()) || "-1".equals(ownerAppUserDto.getCommunityId())) {
+                continue;
+            }
+            communityIds.add(ownerAppUserDto.getCommunityId());
+        }
+        if(ListUtil.isNull(communityIds)){
+            return ;
+        }
+        CommunityDto communityDto = new CommunityDto();
+        communityDto.setCommunityIds(communityIds.toArray(new String[communityIds.size()]));
+        List<CommunityDto> communityDtos = communityV1InnerServiceSMOImpl.queryCommunitys(communityDto);
+        if(ListUtil.isNull(communityDtos)){
+            return;
+        }
+        for (OwnerAppUserDto tmpOwnerAppUserDto : ownerAppUsers) {
+            for (CommunityDto tCommunityDto : communityDtos) {
+                if (!tmpOwnerAppUserDto.getCommunityId().equals(tCommunityDto.getCommunityId())) {
+                    continue;
+                }
+                tmpOwnerAppUserDto.setCommunityName(tCommunityDto.getName());
+                tmpOwnerAppUserDto.setsCommunityTel(tCommunityDto.getTel());
+            }
+        }
     }
 
 
