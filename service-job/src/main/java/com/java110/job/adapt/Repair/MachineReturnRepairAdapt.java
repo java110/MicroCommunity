@@ -87,8 +87,6 @@ public class MachineReturnRepairAdapt extends DatabusAdaptImpl {
     @Autowired
     private IOwnerRoomRelInnerServiceSMO ownerRoomRelInnerServiceSMO;
 
-    //模板信息推送地址
-    private static String sendMsgUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
 
     @Override
     public void execute(Business business, List<Business> businesses) throws Exception {

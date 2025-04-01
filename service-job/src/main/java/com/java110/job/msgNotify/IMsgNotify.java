@@ -1,6 +1,7 @@
 package com.java110.job.msgNotify;
 
 import com.alibaba.fastjson.JSONObject;
+import com.java110.dto.notice.NoticeStaffDto;
 import com.java110.vo.ResultVo;
 
 import java.util.List;
@@ -163,4 +164,12 @@ public interface IMsgNotify {
      * @return
      */
     ResultVo sendComplaintMsg(String communityId, String userId, JSONObject content);
+
+    /**
+     * 通知员工
+     *
+     * @param noticeStaffDto
+     * @return
+     */
+    ResultVo sendStaffMsg(NoticeStaffDto noticeStaffDto);
 }

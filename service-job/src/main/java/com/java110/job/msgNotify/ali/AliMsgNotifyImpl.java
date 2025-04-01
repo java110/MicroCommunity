@@ -13,6 +13,7 @@ import com.java110.core.factory.AliSendMessageFactory;
 import com.java110.core.factory.CommunitySettingFactory;
 import com.java110.core.factory.LogFactory;
 import com.java110.core.log.LoggerFactory;
+import com.java110.dto.notice.NoticeStaffDto;
 import com.java110.dto.owner.OwnerDto;
 import com.java110.dto.user.StaffAppAuthDto;
 import com.java110.dto.user.UserDto;
@@ -544,6 +545,62 @@ public class AliMsgNotifyImpl implements IMsgNotify {
 
         JSONObject param = new JSONObject();
         param.put("orderId", content.getString("orderId"));
+        request.putQueryParameter("TemplateParam", param.toString());
+
+        String resParam = "";
+        try {
+            CommonResponse response = client.getCommonResponse(request);
+            logger.debug("发送验证码信息：{}", response.getData());
+            resParam = response.getData();
+        } catch (Exception e) {
+            e.printStackTrace();
+            resParam = e.getMessage();
+            throw new IllegalArgumentException("短信工单失败" + e.getMessage());
+        } finally {
+            LogFactory.saveOutLog("SMS", param.toString(), new ResponseEntity(resParam, HttpStatus.OK));
+        }
+        return new ResultVo(ResultVo.CODE_OK, "成功");
+    }
+
+    @Override
+    public ResultVo sendStaffMsg(NoticeStaffDto noticeStaffDto) {
+        String userId = noticeStaffDto.getStaffId();
+        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
+            throw new IllegalArgumentException("员工不存在,userId = " + userId);
+        }
+
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (ListUtil.isNull(userDtos)) {
+            throw new IllegalArgumentException("员工不存在");
+        }
+
+
+        String accessKeyId = CommunitySettingFactory.getValue(noticeStaffDto.getCommunityId(), "ALI_ACCESS_KEY_ID");
+        String accessSecret = CommunitySettingFactory.getValue(noticeStaffDto.getCommunityId(), "ALI_ACCESS_SECRET");
+        String region = CommunitySettingFactory.getValue(noticeStaffDto.getCommunityId(), "ALI_REGION");
+        String signName = CommunitySettingFactory.getValue(noticeStaffDto.getCommunityId(), "ALI_SIGN_NAME");
+        String templateCode = CommunitySettingFactory.getValue(noticeStaffDto.getCommunityId(), "ALI_TITLE_TEMPLATE_CODE");
+        DefaultProfile profile = DefaultProfile.getProfile(region,
+                accessKeyId,
+                accessSecret);
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        CommonRequest request = new CommonRequest();
+        request.setSysMethod(MethodType.POST);
+        request.setSysDomain("dysmsapi.aliyuncs.com");
+        request.setSysVersion("2017-05-25");
+        request.setSysAction("SendSms");
+        request.putQueryParameter("RegionId", region);
+        request.putQueryParameter("PhoneNumbers", userDtos.get(0).getTel());
+        request.putQueryParameter("SignName", signName);
+        request.putQueryParameter("TemplateCode", templateCode);
+
+
+        JSONObject param = new JSONObject();
+        param.put("title", noticeStaffDto.getTitle());
         request.putQueryParameter("TemplateParam", param.toString());
 
         String resParam = "";

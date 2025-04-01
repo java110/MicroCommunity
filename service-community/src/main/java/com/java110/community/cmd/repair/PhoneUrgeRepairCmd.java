@@ -7,6 +7,7 @@ import com.java110.core.context.ICmdDataFlowContext;
 import com.java110.core.event.cmd.Cmd;
 import com.java110.core.event.cmd.CmdEvent;
 import com.java110.core.factory.GenerateCodeFactory;
+import com.java110.dto.data.DatabusDataDto;
 import com.java110.dto.privilege.BasePrivilegeDto;
 import com.java110.dto.repair.RepairDto;
 import com.java110.dto.repair.RepairUserDto;
@@ -15,11 +16,13 @@ import com.java110.dto.user.UserDto;
 import com.java110.intf.community.IRepairEventV1InnerServiceSMO;
 import com.java110.intf.community.IRepairInnerServiceSMO;
 import com.java110.intf.community.IRepairUserInnerServiceSMO;
+import com.java110.intf.job.IDataBusInnerServiceSMO;
 import com.java110.intf.order.IPrivilegeInnerServiceSMO;
 import com.java110.intf.user.IUserV1InnerServiceSMO;
 import com.java110.po.repairEvent.RepairEventPo;
 import com.java110.utils.exception.CmdException;
 import com.java110.utils.util.Assert;
+import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,6 +49,9 @@ public class PhoneUrgeRepairCmd extends Cmd {
 
     @Autowired
     private IRepairUserInnerServiceSMO repairUserInnerServiceSMOImpl;
+
+    @Autowired
+    private IDataBusInnerServiceSMO dataBusInnerServiceSMOImpl;
 
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext context, JSONObject reqJson) throws CmdException, ParseException {
@@ -81,6 +87,8 @@ public class PhoneUrgeRepairCmd extends Cmd {
 
 
         repairEventV1InnerServiceSMOImpl.saveRepairEvent(repairEventPo);
+
+        dataBusInnerServiceSMOImpl.databusData(new DatabusDataDto(DatabusDataDto.BUSINESS_TYPE_REPAIR_URGE, BeanConvertUtil.beanCovertJson(repairEventPo)));
     }
 
     private void queryStaff(RepairEventPo repairEventPo, RepairDto repairDto) {

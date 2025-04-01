@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.java110.core.client.RestTemplate;
 import com.java110.core.log.LoggerFactory;
 import com.java110.dto.mapping.Mapping;
+import com.java110.dto.notice.NoticeStaffDto;
 import com.java110.dto.owner.OwnerAppUserDto;
 import com.java110.dto.user.UserDto;
 import com.java110.dto.wechat.Content;
@@ -496,6 +497,29 @@ public class WorkLicenseMsgNotifyImpl implements IMsgNotify {
         JSONObject paramIn = new JSONObject();
         paramIn.put("staffTel", userDtos.get(0).getTel());
         paramIn.put("ttsText", "尊敬的员工，您有一个投诉单需要处理，单号为" + content.getString("orderId") + "，请您及时处理");
+        ResultVo resultVo = sendIotImpl.post(PLAY_TTS_URL, paramIn);
+        return resultVo;
+    }
+
+    @Override
+    public ResultVo sendStaffMsg(NoticeStaffDto noticeStaffDto) {
+        String userId = noticeStaffDto.getStaffId();
+        if (StringUtil.isEmpty(userId) || userId.startsWith("-")) {
+            throw new IllegalArgumentException("员工不存在,userId = " + userId);
+        }
+
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId(userId);
+        List<UserDto> userDtos = userV1InnerServiceSMOImpl.queryUsers(userDto);
+        if (ListUtil.isNull(userDtos)) {
+            throw new IllegalArgumentException("员工不存在");
+        }
+
+
+        JSONObject paramIn = new JSONObject();
+        paramIn.put("staffTel", userDtos.get(0).getTel());
+        paramIn.put("ttsText", "尊敬的员工，您有一个" + noticeStaffDto.getTitle() + "，请您及时处理");
         ResultVo resultVo = sendIotImpl.post(PLAY_TTS_URL, paramIn);
         return resultVo;
     }
