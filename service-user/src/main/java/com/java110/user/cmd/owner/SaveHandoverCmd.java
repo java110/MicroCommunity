@@ -28,10 +28,7 @@ import com.java110.po.owner.OwnerRoomRelPo;
 import com.java110.po.payFee.PayFeeBatchPo;
 import com.java110.po.room.RoomPo;
 import com.java110.utils.exception.CmdException;
-import com.java110.utils.util.Assert;
-import com.java110.utils.util.BeanConvertUtil;
-import com.java110.utils.util.DateUtil;
-import com.java110.utils.util.StringUtil;
+import com.java110.utils.util.*;
 import com.java110.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -83,7 +80,7 @@ public class SaveHandoverCmd extends Cmd {
 
         JSONArray rooms = reqJson.getJSONArray("rooms");
 
-        if (rooms.size() < 1) {
+        if (ListUtil.isNull(rooms)) {
             throw new CmdException("未包含房屋信息");
         }
     }
@@ -105,6 +102,8 @@ public class SaveHandoverCmd extends Cmd {
             ownerPo.setMemberId(ownerPo.getOwnerId());
             ownerPo.setState(OwnerDto.STATE_FINISH);
             ownerPo.setOwnerFlag(OwnerDto.OWNER_FLAG_TRUE);
+            ownerPo.setPersonType(OwnerDto.PERSON_TYPE_PERSON);
+            ownerPo.setPersonRole(OwnerDto.PERSON_ROLE_OWNER);
             flag = ownerV1InnerServiceSMOImpl.saveOwner(ownerPo);
             reqJson.put("ownerId", ownerPo.getOwnerId());
         }
