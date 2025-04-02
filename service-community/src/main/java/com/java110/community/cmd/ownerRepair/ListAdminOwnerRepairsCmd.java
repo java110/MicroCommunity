@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.List;
 
 @Java110Cmd(serviceCode = "ownerRepair.listAdminOwnerRepairs")
-public class RepairsCmd extends Cmd {
+public class ListAdminOwnerRepairsCmd extends Cmd {
 
     @Autowired
     private IRepairInnerServiceSMO repairInnerServiceSMOImpl;
