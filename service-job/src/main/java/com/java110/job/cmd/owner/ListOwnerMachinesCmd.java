@@ -68,8 +68,9 @@ public class ListOwnerMachinesCmd extends Cmd {
         ownerDto.setCommunityId(communityId);
         ownerDto.setMemberId(memberId);
         List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnerMembers(ownerDto);
-        Assert.listOnlyOne(ownerDtos, "存在多条业主数据或未找到业主数据");
-
+        if(ListUtil.isNull(ownerDtos)){
+            throw new CmdException("未认证业主");
+        }
         reqJson.put("link",ownerDtos.get(0).getLink());
         reqJson.put("iotApiCode","listOwnerAccessControlBmoImpl");
 
