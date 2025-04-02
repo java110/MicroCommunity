@@ -77,10 +77,6 @@ public class QueryPhoneRepairsCmd extends Cmd {
         if (reqJson.containsKey("repairStates")) {
             String[] states = reqJson.getString("repairStates").split(",");
             ownerRepairDto.setStatess(states);
-        } else {
-            //Pc WEB维修已办
-            String[] states = {RepairDto.STATE_BACK, RepairDto.STATE_TRANSFER, RepairDto.STATE_PAY, RepairDto.STATE_PAY_ERROR, RepairDto.STATE_APPRAISE, RepairDto.STATE_RETURN_VISIT, RepairDto.STATE_COMPLATE};
-            ownerRepairDto.setStatess(states);
         }
 
         int count = repairInnerServiceSMOImpl.queryRepairsCount(ownerRepairDto);

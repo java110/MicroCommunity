@@ -12,6 +12,7 @@ import com.java110.dto.task.TaskDto;
 import com.java110.job.quartz.TaskSystemQuartz;
 import com.java110.utils.cache.CommonCache;
 import com.java110.utils.constant.ServiceCodeRepairDispatchStepConstant;
+import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
 import org.slf4j.Logger;
 import com.java110.core.log.LoggerFactory;
@@ -76,13 +77,11 @@ public class TrainingRepairTemplate extends TaskSystemQuartz {
             repairTypeUserDto.setState(RepairTypeUserDto.STATE_ONLINE); //派单给在线员工
             List<RepairTypeUserDto> repairTypeUserDtos = repairTypeUserInnerServiceSMOImpl.queryRepairTypeUsers(repairTypeUserDto);
             //没有设置 处理师傅 无法派单
-            if (repairTypeUserDtos == null || repairTypeUserDtos.size() < 1) {
+            if (ListUtil.isNull(repairTypeUserDtos)) {
                 continue;
             }
             doTrainingRepair(tmpRepairDto, repairTypeUserDtos);
-
         }
-
     }
 
     /**

@@ -407,9 +407,13 @@ public class WechatMsgNotifyImpl implements IMsgNotify {
         data.put("time10", new Content(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B)));
         data.put("thing9", new Content(noticeStaffDto.getNotifyUserName()));
         templateMessage.setData(data);
+
         //获取员工公众号地址
         String wechatUrl = MappingCache.getValue(MappingConstant.URL_DOMAIN, "STAFF_WECHAT_URL");
         templateMessage.setUrl(wechatUrl);
+        if (StringUtil.isEmpty(noticeStaffDto.getUrl())) {
+            templateMessage.setUrl(noticeStaffDto.getUrl());
+        }
         logger.info("发送模板消息内容:{}", JSON.toJSONString(templateMessage));
         ResponseEntity<String> responseEntity = outRestTemplate.postForEntity(url, JSON.toJSONString(templateMessage), String.class);
         logger.info("微信模板返回内容:{}", responseEntity);
