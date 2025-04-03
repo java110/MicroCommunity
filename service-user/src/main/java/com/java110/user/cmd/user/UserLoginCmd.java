@@ -192,7 +192,7 @@ public class UserLoginCmd extends Cmd {
         List<OwnerDto> ownerDtos = ownerV1InnerServiceSMOImpl.queryOwners(ownerDto);
 
         // 说明业主不存在 直接返回跑异常
-        if (ownerDtos == null || ownerDtos.size() < 1) {
+        if (ListUtil.isNull(ownerDtos)) {
             return null;
         }
 
