@@ -54,7 +54,7 @@ public class ListParkingSpaceApplyCmd extends Cmd {
     @Override
     public void validate(CmdEvent event, ICmdDataFlowContext cmdDataFlowContext, JSONObject reqJson) {
         super.validatePageInfo(reqJson);
-        super.validateProperty(cmdDataFlowContext);
+        //super.validateProperty(cmdDataFlowContext);
     }
 
     @Override
