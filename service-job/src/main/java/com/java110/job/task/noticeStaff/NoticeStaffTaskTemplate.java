@@ -224,7 +224,7 @@ public class NoticeStaffTaskTemplate extends TaskSystemQuartz {
         InspectionTaskDetailDto inspectionTaskDetailDto = new InspectionTaskDetailDto();
         inspectionTaskDetailDto.setCommunityId(communityDto.getCommunityId());
         inspectionTaskDetailDto.setState(InspectionTaskDto.STATE_NO_START);
-        inspectionTaskDetailDto.setQrCodeTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_B));
+        inspectionTaskDetailDto.setQrCodeTime(DateUtil.getNow(DateUtil.DATE_FORMATE_STRING_A));
         inspectionTaskDetailDto.setSendFlag(InspectionTaskDetailDto.SEND_FLAG_N);
         List<InspectionTaskDetailDto> inspectionTaskDetailDtos = inspectionTaskDetailInnerServiceSMOImpl.queryInspectionTaskDetails(inspectionTaskDetailDto);
         for (InspectionTaskDetailDto tInspectionTaskDetailDto : inspectionTaskDetailDtos) {
