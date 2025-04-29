@@ -841,14 +841,14 @@ public class PayFeeCmd extends Cmd {
         feeConfigDto.setCommunityId(feeInfo.getCommunityId());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(feeConfigDto);
         Assert.listOnlyOne(feeConfigDtos, "费用项不存在");
-        if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeConfigDtos.get(0).getFeeFlag())) {
+        if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDtos.get(0).getFeeFlag())) {
             return;
         }
 
 
         FeeConfigDto tmpFeeConfigDto = new FeeConfigDto();
         tmpFeeConfigDto.setFeeNameEq(feeConfigDtos.get(0).getFeeName() + "欠费");
-        tmpFeeConfigDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE_ONCE);
+        tmpFeeConfigDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
         tmpFeeConfigDto.setComputingFormula(feeConfigDto.getComputingFormula());
         //todo 校验的时候校验过了 所以这里不可能为空
         feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(tmpFeeConfigDto);
