@@ -707,17 +707,17 @@ public class PayFeeCmd extends Cmd {
             return;
         }
         // todo 自己是间接性费用
-        if (FeeDto.FEE_FLAG_CYCLE_ONCE.equals(feeConfigDto.getFeeFlag())) {
+        if (FeeDto.FEE_FLAG_CYCLE.equals(feeConfigDto.getFeeFlag())) {
             return;
         }
 
         FeeConfigDto tmpFeeConfigDto = new FeeConfigDto();
         tmpFeeConfigDto.setFeeNameEq(feeConfigDto.getFeeName() + "欠费");
-        tmpFeeConfigDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE_ONCE);
+        tmpFeeConfigDto.setFeeFlag(FeeDto.FEE_FLAG_CYCLE);
         tmpFeeConfigDto.setComputingFormula(feeConfigDto.getComputingFormula());
         List<FeeConfigDto> feeConfigDtos = feeConfigInnerServiceSMOImpl.queryFeeConfigs(tmpFeeConfigDto);
 
-        Assert.listOnlyOne(feeConfigDtos, "按自定义时间段缴费时，费用必须为间接性费用，或者存在名称为 " + feeConfigDto.getFeeName() + "欠费 的间接性费用，它的公式计算必须要和" + feeConfigDto.getFeeName() + "一致");
+        Assert.listOnlyOne(feeConfigDtos, "按自定义时间段缴费时，费用必须为周期性，或者存在名称为 " + feeConfigDto.getFeeName() + "欠费 的周期性费用，它的公式计算必须要和" + feeConfigDto.getFeeName() + "一致");
     }
 
 
