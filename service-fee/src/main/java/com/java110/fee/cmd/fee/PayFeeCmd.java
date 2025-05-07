@@ -819,7 +819,7 @@ public class PayFeeCmd extends Cmd {
             tmpFeeAttrPo = new FeeAttrPo();
             tmpFeeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId, true));
             tmpFeeAttrPo.setFeeId(tmpPayFeePo.getFeeId());
-            tmpFeeAttrPo.setCommunityId(tmpFeeAttrPo.getCommunityId());
+            tmpFeeAttrPo.setCommunityId(tmpPayFeePo.getCommunityId());
             tmpFeeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
             tmpFeeAttrPo.setValue(reqJson.getString("customStartTime"));
             tmpFeeAttrPos.add(tmpFeeAttrPo);
