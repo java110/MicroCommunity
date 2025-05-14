@@ -186,7 +186,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
             return;
         }
         // 不是自然月 费用直接返回
-        if(DateUtil.getMonthDay(feeDto.getStartTime()) !=1){
+        if(DateUtil.getDay(feeDto.getStartTime()) !=1){
             return;
         }
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();
@@ -265,7 +265,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
     private void waitDispersedOweFeeOnceUnNormalMonth(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto,double feePrice, Date deadlineTime, double oweMonth) {
 
         // 不是一次性费用 并且是 自然月就返回
-        if(!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag()) && DateUtil.getMonthDay(feeDto.getStartTime()) == 1){
+        if(!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag()) && DateUtil.getDay(feeDto.getStartTime()) == 1){
             return;
         }
         List<PayFeeDetailMonthPo> payFeeDetailMonthPos = new ArrayList<>();

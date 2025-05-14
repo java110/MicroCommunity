@@ -619,6 +619,12 @@ public class DateUtil {
         return calendar.get(Calendar.MONTH) + 1;
     }
 
+    public static int getDay(Date date) {
+        Calendar a = Calendar.getInstance();
+        a.setTime(date);
+        return a.get(Calendar.DAY_OF_MONTH);
+    }
+
     /**
      * 判断时间是否在时间段内
      *
