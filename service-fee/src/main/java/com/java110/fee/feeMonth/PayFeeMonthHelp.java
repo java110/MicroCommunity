@@ -97,17 +97,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         Map feePriceAll = computeFeeSMOImpl.getFeePrice(feeDto);
 
         Double feePrice = Double.parseDouble(feePriceAll.get("feePrice").toString());
-        //todo 如果是一次性费用 除以
-//        if (!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getPayerObjType())) {
-//            return feePrice;
-//        }
-//        double maxMonth = Math.ceil(computeFeeSMOImpl.dayCompare(feeDto.getStartTime(), feeDto.getEndTime()));
-//        if (maxMonth <= 0) {
-//            return feePrice;
-//
-//        }
-//        BigDecimal feePriceDec = new BigDecimal(feePrice).divide(new BigDecimal(maxMonth), 2, BigDecimal.ROUND_HALF_UP);
-//        feePrice = feePriceDec.doubleValue();
+
         return feePrice;
     }
 
@@ -159,7 +149,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
      * @param deadlineTime
      */
     @Override
-    public void waitDispersedOweFee(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date deadlineTime, double owePrice) {
+    public void waitDispersedOweFee(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date deadlineTime, double oweMonth) {
 
 
         // todo 清理 detailId 为-1 的数据
@@ -178,7 +168,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         waitDispersedOweFeeCycleNormalMonth(feeDto,payFeeMonthOwnerDto,feePrice,deadlineTime);
 
         // 一次性或者非自然月处理
-        waitDispersedOweFeeOnceUnNormalMonth(feeDto,payFeeMonthOwnerDto,deadlineTime,owePrice);
+        waitDispersedOweFeeOnceUnNormalMonth(feeDto,payFeeMonthOwnerDto,feePrice,deadlineTime,oweMonth);
 
     }
 
@@ -272,7 +262,7 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
      * @param deadlineTime
      * @param oweMonth
      */
-    private void waitDispersedOweFeeOnceUnNormalMonth(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Date deadlineTime, double oweMonth) {
+    private void waitDispersedOweFeeOnceUnNormalMonth(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto,double feePrice, Date deadlineTime, double oweMonth) {
 
         // 不是一次性费用 并且是 自然月就返回
         if(!FeeDto.FEE_FLAG_ONCE.equals(feeDto.getFeeFlag()) && DateUtil.getMonthDay(feeDto.getStartTime()) == 1){
@@ -283,7 +273,8 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
         Date startTime = DateUtil.timeToDate(feeDto.getEndTime());
         Date endTime = DateUtil.deadTimeToDate(deadlineTime);
 
-        BigDecimal receivableAmount = new BigDecimal(oweMonth);
+
+        BigDecimal receivableAmount = new BigDecimal(feePrice).multiply(new BigDecimal(oweMonth)).setScale(8,BigDecimal.ROUND_HALF_UP);
 
         BigDecimal dayReceivableAmount = null;
 
