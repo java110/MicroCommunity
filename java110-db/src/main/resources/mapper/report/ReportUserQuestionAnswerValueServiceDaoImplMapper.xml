@@ -42,9 +42,6 @@
         <if test="valueContent !=null and valueContent != ''">
             and t.value_content= #{valueContent}
         </if>
-        <if test="personId !=null and personId != ''">
-            and t.person_id= #{personId}
-        </if>
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
@@ -111,9 +108,7 @@
         <if test="valueContent !=null and valueContent != ''">
             and t.value_content= #{valueContent}
         </if>
-        <if test="personId !=null and personId != ''">
-            and t.person_id= #{personId}
-        </if>
+
         <if test="statusCd !=null and statusCd != ''">
             and t.status_cd= #{statusCd}
         </if>
