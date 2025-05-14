@@ -30,5 +30,5 @@ public interface IPayFeeMonthHelp {
      * @param feePrice
      * @param deadlineTime
      */
-    void waitDispersedOweFee(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date deadlineTime);
+    void waitDispersedOweFee(FeeDto feeDto, PayFeeMonthOwnerDto payFeeMonthOwnerDto, Double feePrice, Date deadlineTime,double owePrice);
 }

@@ -230,8 +230,10 @@ public class PayFeeMonthImpl implements IPayFeeMonth {
 
 
         //todo 处理 endTime 到 deadlineTime 的费用
-        Date deadlineTime = computeFeeSMOImpl.getDeadlineTime(feeDto);
-        payFeeMonthHelp.waitDispersedOweFee(feeDto, payFeeMonthOwnerDto, feePrice, deadlineTime);
+        Map info = computeFeeSMOImpl.getTargetEndDateAndOweMonth(feeDto);
+        Date deadlineTime = (Date) info.get("targetEndDate");
+        double oweMonth = (double)info.get("targetEndDate");
+        payFeeMonthHelp.waitDispersedOweFee(feeDto, payFeeMonthOwnerDto, feePrice, deadlineTime,oweMonth);
 
     }
 
