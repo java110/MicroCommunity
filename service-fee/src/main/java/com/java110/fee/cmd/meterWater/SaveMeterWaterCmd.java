@@ -193,17 +193,14 @@ public class SaveMeterWaterCmd extends Cmd {
             reqJson.put("feeId", payFeePo.getFeeId());
             addMeterWater(reqJson, roomList.get(0));
 
-            int flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
-            if (flag < 1) {
-                throw new CmdException("保存数据失败");
-            }
+
             FeeAttrPo feeAttrPo = new FeeAttrPo();
             feeAttrPo.setCommunityId(reqJson.getString("communityId"));
             feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_ONCE_FEE_DEADLINE_TIME);
             feeAttrPo.setValue(reqJson.getString("curReadingTime"));
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
-            flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+            int flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
             }
@@ -215,7 +212,7 @@ public class SaveMeterWaterCmd extends Cmd {
             feeAttrPo.setValue(roomList.get(0).getFloorNum() + "-" + roomList.get(0).getUnitNum() + "-" + roomList.get(0).getRoomNum());
             feeAttrPo.setFeeId(payFeePo.getFeeId());
             feeAttrPo.setAttrId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_attrId));
-            flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
+             flag = feeAttrInnerServiceSMOImpl.saveFeeAttr(feeAttrPo);
             if (flag < 1) {
                 throw new CmdException("保存数据失败");
             }
@@ -225,7 +222,7 @@ public class SaveMeterWaterCmd extends Cmd {
             ownerDto.setRoomId(reqJson.getString("objId"));
             List<OwnerDto> ownerDtos = ownerInnerServiceSMOImpl.queryOwnersByRoom(ownerDto);
 
-            if (ownerDtos != null && ownerDtos.size() > 0) {
+            if (!ListUtil.isNull(ownerDtos)) {
                 feeAttrPo = new FeeAttrPo();
                 feeAttrPo.setCommunityId(reqJson.getString("communityId"));
                 feeAttrPo.setSpecCd(FeeAttrDto.SPEC_CD_OWNER_ID);
@@ -259,7 +256,10 @@ public class SaveMeterWaterCmd extends Cmd {
                     throw new CmdException("保存数据失败");
                 }
             }
-
+             flag = payFeeV1InnerServiceSMOImpl.savePayFee(payFeePo);
+            if (flag < 1) {
+                throw new CmdException("保存数据失败");
+            }
         }
         cmdDataFlowContext.setResponseEntity(ResultVo.success());
     }
