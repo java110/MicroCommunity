@@ -447,6 +447,9 @@ public class PayFeeMonthHelp implements IPayFeeMonthHelp {
                 getDiscountAmount(Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivableAmount()),
                         Double.parseDouble(tmpPayFeeDetailMonthPo.getReceivedAmount()),
                         calendar.getTime(), feeDto) + "");
+        if (feeDetailDto == null) {
+            tmpPayFeeDetailMonthPo.setDiscountAmount("0");
+        }
         tmpPayFeeDetailMonthPo.setMonthId(GenerateCodeFactory.getGeneratorId(GenerateCodeFactory.CODE_PREFIX_monthId, true));
         tmpPayFeeDetailMonthPo.setRemark("程序计算生成");
         tmpPayFeeDetailMonthPo.setObjName(payFeeMonthOwnerDto.getObjName());
