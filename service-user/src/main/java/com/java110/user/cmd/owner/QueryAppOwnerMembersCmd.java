@@ -21,6 +21,7 @@ import com.java110.utils.util.Assert;
 import com.java110.utils.util.BeanConvertUtil;
 import com.java110.utils.util.ListUtil;
 import com.java110.utils.util.StringUtil;
+import com.java110.vo.ResultVo;
 import com.java110.vo.api.ApiOwnerDataVo;
 import com.java110.vo.api.ApiOwnerVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,13 +113,7 @@ public class QueryAppOwnerMembersCmd extends Cmd {
             ownerDtoList = new ArrayList<>();
         }
 
-
-        ApiOwnerVo apiOwnerVo = new ApiOwnerVo();
-        apiOwnerVo.setOwners(BeanConvertUtil.covertBeanList(ownerDtoList, ApiOwnerDataVo.class));
-        apiOwnerVo.setTotal(total);
-        apiOwnerVo.setRecords((int) Math.ceil((double) total / (double) row));
-
-        ResponseEntity<String> responseEntity = new ResponseEntity<String>(JSONObject.toJSONString(apiOwnerVo), HttpStatus.OK);
+        ResponseEntity<String> responseEntity = ResultVo.createResponseEntity((int) Math.ceil((double) total / (double) row), total, ownerDtoList);
         context.setResponseEntity(responseEntity);
     }
 }
