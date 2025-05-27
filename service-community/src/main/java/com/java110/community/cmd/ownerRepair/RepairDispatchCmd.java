@@ -168,7 +168,7 @@ public class RepairDispatchCmd extends Cmd {
         repairUserDto.setStates(new String[]{RepairUserDto.STATE_DOING,RepairUserDto.STATE_EVALUATE});
         repairUserDto.setStaffId(reqJson.getString("userId"));
         List<RepairUserDto> repairUserDtos = repairUserInnerServiceSMOImpl.queryRepairUsers(repairUserDto);
-        if (!ListUtil.isNull(repairUserDtos)) {
+        if (ListUtil.isNull(repairUserDtos)) {
             ResponseEntity<String> responseEntity = ResultVo.createResponseEntity(ResultVo.CODE_BUSINESS_VERIFICATION, "当前用户没有需要处理订单！");
             context.setResponseEntity(responseEntity);
             return;
